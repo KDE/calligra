@@ -35,6 +35,9 @@
 #include <KoFilterChain.h>
 #include <commands/KoShapeUngroupCommand.h>
 #include <KoXmlReader.h>
+#include <KoPAPage.h>
+#include <KoPAMasterPage.h>
+#include <KoPageLayout.h>
 
 #include <kpluginfactory.h>
 #include <KCompressionDevice>
@@ -117,9 +120,17 @@ KoFilter::ConversionStatus SvgImport::convert(const QByteArray& from, const QByt
     }
 
     m_document = dynamic_cast<KarbonDocument*>(m_chain->outputDocument());
-    if (! m_document)
+    if (!m_document) {
         return KoFilter::CreationError;
-
+    }
+    if (m_document->pages().isEmpty()) {
+        KoPAMasterPage *mp = dynamic_cast<KoPAMasterPage*>(m_document->pages(true).value(0));
+        if (!mp) {
+            mp = new KoPAMasterPage();
+            m_document->insertPage(mp, 0);
+        }
+        m_document->insertPage(new KoPAPage(mp), 0);
+    }
     // Do the conversion!
     convert(inputDoc.documentElement());
 
@@ -143,11 +154,15 @@ void SvgImport::convert(const KoXmlElement &rootElement)
     buildDocument(toplevelShapes, parser.shapes());
 
     // set the page size
-    m_document->setPageSize(pageSize);
+    KoPageLayout & layout = m_document->pages().at(0)->pageLayout();
+    layout.width = pageSize.width();
+    layout.height = pageSize.height();
 }
 
 void SvgImport::buildDocument(const QList<KoShape*> &toplevelShapes, const QList<KoShape*> &shapes)
 {
+    Q_UNUSED(shapes);
+    KoPAPageBase *page = m_document->pages().first();
     // if we have only top level groups, make them layers
     bool onlyTopLevelGroups = true;
     foreach(KoShape * shape, toplevelShapes) {
@@ -156,47 +171,39 @@ void SvgImport::buildDocument(const QList<KoShape*> &toplevelShapes, const QList
             break;
         }
     }
-
-    // add all shapes to the document
-    foreach(KoShape * shape, shapes) {
-        m_document->add(shape);
+    KoShapeLayer *oldLayer = 0;
+    if (page->shapeCount()) {
+        oldLayer = dynamic_cast<KoShapeLayer*>(page->shapes().first());
     }
-
-    KoShapeLayer * oldLayer = 0;
-    if (m_document->layers().count())
-        oldLayer = m_document->layers().first();
-
     if (onlyTopLevelGroups) {
         foreach(KoShape * shape, toplevelShapes) {
             // ungroup toplevel groups
-            KoShapeGroup * group = dynamic_cast<KoShapeGroup*>(shape);
+            KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(shape);
             QList<KoShape*> children = group->shapes();
             KoShapeUngroupCommand cmd(group, children, QList<KoShape*>() << group);
             cmd.redo();
 
-            KoShapeLayer * layer = new KoShapeLayer();
+            KoShapeLayer *layer = new KoShapeLayer();
             foreach(KoShape * child, children) {
-                m_document->add(child);
                 layer->addShape(child);
             }
-            if (! group->name().isEmpty())
+            if (!group->name().isEmpty()) {
                 layer->setName(group->name());
+            }
             layer->setVisible(group->isVisible());
             layer->setZIndex(group->zIndex());
-            m_document->insertLayer(layer);
+            page->addShape(layer);
             delete group;
         }
     } else {
-        KoShapeLayer * layer = new KoShapeLayer();
+        KoShapeLayer *layer = new KoShapeLayer();
         foreach(KoShape * shape, toplevelShapes) {
-            m_document->add(shape);
             layer->addShape(shape);
         }
-        m_document->insertLayer(layer);
+        page->addShape(layer);
     }
-
     if (oldLayer) {
-        m_document->removeLayer(oldLayer);
+        page->removeShape(oldLayer);
         delete oldLayer;
     }
 }

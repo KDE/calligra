@@ -93,7 +93,7 @@ calligra_define_product(PART_COMPONENTS "QtQuick2 Plugin that provides Calligra 
 calligra_define_product(APP_WORDS "Words app (for Desktop)"  REQUIRES PART_WORDS)
 calligra_define_product(APP_STAGE "Stage app (for Desktop)"   REQUIRES PART_STAGE)
 calligra_define_product(APP_SHEETS "Sheets app (for Desktop)" REQUIRES PART_SHEETS)
-calligra_define_product(APP_KARBON "Karbon app (for Desktop)"  REQUIRES LIB_CALLIGRA LIB_KOMAIN)
+calligra_define_product(APP_KARBON "Karbon app (for Desktop)"  REQUIRES LIB_CALLIGRA LIB_KOMAIN LIB_KOPAGEAPP)
 calligra_define_product(APP_FLOW "Flow app (for Desktop)" REQUIRES LIB_CALLIGRA LIB_KOMAIN LIB_KOPAGEAPP)
 calligra_define_product(APP_BRAINDUMP "Braindump app (for Desktop)"  UNMAINTAINED  REQUIRES LIB_CALLIGRA LIB_KOMAIN)
 calligra_define_product(DOC "Calligra Documentations" STAGING)

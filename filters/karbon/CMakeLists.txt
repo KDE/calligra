@@ -3,6 +3,7 @@ include_directories(
         ${KOTEXT_INCLUDES}
         ${KOMAIN_INCLUDES}
         ${FLAKE_INCLUDES}
+        ${KOPAGEAPP_INCLUDES}
         ${CMAKE_SOURCE_DIR}/karbon
         ${CMAKE_SOURCE_DIR}/karbon/common
         ${CMAKE_SOURCE_DIR}/karbon/ui

@@ -83,6 +83,7 @@ const KoComponentData &KarbonFactory::global()
 
         // Load Karbon specific dockers.
         KoPluginLoader::load(QStringLiteral("karbon/dockers"));
+        KoPluginLoader::load(QStringLiteral("calligra/pageapptools"));
     }
     return *s_global;
 }

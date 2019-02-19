@@ -25,6 +25,7 @@
 #include <QStackedWidget>
 
 class KoPAView;
+class KoPAPageBase;
 
 
 class KoPageNavigator : public QStackedWidget
@@ -47,6 +48,7 @@ protected:
 private Q_SLOTS:
     void updateDisplayLabel();
     void onPageNumberEntered();
+    void slotPageRemoved(KoPAPageBase *page, int index);
 
 private:
     class Private;

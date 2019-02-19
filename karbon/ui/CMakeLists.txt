@@ -1,4 +1,5 @@
 include_directories(
+        ${KOPAGEAPP_INCLUDES}
         ${KOODF_INCLUDES}
         ${KOMAIN_INCLUDES}
         ${CMAKE_SOURCE_DIR}/karbon/
@@ -15,19 +16,12 @@ set(karbonui_SRCS
     KarbonDocument.cpp
     KarbonPart.cpp
     KarbonView.cpp 
-    KarbonPrintJob.cpp
-    KarbonZoomController.cpp
+    ProxyView.cpp
+
     KarbonDocumentMergeCommand.cpp
-    
-    commands/KarbonLayerReorderCommand.cpp
     
     dialogs/KarbonConfigureDialog.cpp
 
-    dockers/KarbonLayerDocker.cpp
-    dockers/KarbonLayerModel.cpp
-    dockers/KarbonLayerSortingModel.cpp
-
-    widgets/KarbonCanvas.cpp
     widgets/KarbonSmallStylePreview.cpp
     widgets/KarbonPaletteBarWidget.cpp
     widgets/KarbonPaletteWidget.cpp
@@ -42,6 +36,7 @@ target_link_libraries(karbonui
         karboncommon
         flake
     PRIVATE
+        kopageapp
         kowidgets
         koodf
         koplugin

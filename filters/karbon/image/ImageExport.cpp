@@ -40,6 +40,7 @@
 #include <KoZoomHandler.h>
 #include <KoUnit.h>
 #include <KoDialog.h>
+#include <KoPAPageBase.h>
 
 #include <kpluginfactory.h>
 
@@ -77,7 +78,12 @@ ImageExport::convert(const QByteArray& from, const QByteArray& to)
     KarbonDocument* doc = dynamic_cast<KarbonDocument*>(document);
     if (doc) {
         KoShapePainter painter;
-        painter.setShapes(doc->shapes());
+        QList<KoPAPageBase*> pages = doc->pages();
+        if (pages.isEmpty()) {
+            return KoFilter::WrongFormat;
+        }
+        // TODO: Handle multiple pages
+        painter.setShapes(pages.at(0)->shapes());
 
         // get the bounding rect of the content
         QRectF shapesRect = painter.contentRect();

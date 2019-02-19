@@ -243,7 +243,7 @@ Q_SIGNALS:
     void pageAdded(KoPAPageBase* page);
 
     /// This is a general signal to tell you a page was removed
-    void pageRemoved(KoPAPageBase* page);
+    void pageRemoved(KoPAPageBase* page, int index = -1);
 
     /// when page is removed this signal indicates you should replace it if it was active
     void replaceActivePage(KoPAPageBase *page, KoPAPageBase *newActivePage);

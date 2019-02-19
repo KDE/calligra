@@ -41,6 +41,8 @@
 
 #include <KoDocument.h>
 #include <KoFilterChain.h>
+#include <KoPAPageBase.h>
+#include <KoPageLayout.h>
 
 #include <kpluginfactory.h>
 
@@ -67,7 +69,13 @@ KoFilter::ConversionStatus SvgExport::convert(const QByteArray& from, const QByt
     if (!karbonPart)
         return KoFilter::WrongFormat;
 
-    SvgWriter writer(karbonPart->layers(), karbonPart->pageSize());
+    KoPAPageBase *page = karbonPart->pages().value(0);
+    if (!page) {
+        return KoFilter::WrongFormat;
+    }
+    const KoPageLayout &layout = page->pageLayout();
+    const QSizeF size(layout.width, layout.height);
+    SvgWriter writer(page->shapes(), size);
     if (!writer.save(m_chain->outputFile(), true))
         return KoFilter::CreationError;
 

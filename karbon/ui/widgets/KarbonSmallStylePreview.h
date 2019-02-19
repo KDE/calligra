@@ -40,7 +40,7 @@ Q_SIGNALS:
     void fillApplied();
     void strokeApplied();
 
-private Q_SLOTS:
+public Q_SLOTS:
     void selectionChanged();
     void canvasChanged(const KoCanvasBase *canvas);
 

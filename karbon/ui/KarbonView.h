@@ -34,7 +34,7 @@
 #ifndef __KARBON_VIEW__
 #define __KARBON_VIEW__
 
-#include <KoView.h>
+#include <KoPAView.h>
 #include <KoShapeAlignCommand.h>
 #include <KoShapeDistributeCommand.h>
 #include <karbonui_export.h>
@@ -42,6 +42,7 @@
 
 class QDropEvent;
 class QResizeEvent;
+class QLayout;
 
 class KarbonDocument;
 
@@ -49,10 +50,13 @@ class KoColor;
 class KoUnit;
 
 
+class KarbonPaletteBarWidget;
 class KarbonPart;
-class KarbonCanvas;
 
-class KARBONUI_EXPORT KarbonView : public KoView
+class KoPACanvas;
+class KoCanvasResourceManager;
+
+class KARBONUI_EXPORT KarbonView : public KoPAView
 {
     Q_OBJECT
 
@@ -61,10 +65,10 @@ public:
     virtual ~KarbonView();
 
     /// Returns the view is attached to
-    KarbonDocument * part() const;
+   KarbonDocument * part() const;
 
     /// Returns the canvas widget of this view
-    KarbonCanvas * canvasWidget() const;
+    KoPACanvas *canvasWidget() const;
 
     void reorganizeGUI();
     void setNumberOfRecentFiles(uint number);
@@ -73,9 +77,11 @@ public:
     virtual void setCursor(const QCursor &);
     /// Reimplemented from QWidget
     virtual void dropEvent(QDropEvent *e);
-    /// Reimplemented from KoView
-    virtual KoZoomController *zoomController() const;
 
+
+    KoCanvasResourceManager *resourceManager() const;
+
+    KarbonPaletteBarWidget *colorBar() const;
 
 public Q_SLOTS:
     // editing:
@@ -113,18 +119,12 @@ public Q_SLOTS:
 
     void pathSnapToGrid();
 
-    void configure();
-
-    void configurePageLayout();
-
     void selectionChanged();
 
-    void togglePageMargins(bool);
-    void showRuler();
-    void showGuides();
     void editGuides();
-    void snapToGrid();
     void showPalette();
+
+    void replaceActivePage(KoPAPageBase *page, KoPAPageBase *newActivePage);
 
 protected Q_SLOTS:
     // Object related operations.
@@ -135,26 +135,21 @@ protected Q_SLOTS:
     void zoomDrawing();
 
     void mousePositionChanged(const QPoint &position);
-    void pageOffsetChanged();
-
-    void updateUnit(const KoUnit &unit);
 
     void applyFillToSelection();
     void applyStrokeToSelection();
     void applyPaletteColor(const KoColor &color);
 
 protected:
+    /// Use own configuaration dialog
+    virtual void openConfiguration();
+
     virtual void updateReadWrite(bool readwrite);
     virtual void resizeEvent(QResizeEvent* event);
     virtual void dragEnterEvent(QDragEnterEvent * event);
-    virtual void addImages(const QVector<QImage> &imageList, const QPoint &insertAt);
 
-    void createLayersTabDock();
     void createStrokeDock();
     void createColorDock();
-
-    virtual KoPrintJob * createPrintJob();
-    virtual KoPrintJob * createPdfPrintJob();
 
 private:
     void initActions();

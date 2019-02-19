@@ -82,8 +82,9 @@ KarbonConfigInterfacePage::KarbonConfigInterfacePage(KarbonView* view, char* nam
     m_dockerFontSize->setValue(m_oldDockerFontSize);
     interfaceLayout->addRow(i18n("Palette font size:"), m_dockerFontSize);
 
-    m_canvasColor = new KColorButton(m_oldCanvasColor, tmpQGroupBox);
-    interfaceLayout->addRow(i18n("Canvas color:"), m_canvasColor);
+// TODO or move or remove?
+//     m_canvasColor = new KColorButton(m_oldCanvasColor, tmpQGroupBox);
+//     interfaceLayout->addRow(i18n("Canvas color:"), m_canvasColor);
 }
 
 void KarbonConfigInterfacePage::apply()
@@ -118,11 +119,11 @@ void KarbonConfigInterfacePage::apply()
         refreshGUI = true;
     }
 
-    QColor canvasColor = m_canvasColor->color();
-    if (canvasColor != m_oldCanvasColor) {
-        interfaceGroup.writeEntry("CanvasColor", canvasColor);
-        refreshGUI = true;
-    }
+//     QColor canvasColor = m_canvasColor->color();
+//     if (canvasColor != m_oldCanvasColor) {
+//         interfaceGroup.writeEntry("CanvasColor", canvasColor);
+//         refreshGUI = true;
+//     }
 
     if (refreshGUI)
         part->reorganizeGUI();

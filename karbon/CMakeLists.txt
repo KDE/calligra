@@ -13,6 +13,7 @@ endif()
 add_definitions(-DTRANSLATION_DOMAIN=\"karbon\")
 
 include_directories(
+    ${KOPAGEAPP_INCLUDES}
     ${FLAKE_INCLUDES}
     ${KOTEXT_INCLUDES}
     ${KOMAIN_INCLUDES}

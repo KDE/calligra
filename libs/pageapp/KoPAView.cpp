@@ -455,8 +455,14 @@ void KoPAView::initActions()
 
     actionCollection()->action( "object_group" )->setShortcut( QKeySequence( "Ctrl+G" ) );
     actionCollection()->action( "object_ungroup" )->setShortcut( QKeySequence( "Ctrl+Shift+G" ) );
+
+    connect(d->doc, &KoPADocument::actionsPossible, this, &KoPAView::setActionEnabled);
 }
 
+KoCanvasController *KoPAView::canvasController() const
+{
+    return d->canvasController;
+}
 
 KoPACanvasBase * KoPAView::kopaCanvas() const
 {
@@ -698,10 +704,15 @@ void KoPAView::slotZoomChanged( KoZoomMode::Mode mode, qreal zoom )
 
 void KoPAView::configure()
 {
+    openConfiguration();
+    // TODO update canvas
+}
+
+void KoPAView::openConfiguration()
+{
     QPointer<KoPAConfigureDialog> dialog(new KoPAConfigureDialog(this));
     dialog->exec();
     delete dialog;
-    // TODO update canvas
 }
 
 void KoPAView::setMasterMode( bool master )

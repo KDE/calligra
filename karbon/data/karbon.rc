@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <gui name="Karbon"
-     version="8"
+     version="16"
      xmlns="http://www.kde.org/standards/kxmlgui/1.0"
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0
@@ -62,8 +62,8 @@
             <Action name="view_tool_options"/>
             <Action name="view_context_help"/>
             <Separator/>
-            <Action name="view_show_margins"/>
-            <Action name="view_show_ruler"/>
+            <Action name="view_page_margins"/>
+            <Action name="view_rulers"/>
             <Action name="view_show_palette"/>
             <Action name="view_grid"/>
             <Action name="view_show_guides"/>
@@ -128,10 +128,22 @@
         </Menu>
         <Menu name="settings"><text>&amp;Settings</text>
             <Separator group="settings_show"/>
-            <Action name="page_layout" group="settings_show"/>
+            <Action name="format_pagelayout" group="settings_show"/>
             <Separator group="settings_show"/>
             <Action name="settings_active_author" group="settings_configure"/>
             <Action name="configure" group="settings_configure"/>
+        </Menu>
+        <Menu name="page">
+            <Text>&amp;Page</Text>
+            <Action name="page_insertpage"/>
+            <Action name="page_copypage"/>
+            <Action name="page_deletepage"/>
+            <Separator/>
+            <Action name="page_previous"/>
+            <Action name="page_next"/>
+            <Separator/>
+            <Action name="page_first"/>
+            <Action name="page_last"/>
         </Menu>
     </MenuBar>
     <ToolBar name="edit_toolbar" position="top">

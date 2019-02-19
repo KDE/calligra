@@ -48,21 +48,20 @@
 // Dialogs.
 #include "KarbonConfigureDialog.h"
 
-// Dockers.
-#include "KarbonLayerDocker.h"
-
 // The rest.
 #include "Karbon.h"
 #include "KarbonFactory.h"
 #include "KarbonPart.h"
-#include "KarbonCanvas.h"
 #include "KarbonDocument.h"
-#include "KarbonPrintJob.h"
-#include "KarbonZoomController.h"
 #include "KarbonSmallStylePreview.h"
 #include "KarbonDocumentMergeCommand.h"
 #include "KarbonPaletteBarWidget.h"
 #include "KarbonUiDebug.h"
+#include "KarbonOutlinePaintingStrategy.h"
+
+#include <KoPACanvas.h>
+#include <KoCanvasResourceManager.h>
+#include <KoPAPageBase.h>
 
 #include <KoMainWindow.h>
 #include <KoShapeStroke.h>
@@ -70,7 +69,6 @@
 #include <KoDocumentResourceManager.h>
 #include <KoCanvasResourceManager.h>
 #include <KoFilterManager.h>
-#include <KoPageLayoutDialog.h>
 #include <KoRuler.h>
 #include <KoToolManager.h>
 #include <KoStandardAction.h>
@@ -103,7 +101,6 @@
 #include <KoRulerController.h>
 #include <KoDockRegistry.h>
 #include <KoDockerManager.h>
-#include <KoPageLayout.h>
 #include <KoGridData.h>
 #include <KoGuidesData.h>
 #include <KoShapeLayer.h>
@@ -132,6 +129,7 @@
 #include <kstandardaction.h>
 #include <ktoggleaction.h>
 #include <KPluginFactory>
+#include <KXMLGUIFactory>
 
 // qt header
 #include <QMimeDatabase>
@@ -152,23 +150,19 @@ class Q_DECL_HIDDEN KarbonView::Private
 {
 public:
     Private(KarbonPart *part, KarbonDocument * doc)
-            : karbonPart(part), part(doc), canvas(0), canvasController(0), horizRuler(0), vertRuler(0)
+            : karbonPart(part), part(doc)
             , colorBar(0), closePath(0), combinePath(0)
             , separatePath(0), reversePath(0), intersectPath(0), subtractPath(0)
             , unitePath(0), excludePath(0), pathSnapToGrid(0), configureAction(0)
             , deleteSelectionAction(0), clipObjects(0), unclipObjects(0)
-            , flipVertical(0), flipHorizontal(0), viewAction(0), showRulerAction(0)
+            , flipVertical(0), flipHorizontal(0), viewAction(0)
             , snapGridAction(0), showPageMargins(0), showGuidesAction(0)
             , showPaletteAction(0)
-            , status(0), cursorCoords(0), smallPreview(0), zoomActionWidget(0)
+            , status(0), cursorCoords(0), smallPreview(0)
     {}
 
     KarbonPart * karbonPart;
     KarbonDocument * part;
-    KarbonCanvas * canvas;
-    KoCanvasController * canvasController;
-    KoRuler * horizRuler;
-    KoRuler * vertRuler;
     KarbonPaletteBarWidget *colorBar;
 
     // actions:
@@ -189,73 +183,40 @@ public:
     QAction * flipHorizontal;
 
     KToggleAction * viewAction;
-    KToggleAction * showRulerAction;
+
     KToggleAction * snapGridAction;
     KToggleAction * showPageMargins;
     KToggleAction * showGuidesAction;
+
     KToggleAction * showPaletteAction;
 
     //Status Bar
     QLabel * status;       ///< ordinary status
     QLabel * cursorCoords; ///< cursor coordinates
     KarbonSmallStylePreview * smallPreview; ///< small style preview
-    QWidget * zoomActionWidget; ///< zoom action widget
 };
 
 KarbonView::KarbonView(KarbonPart *karbonPart, KarbonDocument* doc, QWidget* parent)
-        : KoView(karbonPart, doc, parent), d(new Private(karbonPart, doc))
+    : KoPAView(karbonPart, doc, KoPAView::NormalMode, parent)
+    , d(new Private(karbonPart, doc))
 {
     setAcceptDrops(true);
 
     setXMLFile(QString::fromLatin1("karbon.rc"));
 
-    const int viewMargin = 250;
-    d->canvas = new KarbonCanvas(doc);
-    d->canvas->setParent(this);
-    d->canvas->setDocumentViewMargin(viewMargin);
-    connect(d->canvas->shapeManager()->selection(), SIGNAL(selectionChanged()),
-            this, SLOT(selectionChanged()));
-
-    KoCanvasControllerWidget *canvasController = new KoCanvasControllerWidget(actionCollection(), this);
-    d->canvasController = canvasController;
-    canvasController->setMinimumSize(QSize(viewMargin + 50, viewMargin + 50));
-    d->canvasController->setCanvas(d->canvas);
-    d->canvasController->setCanvasMode(KoCanvasController::Infinite);
-    // always show srollbars which fixes some nasty infinite
-    // recursion when scrollbars are disabled during resizing
-    canvasController->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-    canvasController->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-    canvasController->show();
-
-    // set up status bar message
-    d->status = new QLabel(QString(), this);
-    d->status->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    d->status->setMinimumWidth(300);
-    addStatusBarItem(d->status, 1);
-    connect(KoToolManager::instance(), SIGNAL(changedStatusText(QString)),
-            d->status, SLOT(setText(QString)));
     d->cursorCoords = new QLabel(QString(), this);
     d->cursorCoords->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     d->cursorCoords->setMinimumWidth(50);
     addStatusBarItem(d->cursorCoords, 0);
-
-    // TODO maybe the zoomHandler should be a member of the view and not the canvas.
-    // set up the zoom controller
-    KarbonZoomController * zoomController = new KarbonZoomController(d->canvasController, actionCollection(), this);
-    zoomController->setPageSize(d->part->pageSize());
-    d->zoomActionWidget = zoomController->zoomAction()->createWidget(statusBar());
-    addStatusBarItem(d->zoomActionWidget, 0);
-    zoomController->setZoomMode(KoZoomMode::ZOOM_PAGE);
-    connect(zoomController, SIGNAL(zoomedToSelection()), this, SLOT(zoomSelection()));
-    connect(zoomController, SIGNAL(zoomedToAll()), this, SLOT(zoomDrawing()));
+    connect(canvasController()->proxyObject, SIGNAL(canvasMousePositionChanged(QPoint)), this, SLOT(mousePositionChanged(QPoint)));
 
     d->smallPreview = new KarbonSmallStylePreview(this);
     connect(d->smallPreview, SIGNAL(fillApplied()), this, SLOT(applyFillToSelection()));
     connect(d->smallPreview, SIGNAL(strokeApplied()), this, SLOT(applyStrokeToSelection()));
     addStatusBarItem(d->smallPreview, 0);
-
-    KoToolManager::instance()->addController(d->canvasController);
-    KoToolManager::instance()->registerTools(actionCollection(), d->canvasController);
+    // FIXME: This was not neccessary before refactoring to pageapp, why now?
+    // Also, changing colors of a shape does not update preview
+    connect(shapeManager(), SIGNAL(selectionChanged()), d->smallPreview, SLOT(selectionChanged()));
 
     initActions();
 
@@ -273,77 +234,25 @@ KarbonView::KarbonView(KarbonPart *karbonPart, KarbonDocument* doc, QWidget* par
         }
     }
 
-    unsigned int max = part()->maxRecentFiles();
+    unsigned int max = static_cast<KarbonDocument*>(kopaDocument())->maxRecentFiles();
     setNumberOfRecentFiles(max);
-
-    // widgets:
-    d->horizRuler = new KoRuler(this, Qt::Horizontal, d->canvas->viewConverter());
-    d->horizRuler->setShowMousePosition(true);
-    d->horizRuler->setUnit(doc->unit());
-    d->horizRuler->setRightToLeft(false);
-    d->horizRuler->setVisible(false);
-    new KoRulerController(d->horizRuler, d->canvas->resourceManager());
-
-    connect(doc, SIGNAL(unitChanged(KoUnit)), this, SLOT(updateUnit(KoUnit)));
-
-    d->vertRuler = new KoRuler(this, Qt::Vertical, d->canvas->viewConverter());
-    d->vertRuler->setShowMousePosition(true);
-    d->vertRuler->setUnit(doc->unit());
-    d->vertRuler->setVisible(false);
-
-    connect(d->canvas, SIGNAL(documentOriginChanged(QPoint)), this, SLOT(pageOffsetChanged()));
-    connect(d->canvasController->proxyObject, SIGNAL(canvasOffsetXChanged(int)), this, SLOT(pageOffsetChanged()));
-    connect(d->canvasController->proxyObject, SIGNAL(canvasOffsetYChanged(int)), this, SLOT(pageOffsetChanged()));
-    connect(d->canvasController->proxyObject, SIGNAL(canvasMousePositionChanged(QPoint)),
-            this, SLOT(mousePositionChanged(QPoint)));
-    d->vertRuler->createGuideToolConnection(d->canvas);
-    d->horizRuler->createGuideToolConnection(d->canvas);
-
-    updateRuler();
 
     d->colorBar = new KarbonPaletteBarWidget(Qt::Horizontal, this);
     connect(d->colorBar, SIGNAL(colorSelected(KoColor)), this, SLOT(applyPaletteColor(KoColor)));
-    connect(d->canvas->shapeManager(), SIGNAL(selectionContentChanged()), d->colorBar, SLOT(updateDocumentColors()));
-    connect(part(), SIGNAL(shapeCountChanged()), d->colorBar, SLOT(updateDocumentColors()));
+    connect(shapeManager(), SIGNAL(selectionContentChanged()), d->colorBar, SLOT(updateDocumentColors()));
+    connect(kopaDocument(), SIGNAL(shapeAdded(KoShape*)), d->colorBar, SLOT(updateDocumentColors()));
+    connect(kopaDocument(), SIGNAL(shapeRemoved(KoShape*)), d->colorBar, SLOT(updateDocumentColors()));
 
     if (mainWindow()) {
-        // set the first layer active
-        d->canvasController->canvas()->shapeManager()->selection()->setActiveLayer(part()->layers().first());
-
-        //Create Dockers
-        createLayersTabDock();
-
-        // set one whitespace as title to allow a one column toolbox
-        KoToolBoxFactory toolBoxFactory;
-        mainWindow()->createDockWidget(&toolBoxFactory);
-
-        connect(canvasController, SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget> >)),
-                mainWindow()->dockerManager(), SLOT(newOptionWidgets(QList<QPointer<QWidget> >)));
-
-        KoToolManager::instance()->requestToolActivation(d->canvasController);
-
-        KConfigGroup interfaceGroup = KarbonFactory::global().config()->group("Interface");
-        if(interfaceGroup.readEntry<bool>("ShowRulers", false)) {
-            d->horizRuler->setVisible(true);
-            d->vertRuler->setVisible(true);
-            d->showRulerAction->setChecked(true);
-        }
-        if (!interfaceGroup.readEntry<bool>("ShowPalette", true)) {
-            d->colorBar->setVisible(false);
-            d->showPaletteAction->setChecked(false);
+        KSharedConfigPtr config = KSharedConfig::openConfig();
+        if (config->hasGroup("Interface")) {
+            KConfigGroup interfaceGroup = config->group( "Interface" );
+            if (!interfaceGroup.readEntry<bool>("ShowPalette", true)) {
+                d->colorBar->setVisible(false);
+                d->showPaletteAction->setChecked(false);
+            }
         }
     }
-
-    // layout:
-    QGridLayout *layout = new QGridLayout();
-    layout->setMargin(0);
-    layout->setSpacing(0);
-    layout->addWidget(d->horizRuler->tabChooser(), 0, 0);
-    layout->addWidget(d->horizRuler, 0, 1);
-    layout->addWidget(d->vertRuler, 1, 0);
-    layout->addWidget(canvasController, 1, 1);
-    layout->addWidget(d->colorBar, 2, 1);
-    setLayout(layout);
 
     reorganizeGUI();
 
@@ -352,37 +261,38 @@ KarbonView::KarbonView(KarbonPart *karbonPart, KarbonDocument* doc, QWidget* par
 
 KarbonView::~KarbonView()
 {
-    KoToolManager::instance()->removeCanvasController(d->canvasController);
-
-    removeStatusBarItem(d->status);
     removeStatusBarItem(d->cursorCoords);
     removeStatusBarItem(d->smallPreview);
-    removeStatusBarItem(d->zoomActionWidget);
 
+    if (factory()) {
+        factory()->removeClient(this);
+    }
     delete d;
+}
+
+KarbonPaletteBarWidget *KarbonView::colorBar() const
+{
+    return d->colorBar;
 }
 
 KarbonDocument * KarbonView::part() const
 {
-    return d->part;
+    return static_cast<KarbonDocument*>(kopaDocument());
 }
 
-KarbonCanvas * KarbonView::canvasWidget() const
+KoCanvasResourceManager *KarbonView::resourceManager() const
 {
-    return d->canvas;
+    return kopaCanvas()->resourceManager();
 }
 
-KoZoomController * KarbonView::zoomController() const
+KoPACanvas *KarbonView::canvasWidget() const
 {
-    return 0;
+    return dynamic_cast<KoPACanvas*>(kopaCanvas());
 }
 
 void KarbonView::resizeEvent(QResizeEvent* /*event*/)
 {
-    if (!d->showRulerAction)
-        return;
-
-    if (!d->canvas)
+    if (!kopaCanvas())
         return;
 
     reorganizeGUI();
@@ -403,14 +313,14 @@ void KarbonView::dropEvent(QDropEvent *e)
     //Accepts QColor - from Color Manager's KColorPatch
     QColor color = KColorMimeData::fromMimeData(e->mimeData());
     if (color.isValid()) {
-        KoSelection * selection = d->canvas->shapeManager()->selection();
+        KoSelection * selection = shapeManager()->selection();
         if (! selection)
             return;
 
-        if (! part())
+        if (! kopaDocument())
             return;
 
-        if (d->canvas->resourceManager()->intResource(KoCanvasResourceManager::ActiveStyleType) == KoFlake::Foreground) {
+        if (resourceManager()->intResource(KoCanvasResourceManager::ActiveStyleType) == KoFlake::Foreground) {
             QList<KoShapeStrokeModel*> strokes;
             QList<KoShape*> selectedShapes = selection->selectedShapes();
             foreach(KoShape * shape, selectedShapes) {
@@ -424,60 +334,19 @@ void KarbonView::dropEvent(QDropEvent *e)
                 }
                 strokes.append(newStroke);
             }
-            d->canvas->addCommand(new KoShapeStrokeCommand(selectedShapes, strokes, 0));
+            kopaCanvas()->addCommand(new KoShapeStrokeCommand(selectedShapes, strokes, 0));
         } else {
             QSharedPointer<KoShapeBackground> fill(new KoColorBackground(color));
-            d->canvas->addCommand(new KoShapeBackgroundCommand(selection->selectedShapes(), fill, 0));
+            kopaCanvas()->addCommand(new KoShapeBackgroundCommand(selection->selectedShapes(), fill, 0));
         }
     }
 
-    KoView::dropEvent(e);
+    KoPAView::dropEvent(e);
 }
-
-void KarbonView::addImages(const QVector<QImage> &imageList, const QPoint &insertAt)
-{
-    // get position from event and convert to document coordinates
-    QPointF pos = canvasWidget()->viewConverter()->viewToDocument(insertAt)
-            + canvasWidget()->documentOffset() - canvasWidget()->documentOrigin();
-
-    // create a factory
-    KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value("PictureShape");
-    if (!factory) {
-        warnKarbonUi << "No picture shape found, cannot drop images.";
-        return;
-    }
-
-    foreach(const QImage &image, imageList) {
-
-        KoProperties params;
-        QVariant v;
-        v.setValue<QImage>(image);
-        params.setProperty("qimage", v);
-
-        KoShape *shape = factory->createShape(&params, part()->resourceManager());
-
-        if (!shape) {
-            warnKarbonUi << "Could not create a shape from the image";
-            return;
-        }
-        shape->setPosition(pos);
-        pos += QPointF(25,25); // increase the position for each shape we insert so the
-                               // user can see them all.
-        KUndo2Command *cmd = canvasWidget()->shapeController()->addShapeDirect(shape);
-        if (cmd) {
-            KoSelection *selection = canvasWidget()->shapeManager()->selection();
-            selection->deselectAll();
-            selection->select(shape);
-        }
-        canvasWidget()->addCommand(cmd);
-    }
-}
-
-
 
 void KarbonView::fileImportGraphic()
 {
-    QByteArray nativeMimeType = part()->nativeFormatMimeType();
+    QByteArray nativeMimeType = kopaDocument()->nativeFormatMimeType();
     QStringList filter = KoFilterManager::mimeFilter(nativeMimeType, KoFilterManager::Import);
 
     QStringList imageFilter;
@@ -494,14 +363,9 @@ void KarbonView::fileImportGraphic()
 
     if (fname.isEmpty()) return;
 
-    QMap<QString, KoDataCenterBase*> dataCenters = part()->dataCenterMap();
-
     KarbonPart importPart(0);
     KarbonDocument importDocument(&importPart);
     importPart.setDocument(&importDocument);
-
-    // use data centers of this document for importing
-    importDocument.useExternalDataCenterMap(dataCenters);
 
     bool success = true;
 
@@ -537,8 +401,8 @@ void KarbonView::fileImportGraphic()
             return;
         }
 
-        KoShape *picture = factory->createDefaultShape(part()->resourceManager());
-        KoImageCollection *imageCollection = part()->resourceManager()->imageCollection();
+        KoShape *picture = factory->createDefaultShape(kopaDocument()->resourceManager());
+        KoImageCollection *imageCollection = kopaDocument()->resourceManager()->imageCollection();
         if (!picture || !imageCollection) {
             KMessageBox::error(0, i18n("Could not create image shape."), i18n("Import graphic"), 0);
             return;
@@ -556,13 +420,17 @@ void KarbonView::fileImportGraphic()
         picture->setPosition(QPointF());
         picture->setKeepAspectRatio(true);
 
-        KUndo2Command * cmd = d->canvas->shapeController()->addShapeDirect(picture);
+        KUndo2Command * cmd = kopaCanvas()->shapeController()->addShapeDirect(picture);
         cmd->setText(kundo2_i18n("Insert graphics"));
-        d->canvas->addCommand(cmd);
-        d->canvas->shapeManager()->selection()->select(picture);
+        kopaCanvas()->addCommand(cmd);
+        shapeManager()->selection()->select(picture);
         return;
     }
-
+    // TODO: It is not obvious how this is best implemented when importing multipage docs
+    // Append pages?
+    // Append layers to existing pages?
+    // Add shapes to active page?
+    // etc?
     // check if we are loading our native format
     if (nativeMimeType == currentMimeFilter) {
         // directly load the native format
@@ -589,30 +457,32 @@ void KarbonView::fileImportGraphic()
     }
 
     if (success) {
-        QList<KoShape*> importedShapes = importDocument.shapes();
-
-        KarbonDocumentMergeCommand * cmd = new KarbonDocumentMergeCommand(part(), &importDocument);
-        d->canvas->addCommand(cmd);
-
+        KarbonDocumentMergeCommand * cmd = new KarbonDocumentMergeCommand(dynamic_cast<KarbonDocument*>(kopaDocument()), importDocument);
+        kopaCanvas()->addCommand(cmd);
+/*
         foreach(KoShape * shape, importedShapes) {
             d->canvas->shapeManager()->selection()->select(shape, false);
-        }
+        }*/
     }
 }
 
 void KarbonView::selectionDuplicate()
 {
-    d->canvas->toolProxy()->copy();
-    d->canvas->toolProxy()->paste();
+    kopaCanvas()->toolProxy()->copy();
+    kopaCanvas()->toolProxy()->paste();
 }
 
 void KarbonView::editSelectAll()
 {
-    KoSelection* selection = d->canvas->shapeManager()->selection();
-    if (! selection)
+    KoSelection* selection = shapeManager()->selection();
+    if (! selection) {
         return;
-
-    QList<KoShape*> shapes = part()->shapes();
+    }
+    QList<KoShape*> shapes;
+    for (int i = 0; i < kopaDocument()->pages().count(); ++i) {
+        KoShapeLayer *l = dynamic_cast<KoShapeLayer*>(kopaDocument()->pages().at(i));
+        shapes += l->shapes();
+    }
     debugKarbonUi << "shapes.size() =" << shapes.size();
 
     foreach(KoShape* shape, shapes) {
@@ -625,7 +495,7 @@ void KarbonView::editSelectAll()
 
 void KarbonView::editDeselectAll()
 {
-    KoSelection* selection = d->canvas->shapeManager()->selection();
+    KoSelection* selection = shapeManager()->selection();
     if (selection)
         selection->deselectAll();
 
@@ -634,7 +504,7 @@ void KarbonView::editDeselectAll()
 
 void KarbonView::editDeleteSelection()
 {
-    d->canvas->toolProxy()->deleteSelection();
+    kopaCanvas()->toolProxy()->deleteSelection();
 }
 
 void KarbonView::selectionDistributeHorizontalCenter()
@@ -679,7 +549,7 @@ void KarbonView::selectionDistributeVerticalTop()
 
 void KarbonView::selectionDistribute(KoShapeDistributeCommand::Distribute distribute)
 {
-    KoSelection* selection = d->canvas->shapeManager()->selection();
+    KoSelection* selection = shapeManager()->selection();
     if (! selection)
         return;
 
@@ -688,12 +558,12 @@ void KarbonView::selectionDistribute(KoShapeDistributeCommand::Distribute distri
 
     KoShapeDistributeCommand *cmd = new KoShapeDistributeCommand(selectedShapes, distribute, selection->boundingRect());
 
-    d->canvas->addCommand(cmd);
+    kopaCanvas()->addCommand(cmd);
 }
 
 void KarbonView::clipObjects()
 {
-    KoSelection* selection = d->canvas->shapeManager()->selection();
+    KoSelection* selection = shapeManager()->selection();
     if( ! selection )
         return;
 
@@ -715,13 +585,13 @@ void KarbonView::clipObjects()
     if( ! clipPaths.count() )
         return;
 
-    KUndo2Command * cmd = new KoShapeClipCommand( d->part, shapeToClip, clipPaths );
-    d->canvas->addCommand( cmd );
+    KUndo2Command * cmd = new KoShapeClipCommand( kopaDocument(), shapeToClip, clipPaths );
+    kopaCanvas()->addCommand( cmd );
 }
 
 void KarbonView::unclipObjects()
 {
-    KoSelection* selection = d->canvas->shapeManager()->selection();
+    KoSelection* selection = shapeManager()->selection();
     if( ! selection )
         return;
 
@@ -737,7 +607,7 @@ void KarbonView::unclipObjects()
     if (!shapesToUnclip.count())
         return;
 
-    d->canvas->addCommand(new KoShapeUnclipCommand(d->part, shapesToUnclip));
+    kopaCanvas()->addCommand(new KoShapeUnclipCommand(kopaDocument(), shapesToUnclip));
 }
 
 void KarbonView::flipVertical()
@@ -755,7 +625,7 @@ void KarbonView::selectionFlip(bool horizontally, bool vertically)
     if (!horizontally && !vertically)
         return;
 
-    KoSelection* selection = d->canvas->shapeManager()->selection();
+    KoSelection* selection = shapeManager()->selection();
     if( ! selection )
         return;
 
@@ -793,7 +663,7 @@ void KarbonView::selectionFlip(bool horizontally, bool vertically)
         cmd->setText(kundo2_i18n("Mirror Vertically"));
     else
         cmd->setText(kundo2_i18n("Mirror Horizontally and Vertically"));
-    d->canvas->addCommand(cmd);
+    kopaCanvas()->addCommand(cmd);
 }
 
 void KarbonView::closePath()
@@ -803,7 +673,7 @@ void KarbonView::closePath()
 
 void KarbonView::combinePath()
 {
-    KoSelection* selection = d->canvas->shapeManager()->selection();
+    KoSelection* selection = shapeManager()->selection();
     if (! selection)
         return;
 
@@ -822,12 +692,12 @@ void KarbonView::combinePath()
     }
 
     if (paths.size())
-        d->canvas->addCommand(new KoPathCombineCommand(part(), paths));
+        kopaCanvas()->addCommand(new KoPathCombineCommand(kopaDocument(), paths));
 }
 
 void KarbonView::separatePath()
 {
-    KoSelection* selection = d->canvas->shapeManager()->selection();
+    KoSelection* selection = shapeManager()->selection();
     if (! selection)
         return;
 
@@ -854,7 +724,7 @@ void KarbonView::separatePath()
         QList<KoShape*> newShapes;
         if (p->separate(separatedPaths)) {
             foreach(KoPathShape *subPath, separatedPaths) {
-                new KoShapeCreateCommand(part(), subPath, cmd);
+                new KoShapeCreateCommand(kopaDocument(), subPath, cmd);
                 newShapes << subPath;
             }
             // make sure we put the new subpaths into the parent
@@ -863,17 +733,17 @@ void KarbonView::separatePath()
             if (parentGroup) {
                 new KoShapeGroupCommand(parentGroup, newShapes, cmd);
             }
-            new KoShapeDeleteCommand(part(), p, cmd);
+            new KoShapeDeleteCommand(kopaDocument(), p, cmd);
         }
     }
-    d->canvas->addCommand(cmd);
+    kopaCanvas()->addCommand(cmd);
 }
 
 void KarbonView::reversePath()
 {
     QList<KoPathShape*> paths = selectedPathShapes();
     if (paths.size())
-        d->canvas->addCommand(new KoPathReverseCommand(paths));
+        kopaCanvas()->addCommand(new KoPathReverseCommand(paths));
 }
 
 void KarbonView::intersectPaths()
@@ -898,7 +768,7 @@ void KarbonView::excludePaths()
 
 void KarbonView::booleanOperation(KarbonBooleanCommand::BooleanOperation operation)
 {
-    KoSelection* selection = d->canvas->shapeManager()->selection();
+    KoSelection* selection = shapeManager()->selection();
     if (! selection)
         return;
 
@@ -921,16 +791,16 @@ void KarbonView::booleanOperation(KarbonBooleanCommand::BooleanOperation operati
         paramShape = dynamic_cast<KoParameterShape*>(paths[1]);
         if (paramShape && paramShape->isParametricShape())
             new KoParameterToPathCommand(paramShape, macro);
-        new KarbonBooleanCommand(part(), paths[0], paths[1], operation, macro);
-        new KoShapeDeleteCommand(part(), paths[0], macro);
-        new KoShapeDeleteCommand(part(), paths[1], macro);
-        d->canvas->addCommand(macro);
+        new KarbonBooleanCommand(kopaDocument(), paths[0], paths[1], operation, macro);
+        new KoShapeDeleteCommand(kopaDocument(), paths[0], macro);
+        new KoShapeDeleteCommand(kopaDocument(), paths[1], macro);
+        kopaCanvas()->addCommand(macro);
     }
 }
 
 void KarbonView::pathSnapToGrid()
 {
-    KoSelection* selection = d->canvas->shapeManager()->selection();
+    KoSelection* selection = shapeManager()->selection();
     if (! selection)
         return;
 
@@ -939,11 +809,11 @@ void KarbonView::pathSnapToGrid()
     QVector<QPointF> offsets;
 
     // store current grid snap state
-    bool oldSnapToGrid = part()->gridData().snapToGrid();
+    bool oldSnapToGrid = kopaDocument()->gridData().snapToGrid();
     // enable grid snapping
-    part()->gridData().setSnapToGrid(true);
+    kopaDocument()->gridData().setSnapToGrid(true);
 
-    KoSnapGuide snapGuide(d->canvas);
+    KoSnapGuide snapGuide(kopaCanvas());
     snapGuide.enableSnapStrategies(KoSnapGuide::GridSnapping);
     snapGuide.setSnapDistance(INT_MAX);
 
@@ -974,52 +844,55 @@ void KarbonView::pathSnapToGrid()
     }
 
     // reset grid snapping state to old value
-    part()->gridData().setSnapToGrid(oldSnapToGrid);
+    kopaDocument()->gridData().setSnapToGrid(oldSnapToGrid);
 
-    d->canvas->addCommand(new KoPathPointMoveCommand(points, offsets));
+    kopaCanvas()->addCommand(new KoPathPointMoveCommand(points, offsets));
 }
 
 void KarbonView::viewModeChanged(bool outlineMode)
 {
-    d->canvas->enableOutlineMode(outlineMode);
-    d->canvas->updateCanvas(d->canvas->canvasWidget()->rect());
+    if (outlineMode) {
+        new KarbonOutlinePaintingStrategy(shapeManager());
+    } else {
+        shapeManager()->setPaintingStrategy(new KoShapeManagerPaintingStrategy(shapeManager()));
+    }
 }
 
 void KarbonView::zoomSelection()
 {
-    KoSelection* selection = d->canvas->shapeManager()->selection();
+    KoSelection* selection = shapeManager()->selection();
     if (! selection)
         return;
 
     if (! selection->count())
         return;
 
-    const KoZoomHandler * zoomHandler = dynamic_cast<const KoZoomHandler*>(d->canvas->viewConverter());
+    const KoZoomHandler * zoomHandler = dynamic_cast<const KoZoomHandler*>(viewConverter());
     if (! zoomHandler)
         return;
 
     QRectF bbox = selection->boundingRect();
     QRect viewRect = zoomHandler->documentToView(bbox).toRect();
 
-    d->canvasController->zoomTo(viewRect.translated(d->canvas->documentOrigin()));
-    QPointF newCenter = d->canvas->documentOrigin() + zoomHandler->documentToView(bbox.center());
-    d->canvasController->setPreferredCenter(newCenter.toPoint());
+    kopaCanvas()->canvasController()->zoomTo(viewRect.translated(kopaCanvas()->documentOrigin()));
+//     QPointF newCenter = kopaCanvas()->documentOrigin() + zoomHandler->documentToView(bbox.center());
+//     kopaCanvas()->setPreferredCenter(newCenter.toPoint());
 }
 
 void KarbonView::zoomDrawing()
 {
-    const KoZoomHandler * zoomHandler = dynamic_cast<const KoZoomHandler*>(d->canvas->viewConverter());
+    const KoZoomHandler * zoomHandler = dynamic_cast<const KoZoomHandler*>(kopaCanvas()->viewConverter());
     if (! zoomHandler)
         return;
 
-    QRectF bbox = d->part->contentRect();
+    QRectF bbox = activePage()->contentRect();
     if (bbox.isNull())
         return;
 
     QRect viewRect = zoomHandler->documentToView(bbox).toRect();
-    d->canvasController->zoomTo(viewRect.translated(d->canvas->documentOrigin()));
-    QPointF newCenter = d->canvas->documentOrigin() + zoomHandler->documentToView(bbox.center());
-    d->canvasController->setPreferredCenter(newCenter.toPoint());
+    kopaCanvas()->canvasController()->zoomTo(viewRect.translated(kopaCanvas()->documentOrigin()));
+//     QPointF newCenter = kopaCanvas()->documentOrigin() + zoomHandler->documentToView(bbox.center());
+//     kopaCanvas()->setPreferredCenter(newCenter.toPoint());
 }
 
 void KarbonView::initActions()
@@ -1029,21 +902,17 @@ void KarbonView::initActions()
     actionCollection()->addAction("view_mode", d->viewAction);
     connect(d->viewAction, SIGNAL(toggled(bool)), this, SLOT(viewModeChanged(bool)));
 
-    d->showPageMargins  = new KToggleAction(i18n("Show Page Margins"), this);
-    actionCollection()->addAction("view_show_margins", d->showPageMargins);
-    connect(d->showPageMargins, SIGNAL(toggled(bool)), SLOT(togglePageMargins(bool)));
-
     // No need for the other actions in read-only (embedded) mode
     if (!mainWindow())
         return;
 
     // edit ----->
     QAction *action = actionCollection()->addAction(KStandardAction::Cut,  "edit_cut", 0, 0);
-    new KoCutController(d->canvas, action);
+    new KoCutController(kopaCanvas(), action);
     action = actionCollection()->addAction(KStandardAction::Copy,  "edit_copy", 0, 0);
-    new KoCopyController(d->canvas, action);
+    new KoCopyController(kopaCanvas(), action);
     action = actionCollection()->addAction(KStandardAction::Paste,  "edit_paste", 0, 0);
-    new KoPasteController(d->canvas, action);
+    new KoPasteController(kopaCanvas(), action);
     actionCollection()->addAction(KStandardAction::SelectAll,  "edit_select_all", this, SLOT(editSelectAll()));
     actionCollection()->addAction(KStandardAction::Deselect,  "edit_deselect_all", this, SLOT(editDeselectAll()));
 
@@ -1055,7 +924,7 @@ void KarbonView::initActions()
     actionCollection()->addAction("edit_delete", d->deleteSelectionAction);
     d->deleteSelectionAction->setShortcut(QKeySequence("Del"));
     connect(d->deleteSelectionAction, SIGNAL(triggered()), this, SLOT(editDeleteSelection()));
-    connect(d->canvas->toolProxy(), SIGNAL(selectionChanged(bool)), d->deleteSelectionAction, SLOT(setEnabled(bool)));
+    connect(kopaCanvas()->toolProxy(), SIGNAL(selectionChanged(bool)), d->deleteSelectionAction, SLOT(setEnabled(bool)));
 
     QAction *actionEditGuides = new QAction(koIcon("edit-guides"), i18n("Edit Guides"), this);
     actionCollection()->addAction("edit_guides", actionEditGuides);
@@ -1100,29 +969,11 @@ void KarbonView::initActions()
     actionCollection()->addAction("object_distribute_vertical_top", actionDistributeTop);
     connect(actionDistributeTop, SIGNAL(triggered()), this, SLOT(selectionDistributeVerticalTop()));
 
-    d->showRulerAction  = new KToggleAction(i18n("Show Rulers"), this);
-    actionCollection()->addAction("view_show_ruler", d->showRulerAction);
-    d->showRulerAction->setToolTip(i18n("Shows or hides rulers"));
-    d->showRulerAction->setChecked(false);
-    connect(d->showRulerAction, SIGNAL(triggered()), this, SLOT(showRuler()));
-
-    KToggleAction *gridAction = d->part->gridData().gridToggleAction(d->canvas);
-    actionCollection()->addAction("view_grid", gridAction);
-
-    d->showGuidesAction = KoStandardAction::showGuides(this, SLOT(showGuides()), this);
-    actionCollection()->addAction(KoStandardAction::name(KoStandardAction::ShowGuides), d->showGuidesAction);
-    d->showGuidesAction->setChecked(d->part->guidesData().showGuideLines());
-
     d->showPaletteAction = new KToggleAction(i18n("Show Color Palette"), this);
     actionCollection()->addAction("view_show_palette", d->showPaletteAction);
     d->showPaletteAction->setToolTip(i18n("Show or hide color palette"));
     d->showPaletteAction->setChecked(true);
     connect(d->showPaletteAction, SIGNAL(triggered()), this, SLOT(showPalette()));
-
-    d->snapGridAction  = new KToggleAction(i18n("Snap to Grid"), this);
-    actionCollection()->addAction("view_snap_to_grid", d->snapGridAction);
-    d->snapGridAction->setToolTip(i18n("Snaps to grid"));
-    connect(d->snapGridAction, SIGNAL(triggered()), this, SLOT(snapToGrid()));
 
     action = actionCollection()->action("object_group");
     if (action) {
@@ -1207,18 +1058,6 @@ void KarbonView::initActions()
 
     // path <-----
 
-    d->configureAction  = new QAction(koIcon("configure"), i18n("Configure Karbon..."), this);
-    actionCollection()->addAction("configure", d->configureAction);
-    connect(d->configureAction, SIGNAL(triggered()), this, SLOT(configure()));
-    // not sure why this isn't done through KStandardAction, but since it isn't
-    // we ought to set the MenuRole manually so the item ends up in the appropriate
-    // menu on OS X:
-    d->configureAction->setMenuRole(QAction::PreferencesRole);
-
-    QAction *actionPageLayout  = new QAction(i18n("Page &Layout..."), this);
-    actionCollection()->addAction("page_layout", actionPageLayout);
-    connect(actionPageLayout, SIGNAL(triggered()), this, SLOT(configurePageLayout()));
-
     // view ---->
     QAction * zoomSelection = new QAction(koIcon("zoom-select"), i18n("Zoom to Selection"), this);
     actionCollection()->addAction("view_zoom_selection", zoomSelection);
@@ -1232,16 +1071,12 @@ void KarbonView::initActions()
 
 void KarbonView::mousePositionChanged(const QPoint &position)
 {
-    QPoint canvasOffset(d->canvasController->canvasOffsetX(), d->canvasController->canvasOffsetY());
-    QPoint viewPos = position - d->canvas->documentOrigin() - canvasOffset;
-    if (d->horizRuler->isVisible())
-        d->horizRuler->updateMouseCoordinate(viewPos.x());
-    if (d->vertRuler->isVisible())
-        d->vertRuler->updateMouseCoordinate(viewPos.y());
+    const QPoint canvasOffset(canvasController()->canvasOffsetX(), canvasController()->canvasOffsetY() );
+    const QPoint viewPos = position - kopaCanvas()->documentOrigin() - canvasOffset;
 
-    QPointF documentPos = d->canvas->viewConverter()->viewToDocument(viewPos);
-    qreal x = part()->unit().toUserValue(documentPos.x());
-    qreal y = part()->unit().toUserValue(documentPos.y());
+    QPointF documentPos = kopaCanvas()->viewConverter()->viewToDocument(viewPos);
+    qreal x = kopaDocument()->unit().toUserValue(documentPos.x());
+    qreal y = kopaDocument()->unit().toUserValue(documentPos.y());
 
     if (statusBar() && statusBar()->isVisible()) {
         QLocale locale;
@@ -1251,71 +1086,32 @@ void KarbonView::mousePositionChanged(const QPoint &position)
 
 void KarbonView::reorganizeGUI()
 {
-    if (d->snapGridAction)
-        d->snapGridAction->setChecked(part()->gridData().snapToGrid());
-    if (statusBar())
-        statusBar()->setVisible(part()->showStatusBar());
+    // TODO: Find a better solution, maybe move to KoPAView?
+    if (statusBar()) {
+        bool show = true;
+        if (mainWindow()) {
+            KSharedConfigPtr config = KSharedConfig::openConfig();
+            if (config->hasGroup("Interface")) {
+                KConfigGroup interfaceGroup = config->group( "Interface" );
+                if (!interfaceGroup.readEntry<bool>("ShowStatusBar", true)) {
+                    show = false;
+                }
+            }
+        }
+        statusBar()->setVisible(show);
+    }
 }
 
 void KarbonView::setNumberOfRecentFiles(unsigned int number)
 {
-    if (mainWindow())     // 0L when embedded into konq !
+    if (mainWindow()) {    // 0L when embedded into konq !
         mainWindow()->setMaxRecentItems(number);
-}
-
-void KarbonView::showRuler()
-{
-    if(!mainWindow())
-        return;
-
-    const bool showRuler = d->showRulerAction->isChecked();
-    d->horizRuler->setVisible(showRuler);
-    d->vertRuler->setVisible(showRuler);
-    if (showRuler)
-        updateRuler();
-
-    // this will make the last setting of the ruler visibility persistent
-    KConfigGroup interfaceGroup = KarbonFactory::global().config()->group("Interface");
-    if (!showRuler && !interfaceGroup.hasDefault("ShowRulers"))
-        interfaceGroup.revertToDefault("ShowRulers");
-    else
-        interfaceGroup.writeEntry("ShowRulers", showRuler);
-}
-
-void KarbonView::togglePageMargins(bool b)
-{
-    ((KToggleAction*)actionCollection()->action("view_show_margins"))->setChecked(b);
-    d->canvas->setShowPageMargins(b);
-    d->canvas->update();
-}
-
-void KarbonView::pageOffsetChanged()
-{
-    d->horizRuler->setOffset(d->canvasController->canvasOffsetX() + d->canvas->documentOrigin().x());
-    d->vertRuler->setOffset(d->canvasController->canvasOffsetY() + d->canvas->documentOrigin().y());
-}
-
-void KarbonView::updateRuler()
-{
-    d->horizRuler->setRulerLength(part()->pageSize().width());
-    d->vertRuler->setRulerLength(part()->pageSize().height());
-}
-
-void KarbonView::showGuides()
-{
-    d->part->guidesData().setShowGuideLines(d->showGuidesAction->isChecked());
-    d->canvas->update();
+    }
 }
 
 void KarbonView::editGuides()
 {
     KoToolManager::instance()->switchToolRequested("GuidesTool_ID");
-}
-
-void KarbonView::snapToGrid()
-{
-    d->part->gridData().setSnapToGrid(d->snapGridAction->isChecked());
-    d->canvas->update();
 }
 
 void KarbonView::showPalette()
@@ -1334,36 +1130,19 @@ void KarbonView::showPalette()
         interfaceGroup.writeEntry("ShowPalette", showPalette);
 }
 
-void KarbonView::configure()
+void KarbonView::openConfiguration()
 {
     QPointer<KarbonConfigureDialog> dialog = new KarbonConfigureDialog(this);
     dialog->exec();
     delete dialog;
-    d->part->reorganizeGUI();
-    d->canvas->update();
-}
-
-void KarbonView::configurePageLayout()
-{
-    QPointer<KoPageLayoutDialog> dlg = new KoPageLayoutDialog(this, part()->pageLayout());
-    dlg->showPageSpread(false);
-    dlg->showTextDirection(false);
-    dlg->setPageSpread(false);
-    dlg->setUnit(d->part->unit());
-
-    if (dlg->exec() == QDialog::Accepted) {
-        if (dlg) {
-            part()->setPageLayout(dlg->pageLayout());
-        }
-    }
-    delete dlg;
+    reorganizeGUI();
 }
 
 void KarbonView::selectionChanged()
 {
     if (!mainWindow())
         return;
-    KoSelection *selection = d->canvas->shapeManager()->selection();
+    KoSelection *selection = kopaCanvas()->shapeManager()->selection();
     QList<KoShape*> selectedShapes = selection->selectedShapes(KoFlake::FullSelection);
     const int count = selectedShapes.count();
 
@@ -1426,22 +1205,7 @@ void KarbonView::selectionChanged()
 
 void KarbonView::setCursor(const QCursor &c)
 {
-    d->canvas->setCursor(c);
-}
-
-void KarbonView::createLayersTabDock()
-{
-    if (mainWindow())
-    {
-        KarbonLayerDockerFactory layerFactory;
-        KarbonLayerDocker * layerDocker = qobject_cast<KarbonLayerDocker*>(mainWindow()->createDockWidget(&layerFactory));
-        layerDocker->setCanvas(d->canvas);
-        connect(d->canvas->shapeManager(), SIGNAL(selectionChanged()),
-                layerDocker, SLOT(updateView()));
-        connect(d->canvas->shapeManager(), SIGNAL(selectionContentChanged()),
-                layerDocker, SLOT(updateView()));
-        connect(d->part, SIGNAL(shapeCountChanged()), layerDocker, SLOT(updateView()));
-    }
+    kopaCanvas()->setCursor(c);
 }
 
 void KarbonView::updateReadWrite(bool readwrite)
@@ -1449,16 +1213,9 @@ void KarbonView::updateReadWrite(bool readwrite)
     Q_UNUSED(readwrite);
 }
 
-void KarbonView::updateUnit(const KoUnit &unit)
-{
-    d->horizRuler->setUnit(unit);
-    d->vertRuler->setUnit(unit);
-    d->canvas->resourceManager()->setResource(KoCanvasResourceManager::Unit, unit);
-}
-
 QList<KoPathShape*> KarbonView::selectedPathShapes()
 {
-    KoSelection* selection = d->canvas->shapeManager()->selection();
+    KoSelection* selection = shapeManager()->selection();
     if (! selection)
         return QList<KoPathShape*>();
 
@@ -1476,43 +1233,33 @@ QList<KoPathShape*> KarbonView::selectedPathShapes()
     return paths;
 }
 
-KoPrintJob * KarbonView::createPrintJob()
-{
-    return new KarbonPrintJob(this, KarbonPrintJob::PrintToPaper);
-}
-
-KoPrintJob * KarbonView::createPdfPrintJob()
-{
-    return new KarbonPrintJob(this, KarbonPrintJob::PrintToPdf);
-}
-
 void KarbonView::applyFillToSelection()
 {
-    KoSelection *selection = d->canvas->shapeManager()->selection();
+    KoSelection *selection = shapeManager()->selection();
     if (! selection->count())
         return;
 
     KoShape * shape = selection->firstSelectedShape();
-    d->canvas->addCommand(new KoShapeBackgroundCommand(selection->selectedShapes(), shape->background()));
+    kopaCanvas()->addCommand(new KoShapeBackgroundCommand(selection->selectedShapes(), shape->background()));
 }
 
 void KarbonView::applyStrokeToSelection()
 {
-    KoSelection *selection = d->canvas->shapeManager()->selection();
+    KoSelection *selection = shapeManager()->selection();
     if (! selection->count())
         return;
 
     KoShape * shape = selection->firstSelectedShape();
-    d->canvas->addCommand(new KoShapeStrokeCommand(selection->selectedShapes(), shape->stroke()));
+    kopaCanvas()->addCommand(new KoShapeStrokeCommand(selection->selectedShapes(), shape->stroke()));
 }
 
 void KarbonView::applyPaletteColor(const KoColor &color)
 {
-    KoSelection *selection = d->canvas->shapeManager()->selection();
+    KoSelection *selection = shapeManager()->selection();
     if (! selection->count())
         return;
 
-    int style = d->canvas->resourceManager()->intResource(KoCanvasResourceManager::ActiveStyleType);
+    int style = resourceManager()->intResource(KoCanvasResourceManager::ActiveStyleType);
     if (style == KoFlake::Foreground) {
         QList<KoShapeStrokeModel*> newStrokes;
         foreach(KoShape *shape, selection->selectedShapes()) {
@@ -1526,13 +1273,19 @@ void KarbonView::applyPaletteColor(const KoColor &color)
                 newStrokes << new KoShapeStroke(1.0, color.toQColor());
             }
         }
-        d->canvas->addCommand(new KoShapeStrokeCommand(selection->selectedShapes(), newStrokes));
-        d->canvas->resourceManager()->setForegroundColor(color);
+        kopaCanvas()->addCommand(new KoShapeStrokeCommand(selection->selectedShapes(), newStrokes));
+        resourceManager()->setForegroundColor(color);
     } else {
         QSharedPointer<KoShapeBackground> fill(new KoColorBackground(color.toQColor()));
-        d->canvas->addCommand(new KoShapeBackgroundCommand(selection->selectedShapes(), fill));
-        d->canvas->resourceManager()->setBackgroundColor(color);
+        kopaCanvas()->addCommand(new KoShapeBackgroundCommand(selection->selectedShapes(), fill));
+        resourceManager()->setBackgroundColor(color);
     }
 }
 
+void KarbonView::replaceActivePage(KoPAPageBase *page, KoPAPageBase *newActivePage)
+{
+    if (page == activePage() ) {
+        viewMode()->updateActivePage(newActivePage);
+    }
+}
 

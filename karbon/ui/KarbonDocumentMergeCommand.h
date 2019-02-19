@@ -27,14 +27,10 @@ class KarbonDocument;
 class KarbonDocumentMergeCommand : public KUndo2Command
 {
 public:
-    KarbonDocumentMergeCommand(KarbonDocument * targetPart, KarbonDocument * sourcePart);
-    virtual ~KarbonDocumentMergeCommand();
-    virtual void redo();
-    virtual void undo();
-
-private:
-    class Private;
-    Private * const d;
+    KarbonDocumentMergeCommand(KarbonDocument * targetPart, KarbonDocument &sourcePart, KUndo2Command *parent = 0);
+    virtual ~KarbonDocumentMergeCommand() Q_DECL_OVERRIDE = default;
+    virtual void redo() Q_DECL_OVERRIDE;
+    virtual void undo() Q_DECL_OVERRIDE;
 };
 
 #endif // _KARBONDOCUMENTMERGECOMMAND_H_

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2008-2009 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2019 Dag Andersen <danders@get2net.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,24 +17,32 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KARBON_LAYER_SORTING_MODEL_H
-#define KARBON_LAYER_SORTING_MODEL_H
+#ifndef __PROXYVIEW_H__
+#define __PROXYVIEW_H__
 
-#include <QSortFilterProxyModel>
+#include <KoView.h>
+#include <KoPageLayout.h>
 
-class KarbonDocument;
-
-class KarbonLayerSortingModel : public QSortFilterProxyModel
+class ProxyView : public KoView
 {
     Q_OBJECT
 public:
-    explicit KarbonLayerSortingModel(QObject *parent);
-    /// Sets a new document to use for sorting
-    void setDocument(KarbonDocument * newDocument);
-protected:
-    virtual bool lessThan(const QModelIndex &left, const QModelIndex &right) const;
+    ProxyView(KoPart *part, KoDocument* doc, QWidget* parent = 0);
+    ~ProxyView() Q_DECL_OVERRIDE;
+
+    virtual void updateReadWrite(bool readwrite) Q_DECL_OVERRIDE;
+    virtual KoZoomController *zoomController() const Q_DECL_OVERRIDE;
+    virtual KoPageLayout pageLayout() const Q_DECL_OVERRIDE;
+    virtual void guiActivateEvent(bool activated) Q_DECL_OVERRIDE;
+
+    virtual QPrintDialog *createPrintDialog(KoPrintJob *printJob, QWidget *parent) Q_DECL_OVERRIDE;
+    virtual KoPrintJob *createPrintJob() Q_DECL_OVERRIDE;
+    virtual KoPrintJob *createPdfPrintJob() Q_DECL_OVERRIDE;
+
 private:
-    KarbonDocument *m_document; ///< the underlying data structure
+    friend class KarbonPart;
+    KoView *view;
 };
 
-#endif // KARBON_LAYER_SORTING_MODEL_H
+#endif
+

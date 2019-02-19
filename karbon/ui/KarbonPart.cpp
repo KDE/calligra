@@ -43,15 +43,18 @@
 #include "KarbonPart.h"
 
 #include "KarbonView.h"
+#include "ProxyView.h"
 #include "KarbonDocument.h"
 #include "KarbonFactory.h"
-#include "KarbonCanvas.h"
+#include "KarbonPaletteBarWidget.h"
 
 #include <KoCanvasResourceManager.h>
 #include <KoCanvasBase.h>
 #include <KoComponentData.h>
 
 #include <kconfiggroup.h>
+
+#include <QVBoxLayout>
 
 KarbonPart::KarbonPart(QObject *parent)
     : KoPart(KarbonFactory::global(), parent)
@@ -63,25 +66,24 @@ KarbonPart::~KarbonPart()
 {
 }
 
-void KarbonPart::setDocument(KoDocument *document)
-{
-    KoPart::setDocument(document);
-    KarbonDocument *doc = qobject_cast<KarbonDocument*>(document);
-    connect(doc, SIGNAL(applyCanvasConfiguration(KarbonCanvas*)), SLOT(applyCanvasConfiguration(KarbonCanvas*)));
-}
-
 KoView * KarbonPart::createViewInstance(KoDocument *_document, QWidget *parent)
 {
     KarbonDocument *doc = qobject_cast<KarbonDocument*>(_document);
+    ProxyView *view = new ProxyView(this, doc, parent);
 
-    KarbonView *result = new KarbonView(this, doc, parent);
+    KarbonView *result = new KarbonView(this, doc, view);
+    view->view = result;
 
-    KoCanvasResourceManager * provider = result->canvasWidget()->resourceManager();
-    provider->setResource(KoCanvasResourceManager::PageSize, doc->pageSize());
+    // Add the color bar below the karbon view (the reason for the ProxyView)
+    QVBoxLayout *layout = new QVBoxLayout(view);
+    layout->setMargin(0);
+    layout->setSpacing(0);
+    layout->addWidget(result);
+    layout->addWidget(result->colorBar());
 
-    applyCanvasConfiguration(result->canvasWidget());
+    connect(doc, SIGNAL(replaceActivePage(KoPAPageBase*,KoPAPageBase*)), result, SLOT(replaceActivePage(KoPAPageBase*,KoPAPageBase*)));
 
-    return result;
+    return view;
 }
 
 KoMainWindow *KarbonPart::createMainWindow()
@@ -99,17 +101,3 @@ void KarbonPart::openTemplate(const QUrl& url)
         document()->setOutputMimeType("application/vnd.oasis.opendocument.graphics");
     }
 }
-
-
-void KarbonPart::applyCanvasConfiguration(KarbonCanvas *canvas)
-{
-    KSharedConfigPtr config = componentData().config();
-
-    QColor color(Qt::white);
-    if (config->hasGroup("Interface")) {
-        color = config->group("Interface").readEntry("CanvasColor", color);
-    }
-    canvas->setBackgroundColor(color);
-}
-
-

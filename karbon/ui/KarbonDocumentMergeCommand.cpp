@@ -20,76 +20,112 @@
 #include "KarbonDocumentMergeCommand.h"
 #include "KarbonPart.h"
 #include "KarbonDocument.h"
+
+#include <KoShape.h>
 #include "KoShapeLayer.h"
+#include <KoPAPageBase.h>
+#include <KoPAPage.h>
+#include <KoPAMasterPage.h>
+
 #include <klocalizedstring.h>
 
-class KarbonDocumentMergeCommand::Private
+class MergePageCommand : public KUndo2Command
 {
 public:
-    Private() : hasMerged(false)
+    MergePageCommand(KoPADocument *doc, KoPAPageBase *targetPage, KoPAPageBase *sourcePage, KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , mine(true)
+    , doc(doc)
+    , targetPage(targetPage)
     {
+        layers = sourcePage->shapes();
+        sourcePage->removeAllShapes();
     }
-
-    ~Private()
-    {
-        if (!hasMerged) {
+    ~MergePageCommand() {
+        if (mine) {
             qDeleteAll(layers);
-            qDeleteAll(shapes);
         }
     }
+    void redo() {
+        for (int i = 0; i < layers.count(); ++i) {
+            targetPage->addShape(layers.at(i));
+        }
+        mine = false;
+        doc->emitUpdate(targetPage);
+    }
+    void undo() {
+        for (int i = 0; i < layers.count(); ++i) {
+            targetPage->removeShape(layers.at(i));
+        }
+        mine = true;
+        doc->emitUpdate(targetPage);
+    }
 
-    KarbonDocument * targetPart;
-    QList<KoShapeLayer*> layers;
-    QList<KoShape*> shapes;
-    bool hasMerged;
+private:
+    bool mine;
+    KoPADocument *doc;
+    KoPAPageBase *targetPage;
+    QList<KoShape*> layers;
 };
 
-KarbonDocumentMergeCommand::KarbonDocumentMergeCommand(KarbonDocument *targetPart, KarbonDocument *sourcePart)
-        : KUndo2Command(0), d(new Private())
+class AddPageCommand : public KUndo2Command
 {
-    d->targetPart = targetPart;
-    d->layers = sourcePart->layers();
-    d->shapes = sourcePart->shapes();
-    foreach(KoShapeLayer * layer, d->layers) {
-        sourcePart->removeShape(layer);
+public:
+    AddPageCommand(KarbonDocument *doc, KoPAPageBase *sourcePage, KUndo2Command *parent)
+    : KUndo2Command(parent)
+    , mine(true)
+    , doc(doc)
+    {
+        newPage = doc->newPage(dynamic_cast<KoPAMasterPage*>(doc->pages(true).value(0)));
+        QList<KoShape*> layers = sourcePage->shapes();
+        sourcePage->removeAllShapes();
+        for (int i = 0; i < layers.count(); ++i) {
+            newPage->addShape(layers.at(i));
+        }
     }
-    foreach(KoShape * shape, d->shapes) {
-        sourcePart->removeShape(shape);
+    ~AddPageCommand() {
+        if (mine) {
+            delete newPage;
+        }
+    }
+    void redo() {
+        doc->insertPage(newPage, doc->pages().count());
+        mine = false;
+    }
+    void undo() {
+        doc->takePage(newPage);
+        mine = true;
+    }
+
+private:
+    bool mine;
+    KarbonDocument *doc;
+    KoPAPageBase *newPage;
+};
+
+KarbonDocumentMergeCommand::KarbonDocumentMergeCommand(KarbonDocument *targetPart, KarbonDocument &sourcePart, KUndo2Command *parent)
+    : KUndo2Command(parent)
+{
+    QList<KoPAPageBase*> pages;
+    for(int i = 0; i < sourcePart.pages().count(); ++i) {
+        KoPAPageBase *sourcePage = sourcePart.pages().at(i);
+        pages << sourcePage;
+        if (i < targetPart->pages().count()) {
+            KoPAPageBase *targetPage = targetPart->pages().at(i);
+            new MergePageCommand(targetPart, targetPage, sourcePage, this);
+        } else {
+            new AddPageCommand(targetPart, sourcePage, this);
+        }
     }
     setText(kundo2_i18n("Insert graphics"));
 }
 
-KarbonDocumentMergeCommand::~KarbonDocumentMergeCommand()
-{
-    delete d;
-}
-
 void KarbonDocumentMergeCommand::redo()
 {
-    if (!d->hasMerged) {
-        foreach(KoShapeLayer * layer, d->layers) {
-            d->targetPart->addShape(layer);
-        }
-        foreach(KoShape * shape, d->shapes) {
-            d->targetPart->addShape(shape);
-        }
-        d->hasMerged = true;
-    }
-
     KUndo2Command::redo();
 }
 
 void KarbonDocumentMergeCommand::undo()
 {
     KUndo2Command::undo();
-
-    if (d->hasMerged) {
-        foreach(KoShapeLayer * layer, d->layers) {
-            d->targetPart->removeShape(layer);
-        }
-        foreach(KoShape * shape, d->shapes) {
-            d->targetPart->removeShape(shape);
-        }
-        d->hasMerged = false;
-    }
 }

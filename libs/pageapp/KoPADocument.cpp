@@ -718,7 +718,7 @@ int KoPADocument::takePage( KoPAPageBase *page )
         updatePageCount();
 
         emit replaceActivePage(page, newActivePage);
-        emit pageRemoved(page);
+        emit pageRemoved(page, index);
     }
 
     if ( pages.size() == 1 ) {

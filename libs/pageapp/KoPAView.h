@@ -45,6 +45,7 @@ class QTextDocument;
 class QTabBar;
 class KoCopyController;
 class KoCutController;
+class KoCanvasController;
 
 /// Creates a view with a KoPACanvasBase and rulers
 class KOPAGEAPP_EXPORT KoPAView : public KoView, public KoPAViewBase
@@ -93,6 +94,7 @@ public:
     KoRuler *horizontalRuler();
     KoRuler *verticalRuler();
 
+    KoCanvasController *canvasController() const;
     /// @return the canvas for the application
     KoPACanvasBase * kopaCanvas() const;
     /// @return the document for the application
@@ -110,16 +112,6 @@ public:
 
     /// @return the master shape manager used for this view
     KoShapeManager* masterShapeManager() const;
-
-    /**
-     * @brief Enables/Disables the given actions
-     *
-     * The actions are of Type KoPAAction
-     *
-     * @param actions which should be enabled/disabled
-     * @param enable new state of the actions
-     */
-    void setActionEnabled( int actions, bool enable );
 
     /**
      * @brief Set the view mode
@@ -210,6 +202,15 @@ protected:
     void hideCustomCentralWidget();
 
 public Q_SLOTS:
+    /**
+     * @brief Enables/Disables the given actions
+     *
+     * The actions are of Type KoPAAction
+     *
+     * @param actions which should be enabled/disabled
+     * @param enable new state of the actions
+     */
+    void setActionEnabled( int actions, bool enable );
 
     /// Copy Page
     void copyPage();
@@ -296,6 +297,10 @@ protected Q_SLOTS:
      * This is called when the unit of the document changes
      */
     void updateUnit(const KoUnit &unit);
+
+protected:
+    /// Re-implement this if you need special configuration control
+    virtual void openConfiguration();
 
 private:
     class Private;

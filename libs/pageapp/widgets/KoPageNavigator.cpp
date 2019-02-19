@@ -123,7 +123,7 @@ KoPageNavigator::KoPageNavigator(KoPAView *view)
 
     KoPADocument *const kopaDocument = d->view->kopaDocument();
     connect(kopaDocument, SIGNAL(pageAdded(KoPAPageBase*)), SLOT(updateDisplayLabel()));
-    connect(kopaDocument, SIGNAL(pageRemoved(KoPAPageBase*)), SLOT(updateDisplayLabel()));
+    connect(kopaDocument, SIGNAL(pageRemoved(KoPAPageBase*,int)), SLOT(slotPageRemoved(KoPAPageBase*,int)));
     connect(d->view->proxyObject, SIGNAL(activePageChanged()), SLOT(updateDisplayLabel()));
 
     // Fix width by the largest needed
@@ -253,5 +253,22 @@ void KoPageNavigator::onPageNumberEntered()
     KoPAPageBase* newPage = pages.value(pageNumber-1);
     if (newPage) {
         d->view->proxyObject->updateActivePage(newPage);
+    }
+}
+
+void KoPageNavigator::slotPageRemoved(KoPAPageBase *page, int index)
+{
+    KoPAPageBase *const activePage = d->view->activePage();
+    if (page != activePage) {
+        updateDisplayLabel();
+    } else {
+        KoPADocument *const kopaDocument = d->view->kopaDocument();
+        const int pageNumber = index == 0 ? 0 : index - 1;
+        KoPAPageBase* newPage = kopaDocument->pages().value(pageNumber);
+        if (newPage && d->view->proxyObject) {
+            d->view->proxyObject->updateActivePage(newPage);
+        } else {
+            updateDisplayLabel();
+        }
     }
 }

@@ -33,6 +33,8 @@
 #include <KoGradientBackground.h>
 #include <KoPatternBackground.h>
 #include <KoUnit.h>
+#include <KoPAPageBase.h>
+#include <KoPageLayout.h>
 
 /*
 TODO: bs.wmf stroke in red with MSword and in brown with Words ??
@@ -83,11 +85,15 @@ KoFilter::ConversionStatus WmfExport::convert(const QByteArray& from, const QByt
 
 void WmfExport::paintDocument(KarbonDocument* document)
 {
-
+    KoPAPageBase *page = document->pages().value(0);
+    if (!page) {
+        return;
+    }
     // resolution
     mDpi = 1000;
 
-    QSizeF pageSize = document->pageSize();
+    const KoPageLayout &layout = page->pageLayout();
+    QSizeF pageSize(layout.width, layout.height);
     int width = static_cast<int>(POINT_TO_INCH(pageSize.width()) * mDpi);
     int height = static_cast<int>(POINT_TO_INCH(pageSize.height()) * mDpi);
 
@@ -99,7 +105,7 @@ void WmfExport::paintDocument(KarbonDocument* document)
         mScaleY = static_cast<double>(height) / pageSize.height();
     }
 
-    QList<KoShape*> shapes = document->shapes();
+    QList<KoShape*> shapes = page->shapes();
     qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
 
     // Export layers.

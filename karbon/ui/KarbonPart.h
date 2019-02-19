@@ -39,8 +39,6 @@
 class KoView;
 class KoDocument;
 
-class KarbonCanvas;
-
 class KARBONUI_EXPORT KarbonPart : public KoPart
 {
     Q_OBJECT
@@ -50,21 +48,14 @@ public:
 
     virtual ~KarbonPart();
 
-    void setDocument(KoDocument *document);
-
     /// reimplemented
     virtual KoView *createViewInstance(KoDocument *document, QWidget *parent);
     /// reimplemented
     virtual KoMainWindow *createMainWindow();
 
 protected Q_SLOTS:
-
     /// reimplemented
     virtual void openTemplate(const QUrl& url);
-
-private Q_SLOTS:
-
-    void applyCanvasConfiguration(KarbonCanvas *canvas);
 };
 
 #endif
