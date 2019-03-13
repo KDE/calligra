@@ -1101,7 +1101,11 @@ bool KoShape::isPrintable() const
 void KoShape::setSelectable(bool selectable)
 {
     Q_D(KoShape);
+#if QT_VERSION >= 0x050700
     d->allowedInteractions.setFlag(SelectionAllowed, selectable);
+#else
+    selectable ? (d->allowedInteractions |= SelectionAllowed) : (d->allowedInteractions &= ~SelectionAllowed);
+#endif
 }
 
 bool KoShape::isSelectable() const
@@ -1113,8 +1117,13 @@ bool KoShape::isSelectable() const
 void KoShape::setGeometryProtected(bool on)
 {
     Q_D(KoShape);
+#if QT_VERSION >= 0x050700
     d->allowedInteractions.setFlag(MoveAllowed, !on);
     d->allowedInteractions.setFlag(ResizeAllowed, !on);
+#else
+    (!on) ? (d->allowedInteractions |= MoveAllowed) : (d->allowedInteractions &= ~MoveAllowed);
+    (!on) ? (d->allowedInteractions |= ResizeAllowed) : (d->allowedInteractions &= ~ResizeAllowed);
+#endif
 }
 
 bool KoShape::isGeometryProtected() const
@@ -1126,7 +1135,11 @@ bool KoShape::isGeometryProtected() const
 void KoShape::setContentProtected(bool protect)
 {
     Q_D(KoShape);
+#if QT_VERSION >= 0x050700
     d->allowedInteractions.setFlag(ContentChangeAllowed, !protect);
+#else
+    (!protect) ? (d->allowedInteractions |= ContentChangeAllowed) : (d->allowedInteractions &= ~ContentChangeAllowed);
+#endif
 }
 
 bool KoShape::isContentProtected() const
@@ -1138,7 +1151,11 @@ bool KoShape::isContentProtected() const
 void KoShape::setDeletable(bool deletable)
 {
     Q_D(KoShape);
+#if QT_VERSION >= 0x050700
     d->allowedInteractions.setFlag(DeletionAllowed, deletable);
+#else
+    deletable ? (d->allowedInteractions |= DeletionAllowed) : (d->allowedInteractions &= ~DeletionAllowed);
+#endif
 }
 
 bool KoShape::isDeletable() const
@@ -1150,7 +1167,11 @@ bool KoShape::isDeletable() const
 void KoShape::setAllowedInteraction(KoShape::AllowedInteraction flag, bool value)
 {
     Q_D(KoShape);
+#if QT_VERSION >= 0x050700
     d->allowedInteractions.setFlag(flag, value);
+#else
+    value ? (d->allowedInteractions |= flag) : (d->allowedInteractions &= ~flag);
+#endif
 }
 
 bool KoShape::allowedInteraction(KoShape::AllowedInteraction flag, bool recursive) const
@@ -1494,8 +1515,13 @@ void KoShape::loadStyle(const KoXmlElement &element, KoShapeLoadingContext &cont
     setBorder(d->loadOdfBorder(context));
 
     QString protect(styleStack.property(KoXmlNS::style, "protect"));
+#if QT_VERSION >= 0x050700
     d->allowedInteractions.setFlag(MoveAllowed, !protect.contains("position"));
     d->allowedInteractions.setFlag(ResizeAllowed, !protect.contains("size"));
+#else
+    (!protect.contains("position")) ? (d->allowedInteractions |= MoveAllowed) : (d->allowedInteractions &= ~MoveAllowed);
+    (!protect.contains("size")) ? (d->allowedInteractions |= ResizeAllowed) : (d->allowedInteractions &= ~ResizeAllowed);
+#endif
     setContentProtected(protect.contains("content"));
 
     QString margin = styleStack.property(KoXmlNS::fo, "margin");
