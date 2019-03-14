@@ -136,13 +136,6 @@ void KPrAnimationDirector::paint(QPainter& painter, const QRectF &paintRect)
         painter.setRenderHint( QPainter::Antialiasing );
         paintStep( painter );
     }
-    // This is needed as otherwise on some ATI graphic cards it leads to
-    // 100% CPU load of the x server and no more key events are received
-    // until the page effect is finished. With it is made sure that key
-    // events still get through so that it is possible to cancel the
-    // events. It looks like this is not a problem with nvidia graphic
-    // cards.
-    qApp->syncX();
 }
 
 void KPrAnimationDirector::paintEvent( QPaintEvent* event )
