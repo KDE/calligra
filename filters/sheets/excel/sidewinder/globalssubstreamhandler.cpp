@@ -205,7 +205,7 @@ QString GlobalsSubStreamHandler::nameFromIndex(unsigned index) const
 {
     if (index < d->nameTable.size())
         return d->nameTable[index];
-    std::cerr << "Invalid index in GlobalsSubStreamHandler::nameFromIndex index=" << index << " size=" << d->externNameTable.size() << std::endl;
+    qCWarning(lcSidewinder) << "Invalid index in GlobalsSubStreamHandler::nameFromIndex index=" << index << "size=" << d->externNameTable.size();
     return QString();
 }
 
@@ -213,7 +213,8 @@ QString GlobalsSubStreamHandler::externNameFromIndex(unsigned index) const
 {
     if (index < d->externNameTable.size())
         return d->externNameTable[index];
-    std::cerr << "Invalid index in GlobalsSubStreamHandler::externNameFromIndex index=" << index << " size=" << d->externNameTable.size() << std::endl;
+    qCWarning(lcSidewinder) << "Invalid index in GlobalsSubStreamHandler::externNameFromIndex index=" << index
+                            << "size=" << d->externNameTable.size();
     return QString();
 }
 
@@ -372,7 +373,7 @@ const Format* GlobalsSubStreamHandler::convertedFormat(unsigned index) const
             if (ifmt >= 164 && ifmt <= 392) {  // custom format
                 valueFormat = d->formatsTable[ifmt];
             } else {
-                std::cout << "Unhandled format with index " << xf.formatIndex() << ". Using general format." << std::endl;
+                qCDebug(lcSidewinder) << "Unhandled format with index" << xf.formatIndex() << ". Using general format.";
                 valueFormat = "General";
             }
         }
@@ -516,7 +517,7 @@ void GlobalsSubStreamHandler::handleRecord(Record* record)
     else if (type == 0xA) {} //EofRecord
     //else if (type == 0xEC) Q_ASSERT(false); // MsoDrawing
     else {
-        //std::cout << "Unhandled global record with type=" << type << " name=" << record->name() << std::endl;
+        //qCDebug(lcSidewinder) << "Unhandled global record with type=" << type << " name=" << record->name();
     }
 
 }
@@ -528,7 +529,7 @@ void GlobalsSubStreamHandler::handleBOF(BOFRecord* record)
     if (record->type() == BOFRecord::Workbook) {
         d->version = record->version();
     } else {
-        std::cout << "GlobalsSubStreamHandler::handleBOF: Unhandled type=" << record->type() << std::endl;
+        qCDebug(lcSidewinder) << "GlobalsSubStreamHandler::handleBOF: Unhandled type=" << record->type();
     }
 }
 
@@ -554,7 +555,7 @@ void GlobalsSubStreamHandler::handleBoundSheet(BoundSheetRecord* record)
             d->bofMap[ bofPos ] = sheet;
         } break;
         default:
-            std::cout << "GlobalsSubStreamHandler::handleBoundSheet: Unhandled type=" << record->sheetType() << std::endl;
+            qCDebug(lcSidewinder) << "GlobalsSubStreamHandler::handleBoundSheet: Unhandled type=" << record->sheetType();
             break;
     }
 }
@@ -634,7 +635,7 @@ void GlobalsSubStreamHandler::handleFilepass(FilepassRecord* record)
         if (!d->decryption->checkPassword("VelvetSweatshop")) {
             delete d->decryption;
             d->decryption = 0;
-            fprintf(stderr, "Invalid password\n");
+            qCWarning(lcSidewinder) << "Invalid password";
         } else {
             d->decryption->setInitialPosition(record->position() + 54+4);
         }
@@ -744,7 +745,7 @@ void GlobalsSubStreamHandler::handleProtect(ProtectRecord* record)
     if (!record) return;
 
     if (record->isLocked()) {
-        std::cout << "TODO: The workbook is protected but protected workbooks is not supported yet!" << std::endl;
+        qCDebug(lcSidewinder) << "TODO: The workbook is protected but protected workbooks is not supported yet!";
     }
 }
 
@@ -757,19 +758,19 @@ void GlobalsSubStreamHandler::handlePassword(PasswordRecord* record)
 {
     if (!record) return;
     if (!record->wPassword()) return;
-    std::cout << "GlobalsSubStreamHandler::handlePassword passwordHash=" << record->wPassword() << std::endl;
+    qCDebug(lcSidewinder) << "GlobalsSubStreamHandler::handlePassword passwordHash=" << record->wPassword();
     d->workbook->setPassword(record->wPassword());
 }
 
 void GlobalsSubStreamHandler::handleMsoDrawingGroup(MsoDrawingGroupRecord* record)
 {
     if (!record) return;
-    printf("GlobalsSubStreamHandler::handleMsoDrawingGroup\n");
+    qCDebug(lcSidewinder) << "GlobalsSubStreamHandler::handleMsoDrawingGroup";
 
     static int validMsoDrawingGroups = 0;
     // if this pass then multiple MsoDrawingGroupRecord can exist what we need to handle!
     if (validMsoDrawingGroups > 0) {
-        std::cerr << "Warning: multiple valid MsoDrawingGroupRecord exists : " << validMsoDrawingGroups << std::endl;
+        qCWarning(lcSidewinder) << "Warning: multiple valid MsoDrawingGroupRecord exists:" << validMsoDrawingGroups;
     }
     validMsoDrawingGroups++;
 

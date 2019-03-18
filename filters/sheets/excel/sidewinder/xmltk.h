@@ -23,6 +23,8 @@
 #include <QString>
 #include <QStringList>
 
+#include "utils.h"
+
 namespace Swinder
 {
 
@@ -221,7 +223,7 @@ XmlTk* parseXmlTk(const unsigned char* data) {
         case 0x07:
             return new XmlTkBlob(data);
         default:
-            std::cout << "Error in " << __FUNCTION__ << ": Unhandled drType " << qPrintable(QString::number(drType, 16)) << std::endl;
+            qCDebug(lcSidewinder) << "Error in " << __FUNCTION__ << ": Unhandled drType " << QString::number(drType, 16);
             break;
     }
     return 0;

@@ -284,7 +284,7 @@ const char* FormulaToken::idAsString() const
     case 0:            s = ""; break; // NOPE...
     default:
         s = "Unknown";
-        printf("Unhandled formula id %i as string\n", d->id);
+        qCDebug(lcSidewinder) << QString("Unhandled formula id %1 as string").arg(d->id);
         break;
     }
 
@@ -393,7 +393,7 @@ unsigned FormulaToken::size() const
     default:
         if (d->data.empty())
         // WARNING this is unhandled case
-            printf("Unhandled formula token with id %i\n", d->id);
+            qCDebug(lcSidewinder) << "Unhandled formula token with id" << d->id;
         else
             s = d->data.size();
         break;
@@ -1210,7 +1210,7 @@ QString FormulaToken::areaMap(unsigned row, unsigned col)
     unsigned cce = readU16(buf);
     //printf( "SIZE=%i\n", cce );
     if (cce < 7) {
-        printf("Error: Invalid size %i for formula areaMap of type %i\n", cce, type);
+        qCDebug(lcSidewinder) << QString("Error: Invalid size %1 for formula areaMap of type %2").arg(cce).arg(type);
         return QString();
     }
 
@@ -1400,7 +1400,7 @@ QString FormulaToken::array(unsigned row, unsigned col) const
         #warning TODO Implement FormulaToken::array()
     #endif
 
-    printf("Unhandled formula array-token with row=%i and column=%i\n", row, col);
+    qCDebug(lcSidewinder) << QString("Unhandled formula array-token with row=%1 and column=%2").arg(row).arg(col);
 
     /*
     unsigned char buf[2];
@@ -1478,7 +1478,7 @@ FormulaTokens FormulaDecoder::decodeFormula(unsigned size, unsigned pos, const u
     FormulaTokens tokens;
     const unsigned formula_len = readU16(data + pos);
     if (formula_len + pos + 2 > size) {
-        std::cerr << "formula is longer than available data" << std::endl;
+        qCWarning(lcSidewinder) << "formula is longer than available data";
         return tokens;
     }
     for (unsigned j = pos + 2; j < size;) {
@@ -1772,7 +1772,7 @@ QString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared,
             } else {
               // "2.5.198.58 PtgExp" says that if its not a sharedFormula then it's an indication that the
               // result is an reference to cells. So, we can savly ignore that case...
-              std::cout << "MATRIX first=%i second=" << formulaCellPos.first << " " << formulaCellPos.second << std::endl;
+              qCDebug(lcSidewinder) << "MATRIX first=%i second=" << formulaCellPos.first << formulaCellPos.second;
             }
             break;
         }
@@ -1784,7 +1784,7 @@ QString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared,
               if(dt)
                   stack.push_back(dataTableFormula(row, col, dt));
             } else {
-              std::cout << "TABLE first=%i second=" << formulaCellPos.first << " " << formulaCellPos.second << std::endl;
+              qCDebug(lcSidewinder) << "TABLE first=%i second=" << formulaCellPos.first << formulaCellPos.second;
             }
             break;
         }
@@ -1821,7 +1821,7 @@ QString FormulaDecoder::decodeFormula(unsigned row, unsigned col, bool isShared,
         case FormulaToken::MemNoMemN:
         default:
             // FIXME handle this !
-            std::cout << "Unhandled token=" << token.idAsString() << std::endl;
+            qCDebug(lcSidewinder) << "Unhandled token=" << token.idAsString();
             stack.push_back(QString("Unknown"));
             break;
         };

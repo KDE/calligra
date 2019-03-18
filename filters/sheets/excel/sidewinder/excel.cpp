@@ -1008,7 +1008,7 @@ void NameRecord::setData(unsigned size, const unsigned char* data, const unsigne
         /*
         FormulaDecoder decoder;
         m_formula = decoder.decodeNamedFormula(cce, data + size - cce, version());
-        std::cout << ">>" << m_formula.ascii() << std::endl;
+        qCDebug(lcSidewinder) << ">>" << m_formula.ascii();
         */
         const unsigned char* startNamedParsedFormula = data + size - cce;
         unsigned ptg = readU8(startNamedParsedFormula);
@@ -1019,7 +1019,8 @@ void NameRecord::setData(unsigned size, const unsigned char* data, const unsigne
         m_formula = t;
     }
 
-    std::cout << "NameRecord name=" << d->definedName << " iTab=" << d->sheetIndex << " fBuiltin=" << d->builtin << " formula=" << m_formula.id() << " (" << m_formula.idAsString() << ")" << std::endl;
+    qCDebug(lcSidewinder) << "NameRecord name=" << d->definedName << "iTab=" << d->sheetIndex
+                          << "fBuiltin=" << d->builtin << "formula=" << m_formula.id() << "(" << m_formula.idAsString() << ")";
 }
 
 void NameRecord::dump(std::ostream& /*out*/) const
@@ -1234,7 +1235,7 @@ void SSTRecord::setData(unsigned size, const unsigned char* data, const unsigned
     for (unsigned i = 0; i < count; ++i) {
         // check against size
         if (offset >= size) {
-            std::cerr << "Warning: reached end of SST record, but not all strings have been read!" << std::endl;
+            qCWarning(lcSidewinder) << "Warning: reached end of SST record, but not all strings have been read!";
             break;
         }
 
@@ -1248,7 +1249,7 @@ void SSTRecord::setData(unsigned size, const unsigned char* data, const unsigned
 
     // sanity check, adjust to safer condition
     if (count > d->strings.size()) {
-        std::cerr << "Warning: mismatch number of string in SST record, expected " << count << ", got " << d->strings.size() << "!" << std::endl;
+        qCWarning(lcSidewinder) << "Warning: mismatch number of string in SST record, expected" << count << ", got" << d->strings.size() << "!";
     }
 }
 
@@ -1350,7 +1351,7 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
     const unsigned long ftcmo = readU16(startFtCmo);
     const unsigned long cbcmo = readU16(startFtCmo + 2);
     if (ftcmo !=  0x15 || cbcmo !=  0x12) {
-        std::cerr << "ObjRecord::setData: invalid ObjRecord" << std::endl;
+        qCWarning(lcSidewinder) << "ObjRecord::setData: invalid ObjRecord";
         setIsValid(false);
         return;
     }
@@ -1386,7 +1387,7 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
     const unsigned char* startPict = data + 22;
     switch (ot) {
     case Object::Group: // gmo
-        printf("ObjRecord::setData group\n");
+        qCDebug(lcSidewinder) << "ObjRecord::setData group";
         startPict += 6;
         break;
     case Object::Picture: { // pictFormat and pictFlags
@@ -1406,7 +1407,7 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
             // unspecified format, neither enhanced metafile nor a bitmap
             break;
         default:
-            std::cerr << "ObjRecord::setData: invalid ObjRecord Picture" << std::endl;
+            qCWarning(lcSidewinder) << "ObjRecord::setData: invalid ObjRecord Picture";
             setIsValid(false);
             delete m_object;
             m_object = 0;
@@ -1434,42 +1435,42 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
         //const bool unused5 = opts2 & 0x3000;
         //const bool unused6 = opts2 & 0x6000;
         //const bool unused7 = opts2 & 0xC000;
-        std::cout << "ObjRecord::setData picture id=" << id << " fDde=" << fDde << " FCtl=" << fCtl << " fPrstm=" << fPrstm << std::endl;
+        qCDebug(lcSidewinder) << "ObjRecord::setData picture id=" << id << "fDde=" << fDde << "FCtl=" << fCtl << "fPrstm=" << fPrstm;
         startPict += 12;
     }
     break;
     case Object::Checkbox: // cbls
-        printf("ObjRecord::setData checkbox\n");
+        qCDebug(lcSidewinder) << "ObjRecord::setData checkbox";
         startPict += 16;
         break;
     case Object::RadioButton: // cbls and rbo
-        printf("ObjRecord::setData RadioButton\n");
+        qCDebug(lcSidewinder) << "ObjRecord::setData RadioButton";
         startPict += 26;
         break;
     case Object::SpinControl: // sbs
-        printf("ObjRecord::setData SpinControl\n");
+        qCDebug(lcSidewinder) << "ObjRecord::setData SpinControl";
         startPict += 24;
         break;
     case Object::Scrollbar: // sbs
-        printf("ObjRecord::setData Scrollbar\n");
+        qCDebug(lcSidewinder) << "ObjRecord::setData Scrollbar";
         startPict += 24;
         break;
     case Object::List: // sbs
-        printf("ObjRecord::setData List\n");
+        qCDebug(lcSidewinder) << "ObjRecord::setData List";
         startPict += 24;
         break;
     case Object::DropdownList: // sbs
-        printf("ObjRecord::setData DropdownList\n");
+        qCDebug(lcSidewinder) << "ObjRecord::setData DropdownList";
         startPict += 24;
         break;
     case Object::Note: { // nts
-        std::cout << "ObjRecord::setData note id=" << id << std::endl;
+        qCDebug(lcSidewinder) << "ObjRecord::setData note id=" << id;
         m_object = new NoteObject(id);
         const unsigned long ft = readU16(startPict);
         const unsigned long cb = readU16(startPict + 2);
         startPict += 20; // skip guid
         if (ft != 0x000D || cb != 0x0016) {
-            std::cerr << "ObjRecord::setData: invalid ObjRecord note with id=" << id << std::endl;
+            qCWarning(lcSidewinder) << "ObjRecord::setData: invalid ObjRecord note with id=" << id;
             setIsValid(false);
             delete m_object;
             m_object = 0;
@@ -1485,24 +1486,24 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
     break;
 
     case Object::Chart:
-        std::cout << "ObjRecord::setData chart id=" << id << std::endl;
+        qCDebug(lcSidewinder) << "ObjRecord::setData chart id=" << id;
         m_object = new ChartObject(id);
         break;
-    case Object::Rectangle: printf("ObjRecord::setData Rectangle\n"); break;
-    case Object::Line: printf("ObjRecord::setData Line\n"); break;
-    case Object::Oval: printf("ObjRecord::setData Oval\n"); break;
-    case Object::Arc: printf("ObjRecord::setData Arc\n"); break;
-    case Object::Text: printf("ObjRecord::setData Text\n"); break;
-    case Object::Button: printf("ObjRecord::setData Button\n"); break;
-    case Object::Polygon: printf("ObjRecord::setData Polygon\n"); break;
-    case Object::EditBox: printf("ObjRecord::setData EditBox\n"); break;
-    case Object::Label: printf("ObjRecord::setData Label\n"); break;
-    case Object::DialogBox: printf("ObjRecord::setData DialogBox\n"); break;
-    case Object::GroupBox: printf("ObjRecord::setData GroupBox\n"); break;
-    case Object::OfficeArt: printf("ObjRecord::setData OfficeArt\n"); break;
+    case Object::Rectangle: qCDebug(lcSidewinder) << "ObjRecord::setData Rectangle"; break;
+    case Object::Line: qCDebug(lcSidewinder) << "ObjRecord::setData Line"; break;
+    case Object::Oval: qCDebug(lcSidewinder) << "ObjRecord::setData Oval"; break;
+    case Object::Arc: qCDebug(lcSidewinder) << "ObjRecord::setData Arc"; break;
+    case Object::Text: qCDebug(lcSidewinder) << "ObjRecord::setData Text"; break;
+    case Object::Button: qCDebug(lcSidewinder) << "ObjRecord::setData Button"; break;
+    case Object::Polygon: qCDebug(lcSidewinder) << "ObjRecord::setData Polygon"; break;
+    case Object::EditBox: qCDebug(lcSidewinder) << "ObjRecord::setData EditBox"; break;
+    case Object::Label: qCDebug(lcSidewinder) << "ObjRecord::setData Label"; break;
+    case Object::DialogBox: qCDebug(lcSidewinder) << "ObjRecord::setData DialogBox"; break;
+    case Object::GroupBox: qCDebug(lcSidewinder) << "ObjRecord::setData GroupBox"; break;
+    case Object::OfficeArt: qCDebug(lcSidewinder) << "ObjRecord::setData OfficeArt"; break;
 
     default:
-        std::cerr << "ObjRecord::setData: Unexpected objecttype " << ot << " in ObjRecord" << std::endl;
+        qCWarning(lcSidewinder) << "ObjRecord::setData: Unexpected objecttype" << ot << "in ObjRecord";
         setIsValid(false);
         delete m_object;
         m_object = 0;
@@ -1560,7 +1561,7 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
             ptg = ((ptg & 0x40) ? (ptg | 0x20) : ptg) & 0x3F;
             token = FormulaToken(ptg);
             token.setVersion(version());
-            std::cout << "ObjRecord::setData: Picture is of type id=" << token.id() << " name=" << token.idAsString() << std::endl;
+            qCDebug(lcSidewinder) << "ObjRecord::setData: Picture is of type id=" << token.id() << "name=" << token.idAsString();
             if (token.size() > 0) {
                 token.setData(token.size(), startPict + cbFmlaSize);
                 cbFmlaSize += token.size();
@@ -1583,7 +1584,7 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
                         embedInfoSize += size;
 
                         //TODO
-                        std::cout << "ObjRecord::setData: className=" << qPrintable(className) << std::endl;
+                        qCDebug(lcSidewinder) << "ObjRecord::setData: className=" << className;
                     }
                 }
             }
@@ -1617,7 +1618,7 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
             }
             //fmlaLinkedCell
             //fmlaListFillRange
-            std::cout << "ObjRecord::setData: Runtime license key is: " << key.c_str() << std::endl;
+            qCDebug(lcSidewinder) << "ObjRecord::setData: Runtime license key is: " << key.c_str();
         }
     }
 
@@ -1788,7 +1789,7 @@ void TxORecord::setData(unsigned size, const unsigned char* data, const unsigned
         }
     }
 
-    std::cout << "TxORecord::setData size=" << size << " text=" << qPrintable(d->text) << std::endl;
+    qCDebug(lcSidewinder) << "TxORecord::setData size=" << size << " text=" << d->text;
 }
 
 const QString& TxORecord::text() const
@@ -1863,11 +1864,11 @@ void MsoDrawingRecord::setData(unsigned size, const unsigned char* data, const u
         try {
             parseOfficeArtSpgrContainerFileBlock(in, container.groupShape->rgfb.last());
         } catch(const IOException& e) {
-            std::cerr << "Invalid MsoDrawingRecord record: " << qPrintable(e.msg) << std::endl;
+            qCWarning(lcSidewinder) << "Invalid MsoDrawingRecord record:" << e.msg;
             setIsValid(false);
             return;
         } catch(...) {
-            std::cerr << "Invalid MsoDrawingRecord record: Unexpected error" << std::endl;
+            qCWarning(lcSidewinder) << "Invalid MsoDrawingRecord record: Unexpected error";
             setIsValid(false);
             return;
         }
@@ -1875,7 +1876,7 @@ void MsoDrawingRecord::setData(unsigned size, const unsigned char* data, const u
 
     // Be sure we got at least something useful we can work with.
     if(!container.groupShape) {
-        std::cerr << "Invalid MsoDrawingRecord record: Expected groupShape missing in the container." << std::endl;
+        qCWarning(lcSidewinder) << "Invalid MsoDrawingRecord record: Expected groupShape missing in the container.";
         setIsValid(false);
         return;
     }
@@ -1923,7 +1924,7 @@ void MsoDrawingGroupRecord::dump(std::ostream& out) const
 
 void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char* data, const unsigned* continuePositions)
 {
-    printf("MsoDrawingGroupRecord::setData size=%i data=%i continuePositions=%i\n",size,*data,*continuePositions);
+    qCDebug(lcSidewinder) << QString("MsoDrawingGroupRecord::setData size=%1 data=%2 continuePositions=%3").arg(size).arg(*data).arg(*continuePositions);
     if(size < 32) {
         setIsValid(false);
         return;
@@ -1937,7 +1938,7 @@ void MsoDrawingGroupRecord::setData(unsigned size, const unsigned char* data, co
     try {
         MSO::parseOfficeArtDggContainer(lei, d->container);
     } catch (const IOException& e) {
-        std::cerr << "Invalid MsoDrawingGroup record:" << qPrintable(e.msg) << std::endl;
+        qCWarning(lcSidewinder) << "Invalid MsoDrawingGroup record:" << e.msg;
         setIsValid(false);
         return;
     }
@@ -2114,7 +2115,7 @@ void BkHimRecord::setData( unsigned size, const unsigned char* data, const unsig
         store->write((const char*)(data + curOffset), imageSize);
         store->close();
     } else {
-        std::cerr << "BkHimRecord: Failed to open file=" << filename << std::endl;
+        qCWarning(lcSidewinder) << "BkHimRecord: Failed to open file=" << filename;
     }
 }
 
@@ -2241,18 +2242,20 @@ static void registerAllRecordClasses()
     RecordRegistry::registerRecordClass(BkHimRecord::id, createBkHimRecord);
 }
 
-void printEntries(POLE::Storage &storage, const std::string path = "/", int level = 0)
+#ifdef SWINDER_XLS2RAW
+static void printEntries(POLE::Storage &storage, const std::string path = "/", int level = 0)
 {
-    std::cout << std::setw(level) << "PATH=" << path << std::endl;
+    qCDebug(lcSidewinder) << "PATH=" << QString::fromStdString(path);
     std::list<std::string> entries = storage.entries(path);
     for (std::list<std::string>::iterator it = entries.begin(); it != entries.end(); ++it)  {
-        std::cout << std::setw(level + 1) << "ENTRY=" << *it << std::endl;
+        qCDebug(lcSidewinder) << "ENTRY=" << QString::fromStdString(*it);
         std::string p = path == "/" ? "/" + *it + "/" : path + "/" + *it + "/";
         if (storage.isDirectory(p)) {
             printEntries(storage, p, level + 1);
         }
     }
 }
+#endif
 
 bool ExcelReader::load(Workbook* workbook, const char* filename)
 {
@@ -2260,12 +2263,12 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
 
     POLE::Storage storage(filename);
     if (!storage.open()) {
-        std::cerr << "Cannot open " << filename << std::endl;
+        qCWarning(lcSidewinder) << "Cannot open" << filename;
         return false;
     }
 
 #ifdef SWINDER_XLS2RAW
-    std::cout << "Streams:" << std::endl;
+    qCDebug(lcSidewinder) << "Streams:";
     printEntries(storage);
 #endif
 
@@ -2279,7 +2282,7 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
     }
 
     if (stream->fail()) {
-        std::cerr << filename << " is not Excel workbook" << std::endl;
+        qCWarning(lcSidewinder) << filename << "is not Excel workbook";
         delete stream;
         return false;
     }
@@ -2369,7 +2372,7 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
                         workbook->setProperty(propertyId, s);
                     } break;
                     default:
-                        std::cout << "Ignoring property with known id=" << propertyId << " and unknown type=" << type;
+                        qCDebug(lcSidewinder) << "Ignoring property with known id=" << propertyId << "and unknown type=" << type;
                         break;
                     }
                     break;
@@ -2381,12 +2384,12 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
                     if (newCodec) {
                         codec = newCodec;
                     }
-                    std::cout << "Codepage:" << codepage << std::endl;
+                    qCDebug(lcSidewinder) << "Codepage:" << codepage;
                     }
                     break;
                 default:
                     if (propertyId != 0x0013 /* GKPIDDSI_SHAREDDOC */) {
-                         std::cout << "Ignoring property with unknown id=" << propertyId << " and type=" << type << std::endl;
+                         qCDebug(lcSidewinder) << "Ignoring property with unknown id=" << propertyId << " and type=" << type;
                     }
                     break;
                 }
@@ -2417,7 +2420,7 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
       }
       if(hasCombObjStream) {
           QString ansiUserType = readByteString(buffer, length);
-          printf( "length=%lu ansiUserType=%s\n",length, qPrintable(ansiUserType) );
+          qCDebug(lcSidewinder) << QString("length=%1 ansiUserType=%2").arg(length).arg(ansiUserType);
 
           // AnsiClipboardFormat
           bytes_read = combObjStream->read( buffer, 4 );
@@ -2439,7 +2442,7 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
             break;
             default:
               if (markerOrLength > 65535) {
-                printf("invalid length reading compobj stream: %lu\n", markerOrLength);
+                qCDebug(lcSidewinder) << "invalid length reading compobj stream:" << markerOrLength;
               } else {
                 bytes_read = combObjStream->read( buffer, markerOrLength );
                 QString ansiString = readByteString(buffer, markerOrLength);
@@ -2572,7 +2575,7 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
             // next read the data of the record
             bytes_read = stream->read(buffer + size, next_size);
             if (bytes_read != next_size) {
-                std::cout << "ERROR!" << std::endl;
+                qCDebug(lcSidewinder) << "ERROR!";
                 break;
             }
             d->globals->decryptionSkipBytes(4);
@@ -2596,11 +2599,8 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
 
         if (!record) {
 //#ifdef SWINDER_XLS2RAW
-            std::cout << "Unhandled Record 0x";
-            std::cout << std::setfill('0') << std::setw(4) << std::hex << type;
-            std::cout << std::dec;
-            std::cout << " (" << type << ")";
-            std::cout << std::endl;
+            qCDebug(lcSidewinder) << "Unhandled Record"  << QString("0x%1").arg(QString::number(type, 16))
+                                  << "(" << type << ")";
 //#endif
         } else {
             // setup the record and invoke handler
@@ -2609,15 +2609,12 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
             record->setPosition(pos);
 
 #ifdef SWINDER_XLS2RAW
-            std::cout << std::setfill('0') << std::setw(8) << std::dec << record->position() << " ";
-            if (!record->isValid()) std::cout << "Invalid ";
-            std::cout << "Record 0x";
-            std::cout << std::setfill('0') << std::setw(4) << std::hex << record->rtti();
-            std::cout << " (";
-            std::cout << std::dec;
-            std::cout << record->rtti() << ") ";
-            record->dump(std::cout);
-            std::cout << std::endl;
+            QString debug = QString("%1 ").arg(record->position(), 8, 10, QChar('0'));
+            if (!record->isValid()) debug.append("Invalid ");
+            debug.append(QString("Record 0x%1 (%2)").arg(record->rtti(), 4, 16, QChar('0')).arg(record->rtti()));
+            std::stringstream out;
+            record->dump(out);
+            qCDebug(lcSidewinder) << debug << QString::fromStdString(out.str());
 #endif
 
             if (record->isValid()) {
@@ -2705,7 +2702,7 @@ void ExcelReader::handleBOF(BOFRecord* record)
         SubStreamHandler* parentHandler = d->handlerStack.empty() ? 0 : d->handlerStack.back();
         d->handlerStack.push_back(new Swinder::ChartSubStreamHandler(d->globals, parentHandler));
     } else {
-        std::cout << "ExcelReader::handleBOF Unhandled type=" << record->type() << std::endl;
+        qCDebug(lcSidewinder) << "ExcelReader::handleBOF Unhandled type=" << record->type();
     }
 }
 

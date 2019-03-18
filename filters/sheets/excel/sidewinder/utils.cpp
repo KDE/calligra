@@ -24,6 +24,8 @@
 
 #include "XlsRecordOutputStream.h"
 
+Q_LOGGING_CATEGORY(lcSidewinder, "calligra.filter.sidewinder")
+
 namespace Swinder
 {
 
@@ -281,7 +283,7 @@ void Record::setData(unsigned, const unsigned char*, const unsigned int*)
 void Record::writeData(XlsRecordOutputStream &out) const
 {
     Q_UNUSED(out);
-    fprintf(stderr, "ERROR! writeData not implemented for record type %u\n", rtti());
+    qCWarning(lcSidewinder) << "ERROR! writeData not implemented for record type" << rtti();
 }
 
 void Record::dump(std::ostream&) const

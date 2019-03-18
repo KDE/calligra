@@ -25,7 +25,6 @@
 #include "xmltk.h"
 
 #include <QRegExp>
-#include <QDebug>
 
 #include <XlsUtils.h>  // splitCellRange() et al.
 
@@ -225,14 +224,14 @@ ChartSubStreamHandler::ChartSubStreamHandler(GlobalsSubStreamHandler* globals,
 
         std::vector<unsigned long>& charts = worksheetHandler->charts();
         if (charts.empty()) {
-            std::cerr << "Got a chart substream without having charts in the worksheet";
+            qCWarning(lcSidewinder) << "Got a chart substream without having charts in the worksheet";
             return;
         }
         const unsigned long id = charts.back();
 
         std::map<unsigned long, Object*>::iterator it = worksheetHandler->sharedObjects().find(id);
         if (it == worksheetHandler->sharedObjects().end()) {
-            std::cerr << "Got a chart substream without having a chart in the worksheet";
+            qCWarning(lcSidewinder) << "Got a chart substream without having a chart in the worksheet";
             return;
         }        
         m_chartObject = dynamic_cast<ChartObject*>(it->second);
@@ -247,7 +246,7 @@ ChartSubStreamHandler::ChartSubStreamHandler(GlobalsSubStreamHandler* globals,
     } else {
         Q_ASSERT(globals);
         if (globals->chartSheets().isEmpty()) {
-            std::cerr << "ChartSubStreamHandler: Got a chart substream without having enough chart sheets..." << std::endl;
+            qCWarning(lcSidewinder) << "ChartSubStreamHandler: Got a chart substream without having enough chart sheets...";
         } else {
 #if 0
             m_sheet = globals->chartSheets().takeFirst();
@@ -269,7 +268,7 @@ ChartSubStreamHandler::ChartSubStreamHandler(GlobalsSubStreamHandler* globals,
             Cell* cell = m_sheet->cell(0, 0, true); // anchor to the first cell
             cell->addChart(m_chartObject);
 #else
-            std::cerr << "ChartSubStreamHandler: FIXME" << std::endl;
+            qCWarning(lcSidewinder) << "ChartSubStreamHandler: FIXME";
 #endif
         }
     }
@@ -297,16 +296,8 @@ ChartSubStreamHandler::~ChartSubStreamHandler()
     RecordRegistry::unregisterRecordClass(CrtMlFrtRecord::id);
 }
 
-std::string whitespaces(int number)
-{
-    std::string s;
-    for (int i = 0; i < number; ++i)
-        s += " ";
-    return s;
-}
-
 #define DEBUG \
-    std::cout << whitespaces(m_stack.count()) << "ChartSubStreamHandler::" << __FUNCTION__ << " "
+    qCDebug(lcSidewinder) << QString(m_stack.count(), QChar(' ')) << "ChartSubStreamHandler::" << __FUNCTION__
 
 void ChartSubStreamHandler::handleRecord(Record* record)
 {
@@ -464,19 +455,17 @@ void ChartSubStreamHandler::handleRecord(Record* record)
     else if (type == StartBlockRecord::id || type == EndBlockRecord::id)
         {} // not evaluated atm
     else {
-        DEBUG << "Unhandled chart record with type=" << type << " name=" << record->name() << std::endl;
+        DEBUG << "Unhandled chart record with type=" << type << "name=" << record->name();
         //record->dump(std::cout);
     }
 }
 
 void ChartSubStreamHandler::handleBOF(BOFRecord*)
 {
-    //DEBUG << std::endl;
 }
 
 void ChartSubStreamHandler::handleEOF(EOFRecord *)
 {
-    //DEBUG << std::endl;
 }
 
 void ChartSubStreamHandler::handleFooter(FooterRecord *)
@@ -530,13 +519,15 @@ void ChartSubStreamHandler::handleBottomMargin(BottomMarginRecord* record)
 void ChartSubStreamHandler::handleDimension(DimensionRecord *record)
 {
     if (!record) return;
-    DEBUG << "firstRow=" << record->firstRow() << " lastRowPlus1=" << record->lastRowPlus1() << " firstColumn=" << record->firstColumn() << " lastColumnPlus1=" << record->lastColumnPlus1() << " lastRow=" << record->lastRow() << " lastColumn=" << record->lastColumn() << std::endl;
+    DEBUG << "firstRow=" << record->firstRow() << "lastRowPlus1=" << record->lastRowPlus1()
+          << "firstColumn=" << record->firstColumn() << "lastColumnPlus1=" << record->lastColumnPlus1()
+          << "lastRow=" << record->lastRow() << "lastColumn=" << record->lastColumn();
 }
 
 void ChartSubStreamHandler::handleChart(ChartRecord *record)
 {
     if (!record) return;
-    DEBUG << "x=" << record->x() << " y=" << record->y() << " width=" << record->width() << " height=" << record->height() <<  std::endl;
+    DEBUG << "x=" << record->x() << "y=" << record->y() << "width=" << record->width() << "height=" << record->height();
     m_chart->m_x1 = record->x();
     m_chart->m_y1 = record->y();
     m_chart->m_x2 = record->width() - m_chart->m_x1;
@@ -562,7 +553,7 @@ void ChartSubStreamHandler::handleEnd(EndRecord *)
 void ChartSubStreamHandler::handleFrame(FrameRecord *record)
 {
     if (!record) return;
-    DEBUG << "autoPosition=" << record->isAutoPosition() << " autoSize=" << record->isAutoSize() << std::endl;
+    DEBUG << "autoPosition=" << record->isAutoPosition() << "autoSize=" << record->isAutoSize();
     if ( dynamic_cast< KoChart::Chart* > ( m_currentObj ) ) {
         if (record->isAutoPosition()) {
             m_chart->m_x1 = -1;
@@ -581,7 +572,9 @@ void ChartSubStreamHandler::handleFrame(FrameRecord *record)
 void ChartSubStreamHandler::handleSeries(SeriesRecord *record)
 {
     if (!record) return;
-    DEBUG << "dataTypeX=" << record->dataTypeX() << " dataTypeY=" << record->dataTypeY() << " countXValues=" << record->countXValues() << " countYValues=" << record->countYValues() << " bubbleSizeDataType=" << record->bubbleSizeDataType() << " countBubbleSizeValues=" << record->countBubbleSizeValues() << std::endl;
+    DEBUG << "dataTypeX=" << record->dataTypeX() << "dataTypeY=" << record->dataTypeY() << "countXValues=" << record->countXValues()
+          << "countYValues=" << record->countYValues() << "bubbleSizeDataType=" << record->bubbleSizeDataType()
+          << "countBubbleSizeValues=" << record->countBubbleSizeValues();
     
     m_currentSeries = new KoChart::Series;
     m_currentSeries->m_dataTypeX = record->dataTypeX();
@@ -595,15 +588,15 @@ void ChartSubStreamHandler::handleSeries(SeriesRecord *record)
 
 void ChartSubStreamHandler::handleSeriesList(SeriesListRecord *record)
 {
-    DEBUG << "cser=" << record->cser() << std::endl;
+    DEBUG << "cser=" << record->cser();
     for(unsigned i = 0; i < record->cser(); ++i)
-        DEBUG << "number=" << i << " rgiser=" << record->rgiser(i) << std::endl;
+        DEBUG << "number=" << i << "rgiser=" << record->rgiser(i);
     //TODO
 }
 
 void ChartSubStreamHandler::handleNumber(NumberRecord *record)
 {
-    DEBUG << "row=" << record->row() << " column=" << record->column() << " xfIndex=" << record->xfIndex() << " number=" << record->number() << std::endl;
+    DEBUG << "row=" << record->row() << "column=" << record->column() << "xfIndex=" << record->xfIndex() << "number=" << record->number();
 
     // The formatting of the value doesn't really matter or does it? Well, maybe for data-value-label's that should be displayed as formatted?
     //m_xfTable[record->xfIndex()]
@@ -620,7 +613,9 @@ void ChartSubStreamHandler::handleNumber(NumberRecord *record)
 void ChartSubStreamHandler::handleBRAI(BRAIRecord *record)
 {
     if (!record) return;
-    DEBUG << "dataId=" << record->m_value->m_dataId << " type=" << record->m_value->m_type << " isUnlinkedNumberFormat=" << record->m_value->m_isUnlinkedFormat << " numberFormat=" << record->m_value->m_numberFormat << " formula=" << record->m_value->m_formula.toUtf8().constData() << std::endl;
+    DEBUG << "dataId=" << record->m_value->m_dataId << "type=" << record->m_value->m_type
+          << "isUnlinkedNumberFormat=" << record->m_value->m_isUnlinkedFormat
+          << "numberFormat=" << record->m_value->m_numberFormat << "formula=" << record->m_value->m_formula.toUtf8();
 
     if (m_currentSeries) {
         // FIXME: Is that correct or do we need to take the series
@@ -658,9 +653,9 @@ void ChartSubStreamHandler::handleBRAI(BRAIRecord *record)
 void ChartSubStreamHandler::handleDataFormat(DataFormatRecord *record)
 {
     if (!record) return;
-    DEBUG << "xi=" << record->xi() << " yi=" << record->yi() << " iss=" << record->iss() << std::endl;
+    DEBUG << "xi=" << record->xi() << "yi=" << record->yi() << "iss=" << record->iss();
     if (record->yi() >= uint(m_chart->m_series.count())) {
-        DEBUG << "Invalid series index=" << record->yi() << std::endl;
+        DEBUG << "Invalid series index=" << record->yi();
         m_currentObj = 0; // be sure to ignore all defined sub-elements
         return;
     }
@@ -671,7 +666,7 @@ void ChartSubStreamHandler::handleDataFormat(DataFormatRecord *record)
     } else { // applies to data-point
         KoChart::DataPoint *dataPoint = 0;
         if (record->xi() > uint(m_currentSeries->m_dataPoints.count())) {
-            DEBUG << "Invalid data-point index=" << record->yi() << std::endl;
+            DEBUG << "Invalid data-point index=" << record->yi();
         } else if (record->xi() == uint(m_currentSeries->m_dataPoints.count())) {
             dataPoint = new KoChart::DataPoint();
             m_currentSeries->m_dataPoints << dataPoint;
@@ -685,7 +680,7 @@ void ChartSubStreamHandler::handleDataFormat(DataFormatRecord *record)
 void ChartSubStreamHandler::handleChart3DBarShape(Chart3DBarShapeRecord * record)
 {
     if (!record) return;
-    DEBUG << "riser=" << record->riser() << " taper=" << record->taper() << std::endl;
+    DEBUG << "riser=" << record->riser() << "taper=" << record->taper();
     //TODO
 }
 
@@ -693,7 +688,8 @@ void ChartSubStreamHandler::handleChart3DBarShape(Chart3DBarShapeRecord * record
 void ChartSubStreamHandler::handleChart3d(Chart3dRecord *record)
 {
     if (!record) return;
-    DEBUG << "anRot=" << record->anRot() << " anElev=" << record->anElev() << " pcDist=" << record->pcDist() << " pcHeight=" << record->pcHeight() << " pcDepth=" << record->pcDepth() << std::endl;
+    DEBUG << "anRot=" << record->anRot() << "anElev=" << record->anElev() << "pcDist=" << record->pcDist()
+          << "pcHeight=" << record->pcHeight() << "pcDepth=" << record->pcDepth();
     m_chart->m_is3d = true;
     //TODO
 }
@@ -701,7 +697,7 @@ void ChartSubStreamHandler::handleChart3d(Chart3dRecord *record)
 void ChartSubStreamHandler::handleLineFormat(LineFormatRecord *record)
 {    
     if (!record) return;
-    DEBUG << "lns=" << record->lns() << " we=" << record->we() << " fAxisOn=" << record->isFAxisOn() << std::endl;
+    DEBUG << "lns=" << record->lns() << "we=" << record->we() << "fAxisOn=" << record->isFAxisOn();
     if (KoChart::Axis* axis = dynamic_cast<KoChart::Axis*>(m_currentObj)) {
         KoChart::LineFormat format(KoChart::LineFormat::Style(record->lns()), KoChart::LineFormat::Thickness(record->we()));
         switch(m_axisId) {
@@ -761,7 +757,7 @@ void ChartSubStreamHandler::handleLineFormat(LineFormatRecord *record)
         Q_ASSERT( false );
     }
     else if ( dynamic_cast< KoChart::Chart* > ( m_currentObj ) ) {
-        DEBUG << "color=" << QColor( record->red(), record->green(), record->blue() ).name() << "automatic=" << record->isFAuto() << std::endl;
+        DEBUG << "color=" << QColor( record->red(), record->green(), record->blue() ).name() << "automatic=" << record->isFAuto();
         //m_chart->m_showLines = record->isFAuto();
         Q_ASSERT( !dynamic_cast< KoChart::Series* > ( m_currentSeries ) );
     }
@@ -805,7 +801,8 @@ void ChartSubStreamHandler::handleAreaFormat(AreaFormatRecord *record)
         background = QColor(record->redBackground(), record->greenBackground(), record->blueBackground());
     }
 
-    DEBUG << "foreground=" << foreground.name() << " background=" << background.name() << " fillStyle=" << record->fls() << " fAuto=" << record->isFAuto() << std::endl;
+    DEBUG << "foreground=" << foreground.name() << "background=" << background.name()
+          << "fillStyle=" << record->fls() << "fAuto=" << record->isFAuto();
 
     m_currentObj->m_areaFormat = new KoChart::AreaFormat(foreground, background, fill);
 
@@ -824,14 +821,14 @@ void ChartSubStreamHandler::handlePieFormat(PieFormatRecord *record)
 {
     if (!record) return;
     if (!m_currentSeries) return;
-    DEBUG << "pcExplode=" << record->pcExplode() << std::endl;
+    DEBUG << "pcExplode=" << record->pcExplode();
     m_currentSeries->m_datasetFormat << new KoChart::PieFormat(record->pcExplode());
 }
 
 void ChartSubStreamHandler::handleMarkerFormat(MarkerFormatRecord *record)
 {
     if (!record) return;
-    DEBUG << "fAuto=" << record->fAuto() << " imk=" << record->imk() << std::endl;
+    DEBUG << "fAuto=" << record->fAuto() << "imk=" << record->imk();
     const bool legend = dynamic_cast< KoChart::Legend* >( m_currentObj );
     if ( m_disableAutoMarker && legend )
         return;
@@ -923,14 +920,14 @@ void ChartSubStreamHandler::handleMarkerFormat(MarkerFormatRecord *record)
 void ChartSubStreamHandler::handleChartFormat(ChartFormatRecord *record)
 {
     if (!record) return;
-    DEBUG << "fVaried=" << record->isFVaried() << std::endl;
+    DEBUG << "fVaried=" << record->isFVaried();
     //TODO
 }
 
 void ChartSubStreamHandler::handleGelFrame(GelFrameRecord *record)
 {
     if (!record) return;
-    DEBUG << std::endl;
+    DEBUG << "";
     //TODO
 }
 
@@ -938,14 +935,16 @@ void ChartSubStreamHandler::handleGelFrame(GelFrameRecord *record)
 void ChartSubStreamHandler::handleSerToCrt(SerToCrtRecord *record)
 {
     if (!record) return;
-    DEBUG << "id=" << record->identifier() << std::endl;
+    DEBUG << "id=" << record->identifier();
 }
 
 // properties
 void ChartSubStreamHandler::handleShtProps(ShtPropsRecord *record)
 {
     if (!record) return;
-    DEBUG << "fManSerAlloc=" << record->isFManSerAlloc() << " fPlotVisOnly=" << record->isFPlotVisOnly() << " fNotSizeWIth=" << record->isFNotSizeWIth() << " fManPlotArea=" << record->isFManPlotArea() << " fAlwaysAutoPlotArea=" << record->isFAlwaysAutoPlotArea() << " mdBlank=" << record->mdBlank() << std::endl;
+    DEBUG << "fManSerAlloc=" << record->isFManSerAlloc() << "fPlotVisOnly=" << record->isFPlotVisOnly()
+          << "fNotSizeWIth=" << record->isFNotSizeWIth() << "fManPlotArea=" << record->isFManPlotArea()
+          << "fAlwaysAutoPlotArea=" << record->isFAlwaysAutoPlotArea() << "mdBlank=" << record->mdBlank();
     //TODO
 }
 
@@ -962,7 +961,7 @@ void ChartSubStreamHandler::handleShtProps(ShtPropsRecord *record)
 void ChartSubStreamHandler::handleDefaultText(DefaultTextRecord *record)
 {
     if (!record) return;
-    DEBUG << "id=" << record->identifier() << std::endl;
+    DEBUG << "id=" << record->identifier();
     m_defaultTextId = record->identifier();
 }
 
@@ -971,13 +970,13 @@ void ChartSubStreamHandler::handleText(TextRecord *record)
 {
     if (!record || record->isFDeleted()) return;
     DEBUG << "at=" << record->at()
-          << " vat=" << record->vat()
-          << " x=" << record->x()
-          << " y=" << record->y()
-          << " dx=" << record->dx()
-          << " dy=" << record->dy()
-          << " fShowKey=" << record->isFShowKey()
-          << " fShowValue=" << record->isFShowValue() << std::endl;
+          << "vat=" << record->vat()
+          << "x=" << record->x()
+          << "y=" << record->y()
+          << "dx=" << record->dx()
+          << "dy=" << record->dy()
+          << "fShowKey=" << record->isFShowKey()
+          << "fShowValue=" << record->isFShowValue();
 
     m_currentObj = new KoChart::Text;
     if (m_defaultTextId >= 0) {  
@@ -989,7 +988,7 @@ void ChartSubStreamHandler::handleText(TextRecord *record)
 void ChartSubStreamHandler::handleSeriesText(SeriesTextRecord* record)
 {
     if (!record || !m_currentSeries) return;
-    DEBUG << "text=" << record->text() << std::endl;
+    DEBUG << "text=" << record->text();
     if (KoChart::Text *t = dynamic_cast<KoChart::Text*>(m_currentObj)) {
         t->m_text = record->text();
     } else if (KoChart::Legend *l = dynamic_cast<KoChart::Legend*>(m_currentObj)) {
@@ -1005,7 +1004,8 @@ void ChartSubStreamHandler::handleSeriesText(SeriesTextRecord* record)
 void ChartSubStreamHandler::handlePos(PosRecord *record)
 {
     if (!record) return;
-    DEBUG << "mdTopLt=" << record->mdTopLt() << " mdBotRt=" << record->mdBotRt() << " x1=" << record->x1() << " y1=" << record->y1() << " x2=" << record->x2() << " y2=" << record->y2() << std::endl;
+    DEBUG << "mdTopLt=" << record->mdTopLt() << "mdBotRt=" << record->mdBotRt()
+          << "x1=" << record->x1() << "y1=" << record->y1() << "x2=" << record->x2() << "y2=" << record->y2();
 
     if (m_currentObj) {
         m_currentObj->m_mdBotRt = record->mdBotRt();
@@ -1020,21 +1020,23 @@ void ChartSubStreamHandler::handlePos(PosRecord *record)
 void ChartSubStreamHandler::handleFontX(FontXRecord *record)
 {
     if (!record) return;
-    DEBUG << std::endl;
+    DEBUG << "";
     //TODO
 }
 
 void ChartSubStreamHandler::handlePlotGrowth(PlotGrowthRecord *record)
 {
     if (!record) return;
-    DEBUG << std::endl;
+    DEBUG << "";
     //TODO
 }
 
 void ChartSubStreamHandler::handleLegend(LegendRecord *record)
 {
     if (!record) return;
-    DEBUG << "fAutoPosition=" << record->isFAutoPosition() << " fAutoPosX=" << record->isFAutoPosX() << " fAutoPosY=" << record->isFAutoPosY() << " fVert=" << record->isFVert() << " fWasDataTable=" << record->isFWasDataTable() << std::endl;
+    DEBUG << "fAutoPosition=" << record->isFAutoPosition() << "fAutoPosX=" << record->isFAutoPosX()
+          << "fAutoPosY=" << record->isFAutoPosY() << "fVert=" << record->isFVert()
+          << "fWasDataTable=" << record->isFWasDataTable();
     m_currentObj = m_chart->m_legend = new KoChart::Legend();
 }
 
@@ -1045,7 +1047,7 @@ void ChartSubStreamHandler::handleLegend(LegendRecord *record)
 void ChartSubStreamHandler::handleAxesUsed(AxesUsedRecord *record)
 {
     if (!record) return;
-    DEBUG << "cAxes=" << record->cAxes() << std::endl;
+    DEBUG << "cAxes=" << record->cAxes();
     //TODO
 }
 
@@ -1056,7 +1058,7 @@ void ChartSubStreamHandler::handleAxesUsed(AxesUsedRecord *record)
 void ChartSubStreamHandler::handleAxisParent(AxisParentRecord *record)
 {
     if (!record) return;
-    DEBUG << "iax=" << record->iax() << std::endl;
+    DEBUG << "iax=" << record->iax();
     //TODO
 }
 
@@ -1064,7 +1066,7 @@ void ChartSubStreamHandler::handleAxisParent(AxisParentRecord *record)
 void ChartSubStreamHandler::handlePie(PieRecord *record)
 {
     if (!record || m_chart->m_impl) return;
-    DEBUG << "anStart=" << record->anStart() << " pcDonut=" << record->pcDonut() << std::endl;
+    DEBUG << "anStart=" << record->anStart() << "pcDonut=" << record->pcDonut();
     if (record->pcDonut() > 0)
         m_chart->m_impl = new KoChart::RingImpl(record->anStart(), record->pcDonut());
     else
@@ -1075,7 +1077,8 @@ void ChartSubStreamHandler::handlePie(PieRecord *record)
 void ChartSubStreamHandler::handleBar(BarRecord *record)
 {
     if (!record || m_chart->m_impl) return;
-    DEBUG << "pcOverlap=" << record->pcOverlap() << " pcGap=" << record->pcGap() << " fTranspose=" << record->isFTranspose() << " fStacked=" << record->isFStacked() << " f100=" << record->isF100() << std::endl;
+    DEBUG << "pcOverlap=" << record->pcOverlap() << "pcGap=" << record->pcGap() << "fTranspose=" << record->isFTranspose()
+          << "fStacked=" << record->isFStacked() << "f100=" << record->isF100();
     m_chart->m_impl = new KoChart::BarImpl();
     m_chart->m_transpose = record->isFTranspose();
     m_chart->m_stacked = record->isFStacked();
@@ -1086,7 +1089,7 @@ void ChartSubStreamHandler::handleBar(BarRecord *record)
 void ChartSubStreamHandler::handleArea(AreaRecord* record)
 {
     if (!record || m_chart->m_impl) return;
-    DEBUG << std::endl;
+    DEBUG << "";
     m_chart->m_impl = new KoChart::AreaImpl();
     m_chart->m_stacked = record->isFStacked();
     m_chart->m_f100 = record->isF100();
@@ -1096,7 +1099,7 @@ void ChartSubStreamHandler::handleArea(AreaRecord* record)
 void ChartSubStreamHandler::handleLine(LineRecord* record)
 {
     if (!record || m_chart->m_impl) return;
-    DEBUG << std::endl;
+    DEBUG << "";
     m_chart->m_impl = new KoChart::LineImpl();
     m_chart->m_stacked = record->isFStacked();
     m_chart->m_f100 = record->isF100();
@@ -1113,7 +1116,7 @@ void ChartSubStreamHandler::handleLine(LineRecord* record)
 void ChartSubStreamHandler::handleScatter(ScatterRecord* record)
 {
     if (!record || m_chart->m_impl) return;
-    DEBUG << std::endl;
+    DEBUG << "";
     if (record->isFBubbles())
         m_chart->m_impl = new KoChart::BubbleImpl(KoChart::BubbleImpl::SizeType(record->wBubbleSize()), record->pcBubbleSizeRatio(), record->isFShowNegBubbles());
     else
@@ -1155,7 +1158,7 @@ void ChartSubStreamHandler::handleScatter(ScatterRecord* record)
 void ChartSubStreamHandler::handleRadar(RadarRecord *record)
 {
     if (!record || m_chart->m_impl) return;
-    DEBUG << std::endl;
+    DEBUG << "";
     m_chart->m_impl = new KoChart::RadarImpl(false);
     m_chart->m_markerType = KoChart::AutoMarker;
 }
@@ -1164,7 +1167,7 @@ void ChartSubStreamHandler::handleRadar(RadarRecord *record)
 void ChartSubStreamHandler::handleRadarArea(RadarAreaRecord *record)
 {
     if (!record || m_chart->m_impl) return;
-    DEBUG << std::endl;
+    DEBUG << "";
     m_chart->m_impl = new KoChart::RadarImpl(true);
 }
 
@@ -1172,14 +1175,14 @@ void ChartSubStreamHandler::handleRadarArea(RadarAreaRecord *record)
 void ChartSubStreamHandler::handleSurf(SurfRecord *record)
 {
     if (!record || m_chart->m_impl) return;
-    DEBUG << std::endl;
+    DEBUG << "";
     m_chart->m_impl = new KoChart::SurfaceImpl(record->isFFillSurface());
 }
 
 void ChartSubStreamHandler::handleAxis(AxisRecord* record)
 {
     if (!record) return;
-    DEBUG << "wType=" << record->wType() << std::endl;
+    DEBUG << "wType=" << record->wType();
     KoChart::Axis* axis = new KoChart::Axis(KoChart::Axis::Type(record->wType()));
     m_chart->m_axes << axis;
     m_currentObj = axis;
@@ -1189,7 +1192,7 @@ void ChartSubStreamHandler::handleAxis(AxisRecord* record)
 void ChartSubStreamHandler::handleAxisLine(AxisLineRecord* record)
 {
     if (!record) return;
-    DEBUG << "identifier=" << record->identifier() << std::endl;
+    DEBUG << "identifier=" << record->identifier();
     m_axisId = record->identifier();
 }
 
@@ -1216,7 +1219,7 @@ void ChartSubStreamHandler::handleCatLab(CatLabRecord* record)
 {
     if (!record) return;
     void handleCatLab(CatLabRecord* record);
-    DEBUG << "wOffset=" << record->wOffset() << " at=" << record->at() << " cAutoCatLabelReal=" << record->cAutoCatLabelReal() << std::endl;
+    DEBUG << "wOffset=" << record->wOffset() << "at=" << record->at() << "cAutoCatLabelReal=" << record->cAutoCatLabelReal();
     //TODO
 }
 
@@ -1224,7 +1227,7 @@ void ChartSubStreamHandler::handleCatLab(CatLabRecord* record)
 void ChartSubStreamHandler::handleSIIndex(SIIndexRecord *record)
 {
     if (!record) return;
-    DEBUG << "numIndex=" << record->numIndex() << std::endl;
+    DEBUG << "numIndex=" << record->numIndex();
     Q_ASSERT(!m_internalDataCache);
     m_internalDataCache = new InternalDataCache(this, record->numIndex());
 }
@@ -1232,28 +1235,28 @@ void ChartSubStreamHandler::handleSIIndex(SIIndexRecord *record)
 void ChartSubStreamHandler::handleMsoDrawing(MsoDrawingRecord* record)
 {
     if (!record) return;
-    DEBUG << std::endl;
+    DEBUG << "";
     //TODO
 }
 
 void ChartSubStreamHandler::handleShapePropsStream(ShapePropsStreamRecord* record)
 {
     if (!record) return;
-    DEBUG << "wObjContext=" << record->wObjContext() << "rgbLength=" << record->rgb().length() << " rgbString=" << record->rgb() << std::endl;
+    DEBUG << "wObjContext=" << record->wObjContext() << "rgbLength=" << record->rgb().length() << "rgbString=" << record->rgb();
     //TODO
 }
 
 void ChartSubStreamHandler::handleTextPropsStream(TextPropsStreamRecord* record)
 {
     if (!record) return;
-    DEBUG << "rgbLength=" << record->rgb().length() << " rgbString=" << record->rgb() << std::endl;
+    DEBUG << "rgbLength=" << record->rgb().length() << "rgbString=" << record->rgb();
     //TODO
 }
 
 void ChartSubStreamHandler::handleObjectLink(ObjectLinkRecord *record)
 {
     if (!record) return;
-    DEBUG << "wLinkObj=" << record->wLinkObj() << " wLinkVar1=" << record->wLinkVar1() << " wLinkVar2=" << record->wLinkVar2() << std::endl;
+    DEBUG << "wLinkObj=" << record->wLinkObj() << "wLinkVar1=" << record->wLinkVar1() << "wLinkVar2=" << record->wLinkVar2();
 
     KoChart::Text *t = dynamic_cast<KoChart::Text*>(m_currentObj);
     if (!t) return;         // if the current object is not text, just do nothing
@@ -1288,14 +1291,16 @@ void ChartSubStreamHandler::handleObjectLink(ObjectLinkRecord *record)
 void ChartSubStreamHandler::handlePlotArea(PlotAreaRecord *record)
 {
     if (!record) return;
-    DEBUG << std::endl;
+    DEBUG << "";
     m_currentObj = m_chart->m_plotArea = new KoChart::PlotArea();
 }
 
 void ChartSubStreamHandler::handleValueRange(ValueRangeRecord *record)
 {
     if (!record) return;
-    DEBUG << "fAutoMin=" << record->isFAutoMin() << " fAutoMax=" << record->isFAutoMax() << " fAutoMajor=" << record->isFAutoMajor() << " fAutoMinor=" << record->isFAutoMinor() << " fAutoCross=" << record->isFAutoCross() << " fLog=" << record->isFLog() << " fReversed=" << record->isFReversed() << " fMaxCross=" << record->isFMaxCross() << std::endl;
+    DEBUG << "fAutoMin=" << record->isFAutoMin() << "fAutoMax=" << record->isFAutoMax() << "fAutoMajor=" << record->isFAutoMajor()
+          << "fAutoMinor=" << record->isFAutoMinor() << "fAutoCross=" << record->isFAutoCross() << "fLog=" << record->isFLog()
+          << "fReversed=" << record->isFReversed() << "fMaxCross=" << record->isFMaxCross();
     if ( KoChart::Axis *axis = dynamic_cast< KoChart::Axis* > ( m_currentObj ) ) {
         axis->m_reversed = record->isFReversed();
         axis->m_logarithmic = record->isFLog();
@@ -1310,8 +1315,8 @@ void ChartSubStreamHandler::handleTick(TickRecord *record)
 {
     if (!record) return;
     DEBUG << "tktMajor=" << record->tktMajor()
-          << " tktMinor=" << record->tktMinor()
-          << " tlt=" << record->tlt() << std::endl;
+          << "tktMinor=" << record->tktMinor()
+          << "tlt=" << record->tlt();
     //TODO
 }
 
@@ -1319,13 +1324,13 @@ void ChartSubStreamHandler::handleAxcExt(AxcExtRecord *record)
 {
     if (!record) return;
     DEBUG << "fAutoMin=" << record->isFAutoMin()
-          << " fAutoMax=" << record->isFAutoMax()
-          << " fAutoMajor=" << record->isFAutoMajor()
-          << " fAutoMinor=" << record->isFAutoMinor()
-          << " fDateAxis=" << record->isFDateAxis()
-          << " fAutoBase=" << record->isFAutoBase()
-          << " fAutoCross=" << record->isFAutoCross()
-          << " fAutoDate=" << record->isFAutoDate() << std::endl;
+          << "fAutoMax=" << record->isFAutoMax()
+          << "fAutoMajor=" << record->isFAutoMajor()
+          << "fAutoMinor=" << record->isFAutoMinor()
+          << "fDateAxis=" << record->isFDateAxis()
+          << "fAutoBase=" << record->isFAutoBase()
+          << "fAutoCross=" << record->isFAutoCross()
+          << "fAutoDate=" << record->isFAutoDate();
     //TODO
 }
 
@@ -1333,7 +1338,7 @@ void ChartSubStreamHandler::handleAxcExt(AxcExtRecord *record)
 void ChartSubStreamHandler::handleCrtLine(CrtLineRecord *record)
 {
     if (!record) return;
-    DEBUG << "identifier=" << record->identifier() << std::endl;
+    DEBUG << "identifier=" << record->identifier();
     switch(record->identifier()) {
         case 0x0000: // Drop lines below the data points of line, area, and stock chart groups.
             //TODO
@@ -1357,14 +1362,16 @@ void ChartSubStreamHandler::handleCrtLine(CrtLineRecord *record)
 void ChartSubStreamHandler::handleCatSerRange(CatSerRangeRecord *record)
 {
     if (!record) return;
-    DEBUG << "fBetween=" << record->isFBetween() << " fMaxCross=" << record->isFMaxCross() << " fReverse=" << record->isFReverse() << std::endl;
+    DEBUG << "fBetween=" << record->isFBetween() << "fMaxCross=" << record->isFMaxCross() << "fReverse=" << record->isFReverse();
     //TODO
 }
 
 void ChartSubStreamHandler::handleAttachedLabel(AttachedLabelRecord *record)
 {
     if (!record) return;
-    DEBUG << "fShowValue=" << record->isFShowValue() << " fShowPercent=" << record->isFShowPercent() << " fShowLabelAndPerc=" << record->isFShowLabelAndPerc() << " fShowLabel=" << record->isFShowLabel() << " fShowBubbleSizes=" << record->isFShowBubbleSizes() << " fShowSeriesName=" << record->isFShowSeriesName() << std::endl;
+    DEBUG << "fShowValue=" << record->isFShowValue() << "fShowPercent=" << record->isFShowPercent()
+          << "fShowLabelAndPerc=" << record->isFShowLabelAndPerc() << "fShowLabel=" << record->isFShowLabel()
+          << "fShowBubbleSizes=" << record->isFShowBubbleSizes() << "fShowSeriesName=" << record->isFShowSeriesName();
     if (m_currentSeries) {
         m_currentSeries->m_showDataLabelValues = record->isFShowValue();
         m_currentSeries->m_showDataLabelPercent = record->isFShowPercent() || record->isFShowLabelAndPerc();
@@ -1376,14 +1383,16 @@ void ChartSubStreamHandler::handleAttachedLabel(AttachedLabelRecord *record)
 void ChartSubStreamHandler::handleDataLabelExtContents(DataLabelExtContentsRecord *record)
 {
     if (!record) return;
-    DEBUG << "rt=" << record->rt() << " grbitFrt=" << record->grbitFrt() << " fSerName=" << record->isFSerName() << " fCatName=" << record->isFCatName() << " fValue=" << record->isFValue() << " fPercent=" << record->isFPercent() << " fBubSize=" << record->isFBubSize() << std::endl;
+    DEBUG << "rt=" << record->rt() << "grbitFrt=" << record->grbitFrt() << "fSerName=" << record->isFSerName()
+          << "fCatName=" << record->isFCatName() << "fValue=" << record->isFValue() << "fPercent=" << record->isFPercent()
+          << "fBubSize=" << record->isFBubSize();
     //TODO
 }
 
 void ChartSubStreamHandler::handleXF(XFRecord *record)
 {
     if (!record) return;
-    DEBUG << "formatIndex=" << record->formatIndex() << std::endl;
+    DEBUG << "formatIndex=" << record->formatIndex();
     m_xfTable.push_back(*record);
 }
 
@@ -1391,7 +1400,8 @@ void ChartSubStreamHandler::handleXF(XFRecord *record)
 void ChartSubStreamHandler::handleLabel(LabelRecord *record)
 {
     if (!record) return;
-    DEBUG << "row=" << record->row() << " column=" << record->column() << " xfIndex=" << record->xfIndex() << " label=" << record->label().toUtf8().constData() << std::endl;
+    DEBUG << "row=" << record->row() << "column=" << record->column() << "xfIndex=" << record->xfIndex()
+          << "label=" << record->label().toUtf8();
     //TODO
 }
 
@@ -1402,7 +1412,7 @@ void ChartSubStreamHandler::handleIFmt(IFmtRecord *record)
     //Q_ASSERT(record->ifmt() >= 0x00A4 && record->ifmt() <= 0x0188);
     const Format *f = globals()->convertedFormat(record->ifmt());
     if (!f) return;
-    DEBUG << "ifmt=" << record->ifmt() << " valueFormat=" << qPrintable(f->valueFormat()) << std::endl;
+    DEBUG << "ifmt=" << record->ifmt() << "valueFormat=" << qPrintable(f->valueFormat());
 //     if (!f->valueFormat().isEmpty() && f->valueFormat() != "General") {
 //         Q_ASSERT(false);
 //     }
@@ -1413,8 +1423,8 @@ void ChartSubStreamHandler::handleCrtMlFrt(CrtMlFrtRecord *record)
 {
     if (!record) return;
     std::stringstream out;
-        record->dump(out);
-    DEBUG << "xmlTkParent=" << QString::number(record->xmlTkParent(), 16) << " tokens=" << out.str() << std::endl;
+    record->dump(out);
+    DEBUG << "xmlTkParent=" << QString::number(record->xmlTkParent(), 16) << "tokens=" << QString::fromStdString(out.str());
 
     //TODO
 }

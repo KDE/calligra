@@ -28,6 +28,10 @@
 #include <QUuid>
 #include <QRect>
 #include <QtEndian>
+#include <QLoggingCategory>
+
+//"calligra.filter.sidewinder"
+Q_DECLARE_LOGGING_CATEGORY(lcSidewinder)
 
 namespace Swinder
 {

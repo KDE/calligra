@@ -243,7 +243,7 @@ void WorksheetSubStreamHandler::handleRecord(Record* record)
     else if (type == AutoFilterRecord::id)
         handleAutoFilterRecord(static_cast<AutoFilterRecord*>(record));
     else {
-        //std::cout << "Unhandled worksheet record with type=" << type << " name=" << record->name() << std::endl;
+        //qCDebug(lcSidewinder) << "Unhandled worksheet record with type=" << type << " name=" << record->name();
     }
 }
 
@@ -254,7 +254,7 @@ void WorksheetSubStreamHandler::handleBOF(BOFRecord* record)
     if (record->type() == BOFRecord::Worksheet) {
         // ...
     } else {
-        std::cout << "WorksheetSubStreamHandler::handleBOF Unhandled type=" << record->type() << std::endl;
+        qCDebug(lcSidewinder) << "WorksheetSubStreamHandler::handleBOF Unhandled type=" << record->type();
     }
 }
 
@@ -751,7 +751,7 @@ void WorksheetSubStreamHandler::handleNote(NoteRecord* record)
 {
     if (!record) return;
     if (!d->sheet) return;
-    std::cout << "WorksheetSubStreamHandler::handleNote column=" << record->column() << " row=" << record->row() << std::endl;
+    qCDebug(lcSidewinder) << "WorksheetSubStreamHandler::handleNote column=" << record->column() << "row=" << record->row();
     Cell *cell = d->sheet->cell(record->column(), record->row());
     if (cell) {
         const unsigned long id = record->idObj();
@@ -769,7 +769,7 @@ void WorksheetSubStreamHandler::handleObj(ObjRecord* record)
 
     const unsigned long id = record->m_object ? record->m_object->id() : -1;
 
-    std::cout << "WorksheetSubStreamHandler::handleObj id=" << id << " type=" << (record->m_object ? record->m_object->type() : -1) << std::endl;
+    qCDebug(lcSidewinder) << "WorksheetSubStreamHandler::handleObj id=" << id << " type=" << (record->m_object ? record->m_object->type() : -1);
 
     d->lastOfficeArtObject = 0;
 
@@ -896,7 +896,7 @@ void WorksheetSubStreamHandler::handlePassword(PasswordRecord* record)
     if (!record) return;
     if (!d->sheet) return;
     if (!record->wPassword()) return;
-    std::cout << "WorksheetSubStreamHandler::handlePassword passwordHash=" << record->wPassword() << std::endl;
+    qCDebug(lcSidewinder) << "WorksheetSubStreamHandler::handlePassword passwordHash=" << record->wPassword();
     d->sheet->setPassword(record->wPassword());
 
 #if 0
@@ -945,7 +945,7 @@ void WorksheetSubStreamHandler::handlePassword(PasswordRecord* record)
         sPasswd.prepend(QChar(nNewChar));
     }
 
-    std::cout << ">>>> " << sPasswd.data() << std::endl; //0x218490a
+    qCDebug(lcSidewinder) << ">>>> " << sPasswd.data(); //0x218490a
 #endif
 
 }
