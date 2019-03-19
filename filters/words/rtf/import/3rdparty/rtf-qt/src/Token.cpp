@@ -16,8 +16,7 @@
  */
 
 #include "Token.h"
-
-#include <QDebug>
+#include "rtfdebug.h"
 
 namespace RtfReader
 {
@@ -25,27 +24,27 @@ namespace RtfReader
     {
         switch ( type ) {
 	  case OpenGroup:
-	    qDebug() << "token type: OpenGroup";
+            qCDebug(lcRtf) << "token type: OpenGroup";
 	    break;
 	  case CloseGroup:
-	    qDebug() << "token type: CloseGroup";
+            qCDebug(lcRtf) << "token type: CloseGroup";
 	    break;
 	  case Control:
-	    qDebug() << "token type: Control";
+            qCDebug(lcRtf) << "token type: Control";
 	    break;
 	  case Plain:
-	    qDebug() << "token type: Plain";
+            qCDebug(lcRtf) << "token type: Plain";
 	    break;
 	  case Binary:
-	    qDebug() << "token type: Binary";
+            qCDebug(lcRtf) << "token type: Binary";
 	    break;
 	  default:
-	    qDebug() << "unexpected token type: " << type;
+            qCDebug(lcRtf) << "unexpected token type: " << type;
 	}
 	if ( type > CloseGroup ) {
-	    qDebug() << "name: " << name;
+            qCDebug(lcRtf) << "name: " << name;
 	    if ( hasParameter ) {
-		qDebug() << "parameter: " << parameter;
+                qCDebug(lcRtf) << "parameter: " << parameter;
 	    }
 	}
     }

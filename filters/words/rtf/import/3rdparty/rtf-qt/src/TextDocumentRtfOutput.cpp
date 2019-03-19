@@ -16,6 +16,7 @@
  */
 
 #include "TextDocumentRtfOutput.h"
+#include "rtfdebug.h"
 
 #include <QTextCursor>
 #include <QTextDocument>
@@ -150,7 +151,7 @@ namespace RtfReader
 	  m_textCharFormatStack.top().setForeground( colour );
 	  m_cursor->setCharFormat( m_textCharFormatStack.top() );
 	} else {
-	  qDebug() << "invalid colour at index:" << colourIndex;
+          qCDebug(lcRtf) << "invalid colour at index:" << colourIndex;
 	}
     }
 
@@ -161,7 +162,7 @@ namespace RtfReader
 	  m_textCharFormatStack.top().setBackground( colour );
 	  m_cursor->setCharFormat( m_textCharFormatStack.top() );
 	} else {
-	  qDebug() << "invalid colour at index:" << colourIndex;
+          qCDebug(lcRtf) << "invalid colour at index:" << colourIndex;
 	}
     }
 
@@ -172,18 +173,18 @@ namespace RtfReader
 	    m_paragraphFormat.setBackground( colour );
 	    m_cursor->setBlockFormat( m_paragraphFormat );
 	} else {
-	    qDebug() << "invalid colour at index:" << colourIndex;
+            qCDebug(lcRtf) << "invalid colour at index:" << colourIndex;
 	}
     }
 
     void TextDocumentRtfOutput::setFont( const int fontIndex )
     {
 	if ( ! m_fontTable.contains( fontIndex ) ) {
-	    qDebug() << "attempted to select fontIndex" << fontIndex << "not in the font table";
+            qCDebug(lcRtf) << "attempted to select fontIndex" << fontIndex << "not in the font table";
 	    return;
 	}
 	FontTableEntry fontEntry = m_fontTable.value( fontIndex );
-	qDebug() << "selecting font:" << fontEntry.fontName();
+        qCDebug(lcRtf) << "selecting font:" << fontEntry.fontName();
 	m_textCharFormatStack.top().setFontFamily( fontEntry.fontName() );
 	m_cursor->setCharFormat( m_textCharFormatStack.top() );
 	m_haveSetFont = true;
@@ -201,13 +202,13 @@ namespace RtfReader
 
     void TextDocumentRtfOutput::insertFontTableEntry( FontTableEntry fontTableEntry, quint32 fontTableIndex )
     {
-	// qDebug() << "inserting font entry:" << fontTableIndex << "with name:" << fontTableEntry.fontName();
+        // qCDebug(lcRtf) << "inserting font entry:" << fontTableIndex << "with name:" << fontTableEntry.fontName();
 	m_fontTable.insert( fontTableIndex, fontTableEntry );
     }
 
     void TextDocumentRtfOutput::insertStyleSheetTableEntry( quint32 stylesheetTableIndex, StyleSheetTableEntry stylesheetTableEntry )
     {
-	qDebug() << "inserting stylesheet entry:" << stylesheetTableIndex << "with name:" << stylesheetTableEntry.styleName();
+        qCDebug(lcRtf) << "inserting stylesheet entry:" << stylesheetTableIndex << "with name:" << stylesheetTableEntry.styleName();
 	m_stylesheetTable.insert( stylesheetTableIndex, stylesheetTableEntry );
     }
  
@@ -321,12 +322,12 @@ namespace RtfReader
     
     void TextDocumentRtfOutput::setPageHeight( const int pageHeight )
     {
-	qDebug() << "setPageHeight: " << pageHeight << " (" << pageHeight/1440.0 << ")";
+        qCDebug(lcRtf) << "setPageHeight: " << pageHeight << " (" << pageHeight/1440.0 << ")";
     }
 
     void TextDocumentRtfOutput::setPageWidth( const int pageWidth )
     {
-	qDebug() << "setPageWidth: " << pageWidth << " (" << pageWidth/1440.0 << ")";
+        qCDebug(lcRtf) << "setPageWidth: " << pageWidth << " (" << pageWidth/1440.0 << ")";
     }
 
     qreal TextDocumentRtfOutput::pixelsFromTwips( const int twips )

@@ -18,6 +18,7 @@
 #include "ColorTableDestination.h"
 
 #include "rtfreader.h"
+#include "rtfdebug.h"
 
 namespace RtfReader
 {
@@ -39,7 +40,7 @@ namespace RtfReader
 	} else if (controlWord == "blue" ) {
 	    m_currentColor.setBlue( value );
 	} else {
-	    qDebug() << "unexpected control word in colortbl:" << controlWord;
+            qCDebug(lcRtf) << "unexpected control word in colortbl:" << controlWord;
 	}
     }
 
@@ -49,7 +50,7 @@ namespace RtfReader
 	    m_output->appendToColourTable( m_currentColor );
 	    resetCurrentColor();
 	} else {
-	    qDebug() << "unexpected text in ColorTableDestination:" << plainText;
+            qCDebug(lcRtf) << "unexpected text in ColorTableDestination:" << plainText;
 	}
     }
 

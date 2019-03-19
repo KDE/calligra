@@ -18,6 +18,7 @@
 #include "UserPropsDestination.h"
 
 #include "rtfreader.h"
+#include "rtfdebug.h"
 
 namespace RtfReader
 {
@@ -46,12 +47,12 @@ namespace RtfReader
 	    } else if ( value == 11 ) {
 		m_propertyType = QVariant::Bool;
 	    } else {
-		qDebug() << "unhandled value type in UserPropsDestination:" << value;
+                qCDebug(lcRtf) << "unhandled value type in UserPropsDestination:" << value;
 	    }
 	} else if ( controlWord == "staticval" ) {
 	    m_nextPlainTextIsPropertyName = false;
 	} else {
-	    qDebug() << "unexpected control word in UserPropsDestination:" << controlWord;
+            qCDebug(lcRtf) << "unexpected control word in UserPropsDestination:" << controlWord;
 	}
     }
 
@@ -65,7 +66,7 @@ namespace RtfReader
 		value = QVariant( plainText );
 	    } else {
 		// TODO: Really need some examples of this stuff - int, float, date and boolean
-		qDebug() << "unhandled value type in UserPropsDestination:" << m_propertyType;
+                qCDebug(lcRtf) << "unhandled value type in UserPropsDestination:" << m_propertyType;
 	    }
 	    m_output->addUserProp( m_propertyName, value );
 	}

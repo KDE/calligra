@@ -14,6 +14,7 @@ include_directories(
 #endif()
 
 set(RtfReader_LIB_SOURCES
+        rtfdebug.cpp
 	rtfreader.cpp
 	controlword.cpp
 	AbstractRtfOutput.cpp

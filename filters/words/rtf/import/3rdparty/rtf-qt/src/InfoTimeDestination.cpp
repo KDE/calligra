@@ -18,6 +18,7 @@
 #include "InfoTimeDestination.h"
 
 #include "rtfreader.h"
+#include "rtfdebug.h"
 
 namespace RtfReader
 {
@@ -43,13 +44,13 @@ namespace RtfReader
 	} else if ( controlWord == "min" ) {
 	    m_minute = value;
 	} else {
-	    qDebug() << "unexpected control word in" << m_name << ": " << controlWord;
+            qCDebug(lcRtf) << "unexpected control word in" << m_name << ": " << controlWord;
 	}
     }
 
     void InfoTimeDestination::handlePlainText( const QString &plainText )
     {
-	qDebug() << "unexpected text in InfoTimeDestination:" << plainText;
+        qCDebug(lcRtf) << "unexpected text in InfoTimeDestination:" << plainText;
     }
 
     QDateTime InfoTimeDestination::dateTime() const

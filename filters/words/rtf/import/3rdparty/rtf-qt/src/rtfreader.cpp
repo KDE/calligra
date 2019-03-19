@@ -16,6 +16,7 @@
  */
 
 #include "rtfreader.h"
+#include "rtfdebug.h"
 #include "controlword.h"
 #include "AbstractRtfOutput.h"
 
@@ -114,18 +115,18 @@ namespace RtfReader
 
     Token token = m_tokenizer->fetchToken();
     if (token.type != OpenGroup ) {
-      qDebug() << "Not an RTF file";
+      qCDebug(lcRtf) << "Not an RTF file";
       result = false;
     }
 
     token = m_tokenizer->fetchToken();
     if ( token.type != Control ) {
-      qDebug() << "Not an RTF file - wrong document type";
+      qCDebug(lcRtf) << "Not an RTF file - wrong document type";
       result = false;
     }
 
     if ( ! headerFormatIsKnown( token.name, token.parameter.toInt() ) ) {
-      qDebug() << "Not a valid RTF file - unknown header";
+      qCDebug(lcRtf) << "Not a valid RTF file - unknown header";
       result = false;
     }
 
@@ -135,12 +136,12 @@ namespace RtfReader
   bool Reader::headerFormatIsKnown( const QString &tokenName, int tokenValue )
   {
     if ( tokenName != QString ( "rtf" ) ) {
-      qDebug() << "unknown / unexpected header token name:" << tokenName;
+      qCDebug(lcRtf) << "unknown / unexpected header token name:" << tokenName;
       return false;
     }
 
     if ( tokenValue != 1 ) {
-      qDebug() << "unknown / unexpected header token value:" << tokenValue;
+      qCDebug(lcRtf) << "unknown / unexpected header token value:" << tokenValue;
       return false;
     }
 
@@ -196,7 +197,7 @@ namespace RtfReader
 	} else if ( destinationName == "ignorable" ) {
 	  return new IgnoredDestination( this, m_output, destinationName );
 	}
-	qDebug() << "creating plain old Destination for" << destinationName;
+        qCDebug(lcRtf) << "creating plain old Destination for" << destinationName;
 	return new Destination( this, m_output, destinationName );
     }
     
@@ -206,7 +207,7 @@ namespace RtfReader
 	    // we don't change destinations inside ignored groups
 	    return;
 	}
-        // qDebug() << m_debugIndent << "about to change destination to: " << destinationName;
+        // qCDebug(lcRtf) << m_debugIndent << "about to change destination to: " << destinationName;
 
 	Destination *dest = makeDestination( destinationName );
 
@@ -216,7 +217,7 @@ namespace RtfReader
 	for (int i = 0; i < m_destinationStack.size(); ++i) {
 	    destStackElementNames << m_destinationStack.at(i)->name();
 	}
-	qDebug() << m_debugIndent << "destinationStack after changeDestination (" << destStackElementNames << ")";
+        qCDebug(lcRtf) << m_debugIndent << "destinationStack after changeDestination (" << destStackElementNames << ")";
     }
 
     void Reader::parseDocument()
@@ -249,7 +250,7 @@ namespace RtfReader
 		m_stateStack.push( state );
 		m_nextSymbolMightBeDestination = true;
 		m_output->startGroup();
-		// qDebug() << m_debugIndent << "opengroup";
+                // qCDebug(lcRtf) << m_debugIndent << "opengroup";
 		m_debugIndent.append("\t");
 		break;
 	    }
@@ -258,7 +259,7 @@ namespace RtfReader
 		for (int i = 0; i < m_destinationStack.size(); ++i) {
 		    destStackElementNames << m_destinationStack.at(i)->name();
 		}
-		// qDebug() << m_debugIndent << "closegroup ( destinationStack:" << destStackElementNames << ")";
+                // qCDebug(lcRtf) << m_debugIndent << "closegroup ( destinationStack:" << destStackElementNames << ")";
 		m_debugIndent.remove(0, 1);
 		state = m_stateStack.pop();
 		if ( state.endOfFile ) {
@@ -277,18 +278,18 @@ namespace RtfReader
 		for (int i = 0; i < m_destinationStack.size(); ++i) {
 		    destStackElementNames << m_destinationStack.at(i)->name();
 		}
-		// qDebug() << m_debugIndent << "destinationStack after CloseGroup: (" << destStackElementNames << ")";
+                // qCDebug(lcRtf) << m_debugIndent << "destinationStack after CloseGroup: (" << destStackElementNames << ")";
 		m_nextSymbolMightBeDestination = true;
 		break;
 	    }
 	    case Control:
 		controlWord = ControlWord( token.name );
 		if ( ! controlWord.isKnown() ) {
-		   qDebug() << "*** Unrecognised control word (not in spec 1.9.1): " << token.name;
+                   qCDebug(lcRtf) << "*** Unrecognised control word (not in spec 1.9.1): " << token.name;
 		}
-		// qDebug() << m_debugIndent << "got controlWord: " << token.name;
-		// qDebug() << m_debugIndent << "isDestination:" << controlWord.isDestination();
-		// qDebug() << m_debugIndent << "isIgnorable:" << m_nextSymbolIsIgnorable;
+                // qCDebug(lcRtf) << m_debugIndent << "got controlWord: " << token.name;
+                // qCDebug(lcRtf) << m_debugIndent << "isDestination:" << controlWord.isDestination();
+                // qCDebug(lcRtf) << m_debugIndent << "isIgnorable:" << m_nextSymbolIsIgnorable;
 		if ( m_nextSymbolMightBeDestination && controlWord.isSupportedDestination() ) {
 		    m_nextSymbolMightBeDestination = false;
 		    m_nextSymbolIsIgnorable = false;
@@ -297,7 +298,7 @@ namespace RtfReader
 		    // This is a control word we don't understand
 		    m_nextSymbolMightBeDestination = false;
 		    m_nextSymbolIsIgnorable = false;
-		    qDebug() << "ignorable destination word:" << token.name;
+                    qCDebug(lcRtf) << "ignorable destination word:" << token.name;
 		    changeDestination( "ignorable" );
 		} else {
 		    m_nextSymbolMightBeDestination = false;
@@ -312,9 +313,9 @@ namespace RtfReader
 		m_destinationStack.top()->handlePlainText( token.name );
 		break;
 	    case Binary:
-		qDebug() << "binary data:" << token.name;
+                qCDebug(lcRtf) << "binary data:" << token.name;
 	    default:
-		qDebug() << "Unexpected token Type";
+                qCDebug(lcRtf) << "Unexpected token Type";
 	    }
 	}
     }

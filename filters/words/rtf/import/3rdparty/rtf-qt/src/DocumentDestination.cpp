@@ -18,6 +18,7 @@
 #include "DocumentDestination.h"
 
 #include "rtfreader.h"
+#include "rtfdebug.h"
 #include "controlword.h"
 
 namespace RtfReader
@@ -120,14 +121,14 @@ namespace RtfReader
 	    m_output->appendText( QChar( value ) );
 	    m_charactersToSkip = 1; /* TODO: this should be driven by \uc, default to 1 */
 	} else if ( ( controlWord == "\'" ) && hasValue ) {
-	    qDebug() << "special character value:" << value;
+            qCDebug(lcRtf) << "special character value:" << value;
 	} else if ( controlWord == "*" ) {
 	    // handled elsewhere
 	} else {
 	    if ( ControlWord::isDestination( controlWord ) ) {
-		qDebug() << "unhandled *Destination* control word in DocumentDestination:" << controlWord;
+                qCDebug(lcRtf) << "unhandled *Destination* control word in DocumentDestination:" << controlWord;
 	    } else {
-		qDebug() << "unhandled control word in DocumentDestination:" << controlWord;
+                qCDebug(lcRtf) << "unhandled control word in DocumentDestination:" << controlWord;
 	    }
 	}
     }
@@ -135,7 +136,7 @@ namespace RtfReader
     void DocumentDestination::handlePlainText( const QString &plainText )
     {
 	if ( m_charactersToSkip > 0 ) {
-	    qDebug() << "skipping" << m_charactersToSkip << "of" << plainText;
+            qCDebug(lcRtf) << "skipping" << m_charactersToSkip << "of" << plainText;
 	    if ( m_charactersToSkip >= plainText.size() ) {
 		m_charactersToSkip -= plainText.size();
 		return;

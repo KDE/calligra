@@ -18,6 +18,7 @@
 #include "InfoDestination.h"
 
 #include "rtfreader.h"
+#include "rtfdebug.h"
 
 namespace RtfReader
 {
@@ -48,12 +49,12 @@ namespace RtfReader
 	} else if ( controlWord == "*" ) {
 	    // handled elsewhere
 	} else {
-	    qDebug() << "unexpected control word in InfoDestination:" << controlWord;
+            qCDebug(lcRtf) << "unexpected control word in InfoDestination:" << controlWord;
 	}
     }
 
     void InfoDestination::handlePlainText( const QString &plainText )
     {
-	qDebug() << "unexpected text in InfoDestination:" << plainText;
+        qCDebug(lcRtf) << "unexpected text in InfoDestination:" << plainText;
     }
 }

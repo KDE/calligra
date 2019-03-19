@@ -18,6 +18,7 @@
 #include "PictDestination.h"
 
 #include "rtfreader.h"
+#include "rtfdebug.h"
 
 namespace RtfReader
 {
@@ -35,31 +36,31 @@ namespace RtfReader
 	if ( controlWord == "jpegblip" ) {
 	    // handle this later
 	} else if ( controlWord == "wmetafile" ) {
-	    qDebug() << "todo: get WMF data";
+            qCDebug(lcRtf) << "todo: get WMF data";
 	} else if ( controlWord == "picw" ) {
-	    qDebug() << "pict width: " << value;
+            qCDebug(lcRtf) << "pict width: " << value;
 	    m_imageFormat.setWidth( value );
 	} else if ( controlWord == "pich" ) {
-	    qDebug() << "pict height: " << value;
+            qCDebug(lcRtf) << "pict height: " << value;
 	    m_imageFormat.setHeight( value );
 	} else if ( controlWord == "picscalex" ) {
-	    qDebug() << "X scale: " << value;
+            qCDebug(lcRtf) << "X scale: " << value;
 	} else if ( controlWord == "picscaley" ) {
-	    qDebug() << "Y scale: " << value;
+            qCDebug(lcRtf) << "Y scale: " << value;
 	} else if ( controlWord == "piccropl" ) {
-	    qDebug() << "Left crop:" << value;
+            qCDebug(lcRtf) << "Left crop:" << value;
 	} else if ( controlWord == "piccropr" ) {
-	    qDebug() << "Right crop:" << value;
+            qCDebug(lcRtf) << "Right crop:" << value;
 	} else if ( controlWord == "piccropt" ) {
-	    qDebug() << "Top crop:" << value;
+            qCDebug(lcRtf) << "Top crop:" << value;
 	} else if ( controlWord == "piccropb" ) {
-	    qDebug() << "Bottom crop:" << value;
+            qCDebug(lcRtf) << "Bottom crop:" << value;
 	} else if ( controlWord == "pichgoal" ) {
-	    qDebug() << "Goal Height:" << value;
+            qCDebug(lcRtf) << "Goal Height:" << value;
 	} else if ( controlWord == "picwgoal" ) {
-	    qDebug() << "Goal Width:" << value;
+            qCDebug(lcRtf) << "Goal Width:" << value;
 	} else {
-	    qDebug() << "unexpected control word in pict:" << controlWord;
+            qCDebug(lcRtf) << "unexpected control word in pict:" << controlWord;
 	}
     }
 

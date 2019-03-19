@@ -16,6 +16,7 @@
  */
 
 #include "Destination.h"
+#include "rtfdebug.h"
 
 #include <QStack>
 
@@ -45,7 +46,7 @@ namespace RtfReader
 
     void Destination::handlePlainText( const QString &plainText )
     {
-	qDebug() << "plain text:" << plainText << "in" << m_name;
+        qCDebug(lcRtf) << "plain text:" << plainText << "in" << m_name;
     };
 
     void Destination::aboutToEndDestination()

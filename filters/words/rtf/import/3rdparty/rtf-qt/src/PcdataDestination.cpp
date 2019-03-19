@@ -18,6 +18,7 @@
 #include "PcdataDestination.h"
 
 #include "rtfreader.h"
+#include "rtfdebug.h"
 
 namespace RtfReader
 {
@@ -32,7 +33,7 @@ namespace RtfReader
 
     void PcdataDestination::handleControlWord( const QString &controlWord, bool hasValue, const int value )
     {
-	qDebug() << "unexpected control word in" << m_name << ": " << controlWord;
+        qCDebug(lcRtf) << "unexpected control word in" << m_name << ": " << controlWord;
     }
 
     void PcdataDestination::handlePlainText( const QString &plainText )

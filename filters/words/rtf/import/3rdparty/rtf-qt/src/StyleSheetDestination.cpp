@@ -18,6 +18,7 @@
 #include "StyleSheetDestination.h"
 
 #include "rtfreader.h"
+#include "rtfdebug.h"
 #include "controlword.h"
 
 namespace RtfReader
@@ -50,12 +51,12 @@ namespace RtfReader
         } else if ( ( controlWord == "sb" ) && hasValue ) {
             m_style.setTopMargin( value );
         } else if ( controlWord == "sb" ) {
-            qDebug() << "space before default (0)";
+            qCDebug(lcRtf) << "space before default (0)";
 	} else {
 	    if ( ControlWord::isDestination( controlWord ) ) {
-		qDebug() << "unhandled **Destination** control word in StyleSheetDestination:" << controlWord;
+                qCDebug(lcRtf) << "unhandled **Destination** control word in StyleSheetDestination:" << controlWord;
 	    } else {
-		qDebug() << "unhandled control word in StyleSheetDestination:" << controlWord;
+                qCDebug(lcRtf) << "unhandled control word in StyleSheetDestination:" << controlWord;
 	    }
 	}
     }
@@ -74,7 +75,7 @@ namespace RtfReader
 		m_output->insertStyleSheetTableEntry( m_currentStyleHandleNumber, m_style );
 	    } else {
 		// we were not expecting a name with a delimiter other than at the end
-		qDebug() << "Style name with embedded delimiter: " << plainText;
+                qCDebug(lcRtf) << "Style name with embedded delimiter: " << plainText;
 	    }
 	} else {
 	    // plain font name

@@ -18,6 +18,7 @@
 #include "FontTableDestination.h"
 
 #include "rtfreader.h"
+#include "rtfdebug.h"
 
 namespace RtfReader
 {
@@ -55,7 +56,7 @@ namespace RtfReader
 	} else if ( controlWord == "fcharset" ) {
 	  // TODO: need to figure out how to sanely handle this
 	} else {
-	  qDebug() << "unhandled fonttbl control word:" << controlWord << "(" << value << ")";
+          qCDebug(lcRtf) << "unhandled fonttbl control word:" << controlWord << "(" << value << ")";
 	}
     }
 
@@ -73,7 +74,7 @@ namespace RtfReader
 		m_output->insertFontTableEntry( m_fontTableEntry, m_currentFontTableIndex );
 	    } else {
 		// we were not expecting a name with a delimiter other than at the end
-		qDebug() << "Font name with embedded delimiter: " << plainText;
+                qCDebug(lcRtf) << "Font name with embedded delimiter: " << plainText;
 	    }
 	} else {
 	    // plain font name

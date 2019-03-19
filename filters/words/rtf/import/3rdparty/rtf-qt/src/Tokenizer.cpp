@@ -16,8 +16,8 @@
  */
 
 #include "Tokenizer.h"
+#include "rtfdebug.h"
 #include <ctype.h>
-#include <QDebug>
 
 namespace RtfReader
 {
@@ -61,7 +61,7 @@ namespace RtfReader
         } else if ( token->name == "*" ) {
           // don't need anything else here
         } else {
-            qDebug() << "unhandled control symbol in Tokenizer:" << token->name;
+            qCDebug(lcRtf) << "unhandled control symbol in Tokenizer:" << token->name;
         }
     }
 
