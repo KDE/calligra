@@ -295,6 +295,7 @@ bool TextDocumentStructureModel::hasChildren(const QModelIndex &parentIndex) con
 
 void TextDocumentStructureModel::setTextDocument(QTextDocument* textDocument)
 {
+    beginResetModel();
     if (m_textDocument) {
         m_textDocument->disconnect(this);
     }
@@ -305,7 +306,7 @@ void TextDocumentStructureModel::setTextDocument(QTextDocument* textDocument)
         connect(m_textDocument, SIGNAL(contentsChanged()), SLOT(onContentsChanged()));
     }
 
-    reset();
+    endResetModel();
 }
 
 int TextDocumentStructureModel::lineIndex(const QTextBlock &block, const QTextLine &line) const
@@ -365,7 +366,8 @@ int TextDocumentStructureModel::frameIndex(QTextFrame *frame) const
 
 void TextDocumentStructureModel::onContentsChanged()
 {
-    reset();
+    beginResetModel();
+    endResetModel();
 }
 
 void TextDocumentStructureModel::onModelReset()
