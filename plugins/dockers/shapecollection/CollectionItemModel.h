@@ -51,6 +51,7 @@ class CollectionItemModel : public QAbstractListModel
     public:
         explicit CollectionItemModel(QObject *parent = 0);
 
+        virtual Qt::DropActions supportedDragActions() const;
         virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
         virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
         virtual QMimeData* mimeData(const QModelIndexList& indexes) const;
