@@ -41,6 +41,7 @@ void MSOOXML_CURRENT_CLASS::initInternal()
 void MSOOXML_CURRENT_CLASS::doneInternal()
 {
     delete m_currentTextStyleProperties;
+    m_currentTextStyleProperties = nullptr;
 }
 
 #undef CURRENT_EL
