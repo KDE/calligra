@@ -102,7 +102,7 @@ void DocumentStructureTest::predefinedMetaData()
     KoDocumentInfo *documentInfo = loadDocumentInfo(odt);
     QVERIFY(documentInfo);
     QString keyword = documentInfo->aboutInfo("keyword");
-    QStringList keywords = keyword.split(", ");
+    QStringList keywords = keyword.split(";");
     QVERIFY(keywords.count() == 3);
     QCOMPARE(keywords[0], QString("First keyword"));
     QCOMPARE(keywords[1], QString("Second keyword"));

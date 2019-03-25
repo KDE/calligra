@@ -220,6 +220,7 @@ private:
     QMap<QString, QString> m_aboutInfo;
     /** The original meta:generator of the document */
     QString m_generator;
+    const QString m_keywordSeparator = QStringLiteral(";");
 
 Q_SIGNALS:
     void infoUpdated(const QString &info, const QString &data);

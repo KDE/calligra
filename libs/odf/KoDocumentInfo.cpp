@@ -266,7 +266,7 @@ bool KoDocumentInfo::saveOasisAboutInfo(KoXmlWriter &xmlWriter)
     foreach(const QString &tag, m_aboutTags) {
         if (!aboutInfo(tag).isEmpty() || tag == "title") {
             if (tag == "keyword") {
-                foreach(const QString & tmp, aboutInfo("keyword").split(';')) {
+                foreach(const QString & tmp, aboutInfo("keyword").split(m_keywordSeparator)) {
                     xmlWriter.startElement("meta:keyword");
                     xmlWriter.addTextNode(tmp);
                     xmlWriter.endElement();
@@ -328,7 +328,7 @@ bool KoDocumentInfo::loadOasisAboutInfo(const KoXmlNode &metaDoc)
     }
 
     if (keywords.count() > 0) {
-        setAboutInfo("keyword", keywords.join(", "));
+        setAboutInfo("keyword", keywords.join(m_keywordSeparator));
     }
 
     return true;
