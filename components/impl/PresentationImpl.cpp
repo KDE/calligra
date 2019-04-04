@@ -159,10 +159,8 @@ PresentationImpl::~PresentationImpl()
 
 bool PresentationImpl::load(const QUrl& url)
 {
-    if(d->part) {
-        delete d->part;
-        delete d->document;
-    }
+    delete d->part;
+    delete d->document;
 
     d->part = new KPrPart{this};
     d->document = new KPrDocument{d->part};

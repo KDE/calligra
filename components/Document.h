@@ -80,7 +80,7 @@ class Document : public QObject
 
     /**
      * \property textEditor
-     * \brief The instance of QTextEditor for the currently selected object in the document, or null
+     * \brief The instance of KoTextEditor for the currently selected object in the document, or null
      *
      * \default null
      * \get textEditor() const

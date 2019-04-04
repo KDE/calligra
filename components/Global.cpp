@@ -45,14 +45,14 @@ Calligra::Components::Global::Global(QObject* parent)
 {
 }
 
-void Global::loadPlugins()
-{
-
-}
-
 int Global::documentType(const QUrl& document)
 {
     int result = DocumentType::Unknown;
+
+    if (!document.isValid()) {
+        return result;
+    }
+
     const QUrlQuery query(document);
 
     // First, check if the URL gives us specific information on this topic (such as asking for a new file)

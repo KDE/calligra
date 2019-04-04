@@ -160,10 +160,8 @@ SpreadsheetImpl::~SpreadsheetImpl()
 
 bool SpreadsheetImpl::load(const QUrl& url)
 {
-    if(d->part) {
-        delete d->part;
-        delete d->document;
-    }
+    delete d->part;
+    delete d->document;
 
     d->part = new Calligra::Sheets::Part{this};
     d->document = new Calligra::Sheets::Doc{d->part};

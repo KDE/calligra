@@ -80,9 +80,7 @@ QSGNode* ImageDataItem::updatePaintNode(QSGNode* node, QQuickItem::UpdatePaintNo
     texNode->setRect(0, 0, w, h);
 
     auto texture = window()->createTextureFromImage(d->data);
-    if(texNode->texture()) {
-        delete texNode->texture();
-    }
+    delete texNode->texture();
     texNode->setTexture(texture);
 
     return texNode;

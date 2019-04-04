@@ -142,10 +142,8 @@ QImage ContentsModel::thumbnail(int index, int width) const
 void ContentsModel::updateImpl()
 {
     beginResetModel();
-
-    if(d->impl) {
-        delete d->impl;
-    }
+    delete d->impl;
+    d->impl = nullptr;
 
     if(d->document && d->document->status() == DocumentStatus::Loaded) {
         switch(d->document->documentType()) {
@@ -162,11 +160,8 @@ void ContentsModel::updateImpl()
                 d->impl = new PresentationContentsModelImpl{d->document->koDocument()};
                 break;
             default:
-                d->impl = nullptr;
                 break;
         }
-    } else {
-        d->impl = nullptr;
     }
 
     if(d->impl) {

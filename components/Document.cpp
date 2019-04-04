@@ -43,7 +43,7 @@ using namespace Calligra::Components;
 class Document::Private
 {
 public:
-    Private(Document* qq) : q{qq}, impl{nullptr}, status{DocumentStatus::Unloaded}, textEditor{nullptr}
+    Private(Document* qq) : q{qq}, impl{nullptr}, status{DocumentStatus::Unloaded}
     { }
 
     void updateImpl();
@@ -53,7 +53,6 @@ public:
     QUrl source;
     DocumentImpl* impl;
     DocumentStatus::Status status;
-    KoTextEditor* textEditor;
 };
 
 Document::Document(QObject* parent)
@@ -213,15 +212,7 @@ QUrl Document::urlAtPoint(const QPoint& point)
 QObject * Document::textEditor()
 {
     if (d->impl && d->impl->canvasController()) {
-        if (d->textEditor) {
-            disconnect(d->textEditor, SIGNAL(cursorPositionChanged()), this, SIGNAL(selectionChanged()));
-        }
-        d->textEditor = KoTextEditor::getTextEditorFromCanvas(d->impl->canvasController()->canvas());
-        if (d->textEditor) {
-            disconnect(d->textEditor, SIGNAL(cursorPositionChanged()), this, SIGNAL(selectionChanged()));
-        }
-//         emit selectionChanged();
-        return d->textEditor;
+        return KoTextEditor::getTextEditorFromCanvas(d->impl->canvasController()->canvas());
     }
     return 0;
 }
@@ -238,28 +229,22 @@ void Document::deselectEverything()
 
 void Document::Private::updateImpl()
 {
-    if(impl) {
-        delete impl;
-    }
+    delete impl;
+    impl = nullptr;
 
-    if(!source.isEmpty()) {
-        auto type = Global::documentType(source);
-        switch(type) {
-            case DocumentType::TextDocument:
-                impl = new TextDocumentImpl{q};
-                break;
-            case DocumentType::Spreadsheet:
-                impl = new SpreadsheetImpl{q};
-                break;
-            case DocumentType::Presentation:
-                impl = new PresentationImpl{q};
-                break;
-            default:
-                impl = nullptr;
-                break;
-        }
-    } else {
-        impl = nullptr;
+    auto type = Global::documentType(source);
+    switch(type) {
+    case DocumentType::TextDocument:
+        impl = new TextDocumentImpl{q};
+        break;
+    case DocumentType::Spreadsheet:
+        impl = new SpreadsheetImpl{q};
+        break;
+    case DocumentType::Presentation:
+        impl = new PresentationImpl{q};
+        break;
+    default:
+        break;
     }
 
     if(impl) {

@@ -175,10 +175,8 @@ TextDocumentImpl::~TextDocumentImpl()
 
 bool TextDocumentImpl::load(const QUrl& url)
 {
-    if(d->part) {
-        delete d->part;
-        delete d->document;
-    }
+    delete d->part;
+    delete d->document;
 
     d->part = new KWPart{this};
     d->document = new KWDocument{d->part};
