@@ -26,6 +26,10 @@
 ListModel::ListModel(ListItem* prototype, QObject *parent) :
     QAbstractListModel(parent), m_prototype(prototype)
 {
+}
+
+QHash<int, QByteArray> ListModel::roleNames() const
+{
     QHash<int, QByteArray> roles;
     roles[ListItem::ModifiedRole] = "modified";
     roles[ListItem::PathRole] = "path";
@@ -41,12 +45,8 @@ ListModel::ListModel(ListItem* prototype, QObject *parent) :
     roles[FileTransferItem::In_queueRole] = "in_queue";
     roles[FileTransferItem::Is_CancelledRolse] = "is_cancelled";
     roles[FileTransferItem::DateRole] = "date";
-    setRoleNames(roles);
+    return roles;
 }
-
-// QHash<int, QByteArray> ListModel::roleNames() const {
-//     return m_prototype->roleNames();
-// }
 
 int ListModel::rowCount(const QModelIndex &parent) const
 {

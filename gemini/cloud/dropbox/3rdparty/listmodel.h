@@ -46,7 +46,6 @@ public:
     virtual ~ListItem() {}
     virtual QString id() const = 0;
     virtual QVariant data(int role) const = 0;
-//    virtual QHash<int, QByteArray> roleNames() const = 0;
 
 Q_SIGNALS:
     void dataChanged();
@@ -73,8 +72,6 @@ public:
   QModelIndex indexFromItem( const ListItem* item) const;
   void clear();
 
-  //QHash<int, QByteArray> roleNames() const;
-
   int count() const;
   int getCount() { return this->rowCount();}
   Q_INVOKABLE QVariantMap get(int row) const;
@@ -84,6 +81,9 @@ private Q_SLOTS:
 
 Q_SIGNALS:
   void countChanged();
+
+protected:
+  QHash<int, QByteArray> roleNames() const;
 
 private:
   ListItem* m_prototype;

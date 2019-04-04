@@ -20,6 +20,7 @@
 #include "oauth.h"
 
 #include <QUrl>
+#include <QUrlQuery>
 #include <QByteArray>
 #include <QCryptographicHash>
 #include <QDateTime>
@@ -105,7 +106,7 @@ QString OAuth::oauth_signature(QString method,QUrl *url,QString oAuthHeader)
 
     QList< QPair<QString,QString> > parameters;
 
-    parameters.append(url->queryItems());
+    parameters.append(QUrlQuery(*url).queryItems());
 
     oAuthHeader.remove("OAuth ");
     QStringList oAuthParameters =
