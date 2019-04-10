@@ -25,6 +25,7 @@ Name[sv]=Insticksprogram för RDF-kalenderhändelser
 Name[tr]=RDF Takvim Olayı Eklentisi
 Name[uk]=Додаток подій календаря RDF
 Name[x-test]=xxRDF Calendar Event Pluginxx
+Name[zh_CN]=RDF 日历事件插件
 Comment=A plugin to map calendar event items between document and RDF database
 Comment[bs]=Dodatak koji mapira kalendarske događaje između dokumenta i RDF baze podataka
 Comment[ca]=Un connector per relacionar elements de calendari entre documents i una base de dades RDF
@@ -50,6 +51,7 @@ Comment[sv]=Ett insticksprogram för att avbilda kalenderhändelseobjekt mellan 
 Comment[tr]=Belgeler ile RDF veritabanı arasında takvim olaylarını eşleyen eklenti
 Comment[uk]=Додаток для створення зв’язку між записами подій календаря у документі та у базі даних RDF
 Comment[x-test]=xxA plugin to map calendar event items between document and RDF databasexx
+Comment[zh_CN]=在文档和 RDF 数据库之间映射日历事件项的插件
 
 Type=Service
 X-KDE-ServiceTypes=Calligra/SemanticItem
