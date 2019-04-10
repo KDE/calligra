@@ -35,6 +35,7 @@ Comment[tr]=Pigment Rengi ile kullanmak için tüm renk boşluğunu oluşturan b
 Comment[uk]=Модуль впровадження повного простору кольорів для використання з системою керування кольорами пігментів (PCMS)
 Comment[wa]=On module ki dene en espåce di coleur complet as eployî avou l' Sistinme d' apougnaedje di pigmints d' coleurs
 Comment[x-test]=xxA module implementing a complete colorspace for use with Pigment Color Manipulation Systemxx
+Comment[zh_CN]=为调色操作系统实现完整色域的模块
 Comment[zh_TW]=實作完整色彩空間以使用 Pigment 色彩處理系統的模組
 [PropertyDef::X-Pigment-MinVersion]
 Type=int

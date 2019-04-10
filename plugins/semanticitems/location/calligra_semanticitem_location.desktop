@@ -27,6 +27,7 @@ Name[sv]=Insticksprogram för RDF-plats
 Name[tr]=RDF Konum Eklentisi
 Name[uk]=Додаток місць RDF
 Name[x-test]=xxRDF Location Pluginxx
+Name[zh_CN]=RDF 位置插件
 Comment=A plugin to map location items between document and RDF database
 Comment[bs]=Dodatak koji mapira lokacijeks objekte između dokumenta i RDF baze podataka
 Comment[ca]=Un connector per relacionar elements d'ubicació entre documents i una base de dades RDF
@@ -52,6 +53,7 @@ Comment[sv]=Ett insticksprogram för att avbilda platsobjekt mellan dokument och
 Comment[tr]=Belgeler ile RDF veritabanı arasında konum ögelerini eşleyen eklenti
 Comment[uk]=Додаток для створення зв’язку між записами місць у документі та у базі даних RDF
 Comment[x-test]=xxA plugin to map location items between document and RDF databasexx
+Comment[zh_CN]=映射文档和 RDF 数据库之间的位置项的插件
 
 Type=Service
 X-KDE-ServiceTypes=Calligra/SemanticItem
