@@ -16,6 +16,7 @@
   <name xml:lang="gl">Calligra Stage</name>
   <name xml:lang="id">Calligra Stage</name>
   <name xml:lang="it">Calligra Stage</name>
+  <name xml:lang="ko">Calligra 스테이지</name>
   <name xml:lang="nl">Calligra Stage</name>
   <name xml:lang="pl">Scena Calligra</name>
   <name xml:lang="pt">Calligra Stage</name>
@@ -42,6 +43,7 @@
   <summary xml:lang="ia">Presentation</summary>
   <summary xml:lang="id">Presentasi</summary>
   <summary xml:lang="it">Presentazioni</summary>
+  <summary xml:lang="ko">프레젠테이션</summary>
   <summary xml:lang="nl">Presentatie</summary>
   <summary xml:lang="pl">Prezentacja</summary>
   <summary xml:lang="pt">Apresentação</summary>
@@ -70,6 +72,7 @@
     <p xml:lang="gl">Calligra Stage é un aplicativo de presentacións fácil de usar pero flexíbel. Permítelle crear presentacións cunha ampla variedade de elementos, incluíndo texto, gráficos e imaxes. As funcionalidades de Calligra Stage poden ampliarse mediante un sistema de complementos, así que resulta doado engadir efectos e elementos novos, así como novos xeitos de xestionar as presentacións. Grazas á súa integración con Calligra, Stage pode facer uso da potencia e flexibilidade dos elementos de contido dispoñíbeis en Calligra.</p>
     <p xml:lang="id">Calligra Stage adalah aplikasi presentasi yang mudah digunakan namun tetap fleksibel. Anda dapat dengan mudah membuat presentasi yang mengandung beragam elemen, dari grafik ke teks, dari bagan ke gambar. Calligra Stage dapat diekstensi melalui sistem plugin, sehingga mudah untuk menambahkan efek baru, elemen konten baru atau bahkan cara baru mengelola presentasi Anda. Karena integrasi dengan Calligra, semua kekuatan dan fleksibilitas elemen konten Calligra tersedia untuk tahap (Stage).</p>
     <p xml:lang="it">Calligra Stage è un'applicazione per presentazioni tanto facile da utilizzare quanto è flessibile. Puoi creare facilmente presentazioni che contengono un'ampia varietà di elementi, dalla grafica al testo, dai grafici alle immagini. Calligra Stage è espandibile tramite un sistema di estensioni, per cui è semplice aggiungere nuovi effetti o anche nuovi modi di gestire le tue presentazioni. Grazie all'integrazione con Calligra, tutta la potenza e la flessibilità degli elementi di Calligra sono disponibili in Stage.</p>
+    <p xml:lang="ko">Caligra 스테이지는 사용하기 쉽지만 여전히 탄력적인 프레젠테이션 응용 프로그램입니다. 그래픽에서 텍스트, 차트에서 이미지에 이르기까지 다양한 요소가 포함된 프레젠테이션을 쉽게 만들 수 있습니다. Caligra 스테이지는 플러그인 시스템을 통해 확장 가능하므로 새로운 효과, 새로운 컨텐츠 요소 또는 프레젠테이션을 관리하는 새로운 방법을 쉽게 추가할 수 있습니다. Caligra와의 통합으로 인해 Caligra 컨텐츠 요소의 모든 기능과 유연성을 스테이지에서 사용할 수 있습니다.</p>
     <p xml:lang="nl">Calligra Stage is een gemakkelijk te gebruiken maar toch flexibele toepassing voor presentaties. U kunt gemakkelijk presentaties maken met een rijke variatie van elementen, van grafische tot tekst, van grafieken tot afbeeldingen. Calligra Stage is uit te breiden met een systeem van plug-ins, zodat het gemakkelijk is om nieuwe effecten toe te voegen, nieuwe soorten inhoud of zelfs nieuwe manieren van het beheren van uw presentatie. Vanwege de integratie met Calligra, is alle kracht en flexibiliteit van de inhoudselementen van Calligra beschikbaar in Stage.</p>
     <p xml:lang="pl">Scena Calligra jest łatwym w użyciu, a zarazem elastycznym programem do prezentowania. Można łatwo tworzyć prezentację zawierające bogatą różnorodność elementów, od grafiki do tekstu, od wykresów do obrazów. Scena Calligra jest rozszerzalna przez system wtyczek, tak że można łatwo dodać nowe efekty, nowe elementy lub nawet nowe sposoby na zarządzanie prezentacją. Ze względów na powiązanie z Calligrą, cała moc i elastyczność elementów Calligry jest dostępna również dla Sceny.</p>
     <p xml:lang="pt">O Calligra Stage é uma aplicação de apresentações simples de usar, mas também bastante flexível. Poderá criar facilmente apresentações que contêm uma grande variedade de elementos, desde gráficos a texto, assim como de gráficos a imagens. O Calligra Stage é modular através de um sistema de 'plugins', pelo que é fácil adicionar novos efeitos, elementos de conteúdo ou até novas formas de gerir a sua apresentação. Devido à integração com o Calligra, todo o poder e flexibilidade dos elementos de conteúdo do Calligra estão disponíveis no Stage.</p>
@@ -94,6 +97,7 @@
     <p xml:lang="ia">Characteristicas:</p>
     <p xml:lang="id">Fitur:</p>
     <p xml:lang="it">Funzionalità:</p>
+    <p xml:lang="ko">기능 :</p>
     <p xml:lang="nl">Mogelijkheden:</p>
     <p xml:lang="pl">Cechy:</p>
     <p xml:lang="pt">Funcionalidades:</p>
@@ -119,6 +123,7 @@
       <li xml:lang="gl">Varias diapositivas mestre.</li>
       <li xml:lang="id">Multipel slide master</li>
       <li xml:lang="it">Diapositive master multiple</li>
+      <li xml:lang="ko">다중 마스터 슬라이드</li>
       <li xml:lang="nl">Meerdere voorbeelddia's</li>
       <li xml:lang="pl">Wiele głównych plansz</li>
       <li xml:lang="pt">Diversos 'slides'-mestres</li>
@@ -141,6 +146,7 @@
       <li xml:lang="gl">Permite cambiar facilmente entre diapositivas durante as presentacións.</li>
       <li xml:lang="id">Secara mudah beralih antara slide selagi presentasi</li>
       <li xml:lang="it">Cambia facilmente le diapositive durante una presentazione</li>
+      <li xml:lang="ko">프레젠테이션 중에 간편하게 슬라이드 전환</li>
       <li xml:lang="nl">Schakel gemakkelijk tussen dia's tijdens een presentatie</li>
       <li xml:lang="pl">Łatwe przełączanie pomiędzy planszami przy prezentowaniu</li>
       <li xml:lang="pt">Mudar facilmente de 'slides' durante uma apresentação</li>
@@ -164,6 +170,7 @@
       <li xml:lang="gl">Permite engadir notas ás presentacións.</li>
       <li xml:lang="id">Penambahan catatan Anda untuk slide Anda</li>
       <li xml:lang="it">Aggiungi note alle tue diapositive</li>
+      <li xml:lang="ko">슬라이드에 메모 추가</li>
       <li xml:lang="nl">Voeg notities toe aan uw dia</li>
       <li xml:lang="pl">Dodawanie notatek do plansz</li>
       <li xml:lang="pt">Adicionar notas ao seu 'slide'</li>
@@ -186,6 +193,7 @@
       <li xml:lang="gl">Compatíbel coa meirande parte das transicións dos ficheiros ODF.</li>
       <li xml:lang="id">Dukungan beberapa transisi file ODF</li>
       <li xml:lang="it">Supporta la maggior parte delle transizioni dei file ODF</li>
+      <li xml:lang="ko">대부분의 ODF 파일 전환 지원</li>
       <li xml:lang="nl">Ondersteunt de meeste ODF-bestandstransities</li>
       <li xml:lang="pl">Obsługa większości przejść plików ODF</li>
       <li xml:lang="pt">Suporta a maioria das transições nos ficheiros ODF</li>
