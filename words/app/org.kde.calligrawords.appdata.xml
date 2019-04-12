@@ -16,6 +16,7 @@
   <name xml:lang="gl">Calligra Words</name>
   <name xml:lang="id">Calligra Words</name>
   <name xml:lang="it">Calligra Words</name>
+  <name xml:lang="ko">Calligra 워드</name>
   <name xml:lang="nl">Calligra Words</name>
   <name xml:lang="pl">Słowa Calligra</name>
   <name xml:lang="pt">Calligra Words</name>
@@ -43,6 +44,7 @@
   <summary xml:lang="id">Pengolah Kata</summary>
   <summary xml:lang="it">Elaboratore di testi</summary>
   <summary xml:lang="ja">ワードプロセッサ</summary>
+  <summary xml:lang="ko">워드 프로세서</summary>
   <summary xml:lang="nb">Tekstbehandler</summary>
   <summary xml:lang="nl">Tekstverwerker</summary>
   <summary xml:lang="pl">Edytor tekstu</summary>
@@ -73,6 +75,7 @@
     <p xml:lang="id">Words adalah pengolah kata yang intuitif dan aplikasi penerbit desktop. Dengan itu, Anda dapat membuat dokumen yang informatif dan menarik dengan kesenangan dan kemudahan.</p>
     <p xml:lang="it">Words è un elaboratore di testi intuitivo e un'applicazione di pubblicazione per desktop. Con esso, puoi creare documenti informativi e accattivanti con soddisfazione e facilità.</p>
     <p xml:lang="ja">Words はワードプロセッサおよびデスクトップ出版のためのアプリケーションです。直感的な操作で有益かつ魅力的な文書が簡単に作成できます</p>
+    <p xml:lang="ko">워드는 직관적인 워드 프로세서 및 데스크톱 출판 응용 프로그램입니다. 이를 통해 정보를 제공하고 매력적인 문서를 쉽고 재미있게 작성할 수 있습니다.</p>
     <p xml:lang="nb">Words er en intuitiv tekstbehandler, som kan brrukes til skrivebordspublisering. Du kan lett lage informative og attraktive dokumenter med glede.</p>
     <p xml:lang="nl">Words is een intuïtieve toepassing voor tekstverwerken en weergeven op het bureaublad. Hiermee kunt u informatieve en attractieve documenten met plezier en gemak maken.</p>
     <p xml:lang="pl">Słowa jest intuicyjnym edytorem tekstu i biurkowym programem do publikowania. Dzięki niemu można tworzyć informacyjne i atrakcyjne dokumenty z łatwością użycia.</p>
@@ -99,6 +102,7 @@
     <p xml:lang="id">Fitur:</p>
     <p xml:lang="it">Funzionalità:</p>
     <p xml:lang="ja">機能:</p>
+    <p xml:lang="ko">기능 :</p>
     <p xml:lang="nb">Egenskaper:</p>
     <p xml:lang="nl">Mogelijkheden:</p>
     <p xml:lang="pl">Cechy:</p>
@@ -126,6 +130,7 @@
       <li xml:lang="id">Pengeditan berbasis frame</li>
       <li xml:lang="it">Modifica basata su riquadri</li>
       <li xml:lang="ja">フレームベースの編集</li>
+      <li xml:lang="ko">프레임 기반 편집</li>
       <li xml:lang="nb">Ramme-basert redigering</li>
       <li xml:lang="nl">Bewerken op basis van frames</li>
       <li xml:lang="pl">Edytowanie oparte na ramkach</li>
@@ -151,6 +156,7 @@
       <li xml:lang="id">Memungkinkan penanaman Dokumen</li>
       <li xml:lang="it">Consente l'integrazione di documenti</li>
       <li xml:lang="ja">文書への埋め込みを許可</li>
+      <li xml:lang="ko">문서 포함 허용</li>
       <li xml:lang="nb">Tillater innebygde dokumenter</li>
       <li xml:lang="nl">Staat inbedden van documenten toe</li>
       <li xml:lang="pl">Umożliwia osadzanie dokumentów</li>
@@ -176,6 +182,7 @@
       <li xml:lang="id">Kustomisasi antarmuka pengguna</li>
       <li xml:lang="it">Personalizzazion e dell'interfaccia utente</li>
       <li xml:lang="ja">ユーザインターフェースのカスタマイズ</li>
+      <li xml:lang="ko">사용자 인터페이스 사용자 지정</li>
       <li xml:lang="nb">Tilpassing av brukerflaten</li>
       <li xml:lang="nl">Aanpassen naar behoefte van het gebruikersinterface</li>
       <li xml:lang="pl">Dostosowywanie układu sterowania</li>
@@ -200,6 +207,7 @@
       <li xml:lang="id">Menyertakan semua fitur yang diharapkan dari pengolah kata yang modern</li>
       <li xml:lang="it">Include tutte le funzionalità attese da un elaboratore di testi moderno</li>
       <li xml:lang="ja">現在のワードプロセッサに求められるすべての機能を含む</li>
+      <li xml:lang="ko">최신 워드 프로세서에서 기대되는 모든 기능 포함</li>
       <li xml:lang="nb">Har alle egenskaper forventet av en moderne tekstbehandler</li>
       <li xml:lang="nl">Bevat alle functies die verwacht worden van een moderne tekstverwerker</li>
       <li xml:lang="pl">Zawiera wszystkie cechy oczekiwane od nowoczesnego edytora tekstu</li>
@@ -224,6 +232,7 @@
       <li xml:lang="id">Dukungan ODT (Open Document Text)</li>
       <li xml:lang="it">Supporto ODT (Open Document Text)</li>
       <li xml:lang="ja">ODT (Open Document Text) サポート</li>
+      <li xml:lang="ko">ODT (Open Document Text) 지원</li>
       <li xml:lang="nb">Støtte for ODT (Open Document Text)</li>
       <li xml:lang="nl">Ondersteuning van ODT (Open Document Text)</li>
       <li xml:lang="pl">Obsługa ODT (Open Document Text)</li>
