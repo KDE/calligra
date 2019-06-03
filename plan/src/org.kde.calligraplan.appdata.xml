@@ -56,7 +56,7 @@
   <summary xml:lang="ru">Управление проектами</summary>
   <summary xml:lang="sk">Správa projektov</summary>
   <summary xml:lang="sv">Projekthantering</summary>
-  <summary xml:lang="uk">Керування проектами</summary>
+  <summary xml:lang="uk">Керування проєктами</summary>
   <summary xml:lang="x-test">xxProject Managementxx</summary>
   <summary xml:lang="zh-CN">项目管理</summary>
   <description>
@@ -84,7 +84,7 @@
     <p xml:lang="pt-BR">Plan é um aplicativo para gerenciamento de projetos. Destina-se ao gerenciamento de projetos relativamente grandes com vários recursos.</p>
     <p xml:lang="sk">Plan je aplikácia na správu projektov. Je určená na správu stredne veľkých projektov s viacerými zdrojmi.</p>
     <p xml:lang="sv">Plan är ett projekthanteringsprogram. Det är avsett för att hantera måttligt stora projekt med flera resurser.</p>
-    <p xml:lang="uk">Plan — програма для керування проектами. Її призначено для керування помірно великими проектами з декількома ресурсами або виконавцями.</p>
+    <p xml:lang="uk">Plan — програма для керування проєктами. Її призначено для керування помірно великими проєктами з декількома ресурсами або виконавцями.</p>
     <p xml:lang="x-test">xxPlan is a project management application. It is intended for managing moderately large projects with multiple resources.xx</p>
     <p>Features:</p>
     <p xml:lang="bs">Svojstva:</p>
