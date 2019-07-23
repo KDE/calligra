@@ -31,6 +31,7 @@
 #include <kcalcore/attachment.h>
 #include <kcalcore/icalformat.h>
 #include <kcalcore/memorycalendar.h>
+#include <kcalcore_version.h>
 
 #include <QTextCodec>
 #include <QByteArray>
@@ -140,9 +141,15 @@ void ICalendarExport::createTodos(KCalCore::Calendar::Ptr cal, const Node *node,
         todo->setOrganizer(node->projectNode()->leader());
     }
     if ( node->type() != Node::Type_Project && ! node->leader().isEmpty()) {
+#if KCALCORE_VERSION >= QT_VERSION_CHECK(5, 11, 90)
+        KCalCore::Person p = KCalCore::Person::fromFullName(node->leader());
+        KCalCore::Attendee a(p.name(), p.email());
+        a.setRole(KCalCore::Attendee::NonParticipant);
+#else
         KCalCore::Person::Ptr p = KCalCore::Person::fromFullName(node->leader());
         KCalCore::Attendee::Ptr a(new KCalCore::Attendee(p->name(), p->email()));
         a->setRole(KCalCore::Attendee::NonParticipant);
+#endif
         todo->addAttendee(a);
     }
     DateTime st = node->startTime(id);
@@ -161,13 +168,21 @@ void ICalendarExport::createTodos(KCalCore::Calendar::Ptr cal, const Node *node,
             const QList<Resource*> lst = task->requestedResources();
             foreach(const Resource *r, lst) {
                 if (r->type() == Resource::Type_Work) {
+#if KCALCORE_VERSION >= QT_VERSION_CHECK(5, 11, 90)
+                    todo->addAttendee(KCalCore::Attendee(r->name(), r->email()));
+#else
                     todo->addAttendee(KCalCore::Attendee::Ptr(new KCalCore::Attendee(r->name(), r->email())));
+#endif
                 }
             }
         } else {
             foreach(const Resource *r, s->resources()) {
                 if (r->type() == Resource::Type_Work) {
+#if KCALCORE_VERSION >= QT_VERSION_CHECK(5, 11, 90)
+                    todo->addAttendee(KCalCore::Attendee(r->name(), r->email()));
+#else
                     todo->addAttendee(KCalCore::Attendee::Ptr(new KCalCore::Attendee(r->name(), r->email())));
+#endif
                 }
             }
 
@@ -178,7 +193,11 @@ void ICalendarExport::createTodos(KCalCore::Calendar::Ptr cal, const Node *node,
         todo->setPercentComplete(task->completion().percentFinished());
     }
     foreach(const Document *doc, node->documents().documents()) {
+#if KCALCORE_VERSION >= QT_VERSION_CHECK(5, 11, 90)
+        todo->addAttachment(KCalCore::Attachment(doc->url().url()));
+#else
         todo->addAttachment(KCalCore::Attachment::Ptr(new KCalCore::Attachment(doc->url().url())));
+#endif
     }
     if (! parent.isNull()) {
         todo->setRelatedTo(parent->uid(), KCalCore::Incidence::RelTypeParent);
