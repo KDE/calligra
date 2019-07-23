@@ -24,6 +24,7 @@
 #include <KoView.h>
 
 #include <QStackedWidget>
+#include <QMap>
 
 class QPrinter;
 class QPrintDialog;
