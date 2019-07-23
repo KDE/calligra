@@ -35,8 +35,9 @@
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #endif
 
-#include <poppler/PDFDoc.h>
-#include <poppler/GlobalParams.h>
+// poppler includes
+#include <PDFDoc.h>
+#include <GlobalParams.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(PdfImportFactory, "calligra_filter_pdf2svg.json",
                            registerPlugin<PdfImport>();)

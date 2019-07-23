@@ -25,8 +25,9 @@
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #endif
 
-#include <poppler/Object.h>
-#include <poppler/OutputDev.h>
+// poppler includes
+#include <Object.h>
+#include <OutputDev.h>
 
 #include <QString>
 
