@@ -20,8 +20,8 @@
 #ifndef SVGOUTPUTDEV_H
 #define SVGOUTPUTDEV_H
 
-#include <poppler/Object.h>
-#include <poppler/OutputDev.h>
+#include <Object.h>
+#include <OutputDev.h>
 
 #include <QString>
 

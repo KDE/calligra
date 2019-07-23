@@ -21,10 +21,10 @@
 
 #include "PdfImportDebug.h"
 
-#include <poppler/Object.h>
-#include <poppler/GfxState.h>
-#include <poppler/Stream.h>
-#include <poppler/GfxFont.h>
+// Poppler includes
+#include <GfxState.h>
+#include <Stream.h>
+#include <GfxFont.h>
 
 #include <QFile>
 #include <QTextStream>
