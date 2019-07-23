@@ -30,6 +30,7 @@
 #include <kdatepicker.h>
 
 #include <QPushButton>
+#include <QDate>
 
 namespace Calligra
 {
