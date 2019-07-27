@@ -141,7 +141,7 @@ void ICalendarExport::createTodos(KCalCore::Calendar::Ptr cal, const Node *node,
         todo->setOrganizer(node->projectNode()->leader());
     }
     if ( node->type() != Node::Type_Project && ! node->leader().isEmpty()) {
-#if KCALCORE_VERSION >= QT_VERSION_CHECK(5, 11, 90)
+#if KCALCORE_VERSION >= QT_VERSION_CHECK(5, 11, 80)
         KCalCore::Person p = KCalCore::Person::fromFullName(node->leader());
         KCalCore::Attendee a(p.name(), p.email());
         a.setRole(KCalCore::Attendee::NonParticipant);
@@ -168,7 +168,7 @@ void ICalendarExport::createTodos(KCalCore::Calendar::Ptr cal, const Node *node,
             const QList<Resource*> lst = task->requestedResources();
             foreach(const Resource *r, lst) {
                 if (r->type() == Resource::Type_Work) {
-#if KCALCORE_VERSION >= QT_VERSION_CHECK(5, 11, 90)
+#if KCALCORE_VERSION >= QT_VERSION_CHECK(5, 11, 80)
                     todo->addAttendee(KCalCore::Attendee(r->name(), r->email()));
 #else
                     todo->addAttendee(KCalCore::Attendee::Ptr(new KCalCore::Attendee(r->name(), r->email())));
@@ -178,7 +178,7 @@ void ICalendarExport::createTodos(KCalCore::Calendar::Ptr cal, const Node *node,
         } else {
             foreach(const Resource *r, s->resources()) {
                 if (r->type() == Resource::Type_Work) {
-#if KCALCORE_VERSION >= QT_VERSION_CHECK(5, 11, 90)
+#if KCALCORE_VERSION >= QT_VERSION_CHECK(5, 11, 80)
                     todo->addAttendee(KCalCore::Attendee(r->name(), r->email()));
 #else
                     todo->addAttendee(KCalCore::Attendee::Ptr(new KCalCore::Attendee(r->name(), r->email())));
@@ -193,7 +193,7 @@ void ICalendarExport::createTodos(KCalCore::Calendar::Ptr cal, const Node *node,
         todo->setPercentComplete(task->completion().percentFinished());
     }
     foreach(const Document *doc, node->documents().documents()) {
-#if KCALCORE_VERSION >= QT_VERSION_CHECK(5, 11, 90)
+#if KCALCORE_VERSION >= QT_VERSION_CHECK(5, 11, 80)
         todo->addAttachment(KCalCore::Attachment(doc->url().url()));
 #else
         todo->addAttachment(KCalCore::Attachment::Ptr(new KCalCore::Attachment(doc->url().url())));
