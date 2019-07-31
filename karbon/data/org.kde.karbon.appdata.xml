@@ -206,7 +206,7 @@
       <li xml:lang="fi">Monimutkaisten tiedostojen helppoon hallintaan tasotelakka, joka sisältää esikatselukuvat, muotojen ryhmittelyn tuen vetämällä ja pudottamalla sekä muotojen näkyvyyden ja lukitsemisen hallinnan</li>
       <li xml:lang="fr">Conteneurs de calques pour la manipulation facile de documents complexes incluant les vignettes d'aperçu, la prise en charge du groupement de formes par glisser-déposer, contrôle de la visibilité des formes et verrouillage</li>
       <li xml:lang="gl">Doca de capas para xestionar facilmente documentos complexos. Inclúe miniaturas de vista previa, permite agrupar formas arrastrando e soltando, controlar a visibilidade das formas ou bloquealas.</li>
-      <li xml:lang="id">Docker layer untuk memudahkan penanganan dokumen rumit termasuk thumbnail pratinjau, dukungan untuk pengelompokan bentuk melalui seret dan taruh, mengontrol visibilitas bentuk atau penguncian</li>
+      <li xml:lang="id">Docker layer untuk memudahkan penanganan dokumen rumit termasuk gambar-mini pratinjau, dukungan untuk pengelompokan bentuk melalui seret dan taruh, mengontrol visibilitas bentuk atau penguncian</li>
       <li xml:lang="it">Area di aggancio di livelli per una facile gestione di documenti complessi incluse miniature di anteprima, supporto di forme raggruppate tramite il trascinamento e rilascio, controllo della visibilità delle forme e blocco</li>
       <li xml:lang="ko">미리 보기 썸네일, 드래그 앤 드롭으로 도형 그룹화 지원, 도형 또는 잠금의 가시성을 제어하는 복잡한 문서를 쉽게 처리 할 수 있는 레이어 고정표시 도구</li>
       <li xml:lang="nl">Laagverankering voor gemakkelijke behandeling van complexe documenten inclusief voorbeeldminiaturen, ondersteuning voor groeperen van vormen via slepen en laten vallen, besturing van zichtbaarheid van vormen of vastzetten</li>
@@ -230,7 +230,7 @@
       <li xml:lang="fi">Edistynyt polunmuokkaustyökalu, jolla on erinomaiset muokkausominaisuudet</li>
       <li xml:lang="fr">Outil d'édition de chemin avancé avec des capacités d'édition dans les canevas performantes</li>
       <li xml:lang="gl">Ferramenta avanzada de edición de rutas cunha gran funcionalidade de edición sobre o lenzo.</li>
-      <li xml:lang="id">Alat pengeditan alur tingkatlanjut dengan kemampuan pengeditan di kanvas yang bagus</li>
+      <li xml:lang="id">Alat pengeditan alur tingkat-lanjut dengan kemampuan pengeditan di kanvas yang bagus</li>
       <li xml:lang="it">Strumento avanzato di modifica di tracciati con grandi capacità di modifica sul posto</li>
       <li xml:lang="ko">뛰어난 캔버스 편집 기능을 갖춘 고급 경로 편집 도구</li>
       <li xml:lang="nl">Geavanceerde padbewerkingsgereedschap met prima bewerkingsmiddelen op het werkblad</li>
