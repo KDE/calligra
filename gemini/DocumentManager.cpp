@@ -100,6 +100,7 @@ void DocumentManager::setDocAndPart(KoDocument* document, KoPart* part)
     d->part = part;
     d->temporaryFile = false;
     emit documentChanged();
+    connect(document, SIGNAL(destroyed()), SIGNAL(aboutToDeleteDocument()));
 }
 
 RecentFileManager* DocumentManager::recentFileManager() const
@@ -147,6 +148,7 @@ void DocumentManager::delayedNewDocument()
     d->document->setProgressProxy(d->proxy);
     d->document->setSaveInBatchMode(true);
     part()->setDocument(d->document);
+    connect(d->document, SIGNAL(destroyed()), SIGNAL(aboutToDeleteDocument()));
 
     if(d->newDocOptions.isEmpty())
     {
@@ -193,7 +195,7 @@ void DocumentManager::openDocument(const QString& document, bool import)
     closeDocument();
     d->openDocumentFilename = document;
     d->importingDocument = import;
-    QTimer::singleShot(300, this, SLOT(delayedOpenDocument()));
+    QTimer::singleShot(0, this, SLOT(delayedOpenDocument()));
 }
 
 void DocumentManager::delayedOpenDocument()
@@ -224,9 +226,8 @@ void DocumentManager::delayedOpenDocument()
 void DocumentManager::closeDocument()
 {
     if (d->document) {
-        emit aboutToDeleteDocument();
         d->document->closeUrl(false);
-        //d->document->deleteLater();
+        delete d->document;
         d->document = 0;
     }
 }
@@ -251,7 +252,7 @@ void DocumentManager::saveAs(const QString &filename, const QString &mimetype)
     // the save call happens late enough for a variety of UI things to happen first.
     // A second seems like a long time, but well, we do have file system interaction here,
     // so for now, we can get away with it.
-    QTimer::singleShot(300, this, SLOT(delayedSaveAs()));
+    QTimer::singleShot(0, this, SLOT(delayedSaveAs()));
 }
 
 void DocumentManager::delayedSaveAs()

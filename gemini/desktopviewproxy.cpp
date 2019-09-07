@@ -142,10 +142,12 @@ void DesktopViewProxy::fileSave()
 {
     if(DocumentManager::instance()->isTemporaryFile()) {
         if(d->desktopView->saveDocument(true)) {
-            DocumentManager::instance()->recentFileManager()->addRecent(DocumentManager::instance()->document()->url().toLocalFile());
-            DocumentManager::instance()->settingsManager()->setCurrentFile(DocumentManager::instance()->document()->url().toLocalFile());
-            DocumentManager::instance()->setTemporaryFile(false);
-            emit documentSaved();
+            if (KoDocument* document = DocumentManager::instance()->document()) {
+                DocumentManager::instance()->recentFileManager()->addRecent(document->url().toLocalFile());
+                DocumentManager::instance()->settingsManager()->setCurrentFile(document->url().toLocalFile());
+                DocumentManager::instance()->setTemporaryFile(false);
+                emit documentSaved();
+            }
         }
     } else {
         DocumentManager::instance()->save();
@@ -155,15 +157,19 @@ void DesktopViewProxy::fileSave()
 
 bool DesktopViewProxy::fileSaveAs()
 {
+    KoDocument* document = DocumentManager::instance()->document();
+    if (!document)
+        return false;
+
     if(d->desktopView->saveDocument(true)) {
-        DocumentManager::instance()->recentFileManager()->addRecent(DocumentManager::instance()->document()->url().toLocalFile());
-        DocumentManager::instance()->settingsManager()->setCurrentFile(DocumentManager::instance()->document()->url().toLocalFile());
+        DocumentManager::instance()->recentFileManager()->addRecent(document->url().toLocalFile());
+        DocumentManager::instance()->settingsManager()->setCurrentFile(document->url().toLocalFile());
         DocumentManager::instance()->setTemporaryFile(false);
         emit documentSaved();
         return true;
     }
 
-    DocumentManager::instance()->settingsManager()->setCurrentFile(DocumentManager::instance()->document()->url().toLocalFile());
+    DocumentManager::instance()->settingsManager()->setCurrentFile(document->url().toLocalFile());
     return false;
 }
 

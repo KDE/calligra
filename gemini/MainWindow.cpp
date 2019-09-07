@@ -310,6 +310,7 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
     connect(DocumentManager::instance(), SIGNAL(documentChanged()), SLOT(resetWindowTitle()));
     connect(DocumentManager::instance(), SIGNAL(documentSaved()), SLOT(resetWindowTitle()));
     connect(DocumentManager::instance(), SIGNAL(documentSaved()), SLOT(enableAltSaveAction()));
+    connect(DocumentManager::instance(), SIGNAL(aboutToDeleteDocument()), SLOT(closeWindow()));
 
     d->initTouchView(this);
 
@@ -326,14 +327,16 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
 
 void MainWindow::resetWindowTitle()
 {
-    QUrl url = DocumentManager::instance()->document()->url();
+    KoDocument* document = DocumentManager::instance()->document();
+    if (!document)
+        return;
+    QUrl url = document->url();
     QString fileName = url.fileName();
     if(url.scheme() == "temp" || url.isEmpty())
         fileName = i18n("Untitled");
 
     KoDialog::CaptionFlags flags = KoDialog::HIGCompliantCaption;
-    KoDocument* document = DocumentManager::instance()->document();
-    if (document && document->isModified() ) {
+    if ( document->isModified() ) {
         flags |= KoDialog::ModifiedCaption;
     }
 
@@ -367,16 +370,14 @@ void MainWindow::switchToTouch()
     }
 
     d->syncObject = new ViewModeSynchronisationObject;
-    KoView* view = 0;
 
     if (d->desktopView && centralWidget() == d->desktopView) {
-        view = d->desktopView->rootView();
-
-        //Notify the view we are switching away from that we are about to switch away from it
-        //giving it the possibility to set up the synchronisation object.
-        ViewModeSwitchEvent aboutToSwitchEvent(ViewModeSwitchEvent::AboutToSwitchViewModeEvent, view, d->touchView, d->syncObject);
-        QApplication::sendEvent(view, &aboutToSwitchEvent);
-
+        if (KoView* view = d->desktopView->rootView()) {
+            //Notify the view we are switching away from that we are about to switch away from it
+            //giving it the possibility to set up the synchronisation object.
+            ViewModeSwitchEvent aboutToSwitchEvent(ViewModeSwitchEvent::AboutToSwitchViewModeEvent, view, d->touchView, d->syncObject);
+            QApplication::sendEvent(view, &aboutToSwitchEvent);
+        }
         d->desktopView->setParent(0);
     }
 
@@ -440,6 +441,10 @@ void MainWindow::switchToDesktop()
         view = d->desktopView->rootView();
     }
 
+    if (!view) {
+        return;
+    }
+
     //Notify the view we are switching away from that we are about to switch away from it
     //giving it the possibility to set up the synchronisation object.
     ViewModeSwitchEvent aboutToSwitchEvent(ViewModeSwitchEvent::AboutToSwitchViewModeEvent, d->touchView, view, syncObject);
@@ -453,12 +458,10 @@ void MainWindow::switchToDesktop()
         setCentralWidget(d->desktopView);
     }
 
-    if (view) {
-        //Notify the new view that we just switched to it, passing our synchronisation object
-        //so it can use those values to sync with the old view.
-        ViewModeSwitchEvent switchedEvent(ViewModeSwitchEvent::SwitchedToDesktopModeEvent, d->touchView, view, syncObject);
-        QApplication::sendEvent(view, &switchedEvent);
-    }
+    //Notify the new view that we just switched to it, passing our synchronisation object
+    //so it can use those values to sync with the old view.
+    ViewModeSwitchEvent switchedEvent(ViewModeSwitchEvent::SwitchedToDesktopModeEvent, d->touchView, view, syncObject);
+    QApplication::sendEvent(view, &switchedEvent);
 
     qApp->processEvents();
     d->toTouch->setEnabled(true);
@@ -714,13 +717,19 @@ void MainWindow::minimize()
 
 void MainWindow::closeWindow()
 {
-    d->desktopView->setNoCleanup(true);
-    //For some reason, close() does not work even if setAllowClose(true) was called just before this method.
-    //So instead just completely quit the application, since we are using a single window anyway.
-    DocumentManager::instance()->closeDocument();
-    DocumentManager::instance()->part()->deleteLater();
+    if (d->desktopView) {
+        d->desktopView->setNoCleanup(true);
+        if (centralWidget() == d->desktopView)
+            d->allowClose = d->queryClose();
+    }
+
+    if (d->allowClose)
+    {
+        d->altSaveQuery();
+        d->settings->setCurrentFile("");
+    }
     qApp->processEvents();
-    QApplication::instance()->quit();
+    qApp->quit();
 }
 
 bool MainWindow::Private::queryClose()
@@ -768,7 +777,6 @@ bool MainWindow::Private::queryClose()
 
 void MainWindow::Private::altSaveQuery()
 {
-    qApp->processEvents();
     if(alternativeSaveAction && alternativeSaveAction->isEnabled())
     {
         int res = KMessageBox::warningYesNo(q, i18n("<p>The cloud copy of the document is out of date. Do you want to upload a new copy?</p>"));
@@ -791,29 +799,15 @@ void MainWindow::closeEvent(QCloseEvent* event)
 {
     if (centralWidget() == d->desktopView)
     {
-        if (DocumentManager::instance()->document()->isLoading()) {
+        KoDocument* document = DocumentManager::instance()->document();
+        if (document && document->isLoading()) {
             event->ignore();
             return;
         }
-        d->allowClose = d->queryClose();
     }
 
-    if (d->allowClose)
-    {
-        d->altSaveQuery();
-        d->settings->setCurrentFile("");
-        qApp->processEvents();
-        if (d->desktopView)
-        {
-            d->desktopView->setNoCleanup(true);
-        }
-        event->accept();
-    }
-    else
-    {
-        event->ignore();
-        emit closeRequested();
-    }
+    event->accept();
+    closeWindow();
 }
 
 MainWindow::~MainWindow()

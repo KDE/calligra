@@ -415,14 +415,14 @@ void KWPageManager::clearPageStyles()
 
 const KWPage KWPageManager::begin() const
 {
-    if (d->pages.isEmpty())
+    if (d->pages.isEmpty() || d->pageNumbers.empty())
         return KWPage();
     return KWPage(d, d->pageNumbers.constBegin().value());
 }
 
 const KWPage KWPageManager::last() const
 {
-    if (d->pages.isEmpty())
+    if (d->pages.isEmpty() || d->pageNumbers.empty())
         return KWPage();
     QMap<int, int>::ConstIterator end = d->pageNumbers.constEnd();
     --end; // last one is one before the imaginary 'end'
@@ -431,14 +431,14 @@ const KWPage KWPageManager::last() const
 
 KWPage KWPageManager::begin()
 {
-    if (d->pages.isEmpty())
+    if (d->pages.isEmpty() || d->pageNumbers.empty())
         return KWPage();
     return KWPage(d, d->pageNumbers.begin().value());
 }
 
 KWPage KWPageManager::last()
 {
-    if (d->pages.isEmpty())
+    if (d->pages.isEmpty() || d->pageNumbers.empty())
         return KWPage();
     QMap<int, int>::ConstIterator end = d->pageNumbers.constEnd();
     --end; // last one is one before the imaginary 'end'

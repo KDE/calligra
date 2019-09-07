@@ -57,7 +57,7 @@ public:
     Private(const KoComponentData &componentData_, KoPart *_parent)
         : parent(_parent)
         , document(0)
-        , canvasItem(0)
+        , proxyWidget(0)
         , startUpWidget(0)
         , componentData(componentData_)
     {
@@ -65,11 +65,7 @@ public:
 
     ~Private()
     {
-        /// FIXME ok, so this is obviously bad to leave like this
-        // For now, this is undeleted, but only to avoid an odd double
-        // delete condition. Until that's discovered, we'll need this
-        // to avoid crashes in Gemini
-        //delete canvasItem;
+        delete proxyWidget;
     }
 
     KoPart *parent;
@@ -78,7 +74,7 @@ public:
     QList<KoMainWindow*> mainWindows;
     KoDocument *document;
     QList<KoDocument*> documents;
-    QGraphicsItem *canvasItem;
+    QPointer<QGraphicsProxyWidget> proxyWidget;
     QPointer<KoOpenPane> startUpWidget;
     QString templatesResourcePath;
 
@@ -186,19 +182,19 @@ int KoPart::viewCount() const
 
 QGraphicsItem *KoPart::canvasItem(KoDocument *document, bool create)
 {
-    if (create && !d->canvasItem) {
-        d->canvasItem = createCanvasItem(document);
+    if (create && !d->proxyWidget) {
+        return createCanvasItem(document);
     }
-    return d->canvasItem;
+    return d->proxyWidget;
 }
 
 QGraphicsItem *KoPart::createCanvasItem(KoDocument *document)
 {
     KoView *view = createView(document);
-    QGraphicsProxyWidget *proxy = new QGraphicsProxyWidget();
+    d->proxyWidget = new QGraphicsProxyWidget();
     QWidget *canvasController = view->findChild<KoCanvasControllerWidget*>();
-    proxy->setWidget(canvasController);
-    return proxy;
+    d->proxyWidget->setWidget(canvasController);
+    return d->proxyWidget;
 }
 
 void KoPart::addMainWindow(KoMainWindow *mainWindow)

@@ -175,7 +175,7 @@ public:
     QByteArray nativeMimeType;
 
     KoMainWindow *parent;
-    KoDocument *rootDocument;
+    QPointer<KoDocument> rootDocument;
     QList<KoView*> rootViews;
 
     // PartManager
@@ -706,7 +706,7 @@ KoView *KoMainWindow::rootView() const
 {
     if (d->rootViews.indexOf(d->activeView) != -1)
         return d->activeView;
-    return d->rootViews.first();
+    return d->rootViews.empty() ? nullptr : d->rootViews.first();
 }
 
 bool KoMainWindow::openDocument(const QUrl &url)
