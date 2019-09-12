@@ -27,12 +27,23 @@ Item {
     onHeightChanged: Constants.setGridHeight( height / Constants.GridRows );
     property QtObject window: mainWindow;
     function openFile(fileName, alternativeSaveAction) {
-        mainPageStack.push(mainPage);
-        Settings.currentFile = "";
-        Settings.currentFile = fileName;
-        mainPageStack.currentItem.openFileReal(fileName);
-        RecentFileManager.addRecent(fileName);
-        mainWindow.setAlternativeSaveAction(alternativeSaveAction);
+        loadInitiator.fileName = fileName;
+        loadInitiator.alternativeSaveAction = alternativeSaveAction;
+        loadInitiator.start();
+    }
+    Timer {
+        id: loadInitiator
+        running: false; repeat: false; interval: 1
+        property string fileName
+        property var alternativeSaveAction
+        onTriggered: {
+            mainPageStack.push(mainPage);
+            Settings.currentFile = "";
+            Settings.currentFile = fileName;
+            mainPageStack.currentItem.openFileReal(fileName);
+            RecentFileManager.addRecent(fileName);
+            mainWindow.setAlternativeSaveAction(alternativeSaveAction);
+        }
     }
     function applicationWindow() { return base; }
     property QtObject pageStack: mainPageStack;
