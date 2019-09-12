@@ -227,8 +227,7 @@ void DocumentManager::closeDocument()
 {
     if (d->document) {
         d->document->closeUrl(false);
-        delete d->document;
-        d->document = 0;
+        d->document.clear();
     }
 }
 
