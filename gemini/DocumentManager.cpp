@@ -227,6 +227,7 @@ void DocumentManager::closeDocument()
 {
     if (d->document) {
         d->document->closeUrl(false);
+        d->document->deleteLater();
         d->document.clear();
     }
 }
