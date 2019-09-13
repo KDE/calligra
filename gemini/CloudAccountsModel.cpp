@@ -65,6 +65,7 @@ public:
         stream >> entry->text;
         stream >> entry->accountType;
         stream >> entry->stackComponent;
+        entry->accountDetails->setProperty("text", entry->text);
         while(!stream.atEnd()) {
             QByteArray propertyName;
             QVariant data;
