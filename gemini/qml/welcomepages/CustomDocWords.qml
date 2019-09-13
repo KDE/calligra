@@ -17,13 +17,15 @@
  */
 
 import QtQuick 2.0
+import org.kde.kirigami 2.7 as Kirigami
 import QtQuick.Controls 1.4 as QtControls
 import org.calligra 1.0
 import "../components"
 
-Page {
+Kirigami.Page {
     id: base;
     property string pageName: "CustomDocWords";
+    title: "Create Custom Document"
     Item {
         anchors {
             top: parent.top;
