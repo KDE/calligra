@@ -52,55 +52,15 @@ Page {
     }
     Component {
         id: documentTile;
-        Item {
+        DocumentTile {
             width: docList.cellWidth;
-            height: docList.cellHeight
-            Rectangle {
-                x: documentImage.x - Constants.DefaultMargin + (documentImage.width - documentImage.paintedWidth) / 2;
-                y: documentImage.y - Constants.DefaultMargin + (documentImage.height - documentImage.paintedHeight) / 2;
-                width: documentImage.paintedWidth + Constants.DefaultMargin * 2;
-                height: documentImage.paintedHeight + Constants.DefaultMargin * 2;
-                border {
-                    color: "silver";
-                    width: 1;
-                }
-            }
-            Image {
-                id: documentImage;
-                source: model.image;
-                anchors {
-                    top: parent.top;
-                    left: parent.left;
-                    right: parent.right;
-                    margins: Constants.DefaultMargin / 2;
-                }
-                height: parent.width;
-                fillMode: Image.PreserveAspectFit;
-                smooth: true;
-                asynchronous: true;
-            }
-            Label {
-                id: lblName;
-                anchors {
-                    left: parent.left;
-                    right: parent.right;
-                    bottom: parent.bottom;
-                    margins: Constants.DefaultMargin;
-                    bottomMargin: Constants.DefaultMargin * 2;
-                }
-                height: font.pixelSize + Constants.DefaultMargin * 2;
-                horizontalAlignment: Text.AlignHCenter;
-                verticalAlignment: Text.AlignVCenter;
-                text: model.text ? model.text : "";
-                font: Settings.theme.font("templateLabel");
-                color: "#5b6573";
-            }
-            MouseArea {
-                anchors.fill: parent;
-                onClicked: {
-                    baseLoadingDialog.visible = true;
-                    openFile(model.url);
-                }
+            height: docList.cellHeight;
+            filePath: model.url;
+            imageUrl: model.image;
+            title: model.text != "" ? model.text : "";
+            onClicked: {
+                baseLoadingDialog.visible = true;
+                openFile(model.url);
             }
         }
     }

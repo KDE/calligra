@@ -107,53 +107,14 @@ Page {
     }
     Component {
         id: documentTile;
-        Item {
+        DocumentTile {
             width: docList.cellWidth;
             height: docList.cellHeight
-            Rectangle {
-                x: documentImage.x - Constants.DefaultMargin + (documentImage.width - documentImage.paintedWidth) / 2;
-                y: documentImage.y - Constants.DefaultMargin + (documentImage.height - documentImage.paintedHeight) / 2;
-                width: documentImage.paintedWidth + Constants.DefaultMargin * 2;
-                height: documentImage.paintedHeight + Constants.DefaultMargin * 2;
-                border {
-                    color: "silver";
-                    width: 1;
-                }
-            }
-            Image {
-                id: documentImage;
-                source: "image://recentimage/" + model.filePath;
-                anchors {
-                    top: parent.top;
-                    left: parent.left;
-                    right: parent.right;
-                    margins: Constants.DefaultMargin / 2;
-                }
-                height: parent.width;
-                fillMode: Image.PreserveAspectFit;
-                smooth: true;
-                asynchronous: true;
-            }
-            QtControls.Label {
-                id: lblName;
-                anchors {
-                    left: parent.left;
-                    right: parent.right;
-                    bottom: parent.bottom;
-                    margins: Constants.DefaultMargin;
-                    bottomMargin: Constants.DefaultMargin * 2;
-                }
-                height: font.pixelSize + Constants.DefaultMargin * 2;
-                horizontalAlignment: Text.AlignHCenter;
-                verticalAlignment: Text.AlignVCenter;
-                text: model.fileName ? model.fileName : "";
-            }
-            MouseArea {
-                anchors.fill: parent;
-                onClicked: {
-                    baseLoadingDialog.visible = true;
-                    openFile(model.filePath);
-                }
+            title: model.fileName != "" ? model.fileName : ""
+            filePath: model.filePath
+            onClicked: {
+                baseLoadingDialog.visible = true;
+                openFile(model.filePath);
             }
         }
     }
