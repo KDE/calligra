@@ -18,93 +18,50 @@
 
 import QtQuick 2.0
 import QtQuick.Controls 2.2 as QtControls
+import org.kde.kirigami 2.7 as Kirigami
 import org.calligra 1.0
 import "../components"
 
-Page {
+Kirigami.ScrollablePage {
     id: base;
     objectName: "WelcomePageFilebrowser";
+    title: "Open From Your Library";
     property string categoryUIName: (docList.model === textDocumentsModel) ? "text documents" : "presentations"
+    actions {
+        main: Kirigami.Action {
+            text: "Open Other...";
+            icon.name: "document-open";
+            onTriggered: mainWindow.openFile();
+        }
+        contextualActions: [
+            Kirigami.Action {
+                text: "Text Documents";
+                onTriggered: { if(!checked) { docList.model = textDocumentsModel; } }
+                checked: docList.model === textDocumentsModel;
+            },
+            Kirigami.Action {
+                text: "Presentations";
+                onTriggered: { if(!checked) { docList.model = presentationDocumentsModel; } }
+                checked: docList.model === presentationDocumentsModel;
+            }
+        ]
+    }
     GridView {
         id: docList;
         contentWidth: width;
-        anchors {
-            margins: Constants.DefaultMargin;
-            top: docTypeSelectorRow.bottom;
-            left: parent.left;
-            right: parent.right;
-            bottom: parent.bottom;
-            bottomMargin: 0;
-        }
-        cellWidth: width / 4 - Constants.DefaultMargin;
-        cellHeight: cellWidth + Settings.theme.font("templateLabel").pixelSize + Constants.DefaultMargin * 4;
+        cellWidth: width / 4 - Kirigami.Units.largeSpacing;
+        cellHeight: cellWidth + Settings.theme.font("templateLabel").pixelSize + Kirigami.Units.largeSpacing * 4;
         model: textDocumentsModel;
         delegate: documentTile;
-        ScrollDecorator { flickableItem: docList; }
-    }
-    Rectangle {
-        anchors.fill: docTypeSelectorRow;
-    }
-    Label {
-        id: docTypeSelectorRow;
-        anchors {
-            top: parent.top;
-            left: parent.left;
-            right: parent.right;
-        }
-        height: Constants.GridHeight * 1.5;
-        verticalAlignment: Text.AlignVCenter;
-        horizontalAlignment: Text.AlignHCenter;
-        font: Settings.theme.font("pageHeader");
-        text: "Open From Your Library";
-        color: "#22282f";
-        CohereButton {
-            anchors {
-                left: parent.left;
-                leftMargin: 20;
-                verticalCenter: parent.verticalCenter;
-            }
-            text: "Open Other...";
-            textColor: "#5b6573";
-            textSize: Settings.theme.adjustedPixel(18);
-            color: "#D2D4D5";
-            onClicked: mainWindow.openFile();
-        }
-        Row {
-            anchors {
-                right: parent.right;
-                rightMargin: 20;
-                verticalCenter: parent.verticalCenter;
-            }
-            height: parent.height - Constants.DefaultMargin * 2;
-            spacing: 4;
-            CohereButton {
-                anchors.verticalCenter: parent.verticalCenter;
-                text: "Text Documents";
-                textColor: "#5b6573";
-                textSize: Settings.theme.adjustedPixel(18);
-                checkedColor: "#D2D4D5";
-                onClicked: { if(!checked) { docList.model = textDocumentsModel; } }
-                checked: docList.model === textDocumentsModel;
-            }
-            CohereButton {
-                anchors.verticalCenter: parent.verticalCenter;
-                text: "Presentations";
-                textColor: "#5b6573";
-                textSize: Settings.theme.adjustedPixel(18);
-                checkedColor: "#D2D4D5";
-                onClicked: { if(!checked) { docList.model = presentationDocumentsModel; } }
-                checked: docList.model === presentationDocumentsModel;
-            }
+        QtControls.Label {
+            anchors.fill: parent;
+            text: "No %1\n\nPlease drop some into your Documents folder\n(%2)".arg(base.categoryUIName).arg(docList.model.documentsFolder);
+            horizontalAlignment: Text.AlignHCenter;
+            verticalAlignment: Text.AlignVCenter;
+            visible: docList.count === 0;
         }
     }
-    QtControls.Label {
-        anchors.fill: parent;
-        text: "No %1\n\nPlease drop some into your Documents folder\n(%2)".arg(base.categoryUIName).arg(docList.model.documentsFolder);
-        horizontalAlignment: Text.AlignHCenter;
-        verticalAlignment: Text.AlignVCenter;
-        visible: docList.count === 0;
-    }
+
     Component {
         id: documentTile;
         DocumentTile {

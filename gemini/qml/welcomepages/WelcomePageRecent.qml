@@ -18,37 +18,36 @@
 
 import QtQuick 2.0
 import org.calligra 1.0
+import org.kde.kirigami 2.7 as Kirigami
 import "../components"
 
-Page {
+Kirigami.ScrollablePage {
     id: base;
     objectName: "WelcomePageRecent";
+    title: "Recently Opened Document"
+    actions {
+        main: Kirigami.Action {
+            text: "Open Other...";
+            icon.name: "document-open";
+            onTriggered: mainWindow.openFile();
+        }
+    }
     GridView {
         id: docList;
         contentWidth: width;
-        anchors {
-            margins: Constants.DefaultMargin;
-            top: parent.top;
-            topMargin: Constants.DefaultMargin * 3;
-            left: parent.left;
-            right: parent.right;
-            bottom: parent.bottom;
-            bottomMargin: 0;
-        }
-        cellWidth: width / 4 - Constants.DefaultMargin;
-        cellHeight: cellWidth + Settings.theme.font("templateLabel").pixelSize + Constants.DefaultMargin * 4;
+        cellWidth: width / 4 - Kirigami.Units.largeSpacing;
+        cellHeight: cellWidth + Settings.theme.font("templateLabel").pixelSize + Kirigami.Units.largeSpacing * 4;
         model: RecentFilesModel { recentFileManager: RecentFileManager; }
         delegate: documentTile;
-        ScrollDecorator { flickableItem: docList; }
-    }
-    Label {
-        anchors.fill: parent;
-        text: "There are no recent documents to list.\n\nTo see anything here, open some documents and they\nwill show up here in the order in which they were opened.";
-        horizontalAlignment: Text.AlignHCenter;
-        verticalAlignment: Text.AlignVCenter;
-        font: Settings.theme.font("templateLabel");
-        color: "#5b6573";
-        visible: docList.count === 0;
+        Label {
+            anchors.fill: parent;
+            text: "There are no recent documents to list.\n\nTo see anything here, open some documents and they\nwill show up here in the order in which they were opened.";
+            horizontalAlignment: Text.AlignHCenter;
+            verticalAlignment: Text.AlignVCenter;
+            font: Settings.theme.font("templateLabel");
+            color: "#5b6573";
+            visible: docList.count === 0;
+        }
     }
     Component {
         id: documentTile;
