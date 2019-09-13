@@ -21,19 +21,45 @@ import QtQuick.Controls 1.3
 import org.calligra 1.0
 import org.kde.kirigami 2.1 as Kirigami
 import "welcomepages"
+import "components"
 
 Kirigami.ApplicationItem {
     id: base;
+    onWidthChanged: Constants.setGridWidth( width / Constants.GridColumns );
+    onHeightChanged: Constants.setGridHeight( height / Constants.GridRows );
     DocumentListModel { id: allDocumentsModel; }
     DocumentListModel { id: textDocumentsModel; filter: DocumentListModel.TextDocumentType; }
     DocumentListModel { id: presentationDocumentsModel; filter: DocumentListModel.PresentationType; }
+
+    pageStack.initialPage: welcomePageFilebrowser;
+    pageStack.layers.onCurrentItemChanged: pageStack.layers.currentItem !== null ? mainWindow.currentTouchPage = (pageStack.layers.currentItem.pageName !== undefined) ? pageStack.layers.currentItem.pageName : pageStack.layers.currentItem.toString() : ""
     Component.onCompleted: {
         if(RecentFileManager.size() > 0) {
             pageStack.replace(welcomePageRecent);
         }
     }
+
+    function openFile(fileName, alternativeSaveAction) {
+        loadInitiator.fileName = fileName;
+        loadInitiator.alternativeSaveAction = alternativeSaveAction;
+        loadInitiator.start();
+    }
+    Timer {
+        id: loadInitiator
+        running: false; repeat: false; interval: 1
+        property string fileName
+        property var alternativeSaveAction
+        onTriggered: {
+            pageStack.layers.push(mainPage);
+            Settings.currentFile = "";
+            Settings.currentFile = fileName;
+            pageStack.layers.currentItem.openFileReal(fileName);
+            RecentFileManager.addRecent(fileName);
+            mainWindow.setAlternativeSaveAction(alternativeSaveAction);
+        }
+    }
+
     globalDrawer: Kirigami.GlobalDrawer {
-        id: welcomeSidebar;
         title: "Calligra Gemini"
         titleIcon: Settings.theme.iconActual("Calligra-MockIcon-1");
         drawerOpen: true;
@@ -77,8 +103,7 @@ Kirigami.ApplicationItem {
             }
         ]
     }
-
-    pageStack.initialPage: welcomePageFilebrowser;
+    Component { id: mainPage; MainPage { } }
     Component { id: welcomePageFilebrowser; WelcomePageFilebrowser { } }
     Component { id: welcomePageRecent; WelcomePageRecent { } }
     Component { id: welcomePageStage; WelcomePageStage { } }
@@ -86,8 +111,24 @@ Kirigami.ApplicationItem {
     Component { id: welcomePageCustom; WelcomePageCustom { } }
     Component { id: welcomePageCloud; WelcomePageCloud { } }
 
-    Component { id: mainPage; MainPage { } }
-
     VariantSelector { id: variantSelector; }
     VariantSelector { id: wordsVariantSelector; selectorType: "words"; }
+
+    // This component is used to get around the fact that MainPage takes a very long time to initialise in some cases
+    Dialog {
+        id: baseLoadingDialog;
+        title: "Loading";
+        message: "Please wait...";
+        textAlign: Text.AlignHCenter;
+        modalBackgroundColor: "#ffffff";
+        opacity: 1;
+        progress: 0;
+        visible: false;
+        function hideMe() { timer.start(); }
+        Timer {
+            id: timer;
+            interval: 500; running: false; repeat: false;
+            onTriggered: { parent.visible = false; baseLoadingDialog.progress = -1; }
+        }
+    }
 }

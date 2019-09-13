@@ -27,7 +27,7 @@ Rectangle {
     property int currentSlide: 0;
     property int timePassed: 0;
     Connections {
-        target: mainPageStack;
+        target: pageStack.layers;
         onCurrentPageChanged: timePassed = 0;
     }
     function changeSlide(goToSlide) {
@@ -183,7 +183,7 @@ Rectangle {
             anchors.fill: parent;
             onClicked: {
                 mainWindow.desktopKoView.stopPresentation();
-                mainPageStack.pop();
+                pageStack.layers.pop();
                 if(mainWindow.fullScreen === true) {
                     mainWindow.fullScreen = false;
                 }

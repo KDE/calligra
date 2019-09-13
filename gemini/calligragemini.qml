@@ -16,61 +16,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-import QtQuick 2.0
-import QtQuick.Controls 1.3
+import QtQuick 2.11
 import "qml"
-import "qml/components"
 
-Item {
-    id: base;
-    onWidthChanged: Constants.setGridWidth( width / Constants.GridColumns );
-    onHeightChanged: Constants.setGridHeight( height / Constants.GridRows );
-    property QtObject window: mainWindow;
-    function openFile(fileName, alternativeSaveAction) {
-        loadInitiator.fileName = fileName;
-        loadInitiator.alternativeSaveAction = alternativeSaveAction;
-        loadInitiator.start();
-    }
-    Timer {
-        id: loadInitiator
-        running: false; repeat: false; interval: 1
-        property string fileName
-        property var alternativeSaveAction
-        onTriggered: {
-            mainPageStack.push(mainPage);
-            Settings.currentFile = "";
-            Settings.currentFile = fileName;
-            mainPageStack.currentItem.openFileReal(fileName);
-            RecentFileManager.addRecent(fileName);
-            mainWindow.setAlternativeSaveAction(alternativeSaveAction);
-        }
-    }
-    function applicationWindow() { return base; }
-    property QtObject pageStack: mainPageStack;
-    StackView {
-        id: mainPageStack;
-        anchors.fill: parent;
-        onCurrentItemChanged: currentItem !== null ? window.currentTouchPage = (currentItem.pageName !== undefined) ? currentItem.pageName : currentItem.toString() : "";
-        initialItem: welcomePage;
-    }
-    Component { id: welcomePage; WelcomePage { } }
-    Component { id: mainPage; MainPage { } }
-
-    // This component is used to get around the fact that MainPage takes a very long time to initialise in some cases
-    Dialog {
-        id: baseLoadingDialog;
-        title: "Loading";
-        message: "Please wait...";
-        textAlign: Text.AlignHCenter;
-        modalBackgroundColor: "#ffffff";
-        opacity: 1;
-        progress: 0;
-        visible: false;
-        function hideMe() { timer.start(); }
-        Timer {
-            id: timer;
-            interval: 500; running: false; repeat: false;
-            onTriggered: { parent.visible = false; baseLoadingDialog.progress = -1; }
-        }
-    }
+Loader {
+    sourceComponent: Component { id: welcomePage; WelcomePage { } }
 }

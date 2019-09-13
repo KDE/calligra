@@ -254,7 +254,7 @@ public:
         toTouch->setIcon(koIcon("system-reboot"));
         toTouch->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_S);
         //connect(toTouch, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(switchTouchForced()));
-        connect(toTouch, SIGNAL(triggered(Qt::MouseButtons,Qt::KeyboardModifiers)), q, SLOT(switchToTouch()));
+        connect(toTouch, &QAction::triggered, q, &MainWindow::switchToTouch);
         desktopView->actionCollection()->addAction("SwitchToTouchView", toTouch);
         switcher = new QToolButton();
         switcher->setEnabled(false);

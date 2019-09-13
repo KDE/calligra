@@ -144,7 +144,7 @@ Page {
                         saveBeforeExitDialog.show();
                     }
                     else {
-                        mainPageStack.pop();
+                        pageStack.layers.pop();
                     }
                 }
             }
@@ -395,7 +395,7 @@ Page {
                 height: parent.height; width: height;
                 image: Settings.theme.icon("SVG-Icon-PlayPresentation-1");
                 onClicked: {
-                    mainPageStack.push(presentationDJMode);
+                    pageStack.layers.push(presentationDJMode);
                     closeToolbarMenus();
                     if(mainWindow.lastScreen() > 0) {
                         // don't do the whole song and dance with presenting unless we've got a useful
@@ -518,7 +518,7 @@ Page {
             }
             else if(button === 1) {
                 viewLoader.item.canvas.document.setModified(false);
-                mainPageStack.pop();
+                pageStack.pop();
             }
         }
     }
