@@ -42,6 +42,7 @@ Kirigami.ApplicationItem {
     }
 
     function openFile(fileName, alternativeSaveAction) {
+        baseLoadingDialog.visible = true;
         loadInitiator.fileName = fileName;
         loadInitiator.alternativeSaveAction = alternativeSaveAction;
         loadInitiator.start();

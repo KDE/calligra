@@ -57,10 +57,7 @@ Kirigami.ScrollablePage {
             filePath: model.url;
             imageUrl: model.image;
             title: model.text != "" ? model.text : "";
-            onClicked: {
-                baseLoadingDialog.visible = true;
-                openFile(model.url);
-            }
+            onClicked: openFile(model.url);
         }
     }
 }

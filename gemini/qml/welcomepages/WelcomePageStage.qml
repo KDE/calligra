@@ -30,7 +30,6 @@ Kirigami.ScrollablePage {
         if(templateFile.slice(-1) === "/" || templateFile === "") {
             return;
         }
-        baseLoadingDialog.visible = true;
         openFile("template://" + templateFile);
     }
     TemplatesModel {
@@ -56,11 +55,6 @@ Kirigami.ScrollablePage {
 //         ListElement { text: "Galactic Voyage"; thumbnail: ""; color: "#E8EFF1"; templateFile: ""; variants: [] }
 
     actions {
-//         main: Kirigami.Action {
-//             text: "Open Other...";
-//             icon.name: "document-open";
-//             onTriggered: mainWindow.openFile();
-//         }
         contextualActions: [
             Kirigami.Action {
                 text: "Classic";

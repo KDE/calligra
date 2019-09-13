@@ -129,7 +129,6 @@ Item {
                                 if(file.slice(-1) === "/" || file === "") {
                                     return;
                                 }
-                                baseLoadingDialog.visible = true;
                                 openFile(file);
                             }
                             Rectangle {

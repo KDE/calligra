@@ -455,7 +455,6 @@ Kirigami.Page {
             queryString += "&rightmargin=" + marginRight.value;
             queryString += "&bottommargin=" + marginBottom.value;
             queryString += "&facingpages=" + (facingCheck.checked ? 1 : 0);
-            baseLoadingDialog.visible = true;
             openFile(queryString);
         }
     }

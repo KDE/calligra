@@ -69,10 +69,7 @@ Kirigami.ScrollablePage {
             height: docList.cellHeight
             title: model.fileName != "" ? model.fileName : ""
             filePath: model.filePath
-            onClicked: {
-                baseLoadingDialog.visible = true;
-                openFile(model.filePath);
-            }
+            onClicked: openFile(model.filePath);
         }
     }
 }

@@ -210,11 +210,7 @@ Item {
             height: docList.cellHeight;
             filePath: model.filePath;
             title: model.fileName != "" ? model.filename : "";
-            onClicked: {
-                baseLoadingDialog.visible = true;
-                openFile(model.filePath, gitController.commitAndPushCurrentFileAction());
-            }
+            onClicked: openFile(model.filePath, gitController.commitAndPushCurrentFileAction());
         }
     }
 }
-

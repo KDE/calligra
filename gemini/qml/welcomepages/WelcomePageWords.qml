@@ -40,7 +40,6 @@ Kirigami.ScrollablePage {
         if(templateFile.slice(-1) === "/" || templateFile === "") {
             return;
         }
-        baseLoadingDialog.visible = true;
         openFile("template://" + templateFile);
     }
     TemplatesModel {
