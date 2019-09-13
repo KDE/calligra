@@ -19,7 +19,6 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.2 as QtControls
 import org.calligra 1.0
-import Calligra.Gemini.Dropbox 1.0
 import "../../components"
 import "dropbox" as Dropbox
 import "git" as Git

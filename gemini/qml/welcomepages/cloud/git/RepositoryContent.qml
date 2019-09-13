@@ -209,7 +209,7 @@ Item {
             width: docList.cellWidth;
             height: docList.cellHeight;
             filePath: model.filePath;
-            title: model.fileName != "" ? model.filename : "";
+            title: model.fileName != "" ? model.fileName : "";
             onClicked: openFile(model.filePath, gitController.commitAndPushCurrentFileAction());
         }
     }

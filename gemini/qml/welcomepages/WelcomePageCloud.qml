@@ -17,13 +17,18 @@
  */
 
 import QtQuick 2.0
+import QtQuick.Layouts 1.11 as QtLayouts
+import QtQuick.Controls 2.2 as QtControls
+import org.kde.kirigami 2.7 as Kirigami
+import Calligra.Gemini.Dropbox 1.0
 import org.calligra 1.0
 import "../components"
 import "cloud"
 
-Page {
+Kirigami.ScrollablePage {
     id: base;
     objectName: "WelcomePageCloud";
+    title: "Open from the Cloud";
 /*    ListModel {
         id: cloudAccounts;
         ListElement { text: "Dropbox"; selected: false; accountType: "DropBox"; stackComponent: "accountsPageDropbox"; accountDetails: [ ListElement { userkey: "asfdoijfdshaloiuhs" } ] }
@@ -31,97 +36,217 @@ Page {
         ListElement { text: "bitbucket"; selected: false; accountType: "Git"; stackComponent: "accountsPageGit"; accountDetails: [ ListElement { localrepo: "C:\\Users\\danjensen\\Documents\\nohnas" } ] }
         ListElement { text: "github"; selected: false; accountType: "Git"; stackComponent: "accountsPageGit"; accountDetails: [ ListElement { localrepo: "C:\\dev\\documentation" } ] }
     }*/
+    function showAccount(index, stackComponent, accountDetails) {
+        cloudAccounts.selectIndex(index);
+        pageStack.push(elementFromName(stackComponent));
+        pageStack.currentItem.accountDetails = accountDetails;
+    }
+
     CloudAccountsModel {
         id: cloudAccounts;
     }
-    Label {
-        id: docTypeSelectorRow;
-        anchors {
-            top: parent.top;
-            left: parent.left;
-            right: parent.right;
+    actions {
+        main: Kirigami.Action {
         }
-        height: Constants.GridHeight * 1.5;
-        verticalAlignment: Text.AlignVCenter;
-        horizontalAlignment: Text.AlignHCenter;
-        font: Settings.theme.font("pageHeader");
-        text: "Open from The Cloud";
-        color: "#22282f";
-        CohereButton {
-            id: accountsButton;
+    }
+        Connections {
+        target: controllerMIT;
+        onNeedAuthenticateChanged: {
+            if(controllerMIT.needAuthenticate) {
+                cloudAccounts.removeAccountByName("Dropbox");
+            }
+            else {
+                cloudAccounts.addAccount("Dropbox", "DropBox", "accountsPageDropbox", 0, true);
+            }
+        }
+    }
+    Component.onCompleted: {
+        if(!controllerMIT.needAuthenticate) {
+            cloudAccounts.addAccount("Dropbox", "DropBox", "accountsPageDropbox", 0, true);
+        }
+    }
+    ListView {
+        id: accountsView;
+        model: cloudAccounts;
+        footer: Item {
             anchors {
                 left: parent.left;
-                leftMargin: 20;
-                verticalCenter: parent.verticalCenter;
-            }
-            text: "Accounts";
-            textColor: "#5b6573";
-            textSize: Settings.theme.adjustedPixel(18);
-            checkedColor: "#D2D4D5";
-            onClicked: {
-                cloudAccounts.selectIndex(-1);
-                cloudStack.replace(accountsPage);
-            }
-            checked: cloudStack.currentPage.pageName === "accountsPage";
-        }
-        Row {
-            id: accountsRow;
-            anchors {
                 right: parent.right;
-                rightMargin: 20;
-                verticalCenter: parent.verticalCenter;
+                margins: Kirigami.Units.largeSpacing;
             }
-            height: accountsButton.height; // yeah, i know... cleaner than hacking in and finding the first child button, though ;)
-            spacing: 4;
-            function elementFromName(name) {
-                var elements = {
-                    "accountsPageDropbox": accountsPageDropbox,
-                    "accountsPageWebdav": accountsPageWebdav,
-                    "accountsPageGit": accountsPageGit
-                };
-                return elements[name];
+            height: bottomButtonRow.height + Kirigami.Units.largeSpacing * 2;
+            QtControls.Label {
+                anchors.fill: parent;
+                text: "Add new account:";
+                horizontalAlignment: Text.AlignLeft;
+                verticalAlignment: Text.AlignVCenter;
             }
-            Repeater {
-                model: cloudAccounts;
-                delegate: CohereButton {
-                    text: model.text
-                    textColor: "#5b6573";
-                    textSize: Settings.theme.adjustedPixel(18);
-                    checkedColor: "#D2D4D5";
-                    onClicked: {
-                        if(model.selected) {
-                            return;
-                        }
-                        cloudAccounts.selectIndex(index);
-                        cloudStack.replace(accountsRow.elementFromName(model.stackComponent));
-                        cloudStack.currentPage.accountDetails = model.accountDetails;
+            Row {
+                id: bottomButtonRow;
+                anchors {
+                    verticalCenter: parent.verticalCenter;
+                    right: parent.right;
+                }
+                height: childrenRect.height;
+                spacing: Kirigami.Units.largeSpacing;
+                Repeater {
+                    model: ListModel {
+                        ListElement { text: "Dropbox"; accountType: "DropBox"; serviceName: "dropbox"; }
+                        ListElement { text: "WebDav"; accountType: "WebDav"; serviceName: ""; }
+                        //ListElement { text: "ownCloud"; accountType: "WebDav"; serviceName: "ownCloud"; }
+                        ListElement { text: "Git"; accountType: "Git"; serviceName: ""; }
+                        //ListElement { text: "GitHub"; accountType: "Git"; serviceName: "github"; }
+                        //ListElement { text: "bitbucket (git)"; accountType: "Git"; serviceName: "bitbucket"; }
                     }
-                    checked: model.selected;
+                    QtControls.Button {
+                        text: model.text
+                        onClicked: {
+                            dlgStack.replace(base.addComponentFromName(model.accountType));
+                            dlgStack.currentPage.serviceName = model.serviceName;
+                        }
+                    }
                 }
             }
         }
-    }
-    PageStack {
-        id: cloudStack;
-        initialPage: accountsPage;
-        anchors {
-            margins: Settings.theme.adjustedPixel(8);
-            top: docTypeSelectorRow.bottom;
-            left: parent.left;
-            right: parent.right;
-            bottom: parent.bottom;
-            bottomMargin: 0;
-        }
-    }
-    Component { id: accountsPage;
-        CloudAccounts {
-            accountsList: cloudAccounts;
-            onShowAccount: {
-                cloudAccounts.selectIndex(index);
-                cloudStack.replace(accountsRow.elementFromName(stackComponent));
-                cloudStack.currentPage.accountDetails = accountDetails;
+        delegate: Kirigami.SwipeListItem {
+            QtLayouts.RowLayout {
+                Item {
+                    QtLayouts.Layout.preferredHeight: Kirigami.Units.iconSizes.huge - Kirigami.Units.smallSpacing * 2;
+                    QtLayouts.Layout.minimumWidth: Kirigami.Units.iconSizes.huge;
+                    QtLayouts.Layout.maximumWidth: Kirigami.Units.iconSizes.huge;
+                    Kirigami.Icon {
+                        anchors {
+                            fill: parent;
+                            margins: Kirigami.Units.smallSpacing;
+                        }
+                        source: "document";
+                    }
+                }
+                QtLayouts.ColumnLayout {
+                    QtLayouts.Layout.fillWidth: true
+                    QtLayouts.Layout.fillHeight: true
+                    Kirigami.Heading {
+                        id: nameText
+                        QtLayouts.Layout.fillWidth: true
+                        level: 3
+                        text: model.text
+                    }
+                    QtControls.Label {
+                        id: descriptionText
+                        QtLayouts.Layout.fillWidth: true
+                        text: model.accountType === "DropBox" ? "" : model.accountType
+                        elide: Text.ElideRight
+                        maximumLineCount: 2
+                        wrapMode: Text.Wrap
+                    }
+                    Item {
+                        QtLayouts.Layout.fillWidth: true
+                        QtLayouts.Layout.fillHeight: true
+                    }
+                }
             }
+            onClicked: base.showAccount(model.index, model.stackComponent, model.accountDetails);
+            actions: [
+                Kirigami.Action {
+                    text: (model.accountType === "DropBox") ? "Sign Out" : "Edit Account";
+                    icon.name: (model.accountType === "DropBox") ? "leave" : "document-edit"
+                    onTriggered: {
+                        dlgStack.replace(base.editComponentFromName(model.accountType));
+                        if(dlgStack.currentPage.accountIndex !== undefined) {
+                            dlgStack.currentPage.accountIndex = index;
+                            dlgStack.currentPage.text = model.text;
+                        }
+                    }
+                },
+                Kirigami.Action {
+                    text: "Remove";
+                    icon.name: "remove"
+                    visible: model.accountType !== "DropBox";
+                    onTriggered: {
+                        dlgStack.replace(removeAccountDlg);
+                        if(dlgStack.currentPage.accountIndex !== undefined) {
+                            dlgStack.currentPage.accountIndex = index;
+                            dlgStack.currentPage.text = model.text;
+                        }
+                    }
+                }
+            ]
         }
+        QtControls.Label {
+            anchors.fill: accountsView;
+            text: "You have no cloud accounts defined. Please add one by clicking on your service of choice below.";
+            horizontalAlignment: Text.AlignHCenter;
+            verticalAlignment: Text.AlignVCenter;
+            opacity: cloudAccounts.count === 0 ? 1 : 0;
+            Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+        }
+        PageStack {
+            id: dlgStack;
+            anchors {
+                fill: parent;
+                margins: -Settings.theme.adjustedPixel(8);
+            }
+            initialPage: addEmptyComp;
+        }
+    }
+
+    function addComponentFromName(name) {
+        var elements = {
+            "DropBox": addDropBox,
+            "WebDav": addWebDav,
+            "Git": addGit
+        };
+        return elements[name];
+    }
+    Component {
+        id: addEmptyComp;
+        Item {}
+    }
+    Component {
+        id: addDropBox;
+        AddDropbox { addEmpty: addEmptyComp; }
+    }
+    Component {
+        id: addWebDav;
+        AddWebdav { addEmpty: addEmptyComp; }
+    }
+    Component {
+        id: addGit;
+        AddGit { addEmpty: addEmptyComp; }
+    }
+    function editComponentFromName(name) {
+        var elements = {
+            "DropBox": editDropBox,
+            "WebDav": editWebDav,
+            "Git": editGit
+        };
+        return elements[name];
+    }
+    Component {
+        id: editDropBox;
+        AddDropbox { addEmpty: addEmptyComp; }
+    }
+    Component {
+        id: editWebDav;
+        EditDetailsBase { addEmpty: addEmptyComp; }
+    }
+    Component {
+        id: editGit;
+        EditGit { addEmpty: addEmptyComp; }
+    }
+
+    Component {
+        id: removeAccountDlg;
+        RemoveAccountDlg { addEmpty: addEmptyComp; }
+    }
+
+    function elementFromName(name) {
+        var elements = {
+            "accountsPageDropbox": accountsPageDropbox,
+            "accountsPageWebdav": accountsPageWebdav,
+            "accountsPageGit": accountsPageGit
+        };
+        return elements[name];
     }
     Component { id: accountsPageDropbox; Dropbox { } }
     Component { id: accountsPageWebdav; Webdav { } }
