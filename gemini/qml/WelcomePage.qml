@@ -32,6 +32,7 @@ Kirigami.ApplicationItem {
     DocumentListModel { id: presentationDocumentsModel; filter: DocumentListModel.PresentationType; }
 
     pageStack.initialPage: welcomePageFilebrowser;
+    pageStack.defaultColumnWidth: pageStack.width
     pageStack.globalToolBar.style: Kirigami.ApplicationHeaderStyle.Auto
     pageStack.layers.onCurrentItemChanged: pageStack.layers.currentItem !== null ? mainWindow.currentTouchPage = (pageStack.layers.currentItem.pageName !== undefined) ? pageStack.layers.currentItem.pageName : pageStack.layers.currentItem.toString() : ""
     Component.onCompleted: {
