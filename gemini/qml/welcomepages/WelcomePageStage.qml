@@ -17,12 +17,14 @@
  */
 
 import QtQuick 2.0
+import org.kde.kirigami 2.7 as Kirigami
 import org.calligra 1.0
 import "../components"
 
-Page {
+Kirigami.ScrollablePage {
     id: base;
     objectName: "WelcomePageStage";
+    title: "Pick a Presentation Template"
     function activateTemplate(templateFile) {
         console.debug(templateFile);
         if(templateFile.slice(-1) === "/" || templateFile === "") {
@@ -53,45 +55,24 @@ Page {
 //         ListElement { text: "Luna Rising"; thumbnail: ""; color: "#828C8F"; templateFile: ""; variants: [ ] }
 //         ListElement { text: "Galactic Voyage"; thumbnail: ""; color: "#E8EFF1"; templateFile: ""; variants: [] }
 
-    Label {
-        anchors {
-            top: parent.top;
-            left: parent.left;
-            right: parent.right;
-        }
-        height: Constants.GridHeight * 1.5;
-        verticalAlignment: Text.AlignVCenter;
-        horizontalAlignment: Text.AlignHCenter;
-        font: Settings.theme.font("pageHeader");
-        text: "Select a template";
-        color: "#22282f";
-        Row {
-            anchors {
-                right: parent.right;
-                rightMargin: Settings.theme.adjustedPixel(20);
-                verticalCenter: parent.verticalCenter;
-            }
-            height: parent.height - Constants.DefaultMargin * 2;
-            spacing: Settings.theme.adjustedPixel(4);
-            CohereButton {
-                anchors.verticalCenter: parent.verticalCenter;
-                checked: stageTemplatesRepeater.model === stageTemplatesClassic;
+    actions {
+//         main: Kirigami.Action {
+//             text: "Open Other...";
+//             icon.name: "document-open";
+//             onTriggered: mainWindow.openFile();
+//         }
+        contextualActions: [
+            Kirigami.Action {
                 text: "Classic";
-                textColor: "#5b6573";
-                textSize: Settings.theme.adjustedPixel(18);
-                checkedColor: "#D2D4D5";
-                onClicked: { if(!checked) { stageTemplatesRepeater.model = stageTemplatesClassic; } }
-            }
-            CohereButton {
-                anchors.verticalCenter: parent.verticalCenter;
-                checked: stageTemplatesRepeater.model === stageTemplates;
+                onTriggered: { if(!checked) { stageTemplatesRepeater.model = stageTemplatesClassic; } }
+                checked: stageTemplatesRepeater.model === stageTemplatesClassic;
+            },
+            Kirigami.Action {
                 text: "Wide";
-                textColor: "#5b6573";
-                textSize: Settings.theme.adjustedPixel(18);
-                checkedColor: "#D2D4D5";
-                onClicked: { if(!checked) { stageTemplatesRepeater.model = stageTemplates; } }
+                onTriggered: { if(!checked) { stageTemplatesRepeater.model = stageTemplates; } }
+                checked: stageTemplatesRepeater.model === stageTemplates;
             }
-        }
+        ]
     }
     Flickable {
         id: stageFlickable;
@@ -175,5 +156,4 @@ Page {
             }
         }
     }
-    ScrollDecorator { flickableItem: stageFlickable; anchors.fill: stageFlickable; }
 }
