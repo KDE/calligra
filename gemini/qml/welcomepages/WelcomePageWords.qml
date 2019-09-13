@@ -16,66 +16,121 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-import QtQuick 2.0
+import QtQuick 2.11
+import org.kde.kirigami 2.7 as Kirigami
 import org.calligra 1.0
 import "../components"
 
-Page {
+Kirigami.ScrollablePage {
     id: base;
     objectName: "WelcomePageWords"
-    Label {
-        id: docTypeSelectorRow;
-        anchors {
-            top: parent.top;
-            left: parent.left;
-            right: parent.right;
-        }
-        height: Constants.GridHeight * 1.5;
-        verticalAlignment: Text.AlignVCenter;
-        horizontalAlignment: Text.AlignHCenter;
-        font: Settings.theme.font("pageHeader");
-        text: "Create a Text Document";
-        color: "#22282f";
-        Row {
-            anchors {
-                right: parent.right;
-                rightMargin: 20;
-                verticalCenter: parent.verticalCenter;
-            }
-            height: parent.height - Constants.DefaultMargin * 2;
-            spacing: 4;
-            CohereButton {
-                anchors.verticalCenter: parent.verticalCenter;
-                text: "Custom Document";
-                textColor: "#5b6573";
-                textSize: Settings.theme.adjustedPixel(18);
-                checkedColor: "#D2D4D5";
-                onClicked: { if(!checked) { wordsDocStack.replace(customDocWords); } }
-                checked: wordsDocStack.currentPage.pageName === "CustomDocWords";
-            }
-            CohereButton {
-                anchors.verticalCenter: parent.verticalCenter;
-                text: "Templates";
-                textColor: "#5b6573";
-                textSize: Settings.theme.adjustedPixel(18);
-                checkedColor: "#D2D4D5";
-                onClicked: { if(!checked) { wordsDocStack.replace(templatesWords); } }
-                checked: wordsDocStack.currentPage.pageName === "TemplatesWords";
+    title: "Create a Text Document"
+    actions {
+        main: Kirigami.Action {
+            text: "Create Custom Document..."
+            icon.name: "configure"
+            onTriggered: {
+                pageStack.push(customDocWords);
             }
         }
-    }
-    PageStack {
-        id: wordsDocStack;
-        anchors {
-            margins: Constants.DefaultMargin;
-            top: docTypeSelectorRow.bottom;
-            left: parent.left;
-            right: parent.right;
-            bottom: parent.bottom;
-            bottomMargin: 0;
-        }
-        initialPage: templatesWords;
     }
     Component { id: customDocWords; CustomDocWords { } }
-    Component { id: templatesWords; TemplatesWords { } }
+    function activateTemplate(templateFile) {
+        console.debug(templateFile);
+        if(templateFile.slice(-1) === "/" || templateFile === "") {
+            return;
+        }
+        baseLoadingDialog.visible = true;
+        openFile("template://" + templateFile);
+    }
+    TemplatesModel {
+        id: wordsTemplates;
+        templateType: WORDS_MIME_TYPE;
+    }
+    Flickable {
+        id: wordsFlickable;
+        anchors {
+            fill: parent;
+            margins: Constants.DefaultMargin;
+            bottomMargin: 0;
+        }
+        contentWidth: templatesFlow.width;
+        contentHeight: templatesFlow.height;
+        clip: true;
+        Flow {
+            id: templatesFlow;
+            width: base.width - Constants.DefaultMargin * 2;
+            spacing: Constants.DefaultMargin * 3;
+            Repeater {
+                id: wordsTemplatesRepeater;
+                model: wordsTemplates;
+                Column {
+                    width: (templatesFlow.width / 5) - Constants.DefaultMargin * 3;
+                    height: width * 1.4;
+                    spacing: Constants.DefaultMargin;
+                    Item {
+                        width: parent.width;
+                        height: parent.height - templateName.height - Constants.DefaultMargin;
+                        Image {
+                            anchors.centerIn: parent;
+                            height: parent.height - Constants.DefaultMargin * 2;
+                            width: height;
+                            source: model.thumbnail ? model.thumbnail : "";
+                            fillMode: Image.PreserveAspectFit;
+                            smooth: true;
+                        }
+                        Rectangle {
+                            anchors.fill: parent;
+                            color: model.thumbnail ? "transparent" : model.color;
+                            border {
+                                width: 1;
+                                color: "#c1cdd1";
+                            }
+                            opacity: 0.6;
+                        }
+                        Row {
+                            anchors {
+                                bottom: parent.bottom;
+                                right: parent.right;
+                                margins: Constants.DefaultMargin;
+                            }
+                            height: Constants.DefaultMargin * 2;
+                            spacing: Constants.DefaultMargin;
+                            property QtObject colorModel: model.variants;
+                            Repeater {
+                                model: parent.colorModel;
+                                Rectangle {
+                                    height: Constants.DefaultMargin * 2;
+                                    width: height;
+                                    radius: Constants.DefaultMargin;
+                                    color: model.color;
+                                }
+                            }
+                        }
+                        MouseArea {
+                            anchors.fill: parent;
+                            onClicked: {
+                                if(model.variantCount === 0) {
+                                    activateTemplate(model.url);
+                                }
+                                else {
+                                    // then there are variants to choose between, let the user see!
+                                    wordsVariantSelector.model = model.variants;
+                                    wordsVariantSelector.opacity = 1;
+                                }
+                            }
+                        }
+                    }
+                    Label {
+                        id: templateName;
+                        width: parent.width;
+                        horizontalAlignment: Text.AlignHCenter;
+                        text: model.text;
+                        font: Settings.theme.font("templateLabel");
+                        color: "#5b6573";
+                    }
+                }
+            }
+        }
+    }
 }
