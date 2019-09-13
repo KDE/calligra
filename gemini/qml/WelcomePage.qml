@@ -32,6 +32,7 @@ Kirigami.ApplicationItem {
     DocumentListModel { id: presentationDocumentsModel; filter: DocumentListModel.PresentationType; }
 
     pageStack.initialPage: welcomePageFilebrowser;
+    pageStack.globalToolBar.style: Kirigami.ApplicationHeaderStyle.Auto
     pageStack.layers.onCurrentItemChanged: pageStack.layers.currentItem !== null ? mainWindow.currentTouchPage = (pageStack.layers.currentItem.pageName !== undefined) ? pageStack.layers.currentItem.pageName : pageStack.layers.currentItem.toString() : ""
     Component.onCompleted: {
         if(RecentFileManager.size() > 0) {
@@ -59,6 +60,9 @@ Kirigami.ApplicationItem {
         }
     }
 
+    contextDrawer: Kirigami.ContextDrawer {
+        id: contextDrawer
+    }
     globalDrawer: Kirigami.GlobalDrawer {
         title: "Calligra Gemini"
         titleIcon: Settings.theme.iconActual("Calligra-MockIcon-1");
