@@ -65,6 +65,19 @@ Kirigami.ApplicationItem {
     contextDrawer: Kirigami.ContextDrawer {
         id: contextDrawer
     }
+    Connections {
+        target: pageStack.layers
+        onDepthChanged: {
+            if (pageStack.layers.depth === 1) {
+                base.globalDrawer.drawerOpen = true
+                applicationWindow().controlsVisible = true
+            } else {
+                base,globalDrawer.drawerOpen = false
+                base.contextDrawer.drawerOpen = false
+                applicationWindow().controlsVisible = false
+            }
+        }
+    }
     globalDrawer: Kirigami.GlobalDrawer {
         title: "Calligra Gemini"
         titleIcon: Settings.theme.iconActual("Calligra-MockIcon-1");
