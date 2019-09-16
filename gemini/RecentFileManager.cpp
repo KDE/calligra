@@ -30,6 +30,11 @@
 
 // Much of this is a gui-less clone of KRecentFilesAction, so the format of
 // storing recent files is compatible.
+struct RecentFileEntry {
+    QString fileName;
+    QString filePath;
+};
+
 class RecentFileManager::Private {
 public:
     Private()
@@ -42,8 +47,7 @@ public:
 
     void loadEntries(const KConfigGroup &grp)
     {
-        recentFiles.clear();
-        recentFilesIndex.clear();
+        recents.clear();
 
         QString value;
         QString nameValue;
@@ -78,14 +82,19 @@ public:
             value = QDir::toNativeSeparators( value );
 
             // Don't restore where the url is already known (eg. broken config)
-            if (recentFiles.contains(value))
-                continue;
+            for (const RecentFileEntry& entry : recents) {
+                if (entry.filePath == value) {
+                    continue;
+                }
+            }
 
             nameValue = cg.readPathEntry(QString("Name%1").arg(i), url.fileName());
 
             if (!value.isNull())  {
-                recentFilesIndex << nameValue;
-                recentFiles << value;
+                RecentFileEntry entry;
+                entry.fileName = nameValue;
+                entry.filePath = value;
+                recents << entry;
            }
         }
     }
@@ -100,16 +109,16 @@ public:
         cg.deleteGroup();
 
         // write file list
-        for (int i = 1; i <= recentFilesIndex.size(); ++i) {
+        for (int i = 1; i <= recents.size(); ++i) {
             // i - 1 because we started from 1
-            cg.writePathEntry(QString("File%1").arg(i), recentFiles[i - 1]);
-            cg.writePathEntry(QString("Name%1").arg(i), recentFilesIndex[i - 1]);
+            const RecentFileEntry &item = recents[i-1];
+            cg.writePathEntry(QString("File%1").arg(i), item.filePath);
+            cg.writePathEntry(QString("Name%1").arg(i), item.fileName);
         }
     }
 
     int maxItems;
-    QStringList recentFilesIndex;
-    QStringList recentFiles;
+    QList<RecentFileEntry> recents;
 };
 
 
@@ -131,34 +140,40 @@ RecentFileManager::~RecentFileManager()
 
 QStringList RecentFileManager::recentFileNames() const
 {
-    return d->recentFilesIndex;
+    QStringList files;
+    for(const RecentFileEntry &item : d->recents) {
+        files << item.fileName;
+    }
+    return files;
 }
 
 QStringList RecentFileManager::recentFiles() const
 {
-    return d->recentFiles;
+    QStringList files;
+    for(const RecentFileEntry &item : d->recents) {
+        files << item.filePath;
+    }
+    return files;
 }
 
 void RecentFileManager::addRecent(const QString &_url)
 {
-    if (d->recentFiles.size() > d->maxItems) {
-        d->recentFiles.removeLast();
-        d->recentFilesIndex.removeLast();
+    if (d->recents.size() > d->maxItems) {
+        d->recents.removeLast();
     }
 
-    QString localFile = QDir::toNativeSeparators(_url);
-    QString fileName  = QFileInfo(_url).fileName();
+    RecentFileEntry newEntry;
+    newEntry.filePath = QDir::toNativeSeparators(_url);
+    newEntry.fileName  = QFileInfo(_url).fileName();
 
-    if (d->recentFiles.contains(localFile)) {
-        d->recentFiles.removeAll(localFile);
+    QMutableListIterator<RecentFileEntry> i(d->recents);
+    while (i.hasNext()) {
+        i.next();
+        if (i.value().filePath == newEntry.filePath) {
+            i.remove();
+        }
     }
-
-    if (d->recentFilesIndex.contains(fileName)) {
-        d->recentFilesIndex.removeAll(fileName);
-    }
-
-    d->recentFiles.insert(0, localFile);
-    d->recentFilesIndex.insert(0, fileName);
+    d->recents.insert(0, newEntry);
 
     d->saveEntries(KConfigGroup(KSharedConfig::openConfig(), "RecentFiles"));
     emit recentFilesListChanged();
@@ -166,21 +181,21 @@ void RecentFileManager::addRecent(const QString &_url)
 
 int RecentFileManager::size()
 {
-    return d->recentFiles.size();
+    return d->recents.size();
 }
 
 QString RecentFileManager::recentFile(int index) const
 {
-    if (index < d->recentFiles.size()) {
-        return d->recentFiles.at(index);
+    if (index < d->recents.size()) {
+        return d->recents.at(index).filePath;
     }
     return QString();
 }
 
 QString RecentFileManager::recentFileName(int index) const
 {
-    if (index < d->recentFilesIndex.size()) {
-        return d->recentFilesIndex.at(index);
+    if (index < d->recents.size()) {
+        return d->recents.at(index).fileName;
     }
     return QString();
 }
