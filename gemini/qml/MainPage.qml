@@ -21,10 +21,16 @@ import "components"
 import "panels"
 import org.calligra 1.0
 import org.kde.calligra 1.0 as Calligra
+import org.kde.kirigami 2.7 as Kirigami
 
-Page {
+Kirigami.Page {
     id: base;
     property string pageName: "MainPage";
+    // Not very Kirigami-ish, but we're just going to leave the base interaction for now
+    topPadding: 0;
+    leftPadding: 0;
+    rightPadding: 0;
+    bottomPadding: 0;
     function openFileReal(fileName) {
         if(Settings.currentFileClass === WORDS_MIME_TYPE) {
             viewLoader.sourceComponent = wordsView;
@@ -144,7 +150,7 @@ Page {
                         saveBeforeExitDialog.show();
                     }
                     else {
-                        pageStack.layers.pop();
+                        applicationWindow().pageStack.layers.pop();
                     }
                 }
             }
@@ -395,7 +401,7 @@ Page {
                 height: parent.height; width: height;
                 image: Settings.theme.icon("SVG-Icon-PlayPresentation-1");
                 onClicked: {
-                    pageStack.layers.push(presentationDJMode);
+                    applicationWindow().pageStack.layers.push(presentationDJMode);
                     closeToolbarMenus();
                     if(mainWindow.lastScreen() > 0) {
                         // don't do the whole song and dance with presenting unless we've got a useful
@@ -518,7 +524,7 @@ Page {
             }
             else if(button === 1) {
                 viewLoader.item.canvas.document.setModified(false);
-                pageStack.pop();
+                applicationWindow().pageStack.layers.pop();
             }
         }
     }
