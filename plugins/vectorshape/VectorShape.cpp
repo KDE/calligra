@@ -204,7 +204,7 @@ void RenderThread::drawEmf(QPainter &painter) const
 
     Libemf::Parser  emfParser;
 
-#if 1  // Set to 0 to get debug output
+#ifndef LIBEMF_DEBUG
     // Create a new painter output strategy.  Last param = true means keep aspect ratio.
     Libemf::OutputPainterStrategy  emfPaintOutput( painter, shapeSizeInt, true );
     emfParser.setOutput( &emfPaintOutput );

@@ -46,7 +46,6 @@
 
 #include "EmfParser.h"
 #include "EmfOutputPainterStrategy.h"
-#include "EmfOutputDebugStrategy.h"
 #include "SvmParser.h"
 #include "SvmPainterBackend.h"
 
