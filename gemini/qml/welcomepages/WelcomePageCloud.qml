@@ -125,10 +125,13 @@ Kirigami.ScrollablePage {
                 QtLayouts.ColumnLayout {
                     QtLayouts.Layout.fillWidth: true
                     QtLayouts.Layout.fillHeight: true
+                    Item {
+                        QtLayouts.Layout.fillWidth: true
+                        QtLayouts.Layout.fillHeight: true
+                    }
                     Kirigami.Heading {
                         id: nameText
                         QtLayouts.Layout.fillWidth: true
-                        level: 3
                         text: model.text
                     }
                     QtControls.Label {
@@ -136,7 +139,6 @@ Kirigami.ScrollablePage {
                         QtLayouts.Layout.fillWidth: true
                         text: model.accountType === "DropBox" ? "" : model.accountType
                         elide: Text.ElideRight
-                        maximumLineCount: 2
                         wrapMode: Text.Wrap
                     }
                     Item {
