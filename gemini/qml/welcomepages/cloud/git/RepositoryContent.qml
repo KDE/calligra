@@ -32,17 +32,20 @@ Item {
     GitController {
         id: gitController;
         currentFile: Settings.currentFile;
+        property string progressMessage;
         onPullCompleted: {
             logModel.refreshLog();
             updatedLabel.opacity = 1;
             if(DocumentManager.doc()) {
                 DocumentManager.doc().clearStatusBarMessage();
             }
+            progressMessage = "";
         }
         onTransferProgress: {
             if(DocumentManager.doc()) {
                 DocumentManager.doc().sigProgress(progress);
             }
+            progressMessage = "Transfer progress: %1%".arg(progress);
             console.log("Transfer progress: " + progress);
         }
         onOperationBegun: {
@@ -50,6 +53,7 @@ Item {
             if(DocumentManager.doc()) {
                 DocumentManager.doc().statusBarMessage(message);
             }
+            progressMessage = message;
         }
         onPushCompleted: {
             if(DocumentManager.doc()) {
@@ -81,22 +85,8 @@ Item {
             text: "Pull from upstream";
             onClicked: {
                 enabled = false;
-                pullInProgress.opacity = 1;
+                pullInProgress.running = true;
                 gitController.pull();
-            }
-            QtControls.BusyIndicator {
-                id: pullInProgress;
-                opacity: 0;
-                running: true;
-                height: parent.height;
-                width: height;
-                anchors.centerIn: parent;
-                Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
-                anchors {
-                    top: pullButton.bottom;
-                    left: parent.left;
-                    right: parent.right;
-                }
             }
         }
         QtControls.Label {
@@ -104,7 +94,7 @@ Item {
             opacity: 0;
             Behavior on opacity {
                 SequentialAnimation {
-                    ScriptAction { script: pullInProgress.opacity = 0; }
+                    ScriptAction { script: pullInProgress.running = false; }
                     PropertyAnimation { duration: Constants.AnimationDuration; }
                     ScriptAction { script: hideUpdate.start(); }
                 }
@@ -180,7 +170,6 @@ Item {
     GridView {
         id: docList;
         clip: true;
-        contentWidth: width;
         anchors {
             margins: Constants.DefaultMargin;
             top: parent.top;
@@ -190,8 +179,8 @@ Item {
             bottom: parent.bottom;
             bottomMargin: 0;
         }
-        cellWidth: width / 3 - Constants.DefaultMargin;
-        cellHeight: cellWidth + Settings.theme.font("templateLabel").pixelSize + Constants.DefaultMargin * 4;
+        cellWidth: width / 3;
+        cellHeight: cellWidth + Settings.theme.font("templateLabel").pixelSize;
         model: gitController.documents;
         delegate: documentTile;
         ScrollDecorator { flickableItem: docList; }
@@ -206,11 +195,41 @@ Item {
     Component {
         id: documentTile;
         DocumentTile {
-            width: docList.cellWidth;
-            height: docList.cellHeight;
             filePath: model.filePath;
             title: model.fileName != "" ? model.fileName : "";
             onClicked: openFile(model.filePath, gitController.commitAndPushCurrentFileAction());
+        }
+    }
+    Item {
+        anchors.fill: parent;
+        opacity: pullInProgress.running ? 1 : 0;
+        Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+        Rectangle {
+            anchors.fill: parent;
+            opacity: 0.7;
+            color: Kirigami.Theme.backgroundColor;
+        }
+        MouseArea {
+            enabled: pullInProgress.running;
+            anchors.fill: parent;
+            onClicked: {}
+        }
+        QtControls.BusyIndicator {
+            id: pullInProgress;
+            running: false;
+            height: Kirigami.Units.iconSizes.huge;
+            width: height;
+            anchors.centerIn: parent;
+            QtControls.Label {
+                anchors {
+                    top: parent.bottom;
+                    left: parent.left;
+                    right: parent.right;
+                    margins: Kirigami.Units.largeSpacing;
+                }
+                horizontalAlignment: Text.AlignHCenter;
+                text: gitController.progressMessage;
+            }
         }
     }
 }

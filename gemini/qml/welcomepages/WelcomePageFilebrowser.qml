@@ -48,9 +48,8 @@ Kirigami.ScrollablePage {
     }
     GridView {
         id: docList;
-        contentWidth: width;
-        cellWidth: width / 4 - Kirigami.Units.largeSpacing;
-        cellHeight: cellWidth + Settings.theme.font("templateLabel").pixelSize + Kirigami.Units.largeSpacing * 4;
+        cellWidth: width / 4;
+        cellHeight: cellWidth + Settings.theme.font("templateLabel").pixelSize;
         model: textDocumentsModel;
         delegate: documentTile;
         QtControls.Label {
@@ -65,8 +64,6 @@ Kirigami.ScrollablePage {
     Component {
         id: documentTile;
         DocumentTile {
-            width: docList.cellWidth;
-            height: docList.cellHeight
             title: model.fileName != "" ? model.fileName : ""
             filePath: model.filePath
             onClicked: openFile(model.filePath);
