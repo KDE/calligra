@@ -16,7 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-import QtQuick 2.0
+import QtQuick 2.11
+import org.kde.kirigami 2.7 as Kirigami
 import org.calligra 1.0
 import "../components"
 
@@ -27,7 +28,7 @@ Item {
     anchors.fill: parent;
     enabled: (visible && opacity > 0.0);
     opacity: 0;
-    Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+    Behavior on opacity { NumberAnimation { duration: Kirigami.Units.shortDuration; } }
     MouseArea { anchors.fill: parent; onClicked: {} }
     SimpleTouchArea { anchors.fill: parent; onTouched: {} }
     Rectangle {
@@ -134,7 +135,7 @@ Item {
                             Rectangle {
                                 anchors.fill: parent;
                                 opacity: parent.pressed ? 0.6 : 0;
-                                Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+                                Behavior on opacity { NumberAnimation { duration: Kirigami.Units.shortDuration; } }
                                 radius: Settings.theme.adjustedPixel(8);
                                 color: "#00adf5";
                             }

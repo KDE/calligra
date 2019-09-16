@@ -17,6 +17,7 @@
  */
 
 import QtQuick 2.0
+import org.kde.kirigami 2.7 as Kirigami
 import "components"
 import org.kde.calligra 1.0 as Calligra
 
@@ -206,7 +207,7 @@ Item {
                 Rectangle {
                     anchors.fill: parent;
                     opacity: index === stageDocument.currentIndex ? 0.6 : 0;
-                    Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+                    Behavior on opacity { NumberAnimation { duration: Kirigami.Units.shortDuration; } }
                     color: "#00adf5";
                 }
                 Label {

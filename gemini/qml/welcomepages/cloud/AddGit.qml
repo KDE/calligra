@@ -19,19 +19,20 @@
 import QtQuick 2.0
 import org.calligra 1.0
 import QtQuick.Controls 2.2 as QtControls
+import org.kde.kirigami 2.7 as Kirigami
 
 Rectangle {
     anchors.fill: parent;
-    anchors.margins: Settings.theme.adjustedPixel(16);
+    anchors.margins: Kirigami.Units.largeSpacing * 2;
     property string serviceName: "";
     property Component addEmpty;
-    radius: Settings.theme.adjustedPixel(8);
+    radius: Kirigami.Units.largeSpacing;
     color: "white";
     Rectangle {
         anchors {
             fill: parent;
-            margins: -Settings.theme.adjustedPixel(16);
-            topMargin: -(Settings.theme.adjustedPixel(8) + Constants.GridHeight * 1.5);
+            margins: -Kirigami.Units.largeSpacing * 2;
+            topMargin: -(Kirigami.Units.largeSpacing + Kirigami.Units.gridUnit * 1.5);
         }
         opacity: 0.5;
         color: "white";
@@ -44,7 +45,7 @@ Rectangle {
             left: parent.left;
             right: parent.right;
             bottom: closeButton.top;
-            margins: Settings.theme.adjustedPixel(8);
+            margins: Kirigami.Units.largeSpacing;
         }
         source: "git/createCheckoutContainer.qml";
     }
@@ -53,7 +54,7 @@ Rectangle {
         anchors {
             bottom: parent.bottom;
             right: parent.right;
-            margins: Settings.theme.adjustedPixel(8);
+            margins: Kirigami.Units.largeSpacing;
         }
         text: "Close";
         onClicked: dlgStack.replace(addEmpty);

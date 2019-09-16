@@ -38,7 +38,7 @@ Kirigami.Page {
         Rectangle {
             id: singlePageVisualiser;
             opacity: facingCheck.checked ? 0 : 0.9;
-            Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+            Behavior on opacity { NumberAnimation { duration: Kirigami.Units.shortDuration; } }
             anchors.centerIn: parent;
             property double scale: widthInput.text / heightInput.text;
             property bool landscapeMode: landscapeCheck.checked ? widthInput.text < heightInput.text : heightInput.text < widthInput.text;
@@ -78,7 +78,7 @@ Kirigami.Page {
         Rectangle {
             id: leftPageVisualiser;
             opacity: facingCheck.checked ? 0.9 : 0;
-            Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+            Behavior on opacity { NumberAnimation { duration: Kirigami.Units.shortDuration; } }
             anchors {
                 verticalCenter: parent.verticalCenter;
                 right: parent.horizontalCenter;
@@ -121,7 +121,7 @@ Kirigami.Page {
         Rectangle {
             id: rightPageVisualiser;
             opacity: facingCheck.checked ? 0.9 : 0;
-            Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+            Behavior on opacity { NumberAnimation { duration: Kirigami.Units.shortDuration; } }
             anchors {
                 verticalCenter: parent.verticalCenter;
                 left: parent.horizontalCenter;
@@ -242,9 +242,9 @@ Kirigami.Page {
             Item {
                 width: parent.width;
                 height: opacity > 0 ? childrenRect.height : 0;
-                Behavior on height { PropertyAnimation { duration: Constants.AnimationDuration; } }
+                Behavior on height { NumberAnimation { duration: Kirigami.Units.shortDuration; easing.type: Easing.InOutQuad; } }
                 opacity: paperSizeList.currentIndex === 0 ? 1 : 0;
-                Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+                Behavior on opacity { NumberAnimation { duration: Kirigami.Units.shortDuration; } }
                 clip: true;
                 QtControls.TextField {
                     id: widthInput;

@@ -127,9 +127,9 @@ Item {
             id: newCheckoutServer;
             width: parent.width;
             height: newCheckoutSelector.checked ? Constants.GridHeight : 0;
-            Behavior on height { PropertyAnimation { duration: Constants.AnimationDuration; } }
+            Behavior on height { NumberAnimation { duration: Kirigami.Units.shortDuration; easing.type: Easing.InOutQuad; } }
             opacity: height === 0 ? 0 : 1;
-            Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+            Behavior on opacity { NumberAnimation { duration: Kirigami.Units.shortDuration; } }
             placeholderText: "Clone URL (https or git)";
         }
         QtControls.Button {
@@ -137,7 +137,7 @@ Item {
             onClicked: dlgStack.push(userCredentials);
             text: "Set User Credentials";
         }
-        Kirigami.Label {
+        QtControls.Label {
             id: errorLabel;
             width: parent.width;
             height: cloneAdd.height + Settings.theme.adjustedPixel(16);

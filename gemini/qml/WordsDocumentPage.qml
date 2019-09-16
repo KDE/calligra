@@ -16,7 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-import QtQuick 2.0
+import QtQuick 2.11
+import org.kde.kirigami 2.7 as Kirigami
 import "components"
 import org.kde.calligra 1.0 as Calligra
 
@@ -227,7 +228,7 @@ Item {
                 width: Settings.theme.adjustedPixel(40);
                 source: Settings.theme.icon("intel-Words-Handle-cursor");
                 opacity: wordsCanvas.hasSelection ? 1 : 0;
-                Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+                Behavior on opacity { NumberAnimation { duration: Kirigami.Units.shortDuration; } }
                 x: wordsCanvas.hasSelection ? wordsCanvas.selectionStartPos.x - width / 2 : 0;
                 y: wordsCanvas.hasSelection ? wordsCanvas.selectionStartPos.y - (height - 4) : 0;
                 Rectangle {
@@ -245,7 +246,7 @@ Item {
                 width: Settings.theme.adjustedPixel(40);
                 source: Settings.theme.icon("intel-Words-Handle-cursor");
                 opacity: wordsCanvas.hasSelection ? 1 : 0;
-                Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+                Behavior on opacity { NumberAnimation { duration: Kirigami.Units.shortDuration; } }
                 x: wordsCanvas.hasSelection ? wordsCanvas.selectionEndPos.x - width / 2 : 0;
                 y: wordsCanvas.hasSelection ? wordsCanvas.selectionEndPos.y + (wordsCanvas.selectionEndPos.height - 4) : 0;
                 Rectangle {
@@ -421,7 +422,7 @@ Item {
         }
         ]
     transitions: [ Transition {
-            AnchorAnimation { duration: Constants.AnimationDuration; }
+            AnchorAnimation { duration: Kirigami.Units.shortDuration; easing.type: Easing.InOutQuad; }
         },
         Transition {
             to: "readermode";
@@ -471,7 +472,7 @@ Item {
             verticalTileMode: BorderImage.Stretch;
             source: Settings.theme.image("drop-shadows.png");
             opacity: (base.state === "sidebarShown") ? 1 : 0;
-            Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+            Behavior on opacity { NumberAnimation { duration: Kirigami.Units.shortDuration; } }
             BorderImage {
                 anchors {
                     fill: parent;
@@ -493,14 +494,14 @@ Item {
                 verticalCenter: parent.verticalCenter;
             }
             height: Constants.GridHeight * 2;
-            width: Constants.DefaultMargin * 3;
+            width: Kirigami.Units.largeSpacing * 3;
             clip: true;
             Rectangle {
                 anchors {
                     fill: parent;
                     leftMargin: -(radius + 1);
                 }
-                radius: Constants.DefaultMargin;
+                radius: Kirigami.Units.largeSpacing;
                 color: "#55595e";
                 opacity: 0.5;
             }
@@ -508,7 +509,7 @@ Item {
                 anchors {
                     top: parent.top;
                     bottom: parent.bottom;
-                    margins: Constants.DefaultMargin;
+                    margins: Kirigami.Units.largeSpacing;
                     horizontalCenter: parent.horizontalCenter;
                 }
                 width: 4;
@@ -533,9 +534,9 @@ Item {
         Rectangle {
             anchors {
                 fill: parent;
-                leftMargin: -Constants.DefaultMargin + 1;
+                leftMargin: -Kirigami.Units.largeSpacing + 1;
             }
-            radius: Constants.DefaultMargin;
+            radius: Kirigami.Units.largeSpacing;
             color: "#55595e";
             opacity: 0.5;
             Rectangle {
@@ -628,7 +629,7 @@ Item {
                 Label {
                     anchors {
                         left: parent.left;
-                        leftMargin: Constants.DefaultMargin;
+                        leftMargin: Kirigami.Units.largeSpacing;
                         verticalCenter: parent.verticalCenter;
                     }
                     text: index + 1;
@@ -671,15 +672,15 @@ Item {
         anchors {
             right: parent.right;
             bottom: parent.bottom;
-            margins: Constants.DefaultMargin;
+            margins: Kirigami.Units.largeSpacing;
         }
         opacity: 0;
-        Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+        Behavior on opacity { NumberAnimation { duration: Kirigami.Units.shortDuration; } }
         height: Constants.GridHeight / 2;
         width: Constants.GridWidth;
         Rectangle {
             anchors.fill: parent;
-            radius: Constants.DefaultMargin;
+            radius: Kirigami.Units.largeSpacing;
             color: Settings.theme.color("components/overlay/base");
             opacity: 0.7;
         }
@@ -694,15 +695,15 @@ Item {
         anchors {
             right: parent.right;
             bottom: (pageNumber.opacity > 0) ? pageNumber.top : parent.bottom;
-            margins: Constants.DefaultMargin;
+            margins: Kirigami.Units.largeSpacing;
         }
         opacity: 0;
-        Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+        Behavior on opacity { NumberAnimation { duration: Kirigami.Units.shortDuration; } }
         height: Constants.GridHeight / 2;
         width: Constants.GridWidth;
         Rectangle {
             anchors.fill: parent;
-            radius: Constants.DefaultMargin;
+            radius: Kirigami.Units.largeSpacing;
             color: Settings.theme.color("components/overlay/base");
             opacity: 0.7;
         }

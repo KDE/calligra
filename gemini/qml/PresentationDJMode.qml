@@ -17,6 +17,7 @@
  */
 
 import QtQuick 2.0
+import org.kde.kirigami 2.7 as Kirigami
 import "components"
 import org.calligra 1.0
 import org.kde.calligra 1.0 as Calligra
@@ -73,7 +74,7 @@ Rectangle {
         Image {
             id: fakePieChart;
             opacity: 0;
-            Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+            Behavior on opacity { NumberAnimation { duration: Kirigami.Units.shortDuration; } }
             anchors.fill: parent;
             fillMode: Image.PreserveAspectFit
             source: Settings.theme.image("intel-Stage-Slide-PieChart-Default.svg");
@@ -86,7 +87,7 @@ Rectangle {
         Image {
             id: fakePieChartTapped;
             opacity: 0;
-            Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+            Behavior on opacity { NumberAnimation { duration: Kirigami.Units.shortDuration; } }
             anchors.fill: parent;
             fillMode: Image.PreserveAspectFit
             source: Settings.theme.image("intel-Stage-Slide-PieChart-PieceTappedOn.svg");
@@ -102,12 +103,12 @@ Rectangle {
             opacity: 1;
             color: "#ff0000";
             penWidth: 10;
-            Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+            Behavior on opacity { NumberAnimation { duration: Kirigami.Units.shortDuration; } }
             onPaintingStarted: laserTimer2.stop();
             onPaintingStopped: laserTimer2.start();
             Timer {
                 id: laserTimer;
-                repeat: false; interval: Constants.AnimationDuration;
+                repeat: false; interval: Kirigami.Units.shortDuration;
                 onTriggered: laserScribbler.clear();
             }
             Timer {
@@ -122,10 +123,10 @@ Rectangle {
             opacity: 0;
             color: "#dff03c";
             penWidth: 40;
-            Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+            Behavior on opacity { NumberAnimation { duration: Kirigami.Units.shortDuration; } }
             Timer {
                 id: scribbleTimer;
-                repeat: false; interval: Constants.AnimationDuration;
+                repeat: false; interval: Kirigami.Units.shortDuration;
                 onTriggered: scribbler.clear();
             }
         }
@@ -217,10 +218,10 @@ Rectangle {
         anchors {
             left: parent.left;
             bottom: parent.bottom;
-            margins: Constants.DefaultMargin;
+            margins: Kirigami.Units.largeSpacing;
         }
         height: Settings.theme.adjustedPixel(136);
-        spacing: Constants.DefaultMargin;
+        spacing: Kirigami.Units.largeSpacing;
         Button {
             height: parent.height;
             width: height;
@@ -287,10 +288,10 @@ Rectangle {
         anchors {
             horizontalCenter: parent.horizontalCenter;
             bottom: parent.bottom;
-            margins: Constants.DefaultMargin;
+            margins: Kirigami.Units.largeSpacing;
         }
         height: Settings.theme.adjustedPixel(136);
-        spacing: Constants.DefaultMargin;
+        spacing: Kirigami.Units.largeSpacing;
         Button {
             height: parent.height;
             width: height;
@@ -316,7 +317,7 @@ Rectangle {
         anchors {
             right: parent.right;
             bottom: parent.bottom;
-            margins: Constants.DefaultMargin;
+            margins: Kirigami.Units.largeSpacing;
         }
         height: Settings.theme.adjustedPixel(136);
         width: height;
@@ -328,7 +329,7 @@ Rectangle {
         AnchorChanges { target: fxSidebar; anchors.left: undefined; anchors.right: parent.right; }
     }
     transitions: Transition {
-        AnchorAnimation { duration: Constants.AnimationDuration; }
+        AnchorAnimation { duration: Kirigami.Units.shortDuration; easing.type: Easing.InOutQuad; }
     }
     Item {
         id: fxSidebar;
@@ -413,7 +414,7 @@ Rectangle {
                     Rectangle {
                         anchors.fill: parent;
                         opacity: parent.pressed ? 0.6 : 0;
-                        Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+                        Behavior on opacity { NumberAnimation { duration: Kirigami.Units.shortDuration; } }
                         radius: Settings.theme.adjustedPixel(8);
                         color: "#00adf5";
                     }
@@ -431,7 +432,7 @@ Rectangle {
                         left: parent.left;
                         right: parent.right;
                         bottom: parent.bottom;
-                        margins: Constants.DefaultMargin;
+                        margins: Kirigami.Units.largeSpacing;
                     }
                     height: font.pixelSize;
                     horizontalAlignment: Text.AlignHCenter;

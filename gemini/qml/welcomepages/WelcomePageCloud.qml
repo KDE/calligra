@@ -180,7 +180,7 @@ Kirigami.ScrollablePage {
             horizontalAlignment: Text.AlignHCenter;
             verticalAlignment: Text.AlignVCenter;
             opacity: cloudAccounts.count === 0 ? 1 : 0;
-            Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+            Behavior on opacity { NumberAnimation { duration: Kirigami.Units.shortDuration; } }
         }
         PageStack {
             id: dlgStack;

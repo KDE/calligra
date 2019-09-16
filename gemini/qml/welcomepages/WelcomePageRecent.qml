@@ -34,9 +34,8 @@ Kirigami.ScrollablePage {
     }
     GridView {
         id: docList;
-        contentWidth: width;
-        cellWidth: width / 4 - Kirigami.Units.largeSpacing;
-        cellHeight: cellWidth + Settings.theme.font("templateLabel").pixelSize + Kirigami.Units.largeSpacing * 4;
+        cellWidth: width / 4;
+        cellHeight: cellWidth + Settings.theme.font("templateLabel").pixelSize;
         model: RecentFilesModel { recentFileManager: RecentFileManager; }
         delegate: documentTile;
         Label {
@@ -52,8 +51,6 @@ Kirigami.ScrollablePage {
     Component {
         id: documentTile;
         DocumentTile {
-            width: docList.cellWidth;
-            height: docList.cellHeight;
             filePath: model.url;
             imageUrl: model.image;
             title: model.text != "" ? model.text : "";

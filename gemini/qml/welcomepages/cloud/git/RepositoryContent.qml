@@ -95,7 +95,7 @@ Item {
             Behavior on opacity {
                 SequentialAnimation {
                     ScriptAction { script: pullInProgress.running = false; }
-                    PropertyAnimation { duration: Constants.AnimationDuration; }
+                    NumberAnimation { duration: Kirigami.Units.shortDuration; easing.type: Easing.InOutQuad; }
                     ScriptAction { script: hideUpdate.start(); }
                 }
             }
@@ -203,7 +203,7 @@ Item {
     Item {
         anchors.fill: parent;
         opacity: pullInProgress.running ? 1 : 0;
-        Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+        Behavior on opacity { NumberAnimation { duration: Kirigami.Units.shortDuration; } }
         Rectangle {
             anchors.fill: parent;
             opacity: 0.7;

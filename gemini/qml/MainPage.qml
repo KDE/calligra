@@ -89,7 +89,7 @@ Kirigami.Page {
             right: parent.right;
         }
         opacity: viewLoader.item ? viewLoader.item.toolbarOpacity : 1;
-        Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+        Behavior on opacity { NumberAnimation { duration: Kirigami.Units.shortDuration; } }
         height: Settings.theme.adjustedPixel(86);
         MouseArea {
             anchors.fill: parent;
@@ -133,10 +133,10 @@ Kirigami.Page {
             Image {
                 anchors {
                     right: parent.right;
-                    rightMargin: Constants.DefaultMargin;
+                    rightMargin: Kirigami.Units.largeSpacing;
                     verticalCenter: parent.verticalCenter;
                 }
-                height: Settings.theme.adjustedPixel(86) - Constants.DefaultMargin * 2;
+                height: Settings.theme.adjustedPixel(86) - Kirigami.Units.largeSpacing * 2;
                 width: height;
                 source: Settings.theme.icon("Calligra-MockIcon-1");
                 sourceSize.width: width > height ? height : width;
@@ -218,7 +218,7 @@ Kirigami.Page {
             height: Settings.theme.adjustedPixel(54);
             spacing: Settings.theme.adjustedPixel(4);
             opacity: (toolManager.currentTool !== null && toolManager.currentTool.toolId() === "TextToolFactory_ID") ? 1 : 0;
-            Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+            Behavior on opacity { NumberAnimation { duration: Kirigami.Units.shortDuration; } }
             Button {
                 id: textStyleButton;
                 image: Settings.theme.icon("SVG-Icon-TextStyle-1");
@@ -231,12 +231,12 @@ Kirigami.Page {
                 Rectangle {
                     anchors.horizontalCenter: parent.horizontalCenter;
                     anchors.top: parent.bottom;
-                    height: Constants.DefaultMargin;
+                    height: Kirigami.Units.largeSpacing;
                     width: height;
                     color: "#e8e9ea";
                     rotation: 45;
                     opacity: parent.checked ? 1 : 0;
-                    Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+                    Behavior on opacity { NumberAnimation { duration: Kirigami.Units.shortDuration; } }
                 }
                 TextStylePanel {
                     id: textStylePanel;
@@ -320,7 +320,7 @@ Kirigami.Page {
             height: Settings.theme.adjustedPixel(54);
             spacing: Settings.theme.adjustedPixel(4);
             opacity: (toolManager.currentTool !== null && toolManager.currentTool.toolId() === "InteractionTool") ? 1 : 0;
-            Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+            Behavior on opacity { NumberAnimation { duration: Kirigami.Units.shortDuration; } }
             Button {
                 image: Settings.theme.icon("SVG-Icon-Image");
                 imageMargin: 4;
@@ -368,12 +368,12 @@ Kirigami.Page {
                 Rectangle {
                     anchors.horizontalCenter: parent.horizontalCenter;
                     anchors.top: parent.bottom;
-                    height: Constants.DefaultMargin;
+                    height: Kirigami.Units.largeSpacing;
                     width: height;
                     color: "#22282f";
                     rotation: 45;
                     opacity: parent.checked ? 0.96 : 0;
-                    Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+                    Behavior on opacity { NumberAnimation { duration: Kirigami.Units.shortDuration; } }
                 }
                 ImageToolsPanel { canvas: viewLoader.item && viewLoader.item.canvas ? viewLoader.item.canvas : null; }
             }
@@ -434,12 +434,12 @@ Kirigami.Page {
                 Rectangle {
                     anchors.horizontalCenter: parent.horizontalCenter;
                     anchors.top: parent.bottom;
-                    height: Constants.DefaultMargin;
+                    height: Kirigami.Units.largeSpacing;
                     width: height;
                     color: "#4e5359";
                     rotation: 45;
                     opacity: parent.checked ? 0.96 : 0;
-                    Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+                    Behavior on opacity { NumberAnimation { duration: Kirigami.Units.shortDuration; } }
                 }
                 OptionsPanel { onInteractionStarted: closeToolbarMenus(); }
             }
@@ -470,12 +470,12 @@ Kirigami.Page {
                 Rectangle {
                     anchors.horizontalCenter: parent.horizontalCenter;
                     anchors.top: parent.bottom;
-                    height: Constants.DefaultMargin;
+                    height: Kirigami.Units.largeSpacing;
                     width: height;
                     color: "#e8e9ea";
                     rotation: 45;
                     opacity: parent.checked ? 1 : 0;
-                    Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+                    Behavior on opacity { NumberAnimation { duration: Kirigami.Units.shortDuration; } }
                 }
                 NotesPanel {
                     id: notesPanel;
@@ -503,12 +503,12 @@ Kirigami.Page {
                 Rectangle {
                     anchors.horizontalCenter: parent.horizontalCenter;
                     anchors.top: parent.bottom;
-                    height: Constants.DefaultMargin + 2;
+                    height: Kirigami.Units.largeSpacing + 2;
                     width: height;
                     color: "#4e5359";
                     rotation: 45;
                     opacity: parent.checked ? 0.96 : 0;
-                    Behavior on opacity { PropertyAnimation { duration: Constants.AnimationDuration; } }
+                    Behavior on opacity { NumberAnimation { duration: Kirigami.Units.shortDuration; } }
                 }
             }
         }

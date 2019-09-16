@@ -72,7 +72,7 @@ Kirigami.ScrollablePage {
         id: stageFlickable;
         anchors {
             fill: parent;
-            margins: Constants.DefaultMargin;
+            margins: Kirigami.Units.largeSpacing;
             topMargin: Constants.GridHeight * 1.5;
             bottomMargin: 0;
         }
@@ -81,19 +81,19 @@ Kirigami.ScrollablePage {
         clip: true;
         Flow {
             id: templatesFlow;
-            width: base.width - Constants.DefaultMargin * 2;
-            spacing: Constants.DefaultMargin * 3;
+            width: base.width - Kirigami.Units.largeSpacing * 2;
+            spacing: Kirigami.Units.largeSpacing * 3;
             Repeater {
                 id: stageTemplatesRepeater;
                 model: stageTemplates;
                 Column {
-                    width: (templatesFlow.width / 4) - Constants.DefaultMargin * 3;
+                    width: (templatesFlow.width / 4) - Kirigami.Units.largeSpacing * 3;
                     height: width * 0.7;
-                    spacing: Constants.DefaultMargin;
+                    spacing: Kirigami.Units.largeSpacing;
                     Image {
                         source: model.thumbnail ? model.thumbnail : "";
                         width: parent.width;
-                        height: parent.height - templateName.height - Constants.DefaultMargin;
+                        height: parent.height - templateName.height - Kirigami.Units.largeSpacing;
                         fillMode: Image.PreserveAspectFit;
                         smooth: true;
                         Rectangle {
@@ -109,17 +109,17 @@ Kirigami.ScrollablePage {
                             anchors {
                                 bottom: parent.bottom;
                                 right: parent.right;
-                                margins: Constants.DefaultMargin;
+                                margins: Kirigami.Units.largeSpacing;
                             }
-                            height: Constants.DefaultMargin * 2;
-                            spacing: Constants.DefaultMargin;
+                            height: Kirigami.Units.largeSpacing * 2;
+                            spacing: Kirigami.Units.largeSpacing;
                             property QtObject colorModel: model.variants;
                             Repeater {
                                 model: parent.colorModel;
                                 Rectangle {
-                                    height: Constants.DefaultMargin * 2;
+                                    height: Kirigami.Units.largeSpacing * 2;
                                     width: height;
-                                    radius: Constants.DefaultMargin;
+                                    radius: Kirigami.Units.largeSpacing;
                                     color: model.color;
                                 }
                             }
