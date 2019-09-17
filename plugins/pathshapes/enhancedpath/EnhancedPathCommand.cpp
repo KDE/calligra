@@ -64,8 +64,11 @@ bool EnhancedPathCommand::execute()
         break;
     // line from current point (x y) +
     case 'L':
-        foreach(const QPointF &point, points)
+        // There exists a problem on msvc with for(each) and QVector<QPointF>
+        for (int i = 0; i < points.count(); ++i) {
+            const QPointF &point(points[i]);
             m_parent->lineTo(point);
+        }
         break;
     // cubic bezier curve from current point (x1 y1 x2 y2 x y) +
     case 'C':
@@ -172,7 +175,9 @@ bool EnhancedPathCommand::execute()
     case 'X': {
         KoPathPoint * lastPoint = lastPathPoint();
         bool xDir = true;
-        foreach (const QPointF &point, points) {
+        // There exists a problem on msvc with for(each) and QVector<QPointF>
+        for (int i = 0; i < points.count(); ++i) {
+            const QPointF &point(points[i]);
             qreal rx = point.x() - lastPoint->point().x();
             qreal ry = point.y() - lastPoint->point().y();
             qreal startAngle = xDir ? (ry > 0.0 ? 90.0 : 270.0) : (rx < 0.0 ? 0.0 : 180.0);
@@ -186,7 +191,9 @@ bool EnhancedPathCommand::execute()
     case 'Y': {
         KoPathPoint * lastPoint = lastPathPoint();
         bool xDir = false;
-        foreach (const QPointF &point, points) {
+        // There exists a problem on msvc with for(each) and QVector<QPointF>
+        for (int i = 0; i < points.count(); ++i) {
+            const QPointF &point(points[i]);
             qreal rx = point.x() - lastPoint->point().x();
             qreal ry = point.y() - lastPoint->point().y();
             qreal startAngle = xDir ? (ry > 0.0 ? 90.0 : 270.0) : (rx < 0.0 ? 0.0 : 180.0);

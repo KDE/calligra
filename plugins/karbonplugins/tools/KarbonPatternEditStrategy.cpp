@@ -162,7 +162,9 @@ void KarbonPatternEditStrategy::paint(QPainter &painter, const KoViewConverter &
 bool KarbonPatternEditStrategy::selectHandle(const QPointF &mousePos, const KoViewConverter &converter)
 {
     int handleIndex = 0;
-    foreach(const QPointF & handle, m_handles) {
+    // There exists a problem on msvc with for(each) and QVector<QPointF>
+    for (int i = 0; i < m_handles.count(); ++i) {
+        const QPointF &handle(m_handles[i]);
         if (mouseInsideHandle(mousePos, m_matrix.map(m_origin + handle), converter)) {
             m_selectedHandle = handleIndex;
             return true;

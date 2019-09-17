@@ -93,7 +93,9 @@ bool GradientStrategy::hitHandle(const QPointF &mousePos, const KoViewConverter 
     QRectF roi = grabRect(converter);
 
     int handleIndex = 0;
-    foreach(const QPointF & handle, m_handles) {
+    // There exists a problem on msvc with for(each) and QVector<QPointF>
+    for (int i = 0; i < m_handles.count(); ++i) {
+        const QPointF &handle(m_handles[i]);
         roi.moveCenter(m_matrix.map(handle));
         if (roi.contains(mousePos)) {
             if (select)
@@ -202,8 +204,11 @@ void GradientStrategy::paint(QPainter &painter, const KoViewConverter &converter
         paintStops(painter, converter);
 
     // draw the gradient handles
-    foreach(const QPointF & handle, m_handles)
-    paintHandle(painter, converter, m_matrix.map(handle));
+    // There exists a problem on msvc with for(each) and QVector<QPointF>
+    for (int i = 0; i < m_handles.count(); ++i) {
+        const QPointF &handle(m_handles[i]);
+        paintHandle(painter, converter, m_matrix.map(handle));
+    }
 }
 
 qreal GradientStrategy::projectToGradientLine(const QPointF &point)
