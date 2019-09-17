@@ -353,7 +353,9 @@ void WMFImportParser::drawPolyline(Libwmf::WmfDeviceContext &context, const QPol
         return;
 
     QPointF p;
-    foreach(const QPoint &point, pa) {
+    // There exists a problem on msvc with for(each) and QVector<QPoint>
+    for (int i = 0; i < pa.count(); ++i) {
+        const QPoint &point(pa[i]);
         p = coord(point);
         points += QString("%1,%2 ").arg(p.x()).arg(p.y());
     }
@@ -377,7 +379,9 @@ void WMFImportParser::drawPolygon(Libwmf::WmfDeviceContext &context, const QPoly
         return;
 
     QPointF p;
-    foreach(const QPoint &point, pa) {
+    // There exists a problem on msvc with for(each) and QVector<QPoint>
+    for (int i = 0; i < pa.count(); ++i) {
+        const QPoint &point(pa[i]);
         p = coord(point);
         points += QString("%1,%2 ").arg(p.x()).arg(p.y());
     }
