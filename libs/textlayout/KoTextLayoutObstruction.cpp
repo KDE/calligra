@@ -182,10 +182,10 @@ void KoTextLayoutObstruction::init(const QTransform &matrix, const QPainterPath 
 
     // Now we need to change the path into a polygon for easier handling later on
     m_polygon = path.toFillPolygon();
-    QPointF prev = *(m_polygon.begin());
+    QPointF &prev(m_polygon.first());
     // There exists a problem on msvc with for(each) and QVector<QPointF>
     for (int i = 0; i < m_polygon.count(); ++i) {
-        const QPointF vtx(m_polygon[i]);
+        const QPointF &vtx(m_polygon[i]);
         if (vtx.x() == prev.x() && vtx.y() == prev.y())
             continue;
         QLineF line;
