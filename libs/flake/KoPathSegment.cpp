@@ -254,7 +254,9 @@ public:
     void printDebug() const
     {
         int index = 0;
-        foreach (const QPointF &p, points) {
+        // There exists a problem on msvc with for(each) and QVector<QPointF>
+        for (int i = 0; i < points.count(); ++i) {
+            const QPointF p(points[i]);
             debugFlake << QString("P%1 ").arg(index++) << p;
         }
     }
@@ -705,7 +707,9 @@ QRectF KoPathSegment::controlPointRect() const
 
     const QVector<QPointF> points = controlPoints();
     QRectF bbox(points.first(), points.first());
-    foreach(const QPointF &p, points) {
+    // There exists a problem on msvc with for(each) and QVector<QPointF>
+    for (int i = 0; i < points.count(); ++i) {
+        const QPointF p(points[i]);
         bbox.setLeft(qMin(bbox.left(), p.x()));
         bbox.setRight(qMax(bbox.right(), p.x()));
         bbox.setTop(qMin(bbox.top(), p.y()));
@@ -742,7 +746,7 @@ QRectF KoPathSegment::boundingRect() const
          * was found in comp.graphics.algorithms:
          * Use the points at the extrema of the curve to calculate the AABB.
          */
-        foreach (qreal t, d->extrema()) {
+        for (qreal t : d->extrema()) {
             if (t >= 0.0 && t <= 1.0) {
                 QPointF p = pointAt(t);
                 rect.setLeft(qMin(rect.left(), p.x()));
@@ -1145,7 +1149,7 @@ bool KoPathSegment::isFlat(qreal tolerance) const
     qreal minDist = 0.0;
     qreal maxDist = 0.0;
 
-    foreach (qreal t, s.d->extrema()) {
+    for (qreal t : s.d->extrema()) {
         if (t >= 0.0 && t <= 1.0) {
             QPointF p = pointAt(t);
             qreal dist = s.d->distanceFromChord(p);
@@ -1413,7 +1417,7 @@ qreal KoPathSegment::nearestPoint(const QPointF &point) const
     qreal resultParam = 0.0;
 
     // Iterate over the found candidate params.
-    foreach (qreal root, rootParams) {
+    for (qreal root : rootParams) {
         dist = point - pointAt(root);
         oldDistanceSquared = distanceSquared;
         distanceSquared = dist.x() * dist.x() + dist.y() * dist.y();

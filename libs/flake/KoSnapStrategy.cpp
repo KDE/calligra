@@ -77,9 +77,11 @@ bool OrthogonalSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy * pr
     qreal minHorzDist = HUGE_VAL;
 
     QList<KoShape*> shapes = proxy->shapes();
-    foreach(KoShape * shape, shapes) {
+    for (KoShape * shape : shapes) {
         QVector<QPointF> points = proxy->pointsFromShape(shape);
-        foreach (const QPointF &point, points) {
+        // There exists a problem on msvc with for(each) and QVector<QPointF>
+        for (int i = 0; i < points.count(); ++i) {
+            const QPointF point(points[i]);
             qreal dx = fabs(point.x() - mousePosition.x());
             if (dx < minHorzDist && dx < maxSnapDistance) {
                 minHorzDist = dx;
@@ -145,7 +147,9 @@ bool NodeSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy * proxy, q
     QVector<QPointF> points = proxy->pointsInRect(rect);
     QPointF snappedPoint = mousePosition;
 
-    foreach (const QPointF &point, points) {
+    // There exists a problem on msvc with for(each) and QVector<QPointF>
+    for (int i = 0; i < points.count(); ++i) {
+        const QPointF point(points[i]);
         qreal distance = squareDistance(mousePosition, point);
         if (distance < maxDistance && distance < minDistance) {
             snappedPoint = point;
@@ -184,7 +188,7 @@ bool ExtensionSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy * pro
 
     QList<KoShape*> shapes = proxy->shapes(true);
 
-    foreach(KoShape * shape, shapes) {
+    for (KoShape * shape : shapes) {
         KoPathShape * path = dynamic_cast<KoPathShape*>(shape);
         if (! path) {
             continue;
@@ -285,7 +289,7 @@ bool ExtensionSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy * pro
 QPainterPath ExtensionSnapStrategy::decoration(const KoViewConverter &/*converter*/) const
 {
     QPainterPath decoration;
-    foreach (const QLineF &line, m_lines) {
+    for (const QLineF &line : m_lines) {
         decoration.moveTo(line.p1());
         decoration.lineTo(line.p2());
     }
@@ -390,7 +394,9 @@ bool IntersectionSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy *p
         const KoPathSegment &s1 = segments[i];
         for (int j = i + 1; j < segmentCount; ++j) {
             QVector<QPointF> isects = s1.intersections(segments[j]);
-            foreach(const QPointF &point, isects) {
+            // There exists a problem on msvc with for(each) and QVector<QPointF>
+            for (int a = 0; a < isects.count(); ++a) {
+                const QPointF& point(isects[a]);
                 if (! rect.contains(point))
                     continue;
                 qreal distance = squareDistance(mousePosition, point);
@@ -506,7 +512,7 @@ bool BoundingBoxSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy *pr
     };
 
     QList<KoShape*> shapes = proxy->shapesInRect(rect, true);
-    foreach(KoShape * shape, shapes) {
+    for (KoShape * shape : shapes) {
         qreal shapeMinDistance = HUGE_VAL;
         // first check the corner and center points
         for (int i = 0; i < 5; ++i) {
@@ -586,7 +592,7 @@ bool LineGuideSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy * pro
     m_orientation = 0;
 
     qreal minHorzDistance = maxSnapDistance;
-    foreach(qreal guidePos, guidesData->horizontalGuideLines()) {
+    for (qreal guidePos : guidesData->horizontalGuideLines()) {
         qreal distance = qAbs(guidePos - mousePosition.y());
         if (distance < minHorzDistance) {
             snappedPoint.setY(guidePos);
@@ -595,7 +601,7 @@ bool LineGuideSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy * pro
         }
     }
     qreal minVertSnapDistance = maxSnapDistance;
-    foreach(qreal guidePos, guidesData->verticalGuideLines()) {
+    for (qreal guidePos : guidesData->verticalGuideLines()) {
         qreal distance = qAbs(guidePos - mousePosition.x());
         if (distance < minVertSnapDistance) {
             snappedPoint.setX(guidePos);

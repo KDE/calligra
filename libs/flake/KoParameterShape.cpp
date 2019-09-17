@@ -89,9 +89,9 @@ void KoParameterShape::paintHandles(QPainter & painter, const KoViewConverter & 
     QPolygonF poly(d->handleRect(QPointF(0, 0), handleRadius));
     poly = matrix.map(poly);
 
-    QVector<QPointF>::const_iterator it(d->handles.constBegin());
-    for (; it != d->handles.constEnd(); ++it) {
-        QPointF moveVector = worldMatrix.map(*it);
+    // There exists a problem on msvc with for(each) and QVector<QPointF>
+    for (int i = 0; i < d->handles.count(); ++i) {
+        const QPointF moveVector = worldMatrix.map(d->handles[i]);
         poly.translate(moveVector.x(), moveVector.y());
         painter.drawPolygon(poly);
         poly.translate(-moveVector.x(), -moveVector.y());
