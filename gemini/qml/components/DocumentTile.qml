@@ -27,6 +27,7 @@ Item {
     property string filePath;
     property string imageUrl: "image://recentimage/" + component.filePath;
     property string title;
+    property alias enabled: mouseArea.enabled;
     width: GridView.view.cellWidth; height: GridView.view.cellHeight
     Item {
         anchors {
@@ -77,6 +78,7 @@ Item {
         text: component.title;
     }
     MouseArea {
+        id: mouseArea
         anchors.fill: parent;
         onClicked: component.clicked();
     }
