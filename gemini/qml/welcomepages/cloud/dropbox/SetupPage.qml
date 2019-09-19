@@ -16,117 +16,49 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-import QtQuick 2.0
+import QtQuick 2.11
+import QtQuick.Controls 2.5 as QtControls
+import org.kde.kirigami 2.7 as Kirigami
 import Calligra.Gemini.Dropbox 1.0
-import QtQuick.Controls 1.4 as QtControls
-import org.kde.kirigami 2.1 as Kirigami
 import "../../../components"
 
-Item {
-    anchors.fill: parent;
-    clip: true;
-    Rectangle {
-        anchors.fill: parent;
-        opacity: 0.6;
+Kirigami.FormLayout {
+    id: component
+    QtControls.Label {
+        visible: !controllerMIT.needAuthenticate;
+        wrapMode: Text.Wrap;
+        text: "You are already signed into DropBox, and we only support one DropBox account. To sign in as another user, please click on the button above to sign out of your current account first.";
     }
-    Item {
-        id: header;
-        anchors {
-            top: parent.top;
-            left: parent.left;
-            right: parent.right;
-        }
-        height: Settings.theme.adjustedPixel(64);
+    Kirigami.Separator {
+        visible: !controllerMIT.needAuthenticate;
+        Kirigami.FormData.isSection: true
     }
-    Item {
-        anchors {
-            left: parent.left;
-            right: parent.right;
-            top: header.bottom;
+    QtControls.Button {
+        visible: !controllerMIT.needAuthenticate;
+        Kirigami.FormData.label: "Log out of DropBox?"
+        text: "Log Out"
+        onClicked: {
+            if (!controllerMIT.is_transfer()) {
+                controllerMIT.logout();
+            } else {
+                applicationWindow().showPassiveNotification("Please complete the upload/download tasks in Files Transfer before Sign out.");
+                dlgLoader.item.close();
+            }
         }
-        height: Constants.GridHeight;
+    }
 
-        CohereButton {
-            anchors.centerIn: parent;
-            textColor: "#5b6573";
-            textSize: Settings.theme.adjustedPixel(18);
-            color: "#D2D4D5";
-            text: controllerMIT.needAuthenticate ? "Log in to DropBox" : "Log out of DropBox";
-            onClicked: {
-                if(controllerMIT.needAuthenticate) {
-                    pageStack.push( loginPage );
-                }
-                else {
-                    signOutNow();
-                }
-            }
-            Kirigami.Label {
-                anchors {
-                    top: parent.bottom;
-                    topMargin: Settings.theme.adjustedPixel(16);
-                    horizontalCenter: parent.horizontalCenter;
-                }
-                visible: !controllerMIT.needAuthenticate;
-                width: parent.parent.width / 2;
-                height: font.pixelSize * 6;
-                horizontalAlignment: Text.AlignHCenter;
-                verticalAlignment: Text.AlignTop;
-                wrapMode: Text.Wrap;
-                text: "You are already signed into DropBox, and we only support one DropBox account. To sign in as another user, please click on the button above to sign out of your current account first.";
-            }
+    QtControls.Button {
+        visible: controllerMIT.needAuthenticate
+        text: "Log in to DropBox";
+        onClicked: {
+            dlgLoader.item.close();
+            pageStack.push(loginPage);
         }
     }
     Component {
         id: loginPage;
         LoginPage { }
     }
-    Page {
-        id: signoutconfirmationDlg
-        //PageHeader { title: "Log Out" }
-        Rectangle {
-            anchors.fill: parent;
-            anchors.margins: Settings.theme.adjustedPixel(16);
-            radius: Settings.theme.adjustedPixel(8);
-            color: "white";
-            Kirigami.Label {
-                anchors {
-                    bottom: signoutButtonsRow.top;
-                    left: parent.left;
-                    right: parent.right;
-                    margins: Constants.DefaultMargin;
-                }
-                wrapMode: Text.Wrap
-                horizontalAlignment: Text.AlignHCenter
-                text: "Do you really want to log out of DropBox?"
-            }
-            Row {
-                id: signoutButtonsRow;
-                anchors.centerIn: parent;
-                width: childrenRect.width;
-                spacing: Settings.theme.adjustedPixel(8);
-                QtControls.Button {
-                    text: "Yes"
-                    onClicked: {
-                        controllerMIT.logout()
-                        pageStack.pop()
-                    }
-                }
-                QtControls.Button {
-                    text: "No"
-                    onClicked: {
-                        pageStack.pop()
-                    }
-                }
-            }
-        }
-    }
 
     InfoBanner { id: i_infobanner; }
-    function signOutNow(){
-        if (!controllerMIT.is_transfer()){
-            pageStack.push(signoutconfirmationDlg)
-        }else{
-            i_infobanner.show("Please complete the upload/download tasks in Files Transfer before Sign out.");
-        }
-    }
 }

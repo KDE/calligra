@@ -16,10 +16,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-import QtQuick 2.0
+import QtQuick 2.11
+import QtQuick.Controls 2.5 as QtControls
 import QtWebEngine 1.5
-import org.kde.kirigami 2.1 as Kirigami
-import QtQuick.Controls 1.4 as QtControls
 
 WebEngineView {
     id: webView
@@ -34,7 +33,7 @@ WebEngineView {
         }
     }
 
-    Kirigami.Label {
+    QtControls.Label {
         id: tryingText
         anchors.centerIn: parent;
         text: "Trying to load login page..."

@@ -16,11 +16,12 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-import QtQuick 2.0
+import QtQuick 2.11
+import org.kde.kirigami 2.7 as Kirigami
 import "../../../components"
 
-Page {
-    anchors.fill: parent
+Kirigami.Page {
+    title: "DropBox Login"
 
     property string urlString : "https://www.dropbox.com/1/oauth/authorize?display=mobile&oauth_token="+ controllerMIT.oauth_token
 
@@ -34,17 +35,15 @@ Page {
         source: "DropboxWebView.qml"
         onStatusChanged: {
             if(status === Loader.Error) {
-                i_infobanner.show("Failed to load Web View component.");
+                applicationWindow().showPassiveNotification("Failed to load Web View component.");
             }
         }
     }
 
-    InfoBanner { id: i_infobanner; }
-
     Connections {
         target: controllerMIT
         onNetwork_error : {
-            i_infobanner.show(error);
+            applicationWindow().showPassiveNotification("Network error while loading DropBox:\n" + error);
             console.debug("Network error while loading DropBox:\n" + error);
         }
         onAuthenticate_finished : {

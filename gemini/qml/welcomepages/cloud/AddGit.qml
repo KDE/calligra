@@ -16,47 +16,19 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-import QtQuick 2.0
-import org.calligra 1.0
-import QtQuick.Controls 2.2 as QtControls
+import QtQuick 2.11
+import QtQuick.Controls 2.5 as QtControls
 import org.kde.kirigami 2.7 as Kirigami
+import org.calligra 1.0
+import "git"
 
-Rectangle {
-    anchors.fill: parent;
-    anchors.margins: Kirigami.Units.largeSpacing * 2;
+Kirigami.OverlaySheet {
+    id: component
     property string serviceName: "";
-    property Component addEmpty;
-    radius: Kirigami.Units.largeSpacing;
-    color: "white";
-    Rectangle {
-        anchors {
-            fill: parent;
-            margins: -Kirigami.Units.largeSpacing * 2;
-            topMargin: -(Kirigami.Units.largeSpacing + Kirigami.Units.gridUnit * 1.5);
-        }
-        opacity: 0.5;
-        color: "white";
-        MouseArea { anchors.fill: parent; onClicked: { /*nothing */ } }
-        SimpleTouchArea { anchors.fill: parent; onTouched: { /*nothing */ } }
+    header: Kirigami.Heading {
+        text: "Add Git Account"
+        width: component.width / 2
     }
-    Loader {
-        anchors {
-            top: parent.top;
-            left: parent.left;
-            right: parent.right;
-            bottom: closeButton.top;
-            margins: Kirigami.Units.largeSpacing;
-        }
-        source: "git/createCheckoutContainer.qml";
-    }
-    QtControls.Button {
-        id: closeButton;
-        anchors {
-            bottom: parent.bottom;
-            right: parent.right;
-            margins: Kirigami.Units.largeSpacing;
-        }
-        text: "Close";
-        onClicked: dlgStack.replace(addEmpty);
+    CreateCheckout {
     }
 }

@@ -16,16 +16,15 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-import QtQuick 2.0
+import QtQuick 2.11
+import QtQuick.Controls 2.5 as QtControls
+import org.kde.kirigami 2.7 as Kirigami
 import org.calligra 1.0
 import Calligra.Gemini.Dropbox 1.0
-import QtQuick.Controls 1.4 as QtControls
-import org.kde.kirigami 2.1 as Kirigami
 import "../../../components"
 
-Item {
-    id: page;
-    property QtObject model: folderListModel;
+GridView {
+    id: component;
     property string title: "";
     property string errorText: "";
     property bool have_checked: false;
@@ -48,215 +47,169 @@ Item {
         property color highlightColor: "grey";
     }
 
-    InfoBanner { id: i_infobanner; }
+    cellWidth: width / 4;
+    cellHeight: cellWidth + Settings.theme.font("templateLabel").pixelSize;
+    model: folderListModel;
+    delegate: itemDelegate;
+    cacheBuffer: 1000
+    header: Item {
+        id: pageHeader;
+        height: currentDir !== "/" ? backToRootButton.height : 0;
+        width: component.width;
+        QtControls.Button {
+            id: backToRootButton;
+            anchors {
+                top: parent.top;
+                margins: fakeTheme.paddingSmall
+            }
+            width: component.width;
+            height: Settings.theme.adjustedPixel(64);
+            opacity: currentDir !== "/" ? 1 : 0;
+            Behavior on opacity{ PropertyAnimation{ duration: Constants.AnimationDuration; } }
+            icon.source: Settings.theme.icon("SVG-Icon-MenuBack-1");
+            text: "Back to parent folder"
+            onClicked: {
+                controllerMIT.backtoRootDir()
+                controllerMIT.getlistoffolder()
+            }
+        }
+    }
+
     Component {
         id: itemDelegate;
-        MouseArea {
-            width: folderListView.cellWidth;
-            height: folderListView.cellHeight;
+        DocumentTile {
             enabled: model.is_dir ? true : Settings.mimeTypeToDocumentClass(model.mime_type) !== DocumentListModel.UnknownType;
-            Rectangle {
-                anchors.fill: parent;
-                opacity: parent.enabled ? 1 : 0.3
-            }
-
-            Image {
-                id: icon;
-                anchors {
-                    top: parent.top;
-                    left: parent.left;
-                    right: parent.right;
-                    margins: Constants.DefaultMargin / 2;
+            imageUrl: model.is_dir ? Settings.theme.icon("layer_group-black") : iconFromDocumentClass(Settings.mimeTypeToDocumentClass(model.mime_type));
+            title: {
+                var nameof = model.path.split("/")
+                var nameof1 = nameof[nameof.length - 1]
+                if(model.is_dir) {
+                    return nameof1;
                 }
-                height: parent.width;
-                fillMode: Image.PreserveAspectFit;
-                smooth: true;
-                asynchronous: true;
-                function iconFromDocumentClass(documentClass) {
-                    switch(documentClass) {
-                        case DocumentListModel.PresentationType:
-                            return Settings.theme.icon("SVG-Icon-NewPresentation-1");
-                            break;
-                        case DocumentListModel.TextDocumentType:
-                            return Settings.theme.icon("SVG-Icon-NewDocument-1");
-                            break;
-                        case DocumentListModel.SpreadsheetType:
-                            return Settings.theme.icon("SVG-Icon-NewSpreadsheet-1");
-                            break;
-                        default:
-                            return Settings.theme.icon("SVG-Icon-Cloud-1");
-                            break;
-                    }
-                }
-                source: model.is_dir ? Settings.theme.icon("layer_group-black") : iconFromDocumentClass(Settings.mimeTypeToDocumentClass(model.mime_type));
-                sourceSize.width: width;
-                sourceSize.height: height;
-            }
-            Kirigami.Label {
-                id: lblName;
-                anchors {
-                    left: parent.left;
-                    right: parent.right;
-                    bottom: parent.bottom;
-                    margins: Constants.DefaultMargin;
-                    bottomMargin: Constants.DefaultMargin * 2;
-                }
-                height: font.pixelSize + Constants.DefaultMargin * 2;
-                horizontalAlignment: Text.AlignHCenter;
-                verticalAlignment: Text.AlignVCenter;
-                text:{
-                    var nameof = model.path.split("/")
-                    var nameof1 = nameof[nameof.length - 1]
-                    if(model.is_dir) {
-                        return nameof1;
-                    }
-                    return "%1 (%2)".arg(nameof1).arg(model.size);
-                }
-                elide: Text.ElideMiddle;
-                font: Settings.theme.font("templateLabel");
-                color: "#5b6573";
+                return "%1 (%2)".arg(nameof1).arg(model.size);
             }
             onClicked: {
-                if(model.is_dir)
-                {
+                if (model.is_dir) {
                     controllerMIT.setFolderRoot(model.path)
                     controllerMIT.getlistoffolder()
-                }
-                else
-                {
+                } else {
                     controllerMIT.setCheck(index, true);
                     controllerMIT.downloadSelectedFiles();
                     var nameof = model.path.split("/");
-                    page.downloadWasRequested = true;
-                    page.fileName = nameof[nameof.length - 1];
-                    page.fileMimetype = model.mime_type;
-                    pageStack.push(downloadStatus);
+                    component.downloadWasRequested = true;
+                    component.fileName = nameof[nameof.length - 1];
+                    component.fileMimetype = model.mime_type;
+                    applicationWindow().pageStack.push(downloadStatus);
                     controllerMIT.start_transfer_process();
                 }
             }
+            function iconFromDocumentClass(documentClass) {
+                switch(documentClass) {
+                    case DocumentListModel.PresentationType:
+                        return Settings.theme.icon("SVG-Icon-NewPresentation-1");
+                        break;
+                    case DocumentListModel.TextDocumentType:
+                        return Settings.theme.icon("SVG-Icon-NewDocument-1");
+                        break;
+                    case DocumentListModel.SpreadsheetType:
+                        return Settings.theme.icon("SVG-Icon-NewSpreadsheet-1");
+                        break;
+                    default:
+                        return Settings.theme.icon("SVG-Icon-Cloud-1");
+                        break;
+                }
+            }
+            Rectangle {
+                anchors.fill: parent;
+                opacity: parent.enabled ? 0 : 0.7
+                color: Kirigami.Theme.backgroundColor
+            }
         }
     }
 
-    Page {
+    Component {
         id: downloadStatus;
-        ListView {
-            id: filestransferListView
-            anchors {
-                fill: parent
-                topMargin: Settings.theme.adjustedPixel(64);
-            }
-            model: filesTransferModel
-            delegate: Item {
-                width: downloadStatus.width
-                height: is_finished ? 0 : childrenRect.height;
-                clip: true;
+        Kirigami.ScrollablePage {
+            id: downloadStatusPage
+            title: "DropBox Download Status"
+            ListView {
+                id: filestransferListView
+                model: filesTransferModel
+                delegate: Item {
+                    width: ListView.view.width
+                    height: is_finished ? 0 : childrenRect.height;
+                    clip: true;
 
-                Column {
-                    id:rec_main
-                    spacing: Constants.DefaultMargin;
-                    height: childrenRect.height;
-                    width: parent.width;
-
-                    Image {
-                        id: i_fstatus
-                        anchors.horizontalCenter: parent.horizontalCenter;
-                        source: Settings.theme.icon("SVG-Icon-Cloud-1"); //is_download ? Settings.theme.image("SVG-Icon-Cloud-1") : "image://theme/icon-s-cloud-upload"
-                    }
-                    Item {
+                    Column {
+                        id:rec_main
+                        spacing: Constants.DefaultMargin;
+                        height: childrenRect.height;
                         width: parent.width;
-                        height: Constants.DefaultMargin;
-                    }
 
-                    Kirigami.Label {
-                        id: l_name
-                        anchors.horizontalCenter: parent.horizontalCenter;
-                        height: font.pixelSize;
-                        text: {
-                            var filename1 = model.filename.split("/");
-                            var filename2 = filename1[filename1.length-1];
-                            return filename2;
+                        Image {
+                            id: i_fstatus
+                            anchors.horizontalCenter: parent.horizontalCenter;
+                            source: Settings.theme.icon("SVG-Icon-Cloud-1"); //is_download ? Settings.theme.image("SVG-Icon-Cloud-1") : "image://theme/icon-s-cloud-upload"
                         }
-                    }
+                        Item {
+                            width: parent.width;
+                            height: Constants.DefaultMargin;
+                        }
 
-                    QtControls.ProgressBar {
-                        id: pb_updown
-                        anchors.horizontalCenter: parent.horizontalCenter;
-                        visible: !is_finished && !in_queue
-                        width: parent.width - 120
-                        height: 18
-                        value: progressing
-                    }
+                        QtControls.Label {
+                            id: l_name
+                            anchors.horizontalCenter: parent.horizontalCenter;
+                            height: font.pixelSize;
+                            text: {
+                                var filename1 = model.filename.split("/");
+                                var filename2 = filename1[filename1.length-1];
+                                return filename2;
+                            }
+                        }
 
-                    Kirigami.Label {
-                        id: lb_updown_total
-                        anchors.horizontalCenter: parent.horizontalCenter;
-                        height: visible ? font.pixelSize : 0;
-                        visible: !is_finished && !in_queue
-                        text:""
-                    }
+                        QtControls.ProgressBar {
+                            id: pb_updown
+                            anchors.horizontalCenter: parent.horizontalCenter;
+                            visible: !is_finished && !in_queue
+                            width: parent.width - 120
+                            height: 18
+                            value: progressing
+                        }
 
-                    Connections {
-                        target: controllerMIT
-                        onProgressBarChanged : {
-                            pb_updown.progress = percent
-                            if (sent_received || speed){
-                                lb_updown_total.text = (is_download?"Received: ":"Sent: ")+__sent_received_calculate(sent_received) + " | Speed: " +__speed_calculate(speed)
-                            }else {
-                                console.debug(lb_updown_total.text);
+                        QtControls.Label {
+                            id: lb_updown_total
+                            anchors.horizontalCenter: parent.horizontalCenter;
+                            height: visible ? font.pixelSize : 0;
+                            visible: !is_finished && !in_queue
+                            text:""
+                        }
+
+                        Connections {
+                            target: controllerMIT
+                            onProgressBarChanged : {
+                                pb_updown.progress = percent
+                                if (sent_received || speed){
+                                    lb_updown_total.text = (is_download?"Received: ":"Sent: ")+__sent_received_calculate(sent_received) + " | Speed: " +__speed_calculate(speed)
+                                }else {
+                                    console.debug(lb_updown_total.text);
+                                }
                             }
                         }
                     }
+                } //end filestransferDeligate
+                onCountChanged: {
+                    filestransferListView.visible = (filestransferListView.model.count !== 0)
+                    //no_transfers.visible = !filestransferListView.model.count
                 }
-            } //end filestransferDeligate
-            onCountChanged: {
-                filestransferListView.visible = (filestransferListView.model.count !== 0)
-                //no_transfers.visible = !filestransferListView.model.count
-            }
-        } //end ListView
-    }
-
-    GridView {
-        id: folderListView
-        visible:false
-        clip: true;
-        contentWidth: width;
-        anchors.fill: parent;
-        cellWidth: width / 4 - Constants.DefaultMargin;
-        cellHeight: cellWidth + Settings.theme.font("templateLabel").pixelSize + Constants.DefaultMargin * 4;
-        model: folderListModel;
-        delegate: itemDelegate;
-        //section.property: "section"
-        cacheBuffer: 1000
-        header: Item {
-            id: pageHeader;
-            height: currentDir !== "/" ? backToRootButton.height : 0;
-            width: page.width;
-            QtControls.Button {
-                id: backToRootButton;
-                anchors {
-                    top: parent.top;
-                    margins: fakeTheme.paddingSmall
-                }
-                width: page.width;
-                height: Settings.theme.adjustedPixel(64);
-                opacity: currentDir !== "/" ? 1 : 0;
-                Behavior on opacity{ PropertyAnimation{ duration: Constants.AnimationDuration; } }
-                iconSource: Settings.theme.icon("SVG-Icon-MenuBack-1");
-                text: "Back to parent folder"
-                onClicked: {
-                    controllerMIT.backtoRootDir()
-                    controllerMIT.getlistoffolder()
-                }
-            }
+            } //end ListView
         }
-        ScrollDecorator { flickableItem: folderListView; }
     }
 
     Item {
         id:this_folder_is_empty
         visible: false
         anchors.fill: parent
-        Kirigami.Label {
+        QtControls.Label {
             anchors.centerIn: parent
             text:"This Folder is Empty"
             color: "grey"
@@ -269,7 +222,7 @@ Item {
         anchors.centerIn: parent
         width: parent.width - fakeTheme.paddingLarge
         height: r_label_x.height + r_button_x.height;
-        Kirigami.Label {
+        QtControls.Label {
             id: r_label_x
             anchors {
                 bottom: r_button_x.top;
@@ -278,7 +231,8 @@ Item {
                 margins: fakeTheme.paddingLarge;
             }
             height: paintedHeight;
-            text: "There was a problem loading your Dropbox. It could be lost connection or a slow network. Check your connection or try again later. The reported error was: " + errorText;
+            text: "There was a problem loading your Dropbox. It could be lost connection or a slow network. Check your connection or try again later. The reported error was:\n" + errorText;
+            horizontalAlignment: Text.AlignHCenter
             wrapMode: Text.Wrap;
         }
         QtControls.Button {
@@ -314,7 +268,6 @@ Item {
 
         onFolderfinished : {
             r_networkerror.visible = false
-            folderListView.visible = true
             b_indicator.visible = false; b_indicator_wrap.visible=false;
             //tb_back.enabled = !controllerMIT.isRootDir()
             //f_fastscroll.test()
@@ -325,27 +278,24 @@ Item {
 
             this_folder_is_empty.visible = folderListModel.count ? false : true
 
-            //folderListView.visible = folderListModel.count ? true : false
-            folderListView.visible = folderListModel.count ? true : true
             folderListView.positionViewAtBeginning();
         }
 
         onNetwork_error : { //error
             //top_banner.havemenu = false
             b_indicator.visible = false; b_indicator_wrap.visible=false;
-            folderListView.visible = false
             errorText = error;
             r_networkerror.visible = true
         }
 
         onNotification : {
-            i_infobanner.show(notification);
+            applicationWindow().showPassiveNotification(notification);
             console.log("notification:"+ notification)
         }
 
         onDelete_selected_items_finished: {
             b_indicator.visible = false; b_indicator_wrap.visible=false;
-            i_infobanner.show(result);
+            applicationWindow().showPassiveNotification(result);
             console.log("onDelete_selected_items_finished:" + result);
         }
 
@@ -355,56 +305,56 @@ Item {
             //top_banner.addDownloadVisible = have_checked
             //top_banner.moveVisible = have_checked
 
-            page.have_checked = have_checked
+            component.have_checked = have_checked
         }
 
         onStopTransfer: {
             if (!controllerMIT.is_push_notification()){
-                i_infobanner.show("Files transfer completed");
+                applicationWindow().showPassiveNotification("Files transfer completed");
             }
 
-            if(page.downloadWasRequested) {
-                page.downloadWasRequested = false;
-                var filePath = controllerMIT.dropboxFolder() + "/" + page.fileName;
-                var docClass = Settings.mimeTypeToDocumentClass(page.fileMimetype);
+            if(component.downloadWasRequested) {
+                component.downloadWasRequested = false;
+                var filePath = controllerMIT.dropboxFolder() + "/" + component.fileName;
+                var docClass = Settings.mimeTypeToDocumentClass(component.fileMimetype);
                 if(docClass !== DocumentListModel.UnknownType) {
                     pageStack.pop();
                     openFile(filePath, controllerMIT.uploadMostRecentAction());
                 }
                 else {
-                    console.log("Unknown file format " + docClass + " for file " + filePath + " with stated mimetype " + page.fileMimetype);
+                    console.log("Unknown file format " + docClass + " for file " + filePath + " with stated mimetype " + component.fileMimetype);
                 }
             }
 
             refreshDir();
 //             switch(docClass) {
 //                 case DocumentListModel.TextDocument:
-//                     pageStack.push(pages.textDocument, { title: page.fileName, path: filePath, mimeType: page.fileMimetype });
+//                     pageStack.push(pages.textDocument, { title: component.fileName, path: filePath, mimeType: component.fileMimetype });
 //                     break;
 //                 case DocumentListModel.SpreadSheetDocument:
-//                     pageStack.push(pages.spreadsheet, { title: page.fileName, path: filePath, mimeType: page.fileMimetype });
+//                     pageStack.push(pages.spreadsheet, { title: component.fileName, path: filePath, mimeType: component.fileMimetype });
 //                     break;
 //                 case DocumentListModel.PresentationDocument:
-//                     pageStack.push(pages.presentation, { title: page.fileName, path: filePath, mimeType: page.fileMimetype });
+//                     pageStack.push(pages.presentation, { title: component.fileName, path: filePath, mimeType: component.fileMimetype });
 //                     break;
 //                 case DocumentListModel.PDFDocument:
-//                     pageStack.push(pages.pdf, { title: page.fileName, path: filePath, mimeType: page.fileMimetype });
+//                     pageStack.push(pages.pdf, { title: component.fileName, path: filePath, mimeType: component.fileMimetype });
 //                     break;
 //                 default:
-//                     console.log("Unknown file format " + docClass + " for file " + filePath + " with stated mimetype " + page.fileMimetype);
+//                     console.log("Unknown file format " + docClass + " for file " + filePath + " with stated mimetype " + component.fileMimetype);
 //                     break;
 //             }
         }
 
         onCreate_folder_finished: {
             b_indicator.visible = false; b_indicator_wrap.visible=false;
-            i_infobanner.show(result);
+            applicationWindow().showPassiveNotification(result);
             console.log("onCreate_folder_finished:" + result)
         }
 
         onRename_folder_finished: {
             b_indicator.visible = false; b_indicator_wrap.visible=false;
-            i_infobanner.show(result);
+            applicationWindow().showPassiveNotification(result);
         }
 
         onMove_files_folders_finished: {
@@ -412,13 +362,13 @@ Item {
             m_is_move = false
             m_is_copy = false
             toolicon_show(true);
-            i_infobanner.show(result);
+            applicationWindow().showPassiveNotification(result);
         }
 
         onShares_finished:{ //result
             b_indicator.visible = false; b_indicator_wrap.visible=false;
             if (!result){
-                i_infobanner.show("Could not create share link, try again later.");
+                applicationWindow().showPassiveNotification("Could not create share link, try again later.");
             }
         }
 
@@ -460,8 +410,8 @@ Item {
 //     CohereButton {
 //         id:tb_back
 //         anchors {
-//             bottom: page.bottom;
-//             right: page.right;
+//             bottom: component.bottom;
+//             right: component.right;
 //         }
 //         enabled: !controllerMIT.isRootDir()
 //         onClicked: {
@@ -476,7 +426,7 @@ Item {
 
     function changeCurrentDir(){
          var maxlength = 30
-         if (page.width > page.height)
+         if (component.width > component.height)
                maxlength = 70
 
          if (!currentDir.length) currentDir = "/"

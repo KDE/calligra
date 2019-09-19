@@ -24,7 +24,7 @@ import "../../components"
 Kirigami.Page {
     id: base;
     property string pageName: "accountsPageGit";
-    title: accountDetails.readProperty("text");
+    title: accountDetails === null ? "" : accountDetails.readProperty("text");
     property QtObject accountDetails: null;
     Loader {
         anchors.fill: parent;

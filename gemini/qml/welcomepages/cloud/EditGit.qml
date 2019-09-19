@@ -16,15 +16,15 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-import QtQuick 2.0
-import QtQuick.Controls 1.4 as QtControls
+import QtQuick 2.11
+import QtQuick.Controls 2.5 as QtControls
+import org.kde.kirigami 2.7 as Kirigami
 import org.calligra 1.0
 import "../../components"
+import "git"
 
-Rectangle {
-    id: base;
-    anchors.fill: parent;
-    anchors.margins: Settings.theme.adjustedPixel(16);
+Kirigami.OverlaySheet {
+    id: component;
     property int accountIndex: -1;
     onAccountIndexChanged: {
         accountDetails = cloudAccounts.accountDetails(accountIndex);
@@ -34,80 +34,68 @@ Rectangle {
         nameField.text = text;
     }
     property QtObject accountDetails;
-    property Component addEmpty;
-    radius: Settings.theme.adjustedPixel(8);
-    color: "white";
-    Rectangle {
-        anchors {
-            fill: parent;
-            margins: -Settings.theme.adjustedPixel(16);
-            topMargin: -(Settings.theme.adjustedPixel(8) + Constants.GridHeight * 1.5);
-        }
-        opacity: 0.5;
-        color: "white";
-        MouseArea { anchors.fill: parent; onClicked: { /*nothing */ } }
-        SimpleTouchArea { anchors.fill: parent; onTouched: { /*nothing */ } }
-    }
-    QtControls.TextField {
-        id: nameField;
-        anchors {
-            verticalCenter: parent.verticalCenter;
-            left: parent.left;
-            right: parent.right;
-            margins: Settings.theme.adjustedPixel(16);
-        }
-        placeholderText: "Account Name";
-    }
-    QtControls.Button {
-        id: credentialsButton;
-        anchors {
-            top: nameField.bottom;
-            right: parent.right;
-            margins: Settings.theme.adjustedPixel(8);
-        }
-        text: "Edit User Credentials";
-        onClicked: {
-            dlgStack.push(userCredentials.item);
-            if(accountDetails.readProperty("userForRemote") !== undefined) {
-                dlgStack.currentPage.userForRemote = accountDetails.readProperty("userForRemote");
-            }
-            if(accountDetails.readProperty("privateKeyFile") !== undefined) {
-                dlgStack.currentPage.privateKeyFile = accountDetails.readProperty("privateKeyFile");
-            }
-            if(accountDetails.readProperty("publicKeyFile") !== undefined) {
-                dlgStack.currentPage.publicKeyFile = accountDetails.readProperty("publicKeyFile");
-            }
-            if(accountDetails.readProperty("needsPrivateKeyPassphrase") !== undefined) {
-                dlgStack.currentPage.needsPrivateKeyPassphrase = accountDetails.readProperty("needsPrivateKeyPassphrase");
-            }
-        }
-    }
-    QtControls.Button {
-        id: okButton;
-        anchors {
-            bottom: parent.bottom;
-            right: cancelButton.left;
-            margins: Settings.theme.adjustedPixel(8);
-        }
-        text: "Save";
-        onClicked: {
-            cloudAccounts.renameAccount(base.accountIndex, nameField.text);
-            dlgStack.replace(addEmpty);
-        }
-    }
-    QtControls.Button {
-        id: cancelButton;
-        anchors {
-            bottom: parent.bottom;
-            right: parent.right;
-            margins: Settings.theme.adjustedPixel(8);
-        }
-        text: "Cancel";
-        onClicked: dlgStack.replace(addEmpty);
+
+    header: Kirigami.Heading {
+        text: "Edit Git Account"
+        width: component.width / 2
     }
 
-    Loader {
-        id: userCredentials;
-        source: "git/userCredentialsContainer.qml"
+    Kirigami.FormLayout {
+        QtControls.TextField {
+            id: nameField;
+            Kirigami.FormData.label: "Account Name";
+        }
+
+        QtControls.Button {
+            onClicked: {
+                dlgLoader.item.close();
+                userCredentials.open();
+                if(accountDetails.readProperty("userForRemote") !== undefined) {
+                    credentialsGetter.userForRemote = accountDetails.readProperty("userForRemote");
+                }
+                if(accountDetails.readProperty("privateKeyFile") !== undefined) {
+                    credentialsGetter.privateKeyFile = accountDetails.readProperty("privateKeyFile");
+                }
+                if(accountDetails.readProperty("publicKeyFile") !== undefined) {
+                    credentialsGetter.publicKeyFile = accountDetails.readProperty("publicKeyFile");
+                }
+                if(accountDetails.readProperty("needsPrivateKeyPassphrase") !== undefined) {
+                    credentialsGetter.needsPrivateKeyPassphrase = accountDetails.readProperty("needsPrivateKeyPassphrase");
+                }
+            }
+            text: "Edit User Credentials";
+            Kirigami.FormData.label: "User Credentials"
+        }
+
+        Kirigami.Separator {
+        }
+
+        QtControls.Button {
+            text: "Save";
+            onClicked: {
+                cloudAccounts.renameAccount(component.accountIndex, nameField.text);
+                dlgLoader.item.close();
+            }
+        }
+
+        Kirigami.OverlaySheet {
+            id: userCredentials;
+            header: Kirigami.Heading { text: "User Credentials" }
+            GetUserCredentials {
+                id: credentialsGetter
+                onAccepted: {
+                    component.userForRemote = userForRemote;
+                    component.privateKeyFile = privateKeyFile;
+                    component.publicKeyFile = publicKeyFile;
+                    component.needsPrivateKeyPassphrase = needsPrivateKeyPassphrase;
+                    userCredentials.close();
+                }
+            }
+            onSheetOpenChanged: {
+                if (sheetOpen === false) {
+                    dlgLoader.item.open();
+                }
+            }
+        }
     }
 }

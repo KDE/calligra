@@ -21,5 +21,4 @@ import org.calligra 1.0
 import "../../../components"
 
 CreateCheckout {
-    anchors.fill: parent;
 }

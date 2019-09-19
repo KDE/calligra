@@ -101,8 +101,9 @@ Kirigami.ScrollablePage {
                     QtControls.Button {
                         text: model.text
                         onClicked: {
-                            dlgStack.replace(base.addComponentFromName(model.accountType));
-                            dlgStack.currentPage.serviceName = model.serviceName;
+                            dlgLoader.sourceComponent = base.addComponentFromName(model.accountType);
+                            dlgLoader.item.serviceName = model.serviceName;
+                            dlgLoader.item.open();
                         }
                     }
                 }
@@ -153,11 +154,12 @@ Kirigami.ScrollablePage {
                     text: (model.accountType === "DropBox") ? "Sign Out" : "Edit Account";
                     icon.name: (model.accountType === "DropBox") ? "leave" : "document-edit"
                     onTriggered: {
-                        dlgStack.replace(base.editComponentFromName(model.accountType));
-                        if(dlgStack.currentPage.accountIndex !== undefined) {
-                            dlgStack.currentPage.accountIndex = index;
-                            dlgStack.currentPage.text = model.text;
+                        dlgLoader.sourceComponent = base.editComponentFromName(model.accountType);
+                        if(dlgLoader.item.accountIndex !== undefined) {
+                            dlgLoader.item.accountIndex = index;
+                            dlgLoader.item.text = model.text;
                         }
+                        dlgLoader.item.open();
                     }
                 },
                 Kirigami.Action {
@@ -165,10 +167,11 @@ Kirigami.ScrollablePage {
                     icon.name: "remove"
                     visible: model.accountType !== "DropBox";
                     onTriggered: {
-                        dlgStack.replace(removeAccountDlg);
-                        if(dlgStack.currentPage.accountIndex !== undefined) {
-                            dlgStack.currentPage.accountIndex = index;
-                            dlgStack.currentPage.text = model.text;
+                        dlgLoader.sourceComponent = removeAccountDlg;
+                        dlgLoader.item.open();
+                        if(dlgLoader.item.accountIndex !== undefined) {
+                            dlgLoader.item.accountIndex = index;
+                            dlgLoader.item.text = model.text;
                         }
                     }
                 }
@@ -182,13 +185,9 @@ Kirigami.ScrollablePage {
             opacity: cloudAccounts.count === 0 ? 1 : 0;
             Behavior on opacity { NumberAnimation { duration: Kirigami.Units.shortDuration; } }
         }
-        PageStack {
-            id: dlgStack;
-            anchors {
-                fill: parent;
-                margins: -Settings.theme.adjustedPixel(8);
-            }
-            initialPage: addEmptyComp;
+        Loader {
+            id: dlgLoader
+            anchors.fill: parent;
         }
     }
 
@@ -200,22 +199,10 @@ Kirigami.ScrollablePage {
         };
         return elements[name];
     }
-    Component {
-        id: addEmptyComp;
-        Item {}
-    }
-    Component {
-        id: addDropBox;
-        AddDropbox { addEmpty: addEmptyComp; }
-    }
-    Component {
-        id: addWebDav;
-        AddWebdav { addEmpty: addEmptyComp; }
-    }
-    Component {
-        id: addGit;
-        AddGit { addEmpty: addEmptyComp; }
-    }
+    Component { id: addDropBox; AddDropbox { } }
+    Component { id: addWebDav; AddWebdav { } }
+    Component { id: addGit; AddGit { } }
+
     function editComponentFromName(name) {
         var elements = {
             "DropBox": editDropBox,
@@ -224,23 +211,11 @@ Kirigami.ScrollablePage {
         };
         return elements[name];
     }
-    Component {
-        id: editDropBox;
-        AddDropbox { addEmpty: addEmptyComp; }
-    }
-    Component {
-        id: editWebDav;
-        EditDetailsBase { addEmpty: addEmptyComp; }
-    }
-    Component {
-        id: editGit;
-        EditGit { addEmpty: addEmptyComp; }
-    }
+    Component { id: editDropBox; AddDropbox { } }
+    Component { id: editWebDav; EditDetailsBase { } }
+    Component { id: editGit; EditGit { } }
 
-    Component {
-        id: removeAccountDlg;
-        RemoveAccountDlg { addEmpty: addEmptyComp; }
-    }
+    Component { id: removeAccountDlg; RemoveAccountDlg { } }
 
     function elementFromName(name) {
         var elements = {

@@ -16,13 +16,15 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-import QtQuick 2.0
+import QtQuick 2.11
+import QtQuick.Layouts 1.11 as QtLayouts
+import QtQuick.Controls 2.11 as QtControls
+import org.kde.kirigami 2.7 as Kirigami
 import org.calligra 1.0
 import Calligra.Gemini.Git 1.0
-import QtQuick.Controls 1.4 as QtControls
 import "../../../components"
 
-Item {
+Kirigami.FormLayout {
     id: base;
     signal accepted();
     signal cancelled();
@@ -30,147 +32,62 @@ Item {
     property alias privateKeyFile: privateKey.text;
     property alias needsPrivateKeyPassphrase: needsPassphrase.checked;
     property alias publicKeyFile: publicKey.text;
-    anchors.margins: Settings.theme.adjustedPixel(32);
-    Rectangle {
-        anchors {
-            fill: parent;
-            margins: -Settings.theme.adjustedPixel(48);
-        }
-        opacity: 0.7;
-        color: "white";
-        MouseArea { anchors.fill: parent; onClicked: { /*nothing */ } }
-        SimpleTouchArea { anchors.fill: parent; onTouched: { /*nothing */ } }
+
+    QtControls.TextField {
+        id: userName;
+        Kirigami.FormData.label: "Username";
     }
-    Text {
-        id: pageTitle;
-        anchors {
-            left: parent.left;
-            right: parent.right
-            bottom: pageContent.top;
-            bottomMargin: Settings.theme.adjustedPixel(8);
-        }
-        height: font.pixelHeight + Settings.theme.adjustedPixel(16);
-        font: Settings.theme.font("pageHeader");
-        verticalAlignment: Text.AlignVCenter;
-        horizontalAlignment: Text.AlignHCenter;
-        text: "User Credentials";
-        Rectangle {
+
+    QtControls.TextField {
+        id: privateKey;
+        Kirigami.FormData.label: "Private Key File";
+        QtControls.Button {
+            id: privateKeyBrowse;
             anchors {
-                left: parent.left;
+                verticalCenter: privateKey.verticalCenter;
                 right: parent.right;
-                bottom: parent.bottom;
             }
-            height: 1;
-            color: "black";
-            opacity: 0.1;
+            text: "Browse...";
+            onClicked: {
+                var newFile = GitCheckoutCreator.getFile("Private Key File", "*", ".ssh");
+                if(newFile !== "") {
+                    privateKey.text = newFile;
+                }
+            }
         }
     }
-    Item {
-        id: pageContent;
-        anchors {
-            left: parent.left;
-            right: parent.right;
-            verticalCenter: parent.verticalCenter;
-        }
-        height: contentColumn.height;
-        Column {
-            id: contentColumn;
+
+    QtControls.TextField {
+        id: publicKey;
+        Kirigami.FormData.label: "Public Key File";
+        QtControls.Button {
+            id: publicKeyBrowse;
             anchors {
-                verticalCenter: parent.verticalCenter;
-                left: parent.left;
+                verticalCenter: publicKey.verticalCenter;
                 right: parent.right;
             }
-            height: childrenRect.height;
-            QtControls.TextField {
-                id: userName;
-                width: parent.width;
-                placeholderText: "Username";
-            }
-            Item {
-                height: privateKey.height;
-                width: parent.width;
-                QtControls.TextField {
-                    id: privateKey;
-                    width: parent.width - privateKeyBrowse.width;
-                    anchors.right: privateKeyBrowse.left;
-                    placeholderText: "Private Key File";
+            text: "Browse...";
+            onClicked: {
+                var newFile = GitCheckoutCreator.getFile("Public Key File", "*.pub", ".ssh");
+                if(newFile !== "") {
+                    publicKey.text = newFile;
                 }
-                QtControls.Button {
-                    id: privateKeyBrowse;
-                    anchors {
-                        verticalCenter: privateKey.verticalCenter;
-                        right: parent.right;
-                    }
-                    text: "Browse...";
-                    onClicked: {
-                        var newFile = GitCheckoutCreator.getFile("Private Key File", "*", ".ssh");
-                        if(newFile !== "") {
-                            privateKey.text = newFile;
-                        }
-                    }
-                }
-            }
-            Item {
-                height: publicKey.height;
-                width: parent.width;
-                QtControls.TextField {
-                    id: publicKey;
-                    width: parent.width - privateKeyBrowse.width;
-                    anchors.right: publicKeyBrowse.left;
-                    placeholderText: "Public Key File";
-                }
-                QtControls.Button {
-                    id: publicKeyBrowse;
-                    anchors {
-                        verticalCenter: publicKey.verticalCenter;
-                        right: parent.right;
-                    }
-                    text: "Browse...";
-                    onClicked: {
-                        var newFile = GitCheckoutCreator.getFile("Public Key File", "*.pub", ".ssh");
-                        if(newFile !== "") {
-                            publicKey.text = newFile;
-                        }
-                    }
-                }
-            }
-            CheckBox {
-                id: needsPassphrase;
-                width: parent.width;
-                text: "Does the private key require a password to unlock it?";
             }
         }
-        Rectangle {
-            anchors {
-                left: parent.left;
-                right: parent.right;
-                bottom: parent.bottom;
-            }
-            height: 1;
-            color: "black";
-            opacity: 0.1;
-        }
+    }
+
+    QtControls.CheckBox {
+        id: needsPassphrase;
+        Kirigami.FormData.label: "Does the private key require a password to unlock it?";
+    }
+
+    Kirigami.Separator {
     }
 
     QtControls.Button {
         id: acceptButton;
-        anchors {
-            top: pageContent.bottom;
-            right: cancelButton.left;
-            margins: Settings.theme.adjustedPixel(8);
-        }
         text: "Accept";
         onClicked: base.accepted();
-    }
-    QtControls.Button {
-        id: cancelButton;
-        anchors {
-            top: pageContent.bottom;
-            right: parent.right;
-            margins: Settings.theme.adjustedPixel(8);
-        }
-        text: "Cancel";
-        onClicked: base.cancelled();
     }
 }
 
