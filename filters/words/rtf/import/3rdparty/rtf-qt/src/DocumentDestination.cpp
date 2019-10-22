@@ -117,6 +117,8 @@ namespace RtfReader
 	    m_output->setPageHeight( value );
 	} else if ( controlWord == "paperw" ) {
 	    m_output->setPageWidth( value );
+	} else if ( controlWord == "strike" ) {
+	    m_output->setFontStrikeout( ! hasValue || ( hasValue && value != 0 ) );
 	} else if ( ( controlWord == "u" ) && hasValue ) {
 	    m_output->appendText( QChar( value ) );
 	    m_charactersToSkip = 1; /* TODO: this should be driven by \uc, default to 1 */

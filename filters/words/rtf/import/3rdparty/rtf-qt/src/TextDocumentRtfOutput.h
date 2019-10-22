@@ -68,6 +68,8 @@ namespace RtfReader
 
 	virtual void setFontUnderline( const int value );
 
+	virtual void setFontStrikeout( const bool value );
+
 	virtual void setFontPointSize( const int pointSize );
 
 	virtual void setForegroundColour( const int colourIndex );

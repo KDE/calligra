@@ -137,7 +137,13 @@ namespace RtfReader
 	m_textCharFormatStack.top().setFontUnderline( value != 0 );
 	m_cursor->setCharFormat( m_textCharFormatStack.top() );
     }
-   
+
+    void TextDocumentRtfOutput::setFontStrikeout(const bool value)
+    {
+	m_textCharFormatStack.top().setFontStrikeOut(value);
+	m_cursor->setCharFormat( m_textCharFormatStack.top() );
+    }
+
     void TextDocumentRtfOutput::setFontPointSize( const int pointSize )
     {
 	m_textCharFormatStack.top().setFontPointSize( pointSize );
