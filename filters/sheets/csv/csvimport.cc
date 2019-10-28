@@ -24,10 +24,10 @@
 #include <QFile>
 #include <QRegExp>
 #include <QVector>
-#include <QApplication>
+#include <QGuiApplication>
+#include <QDebug>
 
 #include <kmessagebox.h>
-#include <kdebug.h>
 #include <kpluginfactory.h>
 #include <klocale.h>
 
@@ -59,6 +59,8 @@ using namespace Calligra::Sheets;
 
 K_PLUGIN_FACTORY_WITH_JSON(CSVImportFactory, "calligra_filter_csv2sheets.json", registerPlugin<CSVFilter>();)
 
+Q_LOGGING_CATEGORY(lcCsvImport, "calligra.filter.csv.import")
+
 CSVFilter::CSVFilter(QObject* parent, const QVariantList&) :
         KoFilter(parent)
 {
@@ -73,18 +75,18 @@ KoFilter::ConversionStatus CSVFilter::convert(const QByteArray& from, const QByt
         return KoFilter::StupidError;
 
     if (!qobject_cast<const Calligra::Sheets::Doc *>(document)) {
-        kWarning(30501) << "document isn't a Calligra::Sheets::Doc but a " << document->metaObject()->className();
+        qWarning(lcCsvImport) << "document isn't a Calligra::Sheets::Doc but a " << document->metaObject()->className();
         return KoFilter::NotImplemented;
     }
     if ((from != "text/csv" && from != "text/plain") || to != "application/vnd.oasis.opendocument.spreadsheet") {
-        kWarning(30501) << "Invalid mimetypes " << from << " " << to;
+        qWarning(lcCsvImport) << "Invalid mimetypes " << from << " " << to;
         return KoFilter::NotImplemented;
     }
 
     Doc *ksdoc = static_cast<Doc *>(document);   // type checked above
 
 //    if (ksdoc->mimeType() != "application/vnd.oasis.opendocument.spreadsheet") {
-//       kWarning(30501) << "Invalid document mimetype " << ksdoc->mimeType();
+//       qWarning(lcCsvImport) << "Invalid document mimetype " << ksdoc->mimeType();
 //        return KoFilter::NotImplemented;
 //    }
 
@@ -131,7 +133,7 @@ KoFilter::ConversionStatus CSVFilter::convert(const QByteArray& from, const QByt
     int value = 0;
 
     emit sigProgress(value);
-    QApplication::setOverrideCursor(Qt::WaitCursor);
+    QGuiApplication::setOverrideCursor(Qt::WaitCursor);
 
     const double defaultWidth = ksdoc->map()->defaultColumnFormat()->width();
     QVector<double> widths(numCols);
@@ -199,7 +201,7 @@ KoFilter::ConversionStatus CSVFilter::convert(const QByteArray& from, const QByt
     ksdoc->map()->calculationSettings()->locale()->setThousandsSeparator(documentThousandsSeparator);
 
     emit sigProgress(100);
-    QApplication::restoreOverrideCursor();
+    QGuiApplication::restoreOverrideCursor();
     delete dialog;
 
     return KoFilter::OK;

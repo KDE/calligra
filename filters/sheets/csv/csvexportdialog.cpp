@@ -19,6 +19,7 @@
 */
 
 #include "csvexportdialog.h"
+#include "csvexport.h"
 
 #include "sheets/Map.h"
 #include "sheets/Sheet.h"
@@ -26,11 +27,11 @@
 #include <kcharsets.h>
 #include <kmessagebox.h>
 #include <KSharedConfig>
-#include <kdebug.h>
 
-#include <QApplication>
+#include <QGuiApplication>
 #include <QTextCodec>
 #include <QValidator>
+#include <QDebug>
 
 using namespace Calligra::Sheets;
 
@@ -42,7 +43,7 @@ CSVExportDialog::CSVExportDialog(QWidget * parent)
 {
     setButtons(KoDialog::Ok | KoDialog::Cancel);
     setDefaultButton(KoDialog::Ok);
-    QApplication::restoreOverrideCursor();
+    QGuiApplication::restoreOverrideCursor();
 
     QStringList encodings;
     encodings << i18nc("Descriptive encoding name", "Recommended ( %1 )" , "UTF-8");
@@ -84,7 +85,7 @@ CSVExportDialog::CSVExportDialog(QWidget * parent)
 CSVExportDialog::~CSVExportDialog()
 {
     saveSettings();
-    QApplication::setOverrideCursor(Qt::WaitCursor);
+    QGuiApplication::setOverrideCursor(Qt::WaitCursor);
     delete m_delimiterValidator;
 }
 
@@ -266,7 +267,7 @@ bool CSVExportDialog::exportSelectionOnly() const
 QTextCodec* CSVExportDialog::getCodec(void) const
 {
     const QString strCodec(KCharsets::charsets()->encodingForName(m_dialog->comboBoxEncoding->currentText()));
-    kDebug(30502) << "Encoding:" << strCodec;
+    qDebug(lcCsvExport) << "Encoding:" << strCodec;
 
     bool ok = false;
     QTextCodec* codec = QTextCodec::codecForName(strCodec.toUtf8());
@@ -281,7 +282,7 @@ QTextCodec* CSVExportDialog::getCodec(void) const
     // Still nothing?
     if (!codec || !ok) {
         // Default: UTF-8
-        kWarning(30502) << "Cannot find encoding:" << strCodec;
+        qWarning(lcCsvExport) << "Cannot find encoding:" << strCodec;
         // ### TODO: what parent to use?
         KMessageBox::error(0, i18n("Cannot find encoding: %1", strCodec));
         return 0;

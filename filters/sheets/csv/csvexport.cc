@@ -24,8 +24,8 @@
 #include <QTextCodec>
 #include <QTextStream>
 #include <QByteArray>
+#include <QDebug>
 
-#include <kdebug.h>
 #include <kpluginfactory.h>
 #include <KoFilterChain.h>
 #include <KoFilterManager.h>
@@ -44,6 +44,8 @@
 using namespace Calligra::Sheets;
 
 K_PLUGIN_FACTORY_WITH_JSON(CSVExportFactory, "calligra_filter_sheets2csv.json", registerPlugin<CSVExport>();)
+
+Q_LOGGING_CATEGORY(lcCsvExport, "calligra.filter.csv.export")
 
 class Cell
 {
@@ -118,25 +120,25 @@ QString CSVExport::exportCSVCell(const Calligra::Sheets::Doc* doc, Sheet const *
 // approach is because we don't want to export formulas but values !
 KoFilter::ConversionStatus CSVExport::convert(const QByteArray & from, const QByteArray & to)
 {
-    kDebug(30501) << "CSVExport::convert";
+    qDebug(lcCsvExport) << "CSVExport::convert";
     KoDocument* document = m_chain->inputDocument();
 
     if (!document)
         return KoFilter::StupidError;
 
     if (!qobject_cast<const Calligra::Sheets::Doc *>(document)) {
-        kWarning(30501) << "document isn't a Calligra::Sheets::Doc but a " << document->metaObject()->className();
+        qWarning(lcCsvExport) << "document isn't a Calligra::Sheets::Doc but a " << document->metaObject()->className();
         return KoFilter::NotImplemented;
     }
     if ((to != "text/csv" && to != "text/plain") || from != "application/vnd.oasis.opendocument.spreadsheet") {
-        kWarning(30501) << "Invalid mimetypes " << to << " " << from;
+        qWarning(lcCsvExport) << "Invalid mimetypes " << to << " " << from;
         return KoFilter::NotImplemented;
     }
 
     Doc *ksdoc = qobject_cast<Doc *>(document);
 
     if (ksdoc->mimeType() != "application/vnd.oasis.opendocument.spreadsheet") {
-        kWarning(30501) << "Invalid document mimetype " << ksdoc->mimeType();
+        qWarning(lcCsvExport) << "Invalid document mimetype " << ksdoc->mimeType();
         return KoFilter::NotImplemented;
     }
 
@@ -145,7 +147,7 @@ KoFilter::ConversionStatus CSVExport::convert(const QByteArray & from, const QBy
         expDialog = new CSVExportDialog(0);
 
         if (!expDialog) {
-            kError(30501) << "Dialog has not been created! Aborting!" << endl;
+            qCritical(lcCsvExport) << "Dialog has not been created! Aborting!" << endl;
             return KoFilter::StupidError;
         }
         expDialog->fillSheet(ksdoc->map());
@@ -186,7 +188,7 @@ KoFilter::ConversionStatus CSVExport::convert(const QByteArray & from, const QBy
         textQuote = '"';
 
     if (expDialog && expDialog->exportSelectionOnly()) {
-        kDebug(30501) << "Export as selection mode";
+        qDebug(lcCsvExport) << "Export as selection mode";
         View *view = ksdoc->documentPart()->views().isEmpty() ? 0 : static_cast<View*>(ksdoc->documentPart()->views().first());
 
         if (!view) { // no view if embedded document
@@ -235,7 +237,7 @@ KoFilter::ConversionStatus CSVExport::convert(const QByteArray & from, const QBy
             str += m_eol;
         }
     } else {
-        kDebug(30501) << "Export as full mode";
+        qDebug(lcCsvExport) << "Export as full mode";
         foreach(Sheet const * const sheet, ksdoc->map()->sheetList()) {
             if (expDialog && !expDialog->exportSheet(sheet->sheetName())) {
                 continue;
@@ -265,7 +267,7 @@ KoFilter::ConversionStatus CSVExport::convert(const QByteArray & from, const QBy
             if (CSVMaxRow + CSVMaxCol == 0)
                 continue;
 
-            kDebug(30501) << "Max row x column:" << CSVMaxRow << " x" << CSVMaxCol;
+            qDebug(lcCsvExport) << "Max row x column:" << CSVMaxRow << " x" << CSVMaxCol;
 
             // Print sheet separators, except for the first sheet
             if (!first || (expDialog && expDialog->printAlwaysSheetDelimiter())) {
@@ -326,7 +328,7 @@ KoFilter::ConversionStatus CSVExport::convert(const QByteArray & from, const QBy
 
     QFile out(m_chain->outputFile());
     if (!out.open(QIODevice::WriteOnly)) {
-        kError(30501) << "Unable to open output file!" << endl;
+        qCritical(lcCsvExport) << "Unable to open output file!" << endl;
         out.close();
         delete expDialog;
         return KoFilter::StupidError;

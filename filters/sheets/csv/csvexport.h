@@ -25,6 +25,10 @@
 #include <QByteArray>
 #include <KoFilter.h>
 #include <QVariantList>
+#include <QDebug>
+#include <QLoggingCategory>
+
+Q_DECLARE_LOGGING_CATEGORY(lcCsvExport)
 
 namespace Calligra
 {
