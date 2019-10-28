@@ -49,7 +49,6 @@ KWCanvasItem::KWCanvasItem(const QString &viewMode, KWDocument *document)
         KWCanvasBase(document, this)
 {
     setAttribute(Qt::WA_OpaquePaintEvent, true);
-    setAttribute(Qt::WA_InputMethodEnabled, true);
     setFocusPolicy(Qt::StrongFocus);
     connect(document, SIGNAL(pageSetupChanged()), this, SLOT(pageSetupChanged()));
     m_viewConverter = new KoZoomHandler();

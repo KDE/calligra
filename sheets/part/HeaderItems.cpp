@@ -91,8 +91,6 @@ using namespace Calligra::Sheets;
 RowHeaderItem::RowHeaderItem(QGraphicsItem *_parent, CanvasItem *_canvas)
         : QGraphicsWidget(_parent), RowHeader(_canvas)
 {
-    setAttribute(Qt::WA_StaticContents);
-
     //setMouseTracking(true);
     setAcceptHoverEvents(true);
 
@@ -253,8 +251,6 @@ void RowHeaderItem::toolChanged(const QString& toolId)
 ColumnHeaderItem::ColumnHeaderItem(QGraphicsItem *_parent, CanvasItem *_canvas)
         : QGraphicsWidget(_parent), ColumnHeader(_canvas)
 {
-    setAttribute(Qt::WA_StaticContents);
-
     //setMouseTracking(true);
     setAcceptHoverEvents(true);
 

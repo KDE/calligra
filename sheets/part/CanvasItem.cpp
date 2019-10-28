@@ -136,7 +136,6 @@ CanvasItem::CanvasItem(Doc *doc, QGraphicsItem *parent)
         , d(new Private)
 {
     setAttribute(Qt::WA_OpaquePaintEvent);
-    setAttribute(Qt::WA_StaticContents);
     //setBackgroundRole(QPalette::Base);
 
     QGraphicsWidget::setFocusPolicy(Qt::StrongFocus);
@@ -146,7 +145,6 @@ CanvasItem::CanvasItem(Doc *doc, QGraphicsItem *parent)
 
     installEventFilter(this);   // for TAB key processing, otherwise focus change
     setAcceptDrops(true);
-    setAttribute(Qt::WA_InputMethodEnabled, true); // ensure using the InputMethod
 
     d->doc = doc;
     d->rowHeader = 0;
