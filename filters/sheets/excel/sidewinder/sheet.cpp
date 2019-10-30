@@ -762,6 +762,9 @@ bool Column::operator!=(const Column &other) const
 
 double Column::columnUnitsToPts(const double columnUnits)
 {
+    // See https://docs.microsoft.com/en-us/office/troubleshoot/excel/determine-column-widths
+    // or section 2.4.53 of the XLS spec (ColInfo > coldx):
+    // https://docs.microsoft.com/en-us/openspecs/office_file_formats/ms-xls/
     QFont font("Arial", 10);
     QFontMetricsF fontMetrics(font);
     double characterWidth = qMax(fontMetrics.width("0"),qMax(fontMetrics.width("1"),
@@ -773,8 +776,10 @@ double Column::columnUnitsToPts(const double columnUnits)
     double width = characterWidth * columnUnits / 256.0; //px
     width = qRound(width / 8.0 + 0.5) * 8.0;
 
+    // Scale the width based on the logical DPI (defaults to 96 DPI) to match
+    // the DPI of the Arial 10 font above.
     QWidget widget;
-    width /= (double)widget.physicalDpiX(); //in
+    width /= (double)widget.logicalDpiX(); //in
     width *= 72.0; //pt
     return width;
 }
