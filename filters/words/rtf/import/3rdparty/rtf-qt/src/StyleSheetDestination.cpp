@@ -34,7 +34,7 @@ namespace RtfReader
     {
     }
 
-    void StyleSheetDestination::handleControlWord( const QString &controlWord, bool hasValue, const int value )
+    void StyleSheetDestination::handleControlWord( const QByteArray &controlWord, bool hasValue, const int value )
     {
 	if ( controlWord == "ql" ) {
 	    m_style.setTextAlignment( LeftAligned);
@@ -61,7 +61,7 @@ namespace RtfReader
 	}
     }
 
-    void StyleSheetDestination::handlePlainText( const QString &plainText )
+    void StyleSheetDestination::handlePlainText( const QByteArray &plainText )
     {
 	if ( plainText == ";" ) {
 	    m_output->insertStyleSheetTableEntry( m_currentStyleHandleNumber, m_style );

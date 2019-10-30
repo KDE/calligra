@@ -30,11 +30,11 @@ namespace RtfReader
     {
     }
 
-    void IgnoredDestination::handleControlWord( const QString &controlWord, bool hasValue, const int value )
+    void IgnoredDestination::handleControlWord( const QByteArray &controlWord, bool hasValue, const int value )
     {
     }
 
-    void IgnoredDestination::handlePlainText( const QString &plainText )
+    void IgnoredDestination::handlePlainText( const QByteArray &plainText )
     {
     }
 

@@ -256,6 +256,7 @@ namespace RtfReader
 	void addUserProp( const QString &propertyName, const QVariant &propertyValue );
 
 	// TODO: consider adding default implementation for this
+	virtual void appendText( const QByteArray &text ) = 0;
 	virtual void appendText( const QString &text ) = 0;
 	virtual void insertPar() = 0;
 	virtual void insertTab() = 0;
@@ -291,7 +292,7 @@ namespace RtfReader
 	virtual void setTextDirectionLeftToRight() = 0;
 	virtual void setTextDirectionRightToLeft() = 0;
 	virtual void resetCharacterProperties() = 0;
-	virtual void createImage( const QImage &image, const QTextImageFormat &format) = 0;
+	virtual void createImage( const QByteArray &data, const QTextImageFormat &format) = 0;
 	virtual void setPageHeight( const int pageHeight ) = 0;
 	virtual void setPageWidth( const int pageWidth ) = 0;
 	virtual void setSpaceBefore( const int value ) = 0;

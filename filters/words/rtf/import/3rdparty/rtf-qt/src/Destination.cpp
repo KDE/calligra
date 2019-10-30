@@ -40,11 +40,11 @@ namespace RtfReader
 	return m_name;
     }
 
-    void Destination::handleControlWord( const QString &controlWord, bool hasValue, const int value )
+    void Destination::handleControlWord( const QByteArray &controlWord, bool hasValue, const int value )
     {
     };
 
-    void Destination::handlePlainText( const QString &plainText )
+    void Destination::handlePlainText( const QByteArray &plainText )
     {
         qCDebug(lcRtf) << "plain text:" << plainText << "in" << m_name;
     };

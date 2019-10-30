@@ -314,6 +314,7 @@ namespace RtfReader
 		break;
 	    case Binary:
                 qCDebug(lcRtf) << "binary data:" << token.name;
+                break;
 	    default:
                 qCDebug(lcRtf) << "Unexpected token Type";
 	    }

@@ -18,6 +18,9 @@
 #ifndef RTFREADER_FONTTABLEENTRY_H
 #define RTFREADER_FONTTABLEENTRY_H
 #include "rtfreader_export.h"
+
+#include <QTextCodec>
+
 namespace RtfReader
 {
     enum FontFamily { Nil, Roman, Swiss, Modern, Script, Decor, Tech, Bidi };
@@ -48,10 +51,17 @@ namespace RtfReader
 	void setFontName( const QString &fontName )
 	{ m_fontName = fontName; }
 
+	QTextCodec *codec() const
+	{ return m_codec; }
+
+	void setCodec(QTextCodec *codec)
+	{ m_codec = codec; }
+
       protected:
 	enum FontFamily m_fontFamily;
 	enum FontPitch m_fontPitch;
 	QString m_fontName;
+	QTextCodec *m_codec = nullptr;
     };
 }
 

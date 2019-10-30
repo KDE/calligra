@@ -31,7 +31,7 @@ namespace RtfReader
     UserPropsDestination::~UserPropsDestination()
     {}
 
-    void UserPropsDestination::handleControlWord( const QString &controlWord, bool hasValue, const int value )
+    void UserPropsDestination::handleControlWord( const QByteArray &controlWord, bool hasValue, const int value )
     {
 	if ( controlWord == "propname" ) {
 	    m_nextPlainTextIsPropertyName = true;
@@ -56,7 +56,7 @@ namespace RtfReader
 	}
     }
 
-    void UserPropsDestination::handlePlainText( const QString &plainText )
+    void UserPropsDestination::handlePlainText( const QByteArray &plainText )
     {
 	if ( m_nextPlainTextIsPropertyName ) {
 	    m_propertyName = plainText;

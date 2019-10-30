@@ -18,6 +18,7 @@
 #include "TextDocumentRtfOutput.h"
 #include "rtfdebug.h"
 
+#include <QRegularExpression>
 #include <QTextCursor>
 #include <QTextDocument>
 #include <QDebug>
@@ -56,9 +57,15 @@ namespace RtfReader
 	m_cursor->setCharFormat( m_textCharFormatStack.top() );
     }
 
-    void TextDocumentRtfOutput::appendText( const QString &text )
+    void TextDocumentRtfOutput::appendText( const QByteArray &text )
     {
-	m_cursor->insertText( text );
+        static const QRegularExpression controlCharacters(QStringLiteral("[\\x00-\\x08\\x0B\\x0C\\x0E-\\x1F]"));
+        m_cursor->insertText( (m_codec ? m_codec->toUnicode(text) : QString::fromLatin1(text)).remove(controlCharacters) );
+    }
+
+    void TextDocumentRtfOutput::appendText(const QString &str)
+    {
+	m_cursor->insertText(str);
     }
 
     void TextDocumentRtfOutput::insertPar()
@@ -193,6 +200,7 @@ namespace RtfReader
         qCDebug(lcRtf) << "selecting font:" << fontEntry.fontName();
 	m_textCharFormatStack.top().setFontFamily( fontEntry.fontName() );
 	m_cursor->setCharFormat( m_textCharFormatStack.top() );
+	m_codec = fontEntry.codec();
 	m_haveSetFont = true;
     }
 
@@ -314,16 +322,10 @@ namespace RtfReader
 	m_cursor->setCharFormat( m_textCharFormatStack.top() );
     }
     
-    void TextDocumentRtfOutput::createImage( const QImage &image, const QTextImageFormat &format )
+    void TextDocumentRtfOutput::createImage( const QByteArray &data, const QTextImageFormat &format )
     {
-#if 0
-	QString imageUuid = QString( "rtfparser://" ) + QUuid::createUuid().toString();
-	m_document->addResource( QTextDocument::ImageResource, QUrl( imageUuid ), QVariant( image ));
-	format.setName( imageUuid );
+	m_document->addResource( QTextDocument::ImageResource, QUrl( format.name() ), data );
 	m_cursor->insertImage( format );
-#else
-	m_cursor->insertImage( image.scaled( format.width(), format.height() ) );
-#endif
     }
     
     void TextDocumentRtfOutput::setPageHeight( const int pageHeight )

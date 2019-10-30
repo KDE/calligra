@@ -53,7 +53,7 @@ namespace RtfReader
                 hexDigits.append( QChar( lowNibbleHexDigit ) );
                 uint codepoint = hexDigits.toUInt(0, 16);
                 token->type = Plain;
-                token->name = QChar( codepoint );
+                token->name = QByteArray( 1, codepoint );
             }
         } else if ( token->name == "\\" ) {
             token->type = Plain;

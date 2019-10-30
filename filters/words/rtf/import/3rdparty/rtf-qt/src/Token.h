@@ -32,7 +32,7 @@ namespace RtfReader
       public: /* TODO: convert to getters / setters */
 	void dump() const;
 	TokenType type;
-	QString name;
+	QByteArray name;
 	bool hasParameter;
 	QString parameter;
 	QByteArray binaryData;

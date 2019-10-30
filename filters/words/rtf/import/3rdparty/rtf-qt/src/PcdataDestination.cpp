@@ -31,12 +31,12 @@ namespace RtfReader
     {
     }
 
-    void PcdataDestination::handleControlWord( const QString &controlWord, bool hasValue, const int value )
+    void PcdataDestination::handleControlWord( const QByteArray &controlWord, bool hasValue, const int value )
     {
         qCDebug(lcRtf) << "unexpected control word in" << m_name << ": " << controlWord;
     }
 
-    void PcdataDestination::handlePlainText( const QString &plainText )
+    void PcdataDestination::handlePlainText( const QByteArray &plainText )
     {
 	m_pcdata = plainText;
     }

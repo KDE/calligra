@@ -34,8 +34,8 @@ namespace RtfReader
 
 	virtual ~InfoDestination();
 
-	virtual void handleControlWord( const QString &controlWord, bool hasValue, const int value );
-	virtual void handlePlainText( const QString &plainText );
+	virtual void handleControlWord( const QByteArray &controlWord, bool hasValue, const int value );
+	virtual void handlePlainText( const QByteArray &plainText );
 
       private:
 

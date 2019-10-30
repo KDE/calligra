@@ -31,7 +31,7 @@ namespace RtfReader
     {
     }
 
-    void InfoTimeDestination::handleControlWord( const QString &controlWord, bool hasValue, const int value )
+    void InfoTimeDestination::handleControlWord( const QByteArray &controlWord, bool hasValue, const int value )
     {
 	if ( controlWord == "yr" ) {
 	    m_year = value;
@@ -48,7 +48,7 @@ namespace RtfReader
 	}
     }
 
-    void InfoTimeDestination::handlePlainText( const QString &plainText )
+    void InfoTimeDestination::handlePlainText( const QByteArray &plainText )
     {
         qCDebug(lcRtf) << "unexpected text in InfoTimeDestination:" << plainText;
     }

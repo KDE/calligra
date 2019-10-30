@@ -30,7 +30,7 @@ namespace RtfReader
     InfoDestination::~InfoDestination()
     {}
 
-    void InfoDestination::handleControlWord( const QString &controlWord, bool hasValue, const int value )
+    void InfoDestination::handleControlWord( const QByteArray &controlWord, bool hasValue, const int value )
     {
 	if ( ( controlWord == "edmins" ) && hasValue ) {
 	    m_output->setTotalEditingTime( value );
@@ -53,7 +53,7 @@ namespace RtfReader
 	}
     }
 
-    void InfoDestination::handlePlainText( const QString &plainText )
+    void InfoDestination::handlePlainText( const QByteArray &plainText )
     {
         qCDebug(lcRtf) << "unexpected text in InfoDestination:" << plainText;
     }

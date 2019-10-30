@@ -34,16 +34,21 @@ namespace RtfReader
 
 	virtual ~PictDestination();
 
-	virtual void handleControlWord( const QString &controlWord, bool hasValue, const int value );
-	virtual void handlePlainText( const QString &plainText );
+	virtual void handleControlWord( const QByteArray &controlWord, bool hasValue, const int value );
+	virtual void handlePlainText( const QByteArray &plainText );
 	virtual void aboutToEndDestination();
 
       private:
 	// The hexadecimal version of the data for the image that is currently being built
-	QByteArray m_pictHexData;
+	QByteArray m_pictData;
 	
 	// The format information for the current image
 	QTextImageFormat m_imageFormat;
+	const char *m_format = nullptr;
+	qreal m_xScale = 1.;
+	qreal m_yScale = 1.;
+	qreal m_goalWidth = 0.;
+	qreal m_goalHeight = 0.;
       };
 }
 

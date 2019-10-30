@@ -24,7 +24,7 @@
 namespace RtfReader
 {
     DocumentDestination::DocumentDestination( Reader *reader, AbstractRtfOutput *output, const QString &name ) :
-      Destination( reader, output, name ), m_charactersToSkip( 0 )
+      Destination( reader, output, name ), m_charactersToSkip( 0 ), m_unicodeSkip( 1 )
     {
     }
 
@@ -32,7 +32,7 @@ namespace RtfReader
     {
     }
 
-    void DocumentDestination::handleControlWord( const QString &controlWord, bool hasValue, const int value )
+    void DocumentDestination::handleControlWord( const QByteArray &controlWord, bool hasValue, const int value )
     {
 
 	if ( controlWord == "par" ) {
@@ -120,10 +120,14 @@ namespace RtfReader
 	} else if ( controlWord == "strike" ) {
 	    m_output->setFontStrikeout( ! hasValue || ( hasValue && value != 0 ) );
 	} else if ( ( controlWord == "u" ) && hasValue ) {
-	    m_output->appendText( QChar( value ) );
-	    m_charactersToSkip = 1; /* TODO: this should be driven by \uc, default to 1 */
+	    m_output->appendText( QString( 1, QChar( value ) ) );
+	    m_charactersToSkip = m_unicodeSkip;
+	} else if ( controlWord == "uc" && hasValue ) {
+	    m_unicodeSkip = value;
 	} else if ( ( controlWord == "\'" ) && hasValue ) {
             qCDebug(lcRtf) << "special character value:" << value;
+	} else if ( controlWord == "line" ) {
+	    m_output->appendText( QString( "\n" ) );
 	} else if ( controlWord == "*" ) {
 	    // handled elsewhere
 	} else {
@@ -135,7 +139,7 @@ namespace RtfReader
 	}
     }
 
-    void DocumentDestination::handlePlainText( const QString &plainText )
+    void DocumentDestination::handlePlainText( const QByteArray &plainText )
     {
 	if ( m_charactersToSkip > 0 ) {
             qCDebug(lcRtf) << "skipping" << m_charactersToSkip << "of" << plainText;
@@ -143,7 +147,7 @@ namespace RtfReader
 		m_charactersToSkip -= plainText.size();
 		return;
 	    } else if ( plainText.size() > m_charactersToSkip ) {
-	        QString partiallySkippedText( plainText );
+	        QByteArray partiallySkippedText( plainText );
 		partiallySkippedText.remove( 0, m_charactersToSkip );
 		m_output->appendText( partiallySkippedText );
 		m_charactersToSkip = 0;

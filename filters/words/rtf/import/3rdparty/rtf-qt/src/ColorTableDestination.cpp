@@ -31,7 +31,7 @@ namespace RtfReader
     ColorTableDestination::~ColorTableDestination()
     {}
 
-    void ColorTableDestination::handleControlWord( const QString &controlWord, bool hasValue, const int value )
+    void ColorTableDestination::handleControlWord( const QByteArray &controlWord, bool hasValue, const int value )
     {
 	if ( controlWord == "red" ) {
 	    m_currentColor.setRed( value );
@@ -44,7 +44,7 @@ namespace RtfReader
 	}
     }
 
-    void ColorTableDestination::handlePlainText( const QString &plainText )
+    void ColorTableDestination::handlePlainText( const QByteArray &plainText )
     {
 	if ( plainText == ";" ) {
 	    m_output->appendToColourTable( m_currentColor );

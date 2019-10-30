@@ -43,6 +43,7 @@ namespace RtfReader
 
 	virtual void endGroup();
 
+	virtual void appendText( const QByteArray &text );
 	virtual void appendText( const QString &text );
 
 	virtual void insertPar();
@@ -103,7 +104,7 @@ namespace RtfReader
 	virtual void setLeftIndent( const int twips );
 	virtual void setRightIndent( const int twips );
 
-	virtual void createImage( const QImage &image, const QTextImageFormat &format );
+	virtual void createImage( const QByteArray &data, const QTextImageFormat &format );
 
 	virtual void setPageHeight( const int pageHeight );
 	virtual void setPageWidth( const int pageWidth );
@@ -128,6 +129,7 @@ namespace RtfReader
 	QHash<int, StyleSheetTableEntry> m_stylesheetTable;
 
 	QTextDocument *m_document;
+	QTextCodec *m_codec = nullptr;
 
 	/**
 	  Convenience routine to convert a size in twips into pixels
