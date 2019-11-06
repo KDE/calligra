@@ -21,6 +21,6 @@
 
 const QLoggingCategory &PDFIMPORT_LOG()
 {
-    static const QLoggingCategory category("calligra.filter.pdf2svg");
+    static const QLoggingCategory category("calligra.filter.pdf");
     return category;
 }
