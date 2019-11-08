@@ -24,12 +24,15 @@
 
 #include <QWidget>
 
+class KarbonDocument;
+class KoPAPageBase;
+
 class ImageExportOptionsWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit ImageExportOptionsWidget(const QSizeF &pointSize, QWidget *parent = 0);
+    explicit ImageExportOptionsWidget(KarbonDocument *doc, QWidget *parent = 0);
 
     /// Sets the initial unit to use
     void setUnit(const KoUnit &unit);
@@ -49,6 +52,8 @@ public:
     /// Enables/disables setting the background opacity
     void enableBackgroundOpacity(bool enable);
 
+    KoPAPageBase *page() const;
+
 private Q_SLOTS:
     void unitWidthChanged(qreal);
     void unitHeightChanged(qreal);
@@ -57,6 +62,7 @@ private Q_SLOTS:
     void dpiChanged(int);
     void unitChanged(int);
     void aspectChanged(bool);
+    void setPage(int idx);
 private:
     void updateFromPointSize(const QSizeF &pointSize);
     void updateFromPixelSize(const QSize &pixelSize);
@@ -65,6 +71,8 @@ private:
 
     Ui_ImageExportOptionsWidget widget;
     QSizeF m_pointSize;
+
+    KarbonDocument *m_doc;
 };
 
 #endif // IMAGEEXPORTOPTIONSWIDGET_H

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2019 Dag Andersen <danders@get2net.dk>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -19,11 +20,16 @@
 
 #include "ImageExportOptionsWidget.h"
 
+#include <KarbonDocument.h>
+#include <KoPAPageBase.h>
+
 #include <KoUnit.h> // for POINT_TO_INCH
 #include <KoDpi.h>
+#include <KoShapePainter.h>
+#include <KoZoomHandler.h>
 
-ImageExportOptionsWidget::ImageExportOptionsWidget(const QSizeF &pointSize, QWidget * parent)
-        : QWidget(parent), m_pointSize(pointSize)
+ImageExportOptionsWidget::ImageExportOptionsWidget(KarbonDocument *doc, QWidget * parent)
+    : QWidget(parent), m_doc(doc)
 {
     KoUnit unit;
 
@@ -49,9 +55,14 @@ ImageExportOptionsWidget::ImageExportOptionsWidget(const QSizeF &pointSize, QWid
     widget.opacity->setMinimum(0.0);
     widget.opacity->setMaximum(100.0);
     widget.opacity->setValue(0.0);
-    widget.unitWidth->changeValue(pointSize.width());
-    widget.unitHeight->changeValue(pointSize.height());
-    updateFromPointSize(pointSize);
+
+    for (int i = 0; i < doc->pageCount(); ++i) {
+        widget.pageCombo->addItem(i18n("Page %1", i+1));
+    }
+    setPage(0);
+
+    widget.unitWidth->changeValue(m_pointSize.width());
+    widget.unitHeight->changeValue(m_pointSize.height());
 
     connect(widget.unitWidth, SIGNAL(valueChangedPt(qreal)), this, SLOT(unitWidthChanged(qreal)));
     connect(widget.unitHeight, SIGNAL(valueChangedPt(qreal)), this, SLOT(unitHeightChanged(qreal)));
@@ -61,6 +72,27 @@ ImageExportOptionsWidget::ImageExportOptionsWidget(const QSizeF &pointSize, QWid
     connect(widget.unit, SIGNAL(activated(int)), this, SLOT(unitChanged(int)));
     connect(widget.pxAspect, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(aspectChanged(bool)));
     connect(widget.unitAspect, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(aspectChanged(bool)));
+    connect(widget.pageCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(setPage(int)));
+}
+
+void ImageExportOptionsWidget::setPage(int idx)
+{
+    KoPAPageBase *page = m_doc->pages().value(idx);
+    if (!page) {
+        page = m_doc->pages().first();
+    }
+    KoShapePainter painter;
+    painter.setShapes(page->shapes());
+    // get the bounding rect of the content
+    QRectF shapesRect = painter.contentRect();
+    // get the size in point
+    m_pointSize = shapesRect.size();
+    updateFromPointSize(m_pointSize);
+}
+
+KoPAPageBase *ImageExportOptionsWidget::page() const
+{
+    return m_doc->pages().value(widget.pageCombo->currentIndex());
 }
 
 void ImageExportOptionsWidget::setUnit(const KoUnit &unit)

@@ -10,6 +10,7 @@
    Copyright (C) 2006 Laurent Montel <montel@kde.org>
    Copyright (C) 2006 Christian Mueller <cmueller@gmx.de>
    Copyright (C) 2007-2008,2012 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2019 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -55,76 +56,78 @@ ImageExport::ImageExport(QObject*parent, const QVariantList&)
 {
 }
 
-KoFilter::ConversionStatus
-ImageExport::convert(const QByteArray& from, const QByteArray& to)
+KoFilter::ConversionStatus ImageExport::convert(const QByteArray& from, const QByteArray& to)
 {
+    if (from != KoOdf::mimeType(KoOdf::Graphics)) {
+        return KoFilter::BadMimeType;
+    }
+
     QString format;
+
     if (to == "image/png") {
         format = "PNG";
-    } else if(to == "image/jpeg") {
-        format = "JPG";
-    }
-    if (format.isEmpty()) {
-        return KoFilter::NotImplemented;
-    }
-    if (from != "application/vnd.oasis.opendocument.graphics") {
-        return KoFilter::NotImplemented;
-    }
-
-    KoDocument* document = m_chain->inputDocument();
-    if (! document)
-        return KoFilter::ParsingError;
-
-    KarbonDocument* doc = dynamic_cast<KarbonDocument*>(document);
-    if (doc) {
-        KoShapePainter painter;
-        QList<KoPAPageBase*> pages = doc->pages();
-        if (pages.isEmpty()) {
-            return KoFilter::WrongFormat;
-        }
-        // TODO: Handle multiple pages
-        painter.setShapes(pages.at(0)->shapes());
-
-        // get the bounding rect of the content
-        QRectF shapesRect = painter.contentRect();
-        // get the size in point
-        QSizeF pointSize = shapesRect.size();
-        // get the size in pixel (100% zoom)
-        KoZoomHandler zoomHandler;
-        QSize pixelSize = zoomHandler.documentToView(pointSize).toSize();
-        //transparent white by default
-        QColor backgroundColor(QColor(255, 255, 255, 0));
-
-        if (! m_chain->manager()->getBatchMode()) {
-            ImageExportOptionsWidget * widget = new ImageExportOptionsWidget(pointSize);
-            widget->setUnit(document->unit());
-            widget->setBackgroundColor(backgroundColor);
-            widget->enableBackgroundOpacity(format == "PNG");
-
-            KoDialog dlg;
-            dlg.setCaption(i18n("PNG Export Options"));
-            dlg.setButtons(KoDialog::Ok | KoDialog::Cancel);
-            dlg.setMainWidget(widget);
-            if (dlg.exec() != QDialog::Accepted)
-                return KoFilter::UserCancelled;
-
-            pixelSize = widget->pixelSize();
-            backgroundColor = widget->backgroundColor();
-        }
-        QImage image(pixelSize, QImage::Format_ARGB32);
-
-        // draw the background of the image
-        image.fill(backgroundColor.rgba());
-
-        // paint the shapes
-        painter.paint(image);
-
-        if(!image.save(m_chain->outputFile(), format.toLatin1())) {
-            return KoFilter::CreationError;
-        }
-
+    } else if (to == "image/jpeg") {
+        format = "JPEG";
     } else {
-        return KoFilter::WrongFormat;
+        return KoFilter::BadMimeType;
+    }
+
+    KarbonDocument *doc = dynamic_cast<KarbonDocument*>(m_chain->inputDocument());
+    if (!doc) {
+        KoFilter::InternalError;
+    }
+
+    KoPAPageBase *page = doc->pages().first();
+
+    KoShapePainter painter;
+    painter.setShapes(page->shapes());
+
+    // get the bounding rect of the content
+    QRectF shapesRect = painter.contentRect();
+    // get the size in point
+    QSizeF pointSize = shapesRect.size();
+    // get the size in pixel (100% zoom)
+    KoZoomHandler zoomHandler;
+    QSize pixelSize = zoomHandler.documentToView(pointSize).toSize();
+    //transparent white by default
+    QColor backgroundColor(QColor(255, 255, 255, 0));
+
+    if (! m_chain->manager()->getBatchMode()) {
+        QApplication::restoreOverrideCursor();
+        ImageExportOptionsWidget * widget = new ImageExportOptionsWidget(doc);
+        widget->setUnit(doc->unit());
+        widget->setBackgroundColor(backgroundColor);
+        widget->enableBackgroundOpacity(format == "PNG");
+
+        KoDialog dlg;
+        dlg.setCaption(i18n("%1 Export Options", format));
+        dlg.setButtons(KoDialog::Ok | KoDialog::Cancel);
+        dlg.setMainWidget(widget);
+        int result = dlg.exec();
+        QApplication::setOverrideCursor(Qt::BusyCursor);
+        if (result != QDialog::Accepted) {
+            return KoFilter::UserCancelled;
+        }
+        pixelSize = widget->pixelSize();
+        backgroundColor = widget->backgroundColor();
+
+        page = widget->page();
+        if (!page) {
+            return KoFilter::InternalError;
+        }
+        painter.setShapes(page->shapes());
+    }
+
+    QImage image(pixelSize, QImage::Format_ARGB32);
+
+    // draw the background of the image
+    image.fill(backgroundColor.rgba());
+
+    // paint the shapes
+    painter.paint(image);
+
+    if(!image.save(m_chain->outputFile(), format.toLatin1())) {
+        return KoFilter::CreationError;
     }
 
     return KoFilter::OK;
