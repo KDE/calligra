@@ -737,7 +737,7 @@ macro_optional_find_package(LibVisio)
 set_package_properties(LibVisio PROPERTIES
     DESCRIPTION "Visio Import Filter Library"
     URL "https://wiki.documentfoundation.org/DLP/Libraries/libvisio"
-    PURPOSE "Required by the Flow visio import filter"
+    PURPOSE "Required by the visio import filter"
     TYPE OPTIONAL
     )
 

@@ -153,7 +153,7 @@ calligra_define_product(FILTER_HTML_TO_ODS "HTML to ODS filter"  REQUIRES LIB_KO
 calligra_define_product(FILTER_SHEETS_TO_HTML "Sheets HTML export filter"  REQUIRES PART_SHEETS)
 calligra_define_product(FILTER_KSPREAD_TO_LATEX "KSpread to LaTeX filter"  REQUIRES LIB_KOMAIN)
 
-# Flow filters
+# odg filters
 calligra_define_product(FILTER_VISIO_TO_ODG "Visio to ODG filter"  REQUIRES LIB_KOMAIN)
 calligra_define_product(FILTER_WPG_TO_ODG "WPG to ODG filter" REQUIRES LIB_KOMAIN)
 
@@ -243,17 +243,24 @@ calligra_define_productset(FILTERS_SHEETS "All Sheets filters"
         FILTERS_SHEETS_IMPORT
         FILTERS_SHEETS_EXPORT
 )
-calligra_define_productset(FILTERS_FLOW_IMPORT "All Flow import filters"
+calligra_define_productset(FILTERS_ODG_IMPORT "All odg import filters"
     OPTIONAL
         FILTER_VISIO_TO_ODG
         FILTER_WPG_TO_ODG
 )
-#calligra_define_productset(FILTERS_FLOW_EXPORT "All Flow export filters"  OPTIONAL ) none currently
-calligra_define_productset(FILTERS_FLOW "All Flow filters"
+#calligra_define_productset(FILTERS_ODG_EXPORT "All Flowodg export filters"  OPTIONAL ) none currently
+calligra_define_productset(FILTERS_ODG "All odg filters"
     OPTIONAL
-        FILTERS_FLOW_IMPORT
-#        FILTERS_FLOW_EXPORT
+        FILTERS_ODG_IMPORT
+#        FILTERS_FLOW_EXPORT none currently
 )
+
+#calligra_define_productset(FILTERS_FLOW_EXPORT "All Flow export filters"  OPTIONAL ) none currently
+# calligra_define_productset(FILTERS_FLOW "All Flow filters" none currently
+#     OPTIONAL
+#         FILTERS_FLOW_IMPORT
+#        FILTERS_FLOW_EXPORT
+#)
 calligra_define_productset(FILTERS_STAGE_IMPORT "All Stage import filters"
     OPTIONAL
         FILTER_KEY_TO_ODP
@@ -364,7 +371,7 @@ calligra_define_productset(FLOW "Full Flow (for Desktop)"
         PLUGIN_VARIABLES
         PLUGIN_VECTORSHAPE
         # filters
-        FILTERS_FLOW
+        FILTERS_ODG
 )
 calligra_define_productset(KARBON "Full Karbon (for Desktop)"
     REQUIRES
@@ -390,6 +397,7 @@ calligra_define_productset(KARBON "Full Karbon (for Desktop)"
         PLUGIN_VECTORSHAPE
         # filters
         FILTERS_KARBON
+        FILTERS_ODG
 )
 calligra_define_productset(SHEETS "Full Sheets (for Desktop)"
     REQUIRES
