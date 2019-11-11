@@ -430,6 +430,7 @@ bool PictureShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
     if (loadOdfFrame(element, context)) {
         // load contour (clip)
         KoImageData *imageData = qobject_cast<KoImageData*>(userData());
+        Q_ASSERT(imageData);
 
         QSizeF scaleFactor(size().width() / imageData->imageSize().width(),
                  size().height() / imageData->imageSize().height());
@@ -442,6 +443,37 @@ bool PictureShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &c
     }
     return false;
 }
+
+static const char *s_emptyImageXpm[] = {
+    /* <Values> */
+    /* <width/columns> <height/rows> <colors> <chars per pixel>*/
+    "16 16 2 1",
+    /* <Colors> */
+    "a c #ffffff",
+    "b c #000000",
+    /* <Pixels> */
+    "bbbbbbbbbbbbbbbb",
+    "baaaaaaaaaaaaaab",
+    "baaaaaaaaaaaaaab",
+    "baaaaaaaaaaaaaab",
+    "baaaaaaaaaaaaaab",
+    "baaaaaaaaaaaaaab",
+    "baaaaaaaaaaaaaab",
+    "baaaaaaaaaaaaaab",
+    "baaaaaaaaaaaaaab",
+    "baaaaaaaaaaaaaab",
+    "baaaaaaaaaaaaaab",
+    "baaaaaaaaaaaaaab",
+    "baaaaaaaaaaaaaab",
+    "baaaaaaaaaaaaaab",
+    "baaaaaaaaaaaaaab",
+    "bbbbbbbbbbbbbbbb"
+};
+
+// image formats (possibly) supported by Qt
+// According to docs, only jpg and png are checked for by default
+const int s_numImageFormats = 10;
+const char *s_imageFormat[s_numImageFormats] = { "jpg", "jpeg", "png", "bmp", "gif", "pbm", "pgm", "ppm", "xbm", "xpm" };
 
 bool PictureShape::loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
@@ -457,11 +489,23 @@ bool PictureShape::loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadi
             const KoXmlElement &binaryData(KoXml::namedItemNS(element, KoXmlNS::office, "binary-data"));
             if (!binaryData.isNull()) {
                 QImage image;
-                if (image.loadFromData(QByteArray::fromBase64(binaryData.text().toLatin1()))) {
-                    KoImageData *data = m_imageCollection->createImageData(image);
-                    setUserData(data);
+                for (int i = 0; i < s_numImageFormats; ++i) {
+                    if (image.loadFromData(QByteArray::fromBase64(binaryData.text().toLatin1()), s_imageFormat[i])) {
+                        KoImageData *data = m_imageCollection->createImageData(image);
+                        setUserData(data);
+                        debugPicture<<"Found image format:"<<s_imageFormat[i];
+                        break;
+                    }
                 }
+            } else {
+                debugPicture<<"No image binary data";
             }
+        }
+        if (!userData()) {
+            // We must crate an image or else things crashes later on
+            warnPicture<<"Could not find an image, creating an empty one";
+            KoImageData *data = m_imageCollection->createImageData(QImage(s_emptyImageXpm));
+            setUserData(data);
         }
     }
 
