@@ -1058,7 +1058,6 @@ calligra_drop_products_on_old_flag(karbon APP_KARBON)
 calligra_drop_products_on_old_flag(sheets PART_SHEETS APP_SHEETS)
 calligra_drop_products_on_old_flag(stage  PART_STAGE APP_STAGE)
 calligra_drop_products_on_old_flag(words  PART_WORDS APP_WORDS)
-calligra_drop_products_on_old_flag(flow  APP_FLOW)
 
 #############################################
 ####      Temporarily broken products    ####
@@ -1095,10 +1094,6 @@ endif()
 ###################
 
 add_subdirectory(words)
-
-if(SHOULD_BUILD_APP_FLOW)
-    add_subdirectory(flow)
-endif()
 
 add_subdirectory(stage)
 

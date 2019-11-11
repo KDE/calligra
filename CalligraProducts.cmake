@@ -94,7 +94,6 @@ calligra_define_product(APP_WORDS "Words app (for Desktop)"  REQUIRES PART_WORDS
 calligra_define_product(APP_STAGE "Stage app (for Desktop)"   REQUIRES PART_STAGE)
 calligra_define_product(APP_SHEETS "Sheets app (for Desktop)" REQUIRES PART_SHEETS)
 calligra_define_product(APP_KARBON "Karbon app (for Desktop)"  REQUIRES LIB_CALLIGRA LIB_KOMAIN LIB_KOPAGEAPP)
-calligra_define_product(APP_FLOW "Flow app (for Desktop)" REQUIRES LIB_CALLIGRA LIB_KOMAIN LIB_KOPAGEAPP)
 calligra_define_product(APP_BRAINDUMP "Braindump app (for Desktop)"  UNMAINTAINED  REQUIRES LIB_CALLIGRA LIB_KOMAIN)
 calligra_define_product(DOC "Calligra Documentations" STAGING)
 
@@ -248,19 +247,12 @@ calligra_define_productset(FILTERS_ODG_IMPORT "All odg import filters"
         FILTER_VISIO_TO_ODG
         FILTER_WPG_TO_ODG
 )
-#calligra_define_productset(FILTERS_ODG_EXPORT "All Flowodg export filters"  OPTIONAL ) none currently
+
 calligra_define_productset(FILTERS_ODG "All odg filters"
     OPTIONAL
         FILTERS_ODG_IMPORT
-#        FILTERS_FLOW_EXPORT none currently
 )
 
-#calligra_define_productset(FILTERS_FLOW_EXPORT "All Flow export filters"  OPTIONAL ) none currently
-# calligra_define_productset(FILTERS_FLOW "All Flow filters" none currently
-#     OPTIONAL
-#         FILTERS_FLOW_IMPORT
-#        FILTERS_FLOW_EXPORT
-#)
 calligra_define_productset(FILTERS_STAGE_IMPORT "All Stage import filters"
     OPTIONAL
         FILTER_KEY_TO_ODP
@@ -351,28 +343,7 @@ calligra_define_productset(BRAINDUMP "Full Braindump (for Desktop)"
         PLUGIN_VECTORSHAPE
         PLUGIN_VIDEOSHAPE
 )
-calligra_define_productset(FLOW "Full Flow (for Desktop)"
-    REQUIRES
-        APP_FLOW
-    OPTIONAL
-        # extras
-        FILEMANAGER
-        # plugins
-        PLUGIN_ARTISTICTEXTSHAPE
-        PLUGIN_CHARTSHAPE
-        PLUGIN_DEFAULTTOOLS
-        PLUGIN_DOCKERS
-        PLUGIN_FORMULASHAPE
-        PLUGIN_PATHSHAPES
-        PLUGIN_PICTURESHAPE
-        PLUGIN_PLUGINSHAPE
-        PLUGIN_TEXTEDITING
-        PLUGIN_TEXTSHAPE
-        PLUGIN_VARIABLES
-        PLUGIN_VECTORSHAPE
-        # filters
-        FILTERS_ODG
-)
+
 calligra_define_productset(KARBON "Full Karbon (for Desktop)"
     REQUIRES
         APP_KARBON
