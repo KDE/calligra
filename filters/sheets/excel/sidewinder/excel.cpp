@@ -1392,51 +1392,54 @@ void ObjRecord::setData(unsigned size, const unsigned char* data, const unsigned
         break;
     case Object::Picture: { // pictFormat and pictFlags
         m_object = new Object(Object::Picture, id);
-        //const unsigned long ft = readU16(startPict);
-        //const unsigned long cb = readU16(startPict + 2);
-        // cf specifies Windows Clipboard format -- so far unused
-        const unsigned long cf = readU16(startPict + 4);
-        switch (cf) {
-        case 0x0002:
-            // enhanced metafile
-            break;
-        case 0x0009:
-            // bitmap
-            break;
-        case 0xFFFF:
-            // unspecified format, neither enhanced metafile nor a bitmap
-            break;
-        default:
-            qCWarning(lcSidewinder) << "ObjRecord::setData: invalid ObjRecord Picture";
-            setIsValid(false);
-            delete m_object;
-            m_object = 0;
-            return;
+        const unsigned long ft = readU16(startPict);
+        if (ft == 0x0007) {
+            // const unsigned long cb = readU16(startPict + 2);
+            // cf specifies Windows Clipboard format -- so far unused
+            const unsigned long cf = readU16(startPict + 4);
+            switch (cf) {
+            case 0x0002:
+                // enhanced metafile
+                break;
+            case 0x0009:
+                // bitmap
+                break;
+            case 0xFFFF:
+                // unspecified format, neither enhanced metafile nor a bitmap
+                break;
+            default:
+                qCWarning(lcSidewinder) << "ObjRecord::setData: invalid ObjRecord Picture";
+                setIsValid(false);
+                delete m_object;
+                m_object = 0;
+                return;
+            }
+            startPict += 6;
         }
-        const unsigned long ft2 = readU16(startPict + 6);
-        Q_ASSERT(ft2 == 0x0008); Q_UNUSED(ft2);
-        const unsigned long cb2 = readU16(startPict + 8);
-        Q_ASSERT(cb2 == 0x0002); Q_UNUSED(cb2);
-        const unsigned long opts2 = readU16(startPict + 10);
-        //const bool fAutoPict = opts2 & 0x01;
-        fDde = opts2 & 0x02; // dynamic data exchange reference?
-        //const bool dPrintCalc = opts2 & 0x04;
-        //const bool fIcon = opts2 & 0x08;
-        fCtl = opts2 & 0x10; // ActiveX control?
-        Q_ASSERT(!(fCtl && fDde));
-        fPrstm = opts2 & 0x20;
-        //const bool unused1 = opts2 & 0x60;
-        //const bool fCamera = opts2 & 0xC0;
-        //const bool fDefaultSize = opts2 & 0x180;
-        //const bool fAutoload = opts2 & 0x300;
-        //const bool unused2 = opts2 & 0x600;
-        //const bool unused3 = opts2 & 0xC00;
-        //const bool unused4 = opts2 & 0x1800;
-        //const bool unused5 = opts2 & 0x3000;
-        //const bool unused6 = opts2 & 0x6000;
-        //const bool unused7 = opts2 & 0xC000;
-        qCDebug(lcSidewinder) << "ObjRecord::setData picture id=" << id << "fDde=" << fDde << "FCtl=" << fCtl << "fPrstm=" << fPrstm;
-        startPict += 12;
+        const unsigned long ft2 = readU16(startPict);
+        if (ft2 == 0x0008) {
+            const unsigned long cb2 = readU16(startPict + 2);
+            Q_ASSERT(cb2 == 0x0002); Q_UNUSED(cb2);
+            const unsigned long opts2 = readU16(startPict + 4);
+            //const bool fAutoPict = opts2 & 0x01;
+            fDde = opts2 & 0x02; // dynamic data exchange reference?
+            //const bool dPrintCalc = opts2 & 0x04;
+            //const bool fIcon = opts2 & 0x08;
+            fCtl = opts2 & 0x10; // ActiveX control?
+            Q_ASSERT(!(fCtl && fDde));
+            fPrstm = opts2 & 0x20;
+            //const bool unused1 = opts2 & 0x60;
+            //const bool fCamera = opts2 & 0xC0;
+            //const bool fDefaultSize = opts2 & 0x180;
+            //const bool fAutoload = opts2 & 0x300;
+            //const bool unused2 = opts2 & 0x600;
+            //const bool unused3 = opts2 & 0xC00;
+            //const bool unused4 = opts2 & 0x1800;
+            //const bool unused5 = opts2 & 0x3000;
+            //const bool unused6 = opts2 & 0x6000;
+            //const bool unused7 = opts2 & 0xC000;
+            startPict += 6;
+        }
     }
     break;
     case Object::Checkbox: // cbls
