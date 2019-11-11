@@ -125,8 +125,11 @@ KoFilter::ConversionStatus VSDXImport::convert(const QByteArray& from, const QBy
         fprintf(stderr, "ERROR: We have no confidence that you are giving us a valid Visio Document.\n");
         return KoFilter::ParsingError;
     }
-
-    if (!helper.convertDocument(input, outputFile.constData()))
+    // NOTE:
+    // Flat files are not supported, see convertDocument() above
+    // Setting flat to false makes some formats work (2002 and 2013 have been tested)
+    bool isFlat = false;
+    if (!helper.convertDocument(input, isFlat))
     {
         fprintf(stderr, "ERROR : Couldn't write convert the document\n");
         return KoFilter::ParsingError;
