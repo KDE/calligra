@@ -183,7 +183,8 @@ KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoa
                         if (n.isElement()) {
                             debugFlake << "trying for element " << n.toElement().tagName();
                             shape = d->createShapeInternal(e, context, n.toElement());
-                            break;
+                            if (shape)
+                                break;
                         }
                     }
                     if (shape)
@@ -191,7 +192,8 @@ KoShape * KoShapeRegistry::createShapeFromOdf(const KoXmlElement & e, KoShapeLoa
                     else
                         debugFlake << "Found NO shape shape for draw:object";
                 }
-                else {
+
+                if (!shape) {
                     // If not draw:object, e.g draw:image or draw:plugin
                     shape = d->createShapeInternal(e, context, element);
                 }
