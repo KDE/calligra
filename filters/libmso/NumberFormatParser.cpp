@@ -260,7 +260,8 @@ KoGenStyle NumberFormatParser::parse(const QString& origNumberFormat, KoGenStyle
             // do following only if we are really a number and not part of another KoGenStyle like a date or time formatting
             if (type == KoGenStyle::NumericNumberStyle
 		|| type == KoGenStyle::NumericFractionStyle
-		|| type == KoGenStyle::NumericScientificStyle)
+		|| type == KoGenStyle::NumericScientificStyle
+		|| type == KoGenStyle::NumericCurrencyStyle)
 	    {
                 bool grouping = false;
                 bool gotDot = false;
