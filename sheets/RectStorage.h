@@ -570,19 +570,15 @@ void RectStorageLoader<T>::run()
 
     QList<QPair<QRegion, T> > treeData;
     typedef QPair<QRegion, T> TRegion;
-    QMap<T, int> indexCache;
     foreach (const TRegion& tr, m_data) {
         const QRegion& reg = tr.first;
         const T& d = tr.second;
 
-        typename QMap<T, int>::iterator idx = indexCache.find(d);
-        int index = idx != indexCache.end() ? idx.value() : m_storage->m_storedData.indexOf(d);
+        int index = m_storage->m_storedData.indexOf(d);
         if (index != -1) {
             treeData.append(qMakePair(reg, m_storage->m_storedData[index]));
-            if (idx == indexCache.end()) indexCache.insert(d, index);
         } else {
             treeData.append(tr);
-            if (idx == indexCache.end()) indexCache.insert(d, m_storage->m_storedData.size());
             m_storage->m_storedData.append(d);
         }
     }

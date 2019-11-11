@@ -381,6 +381,8 @@ void Conditions::operator=(const Conditions & other)
 
 bool Conditions::operator==(const Conditions& other) const
 {
+    if (d->defaultStyle != other.d->defaultStyle)
+        return false;
     if (d->conditionList.count() != other.d->conditionList.count())
         return false;
     QLinkedList<Conditional>::ConstIterator end(d->conditionList.end());
@@ -399,7 +401,7 @@ bool Conditions::operator==(const Conditions& other) const
 
 uint Calligra::Sheets::qHash(const Conditions &c)
 {
-    uint res = 0;
+    uint res = qHash(c.defaultStyle());
     foreach (const Conditional& co, c.conditionList()) {
         res ^= qHash(co);
     }
