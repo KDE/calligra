@@ -330,7 +330,11 @@ QString ValueFormatter::createNumberFormat(Number value, int precision,
         break;
     case Format::Money:
         // There is no substitute for this in QLocale (toCurrencyString cannot set precision) :(
-        localizedNumber = m_converter->settings()->locale()->formatMoney(val, currencySymbol.isEmpty() ? m_converter->settings()->locale()->currencySymbol() : currencySymbol, p);
+        if (_formatString.isEmpty()) {
+            localizedNumber = m_converter->settings()->locale()->formatMoney(val, currencySymbol, p);
+        } else {
+            localizedNumber = m_converter->settings()->locale()->formatNumber(val, p);
+        }
         break;
     case Format::Scientific: {
         const QString decimalSymbol = m_converter->settings()->locale()->decimalSymbol();
