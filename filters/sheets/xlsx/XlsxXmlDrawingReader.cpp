@@ -307,6 +307,17 @@ KoFilter::ConversionStatus XlsxXmlDrawingReader::read_anchor(const QString& refe
             // twoCellAnchor does define the 'from' and 'to' elements which do define the anchor-points
             TRY_READ_IF(from)
             ELSE_TRY_READ_IF(to)
+            else if (qualifiedName() == QLatin1String("xdr:ext")) {
+                // read_ext expects the qualifed name a:ext
+                const QXmlStreamAttributes attrs(attributes());
+
+                READ_ATTR_WITHOUT_NS(cx)
+                STRING_TO_INT(cx, m_svgWidth, "ext@cx")
+                READ_ATTR_WITHOUT_NS(cy)
+                STRING_TO_INT(cy, m_svgHeight, "ext@cy")
+                readNext();
+            }
+            ELSE_TRY_READ_IF(ext)
             // a shape
             ELSE_TRY_READ_IF(sp)
             // the reference to a picture
