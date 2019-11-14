@@ -181,7 +181,9 @@ bool ExtensionSnapStrategy::snap(const QPointF &mousePosition, KoSnapProxy * pro
     Q_ASSERT(std::isfinite(maxSnapDistance));
 
     const qreal maxDistance = maxSnapDistance * maxSnapDistance;
-    qreal minDistances[2] = { HUGE_VAL, HUGE_VAL };
+    // NOTE: HUGE_VAL with qreal, which can be either float or double,
+    // is not necessarily ideal, but seems to work good enough
+    qreal minDistances[2] = { (qreal)HUGE_VAL, (qreal)HUGE_VAL };
 
     QPointF snappedPoints[2] = { mousePosition, mousePosition };
     QPointF startPoints[2];
