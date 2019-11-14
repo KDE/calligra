@@ -1867,12 +1867,7 @@ namespace RtfReader
       */
     bool ControlWord::isSupportedDestination() const
     {
-	if ( ( m_name == "pgdsc" ) || // not a verified destination
-	    ( m_name == "pgdsctbl" ) || // not a verified destination
-	    ( m_name == "pict" ) || 
-	    ( m_name == "shppict" ) ||
-	    ( m_name == "pntxta" ) ||
-	    ( m_name == "pntxtb" ) ||
+	if (( m_name == "pict" ) ||
 	    ( m_name == "fonttbl" ) ||
 	    ( m_name == "stylesheet" ) ||
 	    ( m_name == "colortbl" ) ||
@@ -1892,8 +1887,17 @@ namespace RtfReader
 	    ( m_name == "keywords" ) ||
 	    ( m_name == "hlinkbase" ) ||
 	    ( m_name == "userprops" ) ||
-	    ( m_name == "mmathPr" ) ||
-	    ( m_name == "author" ) ) {
+	    ( m_name == "author" ) ||
+	    // destinations from here on are marked supported so content like images inside them are handled,
+	    // but they don't have their own destination class to parse destination specific control words
+	    ( m_name == "pgdsc" ) ||
+	    ( m_name == "pgdsctbl" ) ||
+	    ( m_name == "shppict" ) ||
+	    ( m_name == "shp" ) ||
+	    ( m_name == "shpinst" ) ||
+	    ( m_name == "pntxta" ) ||
+	    ( m_name == "pntxtb" ) ||
+	    ( m_name == "mmathPr" )) {
 	    return true;
 	}
     return false;
