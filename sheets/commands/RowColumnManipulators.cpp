@@ -17,6 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include <algorithm>
+
 // Local
 #include "RowColumnManipulators.h"
 
@@ -649,7 +651,7 @@ bool InsertDeleteColumnManipulator::preProcessing()
         // If we have an NCS, create a child command for each element.
         if (cells().count() > 1) { // non-contiguous selection
             // Sort the elements by their top row.
-            qStableSort(cells().begin(), cells().end(), elementLeftColumnLessThan);
+            std::stable_sort(cells().begin(), cells().end(), elementLeftColumnLessThan);
             // Create sub-commands.
             const Region::ConstIterator end(constEnd());
             for (Region::ConstIterator it = constBegin(); it != end; ++it) {
@@ -772,7 +774,7 @@ bool InsertDeleteRowManipulator::preProcessing()
         // If we have an NCS, create a child command for each element.
         if (cells().count() > 1) { // non-contiguous selection
             // Sort the elements by their top row.
-            qStableSort(cells().begin(), cells().end(), elementTopRowLessThan);
+            std::stable_sort(cells().begin(), cells().end(), elementTopRowLessThan);
             // Create sub-commands.
             const Region::ConstIterator end(constEnd());
             for (Region::ConstIterator it = constBegin(); it != end; ++it) {

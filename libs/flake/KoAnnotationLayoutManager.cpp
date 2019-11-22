@@ -16,6 +16,8 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#include <algorithm>
+
 #include "KoAnnotationLayoutManager.h"
 
 #include <KoViewConverter.h>
@@ -191,7 +193,7 @@ void KoAnnotationLayoutManager::updateLayout(KoShape *shape)
 void KoAnnotationLayoutManager::layoutAnnotationShapes()
 {
     qreal currentY = 0.0;
-    qStableSort(d->annotationShapePositions.begin(), d->annotationShapePositions.end(), compare);
+    std::stable_sort(d->annotationShapePositions.begin(), d->annotationShapePositions.end(), compare);
 
     QList< QPair < QPointF, KoShape * > >::const_iterator it = d->annotationShapePositions.constBegin();
     while (it != d->annotationShapePositions.constEnd()) {

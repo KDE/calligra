@@ -49,6 +49,8 @@
 // Qt
 #include <QStyledItemDelegate>
 
+#include <algorithm>
+
 using namespace Calligra::Sheets;
 
 Q_DECLARE_METATYPE(Qt::CaseSensitivity)
@@ -642,7 +644,7 @@ void SortDialog::removeCriterion()
     if (ranges.isEmpty()) {
         return;
     }
-    qStableSort(ranges.begin(), ranges.end(), greaterThan);
+    std::stable_sort(ranges.begin(), ranges.end(), greaterThan);
     for (int i = 0; i < ranges.count(); ++i) {
         for (int row = ranges[i].bottomRow(); row >= ranges[i].topRow(); --row) {
             // Reinsert the item to be removed into the map of available items.

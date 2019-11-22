@@ -20,6 +20,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include <algorithm>
+
 #include "KoModeBox_p.h"
 
 #include <KoCanvasControllerWidget.h>
@@ -564,7 +566,7 @@ void KoModeBox::toolAdded(KoToolAction *toolAction, KoCanvasController *canvas)
     if (canvas->canvas() == d->canvas) {
         addToolAction(toolAction);
 
-        qStableSort(d->toolActions.begin(), d->toolActions.end(), compareToolActions);
+        std::stable_sort(d->toolActions.begin(), d->toolActions.end(), compareToolActions);
 
         updateShownTools(QList<QString>());
     }

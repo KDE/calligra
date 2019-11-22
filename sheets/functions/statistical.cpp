@@ -34,6 +34,8 @@
 #include <QList>
 #include <QMap>
 
+#include <algorithm>
+
 using namespace Calligra::Sheets;
 
 // prototypes (sorted!)
@@ -1290,7 +1292,7 @@ Value func_frequency(valVector args, ValueCalc*, FuncExtra*)
         return Value(data.count());
 
     // sort the data
-    qStableSort(data);
+    std::stable_sort(data.begin(), data.end());
 
     Value result(Value::Array);
     QVector<double>::ConstIterator begin = data.constBegin();

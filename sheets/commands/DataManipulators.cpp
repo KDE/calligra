@@ -17,6 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include <algorithm>
 
 #include "DataManipulators.h"
 
@@ -467,9 +468,9 @@ bool ShiftManipulator::preProcessing()
         if (cells().count() > 1) { // non-contiguous selection
             // Sort the elements by their top row.
             if (m_direction == ShiftBottom) {
-                qStableSort(cells().begin(), cells().end(), topRowLessThan);
+                std::stable_sort(cells().begin(), cells().end(), topRowLessThan);
             } else { // ShiftRight
-                qStableSort(cells().begin(), cells().end(), leftColumnLessThan);
+                std::stable_sort(cells().begin(), cells().end(), leftColumnLessThan);
             }
             // Create sub-commands.
             const Region::ConstIterator end(constEnd());
