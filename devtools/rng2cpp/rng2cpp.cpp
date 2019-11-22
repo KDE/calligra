@@ -26,8 +26,6 @@
 #include <QSet>
 #include <QVector>
 
-#define assert(cond, what) Q_ASSERT_X(cond, "", qPrintable(what))
-
 static QString ns() {
     return QStringLiteral("writeodf");
 }
@@ -308,7 +306,7 @@ void merge(RNGItemPtr& a, const RNGItemPtr& b)
     if (b->mixedContent) {
         a->mixedContent = true;
     }
-    assert(a->allowedItems.contains(b), "");
+    Q_ASSERT(a->allowedItems.contains(b));
     if (a->requiredItems.contains(b)) {
         foreach(RNGItemPtr i, b->requiredItems) {
             a->requiredItems.insert(i);
@@ -572,7 +570,7 @@ RNGItemPtr getDefines(QDomElement e, RNGItems& items)
         if (e.localName() == "define") {
             parseDefine(e, items, false);
         } else if (e.localName() == "start") {
-            assert(!start, "Multiple start elements.");
+            Q_ASSERT_X(!start, "getDefines", "Multiple start elements.");
             start = parseDefine(e, items, true);
         } else {
             fatal() << "Unknown element " << e.localName();
@@ -718,7 +716,7 @@ int reduce(RNGItems& items)
             RNGItemPtr user = RNGItemPtr(0);
             foreach (const RNGItemPtr& i, items) {
                 if (i->allowedItems.contains(item)) {
-                    assert(!user, "");
+                    Q_ASSERT(!user);
                     user = i;
                 }
             }
@@ -765,11 +763,11 @@ RNGItemPtr getDefine(const QString& name, const RNGItems& items)
     RNGItemPtr item = RNGItemPtr(0);
     foreach (RNGItemPtr i, items) {
         if (i->name() == name) {
-            assert(!item, "Doubly defined element " + name + ".");
+            Q_ASSERT_X(!item, "getDefine", "Doubly defined element " + name + ".");
             item = i;
         }
     }
-    assert(item, "Define not found " + name);
+    Q_ASSERT_X(item, "getDefine", "Define not found " + name);
     return item;
 }
 
