@@ -16,6 +16,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
+#include <algorithm>
+
 #include <QFile>
 #include <QDebug>
 #include <QDomDocument>
@@ -908,7 +910,7 @@ RNGItemList getBasesList(RNGItemPtr item)
     }
     list.subtract(antilist);
     RNGItemList l = toVector(list);
-    qStableSort(l.begin(), l.end(), rngItemPtrLessThan);
+    std::stable_sort(l.begin(), l.end(), rngItemPtrLessThan);
     return l;
 }
 
@@ -919,7 +921,7 @@ RNGItemList getBasesList(RNGItemPtr item)
 RNGItemList list(const RNGItems& items)
 {
     RNGItemList list = toVector(items);
-    qStableSort(list.begin(), list.end(), rngItemPtrLessThan);
+    std::stable_sort(list.begin(), list.end(), rngItemPtrLessThan);
     return list;
 }
 
@@ -1046,7 +1048,7 @@ RequiredArgsList makeFullRequiredArgsList(const RNGItemPtr& item)
     r.length = 0;
     RNGItemList list;
     getAllRequiredAttributes(item, list);
-    qStableSort(list.begin(), list.end(), rngItemPtrLessThan);
+    std::stable_sort(list.begin(), list.end(), rngItemPtrLessThan);
     foreach (RNGItemPtr i, list) {
         QString name = makeCppName(i);
         QString type = i->singleType();
@@ -1410,7 +1412,7 @@ void convert(const QString& rngfile, const QString& outdir)
     //qDebug() << "reduce " << resolved.size();
     RNGItemList list = toVector(resolved);
     //qDebug() << "filteredItems " << list.size();
-    qStableSort(list.begin(), list.end(), rngItemPtrLessThan);
+    std::stable_sort(list.begin(), list.end(), rngItemPtrLessThan);
     makeCppNames(list);
     write(list, outdir);
     //qDebug() << list.size();
