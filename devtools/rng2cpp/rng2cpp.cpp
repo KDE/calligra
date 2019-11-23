@@ -765,11 +765,11 @@ RNGItemPtr getDefine(const QString& name, const RNGItems& items)
     RNGItemPtr item = RNGItemPtr(0);
     foreach (RNGItemPtr i, items) {
         if (i->name() == name) {
-            Q_ASSERT_X(!item, "getDefine", "Doubly defined element " + name + ".");
+            Q_ASSERT_X(!item, "getDefine", qPrintable("Doubly defined element" + name + "."));
             item = i;
         }
     }
-    Q_ASSERT_X(item, "getDefine", "Define not found " + name);
+    Q_ASSERT_X(item, "getDefine", qPrintable("Define not found " + name));
     return item;
 }
 
