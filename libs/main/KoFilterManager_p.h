@@ -54,7 +54,7 @@ class KoFilterChooser : public KoDialog
 public:
     KoFilterChooser(QWidget *parent, const QStringList &mimeTypes,
                     const QString &nativeFormat = QString(), const QUrl &url = QUrl());
-    ~KoFilterChooser();
+    ~KoFilterChooser() override;
 
     QString filterSelected();
 

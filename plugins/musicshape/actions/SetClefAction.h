@@ -26,7 +26,7 @@ class SetClefAction : public AbstractMusicAction
 {
 public:
     SetClefAction(MusicCore::Clef::ClefShape shape, int line, int octaveChange, SimpleEntryTool* tool);
-    virtual void mousePress(MusicCore::Staff* staff, int bar, const QPointF& pos);
+    void mousePress(MusicCore::Staff* staff, int bar, const QPointF& pos) override;
 private:
     MusicCore::Clef::ClefShape m_shape;
     int m_line;

@@ -68,13 +68,13 @@ class FormulaCommandReplaceText : public FormulaCommand {
 public:
     FormulaCommandReplaceText( TokenElement* owner, int position,int length, const QString& added , KUndo2Command *parent=0);
 
-    ~FormulaCommandReplaceText();
+    ~FormulaCommandReplaceText() override;
 
     /// Execute the command
-    void redo();
+    void redo() override;
 
     /// Revert the actions done in redo()
-    void undo();
+    void undo() override;
 
 private:
     /// The BasicElement that owns the newly added Text
@@ -99,13 +99,13 @@ class FormulaCommandReplaceElements : public FormulaCommand {
 public:
     FormulaCommandReplaceElements( RowElement* owner, int position, int length, QList<BasicElement*> elements , bool wrap=false, KUndo2Command *parent=0);
 
-    ~FormulaCommandReplaceElements();
+    ~FormulaCommandReplaceElements() override;
 
     /// Execute the command
-    void redo();
+    void redo() override;
 
     /// Revert the actions done in redo()
-    void undo();
+    void undo() override;
 
 private:
     /// The BasicElement that owns the newly added Text
@@ -135,13 +135,13 @@ class FormulaCommandLoad : public FormulaCommand {
 public:
     FormulaCommandLoad( FormulaData* data, FormulaElement* newelement, KUndo2Command *parent=0);
 
-    ~FormulaCommandLoad ();
+    ~FormulaCommandLoad () override;
     
     /// Execute the command
-    void redo();
+    void redo() override;
 
     /// Revert the actions done in redo()
-    void undo();
+    void undo() override;
 
 private:
     FormulaData* m_data;
@@ -153,13 +153,13 @@ class FormulaCommandReplaceRow : public FormulaCommand {
 public:
     FormulaCommandReplaceRow ( FormulaData* data, FormulaCursor oldPosition, TableElement* table, int number, int oldlength, int newlength );
 
-    ~FormulaCommandReplaceRow ();
+    ~FormulaCommandReplaceRow () override;
 
     /// Execute the command
-    void redo();
+    void redo() override;
 
     /// Revert the actions done in redo()
-    void undo();
+    void undo() override;
 
 private:
     FormulaData* m_data;
@@ -174,13 +174,13 @@ class FormulaCommandReplaceColumn : public FormulaCommand {
 public:
     FormulaCommandReplaceColumn ( FormulaData* data, FormulaCursor oldPosition, TableElement* table, int number, int oldlength, int newlength );
 
-    ~FormulaCommandReplaceColumn ();
+    ~FormulaCommandReplaceColumn () override;
 
     /// Execute the command
-    void redo();
+    void redo() override;
 
     /// Revert the actions done in redo()
-    void undo();
+    void undo() override;
 
 private:
     FormulaData* m_data;

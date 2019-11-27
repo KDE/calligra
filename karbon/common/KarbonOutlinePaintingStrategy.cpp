@@ -34,7 +34,7 @@ public:
 
     using KoShapeStroke::paint;
 
-    virtual void paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter)
+    void paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter) override
     {
         KoShape::applyConversion(painter, converter);
         painter.strokePath(shape->outline(), m_pen);

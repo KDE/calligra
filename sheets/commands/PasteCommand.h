@@ -44,7 +44,7 @@ class CALLIGRA_SHEETS_COMMON_TEST_EXPORT PasteCommand : public AbstractRegionCom
 {
 public:
     PasteCommand(KUndo2Command *parent = 0);
-    virtual ~PasteCommand();
+    ~PasteCommand() override;
 
     /**
      * Modes used for paste with insertion.
@@ -83,9 +83,9 @@ public:
     static bool unknownShiftDirection(const QMimeData *mimeData);
 
 protected:
-    virtual bool preProcessing();
-    virtual bool mainProcessing();
-    virtual bool postProcessing();
+    bool preProcessing() override;
+    bool mainProcessing() override;
+    bool postProcessing() override;
 
     /**
      * Creates sub-commands for the region \p element by parsing XML \p data.

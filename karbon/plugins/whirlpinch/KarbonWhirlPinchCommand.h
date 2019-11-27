@@ -38,12 +38,12 @@ public:
     * @param parent the parent command used for macro commands
      */
     KarbonWhirlPinchCommand(KoPathShape * path, qreal angle, qreal pinch, qreal radius, KUndo2Command *parent = 0);
-    virtual ~KarbonWhirlPinchCommand();
+    ~KarbonWhirlPinchCommand() override;
 
     /// redo the command
-    void redo();
+    void redo() override;
     /// revert the actions done in redo
-    void undo();
+    void undo() override;
 
 private:
     class Private;

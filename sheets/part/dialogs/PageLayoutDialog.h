@@ -44,10 +44,10 @@ public:
     /**
      * Destructor.
      */
-    virtual ~PageLayoutDialog();
+    ~PageLayoutDialog() override;
 
 public Q_SLOTS:
-    virtual void accept();
+    void accept() override;
 
 private:
     class Private;

@@ -36,22 +36,22 @@ class STAGE_EXPORT KPrDocument : public KoPADocument
     Q_OBJECT
 public:
     explicit KPrDocument(KoPart *part=0);
-    ~KPrDocument();
+    ~KPrDocument() override;
 
     /// reimplemented
-    virtual KoPAPage *newPage(KoPAMasterPage *masterPage);
+    KoPAPage *newPage(KoPAMasterPage *masterPage) override;
     /// reimplemented
-    virtual KoPAMasterPage * newMasterPage();
+    KoPAMasterPage * newMasterPage() override;
 
     /// reimplemented
-    virtual KoOdf::DocumentType documentType() const;
+    KoOdf::DocumentType documentType() const override;
 
     /// reimplemented from KoDocument
-    virtual QByteArray nativeFormatMimeType() const { return STAGE_MIME_TYPE; }
+    QByteArray nativeFormatMimeType() const override { return STAGE_MIME_TYPE; }
     /// reimplemented from KoDocument
-    virtual QByteArray nativeOasisMimeType() const {return STAGE_MIME_TYPE;}
+    QByteArray nativeOasisMimeType() const override {return STAGE_MIME_TYPE;}
     /// reimplemented from KoDocument
-    virtual QStringList extraNativeMimeTypes() const
+    QStringList extraNativeMimeTypes() const override
     {
         return QStringList() << "application/vnd.oasis.opendocument.presentation-template";
     }
@@ -133,20 +133,20 @@ public:
     void setActiveCustomSlideShow( const QString &customSlideShow );
 
     /// reimplemented
-    virtual void saveOdfDocumentStyles( KoPASavingContext & context );
+    void saveOdfDocumentStyles( KoPASavingContext & context ) override;
 
     /// reimplemented
-    virtual bool loadOdfDocumentStyles( KoPALoadingContext & context );
+    bool loadOdfDocumentStyles( KoPALoadingContext & context ) override;
 
     /// reimplemented
-    virtual bool loadOdfProlog( const KoXmlElement & body, KoPALoadingContext & context );
+    bool loadOdfProlog( const KoXmlElement & body, KoPALoadingContext & context ) override;
 
     /**
      * Get the page type used in the document
      *
      * The default page type KoPageApp::Page is returned
      */
-    virtual KoPageApp::PageType pageType() const;
+    KoPageApp::PageType pageType() const override;
 
     /**
      * Get the KPrDeclarations pointer
@@ -154,7 +154,7 @@ public:
     KPrDeclarations * declarations() const;
 
 public Q_SLOTS:
-    virtual void initEmpty();
+    void initEmpty() override;
 
 Q_SIGNALS:
     /**
@@ -173,24 +173,24 @@ Q_SIGNALS:
 
 protected:
     /// reimplemented
-    virtual const char *odfTagName( bool withNamespace );
+    const char *odfTagName( bool withNamespace ) override;
 
     /// reimplemented
-    virtual bool loadOdfEpilogue( const KoXmlElement & body, KoPALoadingContext & context );
+    bool loadOdfEpilogue( const KoXmlElement & body, KoPALoadingContext & context ) override;
 
     /// reimplemented
-    virtual bool saveOdfProlog( KoPASavingContext & paContext );
+    bool saveOdfProlog( KoPASavingContext & paContext ) override;
 
     /// reimplemented
-    virtual bool saveOdfEpilogue( KoPASavingContext & context );
+    bool saveOdfEpilogue( KoPASavingContext & context ) override;
 
     /// reimplemented
-    virtual void postAddShape( KoPAPageBase * page, KoShape * shape );
+    void postAddShape( KoPAPageBase * page, KoShape * shape ) override;
     /// reimplemented
-    virtual void postRemoveShape( KoPAPageBase * page, KoShape * shape );
+    void postRemoveShape( KoPAPageBase * page, KoShape * shape ) override;
 
     /// reimplemented
-    virtual void removePages(QList<KoPAPageBase*> &pages);
+    void removePages(QList<KoPAPageBase*> &pages) override;
 
     /// load configuration specific to Stage
     void loadKPrConfig();

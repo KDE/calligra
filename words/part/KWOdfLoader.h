@@ -49,7 +49,7 @@ public:
      * @param document the document this loader will work for.
      */
     explicit KWOdfLoader(KWDocument *document);
-    ~KWOdfLoader();
+    ~KWOdfLoader() override;
 
     KWDocument* document() const;
 

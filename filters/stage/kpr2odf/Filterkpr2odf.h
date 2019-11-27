@@ -42,10 +42,10 @@ class Filterkpr2odf : public KoFilter
 public:
     Filterkpr2odf(QObject* parent, const QVariantList&);
 
-    virtual ~Filterkpr2odf() {}
+    ~Filterkpr2odf() override {}
 
     //reimplemented from KoFilter
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
 
 private:
     //Helper functions

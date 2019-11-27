@@ -48,8 +48,8 @@ public:
     };
 
     ExportHtml(QObject *parent, const QVariantList &);
-    virtual ~ExportHtml();
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    ~ExportHtml() override;
+    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
 
 private:
     KoFilter::ConversionStatus extractImages(KoStore *odfStore, HtmlFile *epubFile);

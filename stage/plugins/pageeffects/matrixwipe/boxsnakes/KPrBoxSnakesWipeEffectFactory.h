@@ -26,8 +26,8 @@ class KPrBoxSnakesWipeEffectFactory : public KPrPageEffectFactory
 {
 public:
     KPrBoxSnakesWipeEffectFactory();
-    virtual ~KPrBoxSnakesWipeEffectFactory();
-    virtual QString subTypeName(int subType) const;
+    ~KPrBoxSnakesWipeEffectFactory() override;
+    QString subTypeName(int subType) const override;
 
     enum SubType {
         TwoBoxTopIn,

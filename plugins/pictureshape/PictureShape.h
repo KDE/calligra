@@ -71,7 +71,7 @@ namespace _Private
         Q_OBJECT
     public:
         PixmapScaler(PictureShape *pictureShape, const QSize &pixmapSize);
-        virtual void run();
+        void run() override;
 
     Q_SIGNALS:
         void finished(const QString &, const QImage &);
@@ -118,19 +118,19 @@ public:
     PictureShape();
 
     // reimplemented
-    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
+    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
     // reimplemented
-    virtual QPainterPath shadowOutline() const;
+    QPainterPath shadowOutline() const override;
     // reimplemented
-    virtual void saveOdf(KoShapeSavingContext &context) const;
+    void saveOdf(KoShapeSavingContext &context) const override;
     // reimplemented
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
     // reimplemented
-    virtual void waitUntilReady(const KoViewConverter &converter, bool asynchronous) const;
+    void waitUntilReady(const KoViewConverter &converter, bool asynchronous) const override;
     // reimplemented from SvgShape
-    virtual bool saveSvg(SvgSavingContext &context);
+    bool saveSvg(SvgSavingContext &context) override;
     // reimplemented from SvgShape
-    virtual bool loadSvg(const KoXmlElement &element, SvgLoadingContext &context);
+    bool loadSvg(const KoXmlElement &element, SvgLoadingContext &context) override;
     /**
      * Get the collection used in the shape.
      */
@@ -151,9 +151,9 @@ public:
 
 
 protected:
-    virtual bool loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context);
-    virtual QString saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const;
-    virtual void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context);
+    bool loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context) override;
+    QString saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const override;
+    void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
 private:
     QSize calcOptimalPixmapSize(const QSizeF &shapeSize, const QSizeF &imageSize) const;

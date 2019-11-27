@@ -37,15 +37,15 @@ class KOWIDGETS_EXPORT KoDockWidgetTitleBarButton : public QAbstractButton
 
 public:
     explicit KoDockWidgetTitleBarButton(QWidget *parent = 0);
-    ~KoDockWidgetTitleBarButton() Q_DECL_OVERRIDE;
+    ~KoDockWidgetTitleBarButton() override;
 
-    QSize sizeHint() const Q_DECL_OVERRIDE; ///< reimplemented from QWidget
-    QSize minimumSizeHint() const Q_DECL_OVERRIDE; ///< reimplemented from QWidget
+    QSize sizeHint() const override; ///< reimplemented from QWidget
+    QSize minimumSizeHint() const override; ///< reimplemented from QWidget
 
 protected:
-    void enterEvent(QEvent *event) Q_DECL_OVERRIDE;
-    void leaveEvent(QEvent *event) Q_DECL_OVERRIDE;
-    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
+    void enterEvent(QEvent *event) override;
+    void leaveEvent(QEvent *event) override;
+    void paintEvent(QPaintEvent *event) override;
 
 private:
     class Private;

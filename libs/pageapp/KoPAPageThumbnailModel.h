@@ -41,12 +41,12 @@ class KOPAGEAPP_EXPORT KoPAPageThumbnailModel : public QAbstractListModel
 
 public:
     explicit KoPAPageThumbnailModel(const QList<KoPAPageBase *> &pages, QObject *parent = 0);
-    ~KoPAPageThumbnailModel();
+    ~KoPAPageThumbnailModel() override;
 
     // from QAbstractItemModel
-    virtual int rowCount(const QModelIndex &parent) const;
-    virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
-    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    int rowCount(const QModelIndex &parent) const override;
+    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
     void setIconSize(const QSize &size);
 

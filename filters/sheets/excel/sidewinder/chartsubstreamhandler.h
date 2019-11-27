@@ -51,11 +51,11 @@ class ChartSubStreamHandler : public SubStreamHandler
 {
 public:
     ChartSubStreamHandler(GlobalsSubStreamHandler* globals, SubStreamHandler* parentHandler);
-    virtual ~ChartSubStreamHandler();
+    ~ChartSubStreamHandler() override;
     //Chart *chart() const { return m_chart; }
     GlobalsSubStreamHandler *globals() const { return m_globals; }
     SubStreamHandler *parentHandler() const { return m_parentHandler; }
-    virtual void handleRecord(Record* record);
+    void handleRecord(Record* record) override;
 
 private:
     GlobalsSubStreamHandler* m_globals;

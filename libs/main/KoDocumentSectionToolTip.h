@@ -34,10 +34,10 @@ class KoDocumentSectionToolTip: public KoItemToolTip
 
 public:
     KoDocumentSectionToolTip();
-    virtual ~KoDocumentSectionToolTip();
+    ~KoDocumentSectionToolTip() override;
 
 protected:
-    virtual QTextDocument *createDocument(const QModelIndex &index);
+    QTextDocument *createDocument(const QModelIndex &index) override;
 
 private:
     typedef KoDocumentSectionModel Model;

@@ -30,9 +30,9 @@ class PdfImport : public KoFilter
 
 public:
     PdfImport(QObject* parent, const QVariantList&);
-    virtual ~PdfImport();
+    ~PdfImport() override;
 
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
 };
 
 #endif

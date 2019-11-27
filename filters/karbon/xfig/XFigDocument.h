@@ -320,7 +320,7 @@ public:
     : XFigAbstractPolylineObject(PolylineId)
     {}
 
-    virtual void setPoints(const QVector<XFigPoint>& points) { m_Points = points; }
+    void setPoints(const QVector<XFigPoint>& points) override { m_Points = points; }
 
     const QVector<XFigPoint>& points() const { return m_Points; }
 private:
@@ -332,7 +332,7 @@ class XFigPolygonObject : public XFigAbstractPolylineObject
 public:
     XFigPolygonObject() : XFigAbstractPolylineObject(PolygonId) {}
 
-    virtual void setPoints(const QVector<XFigPoint>& points) { m_Points = points; }
+    void setPoints(const QVector<XFigPoint>& points) override { m_Points = points; }
 
     const QVector<XFigPoint>& points() const { return m_Points; }
 private:
@@ -348,7 +348,7 @@ protected:
 public:
     XFigBoxObject() : XFigAbstractPolylineObject(BoxId), m_Width(0), m_Height(0), m_Radius(0) {}
 
-    virtual void setPoints(const QVector<XFigPoint>& points);
+    void setPoints(const QVector<XFigPoint>& points) override;
 
     void setRadius( qint32 radius ) { m_Radius = radius; }
 
@@ -498,7 +498,7 @@ class XFigCompoundObject : public XFigAbstractObject
 {
 public:
     XFigCompoundObject() : XFigAbstractObject(CompoundId) {}
-    virtual ~XFigCompoundObject() { qDeleteAll( m_Objects );}
+    ~XFigCompoundObject() override { qDeleteAll( m_Objects );}
 
     void addObject( XFigAbstractObject* object ) { m_Objects.append(object); }
     void setBoundingBox( XFigBoundingBox boundingBox ) { m_BoundingBox = boundingBox; }

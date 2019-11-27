@@ -52,14 +52,14 @@ class KOVECTORIMAGE_EXPORT SvmPainterBackend : public SvmAbstractBackend
 {
 public:
     SvmPainterBackend(QPainter *painter, const QSize &outputSize);
-    virtual ~SvmPainterBackend();
+    ~SvmPainterBackend() override;
 
     /**
        Initialisation routine
 
        \param header the SVM Header record
     */
-    virtual void init(const SvmHeader &header);
+    void init(const SvmHeader &header) override;
 
     /**
        Cleanup routine
@@ -68,14 +68,14 @@ public:
        initializations that are done in init() can be undone here if
        necessary.
     */
-    virtual void cleanup();
+    void cleanup() override;
 
     /**
        Close-out routine
     */
-    virtual void eof();
+    void eof() override;
 
-    virtual void rect( SvmGraphicsContext &context, const QRect &rect );
+    void rect( SvmGraphicsContext &context, const QRect &rect ) override;
 
     /**
        Handler META_POLYLINE_ACTION
@@ -89,7 +89,7 @@ public:
        \note the line is not meant to be closed (i.e. do not connect
        the last point to the first point) or filled.
     */
-    virtual void polyLine(SvmGraphicsContext &context, const QPolygon &polyline);
+    void polyLine(SvmGraphicsContext &context, const QPolygon &polyline) override;
 
     /**
        This action type specifies how to output a multi-segment line
@@ -98,14 +98,14 @@ public:
        \param context the graphics context to be used when drawing the polygon
        \param polygon the sequence of points that describe the polygon
     */
-    virtual void polygon(SvmGraphicsContext &context, const QPolygon &polygon);
+    void polygon(SvmGraphicsContext &context, const QPolygon &polygon) override;
 
-    virtual void polyPolygon(SvmGraphicsContext &context, const QList<QPolygon> &polyPolygon);
+    void polyPolygon(SvmGraphicsContext &context, const QList<QPolygon> &polyPolygon) override;
 
-    virtual void textArray(SvmGraphicsContext &context,
+    void textArray(SvmGraphicsContext &context,
                            const QPoint &point, const QString &string,
                            quint16 startIndex, quint16 len,
-                           quint32 dxArrayLen, qint32 *dxArray);
+                           quint32 dxArrayLen, qint32 *dxArray) override;
 
  private:
     void updateFromGraphicscontext(SvmGraphicsContext &context);

@@ -55,17 +55,17 @@ public:
     * \param parent the parent widget
     */
     explicit CellEditor(CellToolBase *cellTool, QHash<int, QString> &wordList, QWidget *parent = 0);
-    ~CellEditor();
+    ~CellEditor() override;
 
     Selection* selection() const;
 
-    void setEditorFont(QFont const & font, bool updateSize, const KoViewConverter *viewConverter);
+    void setEditorFont(QFont const & font, bool updateSize, const KoViewConverter *viewConverter) override;
 
-    int cursorPosition() const;
-    void setCursorPosition(int pos);
+    int cursorPosition() const override;
+    void setCursorPosition(int pos) override;
 
-    bool captureArrowKeys() const;
-    void setCaptureArrowKeys(bool capture);
+    bool captureArrowKeys() const override;
+    void setCaptureArrowKeys(bool capture) override;
 
     QPoint globalCursorPosition() const;
     QAbstractItemModel *model();
@@ -75,24 +75,24 @@ public:
      * selection's active sub-region name.
      * This is called after selection changes to sync the formula expression.
      */
-    void selectionChanged();
+    void selectionChanged() override;
 
     /**
      * Activates the sub-region belonging to the \p index 'th range.
      */
-    void setActiveSubRegion(int index);
+    void setActiveSubRegion(int index) override;
 
     // CellEditorBase interface
-    virtual QWidget* widget() { return this; }
-    virtual void cut() { KTextEdit::cut(); }
-    virtual void copy() { KTextEdit::copy(); }
-    virtual void paste() { KTextEdit::paste(); }
-    virtual QString toPlainText() const { return KTextEdit::toPlainText(); }
+    QWidget* widget() override { return this; }
+    void cut() override { KTextEdit::cut(); }
+    void copy() override { KTextEdit::copy(); }
+    void paste() override { KTextEdit::paste(); }
+    QString toPlainText() const override { return KTextEdit::toPlainText(); }
 Q_SIGNALS:
     void textChanged(const QString &text);
 
 public Q_SLOTS:
-    void setText(const QString& text, int cursorPos = -1);
+    void setText(const QString& text, int cursorPos = -1) override;
 
     /**
      * Permutes the fixation of the reference, at which the editor's cursor
@@ -109,9 +109,9 @@ private Q_SLOTS:
     void insertCompletion(const QString &completion);
 
 protected: // reimplementations
-    virtual void keyPressEvent(QKeyEvent *event);
-    virtual void focusInEvent(QFocusEvent *event);
-    virtual void focusOutEvent(QFocusEvent *event);
+    void keyPressEvent(QKeyEvent *event) override;
+    void focusInEvent(QFocusEvent *event) override;
+    void focusOutEvent(QFocusEvent *event) override;
 
 private:
     Q_DISABLE_COPY(CellEditor)

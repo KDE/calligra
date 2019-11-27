@@ -55,7 +55,7 @@ public:
     /**
      * Destructor.
      */
-    virtual ~NamedAreaManager();
+    ~NamedAreaManager() override;
 
     const Map *map() const;
 

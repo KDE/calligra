@@ -28,8 +28,8 @@ class KPrAnimationToolFactory : public KoToolFactoryBase {
 public:
     /// constructor
     KPrAnimationToolFactory();
-    ~KPrAnimationToolFactory();
+    ~KPrAnimationToolFactory() override;
 
-    KoToolBase* createTool(KoCanvasBase *canvas);
+    KoToolBase* createTool(KoCanvasBase *canvas) override;
 };
 #endif

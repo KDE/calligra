@@ -66,7 +66,7 @@ class KOODFREADER_EXPORT OdtReader : public OdfReader
 {
  public:
     OdtReader();
-    ~OdtReader();
+    ~OdtReader() override;
 
  protected:
     // ODT document level functions

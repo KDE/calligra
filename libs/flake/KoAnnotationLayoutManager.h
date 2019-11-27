@@ -41,7 +41,7 @@ public:
     static const qreal connectionPointLines;
 
     explicit KoAnnotationLayoutManager(QObject *parent = 0);
-    virtual ~KoAnnotationLayoutManager();
+    ~KoAnnotationLayoutManager() override;
 
     void setShapeManager(KoShapeManager *shapeManager);
 

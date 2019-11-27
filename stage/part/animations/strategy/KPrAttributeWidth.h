@@ -26,8 +26,8 @@ class KPrAttributeWidth : public KPrAnimationAttribute
 {
 public:
     KPrAttributeWidth();
-    virtual void updateCache(KPrAnimationCache *cache, KPrShapeAnimation *shapeAnimation, qreal value);
-    virtual void initCache(KPrAnimationCache * cache, int step, KPrShapeAnimation * shapeAnimation, qreal startValue, qreal endValue);
+    void updateCache(KPrAnimationCache *cache, KPrShapeAnimation *shapeAnimation, qreal value) override;
+    void initCache(KPrAnimationCache * cache, int step, KPrShapeAnimation * shapeAnimation, qreal startValue, qreal endValue) override;
 };
 
 #endif // KPRATTRIBUTEWIDTH_H

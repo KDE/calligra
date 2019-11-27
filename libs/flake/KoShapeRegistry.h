@@ -39,7 +39,7 @@ class FLAKE_EXPORT KoShapeRegistry : public KoGenericRegistry<KoShapeFactoryBase
 {
 public:
     KoShapeRegistry();
-    ~KoShapeRegistry();
+    ~KoShapeRegistry() override;
 
     /**
      * Return an instance of the KoShapeRegistry

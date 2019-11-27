@@ -35,11 +35,11 @@ public:
 		return m_data.cstr();
 	}
 
-	virtual void startDocument() {}
-	virtual void endDocument();
-	virtual void startElement(const char *psName, const librevenge::RVNGPropertyList &xPropList);
-	virtual void endElement(const char *psName);
-	virtual void characters(const librevenge::RVNGString &sCharacters);
+	void startDocument() override {}
+	void endDocument() override;
+	void startElement(const char *psName, const librevenge::RVNGPropertyList &xPropList) override;
+	void endElement(const char *psName) override;
+	void characters(const librevenge::RVNGString &sCharacters) override;
 private:
 private:
 	librevenge::RVNGString m_data;

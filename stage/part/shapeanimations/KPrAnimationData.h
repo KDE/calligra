@@ -53,7 +53,7 @@ public:
     : KPrAnimationData( canvas, shapeManager, boundingRect )
     {}
 
-    virtual ~KPrAnimationDataTranslate() {}
+    ~KPrAnimationDataTranslate() override {}
 
     QPointF m_translate;
 };

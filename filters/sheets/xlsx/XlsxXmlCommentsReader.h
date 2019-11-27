@@ -72,7 +72,7 @@ class XlsxXmlCommentsReaderContext : public MSOOXML::MsooXmlReaderContext
 public:
     explicit XlsxXmlCommentsReaderContext(XlsxComments& _comments, MSOOXML::DrawingMLTheme* _themes,
         QVector<QString>& _colorIndices);
-    ~XlsxXmlCommentsReaderContext();
+    ~XlsxXmlCommentsReaderContext() override;
 
     XlsxComments* comments;
     MSOOXML::DrawingMLTheme* themes;
@@ -83,8 +83,8 @@ class XlsxXmlCommentsReader : public XlsxXmlCommonReader
 {
 public:
     explicit XlsxXmlCommentsReader(KoOdfWriters *writers);
-    virtual ~XlsxXmlCommentsReader();
-    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
+    ~XlsxXmlCommentsReader() override;
+    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0) override;
 
 protected:
     KoFilter::ConversionStatus read_comments();

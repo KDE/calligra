@@ -26,10 +26,10 @@ class KPrPlaceholderToolFactory : public KoToolFactoryBase
 {
 public:
     KPrPlaceholderToolFactory();
-    virtual ~KPrPlaceholderToolFactory();
+    ~KPrPlaceholderToolFactory() override;
 
     /// reimplemented
-    virtual KoToolBase * createTool(KoCanvasBase *canvas);
+    KoToolBase * createTool(KoCanvasBase *canvas) override;
 };
 
 #endif /* KPRPLACEHOLDERTOOLFACTORY_H */

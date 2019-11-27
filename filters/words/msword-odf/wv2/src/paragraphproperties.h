@@ -41,7 +41,7 @@ namespace wvWare
         ParagraphProperties();
         explicit ParagraphProperties( const Word97::PAP& pap );
         ParagraphProperties( const ParagraphProperties& rhs );
-        ~ParagraphProperties();
+        ~ParagraphProperties() override;
 
         Word97::PAP& pap();
         const Word97::PAP& pap() const;

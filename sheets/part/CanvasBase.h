@@ -72,28 +72,28 @@ class CALLIGRA_SHEETS_COMMON_EXPORT CanvasBase : public KoCanvasBase
     friend class Canvas;
 public:
     explicit CanvasBase(Doc* doc);
-    ~CanvasBase();
+    ~CanvasBase() override;
 
     Doc* doc() const;
 
     // KoCanvasBase interface methods.
     /// reimplemented method from KoCanvasBase
-    virtual void gridSize(qreal* horizontal, qreal* vertical) const;
+    void gridSize(qreal* horizontal, qreal* vertical) const override;
     /// reimplemented method from KoCanvasBase
-    virtual bool snapToGrid() const;
+    bool snapToGrid() const override;
     /// reimplemented method from KoCanvasBase
-    virtual void addCommand(KUndo2Command* command);
+    void addCommand(KUndo2Command* command) override;
     /// reimplemented method from KoCanvasBase
-    virtual KoShapeManager* shapeManager() const;
+    KoShapeManager* shapeManager() const override;
     /// reimplemented method from KoCanvasBase
-    virtual void updateCanvas(const QRectF& rc);
+    void updateCanvas(const QRectF& rc) override;
     /// reimplemented method from KoCanvasBase
-    virtual KoToolProxy* toolProxy() const;
+    KoToolProxy* toolProxy() const override;
 
     /// reimplemented method from KoCanvasBase
-    virtual KoUnit unit() const;
+    KoUnit unit() const override;
     /// reimplemented method from KoCanvasBase
-    virtual void updateInputMethodInfo();
+    void updateInputMethodInfo() override;
 
     /**
      * @return the usual selection of cells
@@ -166,7 +166,7 @@ public:
     virtual void updateMicroFocus() = 0;
 
     virtual KoZoomHandler* zoomHandler() const = 0;
-    virtual KoViewConverter* viewConverter() const;
+    KoViewConverter* viewConverter() const override;
     virtual bool isViewLoading() const = 0; // not sure if is needed
     virtual SheetView* sheetView(const Sheet* sheet) const = 0;
     virtual void enableAutoScroll() = 0;

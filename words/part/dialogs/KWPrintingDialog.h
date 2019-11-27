@@ -35,19 +35,19 @@ class KWPrintingDialog : public KoPrintingDialog
 {
 public:
     KWPrintingDialog(KWDocument *document, KoShapeManager *shapeManager, KWView *view);
-    ~KWPrintingDialog();
+    ~KWPrintingDialog() override;
 
-    virtual QList<QWidget *> createOptionWidgets() const;
+    QList<QWidget *> createOptionWidgets() const override;
 
-    virtual QAbstractPrintDialog::PrintDialogOptions printDialogOptions() const;
+    QAbstractPrintDialog::PrintDialogOptions printDialogOptions() const override;
 
 protected:
-    virtual QRectF preparePage(int pageNumber);
-    virtual QList<KoShape*> shapesOnPage(int pageNumber);
-    virtual void printingDone();
-    virtual int documentFirstPage() const;
-    virtual int documentLastPage() const;
-    virtual int documentCurrentPage() const;
+    QRectF preparePage(int pageNumber) override;
+    QList<KoShape*> shapesOnPage(int pageNumber) override;
+    void printingDone() override;
+    int documentFirstPage() const override;
+    int documentLastPage() const override;
+    int documentCurrentPage() const override;
 
 private:
     KWDocument *m_document;

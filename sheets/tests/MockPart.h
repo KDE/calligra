@@ -34,10 +34,10 @@ public:
     MockPart()
     : KoPart(KoComponentData(KAboutData(QStringLiteral("test"), QStringLiteral("Test"), QStringLiteral("0.0.9"))), 0)
     {}
-    KoView *createViewInstance(KoDocument* document, QWidget* parent) { Q_UNUSED(document); Q_UNUSED(parent); return 0; }
-    virtual KoMainWindow *createMainWindow() { return 0; }
+    KoView *createViewInstance(KoDocument* document, QWidget* parent) override { Q_UNUSED(document); Q_UNUSED(parent); return 0; }
+    KoMainWindow *createMainWindow() override { return 0; }
 protected:
-    virtual QGraphicsItem *createCanvasItem(KoDocument* document) { Q_UNUSED(document); return 0; }
+    QGraphicsItem *createCanvasItem(KoDocument* document) override { Q_UNUSED(document); return 0; }
 };
 
 #endif // PAMOCK_H

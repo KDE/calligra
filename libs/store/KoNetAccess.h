@@ -451,7 +451,7 @@ private:
     /**
      * Private destructor
      */
-    ~NetAccess();
+    ~NetAccess() override;
 
     /**
      * Internal methods

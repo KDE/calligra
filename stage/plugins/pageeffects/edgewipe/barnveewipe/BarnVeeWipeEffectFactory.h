@@ -26,8 +26,8 @@ class BarnVeeWipeEffectFactory : public KPrPageEffectFactory
 {
 public:
     BarnVeeWipeEffectFactory();
-    virtual ~BarnVeeWipeEffectFactory();
-    virtual QString subTypeName(int subType) const;
+    ~BarnVeeWipeEffectFactory() override;
+    QString subTypeName(int subType) const override;
 
     enum SubType {
         FromTop,

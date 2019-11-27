@@ -39,7 +39,7 @@ class PivotOptions : public KoDialog
 
   public:
       explicit PivotOptions(QWidget* parent, Selection* selection);
-      ~PivotOptions();
+      ~PivotOptions() override;
       QString returnFunction();
   public Q_SLOTS:
       void on_Ok_clicked();

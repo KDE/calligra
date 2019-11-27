@@ -43,16 +43,16 @@ public:
     /**
      * Destructor
      */
-    ~KoColorPopupButton() Q_DECL_OVERRIDE = default;
+    ~KoColorPopupButton() override = default;
 
-    QSize sizeHint() const Q_DECL_OVERRIDE;
+    QSize sizeHint() const override;
 
 Q_SIGNALS:
     /// Emitted when a resource was selected
     void iconSizeChanged();
 
 protected:
-    void resizeEvent(QResizeEvent *) Q_DECL_OVERRIDE; ///< reimplemented from QToolButton
+    void resizeEvent(QResizeEvent *) override; ///< reimplemented from QToolButton
 };
 
 #endif

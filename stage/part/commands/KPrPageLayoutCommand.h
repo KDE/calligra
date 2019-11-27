@@ -29,12 +29,12 @@ class KPrPageLayoutCommand : public KUndo2Command
 {
 public:
     KPrPageLayoutCommand( KPrPlaceholders * placeholders, KPrPageLayout * layout, KUndo2Command *parent = 0 );
-    virtual ~KPrPageLayoutCommand();
+    ~KPrPageLayoutCommand() override;
 
     /// redo the command
-    void redo();
+    void redo() override;
     /// revert the actions done in redo
-    void undo();
+    void undo() override;
 
 private:
     KPrPlaceholders * m_placeholders;

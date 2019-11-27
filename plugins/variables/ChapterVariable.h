@@ -36,17 +36,17 @@ public:
     ChapterVariable();
 
     // reimplmented
-    QWidget* createOptionsWidget();
+    QWidget* createOptionsWidget() override;
     void readProperties(const KoProperties *props);
-    void saveOdf(KoShapeSavingContext & context);
-    bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context);
+    void saveOdf(KoShapeSavingContext & context) override;
+    bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context) override;
 
 private Q_SLOTS:
     void formatChanged(int format);
     void levelChanged(int level);
 
 private:
-    void resize(const QTextDocument *document, QTextInlineObject &object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd);
+    void resize(const QTextDocument *document, QTextInlineObject &object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd) override;
 
     enum FormatTypes {
         ChapterName,

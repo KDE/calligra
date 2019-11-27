@@ -35,7 +35,7 @@ class OdtReaderAsciiBackend : public OdfTextReaderBackend
 {
  public:
     explicit OdtReaderAsciiBackend();
-    virtual ~OdtReaderAsciiBackend();
+    ~OdtReaderAsciiBackend() override;
 
     // Called before and after the actual traversal.
     // FIXME: NYI
@@ -45,17 +45,17 @@ class OdtReaderAsciiBackend : public OdfTextReaderBackend
     // ----------------------------------------------------------------
     // Text level functions: paragraphs, headings, sections, frames, objects, etc
 
-    void elementTextH(KoXmlStreamReader &reader, OdfReaderContext *context);
-    void elementTextP(KoXmlStreamReader &reader, OdfReaderContext *context);
+    void elementTextH(KoXmlStreamReader &reader, OdfReaderContext *context) override;
+    void elementTextP(KoXmlStreamReader &reader, OdfReaderContext *context) override;
 
     // ----------------------------------------------------------------
     // Paragraph level functions: spans, annotations, notes, text content itself, etc.
 
-    void elementTextLineBreak(KoXmlStreamReader &reader, OdfReaderContext *context);
-    void elementTextS(KoXmlStreamReader &reader, OdfReaderContext *context);
-    void elementTextSpan(KoXmlStreamReader &reader, OdfReaderContext *context);
+    void elementTextLineBreak(KoXmlStreamReader &reader, OdfReaderContext *context) override;
+    void elementTextS(KoXmlStreamReader &reader, OdfReaderContext *context) override;
+    void elementTextSpan(KoXmlStreamReader &reader, OdfReaderContext *context) override;
 
-    void characterData(KoXmlStreamReader &reader, OdfReaderContext *context);
+    void characterData(KoXmlStreamReader &reader, OdfReaderContext *context) override;
 };
 
 

@@ -41,9 +41,9 @@ class APPLIXWORDImport : public KoFilter
 
 public:
     APPLIXWORDImport(QObject *parent, const QVariantList&);
-    virtual ~APPLIXWORDImport() {}
+    ~APPLIXWORDImport() override {}
 
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
 
 private:
     QChar   specCharfind(QChar , QChar);

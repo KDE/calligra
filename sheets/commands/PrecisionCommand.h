@@ -36,11 +36,11 @@ class PrecisionCommand : public AbstractRegionCommand
 public:
     PrecisionCommand();
 
-    virtual void setReverse(bool reverse);
+    void setReverse(bool reverse) override;
 
 protected:
-    virtual bool mainProcessing();
-    virtual bool postProcessing();
+    bool mainProcessing() override;
+    bool postProcessing() override;
 };
 
 } // namespace Sheets

@@ -34,7 +34,7 @@ class KoVersionDialog : public KoDialog
     Q_OBJECT
 public:
     KoVersionDialog(QWidget* parent, KoDocument *doc);
-    ~KoVersionDialog();
+    ~KoVersionDialog() override;
 
 public Q_SLOTS:
     void slotRemove();

@@ -88,7 +88,7 @@ public:
     /**
     * Destructor.
     */
-    virtual ~ScriptingReader() {}
+    ~ScriptingReader() override {}
 
 public Q_SLOTS:
 

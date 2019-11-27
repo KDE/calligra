@@ -32,16 +32,16 @@ class PictureShapeConfigWidget : public KoShapeConfigWidgetBase
     Q_OBJECT
 public:
     PictureShapeConfigWidget();
-    ~PictureShapeConfigWidget();
+    ~PictureShapeConfigWidget() override;
 
     /// reimplemented from KoShapeConfigWidgetBase
-    virtual void open(KoShape *shape);
+    void open(KoShape *shape) override;
     /// reimplemented from KoShapeConfigWidgetBase
-    virtual void save();
+    void save() override;
     /// reimplemented from KoShapeConfigWidgetBase
-    virtual bool showOnShapeCreate();
+    bool showOnShapeCreate() override;
     /// reimplemented from KoShapeConfigWidgetBase
-    virtual bool showOnShapeSelect();
+    bool showOnShapeSelect() override;
 
 private:
     PictureShape *m_shape;

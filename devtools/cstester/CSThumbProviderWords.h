@@ -31,9 +31,9 @@ class CSThumbProviderWords : public CSThumbProvider
 {
 public:
     explicit CSThumbProviderWords(KWDocument *doc);
-    virtual ~CSThumbProviderWords();
+    ~CSThumbProviderWords() override;
 
-    virtual QVector<QImage> createThumbnails(const QSize &thumbSize);
+    QVector<QImage> createThumbnails(const QSize &thumbSize) override;
 
 private:
     KWDocument *m_doc;

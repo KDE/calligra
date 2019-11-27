@@ -54,7 +54,7 @@ public:
      *
      * Nothing to do
      */
-    virtual ~Pen() {}
+    ~Pen() override {}
 
     /**
      * getters

@@ -35,11 +35,11 @@ class KPrPlaceholderShape : public KoShape
 public:
     KPrPlaceholderShape();
     explicit KPrPlaceholderShape(const QString &presentationClass);
-    virtual ~KPrPlaceholderShape();
+    ~KPrPlaceholderShape() override;
 
-    virtual void paint( QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
-    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
-    virtual void saveOdf( KoShapeSavingContext & context ) const;
+    void paint( QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
+    bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) override;
+    void saveOdf( KoShapeSavingContext & context ) const override;
 
     KoShape *createShape(KoDocumentResourceManager *documentResources);
 

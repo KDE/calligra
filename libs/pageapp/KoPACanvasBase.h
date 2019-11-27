@@ -36,7 +36,7 @@ class KOPAGEAPP_EXPORT KoPACanvasBase : public KoCanvasBase
 
 public:
     explicit KoPACanvasBase( KoPADocument * doc );
-    virtual ~KoPACanvasBase();
+    ~KoPACanvasBase() override;
 
     /// set the viewbase on the canvas; this needs to be called before the canvas can be used.
     void setView(KoPAViewBase *view);
@@ -48,20 +48,20 @@ public:
     KoPADocument* document() const;
 
     /// reimplemented method
-    virtual void gridSize( qreal *horizontal, qreal *vertical ) const;
+    void gridSize( qreal *horizontal, qreal *vertical ) const override;
     /// reimplemented method
-    virtual bool snapToGrid() const;
+    bool snapToGrid() const override;
     /// reimplemented method
-    virtual void addCommand( KUndo2Command *command );
+    void addCommand( KUndo2Command *command ) override;
     /// reimplemented method
-    virtual KoShapeManager * shapeManager() const;
+    KoShapeManager * shapeManager() const override;
     KoShapeManager * masterShapeManager() const;
     /// reimplemented from KoCanvasBase
-    virtual KoGuidesData * guidesData();
+    KoGuidesData * guidesData() override;
 
-    KoToolProxy * toolProxy() const;
-    KoViewConverter *viewConverter() const;
-    KoUnit unit() const;
+    KoToolProxy * toolProxy() const override;
+    KoViewConverter *viewConverter() const override;
+    KoUnit unit() const override;
 
     /// XXX
     void setDocumentOffset(const QPoint &offset);
@@ -70,7 +70,7 @@ public:
     const QPoint & documentOffset() const;
 
     /// reimplemented in view coordinates
-    virtual QPoint documentOrigin() const;
+    QPoint documentOrigin() const override;
     /// Set the origin of the page inside the canvas in document coordinates
     void setDocumentOrigin(const QPointF & origin);
 

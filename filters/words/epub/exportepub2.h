@@ -48,8 +48,8 @@ public:
     };
 
     ExportEpub2(QObject *parent, const QVariantList &);
-    virtual ~ExportEpub2();
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    ~ExportEpub2() override;
+    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
 
 private:
     KoFilter::ConversionStatus extractImages(KoStore *odfStore, EpubFile *epubFile);

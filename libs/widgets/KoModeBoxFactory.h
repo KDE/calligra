@@ -38,12 +38,12 @@ class KOWIDGETS_EXPORT KoModeBoxFactory : public KoDockFactoryBase
 {
 public:
     explicit KoModeBoxFactory(KoCanvasControllerWidget *canvas, const QString &applicationName, const QString& appName);
-    ~KoModeBoxFactory() Q_DECL_OVERRIDE;
+    ~KoModeBoxFactory() override;
 
-    QString id() const Q_DECL_OVERRIDE;
-    KoDockFactoryBase::DockPosition defaultDockPosition() const Q_DECL_OVERRIDE;
-    QDockWidget* createDockWidget() Q_DECL_OVERRIDE;
-    bool isCollapsable() const Q_DECL_OVERRIDE { return false; }
+    QString id() const override;
+    KoDockFactoryBase::DockPosition defaultDockPosition() const override;
+    QDockWidget* createDockWidget() override;
+    bool isCollapsable() const override { return false; }
 
 private:
     class Private;

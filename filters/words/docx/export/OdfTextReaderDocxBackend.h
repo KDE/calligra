@@ -36,26 +36,26 @@ class OdfTextReaderDocxBackend : public OdfTextReaderBackend
 {
  public:
     OdfTextReaderDocxBackend();
-    virtual ~OdfTextReaderDocxBackend();
+    ~OdfTextReaderDocxBackend() override;
 
     // ----------------------------------------------------------------
     // Text level functions: paragraphs, headings, sections, frames, objects, etc
 
-    void elementTextH(KoXmlStreamReader &reader, OdfReaderContext *context);
-    void elementTextP(KoXmlStreamReader &reader, OdfReaderContext *context);
+    void elementTextH(KoXmlStreamReader &reader, OdfReaderContext *context) override;
+    void elementTextP(KoXmlStreamReader &reader, OdfReaderContext *context) override;
 
     // ----------------------------------------------------------------
     // Paragraph level functions: spans, annotations, notes, text content itself, etc.
 
-    void elementOfficeAnnotation(KoXmlStreamReader &reader, OdfReaderContext *context);
+    void elementOfficeAnnotation(KoXmlStreamReader &reader, OdfReaderContext *context) override;
 
-    void elementDcCreator(KoXmlStreamReader &reader, OdfReaderContext *context);
-    void elementDcDate(KoXmlStreamReader &reader, OdfReaderContext *context);
+    void elementDcCreator(KoXmlStreamReader &reader, OdfReaderContext *context) override;
+    void elementDcDate(KoXmlStreamReader &reader, OdfReaderContext *context) override;
 
-    void elementTextSpan(KoXmlStreamReader &reader, OdfReaderContext *context);
-    void elementTextS(KoXmlStreamReader &reader, OdfReaderContext *context);
+    void elementTextSpan(KoXmlStreamReader &reader, OdfReaderContext *context) override;
+    void elementTextS(KoXmlStreamReader &reader, OdfReaderContext *context) override;
 
-    void characterData(KoXmlStreamReader &reader, OdfReaderContext *context);
+    void characterData(KoXmlStreamReader &reader, OdfReaderContext *context) override;
 
  private:
     void startRun(const KoXmlStreamReader &reader, OdfReaderDocxContext *context);

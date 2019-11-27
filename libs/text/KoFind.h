@@ -47,7 +47,7 @@ public:
      */
     KoFind(QWidget *parent, KoCanvasResourceManager *canvasResourceManager, KActionCollection *ac);
     /// destructor
-    ~KoFind();
+    ~KoFind() override;
 
 Q_SIGNALS:
     /**

@@ -46,7 +46,7 @@ class CALLIGRA_SHEETS_COMMON_EXPORT SheetAdaptor : public QDBusAbstractAdaptor
     Q_CLASSINFO("D-Bus Interface", "org.kde.calligra.spreadsheet.sheet")
 public:
     explicit SheetAdaptor(Sheet*);
-    ~SheetAdaptor();
+    ~SheetAdaptor() override;
 
 public Q_SLOTS: // METHODS
 

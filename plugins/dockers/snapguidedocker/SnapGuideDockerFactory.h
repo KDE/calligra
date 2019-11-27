@@ -29,9 +29,9 @@ class SnapGuideDockerFactory : public KoDockFactoryBase
 public:
     SnapGuideDockerFactory();
 
-    virtual QString id() const;
-    virtual QDockWidget* createDockWidget();
-    virtual KoDockFactoryBase::DockPosition defaultDockPosition() const;
+    QString id() const override;
+    QDockWidget* createDockWidget() override;
+    KoDockFactoryBase::DockPosition defaultDockPosition() const override;
 
 };
 

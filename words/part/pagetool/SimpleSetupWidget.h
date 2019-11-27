@@ -32,7 +32,7 @@ class SimpleSetupWidget : public QWidget
 public:
 
     explicit SimpleSetupWidget(KWView *view, QWidget *parent = 0);
-    ~SimpleSetupWidget();
+    ~SimpleSetupWidget() override;
 
 private:
     Ui::SimpleSetupWidget widget;

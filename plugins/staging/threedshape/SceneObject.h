@@ -50,25 +50,25 @@ public:
     // element. The top level element is the only one that should read
     // view parameters from the element.
     explicit SceneObject(Object3D *parent, bool topLevel = false);
-    virtual ~SceneObject();
+    ~SceneObject() override;
 
     /// reimplemented from KoShapeContainer
-    virtual void paintComponent(QPainter &painter, const KoViewConverter &converter,
-                                KoShapePaintingContext &paintcontext);
+    void paintComponent(QPainter &painter, const KoViewConverter &converter,
+                                KoShapePaintingContext &paintcontext) override;
 
     // reimplemented from KoShape
-    virtual void paint(QPainter &painter, const KoViewConverter &converter,
-                       KoShapePaintingContext &context);
+    void paint(QPainter &painter, const KoViewConverter &converter,
+                       KoShapePaintingContext &context) override;
     // reimplemented from KoShape
-    virtual void saveOdf(KoShapeSavingContext &context) const;
+    void saveOdf(KoShapeSavingContext &context) const override;
     // reimplemented from KoShape
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
     // reimplemented from KoShape
-    virtual void waitUntilReady(const KoViewConverter &converter, bool asynchronous) const;
+    void waitUntilReady(const KoViewConverter &converter, bool asynchronous) const override;
 
     // Really save the object.  See the explanation in Object3D.h.
-    virtual void saveObjectOdf(KoShapeSavingContext &context) const;
+    void saveObjectOdf(KoShapeSavingContext &context) const override;
 
     // getters
     Ko3dScene *threeDParams() const;

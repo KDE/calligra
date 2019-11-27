@@ -29,7 +29,7 @@ class KPrFactoryInit : public KPrFactory
 
 public:
     explicit KPrFactoryInit() : KPrFactory() {}
-    virtual ~KPrFactoryInit() {}
+    ~KPrFactoryInit() override {}
 
 };
 

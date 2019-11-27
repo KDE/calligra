@@ -26,11 +26,11 @@ class KPrSnakeWipeTopLeftHorizontalStrategy : public KPrMatrixWipeStrategy
 {
 public:
     KPrSnakeWipeTopLeftHorizontalStrategy();
-    virtual ~KPrSnakeWipeTopLeftHorizontalStrategy();
+    ~KPrSnakeWipeTopLeftHorizontalStrategy() override;
 protected:
-    virtual int squareIndex(int x, int y, int columns, int rows);
-    virtual Direction squareDirection(int x, int y, int columns, int rows);
-    virtual int maxIndex(int columns, int rows);
+    int squareIndex(int x, int y, int columns, int rows) override;
+    Direction squareDirection(int x, int y, int columns, int rows) override;
+    int maxIndex(int columns, int rows) override;
 };
 
 #endif // KPRSNAKEWIPETOPLEFTHORIZONTALSTRATEGY_H

@@ -33,12 +33,12 @@ class KoPAChangePageLayoutCommand : public KUndo2Command
 {
 public:
     KoPAChangePageLayoutCommand( KoPADocument *document, KoPAMasterPage *page, const KoPageLayout &newPageLayout, bool applyToDocument, KUndo2Command *parent = 0 );
-    virtual ~KoPAChangePageLayoutCommand();
+    ~KoPAChangePageLayoutCommand() override;
 
     /// redo the command
-    void redo();
+    void redo() override;
     /// revert the actions done in redo
-    void undo();
+    void undo() override;
 
 private:
     KoPADocument *m_document;

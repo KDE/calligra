@@ -37,7 +37,7 @@ class KoFormulaShapePlugin : public QObject {
 
 public:
     KoFormulaShapePlugin( QObject* parent, const QVariantList& );
-    ~KoFormulaShapePlugin();
+    ~KoFormulaShapePlugin() override;
 };
 
 #endif

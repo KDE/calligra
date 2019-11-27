@@ -42,9 +42,9 @@ class CALLIGRA_SHEETS_COMMON_EXPORT AbstractDataManipulator : public AbstractReg
 {
 public:
     explicit AbstractDataManipulator(KUndo2Command *parent = 0);
-    virtual ~AbstractDataManipulator();
+    ~AbstractDataManipulator() override;
 
-    virtual bool process(Element* element);
+    bool process(Element* element) override;
 
 protected:
     /** Return new value. row/col are relative to sheet, not element.
@@ -64,17 +64,17 @@ protected:
     /**
      * Starts the undo recording.
      */
-    virtual bool preProcessing();
+    bool preProcessing() override;
 
     /**
      * Processes the region. Calls process(Element*).
      */
-    virtual bool mainProcessing();
+    bool mainProcessing() override;
 
     /**
      * Stops the undo recording and stores the old data.
      */
-    virtual bool postProcessing();
+    bool postProcessing() override;
 };
 
 /**
@@ -85,8 +85,8 @@ class AbstractDFManipulator : public AbstractDataManipulator
 {
 public:
     explicit AbstractDFManipulator(KUndo2Command *parent = 0);
-    virtual ~AbstractDFManipulator();
-    virtual bool process(Element* element);
+    ~AbstractDFManipulator() override;
+    bool process(Element* element) override;
 
     /** returns whether this manipulator changes formats */
     bool changeFormat() {
@@ -112,7 +112,7 @@ class DataManipulator : public AbstractDataManipulator
 {
 public:
     explicit DataManipulator(KUndo2Command *parent = 0);
-    virtual ~DataManipulator();
+    ~DataManipulator() override;
     void setParsing(bool val) {
         m_parsing = val;
     }
@@ -130,10 +130,10 @@ public:
         m_format = fmtType;
     }
 protected:
-    virtual bool preProcessing();
-    virtual bool process(Element* element);
-    virtual Value newValue(Element *element, int col, int row, bool *, Format::Type *);
-    virtual bool wantChange(Element *element, int col, int row);
+    bool preProcessing() override;
+    bool process(Element* element) override;
+    Value newValue(Element *element, int col, int row, bool *, Format::Type *) override;
+    bool wantChange(Element *element, int col, int row) override;
 
     Value m_data;
     Format::Type m_format;
@@ -152,15 +152,15 @@ public:
     enum Series { Column, Row, Linear, Geometric };
 
     SeriesManipulator();
-    virtual ~SeriesManipulator();
+    ~SeriesManipulator() override;
 
     /** Setup the series. This sets the necessary parameters, and also the
     correct range. */
     void setupSeries(const QPoint &_marker, double start, double end,
                      double step, Series mode, Series type);
 protected:
-    virtual Value newValue(Element *element, int col, int row, bool *,
-                           Format::Type *);
+    Value newValue(Element *element, int col, int row, bool *,
+                           Format::Type *) override;
 
     Series m_type;
     Value m_start, m_step, m_prev;
@@ -176,7 +176,7 @@ class FillManipulator : public AbstractDFManipulator
 {
 public:
     FillManipulator();
-    virtual ~FillManipulator();
+    ~FillManipulator() override;
 
     enum Direction { Up = 0, Down, Left, Right };
 
@@ -184,9 +184,9 @@ public:
         m_dir = d;
     }
 protected:
-    virtual Value newValue(Element *element, int col, int row,
-                           bool *parse, Format::Type *fmtType);
-    virtual Style newFormat(Element *element, int col, int row);
+    Value newValue(Element *element, int col, int row,
+                           bool *parse, Format::Type *fmtType) override;
+    Style newFormat(Element *element, int col, int row) override;
     Direction m_dir;
 };
 
@@ -199,7 +199,7 @@ class CaseManipulator: public AbstractDataManipulator
 {
 public:
     CaseManipulator();
-    virtual ~CaseManipulator();
+    ~CaseManipulator() override;
 
     enum CaseMode {
         Upper = 0,
@@ -212,11 +212,11 @@ public:
     void changeLowerCase();
     void changeFirstUpper();
 protected:
-    virtual Value newValue(Element *element, int col, int row,
-                           bool *parse, Format::Type *fmtType);
+    Value newValue(Element *element, int col, int row,
+                           bool *parse, Format::Type *fmtType) override;
 
     /** do we want to change this cell ? */
-    virtual bool wantChange(Element *element, int col, int row);
+    bool wantChange(Element *element, int col, int row) override;
 
     CaseMode m_mode;
 };
@@ -231,17 +231,17 @@ class ShiftManipulator : public AbstractRegionCommand
 public:
     enum Direction { ShiftRight, ShiftBottom };
     explicit ShiftManipulator(KUndo2Command *parent = 0);
-    virtual ~ShiftManipulator();
+    ~ShiftManipulator() override;
     void setDirection(Direction direction) {
         m_direction = direction;
     }
-    virtual void setReverse(bool reverse);
+    void setReverse(bool reverse) override;
 
 protected:
-    bool process(Element*);
-    virtual bool preProcessing();
-    virtual bool mainProcessing();
-    virtual bool postProcessing();
+    bool process(Element*) override;
+    bool preProcessing() override;
+    bool mainProcessing() override;
+    bool postProcessing() override;
 
 private:
     Direction m_direction;

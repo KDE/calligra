@@ -80,13 +80,13 @@ class CFBWriter::StreamIODevice : public QIODevice
 {
 public:
     StreamIODevice(CFBWriter& writer, DirectoryEntry& entry);
-    virtual ~StreamIODevice();
-    virtual void close();
-    virtual bool open(OpenMode mode);
-    virtual qint64 size() const;
+    ~StreamIODevice() override;
+    void close() override;
+    bool open(OpenMode mode) override;
+    qint64 size() const override;
 protected:
-    virtual qint64 writeData(const char *data, qint64 len);
-    virtual qint64 readData(char *data, qint64 maxlen);
+    qint64 writeData(const char *data, qint64 len) override;
+    qint64 readData(char *data, qint64 maxlen) override;
     void appendData(const char *data, qint64 len);
     qint64 internalWriteData(const char* data, qint64 len, qint64 pos);
 private:

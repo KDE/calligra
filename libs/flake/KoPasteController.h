@@ -44,7 +44,7 @@ public:
      *     action is used as a parent for the QObject for memory management purposes.
      */
     KoPasteController(KoCanvasBase *canvas, QAction *pasteAction);
-    ~KoPasteController();
+    ~KoPasteController() override;
 
 private:
     Q_PRIVATE_SLOT(d, void paste())

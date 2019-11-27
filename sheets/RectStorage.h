@@ -195,7 +195,7 @@ class RectStorageLoader : public QRunnable
 {
 public:
     RectStorageLoader(RectStorage<T>* storage, const QList<QPair<QRegion, T> >& data);
-    virtual void run();
+    void run() override;
     void waitForFinished();
     bool isFinished() const;
     QList<QPair<QRegion, T> > data() const;
@@ -615,10 +615,10 @@ public:
     CommentStorage(const CommentStorage& other) : QObject(other.parent()), RectStorage<QString>(other) {}
 
 protected Q_SLOTS:
-    virtual void triggerGarbageCollection() {
+    void triggerGarbageCollection() override {
         QTimer::singleShot(g_garbageCollectionTimeOut, this, SLOT(garbageCollection()));
     }
-    virtual void garbageCollection() {
+    void garbageCollection() override {
         RectStorage<QString>::garbageCollection();
     }
 };
@@ -633,10 +633,10 @@ public:
     FusionStorage(const FusionStorage& other) : QObject(other.parent()), RectStorage<bool>(other) {}
 
 protected Q_SLOTS:
-    virtual void triggerGarbageCollection() {
+    void triggerGarbageCollection() override {
         QTimer::singleShot(g_garbageCollectionTimeOut, this, SLOT(garbageCollection()));
     }
-    virtual void garbageCollection() {
+    void garbageCollection() override {
         RectStorage<bool>::garbageCollection();
     }
 };
@@ -651,10 +651,10 @@ public:
     MatrixStorage(const MatrixStorage& other) : QObject(other.parent()), RectStorage<bool>(other) {}
 
 protected Q_SLOTS:
-    virtual void triggerGarbageCollection() {
+    void triggerGarbageCollection() override {
         QTimer::singleShot(g_garbageCollectionTimeOut, this, SLOT(garbageCollection()));
     }
-    virtual void garbageCollection() {
+    void garbageCollection() override {
         RectStorage<bool>::garbageCollection();
     }
 };

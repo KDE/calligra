@@ -36,7 +36,7 @@ class KOMAIN_EXPORT KoDockerManager : public QObject
     Q_OBJECT
 public:
     explicit KoDockerManager(KoMainWindow* mainWindow);
-    ~KoDockerManager();
+    ~KoDockerManager() override;
 
     void resetToolDockerWidgets();
 

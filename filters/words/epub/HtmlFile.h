@@ -36,7 +36,7 @@ class HtmlFile : public FileCollector
 {
 public:
     HtmlFile();
-    ~HtmlFile();
+    ~HtmlFile() override;
 
     // When you have created all the content and added it using
     // addContentFile(), call this function once and it will write the

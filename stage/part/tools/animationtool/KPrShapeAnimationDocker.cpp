@@ -58,7 +58,7 @@ class DialogMenu : public QMenu
 {
     public:
         DialogMenu(QWidget *parent = 0);
-        virtual QSize sizeHint() const;
+        QSize sizeHint() const override;
 };
 
 DialogMenu::DialogMenu(QWidget * parent)

@@ -32,7 +32,7 @@ class AutocorrectConfig : public QWidget
     Q_OBJECT
 public:
     AutocorrectConfig(Autocorrect *autocorrect, QWidget *parent);
-    virtual ~AutocorrectConfig();
+    ~AutocorrectConfig() override;
 
 public Q_SLOTS:
     void applyConfig();
@@ -90,7 +90,7 @@ public:
     /**
      * Destructor
      */
-    virtual ~AutocorrectConfigDialog();
+    ~AutocorrectConfigDialog() override;
 
 private:
     AutocorrectConfig *ui;

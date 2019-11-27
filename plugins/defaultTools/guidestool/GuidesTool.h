@@ -37,23 +37,23 @@ class GuidesTool : public KoToolBase
 
 public:
     explicit GuidesTool(KoCanvasBase *canvas);
-    virtual ~GuidesTool();
+    ~GuidesTool() override;
     /// reimplemented form KoToolBase
-    virtual void paint(QPainter &painter, const KoViewConverter &converter);
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
     /// reimplemented form KoToolBase
-    virtual void mousePressEvent(KoPointerEvent *event);
+    void mousePressEvent(KoPointerEvent *event) override;
     /// reimplemented form KoToolBase
-    virtual void mouseMoveEvent(KoPointerEvent *event);
+    void mouseMoveEvent(KoPointerEvent *event) override;
     /// reimplemented form KoToolBase
-    virtual void mouseReleaseEvent(KoPointerEvent *event);
+    void mouseReleaseEvent(KoPointerEvent *event) override;
     /// reimplemented form KoToolBase
-    virtual void mouseDoubleClickEvent(KoPointerEvent *event);
+    void mouseDoubleClickEvent(KoPointerEvent *event) override;
     /// reimplemented form KoToolBase
-    virtual void repaintDecorations();
+    void repaintDecorations() override;
     /// reimplemented form KoToolBase
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
     /// reimplemented form KoToolBase
-    virtual void deactivate();
+    void deactivate() override;
 
     /// Sets up tool state to move the specified guide line
     void moveGuideLine(Qt::Orientation orientation, int index);
@@ -67,14 +67,14 @@ public Q_SLOTS:
 
 protected:
     /// reimplemented form KoToolBase
-    virtual QList<QPointer<QWidget> > createOptionWidgets();
+    QList<QPointer<QWidget> > createOptionWidgets() override;
 
 private Q_SLOTS:
     void updateGuidePosition(qreal position);
     void guideLineSelected(Qt::Orientation orientation, int index);
     void guideLinesChanged(Qt::Orientation orientation);
     /// reimplemented from KoToolBase
-    virtual void canvasResourceChanged(int key, const QVariant &res);
+    void canvasResourceChanged(int key, const QVariant &res) override;
 
     void insertorCreateGuidesSlot(GuidesTransaction* result);
 

@@ -47,11 +47,11 @@ class SortDialog : public KoDialog
     Q_OBJECT
 public:
     SortDialog(QWidget* parent, Selection* selection);
-    ~SortDialog();
+    ~SortDialog() override;
 
 public Q_SLOTS: // reimplementations
-    virtual void accept();
-    virtual void slotButtonClicked(int button);
+    void accept() override;
+    void slotButtonClicked(int button) override;
 
 private:
     void init();

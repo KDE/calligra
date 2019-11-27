@@ -47,7 +47,7 @@ public:
     ShowDialog(QWidget *parent, Selection *selection);
 
 public Q_SLOTS:
-    virtual void accept();
+    void accept() override;
 
 private:
     Selection* m_selection;

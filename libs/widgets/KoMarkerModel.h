@@ -30,10 +30,10 @@ class KoMarkerModel : public QAbstractListModel
 Q_OBJECT
 public:
     KoMarkerModel(const QList<KoMarker*> markers, KoMarkerData::MarkerPosition position, QObject *parent = nullptr);
-    ~KoMarkerModel() Q_DECL_OVERRIDE = default;
+    ~KoMarkerModel() override = default;
 
-    int rowCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE;
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
     int markerIndex(KoMarker *marker) const;
     QVariant marker(int index, int role = Qt::UserRole) const;

@@ -42,7 +42,7 @@ public:
     explicit FormulaToolWidget( KoFormulaTool* tool, QWidget* parent = 0 );
 
     /// Standard destructor
-    ~FormulaToolWidget();
+    ~FormulaToolWidget() override;
 
     /// Set the KoFormulaTool @p tool this options widget belongs to
     void setFormulaTool( KoFormulaTool* tool );

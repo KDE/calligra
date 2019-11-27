@@ -39,7 +39,7 @@ class XlsxXmlCommonReader : public MSOOXML::MsooXmlReader
 public:
     explicit XlsxXmlCommonReader(KoOdfWriters *writers);
 
-    virtual ~XlsxXmlCommonReader();
+    ~XlsxXmlCommonReader() override;
 
 protected:
     QColor tintedColor(const QColor& color, qreal tint);

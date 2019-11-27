@@ -37,20 +37,20 @@ class STAGE_EXPORT KPrSoundCollection : public QObject, public KoDataCenterBase 
 public:
     /// constructor
     explicit KPrSoundCollection(QObject *parent = 0);
-    ~KPrSoundCollection();
+    ~KPrSoundCollection() override;
 
     /**
      * Load all sounds from the store which have a recognized KPrSoundData::storeHref().
      * @return returns true if load was successful (no sounds failed).
      */
-    bool completeLoading(KoStore *store);
+    bool completeLoading(KoStore *store) override;
 
     /**
      * Save all sounds to the store which are tagged for saving
      * and have a recognized KPrSoundData::storeHref().
      * @return returns true if save was successful (no sounds failed).
      */
-    bool completeSaving(KoStore *store, KoXmlWriter * manifestWriter, KoShapeSavingContext * context );
+    bool completeSaving(KoStore *store, KoXmlWriter * manifestWriter, KoShapeSavingContext * context ) override;
 
     KPrSoundData *findSound(const QString &title);
 

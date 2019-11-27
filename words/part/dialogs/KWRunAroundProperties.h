@@ -41,14 +41,14 @@ public:
     /// returns true if at least one frame was accepted
     bool open(const QList<KoShape *> &shapes);
     /// reimplemented
-    void open(KoShape *shape);
+    void open(KoShape *shape) override;
     /// reimplemented
-    void save();
+    void save() override;
     /// save but add to undo command if command != 0
     void save(KUndo2Command *command);
 
     /// reimplemented
-    virtual bool showOnShapeCreate() {
+    bool showOnShapeCreate() override {
         return true;
     }
 

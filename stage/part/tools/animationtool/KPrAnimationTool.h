@@ -43,17 +43,17 @@ public:
      * @param canvas the canvas this tool will be working for.
      */
     explicit KPrAnimationTool(KoCanvasBase *canvas);
-    virtual ~KPrAnimationTool();
+    ~KPrAnimationTool() override;
 
-    virtual void paint(QPainter &painter, const KoViewConverter &converter);
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
 
-    virtual void mousePressEvent(KoPointerEvent *event);
+    void mousePressEvent(KoPointerEvent *event) override;
 
-    void repaintDecorations();
+    void repaintDecorations() override;
 
 public Q_SLOTS:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
-    virtual void deactivate();
+    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void deactivate() override;
 
 private Q_SLOTS:
 
@@ -70,7 +70,7 @@ private Q_SLOTS:
 protected:
     QRectF handlesSize();
 
-    virtual QList<QPointer<QWidget> > createOptionWidgets();
+    QList<QPointer<QWidget> > createOptionWidgets() override;
 
     /**
       * @brief Load motion path shapes (For all shapes with motion paths on current page)

@@ -46,9 +46,9 @@ public:
     KoColor color() const;
 
 protected:
-    void mousePressEvent(QMouseEvent *e) Q_DECL_OVERRIDE; ///< reimplemented from QFrame
-    void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE; ///< reimplemented from QFrame
-    QSize sizeHint() const Q_DECL_OVERRIDE; ///< reimplemented from QFrame
+    void mousePressEvent(QMouseEvent *e) override; ///< reimplemented from QFrame
+    void paintEvent(QPaintEvent *e) override; ///< reimplemented from QFrame
+    QSize sizeHint() const override; ///< reimplemented from QFrame
 
 Q_SIGNALS:
 

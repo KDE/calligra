@@ -65,7 +65,7 @@ class KoScriptManagerAddTypeWidget : public QWidget
     Q_OBJECT
 public:
     explicit KoScriptManagerAddTypeWidget(KoScriptManagerAddWizard *wizard);
-    virtual ~KoScriptManagerAddTypeWidget();
+    ~KoScriptManagerAddTypeWidget() override;
 
 public Q_SLOTS:
     void slotUpdate();
@@ -84,7 +84,7 @@ class KoScriptManagerAddFileWidget : public QWidget
     Q_OBJECT
 public:
     explicit KoScriptManagerAddFileWidget(KoScriptManagerAddWizard *wizard, const QString &startDirOrVariable = QString());
-    virtual ~KoScriptManagerAddFileWidget();
+    ~KoScriptManagerAddFileWidget() override;
     /// \return the currently selected file.
     QString selectedFile() const;
 
@@ -107,7 +107,7 @@ class KoScriptManagerAddScriptWidget : public QWidget
     Q_OBJECT
 public:
     explicit KoScriptManagerAddScriptWidget(KoScriptManagerAddWizard *wizard);
-    virtual ~KoScriptManagerAddScriptWidget();
+    ~KoScriptManagerAddScriptWidget() override;
 public Q_SLOTS:
     void slotUpdate();
     //bool back();
@@ -115,7 +115,7 @@ public Q_SLOTS:
     bool accept();
 
 private:
-    virtual void showEvent(QShowEvent* event);
+    void showEvent(QShowEvent* event) override;
 
 private:
     KoScriptManagerAddWizard *const m_wizard;
@@ -131,7 +131,7 @@ class KoScriptManagerAddCollectionWidget : public QWidget
     Q_OBJECT
 public:
     explicit KoScriptManagerAddCollectionWidget(KoScriptManagerAddWizard *wizard);
-    virtual ~KoScriptManagerAddCollectionWidget();
+    ~KoScriptManagerAddCollectionWidget() override;
 
     QString uniqueName() const;
 
@@ -155,17 +155,17 @@ class KoScriptManagerAddWizard : public KAssistantDialog
     Q_OBJECT
 public:
     explicit KoScriptManagerAddWizard(QWidget* parent, Kross::ActionCollection* collection = 0);
-    virtual ~KoScriptManagerAddWizard();
+    ~KoScriptManagerAddWizard() override;
 
 public Q_SLOTS:
     /// Show the modal wizard dialog.
-    virtual int exec();
+    int exec() override;
     /// Called when the user clicks the Back button.
-    virtual void back();
+    void back() override;
     /// Called when the user clicks the Next button.
-    virtual void next();
+    void next() override;
     /// Called when the user clicks the Finish button.
-    virtual void accept();
+    void accept() override;
 
 private:
     bool invokeWidgetMethod(const char* member);

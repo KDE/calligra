@@ -35,36 +35,36 @@ class KPrSlidesManagerView : public QListView
 public:
     explicit KPrSlidesManagerView(QWidget *parent = 0);
 
-    ~KPrSlidesManagerView();
+    ~KPrSlidesManagerView() override;
 
-    virtual void paintEvent (QPaintEvent *event);
+    void paintEvent (QPaintEvent *event) override;
 
     //It emits a slideDblClick signal and then calls the parent
     //implementation
-    virtual void mouseDoubleClickEvent(QMouseEvent *event);
+    void mouseDoubleClickEvent(QMouseEvent *event) override;
 
-    virtual void contextMenuEvent(QContextMenuEvent *event);
+    void contextMenuEvent(QContextMenuEvent *event) override;
 
-    virtual void startDrag (Qt::DropActions supportedActions);
+    void startDrag (Qt::DropActions supportedActions) override;
 
-    virtual void dropEvent(QDropEvent *ev);
+    void dropEvent(QDropEvent *ev) override;
 
-    virtual void dragMoveEvent(QDragMoveEvent *ev);
+    void dragMoveEvent(QDragMoveEvent *ev) override;
 
-    virtual void dragEnterEvent(QDragEnterEvent *event);
+    void dragEnterEvent(QDragEnterEvent *event) override;
 
-    virtual void dragLeaveEvent(QDragLeaveEvent *e);
+    void dragLeaveEvent(QDragLeaveEvent *e) override;
 
     //Reimplemented to provide suitable signals for selection and deselection of items
-    virtual void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
+    void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected) override;
 
     //Manage click events outside of items, to provide
     //a suitable active item for the context menu.
-    virtual bool eventFilter(QObject *watched, QEvent *event);
+    bool eventFilter(QObject *watched, QEvent *event) override;
 
-    void focusOutEvent(QFocusEvent *event);
+    void focusOutEvent(QFocusEvent *event) override;
 
-    void focusInEvent(QFocusEvent *event);
+    void focusInEvent(QFocusEvent *event) override;
 
     /**
      * Creates a pixmap the contains the all icons of the items
@@ -84,7 +84,7 @@ public:
     QPair<int, int> cursorRowAndColumn() const;
 
 protected:
-    virtual void wheelEvent(QWheelEvent *event);
+    void wheelEvent(QWheelEvent *event) override;
 
 Q_SIGNALS:
 

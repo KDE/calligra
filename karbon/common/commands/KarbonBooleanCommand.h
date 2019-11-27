@@ -46,11 +46,11 @@ public:
      */
     explicit KarbonBooleanCommand(KoShapeBasedDocumentBase *controller, KoPathShape* pathA, KoPathShape * pathB,
                                   BooleanOperation operation, KUndo2Command *parent = 0);
-    virtual ~KarbonBooleanCommand();
+    ~KarbonBooleanCommand() override;
     /// redo the command
-    void redo();
+    void redo() override;
     /// revert the actions done in redo
-    void undo();
+    void undo() override;
 private:
     class Private;
     Private * const d;

@@ -70,10 +70,10 @@ public:
     {}
     FileTransferItem(QObject *parent = 0): ListItem(parent) {}
 
-    QVariant data(int role) const;
+    QVariant data(int role) const override;
     QHash<int, QByteArray> roleNames() const;
 
-    inline QString id() const { return m_filename; }
+    inline QString id() const override { return m_filename; }
 
     inline QString filename() const { return m_filename;}
     inline QString size() const { return m_size;}

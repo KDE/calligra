@@ -37,13 +37,13 @@ public:
      * if you mix the master pages will only be saved if they are needed for a normal page.
      */
     KoPAOdfPageSaveHelper( KoPADocument * doc, QList<KoPAPageBase *> pages );
-    virtual ~KoPAOdfPageSaveHelper();
+    ~KoPAOdfPageSaveHelper() override;
 
     /// reimplemented
-    virtual KoShapeSavingContext * context( KoXmlWriter * bodyWriter, KoGenStyles & mainStyles, KoEmbeddedDocumentSaver & embeddedSaver );
+    KoShapeSavingContext * context( KoXmlWriter * bodyWriter, KoGenStyles & mainStyles, KoEmbeddedDocumentSaver & embeddedSaver ) override;
 
     /// reimplemented
-    virtual bool writeBody();
+    bool writeBody() override;
 
 private:
     KoPADocument * m_doc;

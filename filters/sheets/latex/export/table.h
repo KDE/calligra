@@ -91,7 +91,7 @@ public:
      * The destructor must remove the list of frames.
      */
 
-    virtual ~Table();
+    ~Table() override;
 
     /**
      * getters

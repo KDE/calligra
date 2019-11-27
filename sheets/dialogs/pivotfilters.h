@@ -42,7 +42,7 @@ namespace Calligra{
     public:
       explicit PivotFilters(QWidget* parent,Selection* selection);
       QVector<QString> filterData();
-      ~PivotFilters();
+      ~PivotFilters() override;
     private Q_SLOTS:
       void activateBoxes();
       void activateBoxes2();

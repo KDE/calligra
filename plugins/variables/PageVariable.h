@@ -46,16 +46,16 @@ public:
 
     void readProperties(const KoProperties *props);
 
-    void propertyChanged(Property property, const QVariant &value);
+    void propertyChanged(Property property, const QVariant &value) override;
 
     /// reimplmented
-    void saveOdf(KoShapeSavingContext & context);
+    void saveOdf(KoShapeSavingContext & context) override;
 
     ///reimplemented
-    bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context);
+    bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context) override;
 
 private:
-    void resize(const QTextDocument *document, QTextInlineObject &object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd);
+    void resize(const QTextDocument *document, QTextInlineObject &object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd) override;
 
     PageType m_type;
 

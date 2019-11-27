@@ -34,7 +34,7 @@ class KOWIDGETS_EXPORT KoPageLayoutDialog : public KPageDialog
     Q_OBJECT
 public:
     explicit KoPageLayoutDialog(QWidget *parent, const KoPageLayout &layout);
-    ~KoPageLayoutDialog();
+    ~KoPageLayoutDialog() override;
 
     void showTextDirection(bool on);
     KoText::Direction textDirection() const;
@@ -55,8 +55,8 @@ public Q_SLOTS:
     void setPageLayout(const KoPageLayout &layout);
 
 protected Q_SLOTS:
-    void accept();
-    void reject();
+    void accept() override;
+    void reject() override;
 
 private:
     class Private;

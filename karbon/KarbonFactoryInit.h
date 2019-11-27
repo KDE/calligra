@@ -30,7 +30,7 @@ class KarbonFactoryInit : public KarbonFactory
 
 public:
     explicit KarbonFactoryInit() : KarbonFactory() {}
-    virtual ~KarbonFactoryInit() {}
+    ~KarbonFactoryInit() override {}
 };
 
 #endif

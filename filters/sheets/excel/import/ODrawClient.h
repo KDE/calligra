@@ -32,21 +32,21 @@ class ODrawClient : public ODrawToOdf::Client
 {
 public:
     explicit ODrawClient(Swinder::Sheet* sheet);
-    virtual QRectF getRect(const MSO::OfficeArtClientAnchor& anchor);
-    virtual QRectF getReserveRect(void);
+    QRectF getRect(const MSO::OfficeArtClientAnchor& anchor) override;
+    QRectF getReserveRect(void) override;
     QRectF getGlobalRect(const MSO::OfficeArtClientAnchor& anchor);
-    virtual QString getPicturePath(const quint32 pib);
-    virtual bool onlyClientData(const MSO::OfficeArtClientData &o);
-    virtual void processClientData(const MSO::OfficeArtClientTextBox *ct, const MSO::OfficeArtClientData &o, Writer &out);
-    virtual void processClientTextBox(const MSO::OfficeArtClientTextBox &ct, const MSO::OfficeArtClientData *cd, Writer &out);
-    virtual bool processRectangleAsTextBox(const MSO::OfficeArtClientData& cd);
-    virtual KoGenStyle createGraphicStyle(const MSO::OfficeArtClientTextBox *ct, const MSO::OfficeArtClientData *cd, const DrawStyle& ds, Writer &out);
-    virtual void addTextStyles(const MSO::OfficeArtClientTextBox *clientTextbox, const MSO::OfficeArtClientData *clientData, KoGenStyle &style, Writer& out);
-    virtual QColor toQColor(const MSO::OfficeArtCOLORREF &c);
-    virtual QString formatPos(qreal v);
+    QString getPicturePath(const quint32 pib) override;
+    bool onlyClientData(const MSO::OfficeArtClientData &o) override;
+    void processClientData(const MSO::OfficeArtClientTextBox *ct, const MSO::OfficeArtClientData &o, Writer &out) override;
+    void processClientTextBox(const MSO::OfficeArtClientTextBox &ct, const MSO::OfficeArtClientData *cd, Writer &out) override;
+    bool processRectangleAsTextBox(const MSO::OfficeArtClientData& cd) override;
+    KoGenStyle createGraphicStyle(const MSO::OfficeArtClientTextBox *ct, const MSO::OfficeArtClientData *cd, const DrawStyle& ds, Writer &out) override;
+    void addTextStyles(const MSO::OfficeArtClientTextBox *clientTextbox, const MSO::OfficeArtClientData *clientData, KoGenStyle &style, Writer& out) override;
+    QColor toQColor(const MSO::OfficeArtCOLORREF &c) override;
+    QString formatPos(qreal v) override;
 
-    virtual const MSO::OfficeArtDggContainer* getOfficeArtDggContainer();
-    virtual const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid);
+    const MSO::OfficeArtDggContainer* getOfficeArtDggContainer() override;
+    const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid) override;
 
     void setStyleManager(KoStyleManager* styleManager);
     KoStyleManager* styleManager() const;

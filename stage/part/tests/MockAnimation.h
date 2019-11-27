@@ -34,7 +34,7 @@ public:
     : KPrShapeAnimationOld( shape, step, Appear )
     {}
 
-    KPrAnimationData * animationData( KoCanvasBase * canvas, KoShapeManager * shapeManager, const QRectF & pageRect )
+    KPrAnimationData * animationData( KoCanvasBase * canvas, KoShapeManager * shapeManager, const QRectF & pageRect ) override
     {
         Q_UNUSED( canvas );
         Q_UNUSED( shapeManager );
@@ -42,7 +42,7 @@ public:
         return 0;
     }
 
-    bool animate( QPainter &painter, const KoViewConverter &converter, KPrAnimationData * animationData )
+    bool animate( QPainter &painter, const KoViewConverter &converter, KPrAnimationData * animationData ) override
     {
         Q_UNUSED( painter );
         Q_UNUSED( converter );
@@ -50,19 +50,19 @@ public:
         return true;
     }
 
-    void animateRect( QRectF & rect, KPrAnimationData * animationData )
+    void animateRect( QRectF & rect, KPrAnimationData * animationData ) override
     {
         Q_UNUSED( rect );
         Q_UNUSED( animationData );
     }
 
-    void next( int currentTime, KPrAnimationData * animationData )
+    void next( int currentTime, KPrAnimationData * animationData ) override
     {
         Q_UNUSED( currentTime );
         Q_UNUSED( animationData );
     }
 
-    void finish( KPrAnimationData * animationData )
+    void finish( KPrAnimationData * animationData ) override
     {
         Q_UNUSED(animationData);
     }
@@ -75,7 +75,7 @@ public:
     : KPrShapeAnimationOld( shape, step, Disappear )
     {}
 
-    KPrAnimationData * animationData( KoCanvasBase * canvas, KoShapeManager * shapeManager, const QRectF & pageRect )
+    KPrAnimationData * animationData( KoCanvasBase * canvas, KoShapeManager * shapeManager, const QRectF & pageRect ) override
     {
         Q_UNUSED( canvas );
         Q_UNUSED( shapeManager );
@@ -83,7 +83,7 @@ public:
         return 0;
     }
 
-    bool animate( QPainter &painter, const KoViewConverter &converter, KPrAnimationData * animationData )
+    bool animate( QPainter &painter, const KoViewConverter &converter, KPrAnimationData * animationData ) override
     {
         Q_UNUSED( painter );
         Q_UNUSED( converter );
@@ -91,19 +91,19 @@ public:
         return true;
     }
 
-    void animateRect( QRectF & rect, KPrAnimationData * animationData )
+    void animateRect( QRectF & rect, KPrAnimationData * animationData ) override
     {
         Q_UNUSED( rect );
         Q_UNUSED( animationData );
     }
 
-    void next( int currentTime, KPrAnimationData * animationData )
+    void next( int currentTime, KPrAnimationData * animationData ) override
     {
         Q_UNUSED( currentTime );
         Q_UNUSED( animationData );
     }
 
-    void finish( KPrAnimationData * animationData )
+    void finish( KPrAnimationData * animationData ) override
     {
         Q_UNUSED(animationData);
     }

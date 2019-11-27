@@ -26,8 +26,8 @@ class KPrIrisWipeEffectFactory : public KPrPageEffectFactory
 {
 public:
     KPrIrisWipeEffectFactory();
-    virtual ~KPrIrisWipeEffectFactory();
-    virtual QString subTypeName(int subType) const;
+    ~KPrIrisWipeEffectFactory() override;
+    QString subTypeName(int subType) const override;
 
     enum SubType {
         Rectangle,

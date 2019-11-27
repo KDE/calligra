@@ -84,7 +84,7 @@ public:
     explicit KoFilterManager(const QString& url, const QByteArray& mimetypeHint = QByteArray(),
                              KoFilterChain * const parentChain = 0);
 
-    virtual ~KoFilterManager();
+    ~KoFilterManager() override;
 
     /**
      * Imports the passed URL and returns the resultant filename

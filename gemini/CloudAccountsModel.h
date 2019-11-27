@@ -36,9 +36,9 @@ public:
         AccountDetailsRole
     };
     explicit CloudAccountsModel(QObject* parent = 0);
-    virtual ~CloudAccountsModel();
-    virtual QVariant data(const QModelIndex& index, int role) const;
-    virtual int rowCount(const QModelIndex& parent) const;
+    ~CloudAccountsModel() override;
+    QVariant data(const QModelIndex& index, int role) const override;
+    int rowCount(const QModelIndex& parent) const override;
     Q_INVOKABLE void selectIndex(int newSelection);
 
     /**

@@ -44,7 +44,7 @@ public:
     /**
      * Destructor.
      */
-    ~VoiceBar();
+    ~VoiceBar() override;
 
     Bar* bar();
 

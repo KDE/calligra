@@ -2140,7 +2140,7 @@ namespace {
        */
     class DumbEntityResolver : public QXmlStreamEntityResolver {
     public:
-        QString resolveUndeclaredEntity ( const QString &) { return ""; }
+        QString resolveUndeclaredEntity ( const QString &) override { return ""; }
     };
 
 }

@@ -114,9 +114,9 @@ public:
 class XmlTkBool : public XmlTk {
 public:
     bool m_value;
-    virtual QString value() const { return QString::number(m_value); }
-    virtual QString type() const { return "bool"; }
-    virtual unsigned size() const { return 6; }
+    QString value() const override { return QString::number(m_value); }
+    QString type() const override { return "bool"; }
+    unsigned size() const override { return 6; }
     explicit XmlTkBool(const unsigned char* data) : XmlTk(data) {
         m_value = readU8(data + 4);
     }
@@ -125,9 +125,9 @@ public:
 class XmlTkDouble : public XmlTk {
 public:
     double m_value;
-    virtual QString value() const { return QString::number(m_value); }
-    virtual QString type() const { return "double"; }
-    virtual unsigned size() const { return 12; }
+    QString value() const override { return QString::number(m_value); }
+    QString type() const override { return "double"; }
+    unsigned size() const override { return 12; }
     explicit XmlTkDouble(const unsigned char* data) : XmlTk(data) {
         m_value = readFloat64(data + 4);
     }
@@ -136,9 +136,9 @@ public:
 class XmlTkDWord : public XmlTk {
 public:
     int m_value;
-    virtual QString value() const { return QString::number(m_value); }
-    virtual QString type() const { return "dword"; }
-    virtual unsigned size() const { return 8; }
+    QString value() const override { return QString::number(m_value); }
+    QString type() const override { return "dword"; }
+    unsigned size() const override { return 8; }
     explicit XmlTkDWord(const unsigned char* data) : XmlTk(data) {
         m_value = readS32(data + 4);
     }
@@ -147,9 +147,9 @@ public:
 class XmlTkString : public XmlTk {
 public:
     QString m_value;
-    virtual QString value() const { return m_value; }
-    virtual QString type() const { return "string"; }
-    virtual unsigned size() const { return 8 + m_size; }
+    QString value() const override { return m_value; }
+    QString type() const override { return "string"; }
+    unsigned size() const override { return 8 + m_size; }
     explicit XmlTkString(const unsigned char* data) : XmlTk(data) {
         m_cchValue = readU32(data + 4);
         m_value = readUnicodeChars(data + 8, m_cchValue, -1, 0, &m_size);
@@ -162,9 +162,9 @@ private:
 class XmlTkToken : public XmlTk {
 public:
     unsigned m_value;
-    virtual QString value() const { return QString::number(m_value); }
-    virtual QString type() const { return "token"; }
-    virtual unsigned size() const { return 6; }
+    QString value() const override { return QString::number(m_value); }
+    QString type() const override { return "token"; }
+    unsigned size() const override { return 6; }
     explicit XmlTkToken(const unsigned char* data) : XmlTk(data) {
         m_value = readU16(data + 4);
     }
@@ -173,33 +173,33 @@ public:
 class XmlTkBlob : public XmlTk {
 public:
     QList<XmlTk*> m_tokens;
-    virtual QString value() const {
+    QString value() const override {
         QStringList tokens;
         foreach(XmlTk* t, m_tokens)
             tokens.append( QString("%1 %2 %3").arg(t->m_xmlTkTag, 0, 16).arg(t->type()).arg(t->value()) );
         return QString("[%1]").arg(tokens.join(", "));
     }
-    virtual QString type() const { return "blob"; }
-    virtual unsigned size() const { return 8 + m_cbBlob; }
+    QString type() const override { return "blob"; }
+    unsigned size() const override { return 8 + m_cbBlob; }
     explicit XmlTkBlob(const unsigned char* data);
-    virtual ~XmlTkBlob() { qDeleteAll(m_tokens); }
+    ~XmlTkBlob() override { qDeleteAll(m_tokens); }
 private:
     unsigned m_cbBlob;
 };
 
 class XmlTkBegin : public XmlTk {
 public:
-    virtual QString value() const { return QString(); }
-    virtual QString type() const { return "begin"; }
-    virtual unsigned size() const { return 4; }
+    QString value() const override { return QString(); }
+    QString type() const override { return "begin"; }
+    unsigned size() const override { return 4; }
     explicit XmlTkBegin(const unsigned char* data) : XmlTk(data) {}
 };
 
 class XmlTkEnd : public XmlTk {
 public:
-    virtual QString value() const { return QString(); }
-    virtual QString type() const { return "end"; }
-    virtual unsigned size() const { return 4; }
+    QString value() const override { return QString(); }
+    QString type() const override { return "end"; }
+    unsigned size() const override { return 4; }
     explicit XmlTkEnd(const unsigned char* data) : XmlTk(data) {}
 };
 

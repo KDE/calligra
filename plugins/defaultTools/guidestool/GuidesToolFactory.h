@@ -32,9 +32,9 @@ public:
     /// Constructor
     GuidesToolFactory();
     /// Destructor
-    ~GuidesToolFactory();
+    ~GuidesToolFactory() override;
     /// reimplemented
-    KoToolBase *createTool(KoCanvasBase *canvas);
+    KoToolBase *createTool(KoCanvasBase *canvas) override;
 };
 
 #endif // GUIDESTOOLFACTORY_H

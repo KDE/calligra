@@ -32,11 +32,11 @@ class KPrTextBlockPaintStrategy : public KoTextBlockPaintStrategyBase
 {
 public:
     KPrTextBlockPaintStrategy(QTextBlockUserData *blockUserData, KPrAnimationCache *animationCache);
-    virtual ~KPrTextBlockPaintStrategy();
+    ~KPrTextBlockPaintStrategy() override;
     void setAnimationCache(KPrAnimationCache *animationCache);
-    virtual QBrush background(const QBrush &defaultBackground) const;
-    virtual void applyStrategy(QPainter *painter);
-    virtual bool isVisible() const;
+    QBrush background(const QBrush &defaultBackground) const override;
+    void applyStrategy(QPainter *painter) override;
+    bool isVisible() const override;
 
     KPrAnimationCache *m_animationCache;
     QTextBlockUserData *m_textBlockData;

@@ -139,7 +139,7 @@ public:
     /**
      * Destructor.
      */
-    virtual ~ViewController();
+    ~ViewController() override;
 
     /**
      * Getter for property #view
@@ -201,7 +201,7 @@ public:
     /**
      * Reimlemented from superclass
      */
-    virtual bool event(QEvent* event);
+    bool event(QEvent* event) override;
 public Q_SLOTS:
     /**
      * \brief Zoom by a specific amount around a centre point.
@@ -261,7 +261,7 @@ Q_SIGNALS:
     void useZoomProxyChanged();
 
 protected:
-    virtual QSGNode* updatePaintNode(QSGNode* node, QQuickItem::UpdatePaintNodeData* );
+    QSGNode* updatePaintNode(QSGNode* node, QQuickItem::UpdatePaintNodeData* ) override;
 
 private Q_SLOTS:
     void documentChanged();

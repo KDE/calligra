@@ -39,7 +39,7 @@ class STAGE_TEST_EXPORT KPrCustomSlideShows : public QObject
     Q_OBJECT
 public:
     KPrCustomSlideShows();
-    ~KPrCustomSlideShows();
+    ~KPrCustomSlideShows() override;
 
     /**
      * @brief Insert a new Custom SlideShow

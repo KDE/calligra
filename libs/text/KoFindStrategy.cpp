@@ -33,7 +33,7 @@ public:
     NonClosingFindDialog(QWidget *parent)
             : KFindDialog(parent) {}
 
-    virtual void accept() {}
+    void accept() override {}
 };
 
 KoFindStrategy::KoFindStrategy(QWidget *parent)

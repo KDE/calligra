@@ -41,9 +41,9 @@ class ExternalEditor : public KTextEdit
     Q_OBJECT
 public:
     explicit ExternalEditor(QWidget *parent = 0);
-    ~ExternalEditor();
+    ~ExternalEditor() override;
 
-    virtual QSize sizeHint() const;
+    QSize sizeHint() const override;
 
     void setCellTool(CellToolBase* cellTool);
 
@@ -61,9 +61,9 @@ public Q_SLOTS:
     void setText(const QString &text);
 
 protected:
-    void keyPressEvent(QKeyEvent *event);
-    void focusInEvent(QFocusEvent *event);
-    void focusOutEvent(QFocusEvent *event);
+    void keyPressEvent(QKeyEvent *event) override;
+    void focusInEvent(QFocusEvent *event) override;
+    void focusOutEvent(QFocusEvent *event) override;
 
 private Q_SLOTS:
     void slotTextChanged();

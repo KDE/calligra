@@ -43,11 +43,11 @@ public:
     };
 
     Autocorrect();
-    virtual ~Autocorrect();
+    ~Autocorrect() override;
 
-    void finishedWord(QTextDocument *document, int cursorPosition);
-    void finishedParagraph(QTextDocument *document, int cursorPosition);
-    void startingSimpleEdit(QTextDocument *document, int cursorPosition);
+    void finishedWord(QTextDocument *document, int cursorPosition) override;
+    void finishedParagraph(QTextDocument *document, int cursorPosition) override;
+    void startingSimpleEdit(QTextDocument *document, int cursorPosition) override;
 
     void setUppercaseFirstCharOfSentence(bool b) { m_uppercaseFirstCharOfSentence = b; }
     void setFixTwoUppercaseChars(bool b) { m_fixTwoUppercaseChars = b; }

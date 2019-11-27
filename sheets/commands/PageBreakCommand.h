@@ -35,14 +35,14 @@ class PageBreakCommand : public AbstractRegionCommand
 {
 public:
     explicit PageBreakCommand(KUndo2Command *parent = 0);
-    virtual ~PageBreakCommand();
+    ~PageBreakCommand() override;
 
     enum Mode { BreakBeforeColumn, BreakBeforeRow };
     void setMode(Mode mode);
 
 protected:
-    virtual bool process(Element *);
-    virtual bool postProcessing();
+    bool process(Element *) override;
+    bool postProcessing() override;
 
 private:
     Mode m_mode;

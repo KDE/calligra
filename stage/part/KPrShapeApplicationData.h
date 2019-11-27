@@ -32,7 +32,7 @@ class STAGE_EXPORT KPrShapeApplicationData : public KoShapeApplicationData
 {
 public:
     KPrShapeApplicationData();
-    ~KPrShapeApplicationData();
+    ~KPrShapeApplicationData() override;
 
     QSet<KPrShapeAnimation *> & animations();
 

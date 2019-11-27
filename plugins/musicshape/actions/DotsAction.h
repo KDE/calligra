@@ -26,14 +26,14 @@ class DotsAction : public AbstractNoteMusicAction
 public:
     explicit DotsAction(SimpleEntryTool *tool);
 
-    virtual void mousePress(MusicCore::Chord* chord, MusicCore::Note* note, qreal distance, const QPointF& pos);
+    void mousePress(MusicCore::Chord* chord, MusicCore::Note* note, qreal distance, const QPointF& pos) override;
 
     //! To avoid 'mousePress() was hidden' warning
-    virtual void mousePress(MusicCore::Staff* staff, int bar, const QPointF& pos) {
+    void mousePress(MusicCore::Staff* staff, int bar, const QPointF& pos) override {
         AbstractNoteMusicAction::mousePress(staff, bar, pos);
     }
     //! To avoid 'mousePress() was hidden' warning
-    virtual void mousePress(MusicCore::StaffElement* se, qreal distance, const QPointF& pos) {
+    void mousePress(MusicCore::StaffElement* se, qreal distance, const QPointF& pos) override {
         AbstractNoteMusicAction::mousePress(se, distance, pos);
     }
 };

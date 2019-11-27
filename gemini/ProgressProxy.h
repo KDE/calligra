@@ -29,14 +29,14 @@ class ProgressProxy : public QObject, public KoProgressProxy
 
 public:
     explicit ProgressProxy(QObject* parent = 0);
-    virtual ~ProgressProxy();
+    ~ProgressProxy() override;
 
     QString taskName() const;
 
-    virtual void setFormat(const QString& format);
-    virtual void setRange(int minimum, int maximum);
-    virtual void setValue(int value);
-    virtual int maximum() const;
+    void setFormat(const QString& format) override;
+    void setRange(int minimum, int maximum) override;
+    void setValue(int value) override;
+    int maximum() const override;
 
 Q_SIGNALS:
     void valueChanged(int value);

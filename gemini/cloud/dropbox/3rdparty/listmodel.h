@@ -43,7 +43,7 @@ public:
         SectionRole
     };
     ListItem(QObject* parent = 0) : QObject(parent) {}
-    virtual ~ListItem() {}
+    ~ListItem() override {}
     virtual QString id() const = 0;
     virtual QVariant data(int role) const = 0;
 
@@ -58,14 +58,14 @@ class ListModel : public QAbstractListModel
 
 public:
   explicit ListModel(ListItem* prototype, QObject* parent = 0);
-  ~ListModel();
-  int rowCount(const QModelIndex &parent = QModelIndex()) const;
-  QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+  ~ListModel() override;
+  int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+  QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
   void appendRow(ListItem* item);
   void appendRows(const QList<ListItem*> &items);
   void insertRow(int row, ListItem* item);
   bool removeRow(int row, const QModelIndex &parent = QModelIndex());
-  bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
+  bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
   ListItem* takeRow(int row);
   ListItem* getRow(int row);
   ListItem* find(const QString &id) const;
@@ -83,7 +83,7 @@ Q_SIGNALS:
   void countChanged();
 
 protected:
-  QHash<int, QByteArray> roleNames() const;
+  QHash<int, QByteArray> roleNames() const override;
 
 private:
   ListItem* m_prototype;

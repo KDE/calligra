@@ -29,14 +29,14 @@ class KPrAnimate : public KPrAnimationBase
 {
 public:
     explicit KPrAnimate(KPrShapeAnimation *shapeAnimation);
-    virtual ~KPrAnimate();
+    ~KPrAnimate() override;
 
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
-    virtual bool saveOdf(KoPASavingContext & paContext) const;
-    virtual void init(KPrAnimationCache *animationCache, int step);
-    virtual bool saveAttribute(KoPASavingContext &paContext) const;
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
+    bool saveOdf(KoPASavingContext & paContext) const override;
+    void init(KPrAnimationCache *animationCache, int step) override;
+    bool saveAttribute(KoPASavingContext &paContext) const override;
 protected:
-    virtual void next(int currentTime);
+    void next(int currentTime) override;
 
 private:
     KPrAnimationAttribute * m_attribute;

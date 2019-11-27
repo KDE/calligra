@@ -38,11 +38,11 @@ class CropWidget : public QWidget
 public:
     explicit CropWidget(QWidget *parent=0);
 
-    virtual void paintEvent(QPaintEvent *event);
-    virtual void mousePressEvent(QMouseEvent *event);
-    virtual void mouseMoveEvent(QMouseEvent *event);
-    virtual void mouseReleaseEvent(QMouseEvent *event);
-    virtual void resizeEvent(QResizeEvent *event);
+    void paintEvent(QPaintEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
+    void resizeEvent(QResizeEvent *event) override;
 
     void setPictureShape(PictureShape* shape);
     void setCropRect(const QRectF &rect);

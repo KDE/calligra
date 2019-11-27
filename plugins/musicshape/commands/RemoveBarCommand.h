@@ -30,8 +30,8 @@ class RemoveBarCommand : public KUndo2Command
 {
 public:
     RemoveBarCommand(MusicShape* shape, int barIdx);
-    virtual void redo();
-    virtual void undo();
+    void redo() override;
+    void undo() override;
 private:
     MusicShape* m_shape;
     MusicCore::Bar* m_bar;

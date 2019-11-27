@@ -26,8 +26,8 @@ class BarnZigZagWipeEffectFactory : public KPrPageEffectFactory
 {
 public:
     BarnZigZagWipeEffectFactory();
-    virtual ~BarnZigZagWipeEffectFactory();
-    virtual QString subTypeName(int subType) const;
+    ~BarnZigZagWipeEffectFactory() override;
+    QString subTypeName(int subType) const override;
 
     enum SubType {
         Vertical,

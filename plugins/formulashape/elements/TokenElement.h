@@ -52,20 +52,20 @@ public:
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    const QList<BasicElement*> childElements() const;
+    const QList<BasicElement*> childElements() const override;
 
     /**
      * Render the element to the given QPainter
      * @param painter The QPainter to paint the element to
      * @param am AttributeManager containing style info
      */
-    void paint( QPainter& painter, AttributeManager* am );
+    void paint( QPainter& painter, AttributeManager* am ) override;
 
     /**
      * Calculate the size of the element and the positions of its children
      * @param am The AttributeManager providing information about attributes values
      */
-    void layout( const AttributeManager* am );
+    void layout( const AttributeManager* am ) override;
 
     /**
      * Insert @p text at @p position
@@ -92,10 +92,10 @@ public:
      * @param cursor The cursor
      * @return A this pointer if the element accepts if not the element to asked instead
      */
-    bool acceptCursor( const FormulaCursor& cursor );
+    bool acceptCursor( const FormulaCursor& cursor ) override;
     
     ///inherited from BasicElement
-    virtual bool moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor);
+    bool moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor) override;
     
     /**
      * Obtain the x position of the cursor inside this token element
@@ -108,13 +108,13 @@ public:
     virtual QRectF renderToPath( const QString& raw, QPainterPath& path ) const = 0;
     
     ///inherited from BasicElement
-    virtual int endPosition() const;
+    int endPosition() const override;
     
     ///inherited from BasicElement
-    virtual QLineF cursorLine(int position) const;
+    QLineF cursorLine(int position) const override;
     
     ///inherited from BasicElement
-    virtual bool setCursorTo(FormulaCursor& cursor, QPointF point);
+    bool setCursorTo(FormulaCursor& cursor, QPointF point) override;
     
     ///set m_rawString to @p text and empty the glyph list
     void setText(const QString &text);
@@ -122,14 +122,14 @@ public:
     /// @return the raw string
     const QString& text();
 
-    virtual const QString writeElementContent() const;
+    const QString writeElementContent() const override;
 
 protected:
     /// Read contents of the token element. Content should be unicode text strings or mglyphs
-    bool readMathMLContent( const KoXmlElement& parent );
+    bool readMathMLContent( const KoXmlElement& parent ) override;
 
     /// Write all content to the KoXmlWriter - reimplemented by the child elements
-    virtual void writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const;
+    void writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const override;
 
     /// @return The font to use
     QFont font() const;

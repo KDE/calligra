@@ -30,9 +30,9 @@ class KeyImport : public KoFilter
 public:
 
     KeyImport(QObject *parent, const QVariantList&);
-    virtual ~KeyImport();
+    ~KeyImport() override;
 
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
 };
 
 #endif // KEYIMPORT_H

@@ -35,12 +35,12 @@ public:
                                     KUndo2Command *parent=0);
 
 
-    virtual ~KPrAnimationEditNodeTypeCommand();
+    ~KPrAnimationEditNodeTypeCommand() override;
 
     /// redo the command
-    void redo();
+    void redo() override;
     /// revert the actions done in redo
-    void undo();
+    void undo() override;
 
 private:
     KPrShapeAnimation *m_animation;

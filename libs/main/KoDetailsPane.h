@@ -33,9 +33,9 @@ class KoDetailsPane : public QWidget, public Ui_KoDetailsPaneBase
 
 public:
     KoDetailsPane(QWidget* parent, const QString& header);
-    virtual ~KoDetailsPane();
+    ~KoDetailsPane() override;
 
-    virtual bool eventFilter(QObject* watched, QEvent* e);
+    bool eventFilter(QObject* watched, QEvent* e) override;
 
     /// @return the model used in the document list
     QStandardItemModel* model() const;

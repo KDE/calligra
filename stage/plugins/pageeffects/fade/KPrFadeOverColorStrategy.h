@@ -29,24 +29,24 @@ class KPrFadeOverColorStrategy : public KPrPageEffectStrategy
 {
 public:
     KPrFadeOverColorStrategy();
-    virtual ~KPrFadeOverColorStrategy();
+    ~KPrFadeOverColorStrategy() override;
 
-    virtual void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine );
+    void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine ) override;
 
-    virtual void paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data );
+    void paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data ) override;
 
-    virtual void next( const KPrPageEffect::Data &data );
+    void next( const KPrPageEffect::Data &data ) override;
 
-    virtual void finish(const KPrPageEffect::Data &data);
-
-    // reimplemented
-    virtual void saveOdfSmilAttributes(KoXmlWriter & xmlWriter) const;
+    void finish(const KPrPageEffect::Data &data) override;
 
     // reimplemented
-    virtual void saveOdfSmilAttributes(KoGenStyle & style) const;
+    void saveOdfSmilAttributes(KoXmlWriter & xmlWriter) const override;
 
     // reimplemented
-    virtual void loadOdfSmilAttributes(const KoXmlElement & element);
+    void saveOdfSmilAttributes(KoGenStyle & style) const override;
+
+    // reimplemented
+    void loadOdfSmilAttributes(const KoXmlElement & element) override;
 
 private:
     QColor m_fadeColor;

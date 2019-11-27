@@ -180,11 +180,11 @@ class PointNode : public AbstractNode
         QString m_text;
         QMap< QString, QString > prSet;
         explicit PointNode() : AbstractNode("dgm:pt") {}
-        virtual ~PointNode() {}
-        virtual void dump(Context* context, int level);
-        virtual void dump( QTextStream& device );
-        virtual void readElement(Context* context, MsooXmlDiagramReader* reader);
-        virtual void readAll(Context* context, MsooXmlDiagramReader* reader);
+        ~PointNode() override {}
+        void dump(Context* context, int level) override;
+        void dump( QTextStream& device ) override;
+        void readElement(Context* context, MsooXmlDiagramReader* reader) override;
+        void readAll(Context* context, MsooXmlDiagramReader* reader) override;
     private:
         void readTextBody(Context*, MsooXmlDiagramReader* reader);
 };
@@ -194,10 +194,10 @@ class PointListNode : public AbstractNode
 {
     public:
         explicit PointListNode() : AbstractNode("dgm:ptLst") {}
-        virtual ~PointListNode() {}
-        virtual void dump(Context* context, int level);
-        virtual void dump( QTextStream& device );
-        virtual void readElement(Context* context, MsooXmlDiagramReader* reader);
+        ~PointListNode() override {}
+        void dump(Context* context, int level) override;
+        void dump( QTextStream& device ) override;
+        void readElement(Context* context, MsooXmlDiagramReader* reader) override;
 };
 
 /// A connection between two nodes in the data-model.
@@ -214,11 +214,11 @@ class ConnectionNode : public AbstractNode
         int m_srcOrd;
         int m_destOrd;
         explicit ConnectionNode() : AbstractNode("dgm:cxn"), m_srcOrd(0), m_destOrd(0) {}
-        virtual ~ConnectionNode() {}
-        virtual void dump(Context*, int level);
-        virtual void dump( QTextStream& device );
-        virtual void readElement(Context* context, MsooXmlDiagramReader* reader);
-        virtual void readAll(Context* context, MsooXmlDiagramReader* reader);
+        ~ConnectionNode() override {}
+        void dump(Context*, int level) override;
+        void dump( QTextStream& device ) override;
+        void readElement(Context* context, MsooXmlDiagramReader* reader) override;
+        void readAll(Context* context, MsooXmlDiagramReader* reader) override;
 };
 
 /// A list of connections in the data-model.
@@ -226,10 +226,10 @@ class ConnectionListNode : public AbstractNode
 {
     public:
         explicit ConnectionListNode() : AbstractNode("dgm:cxnLst") {}
-        virtual ~ConnectionListNode() {}
-        virtual void dump(Context* context, int level);
-        virtual void dump( QTextStream& device );
-        virtual void readElement(Context* context, MsooXmlDiagramReader* reader);
+        ~ConnectionListNode() override {}
+        void dump(Context* context, int level) override;
+        void dump( QTextStream& device ) override;
+        void readElement(Context* context, MsooXmlDiagramReader* reader) override;
 };
 
 /****************************************************************************************************
@@ -292,11 +292,11 @@ class AlgorithmAtom : public AbstractAtom
         Algorithm m_type;
         QMap<QString, QString> m_params; // list of type=value parameters that modify the default behavior of the algorithm.
         explicit AlgorithmAtom() : AbstractAtom("dgm:alg"), m_type(UnknownAlg) {}
-        virtual ~AlgorithmAtom() {}
-        virtual AlgorithmAtom* clone(Context* context);
-        virtual void dump(Context* context, int level);
-        virtual void readAll(Context* context, MsooXmlDiagramReader* reader);
-        virtual void readElement(Context*, MsooXmlDiagramReader* reader);
+        ~AlgorithmAtom() override {}
+        AlgorithmAtom* clone(Context* context) override;
+        void dump(Context* context, int level) override;
+        void readAll(Context* context, MsooXmlDiagramReader* reader) override;
+        void readElement(Context*, MsooXmlDiagramReader* reader) override;
     private:
         QString typeAsString() const;
 };
@@ -312,14 +312,14 @@ class LayoutNodeAtom : public AbstractAtom
         int m_rotateAngle;
         bool m_needsReinit, m_needsRelayout, m_childNeedsRelayout;
         explicit LayoutNodeAtom() : AbstractAtom("dgm:layoutNode"), m_rotateAngle(0), m_needsReinit(true), m_needsRelayout(true), m_childNeedsRelayout(true), m_firstLayout(true), m_algorithmImpl(0) {}
-        virtual ~LayoutNodeAtom() {}
-        virtual LayoutNodeAtom* clone(Context* context);
-        virtual void dump(Context* context, int level);
-        virtual void readAll(Context* context, MsooXmlDiagramReader* reader);
-        virtual void build(Context* context);
-        virtual void finishBuild(Context* context);
-        virtual void layoutAtom(Context* context);
-        virtual void writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles* styles);
+        ~LayoutNodeAtom() override {}
+        LayoutNodeAtom* clone(Context* context) override;
+        void dump(Context* context, int level) override;
+        void readAll(Context* context, MsooXmlDiagramReader* reader) override;
+        void build(Context* context) override;
+        void finishBuild(Context* context) override;
+        void layoutAtom(Context* context) override;
+        void writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles* styles) override;
 
         QList< QExplicitlySharedDataPointer<ConstraintAtom> > constraints() const;
         QList< QExplicitlySharedDataPointer<AdjustAtom> > adjustments() const;
@@ -390,12 +390,12 @@ class ConstraintAtom : public AbstractAtom
         QList< QExplicitlySharedDataPointer<LayoutNodeAtom> > m_referencedLayouts;
         
         explicit ConstraintAtom() : AbstractAtom("dgm:constr") {}
-        virtual ~ConstraintAtom() {}
-        virtual ConstraintAtom* clone(Context* context);
-        virtual void dump(Context*, int level);        
-        virtual void readAll(Context*, MsooXmlDiagramReader* reader);
-        virtual void build(Context* context);
-        virtual void finishBuild(Context* context);
+        ~ConstraintAtom() override {}
+        ConstraintAtom* clone(Context* context) override;
+        void dump(Context*, int level) override;        
+        void readAll(Context*, MsooXmlDiagramReader* reader) override;
+        void build(Context* context) override;
+        void finishBuild(Context* context) override;
         void applyConstraint(Context* context, LayoutNodeAtom* atom);
     private:
         QString dump() const;
@@ -408,10 +408,10 @@ class AdjustAtom : public AbstractAtom
         int m_index;
         qreal m_value;
         explicit AdjustAtom() : AbstractAtom("dgm:adj"), m_index(-1) {}
-        virtual ~AdjustAtom() {}
-        virtual AdjustAtom* clone(Context* context);
-        virtual void dump(Context* context, int level);
-        virtual void readAll(Context* context, MsooXmlDiagramReader* reader);
+        ~AdjustAtom() override {}
+        AdjustAtom* clone(Context* context) override;
+        void dump(Context* context, int level) override;
+        void readAll(Context* context, MsooXmlDiagramReader* reader) override;
         void applyAdjustment(Context* context, LayoutNodeAtom* atom);
 };
 
@@ -427,10 +427,10 @@ class RuleAtom : public AbstractAtom
         QString m_type;
         QString m_value;
         explicit RuleAtom() : AbstractAtom("dgm:rule") {}
-        virtual ~RuleAtom() {}
-        virtual RuleAtom* clone(Context* context);
-        virtual void dump(Context* context, int level);
-        virtual void readAll(Context* context, MsooXmlDiagramReader* reader);
+        ~RuleAtom() override {}
+        RuleAtom* clone(Context* context) override;
+        void dump(Context* context, int level) override;
+        void readAll(Context* context, MsooXmlDiagramReader* reader) override;
 };
 
 /// List of atoms.
@@ -439,10 +439,10 @@ class ListAtom : public AbstractAtom
     public:
         explicit ListAtom(const QString &tagName) : AbstractAtom(tagName) {}
         explicit ListAtom(const QStringRef &tagName) : AbstractAtom(tagName.toString()) {}
-        virtual ~ListAtom() {}
-        virtual ListAtom* clone(Context* context);
-        virtual void dump(Context* context, int level);
-        virtual void readElement(Context* context, MsooXmlDiagramReader* reader);
+        ~ListAtom() override {}
+        ListAtom* clone(Context* context) override;
+        void dump(Context* context, int level) override;
+        void readElement(Context* context, MsooXmlDiagramReader* reader) override;
 };
 
 /// The shape displayed by the containing layout node. Not all layout nodes display shapes.
@@ -453,13 +453,13 @@ class ShapeAtom : public AbstractAtom
         QString m_blip;
         bool m_hideGeom;
         explicit ShapeAtom() : AbstractAtom("dgm:shape"), m_hideGeom(false) {}
-        virtual ~ShapeAtom() {}
+        ~ShapeAtom() override {}
         QList< QExplicitlySharedDataPointer<AdjustAtom> > adjustments() const;
-        virtual ShapeAtom* clone(Context* context);
-        virtual void dump(Context* context, int level);
-        virtual void readAll(Context* context, MsooXmlDiagramReader* reader);
-        virtual void build(Context* context);
-        virtual void writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles* styles);
+        ShapeAtom* clone(Context* context) override;
+        void dump(Context* context, int level) override;
+        void readAll(Context* context, MsooXmlDiagramReader* reader) override;
+        void build(Context* context) override;
+        void writeAtom(Context* context, KoXmlWriter* xmlWriter, KoGenStyles* styles) override;
         //virtual void build(Context* context);
 };
 
@@ -474,11 +474,11 @@ class PresentationOfAtom : public AbstractAtom
         QString m_start;
         QString m_step;
         explicit PresentationOfAtom() : AbstractAtom("dgm:presOf") {}
-        virtual ~PresentationOfAtom() {}
-        virtual PresentationOfAtom* clone(Context* context);
-        virtual void dump(Context* context, int level);
-        virtual void readAll(Context* context, MsooXmlDiagramReader* reader);
-        virtual void build(Context* context);
+        ~PresentationOfAtom() override {}
+        PresentationOfAtom* clone(Context* context) override;
+        void dump(Context* context, int level) override;
+        void readAll(Context* context, MsooXmlDiagramReader* reader) override;
+        void build(Context* context) override;
     private:
         QString dump() const;
         bool isEmpty() const;
@@ -500,10 +500,10 @@ class IfAtom : public AbstractAtom
         QString m_count;
         QString m_value;
         explicit IfAtom(bool isTrue) : AbstractAtom(isTrue ? "dgm:if" : "dgm:else"), m_isTrue(isTrue) {}
-        virtual ~IfAtom() {}
-        virtual IfAtom* clone(Context* context);
-        virtual void dump(Context* context, int level);
-        virtual void readAll(Context* context, MsooXmlDiagramReader* reader);
+        ~IfAtom() override {}
+        IfAtom* clone(Context* context) override;
+        void dump(Context* context, int level) override;
+        void readAll(Context* context, MsooXmlDiagramReader* reader) override;
         bool isTrue() const;
         bool testAtom(Context* context);
     private:
@@ -516,12 +516,12 @@ class ChooseAtom : public AbstractAtom
     public:
         QString m_name;
         explicit ChooseAtom() : AbstractAtom("dgm:choose") {}
-        virtual ~ChooseAtom() {}
-        virtual ChooseAtom* clone(Context* context);
-        virtual void dump(Context* context, int level);
-        virtual void readAll(Context* context, MsooXmlDiagramReader* reader);
-        virtual void readElement(Context* context, MsooXmlDiagramReader* reader);
-        virtual void build(Context* context);
+        ~ChooseAtom() override {}
+        ChooseAtom* clone(Context* context) override;
+        void dump(Context* context, int level) override;
+        void readAll(Context* context, MsooXmlDiagramReader* reader) override;
+        void readElement(Context* context, MsooXmlDiagramReader* reader) override;
+        void build(Context* context) override;
 };
 
 /// A looping structure, similar to a for loop in a programming language, which defines what data model points will use this layout node.
@@ -537,11 +537,11 @@ class ForEachAtom : public AbstractAtom
         QString m_step;
         QString m_count;
         explicit ForEachAtom() : AbstractAtom("dgm:forEach") {}
-        virtual ~ForEachAtom() {}
-        virtual ForEachAtom* clone(Context* context);
-        virtual void dump(Context* context, int level);
-        virtual void readAll(Context* context, MsooXmlDiagramReader* reader);
-        virtual void build(Context* context);
+        ~ForEachAtom() override {}
+        ForEachAtom* clone(Context* context) override;
+        void dump(Context* context, int level) override;
+        void readAll(Context* context, MsooXmlDiagramReader* reader) override;
+        void build(Context* context) override;
     private:
         QString dump() const;
 };
@@ -578,21 +578,21 @@ class AbstractAlgorithm {
 class CompositeAlgorithm : public AbstractAlgorithm {
     public:
         explicit CompositeAlgorithm() : AbstractAlgorithm() {}
-        virtual ~CompositeAlgorithm() {}
-        virtual QString name() const { return "Composite"; }
+        ~CompositeAlgorithm() override {}
+        QString name() const override { return "Composite"; }
     protected:
-        virtual qreal virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>& values);
+        qreal virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>& values) override;
 };
 
 /// The connector algorithm lays out and routes connecting lines, arrows, and shapes between layout nodes.
 class ConnectorAlgorithm : public AbstractAlgorithm {
     public:
         explicit ConnectorAlgorithm() : AbstractAlgorithm() {}
-        virtual ~ConnectorAlgorithm() {}
-        virtual QString name() const { return "Connector"; }
+        ~ConnectorAlgorithm() override {}
+        QString name() const override { return "Connector"; }
     protected:
-        virtual qreal virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>& values);
-        virtual void virtualDoLayoutChildren();
+        qreal virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>& values) override;
+        void virtualDoLayoutChildren() override;
     private:
         qreal connectorDistance() const;
 };
@@ -601,44 +601,44 @@ class ConnectorAlgorithm : public AbstractAlgorithm {
 class CycleAlgorithm : public AbstractAlgorithm {
     public:
         explicit CycleAlgorithm() : AbstractAlgorithm() {}
-        virtual ~CycleAlgorithm() {}
-        virtual QString name() const { return "Cycle"; }
+        ~CycleAlgorithm() override {}
+        QString name() const override { return "Cycle"; }
     protected:
-        virtual qreal virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>& values);
-        virtual void virtualDoLayout();
+        qreal virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>& values) override;
+        void virtualDoLayout() override;
 };
 
 /// The linear algorithm lays out child layout nodes along a horizontal or vertical linear path.
 class LinearAlgorithm : public AbstractAlgorithm {
     public:
         explicit LinearAlgorithm() : AbstractAlgorithm() {}
-        virtual ~LinearAlgorithm() {}
-        virtual QString name() const { return "Linear"; }
+        ~LinearAlgorithm() override {}
+        QString name() const override { return "Linear"; }
     protected:
-        virtual qreal virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>& values);
-        virtual void virtualDoLayout();
+        qreal virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>& values) override;
+        void virtualDoLayout() override;
 };
 
 /// The snake algorithm lays out child layout nodes along a linear path in two dimensions, allowing the linear flow to continue across multiple rows or columns.
 class SnakeAlgorithm : public AbstractAlgorithm {
     public:
         explicit SnakeAlgorithm() : AbstractAlgorithm() {}
-        virtual ~SnakeAlgorithm() {}
-        virtual QString name() const { return "Snake"; }
+        ~SnakeAlgorithm() override {}
+        QString name() const override { return "Snake"; }
     protected:
-        virtual qreal virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>& values);
-        virtual void virtualDoLayout();
+        qreal virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>& values) override;
+        void virtualDoLayout() override;
 };
 
 /// The hierarchy root algorithm works with the hierChild algorithm to create hierarchical tree layouts.
 class HierarchyAlgorithm : public AbstractAlgorithm {
     public:
         explicit HierarchyAlgorithm(bool isRoot) : AbstractAlgorithm(), m_isRoot(isRoot) {}
-        virtual ~HierarchyAlgorithm() {}
-        virtual QString name() const { return "Hierarchy"; }
+        ~HierarchyAlgorithm() override {}
+        QString name() const override { return "Hierarchy"; }
     protected:
-        virtual qreal virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>& values);
-        virtual void virtualDoLayout();
+        qreal virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>& values) override;
+        void virtualDoLayout() override;
     private:
         bool m_isRoot; // root or child?
 };
@@ -647,33 +647,33 @@ class HierarchyAlgorithm : public AbstractAlgorithm {
 class PyramidAlgorithm : public AbstractAlgorithm {
     public:
         explicit PyramidAlgorithm() : AbstractAlgorithm() {}
-        virtual ~PyramidAlgorithm() {}
-        virtual QString name() const { return "Pyramid"; }
+        ~PyramidAlgorithm() override {}
+        QString name() const override { return "Pyramid"; }
     protected:
-        virtual qreal virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>& values);
-        virtual void virtualDoLayout();
+        qreal virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>& values) override;
+        void virtualDoLayout() override;
 };
 
 /// The space algorithm is used to specify a minimum space between other layout nodes or as an indication to do nothing with the layout node’s size and position.
 class SpaceAlg : public AbstractAlgorithm {
     public:
         explicit SpaceAlg() : AbstractAlgorithm() {}
-        virtual ~SpaceAlg() {}
-        virtual QString name() const { return "Space"; }
+        ~SpaceAlg() override {}
+        QString name() const override { return "Space"; }
     protected:
-        virtual qreal virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>& values);
-        virtual void virtualDoLayout();
+        qreal virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>& values) override;
+        void virtualDoLayout() override;
 };
 
 /// The text algorithm sizes text to fit inside a shape and controls its margins and alignment.
 class TextAlgorithm : public AbstractAlgorithm {
     public:
         explicit TextAlgorithm() : AbstractAlgorithm() {}
-        virtual ~TextAlgorithm() {}
-        virtual QString name() const { return "Text"; }
+        ~TextAlgorithm() override {}
+        QString name() const override { return "Text"; }
     protected:
-        virtual qreal virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>& values);
-        virtual void virtualDoLayout();
+        qreal virtualGetDefaultValue(const QString& type, const QMap<QString, qreal>& values) override;
+        void virtualDoLayout() override;
 };
 
 }} // namespace MSOOXML::Diagram

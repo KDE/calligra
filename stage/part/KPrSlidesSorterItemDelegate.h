@@ -28,9 +28,9 @@ class KPrSlidesSorterItemDelegate: public QStyledItemDelegate
 public:
     explicit KPrSlidesSorterItemDelegate(QObject *parent = 0);
 
-    ~KPrSlidesSorterItemDelegate();
+    ~KPrSlidesSorterItemDelegate() override;
 
-    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 };
 
 #endif // KPRSLIDESSORTERITEMDELEGATE_H

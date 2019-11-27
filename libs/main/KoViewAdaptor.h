@@ -41,7 +41,7 @@ class KOMAIN_EXPORT KoViewAdaptor : public QDBusAbstractAdaptor
 public:
     explicit KoViewAdaptor(KoView *view);
 
-    virtual ~KoViewAdaptor();
+    ~KoViewAdaptor() override;
 
 public Q_SLOTS: // METHODS
     Q_SCRIPTABLE QStringList/*DCOPCStringList*/ actions();

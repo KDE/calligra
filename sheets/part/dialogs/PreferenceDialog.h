@@ -56,7 +56,7 @@ public:
     };
 
     explicit PreferenceDialog(View* view);
-    ~PreferenceDialog();
+    ~PreferenceDialog() override;
 
     void openPage(int flags);
 

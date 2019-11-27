@@ -37,8 +37,8 @@ class DocxXmlEndnoteReader : public DocxXmlDocumentReader
 {
 public:
     explicit DocxXmlEndnoteReader(KoOdfWriters *writers);
-    virtual ~DocxXmlEndnoteReader();
-    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
+    ~DocxXmlEndnoteReader() override;
+    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0) override;
 
 protected:
     KoFilter::ConversionStatus read_endnotes();

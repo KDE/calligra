@@ -26,8 +26,8 @@ class KPrStarWipeEffectFactory : public KPrPageEffectFactory
 {
 public:
     KPrStarWipeEffectFactory();
-    virtual ~KPrStarWipeEffectFactory();
-    virtual QString subTypeName(int subType) const;
+    ~KPrStarWipeEffectFactory() override;
+    QString subTypeName(int subType) const override;
 
     enum SubType {
         FourPoint,

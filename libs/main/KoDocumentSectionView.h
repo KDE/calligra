@@ -57,7 +57,7 @@ public:
      * Create a new KoDocumentSectionView.
      */
     explicit KoDocumentSectionView(QWidget *parent = 0);
-    virtual ~KoDocumentSectionView();
+    ~KoDocumentSectionView() override;
 
     /// how items should be displayed
     enum DisplayMode {
@@ -71,15 +71,15 @@ public:
         MinimalMode
     };
 
-    virtual void paintEvent (QPaintEvent *event);
+    void paintEvent (QPaintEvent *event) override;
 
-    virtual void dropEvent(QDropEvent *ev);
+    void dropEvent(QDropEvent *ev) override;
 
-    virtual void dragEnterEvent(QDragEnterEvent *e);
+    void dragEnterEvent(QDragEnterEvent *e) override;
 
-    virtual void dragMoveEvent(QDragMoveEvent *ev);
+    void dragMoveEvent(QDragMoveEvent *ev) override;
 
-    virtual void dragLeaveEvent(QDragLeaveEvent *e);
+    void dragLeaveEvent(QDragLeaveEvent *e) override;
 
     /**
      * Set the display mode of the view to one of the options.
@@ -124,10 +124,10 @@ public:
 
 
 protected:
-    virtual bool viewportEvent(QEvent *event);
-    virtual void contextMenuEvent(QContextMenuEvent *event);
+    bool viewportEvent(QEvent *event) override;
+    void contextMenuEvent(QContextMenuEvent *event) override;
     virtual void showContextMenu(const QPoint &globalPos, const QModelIndex &index);
-    virtual void startDrag (Qt::DropActions supportedActions);
+    void startDrag (Qt::DropActions supportedActions) override;
     QPixmap createDragPixmap() const;
 
     /**
@@ -136,9 +136,9 @@ protected:
     int cursorPageIndex() const;
 
 protected Q_SLOTS:
-    virtual void currentChanged(const QModelIndex &current, const QModelIndex &previous);
-    virtual void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles = QVector<int>());
-    virtual void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
+    void currentChanged(const QModelIndex &current, const QModelIndex &previous) override;
+    void dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles = QVector<int>()) override;
+    void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected) override;
 
 private Q_SLOTS:
     void slotActionToggled(bool on, const QPersistentModelIndex &index, int property);

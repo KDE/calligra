@@ -34,7 +34,7 @@ class OdtReaderDocxBackend : public OdtReaderBackend
 {
  public:
     OdtReaderDocxBackend();
-    virtual ~OdtReaderDocxBackend();
+    ~OdtReaderDocxBackend() override;
 
     // Called before and after the actual traversal.
     // FIXME: NYI
@@ -44,7 +44,7 @@ class OdtReaderDocxBackend : public OdtReaderBackend
     // ----------------------------------------------------------------
     // ODT document level functions
 
-    void elementOfficeBody(KoXmlStreamReader &reader, OdfReaderContext *context);
+    void elementOfficeBody(KoXmlStreamReader &reader, OdfReaderContext *context) override;
     //void elementOfficeText(KoXmlStreamReader &reader, OdfReaderContext *context);
 };
 

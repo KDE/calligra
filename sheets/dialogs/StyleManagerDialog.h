@@ -47,7 +47,7 @@ class StyleManagerDialog : public KoDialog
 
 public:
     StyleManagerDialog(QWidget* parent, Selection* selection, StyleManager* manager);
-    ~StyleManagerDialog();
+    ~StyleManagerDialog() override;
 
 protected Q_SLOTS:
     void slotOk();

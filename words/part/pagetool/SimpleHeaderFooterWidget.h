@@ -32,7 +32,7 @@ class SimpleHeaderFooterWidget : public QWidget
 public:
 
     explicit SimpleHeaderFooterWidget(KWView *view, QWidget *parent = 0);
-    ~SimpleHeaderFooterWidget();
+    ~SimpleHeaderFooterWidget() override;
 
 private:
     Ui::SimpleHeaderFooterWidget widget;

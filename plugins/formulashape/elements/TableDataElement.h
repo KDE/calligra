@@ -44,12 +44,12 @@ public:
 //    void layout( const AttributeManager* am );
     
     /// @return The element's ElementType
-    ElementType elementType() const;
+    ElementType elementType() const override;
     
-    virtual bool moveCursor ( FormulaCursor& newcursor, FormulaCursor& oldcursor );
+    bool moveCursor ( FormulaCursor& newcursor, FormulaCursor& oldcursor ) override;
     
     /// @return The default value of the attribute for this element
-    QString attributesDefaultValue( const QString& attribute ) const; 
+    QString attributesDefaultValue( const QString& attribute ) const override; 
 };
 
 #endif // TABLEDATAELEMENT_H

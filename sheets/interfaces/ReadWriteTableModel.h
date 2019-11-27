@@ -36,11 +36,11 @@ public:
     /**
      * Destructor.
      */
-    ~ReadWriteTableModel();
+    ~ReadWriteTableModel() override;
 
     // QAbstractTableModel interface
-    virtual Qt::ItemFlags flags(const QModelIndex& index) const;
-    virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
+    Qt::ItemFlags flags(const QModelIndex& index) const override;
+    bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
 
 private:
     class Private;

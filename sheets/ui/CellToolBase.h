@@ -69,22 +69,22 @@ public:
     /**
      * Destructor.
      */
-    virtual ~CellToolBase();
+    ~CellToolBase() override;
 
-    virtual void paint(QPainter &painter, const KoViewConverter &converter);
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
     void paintReferenceSelection(QPainter &painter, const QRectF &paintRect);
     void paintSelection(QPainter &painter, const QRectF &paintRect);
 
-    virtual void mousePressEvent(KoPointerEvent* event);
-    virtual void mouseMoveEvent(KoPointerEvent* event);
-    virtual void mouseReleaseEvent(KoPointerEvent* event);
-    virtual void mouseDoubleClickEvent(KoPointerEvent* event);
-    virtual void keyPressEvent(QKeyEvent* event);
-    virtual void inputMethodEvent(QInputMethodEvent * event);
+    void mousePressEvent(KoPointerEvent* event) override;
+    void mouseMoveEvent(KoPointerEvent* event) override;
+    void mouseReleaseEvent(KoPointerEvent* event) override;
+    void mouseDoubleClickEvent(KoPointerEvent* event) override;
+    void keyPressEvent(QKeyEvent* event) override;
+    void inputMethodEvent(QInputMethodEvent * event) override;
 
-    virtual Selection* selection() = 0;
+    Selection* selection() override = 0;
 
-    virtual void deleteSelection();
+    void deleteSelection() override;
 
     virtual bool createEditor(bool clear = true, bool focus = true, bool captureArrows = false);
     virtual CellEditorBase* editor() const;
@@ -111,16 +111,16 @@ public Q_SLOTS:
      */
     void scrollToCell(const QPoint &location);
 
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
-    virtual void deactivate();
+    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void deactivate() override;
     virtual void deleteEditor(bool saveChanges, bool expandMatrix = false);
     void populateWordCollection();
 
 protected:
     void init();
-    virtual QList<QPointer<QWidget> > createOptionWidgets();
+    QList<QPointer<QWidget> > createOptionWidgets() override;
     void applyUserInput(const QString &userInput, bool expandMatrix = false);
-    virtual KoInteractionStrategy* createStrategy(KoPointerEvent* event);
+    KoInteractionStrategy* createStrategy(KoPointerEvent* event) override;
 
     /**
      * The canvas scrolling offset in document coordinates.
@@ -255,9 +255,9 @@ protected Q_SLOTS:
     void formulaSelection(const QString& expression);
     // -- general editing actions --
     void edit();
-    virtual void cut();
-    virtual void copy() const;
-    virtual bool paste();
+    void cut() override;
+    void copy() const override;
+    bool paste() override;
     void specialPaste();
     void pasteWithInsertion();
     void selectAll();

@@ -28,7 +28,7 @@ class StencilBoxPlugin : public QObject {
 
 public:
     StencilBoxPlugin(QObject * parent, const QVariantList & );
-    ~StencilBoxPlugin() {}
+    ~StencilBoxPlugin() override {}
 };
 
 #endif

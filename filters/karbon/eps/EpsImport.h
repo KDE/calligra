@@ -31,9 +31,9 @@ class EpsImport : public KoFilter
 
 public:
     EpsImport(QObject* parent, const QVariantList&);
-    virtual ~EpsImport();
+    ~EpsImport() override;
 
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
 };
 
 #endif

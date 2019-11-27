@@ -32,7 +32,7 @@ class KPrPageLayoutSharedSavingData : public KoSharedSavingData
 {
 public:
     KPrPageLayoutSharedSavingData();
-    virtual ~KPrPageLayoutSharedSavingData();
+    ~KPrPageLayoutSharedSavingData() override;
 
     /**
      * Add page layout style name

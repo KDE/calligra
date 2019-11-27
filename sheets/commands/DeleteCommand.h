@@ -46,7 +46,7 @@ public:
     /**
      * Destructor.
      */
-    virtual ~DeleteCommand();
+    ~DeleteCommand() override;
 
     enum Mode {
         Everything,     ///< Delete also column and row formats.
@@ -59,12 +59,12 @@ protected:
      * Processes \p element , a Region::Point or a Region::Range .
      * Invoked by mainProcessing() .
      */
-    virtual bool process(Element* element);
+    bool process(Element* element) override;
 
-    virtual bool mainProcessing();
+    bool mainProcessing() override;
 
     // dummy
-    virtual Value newValue(Element*, int, int, bool*, Format::Type*) {
+    Value newValue(Element*, int, int, bool*, Format::Type*) override {
         return Value();
     }
 

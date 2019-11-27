@@ -512,49 +512,49 @@ public:
     Point(int col, int row) : Element(), m_point(col, row) {}
     Point(const QPoint&);
     Point(const QString&);
-    virtual ~Point();
+    ~Point() override;
 
-    virtual Type type() const {
+    Type type() const override {
         return Element::Point;
     }
-    virtual bool isValid() const {
+    bool isValid() const override {
         return (!m_point.isNull() && Region::isValid(m_point));
     }
-    virtual bool isColumn() const {
+    bool isColumn() const override {
         return false;
     }
-    virtual bool isRow() const {
+    bool isRow() const override {
         return false;
     }
-    virtual bool isAll() const {
+    bool isAll() const override {
         return false;
     }
 
-    virtual bool contains(const QPoint&) const;
-    virtual bool contains(const QRect&) const;
+    bool contains(const QPoint&) const override;
+    bool contains(const QRect&) const override;
 
-    virtual QString name(Sheet* originSheet = 0) const;
+    QString name(Sheet* originSheet = 0) const override;
 
-    virtual QRect rect() const {
+    QRect rect() const override {
         return QRect(m_point, m_point);
     }
 
-    virtual bool isColumnFixed() const {
+    bool isColumnFixed() const override {
         return m_fixedColumn;
     }
-    virtual bool isRowFixed() const {
+    bool isRowFixed() const override {
         return m_fixedRow;
     }
-    virtual bool isTopFixed() const {
+    bool isTopFixed() const override {
         return m_fixedRow;
     }
-    virtual bool isLeftFixed() const {
+    bool isLeftFixed() const override {
         return m_fixedColumn;
     }
-    virtual bool isBottomFixed() const {
+    bool isBottomFixed() const override {
         return m_fixedRow;
     }
-    virtual bool isRightFixed() const {
+    bool isRightFixed() const override {
         return m_fixedColumn;
     }
 
@@ -594,43 +594,43 @@ public:
     Range(const QRect&);
     Range(const Region::Point&, const Region::Point&);
     Range(const QString&);
-    virtual ~Range();
+    ~Range() override;
 
-    virtual Type type() const {
+    Type type() const override {
         return Element::Range;
     }
-    virtual bool isValid() const {
+    bool isValid() const override {
         return !m_range.isNull() && Region::isValid(m_range);
     }
-    virtual bool isColumn() const;
-    virtual bool isRow() const;
-    virtual bool isAll() const;
+    bool isColumn() const override;
+    bool isRow() const override;
+    bool isAll() const override;
 
-    virtual bool contains(const QPoint&) const;
-    virtual bool contains(const QRect&) const;
+    bool contains(const QPoint&) const override;
+    bool contains(const QRect&) const override;
 
-    virtual QString name(Sheet* originSheet = 0) const;
+    QString name(Sheet* originSheet = 0) const override;
 
-    virtual QRect rect() const {
+    QRect rect() const override {
         return m_range;
     }
 
-    virtual bool isColumnFixed() const {
+    bool isColumnFixed() const override {
         return m_fixedLeft && m_fixedRight;
     }
-    virtual bool isRowFixed() const {
+    bool isRowFixed() const override {
         return m_fixedTop && m_fixedBottom;
     }
-    virtual bool isTopFixed() const {
+    bool isTopFixed() const override {
         return m_fixedTop;
     }
-    virtual bool isLeftFixed() const {
+    bool isLeftFixed() const override {
         return m_fixedLeft;
     }
-    virtual bool isBottomFixed() const {
+    bool isBottomFixed() const override {
         return m_fixedBottom;
     }
-    virtual bool isRightFixed() const {
+    bool isRightFixed() const override {
         return m_fixedRight;
     }
 

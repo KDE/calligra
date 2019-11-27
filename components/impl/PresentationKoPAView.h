@@ -41,20 +41,20 @@ class PresentationKoPAView : public QObject, public KoPAViewBase
     Q_OBJECT
 public:
     PresentationKoPAView(KoCanvasController* canvasController, KoPACanvasBase* canvas, KPrDocument* prDocument);
-    virtual ~PresentationKoPAView();
-    virtual void setShowRulers (bool show);
-    virtual void editPaste();
-    virtual void pagePaste();
-    virtual void insertPage();
-    virtual void updatePageNavigationActions();
-    virtual void setActionEnabled (int actions, bool enable);
-    virtual void navigatePage (KoPageApp::PageNavigation pageNavigation);
-    virtual KoPAPageBase* activePage() const;
-    virtual void setActivePage (KoPAPageBase* page);
-    virtual void doUpdateActivePage (KoPAPageBase* page);
-    virtual KoZoomController* zoomController() const;
-    virtual KoPADocument* kopaDocument() const;
-    virtual KoPACanvasBase* kopaCanvas() const;
+    ~PresentationKoPAView() override;
+    void setShowRulers (bool show) override;
+    void editPaste() override;
+    void pagePaste() override;
+    void insertPage() override;
+    void updatePageNavigationActions() override;
+    void setActionEnabled (int actions, bool enable) override;
+    void navigatePage (KoPageApp::PageNavigation pageNavigation) override;
+    KoPAPageBase* activePage() const override;
+    void setActivePage (KoPAPageBase* page) override;
+    void doUpdateActivePage (KoPAPageBase* page) override;
+    KoZoomController* zoomController() const override;
+    KoPADocument* kopaDocument() const override;
+    KoPACanvasBase* kopaCanvas() const override;
 
     void setZoomController(KoZoomController* controller);
 

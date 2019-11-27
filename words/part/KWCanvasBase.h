@@ -50,36 +50,36 @@ public:
     static const qreal AnnotationAreaWidth;
 
     explicit KWCanvasBase(KWDocument *document, QObject *parent = 0);
-    ~KWCanvasBase();
+    ~KWCanvasBase() override;
 
 public: // KoCanvasBase interface methods.
 
     /// reimplemented method from superclass
-    virtual void gridSize(qreal *horizontal, qreal *vertical) const;
+    void gridSize(qreal *horizontal, qreal *vertical) const override;
 
     /// reimplemented method from superclass
-    virtual void addCommand(KUndo2Command *command);
+    void addCommand(KUndo2Command *command) override;
 
     /// reimplemented method from superclass
-    virtual KoShapeManager *shapeManager() const;
+    KoShapeManager *shapeManager() const override;
 
     /// reimplemented method from superclass
-    virtual void updateCanvas(const QRectF &rc);
+    void updateCanvas(const QRectF &rc) override;
 
     /// reimplemented method from superclass
-    virtual KoUnit unit() const;
+    KoUnit unit() const override;
 
     /// reimplemented method from superclass
-    virtual KoToolProxy *toolProxy() const;
+    KoToolProxy *toolProxy() const override;
 
     /// reimplemented method from superclass
-    virtual void clipToDocument(const KoShape *shape, QPointF &move) const;
+    void clipToDocument(const KoShape *shape, QPointF &move) const override;
 
     /// reimplemented method from superclass
-    virtual KoGuidesData *guidesData();
+    KoGuidesData *guidesData() override;
 
     /// reimplemented method from superclass
-    virtual KoViewConverter *viewConverter() const;
+    KoViewConverter *viewConverter() const override;
 
     /// return the document that this canvas works on
     KWDocument *document() const;
@@ -88,7 +88,7 @@ public: // KoCanvasBase interface methods.
     KWViewMode *viewMode() const;
 
     /// reimplemented method from superclass
-    virtual void ensureVisible(const QRectF &rect);
+    void ensureVisible(const QRectF &rect) override;
 
     /**
      * Enable or disable the page cache. The cache stores the rendered pages. It is

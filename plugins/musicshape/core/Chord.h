@@ -60,7 +60,7 @@ public:
     /**
      * Destructor.
      */
-    virtual ~Chord();
+    ~Chord() override;
 
     /**
      * Returns the duration of the chord.
@@ -122,15 +122,15 @@ public:
      * This overrides the method in the VoiceElement class to return the correct y position based on pitch
      * of the notes this chord contains.
      */
-    virtual qreal y() const;
+    qreal y() const override;
     
     /**
      * This overrides the method in the VoiceElement class to return the correct height based on the pitch of
      * the notes in this chord.
      */
-    virtual qreal height() const;
-    virtual qreal width() const;
-    virtual qreal beatline() const;
+    qreal height() const override;
+    qreal width() const override;
+    qreal beatline() const override;
     
     qreal stemX() const;
     qreal centerX() const;

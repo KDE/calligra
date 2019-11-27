@@ -57,7 +57,7 @@ class KOMSOOXML_EXPORT MsooXmlImport : public KoOdfExporter
 public:
     MsooXmlImport(const QString& bodyContentElement, QObject * parent);
 
-    virtual ~MsooXmlImport();
+    ~MsooXmlImport() override;
 
     KoStore* outputStore() const { return m_outputStore; }
 
@@ -105,10 +105,10 @@ public:
     void reportProgress(unsigned progress);
 
 protected:
-    virtual KoFilter::ConversionStatus createDocument(KoStore *outputStore,
-                                                      KoOdfWriters *writers);
+    KoFilter::ConversionStatus createDocument(KoStore *outputStore,
+                                                      KoOdfWriters *writers) override;
 
-    virtual void writeConfigurationSettings(KoXmlWriter* settings) const;
+    void writeConfigurationSettings(KoXmlWriter* settings) const override;
 
     bool isPasswordProtectedFile(QString &filename);
     QTemporaryFile* tryDecryptFile(QString &filename);

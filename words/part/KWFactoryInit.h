@@ -29,7 +29,7 @@ class KWFactoryInit : public KWFactory
 
 public:
     explicit KWFactoryInit() : KWFactory() {}
-    virtual ~KWFactoryInit() {}
+    ~KWFactoryInit() override {}
 
 };
 

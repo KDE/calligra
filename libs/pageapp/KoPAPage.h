@@ -32,14 +32,14 @@ public:
      * @param masterPage masterpage used for this page
      */
     explicit KoPAPage( KoPAMasterPage * masterPage );
-    ~KoPAPage();
+    ~KoPAPage() override;
 
     /// reimplemented
-    virtual void saveOdf( KoShapeSavingContext & context ) const;
+    void saveOdf( KoShapeSavingContext & context ) const override;
 
     /// @return the layout set by the masterpage
-    KoPageLayout & pageLayout();
-    const KoPageLayout & pageLayout() const;
+    KoPageLayout & pageLayout() override;
+    const KoPageLayout & pageLayout() const override;
 
     /// Set the masterpage for this page to @p masterPage
     void setMasterPage( KoPAMasterPage * masterPage );
@@ -47,25 +47,25 @@ public:
     KoPAMasterPage * masterPage() { return m_masterPage; }
 
     /// reimplemented
-    virtual void paintBackground( QPainter & painter, const KoViewConverter & converter, KoShapePaintingContext &paintContext );
+    void paintBackground( QPainter & painter, const KoViewConverter & converter, KoShapePaintingContext &paintContext ) override;
 
     /// reimplemented
-    virtual bool displayMasterShapes();
+    bool displayMasterShapes() override;
 
     /// reimplemented
-    virtual void setDisplayMasterShapes( bool display );
+    void setDisplayMasterShapes( bool display ) override;
 
     /// reimplemented
-    virtual bool displayMasterBackground();
+    bool displayMasterBackground() override;
 
     /// reimplemented
-    virtual void setDisplayMasterBackground( bool display );
+    void setDisplayMasterBackground( bool display ) override;
 
     /// reimplemented
-    virtual bool displayShape(KoShape *shape) const;
+    bool displayShape(KoShape *shape) const override;
 
     /// reimplemented
-    virtual void paintPage( QPainter & painter, KoZoomHandler & zoomHandler );
+    void paintPage( QPainter & painter, KoZoomHandler & zoomHandler ) override;
 
 protected:
     /**
@@ -84,10 +84,10 @@ protected:
     };
 
     /// Reimplemented from KoPageBase
-    virtual void loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &loadingContext );
+    void loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &loadingContext ) override;
 
     /// Reimplemented from KoPageBase
-    virtual void saveOdfPageStyleData( KoGenStyle &style, KoPASavingContext &paContext ) const;
+    void saveOdfPageStyleData( KoGenStyle &style, KoPASavingContext &paContext ) const override;
 
     KoPAMasterPage * m_masterPage;
 

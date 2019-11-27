@@ -46,7 +46,7 @@ public:
 				    const QString& _file, MSOOXML::DrawingMLTheme* _themes,
 				    QMap< QString, MSOOXML::DrawingTableStyle* >* _styleList,
 				    QMap< QString, QString > _colorMap);
-    virtual ~MsooXmlDrawingTableStyleContext();
+    ~MsooXmlDrawingTableStyleContext() override;
 
     QMap<QString, MSOOXML::DrawingTableStyle*>* styleList;
 
@@ -62,9 +62,9 @@ class KOMSOOXML_EXPORT MsooXmlDrawingTableStyleReader : public MsooXmlCommonRead
 {
 public:
     explicit MsooXmlDrawingTableStyleReader(KoOdfWriters *writers);
-    virtual ~MsooXmlDrawingTableStyleReader();
+    ~MsooXmlDrawingTableStyleReader() override;
 
-    virtual KoFilter::ConversionStatus read(MsooXmlReaderContext* context = 0);
+    KoFilter::ConversionStatus read(MsooXmlReaderContext* context = 0) override;
 
 protected:
     KoFilter::ConversionStatus read_tblStyleLst();

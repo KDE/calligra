@@ -40,8 +40,8 @@ class LinkCommand : public KUndo2Command
 public:
     LinkCommand(const Cell& cell, const QString& text, const QString& link);
 
-    virtual void redo();
-    virtual void undo();
+    void redo() override;
+    void undo() override;
 
 protected:
     Cell cell;

@@ -57,11 +57,11 @@ class PptxXmlDocumentReader : public MSOOXML::MsooXmlCommonReader
 public:
     explicit PptxXmlDocumentReader(KoOdfWriters *writers);
 
-    virtual ~PptxXmlDocumentReader();
+    ~PptxXmlDocumentReader() override;
 
     //! Reads/parses the file of format document.xml.
     //! The output goes mainly to KoXmlWriter* KoOdfWriters::body
-    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
+    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0) override;
 
 protected:
     KoFilter::ConversionStatus readInternal();

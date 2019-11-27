@@ -27,10 +27,10 @@ class KPrParallelSnakesWipeDiagonalStrategy : public KPrMatrixWipeStrategy
 {
 public:
     KPrParallelSnakesWipeDiagonalStrategy(bool reverseAngle, bool reverse);
-    virtual ~KPrParallelSnakesWipeDiagonalStrategy();
+    ~KPrParallelSnakesWipeDiagonalStrategy() override;
 protected:
-    virtual int maxIndex(int columns, int rows);
-    virtual int squareIndex(int x, int y, int columns, int rows);
+    int maxIndex(int columns, int rows) override;
+    int squareIndex(int x, int y, int columns, int rows) override;
     QVector<int> m_indices;
     bool m_reverseAngle;
 };

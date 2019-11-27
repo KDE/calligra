@@ -34,8 +34,8 @@ class DocxExport : public KoFilter
 
 public:
     DocxExport(QObject *parent, const QVariantList &);
-    virtual ~DocxExport();
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    ~DocxExport() override;
+    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
 
 private:
 };

@@ -33,17 +33,17 @@ public:
     explicit MultiscriptElement(BasicElement *parent = 0);
 
     /// The destructor
-    ~MultiscriptElement();
+    ~MultiscriptElement() override;
 
     /**
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    const QList<BasicElement*> childElements() const;
+    const QList<BasicElement*> childElements() const override;
     
-    virtual bool setCursorTo ( FormulaCursor& cursor, QPointF point );
+    bool setCursorTo ( FormulaCursor& cursor, QPointF point ) override;
 
-    virtual bool moveCursor ( FormulaCursor& newcursor, FormulaCursor& oldcursor );
+    bool moveCursor ( FormulaCursor& newcursor, FormulaCursor& oldcursor ) override;
     
 //     virtual int length() const;
     /**
@@ -51,33 +51,33 @@ public:
      * @param painter The QPainter to paint the element to
      * @param am AttributeManager containing style info
      */
-    void paint( QPainter& painter, AttributeManager* am );
+    void paint( QPainter& painter, AttributeManager* am ) override;
 
     /**
      * Calculate the size of the element and the positions of its children
      * @param am The AttributeManager providing information about attributes values
      */
-    void layout( const AttributeManager* am );
+    void layout( const AttributeManager* am ) override;
 
     /**
      * Implement the cursor behaviour for the element
      * @param cursor The FormulaCursor that is moved around
      * @return A this pointer if the element accepts if not the element to asked instead
      */
-    virtual bool acceptCursor ( const FormulaCursor& cursor );
+    bool acceptCursor ( const FormulaCursor& cursor ) override;
 
     /// @return The default value of the attribute for this element
-    QString attributesDefaultValue( const QString& attribute ) const; 
+    QString attributesDefaultValue( const QString& attribute ) const override; 
 
     /// @return The element's ElementType
-    ElementType elementType() const;
+    ElementType elementType() const override;
 
 protected:
     /// Read all content from the node
-    bool readMathMLContent( const KoXmlElement& element );
+    bool readMathMLContent( const KoXmlElement& element ) override;
 
     /// Write all content to the KoXmlWriter
-    void writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const;
+    void writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const override;
 
     /// Make sure that there are an even number of elements, as the spec says
     /// there must be.

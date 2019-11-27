@@ -39,7 +39,7 @@ class KOODF2_EXPORT KoTblStyle : public KoStyle
 public:
     KOSTYLE_DECLARE_SHARED_POINTER(KoTblStyle)
 
-    ~KoTblStyle();
+    ~KoTblStyle() override;
 
     void setBackgroundColor(const QColor& color);
     QColor backgroundColor() const;
@@ -123,11 +123,11 @@ public:
     WritingMode writingMode() const;
 
 protected:
-    virtual void prepareStyle(KoGenStyle& style) const;
-    virtual KoGenStyle::Type automaticstyleType() const;
-    virtual KoGenStyle::Type styleType() const;
-    virtual const char* styleFamilyName() const;
-    virtual QString defaultPrefix() const;
+    void prepareStyle(KoGenStyle& style) const override;
+    KoGenStyle::Type automaticstyleType() const override;
+    KoGenStyle::Type styleType() const override;
+    const char* styleFamilyName() const override;
+    QString defaultPrefix() const override;
 
 private:
     QColor m_backgroundColor;

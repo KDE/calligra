@@ -72,12 +72,12 @@ public:
     /**
      * Destructor.
      */
-    virtual ~View();
+    ~View() override;
 
     /**
      * Inherited from QQuickPaintedItem.
      */
-    virtual void paint(QPainter* painter) Q_DECL_OVERRIDE;
+    void paint(QPainter* painter) override;
 
     /**
      * Getter for property #document.
@@ -119,7 +119,7 @@ protected:
     /**
      * Inherited from QQuickPaintedItem.
      */
-    virtual void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry) Q_DECL_OVERRIDE;
+    void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry) override;
 
 private:
     class Private;

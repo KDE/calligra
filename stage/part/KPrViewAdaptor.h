@@ -34,7 +34,7 @@ class KPrViewAdaptor : public KoViewAdaptor
 
 public:
     explicit KPrViewAdaptor( KPrView* view );
-    virtual ~KPrViewAdaptor();
+    ~KPrViewAdaptor() override;
 
 public Q_SLOTS:
 

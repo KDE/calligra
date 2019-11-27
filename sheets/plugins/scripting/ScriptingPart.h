@@ -47,7 +47,7 @@ public:
     /**
     * Destructor.
     */
-    virtual ~ScriptingPart();
+    ~ScriptingPart() override;
 
 private:
     Q_DISABLE_COPY(ScriptingPart)

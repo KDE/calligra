@@ -44,13 +44,13 @@ public:
      * @param clicked the initial point that the user depressed (in pt).
      */
     ShapeRotateStrategy( KoToolBase *tool, const QPointF &clicked, Qt::MouseButtons buttons );
-    virtual ~ShapeRotateStrategy() {}
+    ~ShapeRotateStrategy() override {}
 
-    void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
-    KUndo2Command* createCommand();
-    void finishInteraction( Qt::KeyboardModifiers modifiers ) { Q_UNUSED( modifiers ); }
-    virtual void paint( QPainter &painter, const KoViewConverter &converter);
-    virtual void handleCustomEvent( KoPointerEvent * event );
+    void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) override;
+    KUndo2Command* createCommand() override;
+    void finishInteraction( Qt::KeyboardModifiers modifiers ) override { Q_UNUSED( modifiers ); }
+    void paint( QPainter &painter, const KoViewConverter &converter) override;
+    void handleCustomEvent( KoPointerEvent * event ) override;
 
 private:
     void rotateBy( qreal angle );

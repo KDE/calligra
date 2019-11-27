@@ -38,21 +38,21 @@ class CALLIGRA_SHEETS_COMMON_EXPORT CellTool : public CellToolBase
 
 public:
     explicit CellTool(KoCanvasBase* canvas);
-    ~CellTool();
+    ~CellTool() override;
 
-    virtual void paint(QPainter &painter, const KoViewConverter &converter);
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
 
 public Q_SLOTS:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
 
 protected:
-    virtual Selection* selection();
-    virtual QPointF offset() const;
-    virtual QSizeF size() const;
-    virtual QPointF canvasOffset() const;
-    virtual int maxCol() const;
-    virtual int maxRow() const;
-    virtual SheetView* sheetView(const Sheet* sheet) const;
+    Selection* selection() override;
+    QPointF offset() const override;
+    QSizeF size() const override;
+    QPointF canvasOffset() const override;
+    int maxCol() const override;
+    int maxRow() const override;
+    SheetView* sheetView(const Sheet* sheet) const override;
 
 protected Q_SLOTS:
     // -- misc actions --

@@ -42,14 +42,14 @@ class ResizeColumnManipulator : public AbstractRegionCommand
 {
 public:
     explicit ResizeColumnManipulator(KUndo2Command *parent = 0);
-    ~ResizeColumnManipulator();
+    ~ResizeColumnManipulator() override;
 
     void setSize(double size) {
         m_newSize = size;
     }
 
 protected:
-    virtual bool process(Element*);
+    bool process(Element*) override;
 
 private:
     double m_newSize;
@@ -66,14 +66,14 @@ class ResizeRowManipulator : public AbstractRegionCommand
 {
 public:
     explicit ResizeRowManipulator(KUndo2Command *parent = 0);
-    ~ResizeRowManipulator();
+    ~ResizeRowManipulator() override;
 
     void setSize(double size) {
         m_newSize = size;
     }
 
 protected:
-    virtual bool process(Element*);
+    bool process(Element*) override;
 
 private:
     double m_newSize;
@@ -90,11 +90,11 @@ class AdjustColumnRowManipulator : public AbstractRegionCommand
 {
 public:
     explicit AdjustColumnRowManipulator(KUndo2Command *parent = 0);
-    virtual ~AdjustColumnRowManipulator();
+    ~AdjustColumnRowManipulator() override;
 
-    virtual bool process(Element*);
-    virtual bool preProcessing();
-    virtual bool postProcessing();
+    bool process(Element*) override;
+    bool preProcessing() override;
+    bool postProcessing() override;
 
     void setAdjustColumn(bool state) {
         m_adjustColumn = state;
@@ -130,11 +130,11 @@ class HideShowManipulator : public AbstractRegionCommand
 {
 public:
     explicit HideShowManipulator(KUndo2Command *parent = 0);
-    virtual ~HideShowManipulator();
+    ~HideShowManipulator() override;
 
-    virtual bool process(Element*);
-    virtual bool preProcessing();
-    virtual bool postProcessing();
+    bool process(Element*) override;
+    bool preProcessing() override;
+    bool postProcessing() override;
 
     void setManipulateColumns(bool state) {
         m_manipulateColumns = state;
@@ -162,16 +162,16 @@ class InsertDeleteColumnManipulator : public AbstractRegionCommand
 {
 public:
     explicit InsertDeleteColumnManipulator(KUndo2Command *parent = 0);
-    virtual ~InsertDeleteColumnManipulator();
+    ~InsertDeleteColumnManipulator() override;
 
     void setTemplate(const ColumnFormat &columnFormat);
-    virtual void setReverse(bool reverse);
+    void setReverse(bool reverse) override;
 
 protected:
-    virtual bool process(Element*);
-    virtual bool preProcessing();
-    virtual bool mainProcessing();
-    virtual bool postProcessing();
+    bool process(Element*) override;
+    bool preProcessing() override;
+    bool mainProcessing() override;
+    bool postProcessing() override;
 
 private:
     enum Mode { Insert, Delete };
@@ -190,16 +190,16 @@ class InsertDeleteRowManipulator : public AbstractRegionCommand
 {
 public:
     explicit InsertDeleteRowManipulator(KUndo2Command *parent = 0);
-    virtual ~InsertDeleteRowManipulator();
+    ~InsertDeleteRowManipulator() override;
 
     void setTemplate(const RowFormat &rowFormat);
-    virtual void setReverse(bool reverse);
+    void setReverse(bool reverse) override;
 
 protected:
-    virtual bool process(Element*);
-    virtual bool preProcessing();
-    virtual bool mainProcessing();
-    virtual bool postProcessing();
+    bool process(Element*) override;
+    bool preProcessing() override;
+    bool mainProcessing() override;
+    bool postProcessing() override;
 
 private:
     enum Mode { Insert, Delete };

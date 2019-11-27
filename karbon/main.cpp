@@ -44,7 +44,7 @@ class KoSplashScreen : public QSplashScreen
 public:
     explicit KoSplashScreen(const QPixmap& pixmap) : QSplashScreen(pixmap) {}
 
-    void hideEvent(QHideEvent *event)
+    void hideEvent(QHideEvent *event) override
     {
         event->accept();
         deleteLater();

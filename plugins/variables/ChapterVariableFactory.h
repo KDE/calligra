@@ -27,7 +27,7 @@ class ChapterVariableFactory : public KoInlineObjectFactoryBase
 public:
     ChapterVariableFactory();
 
-    virtual KoInlineObject *createInlineObject(const KoProperties *properties = 0) const;
+    KoInlineObject *createInlineObject(const KoProperties *properties = 0) const override;
 };
 
 #endif

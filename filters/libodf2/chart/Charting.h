@@ -219,7 +219,7 @@ class PieImpl : public ChartImpl
 	, m_anStart(anStart)
     {}
 
-    virtual QByteArray name() const { return "circle"; }
+    QByteArray name() const override { return "circle"; }
 };
 
 class RingImpl : public PieImpl
@@ -233,19 +233,19 @@ class RingImpl : public PieImpl
 	, m_pcDonut(pcDonut)
     {}
 
-    virtual QByteArray name() const { return "ring"; }
+    QByteArray name() const override { return "ring"; }
 };
 
 class BarImpl : public ChartImpl
 {
  public:
-    virtual QByteArray name() const { return "bar"; }
+    QByteArray name() const override { return "bar"; }
 };
     
 class LineImpl : public ChartImpl
 {
  public:
-    virtual QByteArray name() const { return "line"; }
+    QByteArray name() const override { return "line"; }
 };
     
 class RadarImpl : public ChartImpl
@@ -259,7 +259,7 @@ class RadarImpl : public ChartImpl
 	, m_filled(filled)
     {}
 
-    virtual QByteArray name() const { return m_filled ? "filled-radar" : "radar"; }
+    QByteArray name() const override { return m_filled ? "filled-radar" : "radar"; }
 };
 
 class AreaImpl : public ChartImpl
@@ -267,7 +267,7 @@ class AreaImpl : public ChartImpl
  public:
     AreaImpl() : ChartImpl() {}
 
-    virtual QByteArray name() const { return "area"; }
+    QByteArray name() const override { return "area"; }
 };
 
 class StockImpl : public ChartImpl
@@ -275,7 +275,7 @@ class StockImpl : public ChartImpl
  public:
     StockImpl() : ChartImpl() {}
 
-    virtual QByteArray name() const { return "stock"; }
+    QByteArray name() const override { return "stock"; }
 };
 
 class ScatterImpl : public ChartImpl
@@ -289,7 +289,7 @@ class ScatterImpl : public ChartImpl
 	, style(LineMarker)
     {}
 
-    virtual QByteArray name() const { return "scatter"; }
+    QByteArray name() const override { return "scatter"; }
 };
 
 class BubbleImpl : public ChartImpl
@@ -318,7 +318,7 @@ class BubbleImpl : public ChartImpl
 	, m_showNegativeBubbles(showNegativeBubbles)
     {}
 
-    virtual QByteArray name() const { return "bubble"; }
+    QByteArray name() const override { return "bubble"; }
 };
 
 class SurfaceImpl : public ChartImpl
@@ -329,7 +329,7 @@ class SurfaceImpl : public ChartImpl
 
     explicit SurfaceImpl(bool fill = false) : ChartImpl(), m_fill(fill) {}
 
-    virtual QByteArray name() const { return "surface"; }
+    QByteArray name() const override { return "surface"; }
 };
 
 
@@ -369,7 +369,7 @@ class Text : public Obj
 	: Obj()
 	, m_text(text)
     {}
-    virtual ~Text() {}
+    ~Text() override {}
 };
     
 class Axis : public Obj
@@ -416,7 +416,7 @@ class Axis : public Obj
 	, m_minimum(0)
 	, m_maximum(0)
     {}
-    virtual ~Axis() {}
+    ~Axis() override {}
 };
 
 class Cell
@@ -572,7 +572,7 @@ class Series : public Obj
 	, m_markerType(NoMarker)
 	,spPr(0)
     {}
-    virtual ~Series()
+    ~Series() override
     {
 	qDeleteAll(m_datasetValue);
 	qDeleteAll(m_dataPoints);
@@ -588,14 +588,14 @@ class PlotArea : public Obj
     explicit PlotArea()
 	: Obj()
     {}
-    virtual ~PlotArea() {}
+    ~PlotArea() override {}
 };
 
 class Legend : public Obj
 {
  public:
     explicit Legend() : Obj() {}
-    virtual ~Legend() {}
+    ~Legend() override {}
 };
 
 /// The main charting class that represents a single chart.
@@ -690,7 +690,7 @@ class Chart : public Obj
     {
 	m_x1 = m_y1 = m_x2 = m_y2 = -1; // -1 means autoposition/autosize
     }
-    virtual ~Chart()
+    ~Chart() override
     {
 	qDeleteAll(m_series);
 	qDeleteAll(m_texts);

@@ -39,13 +39,13 @@ class KOPAGEAPP_EXPORT KoPAPrintJob : public KoPrintJob
     Q_OBJECT
 public:
     explicit KoPAPrintJob(KoPAView * view);
-    virtual ~KoPAPrintJob();
+    ~KoPAPrintJob() override;
 
-    virtual QPrinter & printer();
-    virtual QList<QWidget *> createOptionWidgets() const;
+    QPrinter & printer() override;
+    QList<QWidget *> createOptionWidgets() const override;
 
 public Q_SLOTS:
-    virtual void startPrinting(RemovePolicy removePolicy = DoNotDelete);
+    void startPrinting(RemovePolicy removePolicy = DoNotDelete) override;
 
 protected:
     QPrinter m_printer;

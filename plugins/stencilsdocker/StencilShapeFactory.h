@@ -33,10 +33,10 @@ class StencilShapeFactory : public KoShapeFactoryBase
 public:
     /// id is the absolute file path
     StencilShapeFactory(const QString& id, const QString& name, const KoProperties* props);
-    ~StencilShapeFactory();
+    ~StencilShapeFactory() override;
 
-    KoShape* createDefaultShape(KoDocumentResourceManager* documentResources = new KoDocumentResourceManager()) const;
-    bool supports(const KoXmlElement& e, KoShapeLoadingContext& context) const;
+    KoShape* createDefaultShape(KoDocumentResourceManager* documentResources = new KoDocumentResourceManager()) const override;
+    bool supports(const KoXmlElement& e, KoShapeLoadingContext& context) const override;
 
 private:
     KoShape* createFromOdf(KoStore* store, KoDocumentResourceManager* documentRes) const;

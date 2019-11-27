@@ -57,13 +57,13 @@ public:
     Q_ENUMS(KeyType)
 
     explicit KeyboardModel(QObject* parent = 0);
-    virtual ~KeyboardModel();
+    ~KeyboardModel() override;
 
-    virtual void classBegin();
-    virtual void componentComplete();
+    void classBegin() override;
+    void componentComplete() override;
 
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 
     KeyboardMode keyboardMode() const;
     void setKeyboardMode(KeyboardModel::KeyboardMode mode);

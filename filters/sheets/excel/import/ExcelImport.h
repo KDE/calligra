@@ -32,9 +32,9 @@ class ExcelImport : public KoFilter
 public:
 
     ExcelImport(QObject *parent, const QVariantList&);
-    virtual ~ExcelImport();
+    ~ExcelImport() override;
 
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
 
 private Q_SLOTS:
     void slotSigProgress(int progress);

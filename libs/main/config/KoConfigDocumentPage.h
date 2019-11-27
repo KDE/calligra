@@ -33,7 +33,7 @@ class KOMAIN_EXPORT KoConfigDocumentPage : public KoVBox
 
 public:
     explicit KoConfigDocumentPage(KoDocument* doc, char* name = 0L);
-    ~KoConfigDocumentPage();
+    ~KoConfigDocumentPage() override;
 
     void apply();
 

@@ -82,7 +82,7 @@ void KWFrameDialog::okClicked()
             , m_canvas(canvas)
         {}
 
-        void redo() {
+        void redo() override {
             if (m_first) {
                 m_first = false;
                 KUndo2Command::redo();

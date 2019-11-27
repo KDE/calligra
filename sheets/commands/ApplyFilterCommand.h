@@ -45,10 +45,10 @@ public:
     /**
      * Destructor.
      */
-    virtual ~ApplyFilterCommand();
+    ~ApplyFilterCommand() override;
 
-    virtual void redo();
-    virtual void undo();
+    void redo() override;
+    void undo() override;
 
     void setDatabase(const Database& database);
     void setOldFilter(const Filter& filter);

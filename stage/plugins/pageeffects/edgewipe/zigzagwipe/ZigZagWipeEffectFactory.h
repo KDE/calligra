@@ -26,8 +26,8 @@ class ZigZagWipeEffectFactory : public KPrPageEffectFactory
 {
 public:
     ZigZagWipeEffectFactory();
-    virtual ~ZigZagWipeEffectFactory();
-    virtual QString subTypeName(int subType) const;
+    ~ZigZagWipeEffectFactory() override;
+    QString subTypeName(int subType) const override;
 
     enum SubType {
         FromLeft,

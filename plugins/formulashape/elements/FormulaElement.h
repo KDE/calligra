@@ -40,9 +40,9 @@ public:
     FormulaElement();
 
     /// @return The element's ElementType
-    virtual ElementType elementType() const;
+    ElementType elementType() const override;
 
-    virtual void writeMathMLAttributes(KoXmlWriter* writer) const;
+    void writeMathMLAttributes(KoXmlWriter* writer) const override;
 };
 
 #endif // FORMULAELEMENT_H

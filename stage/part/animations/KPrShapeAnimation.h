@@ -62,7 +62,7 @@ public:
     };
 
     KPrShapeAnimation(KoShape *shape, QTextBlockUserData *textBlockData);
-    virtual ~KPrShapeAnimation();
+    ~KPrShapeAnimation() override;
 
     bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
     virtual bool saveOdf(KoPASavingContext &paContext, bool startStep, bool startSubStep) const;
@@ -70,7 +70,7 @@ public:
     KoShape *shape() const;
     QTextBlockUserData *textBlockUserData() const;
 
-    virtual void init(KPrAnimationCache *animationCache, int step);
+    void init(KPrAnimationCache *animationCache, int step);
 
     virtual void deactivate();
 

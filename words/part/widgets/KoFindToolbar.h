@@ -47,7 +47,7 @@ public:
      * \param f Qt window flags
      */
     explicit KoFindToolbar(KoFindBase *find, KActionCollection *ac, QWidget *parent = 0, Qt::WindowFlags f = 0);
-    virtual ~KoFindToolbar();
+    ~KoFindToolbar() override;
 
 public Q_SLOTS:
     /**

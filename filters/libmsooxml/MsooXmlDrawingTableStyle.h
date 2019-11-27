@@ -78,7 +78,7 @@ public:
     };
 
     DrawingTableStyle();
-    virtual ~DrawingTableStyle();
+    ~DrawingTableStyle() override;
 
     //the style takes ownership of the properties
     void addProperties(Type type, TableStyleProperties* properties);
@@ -96,7 +96,7 @@ class KOMSOOXML_EXPORT DrawingTableStyleConverterProperties : public TableStyleC
 {
 public:
     DrawingTableStyleConverterProperties();
-    ~DrawingTableStyleConverterProperties();
+    ~DrawingTableStyleConverterProperties() override;
 
     enum Role {
         FirstRow = 1,
@@ -124,9 +124,9 @@ class KOMSOOXML_EXPORT DrawingTableStyleConverter : public TableStyleConverter
 {
 public:
     explicit DrawingTableStyleConverter(DrawingTableStyleConverterProperties const& properties, DrawingTableStyle* style =0);
-    virtual ~DrawingTableStyleConverter();
+    ~DrawingTableStyleConverter() override;
 
-    KoCellStyle::Ptr style(int row, int column, const QPair<int, int> &spans);
+    KoCellStyle::Ptr style(int row, int column, const QPair<int, int> &spans) override;
 
 private:
     void applyStyle(MSOOXML::DrawingTableStyle::Type type, KoCellStyle::Ptr& style, int row, int column, const QPair<int, int> &spans);

@@ -31,7 +31,7 @@ class FlowView : public KoPAView
 
 public:
     explicit FlowView(FlowPart *part, FlowDocument *document, QWidget *parent);
-    ~FlowView();
+    ~FlowView() override;
 
     /// Returns the document
     FlowDocument* document() const;

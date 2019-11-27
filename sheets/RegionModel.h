@@ -36,7 +36,7 @@ class RegionModel : public SheetModel
 {
 public:
     explicit RegionModel(const Region &region);
-    virtual ~RegionModel();
+    ~RegionModel() override;
 
     /**
      * Existing data gets overwritten.
@@ -44,9 +44,9 @@ public:
      */
     void setOverwriteMode(bool enable);
 
-    virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
-    virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
-    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 
 private:
     class Private;

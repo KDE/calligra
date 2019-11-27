@@ -40,7 +40,7 @@ class WORDS_EXPORT KWFrameSet : public QObject
 public:
     /// Constructor.
     explicit KWFrameSet(Words::FrameSetType type = Words::OtherFrameSet);
-    virtual ~KWFrameSet();
+    ~KWFrameSet() override;
 
     /** fetch the frameset of a shape
      * @param shape the shape to fetch the frameset from

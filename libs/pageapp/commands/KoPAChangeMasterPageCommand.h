@@ -33,12 +33,12 @@ class KoPAChangeMasterPageCommand : public KUndo2Command
 {
 public:
     KoPAChangeMasterPageCommand( KoPADocument *document, KoPAPage * page, KoPAMasterPage * masterPage );
-    virtual ~KoPAChangeMasterPageCommand();
+    ~KoPAChangeMasterPageCommand() override;
 
     /// redo the command
-    void redo();
+    void redo() override;
     /// revert the actions done in redo
-    void undo();
+    void undo() override;
 
 private:
     KoPADocument *m_document;

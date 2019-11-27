@@ -33,8 +33,8 @@ class MusicShape;
 class AddNoteCommand : public KUndo2Command {
 public:
     AddNoteCommand(MusicShape* shape, MusicCore::Chord* chord, MusicCore::Staff* staff, MusicCore::Duration duration, int pitch, int accidentals=0);
-    virtual void redo();
-    virtual void undo();
+    void redo() override;
+    void undo() override;
 private:
     MusicShape* m_shape;
     MusicCore::Chord* m_chord;

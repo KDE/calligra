@@ -57,9 +57,9 @@ class GlobalsSubStreamHandler : public SubStreamHandler, public FormulaDecoder
 {
 public:
     GlobalsSubStreamHandler(Workbook* workbook, unsigned version);
-    virtual ~GlobalsSubStreamHandler();
+    ~GlobalsSubStreamHandler() override;
 
-    virtual void handleRecord(Record* record);
+    void handleRecord(Record* record) override;
 
     Workbook* workbook() const;
 
@@ -83,10 +83,10 @@ public:
 
     QString valueFormat(unsigned index) const;  //
 
-    virtual const std::vector<QString>& externSheets() const;
+    const std::vector<QString>& externSheets() const override;
 
-    virtual QString nameFromIndex(unsigned index) const;
-    virtual QString externNameFromIndex(unsigned index) const;
+    QString nameFromIndex(unsigned index) const override;
+    QString externNameFromIndex(unsigned index) const override;
 
     QList< Sheet* >& chartSheets();
 

@@ -66,16 +66,16 @@ protected:
     /**
      * Overridden from KoFindBase
      */
-    virtual void replaceImplementation(const KoFindMatch &match, const QVariant &value);
+    void replaceImplementation(const KoFindMatch &match, const QVariant &value) override;
     /**
      * Overridden from KoFindBase
      */
-    virtual void findImplementation(const QString &pattern, KoFindBase::KoFindMatchList &matchList);
+    void findImplementation(const QString &pattern, KoFindBase::KoFindMatchList &matchList) override;
 
     /**
      * Overridden from KoFindBase
      */
-    virtual void clearMatches();
+    void clearMatches() override;
 
 private:
     class Private;

@@ -51,7 +51,7 @@ public:
     enum DisplayMode { Widget, Dialog };
 
     explicit RegionSelector(QWidget *parent = 0);
-    ~RegionSelector();
+    ~RegionSelector() override;
 
     void setSelectionMode(SelectionMode mode);
     void setSelection(Selection* selection);
@@ -61,7 +61,7 @@ public:
     KTextEdit* textEdit() const;
 
 protected:
-    bool eventFilter(QObject* obj, QEvent* event);
+    bool eventFilter(QObject* obj, QEvent* event) override;
 
 protected Q_SLOTS:
     void switchDisplayMode(bool state);

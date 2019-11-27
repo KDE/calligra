@@ -41,10 +41,10 @@ class KoPADocumentStructureDockerFactory : public KoDockFactoryBase
 public:
     explicit KoPADocumentStructureDockerFactory(KoDocumentSectionView::DisplayMode mode, KoPageApp::PageType pageType = KoPageApp::Page);
 
-    virtual QString id() const;
-    virtual QDockWidget* createDockWidget();
+    QString id() const override;
+    QDockWidget* createDockWidget() override;
 
-    DockPosition defaultDockPosition() const
+    DockPosition defaultDockPosition() const override
     {
         return DockRight;
     }
@@ -60,16 +60,16 @@ Q_OBJECT
 
 public:
     explicit KoPADocumentStructureDocker(KoDocumentSectionView::DisplayMode mode, KoPageApp::PageType pageType, QWidget* parent = 0);
-    virtual ~KoPADocumentStructureDocker();
+    ~KoPADocumentStructureDocker() override;
 
-    virtual void setCanvas(KoCanvasBase* canvas);
-    virtual void unsetCanvas();
+    void setCanvas(KoCanvasBase* canvas) override;
+    void unsetCanvas() override;
     void setActivePage(KoPAPageBase *page);
     void setMasterMode(bool master);
 
 protected:
     /// This is the context menu for the slide show in the KoPADocumentStructure docker
-    void contextMenuEvent(QContextMenuEvent* event);
+    void contextMenuEvent(QContextMenuEvent* event) override;
 
 Q_SIGNALS:
     void pageChanged(KoPAPageBase *page);

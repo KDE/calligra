@@ -32,7 +32,7 @@ class AsciiImportDialog : public KoDialog
     Q_OBJECT
 public:
     explicit AsciiImportDialog(const QString &encoding, QWidget *parent = 0);
-    ~AsciiImportDialog();
+    ~AsciiImportDialog() override;
     QTextCodec *getCodec() const;
     int getParagraphStrategy() const;
 

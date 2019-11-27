@@ -72,7 +72,7 @@ public:
      * @param parent a parent widget we show ourselves in.
      */
     KWView(KoPart *part, KWDocument *document, QWidget *parent);
-    virtual ~KWView();
+    ~KWView() override;
 
     /**
      * return the KWDocument that owns this view.
@@ -83,11 +83,11 @@ public:
     }
 
     /// reimplemented from superclass
-    void addImages(const QVector<QImage> &imageList, const QPoint &insertAt);
+    void addImages(const QVector<QImage> &imageList, const QPoint &insertAt) override;
 
     // interface KoView
     /// reimplemented method from superclass
-    virtual void updateReadWrite(bool readWrite);
+    void updateReadWrite(bool readWrite) override;
     /// reimplemented method from superclass
     virtual QWidget *canvas() const;
 
@@ -115,7 +115,7 @@ public:
     /// go to page
     void goToPage(const KWPage &page);
 
-    virtual KoZoomController *zoomController() const { return m_zoomController; }
+    KoZoomController *zoomController() const override { return m_zoomController; }
 
     int minPageNumber() const { return m_minPageNum; }
     int maxPageNumber() const { return m_maxPageNum; }
@@ -151,12 +151,12 @@ public Q_SLOTS:
 
 protected:
     /// reimplemented method from superclass
-    virtual void showEvent(QShowEvent *event);
-    virtual bool event(QEvent* event);
+    void showEvent(QShowEvent *event) override;
+    bool event(QEvent* event) override;
 
 private:
     void setupActions();
-    virtual KoPrintJob *createPrintJob();
+    KoPrintJob *createPrintJob() override;
     /// loops over the selected shapes and returns the top level shapes.
     QList<KoShape *> selectedShapes() const;
     KoShape *selectedShape() const;

@@ -37,10 +37,10 @@ public:
         VariantsRole
     };
     explicit TemplatesModel(QObject* parent = 0);
-    virtual ~TemplatesModel();
+    ~TemplatesModel() override;
 
-    virtual QVariant data(const QModelIndex& index, int role) const;
-    virtual int rowCount(const QModelIndex& parent) const;
+    QVariant data(const QModelIndex& index, int role) const override;
+    int rowCount(const QModelIndex& parent) const override;
 
     QString templateType() const;
     void setTemplateType(const QString& newType);

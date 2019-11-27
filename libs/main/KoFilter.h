@@ -75,7 +75,7 @@ public:
                             JustInCaseSomeBrokenCompilerUsesLessThanAByte = 255
                           };
 
-    virtual ~KoFilter();
+    ~KoFilter() override;
 
     /**
      * The filter chain calls this method to perform the actual conversion.

@@ -52,7 +52,7 @@ public:
     Sheet* sheet;
 
 public Q_SLOTS:
-    virtual void slotButtonClicked(int button);
+    void slotButtonClicked(int button) override;
 
 protected:
     Selection* m_selection;

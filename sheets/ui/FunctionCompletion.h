@@ -50,12 +50,12 @@ class FunctionCompletion : public QObject
 public:
 
     explicit FunctionCompletion(CellEditor *editor);
-    ~FunctionCompletion();
+    ~FunctionCompletion() override;
 
     /**
     * Handles various keyboard and mouse actions which may occur on the autocompletion popup list
     */
-    bool eventFilter(QObject *o, QEvent *e);
+    bool eventFilter(QObject *o, QEvent *e) override;
 
     /**
     * Populates the autocompletion list box with the specified choices and shows it so that the user can view and select a function name.

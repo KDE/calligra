@@ -28,16 +28,16 @@ class ProxyView : public KoView
     Q_OBJECT
 public:
     ProxyView(KoPart *part, KoDocument* doc, QWidget* parent = 0);
-    ~ProxyView() Q_DECL_OVERRIDE;
+    ~ProxyView() override;
 
-    virtual void updateReadWrite(bool readwrite) Q_DECL_OVERRIDE;
-    virtual KoZoomController *zoomController() const Q_DECL_OVERRIDE;
-    virtual KoPageLayout pageLayout() const Q_DECL_OVERRIDE;
-    virtual void guiActivateEvent(bool activated) Q_DECL_OVERRIDE;
+    void updateReadWrite(bool readwrite) override;
+    KoZoomController *zoomController() const override;
+    KoPageLayout pageLayout() const override;
+    void guiActivateEvent(bool activated) override;
 
-    virtual QPrintDialog *createPrintDialog(KoPrintJob *printJob, QWidget *parent) Q_DECL_OVERRIDE;
-    virtual KoPrintJob *createPrintJob() Q_DECL_OVERRIDE;
-    virtual KoPrintJob *createPdfPrintJob() Q_DECL_OVERRIDE;
+    QPrintDialog *createPrintDialog(KoPrintJob *printJob, QWidget *parent) override;
+    KoPrintJob *createPrintJob() override;
+    KoPrintJob *createPdfPrintJob() override;
 
 private:
     friend class KarbonPart;

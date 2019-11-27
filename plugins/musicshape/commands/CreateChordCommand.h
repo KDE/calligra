@@ -34,8 +34,8 @@ class CreateChordCommand : public KUndo2Command {
 public:
     CreateChordCommand(MusicShape* shape, MusicCore::VoiceBar* voiceBar, MusicCore::Staff* staff, MusicCore::Duration duration, int before, int pitch, int accidentals);
     CreateChordCommand(MusicShape* shape, MusicCore::VoiceBar* voiceBar, MusicCore::Staff* staff, MusicCore::Duration duration, int before);
-    virtual void redo();
-    virtual void undo();
+    void redo() override;
+    void undo() override;
 private:
     MusicShape* m_shape;
     MusicCore::VoiceBar* m_voiceBar;

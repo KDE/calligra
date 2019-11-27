@@ -26,8 +26,8 @@ class KPrEllipseWipeEffectFactory : public KPrPageEffectFactory
 {
 public:
     KPrEllipseWipeEffectFactory();
-    virtual ~KPrEllipseWipeEffectFactory();
-    virtual QString subTypeName(int subType) const;
+    ~KPrEllipseWipeEffectFactory() override;
+    QString subTypeName(int subType) const override;
 
     enum SubType {
         Circle,

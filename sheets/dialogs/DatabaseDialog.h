@@ -63,7 +63,7 @@ public:
     enum PageId { eDatabase = 0, eTables = 1, eColumns = 2, eOptions = 3, eResult = 4 };
 
     DatabaseDialog(QWidget* parent, Selection* selection);
-    virtual ~DatabaseDialog();
+    ~DatabaseDialog() override;
 
 private Q_SLOTS:
     void orBox_clicked();
@@ -76,11 +76,11 @@ private Q_SLOTS:
     void databaseDriverChanged(int);
     //void popupTableViewMenu( QListWidgetItem *, const QPoint &, int );
     void tableViewClicked(QListWidgetItem *);
-    void accept();
+    void accept() override;
 
 protected:
-    void next();
-    void back();
+    void next() override;
+    void back() override;
 
 private:
     int            m_currentPage;

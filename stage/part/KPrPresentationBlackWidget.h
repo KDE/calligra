@@ -30,10 +30,10 @@ class KPrPresentationBlackWidget : public KPrPresentationToolEventForwarder
     Q_OBJECT
 public:
     explicit KPrPresentationBlackWidget(KoPACanvasBase *canvas);
-    virtual ~KPrPresentationBlackWidget();
+    ~KPrPresentationBlackWidget() override;
 
 protected:
-    void paintEvent( QPaintEvent * event );
+    void paintEvent( QPaintEvent * event ) override;
 
 private:
     QSize m_size;

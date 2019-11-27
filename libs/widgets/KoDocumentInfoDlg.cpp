@@ -60,7 +60,7 @@ public:
         setHeader(item->name());
         setIcon(QIcon::fromTheme(item->iconName()));
     }
-    ~KoPageWidgetItemAdapter() Q_DECL_OVERRIDE { delete m_item; }
+    ~KoPageWidgetItemAdapter() override { delete m_item; }
 
     bool shouldDialogCloseBeVetoed() { return m_item->shouldDialogCloseBeVetoed(); }
     void apply() { m_item->apply(); }

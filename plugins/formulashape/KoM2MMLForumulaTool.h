@@ -34,13 +34,13 @@ class KoM2MMLFormulaTool : public KoToolBase
 public:
     explicit KoM2MMLFormulaTool(KoCanvasBase *canvas);
     
-    virtual void activate(ToolActivation toolActivation, const QSet< KoShape* >& shapes);
+    void activate(ToolActivation toolActivation, const QSet< KoShape* >& shapes) override;
     
-    virtual void mouseReleaseEvent(KoPointerEvent* event);
-    virtual void mousePressEvent(KoPointerEvent* event);
-    virtual void mouseMoveEvent(KoPointerEvent* event);
-    virtual void paint(QPainter& painter, const KoViewConverter& converter);
-    virtual QWidget* createOptionWidget();
+    void mouseReleaseEvent(KoPointerEvent* event) override;
+    void mousePressEvent(KoPointerEvent* event) override;
+    void mouseMoveEvent(KoPointerEvent* event) override;
+    void paint(QPainter& painter, const KoViewConverter& converter) override;
+    QWidget* createOptionWidget() override;
 public Q_SLOTS:
     void textEdited();
 private:
@@ -60,10 +60,10 @@ public:
     explicit KoM2MMLFormulaToolFactory();
 
     /// The destructor - reimplemented from KoToolFactoryBase
-    ~KoM2MMLFormulaToolFactory();
+    ~KoM2MMLFormulaToolFactory() override;
 
     /// @return an instance of KoFormulaTool
-    KoToolBase* createTool( KoCanvasBase* canvas );
+    KoToolBase* createTool( KoCanvasBase* canvas ) override;
 };
 
 #endif

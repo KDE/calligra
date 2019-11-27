@@ -38,11 +38,11 @@ class MergeCommand : public AbstractRegionCommand
 {
 public:
     explicit MergeCommand(KUndo2Command *parent = 0);
-    virtual ~MergeCommand();
+    ~MergeCommand() override;
 
-    virtual bool preProcessing();
+    bool preProcessing() override;
 
-    virtual void setReverse(bool reverse) {
+    void setReverse(bool reverse) override {
         m_merge = !reverse;
     }
     void setHorizontalMerge(bool state) {
@@ -56,9 +56,9 @@ public:
         m_selection = selection;
     }
 protected:
-    virtual bool process(Element*);
+    bool process(Element*) override;
 
-    virtual bool postProcessing();
+    bool postProcessing() override;
 
     KUndo2MagicString name() const;
 

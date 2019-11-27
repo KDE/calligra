@@ -70,14 +70,14 @@ public:
         //selectionModel();
     }
 
-    virtual ~KoScriptManagerView() {}
+    ~KoScriptManagerView() override {}
 
     Kross::ActionCollectionModel *model() const
     {
             return static_cast<Kross::ActionCollectionModel*>(Kross::ActionCollectionView::model());
     }
 
-    virtual void slotAdd()
+    void slotAdd() override
     {
         Kross::ActionCollection *collection = model()->rootCollection();
         if (itemSelection().count() == 1) {
@@ -87,7 +87,7 @@ public:
         int result = wizard.exec();
         Q_UNUSED(result);
     }
-    virtual void slotRemove()
+    void slotRemove() override
     {
         if (itemSelection().isEmpty()) {
             return;

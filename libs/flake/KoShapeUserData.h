@@ -48,7 +48,7 @@ class FLAKE_EXPORT KoShapeUserData : public QObject
 public:
     /// Constructor
     explicit KoShapeUserData(QObject *parent = 0);
-    virtual ~KoShapeUserData();
+    ~KoShapeUserData() override;
 };
 
 #endif

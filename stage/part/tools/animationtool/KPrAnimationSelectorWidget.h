@@ -43,7 +43,7 @@ class KPrAnimationSelectorWidget : public QWidget
 public:
     explicit KPrAnimationSelectorWidget(KPrShapeAnimationDocker *docker, KPrPredefinedAnimationsLoader *animationsData,
                                         QWidget *parent = 0);
-    ~KPrAnimationSelectorWidget();
+    ~KPrAnimationSelectorWidget() override;
 
     /**
      * @brief Loads data from data model (call this method before use the widget)

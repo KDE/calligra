@@ -44,7 +44,7 @@ public:
      * Creates the registry and loads the function modules.
      */
     FunctionModuleRegistry();
-    ~FunctionModuleRegistry();
+    ~FunctionModuleRegistry() override;
 
     /**
      * \return the singleton instance

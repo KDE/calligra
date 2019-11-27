@@ -43,14 +43,14 @@ class ShapeLoaderHelper : public KoShape
 public:
     ShapeLoaderHelper() { }
 
-    virtual void paint( QPainter &, const KoViewConverter &, KoShapePaintingContext &) { }
+    void paint( QPainter &, const KoViewConverter &, KoShapePaintingContext &) override { }
 
-    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
+    bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) override
     {
         return loadOdfAttributes( element, context, OdfAllAttributes );
     }
 
-    virtual void saveOdf( KoShapeSavingContext & ) const { }
+    void saveOdf( KoShapeSavingContext & ) const override { }
 };
 
 KPrNotes::KPrNotes( KPrPage *page, KPrDocument * document )

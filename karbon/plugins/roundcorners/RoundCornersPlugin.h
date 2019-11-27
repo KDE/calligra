@@ -37,7 +37,7 @@ class RoundCornersPlugin : public QObject, public KXMLGUIClient
     Q_OBJECT
 public:
     RoundCornersPlugin(QObject * parent, const QVariantList &);
-    virtual ~RoundCornersPlugin();
+    ~RoundCornersPlugin() override;
 
 private Q_SLOTS:
     void slotRoundCorners();

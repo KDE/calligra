@@ -30,12 +30,12 @@ class KPrAnimationCreateCommand : public KUndo2Command
 {
 public:
     KPrAnimationCreateCommand(KPrDocument *doc, KPrShapeAnimation *animation);
-    virtual ~KPrAnimationCreateCommand();
+    ~KPrAnimationCreateCommand() override;
 
     /// redo the command
-    void redo();
+    void redo() override;
     /// revert the actions done in redo
-    void undo();
+    void undo() override;
 
 private:
     KPrDocument *m_doc;

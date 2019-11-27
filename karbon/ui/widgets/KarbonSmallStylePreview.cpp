@@ -54,7 +54,7 @@ public:
         setToolTip(i18n("Press to apply fill to selection"));
     }
 
-    virtual ~KarbonFillStyleWidget() {
+    ~KarbonFillStyleWidget() override {
     }
 
     void setFill(QSharedPointer<KoShapeBackground>  fill) {
@@ -62,7 +62,7 @@ public:
         update();
     }
 protected:
-    virtual void paintEvent(QPaintEvent* event) {
+    void paintEvent(QPaintEvent* event) override {
         QPainter painter(this);
         painter.setClipRect(event->rect());
 
@@ -112,7 +112,7 @@ public:
         setToolTip(i18n("Press to apply stroke to selection"));
     }
 
-    virtual ~KarbonStrokeStyleWidget() {
+    ~KarbonStrokeStyleWidget() override {
         if (m_stroke && !m_stroke->deref())
             delete m_stroke;
     }
@@ -128,7 +128,7 @@ public:
         update();
     }
 protected:
-    virtual void paintEvent(QPaintEvent* event) {
+    void paintEvent(QPaintEvent* event) override {
         QPainter painter(this);
         painter.setClipRect(event->rect());
 

@@ -40,8 +40,8 @@ class RenameSheetCommand : public KUndo2Command
 public:
     RenameSheetCommand(Sheet* sheet, const QString &name);
 
-    virtual void redo();
-    virtual void undo();
+    void redo() override;
+    void undo() override;
 
 protected:
     Sheet* sheet;
@@ -59,8 +59,8 @@ class HideSheetCommand : public KUndo2Command
 public:
     explicit HideSheetCommand(Sheet* sheet);
 
-    virtual void redo();
-    virtual void undo();
+    void redo() override;
+    void undo() override;
 
 protected:
     Map* map;
@@ -77,8 +77,8 @@ class ShowSheetCommand : public KUndo2Command
 public:
     explicit ShowSheetCommand(Sheet* sheet, KUndo2Command* parent = 0);
 
-    virtual void redo();
-    virtual void undo();
+    void redo() override;
+    void undo() override;
 
 protected:
     Map* map;
@@ -95,8 +95,8 @@ class AddSheetCommand : public KUndo2Command
 public:
     explicit AddSheetCommand(Sheet* sheet);
 
-    virtual void redo();
-    virtual void undo();
+    void redo() override;
+    void undo() override;
 
 protected:
     Sheet*  m_sheet;
@@ -115,8 +115,8 @@ public:
 
     void setSheet(Sheet* sheet);
 
-    virtual void redo();
-    virtual void undo();
+    void redo() override;
+    void undo() override;
 
 protected:
     Sheet* m_oldSheet;
@@ -134,8 +134,8 @@ class RemoveSheetCommand : public KUndo2Command
 public:
     explicit RemoveSheetCommand(Sheet* sheet);
 
-    virtual void redo();
-    virtual void undo();
+    void redo() override;
+    void undo() override;
 
 protected:
     Sheet* sheet;
@@ -163,8 +163,8 @@ public:
     void setLcMode(bool b);
     void setCapitalizeFirstLetter(bool b);
 
-    virtual void redo();
-    virtual void undo();
+    void redo() override;
+    void undo() override;
 
 protected:
     Sheet* sheet;

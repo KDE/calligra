@@ -45,21 +45,21 @@ public:
     QPainterPath renderForFence( const QString& raw, Form form );
 
     /// @return The element's ElementType
-    ElementType elementType() const;
+    ElementType elementType() const override;
 
     /// Process @p raw and render it to @p path
-    QRectF renderToPath( const QString& raw, QPainterPath& path ) const;
+    QRectF renderToPath( const QString& raw, QPainterPath& path ) const override;
     
     /// Inherited from TokenElement
-    virtual bool insertText ( int position, const QString& text );
+    bool insertText ( int position, const QString& text ) override;
     
     /// Inherited from TokenElement
-    virtual bool readMathMLContent ( const KoXmlElement& parent );
+    bool readMathMLContent ( const KoXmlElement& parent ) override;
     
     /** Reimplemented from BaseElement
      *  Sets the height() and baseLine() of the element based on the parent size
      */
-    virtual void stretch();
+    void stretch() override;
 private:
     /// @return The Form value that was passed as QString @p value
     Form parseForm( const QString& value ) const;

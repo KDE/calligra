@@ -170,10 +170,10 @@ public:
 
     explicit PptxXmlSlideReader(KoOdfWriters *writers);
 
-    virtual ~PptxXmlSlideReader();
+    ~PptxXmlSlideReader() override;
 
     //! Reads/parses the XML.
-    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
+    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0) override;
 
 protected:
 

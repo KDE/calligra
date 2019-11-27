@@ -56,7 +56,7 @@ public:
     /** Constructor. */
     explicit KoScriptingOdfReader(KoScriptingOdfStore *store, const KoXmlDocument &doc);
     /** Destructor. */
-    virtual ~KoScriptingOdfReader();
+    ~KoScriptingOdfReader() override;
     /** Return the KoScriptingOdfStore instance this reader belongs to. */
     KoScriptingOdfStore *store() const;
     /** Return the KoXmlDocument instance this reader operates on. */
@@ -226,7 +226,7 @@ public:
     /** Constructor. */
     KoScriptingOdfManifestReader(KoScriptingOdfStore *store, const KoXmlDocument &doc);
     /** Destructor. */
-    virtual ~KoScriptingOdfManifestReader() {}
+    ~KoScriptingOdfManifestReader() override {}
 
 public Q_SLOTS:
     /** Returns the number of file-entries the manifest has. */
@@ -271,7 +271,7 @@ public:
     /** Constructor. */
     KoScriptingOdfStylesReader(KoScriptingOdfStore *store, const KoXmlDocument &doc);
     /** Destructor. */
-    virtual ~KoScriptingOdfStylesReader() {}
+    ~KoScriptingOdfStylesReader() override {}
 public Q_SLOTS:
     //QString style(const QString &styleName);
 };
@@ -286,7 +286,7 @@ public:
     /** Constructor. */
     KoScriptingOdfContentReader(KoScriptingOdfStore *store, const KoXmlDocument &doc);
     /** Destructor. */
-    virtual ~KoScriptingOdfContentReader() {}
+    ~KoScriptingOdfContentReader() override {}
 public Q_SLOTS:
     //QStringList headers(const QString &filter);
     //QStringList lists(const QString &filter);
@@ -332,7 +332,7 @@ public:
     /** Constructor. */
     explicit KoScriptingOdfStore(QObject *parent, KoDocument *doc);
     /** Destructor. */
-    virtual ~KoScriptingOdfStore();
+    ~KoScriptingOdfStore() override;
 
     //KoStore* readStore() const;
     //QIODevice* readDevice() const;

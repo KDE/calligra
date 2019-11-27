@@ -41,7 +41,7 @@ class OdfReaderAsciiContext : public OdfReaderContext
 {
  public: 
     OdfReaderAsciiContext(KoStore *store, QFile &file);
-    virtual ~OdfReaderAsciiContext();
+    ~OdfReaderAsciiContext() override;
 
     QTextStream  outStream;
 };

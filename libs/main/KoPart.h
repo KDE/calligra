@@ -67,7 +67,7 @@ public:
      * The destructor does not delete any attached KoView objects and it does not
      * delete the attached widget as returned by widget().
      */
-    virtual ~KoPart();
+    ~KoPart() override;
 
     /**
      * @return The componentData ( KoComponentData ) for this GUI client. You set the componentdata

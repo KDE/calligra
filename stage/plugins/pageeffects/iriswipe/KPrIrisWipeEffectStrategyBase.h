@@ -30,13 +30,13 @@ class KPrIrisWipeEffectStrategyBase : public KPrPageEffectStrategy
 {
 public:
     KPrIrisWipeEffectStrategyBase(QPainterPath shape, int subType, const char * smilType, const char *smilSubType, bool reverse = false );
-    virtual ~KPrIrisWipeEffectStrategyBase();
+    ~KPrIrisWipeEffectStrategyBase() override;
 
-    virtual void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine );
+    void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine ) override;
 
-    virtual void paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data );
+    void paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data ) override;
 
-    virtual void next( const KPrPageEffect::Data &data );
+    void next( const KPrPageEffect::Data &data ) override;
 
     int findMaxScaling( const KPrPageEffect::Data &data );
 

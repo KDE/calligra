@@ -44,11 +44,11 @@ class XlsxXmlSharedStringsReader : public XlsxXmlCommonReader
 public:
     explicit XlsxXmlSharedStringsReader(KoOdfWriters *writers);
 
-    virtual ~XlsxXmlSharedStringsReader();
+    ~XlsxXmlSharedStringsReader() override;
 
     //! Reads/parses the file of format document.xml.
     //! The output goes mainly to KoXmlWriter* KoOdfWriters::body
-    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
+    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0) override;
 
 protected:
     KoFilter::ConversionStatus readInternal();

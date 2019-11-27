@@ -35,8 +35,8 @@ class ChangePartDetailsCommand : public KUndo2Command
 {
 public:
     ChangePartDetailsCommand(MusicShape* shape, MusicCore::Part* part, const QString& name, const QString& abbreviation, int staffCount);
-    virtual void redo();
-    virtual void undo();
+    void redo() override;
+    void undo() override;
 private:
     MusicShape* m_shape;
     MusicCore::Part* m_part;

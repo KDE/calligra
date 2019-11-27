@@ -166,7 +166,7 @@ public:
         repo->add(desc);
     }
 
-    virtual ~ScriptingFunctionImpl() {}
+    ~ScriptingFunctionImpl() override {}
 
 private:
     QPointer<ScriptingFunction> m_function;

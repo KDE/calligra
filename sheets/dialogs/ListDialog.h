@@ -38,7 +38,7 @@ class ListDialog: public KoDialog
     Q_OBJECT
 public:
     explicit ListDialog(QWidget *parent);
-    ~ListDialog();
+    ~ListDialog() override;
 
     void init();
 

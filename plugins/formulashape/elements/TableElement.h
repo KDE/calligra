@@ -43,47 +43,47 @@ public:
     explicit TableElement(BasicElement *parent = 0);
     
     /// The standard destructor
-    ~TableElement();
+    ~TableElement() override;
 
     /**
      * Render the element to the given QPainter
      * @param painter The QPainter to paint the element to
      * @param am AttributeManager containing style info
      */
-    void paint( QPainter& painter, AttributeManager* am );
+    void paint( QPainter& painter, AttributeManager* am ) override;
 
     /**
      * Calculate the size of the element and the positions of its children
      * @param am The AttributeManager providing information about attributes values
      */
-    void layout( const AttributeManager* am );
+    void layout( const AttributeManager* am ) override;
 
     /**
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    const QList<BasicElement*> childElements() const;
+    const QList<BasicElement*> childElements() const override;
 
     /// inherited from BasicElement
-    virtual bool acceptCursor( const FormulaCursor& cursor );
+    bool acceptCursor( const FormulaCursor& cursor ) override;
     
     /// inherited from BasicElement
-    virtual int positionOfChild(BasicElement* child) const;
+    int positionOfChild(BasicElement* child) const override;
     
     /// inherited from BasicElement
-    virtual int endPosition() const;
+    int endPosition() const override;
     
     /// inherited from BasicElement
-    virtual bool setCursorTo(FormulaCursor& cursor, QPointF point);
+    bool setCursorTo(FormulaCursor& cursor, QPointF point) override;
     
     virtual bool insertChild ( int position, BasicElement* child );
     bool removeChild (BasicElement* child); 
     
     /// inherited from BasicElement
-    virtual bool moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor);
+    bool moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor) override;
     
     /// @return The default value of the attribute for this element
-    QString attributesDefaultValue( const QString& attribute ) const;
+    QString attributesDefaultValue( const QString& attribute ) const override;
 
     /// @return The width of the column with the index @p column
     qreal columnWidth( int column );
@@ -92,20 +92,20 @@ public:
     qreal rowHeight( TableRowElement* row );
     
     /// inherited from BasicElement
-    virtual QLineF cursorLine ( int position ) const;
+    QLineF cursorLine ( int position ) const override;
     
     /// inherited from BasicElement
-    virtual QPainterPath selectionRegion ( const int pos1, const int pos2 ) const;
+    QPainterPath selectionRegion ( const int pos1, const int pos2 ) const override;
     
     /// @return The element's ElementType
-    virtual ElementType elementType() const;
+    ElementType elementType() const override;
     
 protected:
     /// Read all content from the node - reimplemented by child elements
-    bool readMathMLContent( const KoXmlElement& element );
+    bool readMathMLContent( const KoXmlElement& element ) override;
 
     /// Write all content to the KoXmlWriter - reimplemented by the child elements
-    void writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const;
+    void writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const override;
 
 private:
     /// @return The base line computed out of the align attribute

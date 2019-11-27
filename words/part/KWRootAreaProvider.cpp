@@ -49,7 +49,7 @@ class KWTextLayoutRootArea : public KoTextLayoutRootArea
         KWTextLayoutRootArea(KoTextDocumentLayout *documentLayout, KWTextFrameSet *frameSet, int pageNumber) : KoTextLayoutRootArea(documentLayout), m_frameSet(frameSet), m_pageNumber(pageNumber) {
             //debugWords;
         }
-        virtual ~KWTextLayoutRootArea() {
+        ~KWTextLayoutRootArea() override {
             //debugWords;
         }
         virtual bool layout(FrameIterator *cursor) {

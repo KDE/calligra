@@ -32,13 +32,13 @@ class KOWIDGETS_EXPORT KoTriangleColorSelector : public QWidget {
     public:
         explicit KoTriangleColorSelector(QWidget *parent);
         explicit KoTriangleColorSelector(const KoColorDisplayRendererInterface *displayRenderer, QWidget *parent);
-        ~KoTriangleColorSelector() Q_DECL_OVERRIDE;
+        ~KoTriangleColorSelector() override;
     protected: // events
-        void paintEvent( QPaintEvent * event ) Q_DECL_OVERRIDE;
-        void resizeEvent( QResizeEvent * event ) Q_DECL_OVERRIDE;
-        void mouseReleaseEvent( QMouseEvent * event ) Q_DECL_OVERRIDE;
-        void mousePressEvent( QMouseEvent * event ) Q_DECL_OVERRIDE;
-        void mouseMoveEvent( QMouseEvent * event ) Q_DECL_OVERRIDE;
+        void paintEvent( QPaintEvent * event ) override;
+        void resizeEvent( QResizeEvent * event ) override;
+        void mouseReleaseEvent( QMouseEvent * event ) override;
+        void mousePressEvent( QMouseEvent * event ) override;
+        void mouseMoveEvent( QMouseEvent * event ) override;
     public:
         int hue() const;
         int value() const;

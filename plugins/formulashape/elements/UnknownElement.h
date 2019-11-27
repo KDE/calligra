@@ -42,13 +42,13 @@ public:
     explicit UnknownElement(BasicElement *parent = 0);
 
     /// The standard destructor
-    ~UnknownElement();
+    ~UnknownElement() override;
 
     /**
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    virtual const QList< BasicElement* > childElements() const;
+    const QList< BasicElement* > childElements() const override;
     
     /**
      * Remove a child element
@@ -61,32 +61,32 @@ public:
      * @param painter The QPainter to paint the element to
      * @param am The AttributeManager providing information about attributes values
      */
-    void paint( QPainter& painter, AttributeManager* am );
+    void paint( QPainter& painter, AttributeManager* am ) override;
 
     /**
      * Calculate the size of the element and the positions of its children
      * @param am The AttributeManager providing information about attributes values
      */
-    void layout( const AttributeManager* am );
+    void layout( const AttributeManager* am ) override;
 
     /// inherited from BasicElement
-    virtual bool acceptCursor ( const FormulaCursor& cursor );
+    bool acceptCursor ( const FormulaCursor& cursor ) override;
     
     /// @return The element's ElementType
-    ElementType elementType() const;
+    ElementType elementType() const override;
 
 protected:
     /// Read all attributes - reimplemented from BasicElement
-    bool readMathMLAttributes( const KoXmlElement& element );
+    bool readMathMLAttributes( const KoXmlElement& element ) override;
 
     /// Read root contents - reimplemented from BasicElement
-    bool readMathMLContent( const KoXmlElement& element );
+    bool readMathMLContent( const KoXmlElement& element ) override;
 
     /// Write element attributes - reimplemented from BasicElement
-    void writeMathMLAttributes( KoXmlWriter* writer ) const;
+    void writeMathMLAttributes( KoXmlWriter* writer ) const override;
 
     /// Write root contents - reimplemented from BasicElement
-    void writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const;
+    void writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const override;
 
 private:
 };

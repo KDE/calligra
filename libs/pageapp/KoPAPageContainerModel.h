@@ -26,9 +26,9 @@ class KoPAPageContainerModel : public KoShapeContainerDefaultModel
 {
 public:
     KoPAPageContainerModel();
-    virtual ~KoPAPageContainerModel();
+    ~KoPAPageContainerModel() override;
 
-    virtual void childChanged(KoShape *child, KoShape::ChangeType type);
+    void childChanged(KoShape *child, KoShape::ChangeType type) override;
 };
 
 #endif /* KOPAPAGECONTAINERMODEL_H */

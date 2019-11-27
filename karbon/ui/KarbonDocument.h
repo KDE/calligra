@@ -66,16 +66,16 @@ class KARBONUI_EXPORT KarbonDocument : public KoPADocument
     Q_OBJECT
 public:
     explicit KarbonDocument(KarbonPart *part);
-    virtual ~KarbonDocument();
+    ~KarbonDocument() override;
 
-    KoOdf::DocumentType documentType() const;
+    KoOdf::DocumentType documentType() const override;
 
     /// reimplemented from KoDocument
-    virtual QByteArray nativeFormatMimeType() const { return KARBON_MIME_TYPE; }
+    QByteArray nativeFormatMimeType() const override { return KARBON_MIME_TYPE; }
     /// reimplemented from KoDocument
-    virtual QByteArray nativeOasisMimeType() const { return KARBON_MIME_TYPE; }
+    QByteArray nativeOasisMimeType() const override { return KARBON_MIME_TYPE; }
     /// reimplemented from KoDocument
-    virtual QStringList extraNativeMimeTypes() const
+    QStringList extraNativeMimeTypes() const override
     {
         return QStringList() << "application/vnd.oasis.opendocument.graphics-template";
     }
@@ -100,7 +100,7 @@ Q_SIGNALS:
     void applyCanvasConfiguration(KarbonCanvas *canvas);
 
 protected:
-    virtual const char *odfTagName(bool withNamespace);
+    const char *odfTagName(bool withNamespace) override;
     /// Reads settings from config file
     void initConfig();
 

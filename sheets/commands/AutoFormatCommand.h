@@ -45,14 +45,14 @@ public:
     /**
      * Destructor.
      */
-    virtual ~AutoFormatCommand();
+    ~AutoFormatCommand() override;
 
     void setStyles(const QList<Style>& styles);
 
 protected:
-    virtual bool process(Element* element);
-    virtual bool preProcessing();
-    virtual bool mainProcessing();
+    bool process(Element* element) override;
+    bool preProcessing() override;
+    bool mainProcessing() override;
 
 private:
     QList<Style> m_styles;

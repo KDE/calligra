@@ -42,22 +42,22 @@ public:
         FillDefault
     };
     explicit KPrAnimationBase(KPrShapeAnimation *shapeAnimation);
-    virtual ~KPrAnimationBase();
+    ~KPrAnimationBase() override;
     virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
     virtual bool saveOdf(KoPASavingContext &paContext) const = 0;
 
     /// Total duration including time delay
-    virtual int duration() const;
+    int duration() const override;
     virtual int begin() const;
     virtual void setBegin(int value);
 
     /// Set duration (without time delay)
     virtual void setDuration(int value);
-    virtual void init(KPrAnimationCache *animationCache, int step) = 0;
+    void init(KPrAnimationCache *animationCache, int step) override = 0;
     int animationDuration() const;
     virtual bool saveAttribute(KoPASavingContext &paContext) const;
 protected:
-    virtual void updateCurrentTime(int currentTime);
+    void updateCurrentTime(int currentTime) override;
     virtual void next(int currentTime) = 0;
     void updateCache(const QString &id, const QVariant &value);
 

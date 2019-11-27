@@ -39,12 +39,12 @@ public:
      * @param parent the parent command used for macro commands
      */
     KarbonPathRefineCommand(KoPathShape * path, uint insertPointsCount, KUndo2Command *parent = 0);
-    virtual ~KarbonPathRefineCommand();
+    ~KarbonPathRefineCommand() override;
 
     /// redo the command
-    void redo();
+    void redo() override;
     /// revert the actions done in redo
-    void undo();
+    void undo() override;
 
 private:
     class Private;

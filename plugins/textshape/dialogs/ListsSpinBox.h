@@ -33,10 +33,10 @@ public:
     explicit ListsSpinBox(QWidget *parent = 0);
 
     void setNumberFormat(const KoOdfNumberDefinition &format);
-    virtual QString textFromValue(int value) const;
+    QString textFromValue(int value) const override;
 
 private:
-    virtual int valueFromText(const QString &text) const;
+    int valueFromText(const QString &text) const override;
 
 
     KoOdfNumberDefinition m_format;

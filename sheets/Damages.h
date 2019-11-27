@@ -87,9 +87,9 @@ public:
     CellDamage(const Calligra::Sheets::Cell& cell, Changes changes);
     CellDamage(Calligra::Sheets::Sheet* sheet, const Region& region, Changes changes);
 
-    virtual ~CellDamage();
+    ~CellDamage() override;
 
-    virtual Type type() const {
+    Type type() const override {
         return Damage::Cell;
     }
 
@@ -129,9 +129,9 @@ public:
 
     SheetDamage(Calligra::Sheets::Sheet* sheet, Changes changes);
 
-    virtual ~SheetDamage();
+    ~SheetDamage() override;
 
-    virtual Type type() const {
+    Type type() const override {
         return Damage::Sheet;
     }
 
@@ -163,9 +163,9 @@ public:
     Q_DECLARE_FLAGS(Changes, Change)
 
     WorkbookDamage(Calligra::Sheets::Map* map, Changes changes);
-    virtual ~WorkbookDamage();
+    ~WorkbookDamage() override;
 
-    virtual Type type() const {
+    Type type() const override {
         return Damage::Workbook;
     }
     Calligra::Sheets::Map* map() const;
@@ -188,9 +188,9 @@ class CALLIGRA_SHEETS_ODF_EXPORT SelectionDamage : public Damage
 {
 public:
     explicit SelectionDamage(const Region &region);
-    virtual ~SelectionDamage();
+    ~SelectionDamage() override;
 
-    virtual Type type() const {
+    Type type() const override {
         return Damage::Selection;
     }
 

@@ -104,7 +104,7 @@ class ChartShape
 
 public:
     explicit ChartShape(KoDocumentResourceManager *documentResourceManager);
-    ~ChartShape();
+    ~ChartShape() override;
 
     // Getter methods
     ChartProxyModel *proxyModel() const;
@@ -177,7 +177,7 @@ public:
      *
      * See sheets/SheetAccessModel.h for details.
      */
-    void setSheetAccessModel(QAbstractItemModel* model);
+    void setSheetAccessModel(QAbstractItemModel* model) override;
 
     /**
      * Re-initializes the chart with data from an arbitrary region.
@@ -193,7 +193,7 @@ public:
     void reset(const QString& region,
                bool firstRowIsLabel,
                bool firstColumnIsLabel,
-               Qt::Orientation dataDirection);
+               Qt::Orientation dataDirection) override;
 
     void setChartType(ChartType type);
     void setChartSubType(ChartSubtype subType, bool reset = false);
@@ -201,18 +201,18 @@ public:
 
     /// reimplemented
     void paintComponent(QPainter &painter, const KoViewConverter &converter,
-                        KoShapePaintingContext &paintcontext);
+                        KoShapePaintingContext &paintcontext) override;
     void paintDecorations(QPainter &painter, const KoViewConverter &converter,
                           const KoCanvasBase *canvas);
 
     /// reimplemented
-    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
-    bool loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context);
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
+    bool loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context) override;
     bool loadOdfData(const KoXmlElement &tableElement, KoShapeLoadingContext &context);
 
     bool loadOdfChartElement(const KoXmlElement &chartElement, KoShapeLoadingContext &context);
     /// reimplemented
-    void saveOdf(KoShapeSavingContext &context) const;
+    void saveOdf(KoShapeSavingContext &context) const override;
     void saveOdfData(KoXmlWriter &bodyWriter, KoGenStyles &mainStyles) const;
 
     /**
@@ -224,7 +224,7 @@ public:
 
     using KoShapeContainer::update;
     /// reimplemented
-    void update() const;
+    void update() const override;
     void relayout() const;
 
     void requestRepaint() const;
@@ -242,7 +242,7 @@ public Q_SLOTS:
     void updateAll();
 
 protected:
-    virtual void shapeChanged(ChangeType type, KoShape *shape = 0);
+    void shapeChanged(ChangeType type, KoShape *shape = 0) override;
 
 private:
     bool loadEmbeddedDocument(KoStore *store, const KoXmlElement &objectElement,

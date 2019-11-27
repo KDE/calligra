@@ -51,7 +51,7 @@ public:
     enum Mode { Clipboard, File, Column };
 
     CSVDialog(QWidget* parent, Selection* selection, Mode mode);
-    ~CSVDialog();
+    ~CSVDialog() override;
 
     bool canceled();
 
@@ -59,7 +59,7 @@ protected Q_SLOTS:
     void init();
 
 protected:
-    void accept();
+    void accept() override;
 
 private:
     Selection* m_selection;

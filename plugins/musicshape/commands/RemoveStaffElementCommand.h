@@ -31,8 +31,8 @@ class RemoveStaffElementCommand : public KUndo2Command
 {
 public:
     RemoveStaffElementCommand(MusicShape* shape, MusicCore::StaffElement* se, MusicCore::Bar* bar);
-    virtual void redo();
-    virtual void undo();
+    void redo() override;
+    void undo() override;
 private:
     MusicShape* m_shape;
     MusicCore::StaffElement* m_element;

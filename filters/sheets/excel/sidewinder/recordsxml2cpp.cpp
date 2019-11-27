@@ -179,10 +179,10 @@ void processRecordForHeader(QDomElement e, QTextStream& out)
 
     // add id field and rtti method
     out << "    static const unsigned id;\n\n"
-    << "    virtual unsigned rtti() const { return this->id; }\n\n";
+    << "    virtual unsigned rtti() const override { return this->id; }\n\n";
 
     // constructor and destructor
-    out << "    " << className << "(Swinder::Workbook *book);\n    virtual ~" << className << "();\n\n";
+    out << "    " << className << "(Swinder::Workbook *book);\n    virtual ~" << className << "() override;\n\n";
 
     // copy and assignment
     out << "    " << className << "( const " << className << "& record );\n"
@@ -234,16 +234,16 @@ void processRecordForHeader(QDomElement e, QTextStream& out)
     }
 
     // setData method
-    out << "    virtual void setData( unsigned size, const unsigned char* data, const unsigned* continuePositions );\n\n";
+    out << "    virtual void setData( unsigned size, const unsigned char* data, const unsigned* continuePositions ) override;\n\n";
 
     // writeData method
-    out << "    virtual void writeData( XlsRecordOutputStream& out ) const;\n\n";
+    out << "    virtual void writeData( XlsRecordOutputStream& out ) const override;\n\n";
 
     // name method
-    out << "    virtual const char* name() const { return \"" << e.attribute("name") << "\"; }\n\n";
+    out << "    virtual const char* name() const override { return \"" << e.attribute("name") << "\"; }\n\n";
 
     // dump method
-    out << "    virtual void dump( std::ostream& out ) const;\n\n";
+    out << "    virtual void dump( std::ostream& out ) const override;\n\n";
 
     // private stuff
     out << "private:\n    class Private;\n    Private * const d;\n};\n\n";

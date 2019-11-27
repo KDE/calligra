@@ -35,7 +35,7 @@ class KOODF2_EXPORT KoColumnStyle : public KoStyle
 public:
     KOSTYLE_DECLARE_SHARED_POINTER(KoColumnStyle)
 
-    ~KoColumnStyle();
+    ~KoColumnStyle() override;
 
     enum BreakType {
         NoBreak,
@@ -60,11 +60,11 @@ public:
     WidthType widthType() const;
 
 protected:
-    virtual void prepareStyle(KoGenStyle& style) const;
-    virtual QString defaultPrefix() const;
-    virtual KoGenStyle::Type styleType() const;
-    virtual KoGenStyle::Type automaticstyleType() const;
-    virtual const char* styleFamilyName() const;
+    void prepareStyle(KoGenStyle& style) const override;
+    QString defaultPrefix() const override;
+    KoGenStyle::Type styleType() const override;
+    KoGenStyle::Type automaticstyleType() const override;
+    const char* styleFamilyName() const override;
 
 private:
     BreakType m_breakAfter;

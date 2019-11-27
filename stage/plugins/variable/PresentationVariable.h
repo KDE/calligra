@@ -43,16 +43,16 @@ public:
      */
     PresentationVariable();
 
-    virtual void setProperties(const KoProperties *props);
+    void setProperties(const KoProperties *props) override;
 
     ///reimplemented
-    virtual void saveOdf(KoShapeSavingContext &context);
+    void saveOdf(KoShapeSavingContext &context) override;
 
     ///reimplemented
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
 private:
-    virtual void resize(const QTextDocument *document, QTextInlineObject &object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd);
+    void resize(const QTextDocument *document, QTextInlineObject &object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd) override;
 
     KPrDeclarations::Type m_type;
 };

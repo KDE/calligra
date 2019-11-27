@@ -45,10 +45,10 @@ public:
     /**
      * Destructor.
      */
-    virtual ~DragAndDropStrategy();
+    ~DragAndDropStrategy() override;
 
-    virtual void handleMouseMove(const QPointF& mouseLocation, Qt::KeyboardModifiers modifiers);
-    virtual KUndo2Command* createCommand();
+    void handleMouseMove(const QPointF& mouseLocation, Qt::KeyboardModifiers modifiers) override;
+    KUndo2Command* createCommand() override;
 
     bool dragStarted() const;
 

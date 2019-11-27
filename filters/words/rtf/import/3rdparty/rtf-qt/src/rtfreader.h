@@ -87,7 +87,7 @@ namespace RtfReader
     */
     bool parseTo( AbstractRtfOutput *output );
 
-    ~Reader();
+    ~Reader() override;
 
     /////////////////////////////////////////////////
     //

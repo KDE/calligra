@@ -60,7 +60,7 @@ public:
     /**
      * Destructor.
      */
-    virtual ~Clef();
+    ~Clef() override;
 
     /**
      * Returns the shape of the clef.
@@ -90,7 +90,7 @@ public:
     /**
      * Returns the priority of this staff element with regard to order in which it should be sorted.
      */
-    virtual int priority() const;
+    int priority() const override;
 public Q_SLOTS:
     /**
      * Changes the shape of the clef.

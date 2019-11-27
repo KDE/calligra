@@ -26,8 +26,8 @@ class KPrRoundRectWipeEffectFactory : public KPrPageEffectFactory
 {
 public:
     KPrRoundRectWipeEffectFactory();
-    virtual ~KPrRoundRectWipeEffectFactory();
-    virtual QString subTypeName(int subType) const;
+    ~KPrRoundRectWipeEffectFactory() override;
+    QString subTypeName(int subType) const override;
 
     enum SubType {
         Horizontal,

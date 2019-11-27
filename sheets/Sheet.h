@@ -101,7 +101,7 @@ public:
     /**
      * Destructor.
      */
-    ~Sheet();
+    ~Sheet() override;
 
     /**
      * \return a model for this sheet
@@ -119,9 +119,9 @@ public:
     DocBase* doc() const;
 
     // KoShapeBasedDocumentBase interface
-    virtual void addShape(KoShape* shape);
-    virtual void removeShape(KoShape* shape);
-    virtual KoDocumentResourceManager* resourceManager() const;
+    void addShape(KoShape* shape) override;
+    void removeShape(KoShape* shape) override;
+    KoDocumentResourceManager* resourceManager() const override;
 
     /**
      * Deletes all shapes without emitting shapeRemoved()

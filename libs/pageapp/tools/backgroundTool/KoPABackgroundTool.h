@@ -32,20 +32,20 @@ class KOPAGEAPP_EXPORT KoPABackgroundTool : public KoToolBase
     Q_OBJECT
 public:
     explicit KoPABackgroundTool(KoCanvasBase *base);
-    virtual ~KoPABackgroundTool();
+    ~KoPABackgroundTool() override;
 
     ///Reimplemented from KoToolBase
-    virtual void paint( QPainter &painter, const KoViewConverter &converter );
+    void paint( QPainter &painter, const KoViewConverter &converter ) override;
     ///Reimplemented from KoToolBase
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
     ///Reimplemented from KoToolBase
-    virtual void deactivate();
+    void deactivate() override;
     ///Reimplemented from KoToolBase
-    virtual void mousePressEvent( KoPointerEvent *event );
+    void mousePressEvent( KoPointerEvent *event ) override;
     ///Reimplemented from KoToolBase
-    virtual void mouseMoveEvent( KoPointerEvent *event );
+    void mouseMoveEvent( KoPointerEvent *event ) override;
     ///Reimplemented from KoToolBase
-    virtual void mouseReleaseEvent( KoPointerEvent *event );
+    void mouseReleaseEvent( KoPointerEvent *event ) override;
 
     KoPAViewBase * view() const;
 
@@ -55,7 +55,7 @@ public Q_SLOTS:
 
 protected:
     ///Reimplemented from KoToolBase
-    virtual QList<QPointer<QWidget> > createOptionWidgets();
+    QList<QPointer<QWidget> > createOptionWidgets() override;
 
 private:
     KoPAViewBase * m_view;

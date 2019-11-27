@@ -31,9 +31,9 @@ class WMFImport : public KoFilter
 
 public:
     WMFImport(QObject* parent, const QVariantList&);
-    virtual ~WMFImport();
+    ~WMFImport() override;
 
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
 };
 
 #endif // WMFIMPORT_H

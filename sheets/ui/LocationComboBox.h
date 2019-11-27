@@ -65,7 +65,7 @@ public Q_SLOTS:
     void slotRemoveAreaName(const QString &);
 
 protected: // reimplementations
-    virtual void keyPressEvent(QKeyEvent *event);
+    void keyPressEvent(QKeyEvent *event) override;
 
 Q_SIGNALS:
     void updateAccessedCellRange(Sheet* sheet, const QPoint& location);

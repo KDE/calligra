@@ -45,38 +45,38 @@ public:
     {
     }
 
-    virtual ~DummyInlineObject() {}
+    ~DummyInlineObject() override {}
 
-    virtual void saveOdf(KoShapeSavingContext &/*context*/)
+    void saveOdf(KoShapeSavingContext &/*context*/) override
     {
         // dummy impl
     }
 
-    virtual bool loadOdf(const KoXmlElement&, KoShapeLoadingContext&)
+    bool loadOdf(const KoXmlElement&, KoShapeLoadingContext&) override
     {
         // dummy impl
         return false;
     }
 
-    virtual void updatePosition(const QTextDocument *document, int posInDocument, const QTextCharFormat &/*format*/)
+    void updatePosition(const QTextDocument *document, int posInDocument, const QTextCharFormat &/*format*/) override
     {
         Q_ASSERT(posInDocument <= document->toPlainText().size()); Q_UNUSED(document);
         m_position = posInDocument;
     }
 
-    virtual void resize(const QTextDocument */*document*/, QTextInlineObject &/*object*/,
-                        int /*posInDocument*/, const QTextCharFormat &/*format*/, QPaintDevice */*pd*/)
+    void resize(const QTextDocument */*document*/, QTextInlineObject &/*object*/,
+                        int /*posInDocument*/, const QTextCharFormat &/*format*/, QPaintDevice */*pd*/) override
     {
         // dummy impl
     }
 
-    virtual void paint(QPainter &/*painter*/, QPaintDevice */*pd*/, const QTextDocument */*document*/,
-                       const QRectF &/*rect*/, const QTextInlineObject &/*object*/, int /*posInDocument*/, const QTextCharFormat &/*format*/)
+    void paint(QPainter &/*painter*/, QPaintDevice */*pd*/, const QTextDocument */*document*/,
+                       const QRectF &/*rect*/, const QTextInlineObject &/*object*/, int /*posInDocument*/, const QTextCharFormat &/*format*/) override
     {
         // dummy impl
     }
 
-    virtual void propertyChanged(Property /*property*/, const QVariant &value)
+    void propertyChanged(Property /*property*/, const QVariant &value) override
     {
         m_property = value;
     }

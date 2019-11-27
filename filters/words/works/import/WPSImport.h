@@ -31,9 +31,9 @@ class WPSImport : public KoFilter
 public:
 
     WPSImport(QObject *parent, const QVariantList&);
-    virtual ~WPSImport();
+    ~WPSImport() override;
 
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
 };
 
 #endif // WPSIMPORT_H

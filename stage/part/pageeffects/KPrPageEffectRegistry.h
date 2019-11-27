@@ -39,7 +39,7 @@ private:
     void init();
 
     KPrPageEffectRegistry();
-    ~KPrPageEffectRegistry();
+    ~KPrPageEffectRegistry() override;
 
     friend class Singleton;
 

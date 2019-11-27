@@ -51,7 +51,7 @@ public:
      */
     Document(const KoStore* in, QString fileOut);
 
-    virtual ~Document();
+    ~Document() override;
 
     /* Accesors */
 

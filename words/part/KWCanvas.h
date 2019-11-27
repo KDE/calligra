@@ -57,24 +57,24 @@ public:
      * @param parent the parent widget.
      */
     KWCanvas(const QString &viewMode, KWDocument *document, KWView *view, KWGui *parent);
-    virtual ~KWCanvas();
+    ~KWCanvas() override;
 
     /// ask the widget to set the size this canvas takes to display all content
     void updateSize();
 
     // KoCanvasBase interface methods.
     /// reimplemented method from superclass
-    virtual bool snapToGrid() const;
+    bool snapToGrid() const override;
 
     /// reimplemented method from superclass
-    virtual QPointF viewToDocument(const QPointF &viewPoint) const;
+    QPointF viewToDocument(const QPointF &viewPoint) const override;
 
     /// reimplemented method from superclass
-    virtual QWidget *canvasWidget() {
+    QWidget *canvasWidget() override {
         return this;
     }
     /// reimplemented method from superclass
-    virtual const QWidget *canvasWidget() const {
+    const QWidget *canvasWidget() const override {
         return this;
     }
 
@@ -82,7 +82,7 @@ public:
         return m_view;
     }
 
-    virtual void setCursor(const QCursor &cursor);
+    void setCursor(const QCursor &cursor) override;
 
 public Q_SLOTS:
     /**
@@ -101,35 +101,35 @@ Q_SIGNALS:
 
 protected: // QWidget
     /// reimplemented method from superclass
-    virtual bool event(QEvent *);
+    bool event(QEvent *) override;
     /// reimplemented method from superclass
-    virtual void keyPressEvent(QKeyEvent *e);
+    void keyPressEvent(QKeyEvent *e) override;
     /// reimplemented method from superclass
-    virtual void contextMenuEvent(QContextMenuEvent *e);
+    void contextMenuEvent(QContextMenuEvent *e) override;
     /// reimplemented method from superclass
-    virtual void mouseMoveEvent(QMouseEvent *e);
+    void mouseMoveEvent(QMouseEvent *e) override;
     /// reimplemented method from superclass
-    virtual void mousePressEvent(QMouseEvent *e);
+    void mousePressEvent(QMouseEvent *e) override;
     /// reimplemented method from superclass
-    virtual void mouseReleaseEvent(QMouseEvent *e);
+    void mouseReleaseEvent(QMouseEvent *e) override;
     /// reimplemented method from superclass
-    virtual void mouseDoubleClickEvent(QMouseEvent *e);
+    void mouseDoubleClickEvent(QMouseEvent *e) override;
     /// reimplemented method from superclass
-    virtual void keyReleaseEvent(QKeyEvent *e);
+    void keyReleaseEvent(QKeyEvent *e) override;
     /// reimplemented method from superclass
-    virtual void paintEvent(QPaintEvent * ev);
+    void paintEvent(QPaintEvent * ev) override;
     /// reimplemented method from superclass
-    virtual void tabletEvent(QTabletEvent *e);
+    void tabletEvent(QTabletEvent *e) override;
     /// reimplemented method from superclass
-    virtual void wheelEvent(QWheelEvent *e);
+    void wheelEvent(QWheelEvent *e) override;
     /// reimplemented method from superclass
-    virtual QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
+    QVariant inputMethodQuery(Qt::InputMethodQuery query) const override;
     /// reimplemented method from superclass
-    virtual void inputMethodEvent(QInputMethodEvent *event);
+    void inputMethodEvent(QInputMethodEvent *event) override;
     /// reimplemented method from superclass
-    virtual void updateInputMethodInfo();
+    void updateInputMethodInfo() override;
     /// reimplemented method from superclass
-    virtual void updateCanvasInternal(const QRectF &clip) { update(clip.toRect()); }
+    void updateCanvasInternal(const QRectF &clip) override { update(clip.toRect()); }
 
 private Q_SLOTS:
     /// Called whenever there was a page added/removed or simply resized.

@@ -49,7 +49,7 @@ class CALLIGRA_SHEETS_COMMON_EXPORT ViewAdaptor : public QDBusAbstractAdaptor
     Q_CLASSINFO("D-Bus Interface", "org.kde.calligra.spreadsheet.view")
 public:
     explicit ViewAdaptor(View*);
-    ~ViewAdaptor();
+    ~ViewAdaptor() override;
 
 public Q_SLOTS: // METHODS
 

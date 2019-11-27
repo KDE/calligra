@@ -32,14 +32,14 @@ class KPrSmilValues : public KPrAnimationValue
 {
 public:
     explicit KPrSmilValues(KPrShapeAnimation *shapeAnimation);
-    ~KPrSmilValues();
+    ~KPrSmilValues() override;
 
-    virtual qreal value(qreal time) const;
-    virtual qreal endValue() const;
-    virtual qreal startValue() const;
+    qreal value(qreal time) const override;
+    qreal endValue() const override;
+    qreal startValue() const override;
     bool loadValues(const QString &values, const QString &keyTimes, const QString &keySplines, SmilCalcMode calcMode);
     bool loadFormula(const QString &values, const QString &keyTimes, const QString &keySplines, SmilCalcMode calcMode, const QString &formula);
-    bool saveOdf(KoPASavingContext &paContext) const;
+    bool saveOdf(KoPASavingContext &paContext) const override;
 protected:
     QList<KPrFormulaParser> m_values;
     QList<qreal> m_times;

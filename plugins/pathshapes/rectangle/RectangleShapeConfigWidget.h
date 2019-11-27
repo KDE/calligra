@@ -32,15 +32,15 @@ class RectangleShapeConfigWidget : public KoShapeConfigWidgetBase
 public:
     RectangleShapeConfigWidget();
     /// reimplemented
-    virtual void open(KoShape *shape);
+    void open(KoShape *shape) override;
     /// reimplemented
-    virtual void save();
+    void save() override;
     /// reimplemented
-    virtual void setUnit(const KoUnit &unit);
+    void setUnit(const KoUnit &unit) override;
     /// reimplemented
-    virtual bool showOnShapeCreate() { return false; }
+    bool showOnShapeCreate() override { return false; }
     /// reimplemented
-    virtual KUndo2Command *createCommand();
+    KUndo2Command *createCommand() override;
 
 private:
     Ui::RectangleShapeConfigWidget widget;

@@ -26,13 +26,13 @@ class IccColorSpaceEngine : public KoColorSpaceEngine
 {
 public:
     IccColorSpaceEngine();
-    virtual ~IccColorSpaceEngine();
-    void addProfile(const QString &filename);
-    void removeProfile(const QString &filename);
-    virtual KoColorConversionTransformation *createColorTransformation(const KoColorSpace *srcColorSpace,
+    ~IccColorSpaceEngine() override;
+    void addProfile(const QString &filename) override;
+    void removeProfile(const QString &filename) override;
+    KoColorConversionTransformation *createColorTransformation(const KoColorSpace *srcColorSpace,
             const KoColorSpace *dstColorSpace,
             KoColorConversionTransformation::Intent renderingIntent,
-            KoColorConversionTransformation::ConversionFlags conversionFlags) const;
+            KoColorConversionTransformation::ConversionFlags conversionFlags) const override;
     quint32 computeColorSpaceType(const KoColorSpace *cs) const;
 private:
     struct Private;

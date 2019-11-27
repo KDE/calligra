@@ -41,12 +41,12 @@ public:
     /**
      * Destructor.
      */
-    ~PixmapCachingSheetView();
+    ~PixmapCachingSheetView() override;
 
-    virtual void invalidate();
-    virtual void paintCells(QPainter& painter, const QRectF& paintRect, const QPointF& topLeft, CanvasBase* canvas, const QRect& visibleRect);
+    void invalidate() override;
+    void paintCells(QPainter& painter, const QRectF& paintRect, const QPointF& topLeft, CanvasBase* canvas, const QRect& visibleRect) override;
 protected:
-    virtual void invalidateRange(const QRect &range);
+    void invalidateRange(const QRect &range) override;
 private Q_SLOTS:
     void jobDone(ThreadWeaver::Job* job);
 private:

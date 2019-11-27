@@ -39,8 +39,8 @@ public:
     };
     SetKeySignatureCommand(MusicShape* shape, int bar, RegionType type, MusicCore::Staff* staff, int accidentals);
     SetKeySignatureCommand(MusicShape* shape, int startBar, int endBar, MusicCore::Staff* staff, int accidentals);
-    virtual void redo();
-    virtual void undo();
+    void redo() override;
+    void undo() override;
 private:
     MusicShape* m_shape;
     MusicCore::Staff* m_staff;

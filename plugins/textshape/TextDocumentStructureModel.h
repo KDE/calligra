@@ -69,15 +69,15 @@ class TextDocumentStructureModel : public QAbstractItemModel
 
 public:
     explicit TextDocumentStructureModel(QObject *parent = 0);
-    virtual ~TextDocumentStructureModel();
+    ~TextDocumentStructureModel() override;
 
 public: // QAbstractItemModel API
-    virtual QModelIndex index(int row, int column, const QModelIndex &parentIndex) const;
-    virtual QModelIndex parent(const QModelIndex &index) const;
-    virtual int rowCount(const QModelIndex &index) const;
-    virtual int columnCount(const QModelIndex &index) const;
-    virtual QVariant data(const QModelIndex &index, int role) const;
-    virtual bool hasChildren(const QModelIndex &parent) const;
+    QModelIndex index(int row, int column, const QModelIndex &parentIndex) const override;
+    QModelIndex parent(const QModelIndex &index) const override;
+    int rowCount(const QModelIndex &index) const override;
+    int columnCount(const QModelIndex &index) const override;
+    QVariant data(const QModelIndex &index, int role) const override;
+    bool hasChildren(const QModelIndex &parent) const override;
 
 public:
     void setTextDocument(QTextDocument *textDocument);

@@ -29,12 +29,12 @@ class KoMixColorsOpImpl : public KoMixColorsOp
 public:
     KoMixColorsOpImpl() {
     }
-    virtual ~KoMixColorsOpImpl() { }
-    virtual void mixColors(const quint8 * const* colors, const qint16 *weights, quint32 nColors, quint8 *dst) const {
+    ~KoMixColorsOpImpl() override { }
+    void mixColors(const quint8 * const* colors, const qint16 *weights, quint32 nColors, quint8 *dst) const override {
         mixColorsImpl(ArrayOfPointers(colors), weights, nColors, dst);
     }
 
-    virtual void mixColors(const quint8 *colors, const qint16 *weights, quint32 nColors, quint8 *dst) const {
+    void mixColors(const quint8 *colors, const qint16 *weights, quint32 nColors, quint8 *dst) const override {
         mixColorsImpl(PointerToArray(colors, _CSTrait::pixelSize), weights, nColors, dst);
     }
 

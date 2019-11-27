@@ -62,7 +62,7 @@ public:
                  KoFileDialog::DialogType type,
                  const QString &dialogName);
 
-    ~KoFileDialog();
+    ~KoFileDialog() override;
 
     void setCaption(const QString &caption);
 

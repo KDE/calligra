@@ -97,7 +97,7 @@ class BoundingBoxExtractor : public PSCommentLexer
 {
 public:
     BoundingBoxExtractor();
-    virtual ~BoundingBoxExtractor();
+    ~BoundingBoxExtractor() override;
 
     int llx() const {
         return m_llx;
@@ -116,7 +116,7 @@ private:
     bool getRectangle(const char* input, int &llx, int &lly, int &urx, int &ury);
 
 protected:
-    void gotComment(const char *value);
+    void gotComment(const char *value) override;
 };
 
 #endif

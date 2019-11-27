@@ -33,7 +33,7 @@ class StaffSystem : public QObject
     Q_OBJECT
 public:
     explicit StaffSystem(Sheet *sheet);
-    ~StaffSystem();
+    ~StaffSystem() override;
 
     qreal top() const;
     qreal height() const;

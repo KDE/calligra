@@ -27,16 +27,16 @@
 class StencilBoxDockerFactory : public KoDockFactoryBase
 {
 public:
-    QString id() const {
+    QString id() const override {
         return QString("StencilBox");
     }
-    QDockWidget* createDockWidget() {
+    QDockWidget* createDockWidget() override {
         return new StencilBoxDocker();
     }
-    DockPosition defaultDockPosition() const {
+    DockPosition defaultDockPosition() const override {
         return DockLeft;
     }
-    bool defaultVisible() const {
+    bool defaultVisible() const override {
         return false;
     }
 };

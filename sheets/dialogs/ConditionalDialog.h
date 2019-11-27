@@ -46,7 +46,7 @@ class ConditionalWidget : public QWidget
 
 public:
     explicit ConditionalWidget(QWidget * parent = 0, const char * name = 0, Qt::WindowFlags fl = 0);
-    ~ConditionalWidget();
+    ~ConditionalWidget() override;
 
     KComboBox * m_condition_1;
     KComboBox * m_style_1;

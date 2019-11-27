@@ -92,7 +92,7 @@ public:
     /**
      * Destructor
      */
-    virtual ~FileHeader();
+    ~FileHeader() override;
 
     /**
      * Accessors

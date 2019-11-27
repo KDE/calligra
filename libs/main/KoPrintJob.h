@@ -47,7 +47,7 @@ public:
      * @param parent the parent qobject that is passed for memory management purposes.
      */
     explicit KoPrintJob(QObject *parent = 0);
-    virtual ~KoPrintJob();
+    ~KoPrintJob() override;
 
     /// A policy to allow the printjob to delete itself after its done printing.
     enum RemovePolicy {

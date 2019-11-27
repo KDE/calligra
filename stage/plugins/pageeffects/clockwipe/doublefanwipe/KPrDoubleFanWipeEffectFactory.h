@@ -26,8 +26,8 @@ class KPrDoubleFanWipeEffectFactory : public KPrPageEffectFactory
 {
 public:
     KPrDoubleFanWipeEffectFactory();
-    virtual ~KPrDoubleFanWipeEffectFactory();
-    virtual QString subTypeName(int subType) const;
+    ~KPrDoubleFanWipeEffectFactory() override;
+    QString subTypeName(int subType) const override;
 
     enum SubType {
         FanOutVertical,

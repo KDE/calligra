@@ -46,7 +46,7 @@ public:
     /**
      * Destructor.
      */
-    ~Part();
+    ~Part() override;
 
     /**
      * Returns the sheet this part is part of.

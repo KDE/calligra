@@ -92,7 +92,7 @@ public:
     /**
      * Destroys the whole R-Tree.
      */
-    virtual ~RTree();
+    ~RTree() override;
 
     /**
      * @brief Insert data item into the tree
@@ -109,7 +109,7 @@ public:
      * @param data
      * @param rect
      */
-    virtual void insert(const QRectF& rect, const T& data);
+    void insert(const QRectF& rect, const T& data) override;
 
     void load(const QList<QPair<QRegion, T> >& data);
 
@@ -146,7 +146,7 @@ public:
      *
      * @return objects intersecting the rect
      */
-    virtual QList<T> intersects(const QRectF& rect) const;
+    QList<T> intersects(const QRectF& rect) const override;
 
     virtual QMap<int, QPair<QRectF, T> > intersectingPairs(const QRectF& rect) const;
 
@@ -216,7 +216,7 @@ public:
      */
     QRectF boundingBox() const { return KoRTree<T>::m_root->boundingBox(); }
 
-    void clear() {
+    void clear() override {
         KoRTree<T>::clear();
         m_castRoot = dynamic_cast<Node*>(this->m_root);
     }
@@ -227,19 +227,19 @@ protected:
     class LeafNode;
 
     // factory methods
-    virtual LeafNode* createLeafNode(int capacity, int level, typename KoRTree<T>::Node * parent) {
+    LeafNode* createLeafNode(int capacity, int level, typename KoRTree<T>::Node * parent) override {
         return new LeafNode(capacity, level, dynamic_cast<Node*>(parent));
     }
-    virtual NonLeafNode* createNonLeafNode(int capacity, int level, typename KoRTree<T>::Node * parent) {
+    NonLeafNode* createNonLeafNode(int capacity, int level, typename KoRTree<T>::Node * parent) override {
         return new NonLeafNode(capacity, level, dynamic_cast<Node*>(parent));
     }
 
-    void adjustTree(typename KoRTree<T>::Node *node1, typename KoRTree<T>::Node *node2) {
+    void adjustTree(typename KoRTree<T>::Node *node1, typename KoRTree<T>::Node *node2) override {
         KoRTree<T>::adjustTree(node1, node2);
         m_castRoot = dynamic_cast<Node*>(this->m_root);
     }
 
-    void condenseTree(typename KoRTree<T>::Node * node, QVector<typename KoRTree<T>::Node *> & reinsert) {
+    void condenseTree(typename KoRTree<T>::Node * node, QVector<typename KoRTree<T>::Node *> & reinsert) override {
         KoRTree<T>::condenseTree(node, reinsert);
         m_castRoot = dynamic_cast<Node*>(this->m_root);
     }
@@ -283,20 +283,20 @@ class RTree<T>::Node : virtual public KoRTree<T>::Node
 public:
     Node(int capacity, int level, Node * parent)
             : KoRTree<T>::Node(capacity, level, parent) {}
-    virtual ~Node() {}
+    ~Node() override {}
 
-    virtual void remove(int index) {
+    void remove(int index) override {
         KoRTree<T>::Node::remove(index);
     }
     virtual void remove(const QRectF& rect, const T& data, int id = -1) = 0;
-    virtual void contains(const QPointF & point, QMap<int, T> & result) const = 0;
+    void contains(const QPointF & point, QMap<int, T> & result) const override = 0;
     virtual void contains(const QRectF& rect, QMap<int, T>& result) const = 0;
     virtual void intersectingPairs(const QRectF& rect, QMap<int, QPair<QRectF, T> >& result) const = 0;
     virtual QMap< int, QPair<QRectF, T> > insertRows(int position, int number, InsertMode mode) = 0;
     virtual QMap< int, QPair<QRectF, T> > insertColumns(int position, int number, InsertMode mode) = 0;
     virtual QMap< int, QPair<QRectF, T> > removeRows(int position, int number) = 0;
     virtual QMap< int, QPair<QRectF, T> > removeColumns(int position, int number) = 0;
-    virtual const QRectF& childBoundingBox(int index) const {
+    const QRectF& childBoundingBox(int index) const override {
         return KoRTree<T>::Node::childBoundingBox(index);
     }
     QVector<QRectF> childBoundingBox() const {
@@ -318,24 +318,24 @@ public:
             : KoRTree<T>::Node(capacity, level, parent)
             , RTree<T>::Node(capacity, level, parent)
             , KoRTree<T>::LeafNode(capacity, level, parent) {}
-    virtual ~LeafNode() {}
+    ~LeafNode() override {}
 
-    virtual void remove(int index) {
+    void remove(int index) override {
         KoRTree<T>::LeafNode::remove(index);
     }
-    virtual void remove(const T& data) {
+    void remove(const T& data) override {
         KoRTree<T>::LeafNode::remove(data);
     }
-    virtual void remove(const QRectF& rect, const T& data, int id = -1);
-    virtual void contains(const QPointF & point, QMap<int, T> & result) const {
+    void remove(const QRectF& rect, const T& data, int id = -1) override;
+    void contains(const QPointF & point, QMap<int, T> & result) const override {
         KoRTree<T>::LeafNode::contains(point, result);
     }
-    virtual void contains(const QRectF& rect, QMap<int, T>& result) const;
-    virtual void intersectingPairs(const QRectF& rect, QMap<int, QPair<QRectF, T> >& result) const;
-    virtual QMap< int, QPair<QRectF, T> > insertRows(int position, int number, InsertMode mode);
-    virtual QMap< int, QPair<QRectF, T> > insertColumns(int position, int number, InsertMode mode);
-    virtual QMap< int, QPair<QRectF, T> > removeRows(int position, int number);
-    virtual QMap< int, QPair<QRectF, T> > removeColumns(int position, int number);
+    void contains(const QRectF& rect, QMap<int, T>& result) const override;
+    void intersectingPairs(const QRectF& rect, QMap<int, QPair<QRectF, T> >& result) const override;
+    QMap< int, QPair<QRectF, T> > insertRows(int position, int number, InsertMode mode) override;
+    QMap< int, QPair<QRectF, T> > insertColumns(int position, int number, InsertMode mode) override;
+    QMap< int, QPair<QRectF, T> > removeRows(int position, int number) override;
+    QMap< int, QPair<QRectF, T> > removeColumns(int position, int number) override;
     virtual void operator=(const LeafNode& other);
 private:
     // disable copy constructor
@@ -353,21 +353,21 @@ public:
             : KoRTree<T>::Node(capacity, level, parent)
             , RTree<T>::Node(capacity, level, parent)
             , KoRTree<T>::NonLeafNode(capacity, level, parent) {}
-    virtual ~NonLeafNode() {}
+    ~NonLeafNode() override {}
 
-    virtual void remove(int index) {
+    void remove(int index) override {
         KoRTree<T>::NonLeafNode::remove(index);
     }
-    virtual void remove(const QRectF& rect, const T& data, int id = -1);
-    virtual void contains(const QPointF & point, QMap<int, T> & result) const {
+    void remove(const QRectF& rect, const T& data, int id = -1) override;
+    void contains(const QPointF & point, QMap<int, T> & result) const override {
         KoRTree<T>::NonLeafNode::contains(point, result);
     }
-    virtual void contains(const QRectF& rect, QMap<int, T>& result) const;
-    virtual void intersectingPairs(const QRectF& rect, QMap<int, QPair<QRectF, T> >& result) const;
-    virtual QMap< int, QPair<QRectF, T> > insertRows(int position, int number, InsertMode mode);
-    virtual QMap< int, QPair<QRectF, T> > insertColumns(int position, int number, InsertMode mode);
-    virtual QMap< int, QPair<QRectF, T> > removeRows(int position, int number);
-    virtual QMap< int, QPair<QRectF, T> > removeColumns(int position, int number);
+    void contains(const QRectF& rect, QMap<int, T>& result) const override;
+    void intersectingPairs(const QRectF& rect, QMap<int, QPair<QRectF, T> >& result) const override;
+    QMap< int, QPair<QRectF, T> > insertRows(int position, int number, InsertMode mode) override;
+    QMap< int, QPair<QRectF, T> > insertColumns(int position, int number, InsertMode mode) override;
+    QMap< int, QPair<QRectF, T> > removeRows(int position, int number) override;
+    QMap< int, QPair<QRectF, T> > removeColumns(int position, int number) override;
     virtual void operator=(const NonLeafNode& other);
 private:
     // disable copy constructor

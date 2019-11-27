@@ -45,7 +45,7 @@ public:
      * @param type the type of frameSet; this can indicate headers, footers etc.
      */
     explicit KWTextFrameSet(KWDocument *wordsDocument, Words::TextFrameSetType type = Words::OtherTextFrameSet);
-    ~KWTextFrameSet();
+    ~KWTextFrameSet() override;
 
     /// return the type of frameSet this is
     Words::TextFrameSetType textFrameSetType() {
@@ -78,8 +78,8 @@ protected:
     friend class TestTextFrameSorting;
     friend class TestTextFrameManagement;
 
-    virtual void setupShape(KoShape *shape);
-    virtual void cleanupShape(KoShape *shape);
+    void setupShape(KoShape *shape) override;
+    void cleanupShape(KoShape *shape) override;
 
 private:
     void setupDocument();

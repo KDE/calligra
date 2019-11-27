@@ -26,9 +26,9 @@ class SimpleEntryToolFactory : public KoToolFactoryBase
 {
 public:
     SimpleEntryToolFactory();
-    ~SimpleEntryToolFactory();
+    ~SimpleEntryToolFactory() override;
 
-    KoToolBase* createTool( KoCanvasBase* canvas );
+    KoToolBase* createTool( KoCanvasBase* canvas ) override;
 };
 
 

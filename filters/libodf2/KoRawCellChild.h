@@ -41,10 +41,10 @@ class KOODF2_EXPORT KoRawCellChild : public KoCellChild
 {
 public:
     explicit KoRawCellChild(const QByteArray &content);
-    virtual ~KoRawCellChild();
+    ~KoRawCellChild() override;
 
 protected:
-    virtual void saveOdf(KoXmlWriter& writer, KoGenStyles& styles) const;
+    void saveOdf(KoXmlWriter& writer, KoGenStyles& styles) const override;
 
 private:
     QByteArray m_content;

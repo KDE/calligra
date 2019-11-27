@@ -36,9 +36,9 @@ class WmfExport : public KoFilter
 
 public:
     WmfExport(QObject* parent, const QVariantList&);
-    virtual ~WmfExport();
+    ~WmfExport() override;
 
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
 
 private:
     void paintDocument(KarbonDocument* document);

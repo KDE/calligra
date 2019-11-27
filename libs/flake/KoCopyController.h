@@ -45,7 +45,7 @@ public:
      *     action is used as a parent for the QObject for memory management purposes.
      */
     KoCopyController(KoCanvasBase *canvas, QAction *copyAction);
-    virtual ~KoCopyController();
+    ~KoCopyController() override;
 
 Q_SIGNALS:
     /// emitted when the user pressed copy and the current tool had no selection.

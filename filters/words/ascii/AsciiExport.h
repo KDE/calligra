@@ -34,8 +34,8 @@ class AsciiExport : public KoFilter
 
 public:
     AsciiExport(QObject *parent, const QVariantList &);
-    virtual ~AsciiExport();
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    ~AsciiExport() override;
+    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
 
 private:
 };

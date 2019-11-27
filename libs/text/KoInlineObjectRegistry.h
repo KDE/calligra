@@ -41,7 +41,7 @@ class KOTEXT_EXPORT KoInlineObjectRegistry : public KoGenericRegistry<KoInlineOb
 {
 public:
     KoInlineObjectRegistry();
-    ~KoInlineObjectRegistry();
+    ~KoInlineObjectRegistry() override;
 
     /**
      * Return an instance of the KoInlineObjectRegistry

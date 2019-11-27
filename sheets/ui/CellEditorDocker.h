@@ -36,14 +36,14 @@ class CellEditorDocker : public QDockWidget, public KoCanvasObserverBase
     Q_OBJECT
 public:
     explicit CellEditorDocker();
-    virtual ~CellEditorDocker();
+    ~CellEditorDocker() override;
 
     /// reimplemented from KoCanvasObserver
-    virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas();
+    void setCanvas(KoCanvasBase *canvas) override;
+    void unsetCanvas() override;
 
 protected: // reimplementations
-    virtual void resizeEvent(QResizeEvent *event);
+    void resizeEvent(QResizeEvent *event) override;
 
 private Q_SLOTS:
     void toolChanged(const QString& toolId);
@@ -58,9 +58,9 @@ class CellEditorDockerFactory : public KoDockFactoryBase
 public:
     CellEditorDockerFactory();
 
-    virtual QString id() const;
-    virtual QDockWidget* createDockWidget();
-    DockPosition defaultDockPosition() const {
+    QString id() const override;
+    QDockWidget* createDockWidget() override;
+    DockPosition defaultDockPosition() const override {
         return DockTop;
     }
 };

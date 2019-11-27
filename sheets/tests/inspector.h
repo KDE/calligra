@@ -33,7 +33,7 @@ class Inspector : public KPageDialog
     Q_OBJECT
 public:
     Inspector(const Cell& cell);
-    ~Inspector();
+    ~Inspector() override;
 
 private:
     Q_DISABLE_COPY(Inspector)

@@ -31,7 +31,7 @@ class FLAKE_EXPORT KoShapeContainerPrivate : public KoShapePrivate
 {
 public:
     explicit KoShapeContainerPrivate(KoShapeContainer *q);
-    virtual ~KoShapeContainerPrivate();
+    ~KoShapeContainerPrivate() override;
 
     KoShapeContainerModel *model;
 };

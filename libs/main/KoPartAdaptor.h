@@ -43,7 +43,7 @@ class KOMAIN_EXPORT KoPartAdaptor : public QDBusAbstractAdaptor
 public:
 
     explicit KoPartAdaptor(KoPart* doc);
-    ~KoPartAdaptor();
+    ~KoPartAdaptor() override;
 
 public Q_SLOTS: // METHODS
     /**

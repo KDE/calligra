@@ -41,11 +41,11 @@ class SubtotalDialog : public KoDialog
 
 public:
     SubtotalDialog(QWidget* parent, Selection* selection);
-    ~SubtotalDialog();
+    ~SubtotalDialog() override;
 
 public Q_SLOTS: // reimplemented
-    virtual void accept();
-    virtual void reject();
+    void accept() override;
+    void reject() override;
 
 private Q_SLOTS:
     void slotUser1();

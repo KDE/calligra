@@ -44,7 +44,7 @@ public:
     /**
      * Destructor.
      */
-    virtual ~StaffElement();
+    ~StaffElement() override;
 
     /**
      * Returns the staff this staff element is part of.

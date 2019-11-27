@@ -28,10 +28,10 @@ class KoIconToolTip: public KoItemToolTip
 Q_OBJECT
     public:
         KoIconToolTip() = default;
-        ~KoIconToolTip() Q_DECL_OVERRIDE = default;
+        ~KoIconToolTip() override = default;
 
     protected:
-        virtual QTextDocument *createDocument( const QModelIndex &index ) Q_DECL_OVERRIDE;
+        QTextDocument *createDocument( const QModelIndex &index ) override;
 
     private:
         typedef KoItemToolTip super;

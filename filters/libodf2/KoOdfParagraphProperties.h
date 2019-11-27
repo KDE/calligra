@@ -47,16 +47,16 @@ class KOODF2_EXPORT KoOdfParagraphProperties : public KoOdfStyleProperties
 {
  public:
     KoOdfParagraphProperties();
-    virtual ~KoOdfParagraphProperties();
+    ~KoOdfParagraphProperties() override;
 
     KoOdfStyleDropCap         &dropCap();
     QList<KoOdfStyleTabStop>  &tabStops();
 
     // Inherited from KoOdfStyleProperties
-    virtual void clear();
+    void clear() override;
 
-    virtual bool readOdf(KoXmlStreamReader &reader);
-    virtual bool saveOdf(const QString &propertySet, KoXmlWriter *writer);
+    bool readOdf(KoXmlStreamReader &reader) override;
+    bool saveOdf(const QString &propertySet, KoXmlWriter *writer) override;
 
  private:
     class Private;

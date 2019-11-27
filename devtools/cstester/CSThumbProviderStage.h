@@ -31,9 +31,9 @@ class CSThumbProviderStage : public CSThumbProvider
 {
 public:
     explicit CSThumbProviderStage(KoPADocument *doc);
-    virtual ~CSThumbProviderStage();
+    ~CSThumbProviderStage() override;
 
-    virtual QVector<QImage> createThumbnails(const QSize &thumbSize);
+    QVector<QImage> createThumbnails(const QSize &thumbSize) override;
 
 private:
     KoPADocument *m_doc;

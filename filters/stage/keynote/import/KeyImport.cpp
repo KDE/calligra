@@ -40,7 +40,7 @@ class OdpOutputFileHelper : public OutputFileHelper
 public:
     OdpOutputFileHelper(const char *outFileName, const char *password) :
         OutputFileHelper(outFileName, password) {}
-    ~OdpOutputFileHelper() {}
+    ~OdpOutputFileHelper() override {}
 
     bool convertDocument(librevenge::RVNGInputStream &input, bool isFlat)
     {

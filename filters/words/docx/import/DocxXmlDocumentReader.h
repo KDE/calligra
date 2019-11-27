@@ -55,11 +55,11 @@ class DocxXmlDocumentReader : public MSOOXML::MsooXmlCommonReader
 public:
     explicit DocxXmlDocumentReader(KoOdfWriters *writers);
 
-    virtual ~DocxXmlDocumentReader();
+    ~DocxXmlDocumentReader() override;
 
     //! Reads/parses the file of format document.xml.
     //! The output goes mainly to KoXmlWriter* KoOdfWriters::body
-    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
+    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0) override;
 
 // Note: Do not move this, it just defines parts of this class
 // It is separated out, as it is not part of the OOXML spec

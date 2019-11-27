@@ -38,11 +38,11 @@ class IndentationCommand : public AbstractRegionCommand
 public:
     IndentationCommand();
 
-    virtual void setReverse(bool reverse);
+    void setReverse(bool reverse) override;
 
 protected:
-    virtual bool mainProcessing();
-    virtual bool postProcessing();
+    bool mainProcessing() override;
+    bool postProcessing() override;
 };
 
 } // namespace Sheets

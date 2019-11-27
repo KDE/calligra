@@ -140,7 +140,7 @@ public:
         m_tagStore->loadTags();
     }
 
-    virtual ~KoResourceServer() Q_DECL_OVERRIDE
+    ~KoResourceServer() override
     {
         if (m_tagStore) {
             delete m_tagStore;
@@ -158,7 +158,7 @@ public:
 
     }
 
-    int resourceCount() const Q_DECL_OVERRIDE {
+    int resourceCount() const override {
         return m_resources.size();
     }
 
@@ -168,7 +168,7 @@ public:
      * be loaded or and invalid aren't added to the server.
      * @param filenames list of filenames to be loaded
      */
-    void loadResources(QStringList filenames) Q_DECL_OVERRIDE {
+    void loadResources(QStringList filenames) override {
 
         QStringList uniqueFiles;
 
@@ -478,7 +478,7 @@ public:
         notifyResourceChanged(resource);
     }
 
-    QStringList blackListedFiles() const Q_DECL_OVERRIDE
+    QStringList blackListedFiles() const override
     {
         return m_blackListFileNames;
     }
@@ -542,7 +542,7 @@ public:
         }
     }
 
-    QStringList queryResources(const QString &query) const Q_DECL_OVERRIDE
+    QStringList queryResources(const QString &query) const override
     {
         return m_tagStore->searchTag(query);
     }
@@ -670,12 +670,12 @@ protected:
 
 protected:
 
-    KoResource* byMd5(const QByteArray &md5) const Q_DECL_OVERRIDE
+    KoResource* byMd5(const QByteArray &md5) const override
     {
         return Policy::toResourcePointer(resourceByMD5(md5));
     }
 
-    KoResource* byFileName(const QString &fileName) const Q_DECL_OVERRIDE
+    KoResource* byFileName(const QString &fileName) const override
     {
         return Policy::toResourcePointer(resourceByFilename(fileName));
     }
@@ -704,7 +704,7 @@ public:
     {
     }
 
-typename KoResourceServer<T, Policy>::PointerType createResource( const QString & filename ) {
+typename KoResourceServer<T, Policy>::PointerType createResource( const QString & filename ) override {
         return new T(filename);
     }
 };

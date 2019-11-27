@@ -35,9 +35,9 @@ class SvgImport : public KoFilter
 
 public:
     SvgImport(QObject* parent, const QVariantList&);
-    virtual ~SvgImport();
+    ~SvgImport() override;
 
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
 
 protected:
 

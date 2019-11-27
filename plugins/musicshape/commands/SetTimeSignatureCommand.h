@@ -34,8 +34,8 @@ class SetTimeSignatureCommand : public KUndo2Command
 {
 public:
     SetTimeSignatureCommand(MusicShape* shape, MusicCore::Bar* bar, int beats, int beat);
-    virtual void redo();
-    virtual void undo();
+    void redo() override;
+    void undo() override;
 private:
     MusicShape* m_shape;
     MusicCore::Bar* m_bar;

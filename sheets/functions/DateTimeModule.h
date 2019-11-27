@@ -35,7 +35,7 @@ class DateTimeModule : public FunctionModule
 public:
     explicit DateTimeModule(QObject* parent, const QVariantList& args = QVariantList());
 
-    QString descriptionFileName() const;
+    QString descriptionFileName() const override;
 };
 
 } // namespace Sheets

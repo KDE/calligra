@@ -66,19 +66,19 @@ public:
     /**
      * Destroys the view and unregisters at the document.
      */
-    virtual ~KoView();
+    ~KoView() override;
 
     // QWidget overrides
 protected:
 
-    virtual void dragEnterEvent(QDragEnterEvent * event);
+    void dragEnterEvent(QDragEnterEvent * event) override;
 
     /**
      * dropEvent by default calls addImages. Your KoView subclass might
      * override dropEvent and if your app can also handle images, call this
      * method.
      */
-    virtual void dropEvent(QDropEvent * event);
+    void dropEvent(QDropEvent * event) override;
 
     // KoView api
 

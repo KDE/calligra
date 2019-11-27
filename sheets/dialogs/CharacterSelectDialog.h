@@ -46,7 +46,7 @@ public:
     //constructor when you want to insert multi char
     CharacterSelectDialog(QWidget *parent, const QString &name, const QString &_font,
                   const QChar &_chr, bool _modal = true);
-    ~CharacterSelectDialog();
+    ~CharacterSelectDialog() override;
     /**
      * Shows the selection dialog and returns true if user pressed ok, after filling the font and character parameters.
      * @param font will be filled when the user pressed Ok with the selected font.

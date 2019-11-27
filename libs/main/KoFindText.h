@@ -68,16 +68,16 @@ public:
      * Constructor.
      */
     explicit KoFindText(QObject *parent = 0);
-    virtual ~KoFindText();
+    ~KoFindText() override;
 
     /**
      * Overridden from KoFindBase
      */
-    virtual void findNext();
+    void findNext() override;
     /**
      * Overridden from KoFindBase
      */
-    virtual void findPrevious();
+    void findPrevious() override;
 
     /**
      * Retrieve the list of documents currently in use.
@@ -127,15 +127,15 @@ protected:
     /**
      * The actual implementation of the searching, overridden from KoFindBase.
      */
-    virtual void findImplementation(const QString &pattern, KoFindMatchList &matchList);
+    void findImplementation(const QString &pattern, KoFindMatchList &matchList) override;
     /**
      * The actual implementation of replacing, overridden from KoFindBase.
      */
-    virtual void replaceImplementation(const KoFindMatch &match, const QVariant &value);
+    void replaceImplementation(const KoFindMatch &match, const QVariant &value) override;
     /**
      * Clear the list of matches properly. Overridden from KoFindBase.
      */
-    virtual void clearMatches();
+    void clearMatches() override;
 
 private:
     class Private;

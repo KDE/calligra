@@ -63,7 +63,7 @@ public:
      *
      * Remove the list of headers, footers and the body.
      */
-    virtual ~Spreadsheet();
+    ~Spreadsheet() override;
 
     /**
      * Accessors

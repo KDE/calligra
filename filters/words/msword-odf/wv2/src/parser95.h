@@ -32,7 +32,7 @@ class Parser95 : public Parser9x
 {
 public:
     Parser95( OLEStorage* storage, OLEStreamReader* wordDocument );
-    virtual ~Parser95();
+    ~Parser95() override;
 
 private:
     // don't copy or assign us

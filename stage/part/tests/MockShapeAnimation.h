@@ -34,25 +34,25 @@ public:
     /**
       * Return the begin and end time of the animation as a QPair
       */
-    QPair<int, int> timeRange() const {return QPair<int, int>(m_beginTime, m_beginTime + m_duration);}
+    QPair<int, int> timeRange() const override {return QPair<int, int>(m_beginTime, m_beginTime + m_duration);}
     /**
       * Return global duration of the shape animation
       */
-    int globalDuration() const {return m_duration;}
+    int globalDuration() const override {return m_duration;}
 
     /**
      * @brief Set the begin time for the animation
      *
      * @param timeMS time in milliseconds
      */
-    void setBeginTime(int timeMS) {m_beginTime = timeMS;}
+    void setBeginTime(int timeMS) override {m_beginTime = timeMS;}
 
     /**
      * @brief Set duration time for the animation
      *
      * @param timeMS time in milliseconds
      */
-    void setGlobalDuration(int timeMS) {m_duration = timeMS;}
+    void setGlobalDuration(int timeMS) override {m_duration = timeMS;}
 
 private:
     int m_beginTime;

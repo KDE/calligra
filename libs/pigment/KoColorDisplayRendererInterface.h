@@ -42,7 +42,7 @@ class PIGMENTCMS_EXPORT KoColorDisplayRendererInterface : public QObject
 
 public:
     KoColorDisplayRendererInterface();
-    virtual ~KoColorDisplayRendererInterface();
+    ~KoColorDisplayRendererInterface() override;
 
     /**
      * Convert the color \p c to a custom QColor that will be
@@ -96,13 +96,13 @@ class PIGMENTCMS_EXPORT KoDumbColorDisplayRenderer : public KoColorDisplayRender
 {
 Q_OBJECT
 public:
-    QColor toQColor(const KoColor &c) const;
-    KoColor approximateFromRenderedQColor(const QColor &c) const;
-    KoColor fromHsv(int h, int s, int v, int a = 255) const;
-    void getHsv(const KoColor &srcColor, int *h, int *s, int *v, int *a = 0) const;
+    QColor toQColor(const KoColor &c) const override;
+    KoColor approximateFromRenderedQColor(const QColor &c) const override;
+    KoColor fromHsv(int h, int s, int v, int a = 255) const override;
+    void getHsv(const KoColor &srcColor, int *h, int *s, int *v, int *a = 0) const override;
 
-    virtual qreal minVisibleFloatValue(const KoChannelInfo *chaninfo) const;
-    virtual qreal maxVisibleFloatValue(const KoChannelInfo *chaninfo) const;
+    qreal minVisibleFloatValue(const KoChannelInfo *chaninfo) const override;
+    qreal maxVisibleFloatValue(const KoChannelInfo *chaninfo) const override;
 
     static KoColorDisplayRendererInterface* instance();
 };

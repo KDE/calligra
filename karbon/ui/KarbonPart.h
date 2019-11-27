@@ -46,16 +46,16 @@ class KARBONUI_EXPORT KarbonPart : public KoPart
 public:
     explicit KarbonPart(QObject *parent);
 
-    virtual ~KarbonPart();
+    ~KarbonPart() override;
 
     /// reimplemented
-    virtual KoView *createViewInstance(KoDocument *document, QWidget *parent);
+    KoView *createViewInstance(KoDocument *document, QWidget *parent) override;
     /// reimplemented
-    virtual KoMainWindow *createMainWindow();
+    KoMainWindow *createMainWindow() override;
 
 protected Q_SLOTS:
     /// reimplemented
-    virtual void openTemplate(const QUrl& url);
+    void openTemplate(const QUrl& url) override;
 };
 
 #endif

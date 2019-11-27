@@ -40,7 +40,7 @@ class NetworkController : public QObject
     Q_ENUMS(State)
 public:
     explicit NetworkController(QObject *parent = 0);
-    ~NetworkController();
+    ~NetworkController() override;
 
     static QString Dropbox_Folder() {
         QDir tmpdir = QDir::temp();

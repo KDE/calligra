@@ -41,15 +41,15 @@ class KOPAGEAPP_EXPORT KoPADocument : public KoDocument, public KoShapeBasedDocu
 public:
 
     explicit KoPADocument(KoPart *part);
-    virtual ~KoPADocument();
+    ~KoPADocument() override;
 
-    QPixmap generatePreview(const QSize& size);
-    void paintContent( QPainter &painter, const QRect &rect);
+    QPixmap generatePreview(const QSize& size) override;
+    void paintContent( QPainter &painter, const QRect &rect) override;
 
-    bool loadXML( const KoXmlDocument & doc, KoStore *store );
-    bool loadOdf( KoOdfReadStore & odfStore );
+    bool loadXML( const KoXmlDocument & doc, KoStore *store ) override;
+    bool loadOdf( KoOdfReadStore & odfStore ) override;
 
-    bool saveOdf( SavingContext & documentContext );
+    bool saveOdf( SavingContext & documentContext ) override;
 
     /**
      * The tag the body is saved in
@@ -92,7 +92,7 @@ public:
     KoPAPageBase* pageByIndex( int index, bool masterPage ) const;
 
     /// reimplemnted
-    virtual int pageCount() const;
+    int pageCount() const override;
 
     /**
      * Get the index of the page
@@ -161,8 +161,8 @@ public:
      */
     virtual void removePages(QList<KoPAPageBase*> &pages);
 
-    void addShape( KoShape *shape );
-    void removeShape( KoShape* shape );
+    void addShape( KoShape *shape ) override;
+    void removeShape( KoShape* shape ) override;
 
     QList<KoPAPageBase*> pages( bool masterPages = false ) const;
 
@@ -235,7 +235,7 @@ public:
 
 public Q_SLOTS:
     /// reimplemented
-    virtual void initEmpty();
+    void initEmpty() override;
 
 Q_SIGNALS:
     void shapeAdded(KoShape* shape);
@@ -342,7 +342,7 @@ protected:
     /// set the url so it gets shown correctly in variables
     void updateDocumentURL();
 
-    virtual void setupOpenFileSubProgress();
+    void setupOpenFileSubProgress() override;
 
 private:
 

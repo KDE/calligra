@@ -35,9 +35,9 @@ public:
 
     void setView(KoPAViewBase *view);
 
-    QList<KoShape*> currentShapes();
+    QList<KoShape*> currentShapes() override;
 
-    KoShape *currentShape();
+    KoShape *currentShape() override;
 };
 
 #endif /* KOPABACKGROUNDFILLWIDGET_H */

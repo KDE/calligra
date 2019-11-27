@@ -33,12 +33,12 @@ class SpreadsheetContentsModelImpl : public ContentsModelImpl
 {
 public:
     explicit SpreadsheetContentsModelImpl(KoDocument* document);
-    ~SpreadsheetContentsModelImpl();
+    ~SpreadsheetContentsModelImpl() override;
 
-    virtual int rowCount() const Q_DECL_OVERRIDE;
-    virtual QVariant data(int index, Calligra::Components::ContentsModel::Role role) const Q_DECL_OVERRIDE;
-    virtual void setThumbnailSize(const QSize& size) Q_DECL_OVERRIDE;
-    virtual QImage thumbnail(int index, int width) const Q_DECL_OVERRIDE;
+    int rowCount() const override;
+    QVariant data(int index, Calligra::Components::ContentsModel::Role role) const override;
+    void setThumbnailSize(const QSize& size) override;
+    QImage thumbnail(int index, int width) const override;
 
 private:
     class Private;

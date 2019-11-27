@@ -47,30 +47,30 @@ class FindForward : public FindDirection
 {
 public:
     explicit FindForward(KoCanvasResourceManager *provider);
-    virtual ~FindForward();
+    ~FindForward() override;
 
-    virtual bool positionReached(const QTextCursor &currentPos, const QTextCursor &endPos);
+    bool positionReached(const QTextCursor &currentPos, const QTextCursor &endPos) override;
 
-    virtual void positionCursor(QTextCursor &currentPos);
+    void positionCursor(QTextCursor &currentPos) override;
 
-    virtual void select(const QTextCursor &cursor);
+    void select(const QTextCursor &cursor) override;
 
-    virtual void nextDocument(QTextDocument *document, KoFindPrivate *findPrivate);
+    void nextDocument(QTextDocument *document, KoFindPrivate *findPrivate) override;
 };
 
 class FindBackward : public FindDirection
 {
 public:
     explicit FindBackward(KoCanvasResourceManager *provider);
-    virtual ~FindBackward();
+    ~FindBackward() override;
 
-    virtual bool positionReached(const QTextCursor &currentPos, const QTextCursor &endPos);
+    bool positionReached(const QTextCursor &currentPos, const QTextCursor &endPos) override;
 
-    virtual void positionCursor(QTextCursor &currentPos);
+    void positionCursor(QTextCursor &currentPos) override;
 
-    virtual void select(const QTextCursor &cursor);
+    void select(const QTextCursor &cursor) override;
 
-    virtual void nextDocument(QTextDocument *document, KoFindPrivate *findPrivate);
+    void nextDocument(QTextDocument *document, KoFindPrivate *findPrivate) override;
 };
 
 #endif // FINDDIRECTION_P_H

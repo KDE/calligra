@@ -81,7 +81,7 @@ class EditNamedAreaDialog : public KoDialog
 
 public:
     EditNamedAreaDialog(QWidget* parent, Selection* selection);
-    ~EditNamedAreaDialog();
+    ~EditNamedAreaDialog() override;
 
     QString areaName() const;
     void setAreaName(const QString& areaname);

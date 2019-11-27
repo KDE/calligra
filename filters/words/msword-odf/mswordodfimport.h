@@ -33,9 +33,9 @@ class MSWordOdfImport : public KoFilter
     Q_OBJECT
 public:
     MSWordOdfImport(QObject* parent, const QVariantList&);
-    virtual ~MSWordOdfImport();
+    ~MSWordOdfImport() override;
 
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
 
     void setProgress(const int percent);
 

@@ -42,7 +42,7 @@ protected:
 
     MsooXmlCommonReader(QIODevice* io, KoOdfWriters *writers);
 
-    virtual ~MsooXmlCommonReader();
+    ~MsooXmlCommonReader() override;
 
     // -- for read_p()
     enum read_p_arg {

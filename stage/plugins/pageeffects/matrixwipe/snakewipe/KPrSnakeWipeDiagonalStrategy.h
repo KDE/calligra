@@ -27,9 +27,9 @@ class KPrSnakeWipeDiagonalStrategy : public KPrMatrixWipeStrategy
 {
 public:
     KPrSnakeWipeDiagonalStrategy(int subType, const char * smilType, const char *smilSubType, bool reverse);
-    virtual ~KPrSnakeWipeDiagonalStrategy();
+    ~KPrSnakeWipeDiagonalStrategy() override;
 protected:
-    virtual int maxIndex(int columns, int rows);
+    int maxIndex(int columns, int rows) override;
     QVector<int> m_indices;
 };
 

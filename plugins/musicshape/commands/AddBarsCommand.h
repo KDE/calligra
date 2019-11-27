@@ -29,8 +29,8 @@ class MusicShape;
 class AddBarsCommand : public KUndo2Command {
 public:
     AddBarsCommand(MusicShape* shape, int bars);
-    virtual void redo();
-    virtual void undo();
+    void redo() override;
+    void undo() override;
 private:
     MusicCore::Sheet* m_sheet;
     int m_bars;

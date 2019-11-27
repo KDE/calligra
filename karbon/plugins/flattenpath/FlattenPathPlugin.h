@@ -33,7 +33,7 @@ class FlattenPathPlugin : public QObject, public KXMLGUIClient
     Q_OBJECT
 public:
     FlattenPathPlugin(QObject *parent, const QVariantList &);
-    virtual ~FlattenPathPlugin() {}
+    ~FlattenPathPlugin() override {}
 
 private Q_SLOTS:
     void slotFlattenPath();

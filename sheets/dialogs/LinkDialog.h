@@ -42,7 +42,7 @@ class LinkDialog : public KPageDialog
     Q_OBJECT
 public:
     explicit LinkDialog(QWidget* parent, Selection* selection);
-    ~LinkDialog();
+    ~LinkDialog() override;
     QString text() const;
     QString link() const;
 

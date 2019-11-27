@@ -37,7 +37,7 @@ class STAGE_EXPORT KPrEventActionWidget : public QWidget
     Q_OBJECT
 public:
     explicit KPrEventActionWidget(QWidget *parent = 0);
-    virtual ~KPrEventActionWidget();
+    ~KPrEventActionWidget() override;
 
     /**
      * Set the data for the widget

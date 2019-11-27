@@ -32,7 +32,7 @@ class KOWIDGETS_EXPORT KoConfigAuthorPage : public QWidget
 
 public:
     KoConfigAuthorPage();
-    ~KoConfigAuthorPage() Q_DECL_OVERRIDE;
+    ~KoConfigAuthorPage() override;
 
     void apply();
 

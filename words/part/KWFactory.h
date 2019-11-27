@@ -37,10 +37,10 @@ public:
      * Constructor
      */
     explicit KWFactory();
-    ~KWFactory();
+    ~KWFactory() override;
 
     /// overwritten method from superclass
-    virtual QObject* create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword);
+    QObject* create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword) override;
 
     static const KoComponentData &componentData();
 

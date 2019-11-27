@@ -40,13 +40,13 @@ class UserVariable : public KoVariable
 public:
     UserVariable();
 
-    QWidget* createOptionsWidget();
+    QWidget* createOptionsWidget() override;
 
     void readProperties(const KoProperties *props);
-    void propertyChanged(Property property, const QVariant &value);
+    void propertyChanged(Property property, const QVariant &value) override;
 
-    void saveOdf(KoShapeSavingContext &context);
-    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext & context);
+    void saveOdf(KoShapeSavingContext &context) override;
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext & context) override;
 
     KoVariableManager *variableManager();
 
@@ -62,7 +62,7 @@ private Q_SLOTS:
     void valueChanged();
 
 private:
-    void resize(const QTextDocument *document, QTextInlineObject &object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd);
+    void resize(const QTextDocument *document, QTextInlineObject &object, int posInDocument, const QTextCharFormat &format, QPaintDevice *pd) override;
 
     KoVariableManager *m_variableManager;
     int m_property;

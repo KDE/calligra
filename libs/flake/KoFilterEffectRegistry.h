@@ -32,7 +32,7 @@ class FLAKE_EXPORT KoFilterEffectRegistry : public KoGenericRegistry<KoFilterEff
 {
 public:
     KoFilterEffectRegistry();
-    virtual ~KoFilterEffectRegistry();
+    ~KoFilterEffectRegistry() override;
 
     /**
     * Return the only instance of KoFilterEffectRegistry.

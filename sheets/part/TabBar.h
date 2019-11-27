@@ -85,7 +85,7 @@ public:
     /**
      * Destroy the tabbar.
      */
-    virtual ~TabBar();
+    ~TabBar() override;
 
     /**
      * Returns true if the tab bar is read only.
@@ -214,7 +214,7 @@ public Q_SLOTS:
      */
     void clear();
 
-    QSize sizeHint() const;
+    QSize sizeHint() const override;
 
 Q_SIGNALS:
 
@@ -251,13 +251,13 @@ protected Q_SLOTS:
     void autoScrollForward();
 
 protected:
-    virtual void paintEvent(QPaintEvent* ev);
-    virtual void resizeEvent(QResizeEvent* ev);
-    virtual void mousePressEvent(QMouseEvent* ev);
-    virtual void mouseReleaseEvent(QMouseEvent* ev);
-    virtual void mouseDoubleClickEvent(QMouseEvent* ev);
-    virtual void mouseMoveEvent(QMouseEvent* ev);
-    virtual void wheelEvent(QWheelEvent * e);
+    void paintEvent(QPaintEvent* ev) override;
+    void resizeEvent(QResizeEvent* ev) override;
+    void mousePressEvent(QMouseEvent* ev) override;
+    void mouseReleaseEvent(QMouseEvent* ev) override;
+    void mouseDoubleClickEvent(QMouseEvent* ev) override;
+    void mouseMoveEvent(QMouseEvent* ev) override;
+    void wheelEvent(QWheelEvent * e) override;
 
 private:
     TabBarPrivate * const d;

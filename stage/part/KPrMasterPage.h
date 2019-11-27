@@ -29,21 +29,21 @@ class KPrMasterPage : public KoPAMasterPage, public KPrPageData
 {
 public:
     explicit KPrMasterPage(KPrDocument *document);
-    virtual ~KPrMasterPage();
+    ~KPrMasterPage() override;
 
     /**
      * Get the page type used in the document
      *
      * @return KoPageApp::Slide
      */
-    virtual KoPageApp::PageType pageType() const;
+    KoPageApp::PageType pageType() const override;
 
     /// reimplemented
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
 protected:
     /// reimplemented
-    virtual void loadOdfPageExtra( const KoXmlElement &element, KoPALoadingContext & loadingContext );
+    void loadOdfPageExtra( const KoXmlElement &element, KoPALoadingContext & loadingContext ) override;
 };
 
 #endif /* KPRMASTERPAGE_H */

@@ -71,17 +71,17 @@ public:
         textDoc.setTextEditor(editor);
     }
 
-    virtual ~TestDocument()
+    ~TestDocument() override
     {
         delete m_document;
     }
 
-    virtual void addShape(KoShape *shape)
+    void addShape(KoShape *shape) override
     {
         m_shapes << shape;
     }
 
-    virtual void removeShape(KoShape *shape)
+    void removeShape(KoShape *shape) override
     {
         m_shapes.removeAll(shape);
     }

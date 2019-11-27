@@ -32,10 +32,10 @@ class KWDebugDocker : public QDockWidget, public KoCanvasObserverBase
     Q_OBJECT
 public:
     explicit KWDebugDocker();
-    ~KWDebugDocker();
+    ~KWDebugDocker() override;
     /// reimplemented from KoCanvasObserver
-    virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas();
+    void setCanvas(KoCanvasBase *canvas) override;
+    void unsetCanvas() override;
 
 private:
 

@@ -35,15 +35,15 @@ class LatexExportDialog : public KoDialog
 
 public:
     explicit LatexExportDialog(KoStore*, QWidget* parent = 0);
-    virtual ~LatexExportDialog();
+    ~LatexExportDialog() override;
 
     void setOutputFile(const QString& file) {
         m_fileOut = file;
     }
 
 public Q_SLOTS:
-    virtual void reject();
-    virtual void accept();
+    void reject() override;
+    void accept() override;
     virtual void addLanguage();
     virtual void removeLanguage();
 

@@ -34,24 +34,24 @@ class KOPAGEAPP_EXPORT KoPACanvasItem : public QGraphicsWidget, public KoPACanva
 public:
     explicit KoPACanvasItem( KoPADocument * doc );
 
-    void repaint();
+    void repaint() override;
 
-    void setCursor(const QCursor &cursor);
+    void setCursor(const QCursor &cursor) override;
 
-    QWidget* canvasWidget() { return 0; }
-    const QWidget* canvasWidget() const { return 0; }
+    QWidget* canvasWidget() override { return 0; }
+    const QWidget* canvasWidget() const override { return 0; }
 
-    QGraphicsObject *canvasItem() { return this; }
-    const QGraphicsObject *canvasItem() const{ return this; }
-
-    /// reimplemented method
-    virtual void updateCanvas( const QRectF& rc );
+    QGraphicsObject *canvasItem() override { return this; }
+    const QGraphicsObject *canvasItem() const override{ return this; }
 
     /// reimplemented method
-    virtual void updateInputMethodInfo();
+    void updateCanvas( const QRectF& rc ) override;
+
+    /// reimplemented method
+    void updateInputMethodInfo() override;
 
     /// Recalculates the size of the canvas (needed when zooming or changing pagelayout)
-    void updateSize();
+    void updateSize() override;
 
 public Q_SLOTS:
 
@@ -72,33 +72,33 @@ Q_SIGNALS:
 
 protected:
     /// reimplemented method from superclass
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
     /// reimplemented method from superclass
-    void mousePressEvent( QGraphicsSceneMouseEvent *event );
+    void mousePressEvent( QGraphicsSceneMouseEvent *event ) override;
     /// reimplemented method from superclass
-    void mouseDoubleClickEvent( QGraphicsSceneMouseEvent *event );
+    void mouseDoubleClickEvent( QGraphicsSceneMouseEvent *event ) override;
     /// reimplemented method from superclass
-    void mouseMoveEvent( QGraphicsSceneMouseEvent *event );
+    void mouseMoveEvent( QGraphicsSceneMouseEvent *event ) override;
     /// reimplemented method from superclass
-    void mouseReleaseEvent( QGraphicsSceneMouseEvent *event );
+    void mouseReleaseEvent( QGraphicsSceneMouseEvent *event ) override;
     /// reimplemented method from superclass
-    void keyPressEvent( QKeyEvent *event );
+    void keyPressEvent( QKeyEvent *event ) override;
     /// reimplemented method from superclass
-    void keyReleaseEvent( QKeyEvent *event );
+    void keyReleaseEvent( QKeyEvent *event ) override;
     /// reimplemented method from superclass
-    void wheelEvent ( QGraphicsSceneWheelEvent * event );
+    void wheelEvent ( QGraphicsSceneWheelEvent * event ) override;
     /// reimplemented method from superclass
-    void closeEvent( QCloseEvent * event );
+    void closeEvent( QCloseEvent * event ) override;
     /// reimplemented method from superclass
-    bool event( QEvent * event );
+    bool event( QEvent * event ) override;
     /// reimplemented method from superclass
-    virtual QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
+    QVariant inputMethodQuery(Qt::InputMethodQuery query) const override;
     /// reimplemented method from superclass
-    virtual void inputMethodEvent(QInputMethodEvent *event);
+    void inputMethodEvent(QInputMethodEvent *event) override;
 
     /// reimplemented method from superclass
-    virtual void resizeEvent( QGraphicsSceneResizeEvent * event );
+    void resizeEvent( QGraphicsSceneResizeEvent * event ) override;
 
     /**
      * Shows the default context menu

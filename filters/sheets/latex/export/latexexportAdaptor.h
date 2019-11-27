@@ -34,7 +34,7 @@ class LatexExportAdaptor: public QDBusAbstractAdaptor
 public:
     explicit LatexExportAdaptor(LatexExportDialog* dialog);
 
-    ~LatexExportAdaptor();
+    ~LatexExportAdaptor() override;
 
 public Q_SLOTS: // METHODS
     Q_SCRIPTABLE void useDefaultConfig();

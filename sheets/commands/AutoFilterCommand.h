@@ -42,10 +42,10 @@ public:
     /**
      * Destructor.
      */
-    virtual ~AutoFilterCommand();
+    ~AutoFilterCommand() override;
 
-    virtual void redo();
-    virtual void undo();
+    void redo() override;
+    void undo() override;
 };
 
 } // namespace Sheets

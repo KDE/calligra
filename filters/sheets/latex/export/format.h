@@ -86,7 +86,7 @@ public:
      *
      * Nothing to do
      */
-    virtual ~Format();
+    ~Format() override;
 
     /**
      * getters

@@ -54,20 +54,20 @@ public:
     /**
      * Destroys the document.
      */
-    ~Part();
+    ~Part() override;
 
     void setDocument(Doc *document);
 
-    virtual void addView(KoView *_view, KoDocument *document); /// reimplemented
+    void addView(KoView *_view, KoDocument *document) override; /// reimplemented
 
-    virtual QGraphicsItem *createCanvasItem(KoDocument *document); /// reimplemented
+    QGraphicsItem *createCanvasItem(KoDocument *document) override; /// reimplemented
 
-    virtual KoMainWindow *createMainWindow(); /// reimplemented
+    KoMainWindow *createMainWindow() override; /// reimplemented
 
 protected:
-    virtual KoView* createViewInstance(KoDocument *document, QWidget*); /// reimplemented
+    KoView* createViewInstance(KoDocument *document, QWidget*) override; /// reimplemented
 
-    virtual void openTemplate(const QUrl& url); /// reimplemented
+    void openTemplate(const QUrl& url) override; /// reimplemented
 
     Doc *m_document;
 

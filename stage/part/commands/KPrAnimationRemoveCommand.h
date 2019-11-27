@@ -31,12 +31,12 @@ class STAGE_EXPORT KPrAnimationRemoveCommand : public KUndo2Command
 {
 public:
     KPrAnimationRemoveCommand(KPrDocument *doc, KPrShapeAnimation *animation);
-    virtual ~KPrAnimationRemoveCommand();
+    ~KPrAnimationRemoveCommand() override;
 
     /// redo the command
-    void redo();
+    void redo() override;
     /// revert the actions done in redo
-    void undo();
+    void undo() override;
 
 private:
     KPrDocument *m_doc;

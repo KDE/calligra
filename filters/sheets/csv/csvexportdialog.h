@@ -49,7 +49,7 @@ class CSVExportDialog : public KoDialog
     Q_OBJECT
 public:
     explicit CSVExportDialog(QWidget *parent);
-    ~CSVExportDialog();
+    ~CSVExportDialog() override;
 
     QChar   getDelimiter() const;
     QChar   getTextQuote() const;

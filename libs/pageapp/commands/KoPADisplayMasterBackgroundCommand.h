@@ -35,12 +35,12 @@ class KOPAGEAPP_EXPORT KoPADisplayMasterBackgroundCommand : public KUndo2Command
 {
 public:
     KoPADisplayMasterBackgroundCommand( KoPAPage * page, bool display );
-    virtual ~KoPADisplayMasterBackgroundCommand();
+    ~KoPADisplayMasterBackgroundCommand() override;
 
     /// redo the command
-    void redo();
+    void redo() override;
     /// revert the actions done in redo
-    void undo();
+    void undo() override;
 
 private:
     KoPAPage * m_page;

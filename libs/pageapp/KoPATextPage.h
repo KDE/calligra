@@ -31,14 +31,14 @@ class KOPAGEAPP_EXPORT KoPATextPage : public KoTextPage
 public:
     KoPATextPage(int pageNumber, KoPAPageBase *page);
 
-    virtual ~KoPATextPage();
+    ~KoPATextPage() override;
 
-    virtual int pageNumber() const;
-    virtual int visiblePageNumber(PageSelection select = CurrentPage, int adjustment = 0) const;
+    int pageNumber() const override;
+    int visiblePageNumber(PageSelection select = CurrentPage, int adjustment = 0) const override;
 
     KoPAPageBase *page() const;
 
-    virtual QRectF rect() const;
+    QRectF rect() const override;
 
 private:
     int m_pageNumber;

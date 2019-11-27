@@ -51,24 +51,24 @@ class TextShape : public KoShapeContainer, public KoFrameShape
 {
 public:
     TextShape(KoInlineTextObjectManager *inlineTextObjectManager, KoTextRangeManager *textRangeManager);
-    virtual ~TextShape();
+    ~TextShape() override;
 
     /// reimplemented
-    void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
+    void paintComponent(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
     /// reimplemented
-    virtual void waitUntilReady(const KoViewConverter &converter, bool asynchronous) const;
+    void waitUntilReady(const KoViewConverter &converter, bool asynchronous) const override;
 
     /// helper method.
     QPointF convertScreenPos(const QPointF &point) const;
 
     /// reimplemented
-    QPainterPath outline() const;
+    QPainterPath outline() const override;
 
     /// reimplemented
-    QRectF outlineRect() const;
+    QRectF outlineRect() const override;
 
     ///reimplemented
-    ChildZOrderPolicy childZOrderPolicy() {return KoShape::ChildZPassThrough;}
+    ChildZOrderPolicy childZOrderPolicy() override {return KoShape::ChildZPassThrough;}
 
     /// set the image collection which is needed to draw bullet from images
     void setImageCollection(KoImageCollection *collection) { m_imageCollection = collection; }
@@ -86,14 +86,14 @@ public:
      * @param element element which represents the shape in odf.
      * @return false if loading failed.
      */
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
     /**
      * From KoShape reimplemented method to store the TextShape data as ODF.
      *
      * @param context the KoShapeSavingContext used for saving.
      */
-    virtual void saveOdf(KoShapeSavingContext &context) const;
+    void saveOdf(KoShapeSavingContext &context) const override;
 
     KoTextShapeData *textShapeData() {
         return m_textShapeData;
@@ -101,26 +101,26 @@ public:
 
     void updateDocumentData();
 
-    virtual void update() const;
-    virtual void update(const QRectF &shape) const;
+    void update() const override;
+    void update(const QRectF &shape) const override;
 
     // required for Stage hack
     void setPageProvider(KoPageProvider *provider) { m_pageProvider = provider; }
 
     /// reimplemented
-    virtual bool loadOdfFrame(const KoXmlElement &element, KoShapeLoadingContext &context);
+    bool loadOdfFrame(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
 protected:
-    virtual bool loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context);
+    bool loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
     /// reimplemented
-    virtual void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context);
+    void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
     /// reimplemented
-    virtual QString saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const;
+    QString saveStyle(KoGenStyle &style, KoShapeSavingContext &context) const override;
 
 private:
-    void shapeChanged(ChangeType type, KoShape *shape = 0);
+    void shapeChanged(ChangeType type, KoShape *shape = 0) override;
 
     KoTextShapeData *m_textShapeData;
     KoPageProvider *m_pageProvider;

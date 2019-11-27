@@ -30,13 +30,13 @@ class KPrShapeManagerAnimationStrategy : public KoShapeManagerPaintingStrategy
 public:
     KPrShapeManagerAnimationStrategy( KoShapeManager * shapeManager, KPrAnimationCache * animationCache,
                                       KPrPageSelectStrategyBase * strategy );
-    virtual ~KPrShapeManagerAnimationStrategy();
+    ~KPrShapeManagerAnimationStrategy() override;
 
     /// reimplemented
-    virtual void paint( KoShape * shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext);
+    void paint( KoShape * shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext) override;
 
     /// reimplemented
-    virtual void adapt( KoShape * shape, QRectF & rect );
+    void adapt( KoShape * shape, QRectF & rect ) override;
 
 private:
     KPrAnimationCache * m_animationCache;

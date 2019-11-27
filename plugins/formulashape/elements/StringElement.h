@@ -32,9 +32,9 @@ public:
     explicit StringElement(BasicElement *parent = 0);
 
     /// @return The element's ElementType
-    ElementType elementType() const;
+    ElementType elementType() const override;
 
-    QRectF renderToPath( const QString& raw, QPainterPath& path ) const;
+    QRectF renderToPath( const QString& raw, QPainterPath& path ) const override;
 };
 
 #endif // STRINGELEMENT_H

@@ -32,7 +32,7 @@ class KOWIDGETS_EXPORT KoColorSlider : public KSelector
 public:
     explicit KoColorSlider(QWidget *parent = 0, KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
     explicit KoColorSlider(Qt::Orientation orientation, QWidget *parent = 0, KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
-    virtual ~KoColorSlider();
+    ~KoColorSlider() override;
 
 public:
     void setColors( const KoColor& minColor, const KoColor& maxColor);
@@ -41,8 +41,8 @@ public:
      */
     KoColor currentColor() const;
 protected:
-    void drawContents( QPainter* ) Q_DECL_OVERRIDE;
-    void drawArrow(QPainter *painter, const QPoint &pos) Q_DECL_OVERRIDE;
+    void drawContents( QPainter* ) override;
+    void drawArrow(QPainter *painter, const QPoint &pos) override;
 
 protected:
     struct Private;

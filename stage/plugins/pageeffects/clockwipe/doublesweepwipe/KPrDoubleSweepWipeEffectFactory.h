@@ -26,8 +26,8 @@ class KPrDoubleSweepWipeEffectFactory : public KPrPageEffectFactory
 {
 public:
     KPrDoubleSweepWipeEffectFactory();
-    virtual ~KPrDoubleSweepWipeEffectFactory();
-    virtual QString subTypeName(int subType) const;
+    ~KPrDoubleSweepWipeEffectFactory() override;
+    QString subTypeName(int subType) const override;
 
     enum SubType {
         ParallelVertical,

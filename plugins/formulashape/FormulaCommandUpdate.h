@@ -38,10 +38,10 @@ public:
     FormulaCommandUpdate(KoFormulaShape* shape, FormulaCommand* command);
 
     /// Execute the command
-    void redo();
+    void redo() override;
 
     /// Revert the actions done in redo()
-    void undo();
+    void undo() override;
     
 private:
     /// The BasicElement that owns the newly added Text

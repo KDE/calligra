@@ -25,12 +25,12 @@ class KoDummyCellValue : public KoCellValue
 {
 public:
     KoDummyCellValue();
-    ~KoDummyCellValue();
+    ~KoDummyCellValue() override;
 
 protected:
 
-    virtual QString type() const;
-    virtual QList< QPair<QString, QString> > attributes()  const;
+    QString type() const override;
+    QList< QPair<QString, QString> > attributes()  const override;
 };
 
 #endif

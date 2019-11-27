@@ -28,10 +28,10 @@ class KPrPlaceholderShapeFactory : public KoShapeFactoryBase
 {
 public:
     KPrPlaceholderShapeFactory();
-    virtual ~KPrPlaceholderShapeFactory();
+    ~KPrPlaceholderShapeFactory() override;
 
-    virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const;
-    virtual bool supports( const KoXmlElement & e, KoShapeLoadingContext &context ) const;
+    KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const override;
+    bool supports( const KoXmlElement & e, KoShapeLoadingContext &context ) const override;
 };
 
 #endif /* KPRPLACEHOLDERSHAPEFACTORY_H */

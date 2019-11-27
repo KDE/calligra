@@ -27,11 +27,11 @@ class NoteEntryAction : public AbstractMusicAction
 public:
     NoteEntryAction(MusicCore::Duration duration, bool isRest, SimpleEntryTool* tool);
 
-    virtual void renderPreview(QPainter& painter, const QPointF& point);
-    virtual void mousePress(MusicCore::Staff* staff, int bar, const QPointF& pos);
+    void renderPreview(QPainter& painter, const QPointF& point) override;
+    void mousePress(MusicCore::Staff* staff, int bar, const QPointF& pos) override;
 
-    virtual void renderKeyboardPreview(QPainter& painter, const MusicCursor& cursor);
-    virtual void keyPress(QKeyEvent* event, const MusicCursor& cursor);
+    void renderKeyboardPreview(QPainter& painter, const MusicCursor& cursor) override;
+    void keyPress(QKeyEvent* event, const MusicCursor& cursor) override;
 private:
     MusicCore::Duration m_duration;
     bool m_isRest;

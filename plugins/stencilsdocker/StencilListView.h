@@ -35,8 +35,8 @@ Q_SIGNALS:
     void pressed(const QString &name, const QString &xml, const QPoint &globalPos);
 
 protected:
-    void dragEnterEvent(QDragEnterEvent *event);
-    void dropEvent(QDropEvent *event);
+    void dragEnterEvent(QDragEnterEvent *event) override;
+    void dropEvent(QDropEvent *event) override;
 };
 
 #endif // STENCILLISTVIEW_H

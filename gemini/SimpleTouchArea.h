@@ -26,14 +26,14 @@ class SimpleTouchArea : public QQuickItem
     Q_OBJECT
 public:
     explicit SimpleTouchArea(QQuickItem* parent = 0);
-    virtual ~SimpleTouchArea();
+    ~SimpleTouchArea() override;
 
 Q_SIGNALS:
     void touched();
 
 protected:
-    virtual bool event(QEvent* event);
-    virtual void touchEvent(QTouchEvent*);
+    bool event(QEvent* event) override;
+    void touchEvent(QTouchEvent*) override;
 };
 
 #endif // SIMPLETOUCHAREA_H

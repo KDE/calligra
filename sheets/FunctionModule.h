@@ -53,7 +53,7 @@ public:
      * Destroys the module and the provided Function objects.
      * Check, if this module isRemovable(), before you unload the plugin.
      */
-    virtual ~FunctionModule();
+    ~FunctionModule() override;
 
     /**
      * Returns the file name of the XML description for the functions.

@@ -26,9 +26,9 @@ class MusicToolFactory : public KoToolFactoryBase
 {
 public:
     MusicToolFactory();
-    ~MusicToolFactory();
+    ~MusicToolFactory() override;
 
-    KoToolBase* createTool( KoCanvasBase* canvas );
+    KoToolBase* createTool( KoCanvasBase* canvas ) override;
 };
 
 

@@ -87,32 +87,32 @@ namespace wvWare
          * @see parse, init
          */
         Parser9x( OLEStorage* storage, OLEStreamReader* wordDocument, const Word97::FIB& fib );
-        virtual ~Parser9x();
+        ~Parser9x() override;
 
         /**
          * The main parsing method.
          */
-        virtual bool parse();
+        bool parse() override;
 
-        virtual const Word97::FIB& fib() const;
-        virtual const Word97::DOP& dop() const;
+        const Word97::FIB& fib() const override;
+        const Word97::DOP& dop() const override;
 
         /**
          * Get the font family name structure for a given ftc.
          */
-        virtual const Word97::FFN& font( S16 ftc ) const;
+        const Word97::FFN& font( S16 ftc ) const override;
 
         /**
          * Get the associated strings (author, title,...).
          * Not cached.
          */
-        virtual AssociatedStrings associatedStrings();
+        AssociatedStrings associatedStrings() override;
 
-        virtual const StyleSheet& styleSheet() const;
+        const StyleSheet& styleSheet() const override;
 
-        virtual const Drawings* getDrawings() const;
+        const Drawings* getDrawings() const override;
 
-        virtual OLEStreamReader* getTable();
+        OLEStreamReader* getTable() override;
 
         // This part of the public API is only visible to the Functor classes,
         // as the "outside world" only sees the public API of Parser. The Functors
@@ -130,7 +130,7 @@ namespace wvWare
         void parsePicture( const PictureData& data );
 
         //Can't create Functor for textbox in advance.  Index into plcfTxbxTxt unknown.
-        virtual void parseTextBox(unsigned int index, bool stylesxml);
+        void parseTextBox(unsigned int index, bool stylesxml) override;
 
     protected:
         // First all variables which don't change their state during

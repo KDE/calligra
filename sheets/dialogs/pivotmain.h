@@ -39,7 +39,7 @@ class PivotMain : public KoDialog
       QVector<QString> ValueData(const QString &str);
       bool checkCondition(const QString &field , const QString &condition, const QString &value, int line);
       Sheet* filter();
-      ~PivotMain();
+      ~PivotMain() override;
 
     private Q_SLOTS:
 	  

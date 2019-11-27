@@ -35,7 +35,7 @@ class BitOpsModule : public FunctionModule
 public:
     explicit BitOpsModule(QObject* parent, const QVariantList& args = QVariantList());
 
-    QString descriptionFileName() const;
+    QString descriptionFileName() const override;
 };
 
 } // namespace Sheets

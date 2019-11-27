@@ -29,8 +29,8 @@ class PptxXmlCommentsReader : public MSOOXML::MsooXmlCommonReader
 {
 public:
     explicit PptxXmlCommentsReader(KoOdfWriters *writers);
-    virtual ~PptxXmlCommentsReader();
-    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
+    ~PptxXmlCommentsReader() override;
+    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0) override;
 
     KoFilter::ConversionStatus read_cmLst();
     KoFilter::ConversionStatus read_cm();
@@ -49,7 +49,7 @@ class PptxXmlCommentsReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
     PptxXmlCommentsReaderContext();
-    virtual ~PptxXmlCommentsReaderContext();
+    ~PptxXmlCommentsReaderContext() override;
 
     QMap<int, QString> authors;
 };

@@ -64,9 +64,9 @@ public:
     {
     }
 
-    virtual QWidget *createEditor(QWidget *parent,
+    QWidget *createEditor(QWidget *parent,
                                   const QStyleOptionViewItem &option,
-                                  const QModelIndex &index) const
+                                  const QModelIndex &index) const override
     {
         Q_UNUSED(index)
         Q_UNUSED(option)
@@ -81,7 +81,7 @@ public:
         return combo;
     }
 
-    virtual void setEditorData(QWidget *editor, const QModelIndex &index) const
+    void setEditorData(QWidget *editor, const QModelIndex &index) const override
     {
         if (!index.isValid()) {
             return;
@@ -147,8 +147,8 @@ public:
         }
     }
 
-    virtual void setModelData(QWidget *editor, QAbstractItemModel *model,
-                              const QModelIndex &index) const
+    void setModelData(QWidget *editor, QAbstractItemModel *model,
+                              const QModelIndex &index) const override
     {
         KComboBox *const combo = static_cast<KComboBox*>(editor);
         const int currentIndex = combo->currentIndex();
@@ -163,9 +163,9 @@ public:
         }
     }
 
-    virtual void updateEditorGeometry(QWidget *editor,
+    void updateEditorGeometry(QWidget *editor,
                                       const QStyleOptionViewItem &option,
-                                      const QModelIndex &index) const
+                                      const QModelIndex &index) const override
     {
         Q_UNUSED(index)
         editor->setGeometry(option.rect);

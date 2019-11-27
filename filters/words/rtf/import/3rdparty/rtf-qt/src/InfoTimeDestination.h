@@ -32,11 +32,11 @@ namespace RtfReader
       public:
 	InfoTimeDestination( Reader *reader, AbstractRtfOutput *output, const QString &name );
 
-	virtual ~InfoTimeDestination();
+	~InfoTimeDestination() override;
 
-	virtual void handleControlWord( const QByteArray &controlWord, bool hasValue, const int value );
-	virtual void handlePlainText( const QByteArray &plainText );
-	virtual void aboutToEndDestination() = 0;
+	void handleControlWord( const QByteArray &controlWord, bool hasValue, const int value ) override;
+	void handlePlainText( const QByteArray &plainText ) override;
+	void aboutToEndDestination() override = 0;
 
       protected:
 	QDateTime dateTime() const;

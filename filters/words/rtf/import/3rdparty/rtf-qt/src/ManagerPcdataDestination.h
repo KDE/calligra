@@ -32,9 +32,9 @@ namespace RtfReader
       public:
 	ManagerPcdataDestination( Reader *reader, AbstractRtfOutput *output, const QString &name );
 
-	virtual ~ManagerPcdataDestination();
+	~ManagerPcdataDestination() override;
 
-	virtual void aboutToEndDestination();
+	void aboutToEndDestination() override;
       };
 }
 

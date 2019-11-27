@@ -26,11 +26,11 @@ class KPrClockWipeStrategy : public KPrPageEffectStrategy
 {
 public:
     KPrClockWipeStrategy(int startAngle, int bladeCount, int subType, const char * smilType, const char *smilSubType, bool reverse );
-    virtual ~KPrClockWipeStrategy();
+    ~KPrClockWipeStrategy() override;
 
-    virtual void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine );
-    virtual void paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data );
-    virtual void next( const KPrPageEffect::Data &data );
+    void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine ) override;
+    void paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data ) override;
+    void next( const KPrPageEffect::Data &data ) override;
 
 private:
     double m_startAngle;

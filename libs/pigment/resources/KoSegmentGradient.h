@@ -101,8 +101,8 @@ protected:
     public:
         static RGBColorInterpolationStrategy *instance();
 
-        virtual void colorAt(KoColor& dst, qreal t, const KoColor& start, const KoColor& end) const;
-        virtual int type() const {
+        void colorAt(KoColor& dst, qreal t, const KoColor& start, const KoColor& end) const override;
+        int type() const override {
             return COLOR_INTERP_RGB;
         }
 
@@ -121,8 +121,8 @@ protected:
     public:
         static HSVCWColorInterpolationStrategy *instance();
 
-        virtual void colorAt(KoColor& dst, qreal t, const KoColor& start, const KoColor& end) const;
-        virtual int type() const {
+        void colorAt(KoColor& dst, qreal t, const KoColor& start, const KoColor& end) const override;
+        int type() const override {
             return COLOR_INTERP_HSV_CW;
         }
     private:
@@ -137,8 +137,8 @@ protected:
     public:
         static HSVCCWColorInterpolationStrategy *instance();
 
-        virtual void colorAt(KoColor& dst, qreal t, const KoColor& start, const KoColor& end) const;
-        virtual int type() const {
+        void colorAt(KoColor& dst, qreal t, const KoColor& start, const KoColor& end) const override;
+        int type() const override {
             return COLOR_INTERP_HSV_CCW;
         }
     private:
@@ -163,8 +163,8 @@ protected:
     public:
         static LinearInterpolationStrategy *instance();
 
-        virtual qreal valueAt(qreal t, qreal middle) const;
-        virtual int type() const {
+        qreal valueAt(qreal t, qreal middle) const override;
+        int type() const override {
             return INTERP_LINEAR;
         }
 
@@ -184,8 +184,8 @@ protected:
     public:
         static CurvedInterpolationStrategy *instance();
 
-        virtual qreal valueAt(qreal t, qreal middle) const;
-        virtual int type() const {
+        qreal valueAt(qreal t, qreal middle) const override;
+        int type() const override {
             return INTERP_CURVED;
         }
     private:
@@ -200,8 +200,8 @@ protected:
     public:
         static SphereIncreasingInterpolationStrategy *instance();
 
-        virtual qreal valueAt(qreal t, qreal middle) const;
-        virtual int type() const {
+        qreal valueAt(qreal t, qreal middle) const override;
+        int type() const override {
             return INTERP_SPHERE_INCREASING;
         }
     private:
@@ -215,8 +215,8 @@ protected:
     public:
         static SphereDecreasingInterpolationStrategy *instance();
 
-        virtual qreal valueAt(qreal t, qreal middle) const;
-        virtual int type() const {
+        qreal valueAt(qreal t, qreal middle) const override;
+        int type() const override {
             return INTERP_SPHERE_DECREASING;
         }
     private:
@@ -230,8 +230,8 @@ protected:
     public:
         static SineInterpolationStrategy *instance();
 
-        virtual qreal valueAt(qreal t, qreal middle) const;
-        virtual int type() const {
+        qreal valueAt(qreal t, qreal middle) const override;
+        int type() const override {
             return INTERP_SINE;
         }
     private:
@@ -261,20 +261,20 @@ class PIGMENTCMS_EXPORT KoSegmentGradient : public KoAbstractGradient
 
 public:
     explicit KoSegmentGradient(const QString &file);
-    virtual ~KoSegmentGradient();
+    ~KoSegmentGradient() override;
 
-    KoAbstractGradient* clone() const;
+    KoAbstractGradient* clone() const override;
 
     /// reimplemented
-    virtual bool load();
-    virtual bool loadFromDevice(QIODevice *dev);
+    bool load() override;
+    bool loadFromDevice(QIODevice *dev) override;
 
     /// not implemented
-    virtual bool save();
-    virtual bool saveToDevice(QIODevice* dev) const;
+    bool save() override;
+    bool saveToDevice(QIODevice* dev) const override;
 
     /// reimplemented
-    void colorAt(KoColor& dst, qreal t) const;
+    void colorAt(KoColor& dst, qreal t) const override;
 
     /**
      * Returns the segment at a given position
@@ -284,10 +284,10 @@ public:
     KoGradientSegment *segmentAt(qreal t) const;
 
     /// reimplemented
-    virtual QGradient* toQGradient() const;
+    QGradient* toQGradient() const override;
 
     /// reimplemented
-    QString defaultFileExtension() const;
+    QString defaultFileExtension() const override;
 
         /**
      * a gradient colour picker can consist of one or more segments.

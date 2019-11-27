@@ -82,12 +82,12 @@ public:
     /**
      * return a rectangle outlining this page, using the offset in the document.
      */
-    QRectF rect() const;
+    QRectF rect() const override;
 
     /**
      * return a rectangle outlining the main text on this page, using the offset in the document.
      */
-    QRectF contentRect() const;
+    QRectF contentRect() const override;
 
     /* set the content rect valid on this page
      */
@@ -113,10 +113,10 @@ public:
     void setPageSide(PageSide ps);
 
     /// reimplemented from KoTextPage
-    virtual int visiblePageNumber(PageSelection select = CurrentPage, int adjustment = 0) const;
+    int visiblePageNumber(PageSelection select = CurrentPage, int adjustment = 0) const override;
 
     /// reimplemented from KoTextPage
-    virtual int pageNumber() const;
+    int pageNumber() const override;
 
     /**
      * Adjusts the visible page number of this page.
@@ -130,7 +130,7 @@ public:
     void setVisiblePageNumber(int pageNumber);
 
     /// reimplemented from KoTextPage
-    virtual QString masterPageName() const;
+    QString masterPageName() const override;
 
     /// returns the page style applied on this page
     KWPageStyle pageStyle() const;

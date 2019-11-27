@@ -35,7 +35,7 @@ class KOWIDGETS_EXPORT KoTagChooserWidget : public QWidget
 
 public:
     explicit KoTagChooserWidget(QWidget* parent);
-    ~KoTagChooserWidget() Q_DECL_OVERRIDE;
+    ~KoTagChooserWidget() override;
     void setCurrentIndex(int index);
     int findIndexOf(const QString &tagName);
     void insertItem(const QString &tagName);

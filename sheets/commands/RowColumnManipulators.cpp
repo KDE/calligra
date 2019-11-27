@@ -455,7 +455,7 @@ bool AdjustColumnRowManipulator::postProcessing()
 
 class DummyWidget : public QWidget
 {
-    int metric(PaintDeviceMetric metric) const {
+    int metric(PaintDeviceMetric metric) const override {
         switch (metric) {
         case QPaintDevice::PdmDpiX:
         case QPaintDevice::PdmDpiY:

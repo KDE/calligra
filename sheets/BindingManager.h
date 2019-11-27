@@ -47,7 +47,7 @@ public:
     /**
      * Destructor.
      */
-    virtual ~BindingManager();
+    ~BindingManager() override;
 
     // KoTable::SourceRangeManager interface
     virtual const QAbstractItemModel* createModel(const QString& regionName);

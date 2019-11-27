@@ -31,19 +31,19 @@ class KoFindStrategy : public KoFindStrategyBase
 {
 public:
     explicit KoFindStrategy(QWidget *parent);
-    virtual ~KoFindStrategy();
+    ~KoFindStrategy() override;
 
     /// reimplemented
-    KFindDialog *dialog() const;
+    KFindDialog *dialog() const override;
 
     /// reimplemented
-    virtual void reset();
+    void reset() override;
 
     /// reimplemented
-    virtual void displayFinalDialog();
+    void displayFinalDialog() override;
 
     /// reimplemented
-    virtual bool foundMatch(QTextCursor &cursor, FindDirection *findDirection);
+    bool foundMatch(QTextCursor &cursor, FindDirection *findDirection) override;
 
 private:
     KFindDialog *m_dialog;

@@ -35,7 +35,7 @@ class EngineeringModule : public FunctionModule
 public:
     explicit EngineeringModule(QObject* parent, const QVariantList& args = QVariantList());
 
-    QString descriptionFileName() const;
+    QString descriptionFileName() const override;
 };
 
 } // namespace Sheets

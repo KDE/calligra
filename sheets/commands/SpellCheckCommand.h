@@ -46,11 +46,11 @@ public:
     /**
      * Destructor.
      */
-    ~SpellCheckCommand();
+    ~SpellCheckCommand() override;
 
 protected:
-    virtual QString fetchMoreText();
-    virtual void finishedCurrentFeed();
+    QString fetchMoreText() override;
+    void finishedCurrentFeed() override;
 
 private Q_SLOTS:
     void finishCommand();

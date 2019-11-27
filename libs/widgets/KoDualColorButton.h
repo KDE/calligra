@@ -79,7 +79,7 @@ class KOWIDGETS_EXPORT KoDualColorButton : public QWidget
     /**
      * Destroys the KoDualColorButton.
      */
-    ~KoDualColorButton() Q_DECL_OVERRIDE;
+    ~KoDualColorButton() override;
 
     /**
      * Returns the current foreground color.
@@ -102,7 +102,7 @@ class KOWIDGETS_EXPORT KoDualColorButton : public QWidget
      * Returns the minimum size needed to display the widget and all its
      * controls.
      */
-    virtual QSize sizeHint() const Q_DECL_OVERRIDE;
+    QSize sizeHint() const override;
 
   public Q_SLOTS:
     /**
@@ -150,13 +150,13 @@ class KOWIDGETS_EXPORT KoDualColorButton : public QWidget
      */
     virtual void metrics( QRect &foregroundRect, QRect &backgroundRect );
 
-    virtual void paintEvent( QPaintEvent *event ) Q_DECL_OVERRIDE;
-    virtual void mousePressEvent( QMouseEvent *event ) Q_DECL_OVERRIDE;
-    virtual void mouseMoveEvent( QMouseEvent *event ) Q_DECL_OVERRIDE;
-    virtual void mouseReleaseEvent( QMouseEvent *event ) Q_DECL_OVERRIDE;
-    virtual void dragEnterEvent( QDragEnterEvent *event ) Q_DECL_OVERRIDE;
-    virtual void dropEvent( QDropEvent *event ) Q_DECL_OVERRIDE;
-    virtual void changeEvent(QEvent *event) Q_DECL_OVERRIDE;
+    void paintEvent( QPaintEvent *event ) override;
+    void mousePressEvent( QMouseEvent *event ) override;
+    void mouseMoveEvent( QMouseEvent *event ) override;
+    void mouseReleaseEvent( QMouseEvent *event ) override;
+    void dragEnterEvent( QDragEnterEvent *event ) override;
+    void dropEvent( QDropEvent *event ) override;
+    void changeEvent(QEvent *event) override;
 
   private:
     class Private;

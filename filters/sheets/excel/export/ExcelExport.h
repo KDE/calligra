@@ -50,9 +50,9 @@ class ExcelExport : public KoFilter
 public:
 
     ExcelExport(QObject *parent, const QVariantList&);
-    virtual ~ExcelExport();
+    ~ExcelExport() override;
 
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
 
     QList<Swinder::FormulaToken> compileFormula(const Calligra::Sheets::Tokens& tokens, Calligra::Sheets::Sheet* sheet) const;
 

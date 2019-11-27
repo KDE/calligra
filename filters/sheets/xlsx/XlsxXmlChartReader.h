@@ -42,15 +42,15 @@ public:
     KoChart::Chart* m_chart;
     XlsxChartOdfWriter* m_chartWriter;
     explicit XlsxXmlChartReaderContext(KoStore* _storeout, XlsxChartOdfWriter* _chartWriter);
-    virtual ~XlsxXmlChartReaderContext();
+    ~XlsxXmlChartReaderContext() override;
 };
 
 class XlsxXmlChartReader : public MSOOXML::MsooXmlCommonReader
 {
 public:
     explicit XlsxXmlChartReader(KoOdfWriters *writers);
-    virtual ~XlsxXmlChartReader();
-    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
+    ~XlsxXmlChartReader() override;
+    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0) override;
     void WriteIntoInternalTable(QString &range, QVector< QString > &buffer, KoGenStyle::Type formatType, const QString& formatString = QString());
     QString AlocateAndWriteIntoInternalTable(QVector< QString > &buffer, KoGenStyle::Type formatType);
 protected:

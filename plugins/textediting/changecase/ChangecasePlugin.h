@@ -28,7 +28,7 @@ class ChangecasePlugin : public QObject {
 
 public:
     ChangecasePlugin(QObject * parent,  const QVariantList & );
-    ~ChangecasePlugin() {}
+    ~ChangecasePlugin() override {}
 };
 
 #endif

@@ -47,7 +47,7 @@ public:
     */
     KoTemplatesPane(QWidget* parent, const QString& header,
                     KoTemplateGroup* group, KoTemplate* defaultTemplate);
-    ~KoTemplatesPane();
+    ~KoTemplatesPane() override;
 
     /// Returns true if a template in this group was the last one selected
     bool isSelected();
@@ -57,10 +57,10 @@ Q_SIGNALS:
     void alwaysUseChanged(KoTemplatesPane* sender, const QString& alwaysUse);
 
 protected Q_SLOTS:
-    void selectionChanged(const QModelIndex& index);
+    void selectionChanged(const QModelIndex& index) override;
 
-    void openFile();
-    void openFile(const QModelIndex& index);
+    void openFile() override;
+    void openFile(const QModelIndex& index) override;
     void alwaysUseClicked();
     void changeAlwaysUseTemplate(KoTemplatesPane* sender, const QString& alwaysUse);
 

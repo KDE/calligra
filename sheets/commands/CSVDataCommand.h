@@ -44,7 +44,7 @@ public:
     /**
      * Destructor.
      */
-    virtual ~CSVDataCommand();
+    ~CSVDataCommand() override;
 
     void setValue(const Value& value);
     void setColumnDataTypes(const QList<KoCsvImportDialog::DataType>& dataTypes);
@@ -52,10 +52,10 @@ public:
     void setThousandsSeparator(const QString& separator);
 
 protected:
-    virtual Value newValue(Element* element, int col, int row, bool* parse, Format::Type* fmtType);
-    virtual bool wantChange(Element* element, int col, int row);
-    virtual bool preProcessing();
-    virtual bool postProcessing();
+    Value newValue(Element* element, int col, int row, bool* parse, Format::Type* fmtType) override;
+    bool wantChange(Element* element, int col, int row) override;
+    bool preProcessing() override;
+    bool postProcessing() override;
 
 private:
     QList<KoCsvImportDialog::DataType> m_dataTypes;

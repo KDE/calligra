@@ -26,9 +26,9 @@ class KWDebugDockerFactory : public KoDockFactoryBase
 {
 public:
     KWDebugDockerFactory();
-    virtual QString id() const;
-    virtual QDockWidget* createDockWidget();
-    DockPosition defaultDockPosition() const {
+    QString id() const override;
+    QDockWidget* createDockWidget() override;
+    DockPosition defaultDockPosition() const override {
         return DockMinimized;
     }
 };

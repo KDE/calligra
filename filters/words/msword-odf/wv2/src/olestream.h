@@ -91,25 +91,25 @@ class WV2_EXPORT OLEStreamReader : public OLEStream
 {
 public:
     OLEStreamReader( POLE::Stream *stream, OLEStorage *storage );
-    virtual ~OLEStreamReader();
+    ~OLEStreamReader() override;
 
     /**
      * Is this still a valid stream?
      */
-    virtual bool isValid() const;
+    bool isValid() const override;
 
     /**
      * works like plain fseek
      */
-    virtual bool seek( int offset, WV2SeekType whence = WV2_SEEK_SET );
+    bool seek( int offset, WV2SeekType whence = WV2_SEEK_SET ) override;
     /**
      * works like plain ftell
      */
-    virtual int tell() const;
+    int tell() const override;
     /**
      * The size of the stream
      */
-    virtual size_t size() const;
+    size_t size() const override;
 
     /**
      * Reading from the current position
@@ -160,25 +160,25 @@ class WV2_EXPORT OLEStreamWriter : public OLEStream
 {
 public:
     explicit OLEStreamWriter( OLEStorage* storage );
-    virtual ~OLEStreamWriter();
+    ~OLEStreamWriter() override;
 
     /**
      * Is this still a valid stream?
      */
-    virtual bool isValid() const;
+    bool isValid() const override;
 
     /**
      * works like plain fseek
      */
-    virtual bool seek( int offset, WV2SeekType whence = WV2_SEEK_SET );
+    bool seek( int offset, WV2SeekType whence = WV2_SEEK_SET ) override;
     /**
      * works like plain ftell
      */
-    virtual int tell() const;
+    int tell() const override;
     /**
      * The size of the stream
      */
-    virtual size_t size() const;
+    size_t size() const override;
 
     /**
      * Writing to the current position

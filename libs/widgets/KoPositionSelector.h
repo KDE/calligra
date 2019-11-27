@@ -32,7 +32,7 @@ class KOWIDGETS_EXPORT KoPositionSelector : public QWidget
     Q_OBJECT
 public:
     explicit KoPositionSelector(QWidget *parent);
-    ~KoPositionSelector() Q_DECL_OVERRIDE;
+    ~KoPositionSelector() override;
 
     KoFlake::Position position() const;
     void setPosition(KoFlake::Position position);
@@ -42,7 +42,7 @@ Q_SIGNALS:
 
 protected:
     /// reimplemented
-    virtual void paintEvent (QPaintEvent *event) Q_DECL_OVERRIDE;
+    void paintEvent (QPaintEvent *event) override;
 
 private Q_SLOTS:
     void positionChanged(int position);

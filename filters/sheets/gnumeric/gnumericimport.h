@@ -42,9 +42,9 @@ class GNUMERICFilter : public KoFilter
     Q_OBJECT
 public:
     GNUMERICFilter(QObject* parent, const QVariantList&);
-    virtual ~GNUMERICFilter() {}
+    ~GNUMERICFilter() override {}
 
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
 
     enum borderStyle { Left, Right, Top, Bottom, Diagonal, Revdiagonal};
 private:

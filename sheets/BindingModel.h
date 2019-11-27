@@ -44,15 +44,15 @@ public:
     explicit BindingModel(Binding* binding, QObject *parent = 0);
 
     // QAbstractTableModel interface
-    virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
-    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
+    int columnCount(const QModelIndex& parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
 
     // KoChart::ChartModel interface
-    virtual QHash<QString, QVector<QRect> > cellRegion() const;
-    virtual bool setCellRegion(const QString& regionName);
-    virtual bool isCellRegionValid(const QString& regionName) const;
+    QHash<QString, QVector<QRect> > cellRegion() const override;
+    bool setCellRegion(const QString& regionName) override;
+    bool isCellRegionValid(const QString& regionName) const override;
 
     const Region& region() const;
     void setRegion(const Region& region);

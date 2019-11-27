@@ -31,8 +31,8 @@ class STAGE_EXPORT KPrAnimationStep : public QSequentialAnimationGroup, KPrAnima
 {
 public:
     KPrAnimationStep();
-    virtual ~KPrAnimationStep();
-    virtual void init(KPrAnimationCache *animationCache, int step);
+    ~KPrAnimationStep() override;
+    void init(KPrAnimationCache *animationCache, int step);
     virtual bool saveOdf(KoPASavingContext & paContext) const;
     virtual void deactivate();
 };

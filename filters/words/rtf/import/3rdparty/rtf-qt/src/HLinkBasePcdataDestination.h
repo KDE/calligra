@@ -32,9 +32,9 @@ namespace RtfReader
       public:
 	HLinkBasePcdataDestination( Reader *reader, AbstractRtfOutput *output, const QString &name );
 
-	virtual ~HLinkBasePcdataDestination();
+	~HLinkBasePcdataDestination() override;
 
-	virtual void aboutToEndDestination();
+	void aboutToEndDestination() override;
       };
 }
 

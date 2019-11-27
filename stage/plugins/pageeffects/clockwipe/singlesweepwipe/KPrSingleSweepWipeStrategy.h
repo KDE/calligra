@@ -26,11 +26,11 @@ class KPrSingleSweepWipeStrategy : public KPrPageEffectStrategy
 {
 public:
     KPrSingleSweepWipeStrategy( double rotationX, double rotationY, int startAngle, int rotationAngle, int subType, const char * smilType, const char *smilSubType, bool reverse );
-    virtual ~KPrSingleSweepWipeStrategy();
+    ~KPrSingleSweepWipeStrategy() override;
 
-    virtual void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine );
-    virtual void paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data );
-    virtual void next( const KPrPageEffect::Data &data );
+    void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine ) override;
+    void paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data ) override;
+    void next( const KPrPageEffect::Data &data ) override;
 
 private:
     double m_startAngle;

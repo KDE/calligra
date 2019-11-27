@@ -27,8 +27,8 @@ class KPrBarWipeEffectFactory : public KPrPageEffectFactory
 {
 public:
     KPrBarWipeEffectFactory();
-    virtual ~KPrBarWipeEffectFactory();
-    virtual QString subTypeName(int subType) const;
+    ~KPrBarWipeEffectFactory() override;
+    QString subTypeName(int subType) const override;
 
     enum SubType {
         FromLeft,

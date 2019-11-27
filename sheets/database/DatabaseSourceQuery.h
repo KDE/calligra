@@ -41,7 +41,7 @@ public:
     /**
      * Destructor.
      */
-    virtual ~DatabaseSourceQuery();
+    ~DatabaseSourceQuery() override;
 
 private:
     class Private;

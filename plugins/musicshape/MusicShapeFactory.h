@@ -32,7 +32,7 @@ class MusicShapePlugin : public QObject
 public:
 
     MusicShapePlugin( QObject * parent,  const QVariantList& );
-    ~MusicShapePlugin() {}
+    ~MusicShapePlugin() override {}
 
 };
 
@@ -40,10 +40,10 @@ class MusicShapeFactory : public KoShapeFactoryBase
 {
 public:
     MusicShapeFactory();
-    ~MusicShapeFactory() {}
+    ~MusicShapeFactory() override {}
 
-    virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const;
-    virtual bool supports(const KoXmlElement & e, KoShapeLoadingContext &context) const;
+    KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const override;
+    bool supports(const KoXmlElement & e, KoShapeLoadingContext &context) const override;
 };
 
 #endif

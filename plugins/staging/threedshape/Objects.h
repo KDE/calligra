@@ -37,15 +37,15 @@ class Sphere : public Object3D, public KoShape
 {
 public:
     explicit Sphere(Object3D *parent);
-    virtual ~Sphere();
+    ~Sphere() override;
 
-    virtual void paint(QPainter &painter, const KoViewConverter &converter,
-                       KoShapePaintingContext &context);
-    virtual bool loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &context);
-    virtual void saveOdf(KoShapeSavingContext &context) const;
+    void paint(QPainter &painter, const KoViewConverter &converter,
+                       KoShapePaintingContext &context) override;
+    bool loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &context) override;
+    void saveOdf(KoShapeSavingContext &context) const override;
 
     // Really save the object.  See the explanation in Object3D.h.
-    virtual void saveObjectOdf(KoShapeSavingContext &context) const;
+    void saveObjectOdf(KoShapeSavingContext &context) const override;
 
     // getters
     QVector3D sphereCenter() const { return m_center; }
@@ -60,15 +60,15 @@ class Cube : public Object3D, public KoShape
 {
 public:
     explicit Cube(Object3D *parent);
-    virtual ~Cube();
+    ~Cube() override;
 
-    virtual void paint(QPainter &painter, const KoViewConverter &converter,
-                       KoShapePaintingContext &context);
-    virtual bool loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &context);
-    virtual void saveOdf(KoShapeSavingContext &context) const;
+    void paint(QPainter &painter, const KoViewConverter &converter,
+                       KoShapePaintingContext &context) override;
+    bool loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &context) override;
+    void saveOdf(KoShapeSavingContext &context) const override;
 
     // Really save the object.  See the explanation in Object3D.h.
-    virtual void saveObjectOdf(KoShapeSavingContext &context) const;
+    void saveObjectOdf(KoShapeSavingContext &context) const override;
 
     // getters
     QVector3D minEdge() const { return m_minEdge;   }
@@ -83,18 +83,18 @@ class Extrude : public Object3D, public KoShape
 {
 public:
     explicit Extrude(Object3D *parent);
-    virtual ~Extrude();
+    ~Extrude() override;
 
-    virtual void paint(QPainter &painter, const KoViewConverter &converter,
-                       KoShapePaintingContext &context);
-    virtual bool loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &context);
-    virtual void saveOdf(KoShapeSavingContext &context) const;
+    void paint(QPainter &painter, const KoViewConverter &converter,
+                       KoShapePaintingContext &context) override;
+    bool loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &context) override;
+    void saveOdf(KoShapeSavingContext &context) const override;
 
-    virtual void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context);
-    virtual QString saveStyle(KoGenStyle& style, KoShapeSavingContext& context) const;
+    void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context) override;
+    QString saveStyle(KoGenStyle& style, KoShapeSavingContext& context) const override;
 
     // Really save the object.  See the explanation in Object3D.h.
-    virtual void saveObjectOdf(KoShapeSavingContext &context) const;
+    void saveObjectOdf(KoShapeSavingContext &context) const override;
 
     // getters
     QString path()       const { return m_path; }
@@ -117,19 +117,19 @@ class Rotate : public Object3D, public KoShape
 {
 public:
     explicit Rotate(Object3D *parent);
-    virtual ~Rotate();
+    ~Rotate() override;
 
     // reimplemented from KoShape
-    virtual void paint(QPainter &painter, const KoViewConverter &converter,
-                       KoShapePaintingContext &context);
-    virtual bool loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &context);
-    virtual void saveOdf(KoShapeSavingContext &context) const;
+    void paint(QPainter &painter, const KoViewConverter &converter,
+                       KoShapePaintingContext &context) override;
+    bool loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &context) override;
+    void saveOdf(KoShapeSavingContext &context) const override;
 
-    virtual void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context);
-    virtual QString saveStyle(KoGenStyle& style, KoShapeSavingContext& context) const;
+    void loadStyle(const KoXmlElement &element, KoShapeLoadingContext &context) override;
+    QString saveStyle(KoGenStyle& style, KoShapeSavingContext& context) const override;
 
     // Really save the object.  See the explanation in Object3D.h.
-    virtual void saveObjectOdf(KoShapeSavingContext &context) const;
+    void saveObjectOdf(KoShapeSavingContext &context) const override;
 
     // getters
     QString path()               const { return m_path; }

@@ -37,80 +37,80 @@ namespace RtfReader
       public:
 	explicit TextDocumentRtfOutput( QTextDocument *document );
 
-	virtual ~TextDocumentRtfOutput();
+	~TextDocumentRtfOutput() override;
 
-	virtual void startGroup();
+	void startGroup() override;
 
-	virtual void endGroup();
+	void endGroup() override;
 
-	virtual void appendText( const QByteArray &text );
-	virtual void appendText( const QString &text );
+	void appendText( const QByteArray &text ) override;
+	void appendText( const QString &text ) override;
 
-	virtual void insertPar();
+	void insertPar() override;
 
-	virtual void insertTab();
+	void insertTab() override;
 
-	virtual void insertLeftQuote();
-	virtual void insertRightQuote();
-	virtual void insertLeftDoubleQuote();
-	virtual void insertRightDoubleQuote();
+	void insertLeftQuote() override;
+	void insertRightQuote() override;
+	void insertLeftDoubleQuote() override;
+	void insertRightDoubleQuote() override;
 
-	virtual void insertEnDash();
-	virtual void insertEmDash();
+	void insertEnDash() override;
+	void insertEmDash() override;
 
-	virtual void insertEnSpace();
-	virtual void insertEmSpace();
+	void insertEnSpace() override;
+	void insertEmSpace() override;
 
-	virtual void insertBullet();
+	void insertBullet() override;
 
-	virtual void setFontItalic( const int value );
+	void setFontItalic( const int value ) override;
 
-	virtual void setFontBold( const int value );
+	void setFontBold( const int value ) override;
 
-	virtual void setFontUnderline( const int value );
+	void setFontUnderline( const int value ) override;
 
-	virtual void setFontStrikeout( const bool value );
+	void setFontStrikeout( const bool value ) override;
 
-	virtual void setFontPointSize( const int pointSize );
+	void setFontPointSize( const int pointSize ) override;
 
-	virtual void setForegroundColour( const int colourIndex );
-	virtual void setHighlightColour( const int colourIndex );
-	virtual void setParagraphPatternBackgroundColour( const int colourIndex );
+	void setForegroundColour( const int colourIndex ) override;
+	void setHighlightColour( const int colourIndex ) override;
+	void setParagraphPatternBackgroundColour( const int colourIndex ) override;
 
-	virtual void setFont( const int fontIndex );
+	void setFont( const int fontIndex ) override;
 
-	virtual void setDefaultFont( const int fontIndex );
+	void setDefaultFont( const int fontIndex ) override;
 
-	virtual void setFontSuperscript();
-	virtual void setFontSubscript();
+	void setFontSuperscript() override;
+	void setFontSubscript() override;
 
-	virtual void setTextDirectionLeftToRight();
-	virtual void setTextDirectionRightToLeft();
+	void setTextDirectionLeftToRight() override;
+	void setTextDirectionRightToLeft() override;
 
-	virtual void appendToColourTable( const QColor &colour );
+	void appendToColourTable( const QColor &colour ) override;
 
-	virtual void insertFontTableEntry( FontTableEntry fontTableEntry, quint32 fontTableIndex );
-	virtual void insertStyleSheetTableEntry( quint32 stylesheetTableIndex, StyleSheetTableEntry stylesheetTableEntry );
+	void insertFontTableEntry( FontTableEntry fontTableEntry, quint32 fontTableIndex ) override;
+	void insertStyleSheetTableEntry( quint32 stylesheetTableIndex, StyleSheetTableEntry stylesheetTableEntry ) override;
 
-	virtual void resetParagraphFormat();
-	virtual void resetCharacterProperties();
+	void resetParagraphFormat() override;
+	void resetCharacterProperties() override;
 
-	virtual void setParagraphAlignmentLeft();
-	virtual void setParagraphAlignmentCentred();
-	virtual void setParagraphAlignmentJustified();
-	virtual void setParagraphAlignmentRight();
+	void setParagraphAlignmentLeft() override;
+	void setParagraphAlignmentCentred() override;
+	void setParagraphAlignmentJustified() override;
+	void setParagraphAlignmentRight() override;
 
-	virtual void setFirstLineIndent( const int twips );
-	virtual void setLeftIndent( const int twips );
-	virtual void setRightIndent( const int twips );
+	void setFirstLineIndent( const int twips ) override;
+	void setLeftIndent( const int twips ) override;
+	void setRightIndent( const int twips ) override;
 
-	virtual void createImage( const QByteArray &data, const QTextImageFormat &format );
+	void createImage( const QByteArray &data, const QTextImageFormat &format ) override;
 
-	virtual void setPageHeight( const int pageHeight );
-	virtual void setPageWidth( const int pageWidth );
+	void setPageHeight( const int pageHeight ) override;
+	void setPageWidth( const int pageWidth ) override;
 
-	virtual void setSpaceBefore( const int twips );
-	virtual void setSpaceAfter( const int twips );
+	void setSpaceBefore( const int twips ) override;
+	void setSpaceAfter( const int twips ) override;
 
       protected:
 	// The text cursor on the document being generated

@@ -36,10 +36,10 @@ public:
     explicit NumberElement(BasicElement *parent = 0);
 
     /// @return The element's ElementType
-    ElementType elementType() const;
+    ElementType elementType() const override;
 
     /// Process @p raw and render it to @p path
-    QRectF renderToPath( const QString& raw, QPainterPath& path ) const;
+    QRectF renderToPath( const QString& raw, QPainterPath& path ) const override;
 };
 
 #endif // NUMBERELEMENT_H

@@ -40,7 +40,7 @@ class PIGMENTCMS_EXPORT KoColorSpaceEngine : public KoColorConversionTransformat
 {
 public:
     KoColorSpaceEngine(const QString& id, const QString& name);
-    virtual ~KoColorSpaceEngine();
+    ~KoColorSpaceEngine() override;
     const QString& id() const;
     const QString& name() const;
     virtual void addProfile(const QString &filename) = 0;
@@ -54,7 +54,7 @@ class PIGMENTCMS_EXPORT KoColorSpaceEngineRegistry : public KoGenericRegistry< K
 {
 public:
     KoColorSpaceEngineRegistry();
-    ~KoColorSpaceEngineRegistry();
+    ~KoColorSpaceEngineRegistry() override;
     static KoColorSpaceEngineRegistry* instance();
 };
 

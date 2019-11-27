@@ -35,10 +35,10 @@ public:
         UrlRole
     };
     explicit TemplateVariantsModel(QObject* parent = 0);
-    virtual ~TemplateVariantsModel();
+    ~TemplateVariantsModel() override;
 
-    virtual QVariant data(const QModelIndex& index, int role) const;
-    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+    QVariant data(const QModelIndex& index, int role) const override;
+    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 
     void addVariant(QString name, QString color, QString swatch, QString picture, QString file);
     QModelIndex firstIndex();

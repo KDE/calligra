@@ -33,7 +33,7 @@ class DesktopViewProxy : public QObject
     Q_OBJECT
 public:
     explicit DesktopViewProxy(MainWindow* mainWindow, KoMainWindow* parent = 0);
-    virtual ~DesktopViewProxy();
+    ~DesktopViewProxy() override;
 
 public Q_SLOTS:
     void fileNew();

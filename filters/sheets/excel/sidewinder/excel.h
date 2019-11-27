@@ -237,27 +237,27 @@ public:
 
     static const unsigned int id;
 
-    unsigned int rtti() const {
+    unsigned int rtti() const override {
         return this->id;
     }
 
     explicit ExternBookRecord(Workbook *book);
 
-    ~ExternBookRecord();
+    ~ExternBookRecord() override;
 
     unsigned sheetCount() const;
 
     QString bookName() const;
 
-    virtual void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions);
+    void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions) override;
 
 
 
-    virtual const char* name() const {
+    const char* name() const override {
         return "EXTERNBOOK";
     }
 
-    virtual void dump(std::ostream& out) const;
+    void dump(std::ostream& out) const override;
 
 private:
     // no copy or assign
@@ -274,13 +274,13 @@ public:
 
     static const unsigned int id;
 
-    unsigned int rtti() const {
+    unsigned int rtti() const override {
         return this->id;
     }
 
     explicit ExternNameRecord(Workbook *book);
 
-    ~ExternNameRecord();
+    ~ExternNameRecord() override;
 
     // one-based sheet index
     // if 0 means AddIn function
@@ -292,15 +292,15 @@ public:
 
     void setExternName(const QString& name);
 
-    virtual void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions);
+    void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions) override;
 
 
 
-    virtual const char* name() const {
+    const char* name() const override {
         return "EXTERNNAME";
     }
 
-    virtual void dump(std::ostream& out) const;
+    void dump(std::ostream& out) const override;
 
 private:
     // no copy or assign
@@ -323,7 +323,7 @@ public:
 
     static const unsigned int id;
 
-    unsigned int rtti() const {
+    unsigned int rtti() const override {
         return this->id;
     }
 
@@ -335,7 +335,7 @@ public:
     /**
      * Destroy the record.
      */
-    ~FormulaRecord();
+    ~FormulaRecord() override;
 
     /**
      * Gets the result of the formula.
@@ -355,14 +355,14 @@ public:
      */
     bool isShared() const;
 
-    virtual void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions);
-    virtual void writeData(XlsRecordOutputStream &out) const;
+    void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions) override;
+    void writeData(XlsRecordOutputStream &out) const override;
 
-    virtual const char* name() const {
+    const char* name() const override {
         return "FORMULA";
     }
 
-    virtual void dump(std::ostream& out) const;
+    void dump(std::ostream& out) const override;
 
 private:
     // no copy or assign
@@ -384,7 +384,7 @@ class SharedFormulaRecord : public Record
 public:
     static const unsigned int id;
 
-    unsigned int rtti() const {
+    unsigned int rtti() const override {
         return this->id;
     }
 
@@ -396,17 +396,17 @@ public:
     /**
      * Destroy the record.
      */
-    ~SharedFormulaRecord();
+    ~SharedFormulaRecord() override;
 
     FormulaTokens tokens() const;
 
-    virtual void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions);
+    void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions) override;
 
-    virtual const char* name() const {
+    const char* name() const override {
         return "SHAREDFMLA";
     }
 
-    virtual void dump(std::ostream& out) const;
+    void dump(std::ostream& out) const override;
 
 private:
     // no copy or assign
@@ -430,7 +430,7 @@ public:
 
     static const unsigned int id;
 
-    unsigned int rtti() const {
+    unsigned int rtti() const override {
         return this->id;
     }
 
@@ -442,9 +442,9 @@ public:
     /**
      * Destroys the record.
      */
-    virtual ~MulRKRecord();
+    ~MulRKRecord() override;
 
-    virtual void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions);
+    void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions) override;
 
     /**
      Returns XF index of ith column.
@@ -476,11 +476,11 @@ public:
 
     unsigned encodedRK(unsigned i) const;
 
-    virtual const char* name() const {
+    const char* name() const override {
         return "MULRK";
     }
 
-    virtual void dump(std::ostream& out) const;
+    void dump(std::ostream& out) const override;
 
 private:
     // no copy or assign
@@ -492,10 +492,10 @@ private:
 
     // from CellInfo, we don't need it
     // mark as private so nobody can call them
-    virtual unsigned column() const {
+    unsigned column() const override {
         return CellInfo::column();
     }
-    virtual unsigned xfIndex() const {
+    unsigned xfIndex() const override {
         return CellInfo::xfIndex();
     }
 };
@@ -508,13 +508,13 @@ public:
 
     static const unsigned int id;
 
-    unsigned int rtti() const {
+    unsigned int rtti() const override {
         return this->id;
     }
 
     explicit NameRecord(Workbook *book);
 
-    ~NameRecord();
+    ~NameRecord() override;
 
     QString definedName() const;
 
@@ -524,13 +524,13 @@ public:
 
     bool isBuiltin() const;
 
-    virtual void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions);
+    void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions) override;
 
-    virtual const char* name() const {
+    const char* name() const override {
         return "NAME";
     }
 
-    virtual void dump(std::ostream& out) const;
+    void dump(std::ostream& out) const override;
 
 private:
     // no copy or assign
@@ -552,7 +552,7 @@ public:
 
     static const unsigned int id;
 
-    unsigned int rtti() const {
+    unsigned int rtti() const override {
         return this->id;
     }
 
@@ -564,9 +564,9 @@ public:
     /**
      * Destroys the record.
      */
-    virtual ~RKRecord();
+    ~RKRecord() override;
 
-    virtual void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions);
+    void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions) override;
 
     /**
      * Returns true if the record holds an integer value.
@@ -614,11 +614,11 @@ public:
 
     unsigned encodedRK() const;
 
-    virtual const char* name() const {
+    const char* name() const override {
         return "RK";
     }
 
-    virtual void dump(std::ostream& out) const;
+    void dump(std::ostream& out) const override;
 
 private:
     // no copy or assign
@@ -645,7 +645,7 @@ public:
 
     static const unsigned int id;
 
-    unsigned int rtti() const {
+    unsigned int rtti() const override {
         return this->id;
     }
 
@@ -657,7 +657,7 @@ public:
     /**
      * Destroys the record.
      */
-    virtual ~RStringRecord();
+    ~RStringRecord() override;
 
     /**
      * Returns the label string.
@@ -673,13 +673,13 @@ public:
      */
     void setLabel(const QString& l);
 
-    virtual void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions);
+    void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions) override;
 
-    virtual const char* name() const {
+    const char* name() const override {
         return "RSTRING";
     }
 
-    virtual void dump(std::ostream& out) const;
+    void dump(std::ostream& out) const override;
 
 private:
     // no copy or assign
@@ -704,7 +704,7 @@ public:
 
     static const unsigned int id;
 
-    unsigned int rtti() const {
+    unsigned int rtti() const override {
         return this->id;
     }
 
@@ -716,10 +716,10 @@ public:
     /**
      * Destroys the record.
      */
-    virtual ~SSTRecord();
+    ~SSTRecord() override;
 
-    virtual void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions);
-    virtual void writeData(XlsRecordOutputStream& out) const;
+    void setData(unsigned size, const unsigned char* data, const unsigned int* continuePositions) override;
+    void writeData(XlsRecordOutputStream& out) const override;
 
     /**
       Returns the number of available string in this string table.
@@ -746,11 +746,11 @@ public:
 
     unsigned addString(const QString& string);
 
-    virtual const char* name() const {
+    const char* name() const override {
         return "SST";
     }
 
-    virtual void dump(std::ostream& out) const;
+    void dump(std::ostream& out) const override;
 
 private:
     // no copy or assign
@@ -767,15 +767,15 @@ public:
     Object *m_object;
     static const unsigned id;
     explicit ObjRecord(Workbook *book);
-    virtual ~ObjRecord();
-    virtual unsigned rtti() const {
+    ~ObjRecord() override;
+    unsigned rtti() const override {
         return this->id;
     }
-    virtual const char* name() const {
+    const char* name() const override {
         return "Obj";
     }
-    virtual void dump(std::ostream&) const;
-    virtual void setData(unsigned size, const unsigned char* data, const unsigned* continuePositions);
+    void dump(std::ostream&) const override;
+    void setData(unsigned size, const unsigned char* data, const unsigned* continuePositions) override;
 };
 
 class TxORecord : public Record
@@ -800,16 +800,16 @@ public:
     explicit TxORecord(Workbook *book=0);
     // allowing copies for the hack for text support in shapes
     TxORecord(const TxORecord&);
-    virtual ~TxORecord();
+    ~TxORecord() override;
     TxORecord& operator=(const TxORecord&);
-    virtual unsigned rtti() const {
+    unsigned rtti() const override {
         return this->id;
     }
-    virtual const char* name() const {
+    const char* name() const override {
         return "TxO";
     }
-    virtual void dump(std::ostream&) const;
-    virtual void setData(unsigned size, const unsigned char* data, const unsigned* continuePositions);
+    void dump(std::ostream&) const override;
+    void setData(unsigned size, const unsigned char* data, const unsigned* continuePositions) override;
     const QString &text() const;
     TxORecord::HorizontalAlignment hAlign() const;
     TxORecord::VerticalAlignment vAlign() const;
@@ -824,16 +824,16 @@ class MsoDrawingRecord : public Record
 public:
     static const unsigned id;
     explicit MsoDrawingRecord(Workbook *book);
-    virtual ~MsoDrawingRecord();
+    ~MsoDrawingRecord() override;
 
-    virtual unsigned rtti() const {
+    unsigned rtti() const override {
         return this->id;
     }
-    virtual const char* name() const {
+    const char* name() const override {
         return "MsoDrawing";
     }
-    virtual void dump(std::ostream&) const;
-    virtual void setData(unsigned size, const unsigned char* data, const unsigned* continuePositions);
+    void dump(std::ostream&) const override;
+    void setData(unsigned size, const unsigned char* data, const unsigned* continuePositions) override;
 
     const MSO::OfficeArtDgContainer& dgContainer() const;
 private:
@@ -851,15 +851,15 @@ class MsoDrawingGroupRecord : public Record
 public:
     static const unsigned id;
     explicit MsoDrawingGroupRecord(Workbook *book);
-    virtual ~MsoDrawingGroupRecord();
-    virtual unsigned rtti() const {
+    ~MsoDrawingGroupRecord() override;
+    unsigned rtti() const override {
         return this->id;
     }
-    virtual const char* name() const {
+    const char* name() const override {
         return "MsoDrawingGroup";
     }
-    virtual void dump(std::ostream&) const;
-    virtual void setData(unsigned size, const unsigned char* data, const unsigned* continuePositions);
+    void dump(std::ostream&) const override;
+    void setData(unsigned size, const unsigned char* data, const unsigned* continuePositions) override;
 
     const QMap<QByteArray,QString> pictureNames() const;
     const MSO::OfficeArtDggContainer& dggContainer() const;
@@ -899,10 +899,10 @@ class BkHimRecord : public Record
 public:
     static const unsigned id;
 
-    virtual unsigned rtti() const { return this->id; }
+    unsigned rtti() const override { return this->id; }
 
     explicit BkHimRecord(Workbook *book);
-    virtual ~BkHimRecord();
+    ~BkHimRecord() override;
 
     BkHimRecord( const BkHimRecord& record );
     BkHimRecord& operator=( const BkHimRecord& record );
@@ -923,11 +923,11 @@ public:
     unsigned imageSize() const;
     void setImageSize( unsigned imageSize );
 
-    virtual void setData( unsigned size, const unsigned char* data, const unsigned* continuePositions );
+    void setData( unsigned size, const unsigned char* data, const unsigned* continuePositions ) override;
 
-    virtual const char* name() const { return "BkHim"; }
+    const char* name() const override { return "BkHim"; }
 
-    virtual void dump( std::ostream& out ) const;
+    void dump( std::ostream& out ) const override;
 
 private:
     class Private;

@@ -58,7 +58,7 @@ class SheetAccessModel : public QStandardItemModel
 
 public:
     explicit SheetAccessModel(Map *map);
-    virtual ~SheetAccessModel();
+    ~SheetAccessModel() override;
 
 public Q_SLOTS:
     void slotSheetAdded(Sheet *sheet);

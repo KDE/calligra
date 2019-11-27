@@ -33,15 +33,15 @@ class StaffElementPreviewWidget : public QWidget
     Q_OBJECT
 public:
     explicit StaffElementPreviewWidget(QWidget* parent = 0);
-    virtual ~StaffElementPreviewWidget();
+    ~StaffElementPreviewWidget() override;
     
-    virtual QSize sizeHint() const;
+    QSize sizeHint() const override;
     
     void setMusicStyle(MusicStyle* style);
     void setStaffElement(MusicCore::StaffElement* se);
     MusicCore::Staff* staff();
 protected:
-    virtual void paintEvent(QPaintEvent * event);
+    void paintEvent(QPaintEvent * event) override;
 private:
     MusicStyle* m_style;
     MusicRenderer* m_renderer;

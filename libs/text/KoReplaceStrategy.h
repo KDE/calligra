@@ -32,19 +32,19 @@ class KoReplaceStrategy : public KoFindStrategyBase
 {
 public:
     explicit KoReplaceStrategy(QWidget *parent);
-    virtual ~KoReplaceStrategy();
+    ~KoReplaceStrategy() override;
 
     /// reimplmented
-    KFindDialog *dialog() const;
+    KFindDialog *dialog() const override;
 
     /// reimplmented
-    virtual void reset();
+    void reset() override;
 
     /// reimplmented
-    virtual void displayFinalDialog();
+    void displayFinalDialog() override;
 
     /// reimplmented
-    virtual bool foundMatch(QTextCursor &cursor, FindDirection *findDirection);
+    bool foundMatch(QTextCursor &cursor, FindDirection *findDirection) override;
 
 private:
     KReplaceDialog *m_dialog;

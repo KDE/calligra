@@ -34,10 +34,10 @@ class KOWIDGETS_EXPORT KoDockWidgetTitleBar : public QWidget
     Q_OBJECT
 public:
     explicit KoDockWidgetTitleBar(QDockWidget *dockWidget);
-    ~KoDockWidgetTitleBar() Q_DECL_OVERRIDE;
+    ~KoDockWidgetTitleBar() override;
 
-    QSize minimumSizeHint() const Q_DECL_OVERRIDE; ///< reimplemented from QWidget
-    QSize sizeHint() const Q_DECL_OVERRIDE;  ///< reimplemented from QWidget
+    QSize minimumSizeHint() const override; ///< reimplemented from QWidget
+    QSize sizeHint() const override;  ///< reimplemented from QWidget
 
     enum TextVisibilityMode {TextCanBeInvisible, FullTextAlwaysVisible};
     /// Define whether the minimal width should ensure that the full text is visible.
@@ -52,8 +52,8 @@ public Q_SLOTS:
     void setCollapsable(bool collapsable);
 
 protected:
-    void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE; ///< reimplemented from QWidget
-    void resizeEvent(QResizeEvent* event) Q_DECL_OVERRIDE; ///< reimplemented from QWidget
+    void paintEvent(QPaintEvent* event) override; ///< reimplemented from QWidget
+    void resizeEvent(QResizeEvent* event) override; ///< reimplemented from QWidget
 private:
     Q_PRIVATE_SLOT(d, void toggleFloating())
     Q_PRIVATE_SLOT(d, void toggleCollapsed())

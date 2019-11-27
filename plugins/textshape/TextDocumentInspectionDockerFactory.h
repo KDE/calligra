@@ -28,10 +28,10 @@ class TextDocumentInspectionDockerFactory : public KoDockFactoryBase
 public:
     TextDocumentInspectionDockerFactory();
 
-    virtual QString id() const;
-    virtual KoDockFactoryBase::DockPosition defaultDockPosition() const;
-    virtual QDockWidget* createDockWidget();
-    virtual bool isCollapsable() const;
+    QString id() const override;
+    KoDockFactoryBase::DockPosition defaultDockPosition() const override;
+    QDockWidget* createDockWidget() override;
+    bool isCollapsable() const override;
 };
 
 #endif // TEXTDOCUMENTINSPECTIONDOCKERFACTORY_H

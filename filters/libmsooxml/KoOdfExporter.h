@@ -54,9 +54,9 @@ class KOMSOOXML_EXPORT KoOdfExporter : public KoFilter
 {
     Q_OBJECT
 public:
-    virtual ~KoOdfExporter();
+    ~KoOdfExporter() override;
 
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
 
 protected:
     /**

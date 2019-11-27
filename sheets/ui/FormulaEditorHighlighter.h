@@ -47,13 +47,13 @@ public:
      * @param selection The Selection object
      */
     FormulaEditorHighlighter(QTextEdit* textEdit, Selection* selection);
-    virtual ~FormulaEditorHighlighter();
+    ~FormulaEditorHighlighter() override;
 
 
     /**
      * Called automatically by KTextEditor to highlight text when modified.
      */
-    virtual void highlightBlock(const QString& text);
+    void highlightBlock(const QString& text) override;
     /**
      *
      */

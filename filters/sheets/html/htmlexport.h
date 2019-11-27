@@ -42,9 +42,9 @@ class HTMLExport : public KoFilter
     Q_OBJECT
 public:
     HTMLExport(QObject* parent, const QVariantList&);
-    virtual ~HTMLExport();
+    ~HTMLExport() override;
 
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
 private:
     /** Writes the top of the page in HTML to @par str */
     void openPage(Calligra::Sheets::Sheet *sheet, KoDocument *document, QString &str);

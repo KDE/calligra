@@ -29,7 +29,7 @@ class FlowFactoryInit : public FlowFactory
 
 public:
     explicit FlowFactoryInit() : FlowFactory() {}
-    virtual ~FlowFactoryInit() {}
+    ~FlowFactoryInit() override {}
 };
 
 #endif

@@ -32,7 +32,7 @@ class SnapGuideConfigWidget : public QWidget
     Q_OBJECT
 public:
     explicit SnapGuideConfigWidget(KoSnapGuide *snapGuide, QWidget *parent = 0);
-    ~SnapGuideConfigWidget();
+    ~SnapGuideConfigWidget() override;
 
 private Q_SLOTS:
     void snappingEnabled(bool isEnabled);
@@ -41,7 +41,7 @@ private Q_SLOTS:
     void updateControls();
 
 protected:
-    virtual void showEvent(QShowEvent *event);
+    void showEvent(QShowEvent *event) override;
 
 private:
 

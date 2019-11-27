@@ -40,20 +40,20 @@ public:
      * @param pageManager the page manager
      */
     explicit KWCopyShape(KoShape *original, const KWPageManager *pageManager = 0);
-    ~KWCopyShape();
+    ~KWCopyShape() override;
 
     /// reimplemented from KoShape
-    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
+    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
     /// reimplemented from KoShape
-    QPainterPath outline() const;
+    QPainterPath outline() const override;
     /// reimplemented from KoShape
-    QRectF outlineRect() const;
+    QRectF outlineRect() const override;
     /// reimplemented from KoShape
-    QRectF boundingRect() const;
+    QRectF boundingRect() const override;
     /// reimplemented
-    virtual void saveOdf(KoShapeSavingContext &context) const;
+    void saveOdf(KoShapeSavingContext &context) const override;
     /// reimplemented
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
     KoShape *original() const;
 

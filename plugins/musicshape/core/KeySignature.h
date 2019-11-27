@@ -45,7 +45,7 @@ public:
     /**
      * Destructor.
      */
-    virtual ~KeySignature();
+    ~KeySignature() override;
 
     /**
      * Returns the number of accidentals in this key signature. Returns a positive value for sharps or a negative value
@@ -63,7 +63,7 @@ public:
     /**
      * Returns the priority of this staff element with regard to order in which it should be sorted.
      */    
-    virtual int priority() const;
+    int priority() const override;
     
     int cancel() const;
     int cancel(int pitch) const;

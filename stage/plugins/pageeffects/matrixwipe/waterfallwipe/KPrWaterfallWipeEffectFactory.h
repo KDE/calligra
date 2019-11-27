@@ -26,8 +26,8 @@ class KPrWaterfallWipeEffectFactory : public KPrPageEffectFactory
 {
 public:
     KPrWaterfallWipeEffectFactory();
-    virtual ~KPrWaterfallWipeEffectFactory();
-    virtual QString subTypeName(int subType) const;
+    ~KPrWaterfallWipeEffectFactory() override;
+    QString subTypeName(int subType) const override;
 
     enum SubType {
         TopLeftVertical,

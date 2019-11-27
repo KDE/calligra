@@ -44,7 +44,7 @@ class KPrEditAnimationsWidget : public QWidget
     Q_OBJECT
 public:
     explicit KPrEditAnimationsWidget(KPrShapeAnimationDocker *docker, QWidget *parent = 0);
-    virtual ~KPrEditAnimationsWidget();
+    ~KPrEditAnimationsWidget() override;
 
     void setView(KoPAViewBase *view);
 

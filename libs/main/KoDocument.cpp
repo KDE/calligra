@@ -105,26 +105,26 @@ public:
     {
     }
 
-    ~DocumentProgressProxy() {
+    ~DocumentProgressProxy() override {
         // signal that the job is done
         setValue(-1);
     }
 
-    int maximum() const {
+    int maximum() const override {
         return 100;
     }
 
-    void setValue(int value) {
+    void setValue(int value) override {
         if (m_mainWindow) {
             m_mainWindow->slotProgress(value);
         }
     }
 
-    void setRange(int /*minimum*/, int /*maximum*/) {
+    void setRange(int /*minimum*/, int /*maximum*/) override {
 
     }
 
-    void setFormat(const QString &/*format*/) {
+    void setFormat(const QString &/*format*/) override {
 
     }
 };

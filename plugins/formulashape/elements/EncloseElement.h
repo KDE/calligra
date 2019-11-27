@@ -37,16 +37,16 @@ public:
      * @param painter The QPainter to paint the element to
      * @param am AttributeManager containing style info
      */
-    virtual void paint( QPainter& painter, AttributeManager* am );
+    void paint( QPainter& painter, AttributeManager* am ) override;
 
     /**
      * Calculate the size of the element and the positions of its children
      * @param am The AttributeManager providing information about attributes values
      */
-    void layout( const AttributeManager* am );
+    void layout( const AttributeManager* am ) override;
 
     /// @return The element's ElementType
-    ElementType elementType() const;   
+    ElementType elementType() const override;   
 
 private:
     /// The QPainterPath holding what the enclose element has to paint

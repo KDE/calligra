@@ -32,11 +32,11 @@ namespace RtfReader
       public:
 	DocumentDestination( Reader *reader, AbstractRtfOutput *output, const QString &name );
 
-	virtual ~DocumentDestination();
+	~DocumentDestination() override;
 
-	virtual void handleControlWord( const QByteArray &controlWord, bool hasValue, const int value );
-	virtual void handlePlainText( const QByteArray &plainText );
-	virtual void aboutToEndDestination();
+	void handleControlWord( const QByteArray &controlWord, bool hasValue, const int value ) override;
+	void handlePlainText( const QByteArray &plainText ) override;
+	void aboutToEndDestination() override;
 
       protected:
 	int m_charactersToSkip;

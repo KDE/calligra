@@ -26,8 +26,8 @@ class KPrFanWipeEffectFactory : public KPrPageEffectFactory
 {
 public:
     KPrFanWipeEffectFactory();
-    virtual ~KPrFanWipeEffectFactory();
-    virtual QString subTypeName(int subType) const;
+    ~KPrFanWipeEffectFactory() override;
+    QString subTypeName(int subType) const override;
 
     enum SubType {
         CenterRight,

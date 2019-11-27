@@ -26,8 +26,8 @@ class KPrArrowHeadWipeEffectFactory : public KPrPageEffectFactory
 {
 public:
     KPrArrowHeadWipeEffectFactory();
-    virtual ~KPrArrowHeadWipeEffectFactory();
-    virtual QString subTypeName(int subType) const;
+    ~KPrArrowHeadWipeEffectFactory() override;
+    QString subTypeName(int subType) const override;
 
     enum SubType {
         Up,

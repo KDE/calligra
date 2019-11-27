@@ -27,15 +27,15 @@ class KPrSpaceRotationFromTopStrategy : public KPrPageEffectStrategy
 {
 public:
     KPrSpaceRotationFromTopStrategy();
-    virtual ~KPrSpaceRotationFromTopStrategy();
+    ~KPrSpaceRotationFromTopStrategy() override;
 
-    virtual void setup(const KPrPageEffect::Data &data, QTimeLine &timeLine);
+    void setup(const KPrPageEffect::Data &data, QTimeLine &timeLine) override;
 
-    virtual void paintStep(QPainter &p, int currPos, const KPrPageEffect::Data &data);
+    void paintStep(QPainter &p, int currPos, const KPrPageEffect::Data &data) override;
 
-    virtual void next(const KPrPageEffect::Data &data);
+    void next(const KPrPageEffect::Data &data) override;
 
-    virtual void finish(const KPrPageEffect::Data &data);
+    void finish(const KPrPageEffect::Data &data) override;
 
 private:
     QTransform m_transform;

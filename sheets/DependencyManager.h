@@ -48,7 +48,7 @@ public:
     /** constructor */
     explicit DependencyManager(const Map *map);
     /** destructor */
-    ~DependencyManager();
+    ~DependencyManager() override;
 
     /** clear all data */
     void reset();

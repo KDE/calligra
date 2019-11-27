@@ -41,9 +41,9 @@ class QpImport : public KoFilter
 
 public:
     QpImport(QObject* parent, const QVariantList&);
-    virtual ~QpImport() {}
+    ~QpImport() override {}
 
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
     void InitTableName(int pIdx, QString& pResult);
 
 protected:

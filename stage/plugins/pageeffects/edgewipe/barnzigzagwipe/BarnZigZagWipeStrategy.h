@@ -27,14 +27,14 @@ class BarnZigZagWipeStrategy : public KPrPageEffectStrategy
 {
 public:
     BarnZigZagWipeStrategy( int subtype, const char *smilSubType, bool reverse );
-    virtual ~BarnZigZagWipeStrategy();
+    ~BarnZigZagWipeStrategy() override;
 
     /// reimplemented from KPrPageEffectStrategy
-    virtual void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine );
+    void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine ) override;
     /// reimplemented from KPrPageEffectStrategy
-    virtual void paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data );
+    void paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data ) override;
     /// reimplemented from KPrPageEffectStrategy
-    virtual void next( const KPrPageEffect::Data &data );
+    void next( const KPrPageEffect::Data &data ) override;
 
 private:
     /// calculates clip path for given step

@@ -46,12 +46,12 @@ class MapViewModel : public MapModel
     Q_OBJECT
 public:
     MapViewModel(Map *map, KoCanvasBase *canvas, KXMLGUIClient *xmlGuiClient);
-    virtual ~MapViewModel();
+    ~MapViewModel() override;
 
     // QAbstractItemModel interface
-    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
-    virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
 
     Sheet* activeSheet() const;
 
@@ -65,12 +65,12 @@ private Q_SLOTS:
     /**
      * Adds \p sheet to the goto sheet actions.
      */
-    virtual void addSheet(Sheet *sheet);
+    void addSheet(Sheet *sheet) override;
 
     /**
      * Removes \p sheet from the goto sheet actions.
      */
-    virtual void removeSheet(Sheet *sheet);
+    void removeSheet(Sheet *sheet) override;
 
     /**
      * Adds the \p shape, if \p sheet is active.

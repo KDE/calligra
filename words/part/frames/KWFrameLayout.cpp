@@ -55,10 +55,10 @@ public:
         setSelectable(false);
         setTextRunAroundSide(KoShape::RunThrough, KoShape::Background);
     }
-    virtual ~KWPageBackground()
+    ~KWPageBackground() override
     {
     }
-    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
+    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext) override
     {
         applyConversion(painter, converter);
 
@@ -80,11 +80,11 @@ public:
             }
         }
     }
-    virtual bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &)
+    bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &) override
     {
         return true;
     }
-    virtual void saveOdf(KoShapeSavingContext &) const
+    void saveOdf(KoShapeSavingContext &) const override
     {
     }
 

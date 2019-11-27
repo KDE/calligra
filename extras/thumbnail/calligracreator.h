@@ -35,9 +35,9 @@ class CalligraCreator : public QObject, public ThumbCreator
     Q_OBJECT
 public:
     CalligraCreator();
-    virtual ~CalligraCreator();
-    virtual bool create(const QString &path, int width, int height, QImage &image);
-    virtual Flags flags() const;
+    ~CalligraCreator() override;
+    bool create(const QString &path, int width, int height, QImage &image) override;
+    Flags flags() const override;
 
 private Q_SLOTS:
     void onLoadingCompleted();

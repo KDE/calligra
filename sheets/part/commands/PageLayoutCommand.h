@@ -40,8 +40,8 @@ class PageLayoutCommand : public KUndo2Command
 public:
     explicit PageLayoutCommand(Sheet* sheet, const PrintSettings& settings, KUndo2Command* parent = 0);
 
-    virtual void redo();
-    virtual void undo();
+    void redo() override;
+    void undo() override;
 
 private:
     Sheet* m_sheet;

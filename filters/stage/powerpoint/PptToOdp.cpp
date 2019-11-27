@@ -267,29 +267,29 @@ getText(const TextContainer* tc)
 class PptToOdp::DrawClient : public ODrawToOdf::Client
 {
 private:
-    QRectF getRect(const MSO::OfficeArtClientAnchor&);
-    QRectF getReserveRect(void);
-    QString getPicturePath(const quint32 pib);
-    bool onlyClientData(const MSO::OfficeArtClientData& o);
+    QRectF getRect(const MSO::OfficeArtClientAnchor&) override;
+    QRectF getReserveRect(void) override;
+    QString getPicturePath(const quint32 pib) override;
+    bool onlyClientData(const MSO::OfficeArtClientData& o) override;
     void processClientData(const MSO::OfficeArtClientTextBox* ct,
                            const MSO::OfficeArtClientData& cd,
-                           Writer& out);
+                           Writer& out) override;
     void processClientTextBox(const MSO::OfficeArtClientTextBox& ct,
                               const MSO::OfficeArtClientData* cd,
-                              Writer& out);
-    bool processRectangleAsTextBox(const MSO::OfficeArtClientData& cd);
+                              Writer& out) override;
+    bool processRectangleAsTextBox(const MSO::OfficeArtClientData& cd) override;
     KoGenStyle createGraphicStyle(
             const MSO::OfficeArtClientTextBox* ct,
-            const MSO::OfficeArtClientData* cd, const DrawStyle& ds, Writer& out);
+            const MSO::OfficeArtClientData* cd, const DrawStyle& ds, Writer& out) override;
     void addTextStyles(const MSO::OfficeArtClientTextBox* clientTextbox,
                        const MSO::OfficeArtClientData* clientData,
-                       KoGenStyle& style, Writer& out);
+                       KoGenStyle& style, Writer& out) override;
 
-    const MSO::OfficeArtDggContainer* getOfficeArtDggContainer();
-    const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid);
+    const MSO::OfficeArtDggContainer* getOfficeArtDggContainer() override;
+    const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid) override;
 
-    QColor toQColor(const MSO::OfficeArtCOLORREF& c);
-    QString formatPos(qreal v);
+    QColor toQColor(const MSO::OfficeArtCOLORREF& c) override;
+    QString formatPos(qreal v) override;
 
    /**
     * Check if a placeholder is valid and allowed by the slide layout.

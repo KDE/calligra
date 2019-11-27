@@ -45,7 +45,7 @@ public:
 
 public Q_SLOTS:
     /// reimplemented
-    virtual void setActivePage( int pageIndex );
+    void setActivePage( int pageIndex ) override;
 
 private:
     KoPACanvas *m_canvas;

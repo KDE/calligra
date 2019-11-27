@@ -35,17 +35,17 @@ class PluginShape : public KoShape, public KoFrameShape
 {
 public:
     PluginShape();
-    virtual ~PluginShape();
+    ~PluginShape() override;
 
     // reimplemented
-    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
+    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
     // reimplemented
-    virtual void saveOdf(KoShapeSavingContext &context) const;
+    void saveOdf(KoShapeSavingContext &context) const override;
     // reimplemented
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
 protected:
-    virtual bool loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context);
+    bool loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
 private:
     //Note:- We assume that all the name of draw:param are unique.

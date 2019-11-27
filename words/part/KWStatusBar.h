@@ -50,7 +50,7 @@ public:
     /**
     * Destructor.
     */
-    virtual ~KWStatusBar();
+    ~KWStatusBar() override;
 
     static void addViewControls(QStatusBar *statusBar, KWView *view);
 

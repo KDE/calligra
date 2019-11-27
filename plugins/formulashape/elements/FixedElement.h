@@ -39,26 +39,26 @@ public:
     explicit FixedElement(BasicElement *parent = 0);
 
     /// The standard destructor
-    virtual ~FixedElement();
+    ~FixedElement() override;
 
-    virtual bool acceptCursor ( const FormulaCursor& cursor );
+    bool acceptCursor ( const FormulaCursor& cursor ) override;
 
-    BasicElement* elementBefore(int position) const;
+    BasicElement* elementBefore(int position) const override;
 
-    BasicElement* elementAfter(int position) const;
+    BasicElement* elementAfter(int position) const override;
 
     virtual BasicElement* elementNext(int position) const;
 
-    virtual QLineF cursorLine ( int position ) const;
+    QLineF cursorLine ( int position ) const override;
 
     bool loadElement(KoXmlElement& tmp, RowElement** child);
 
-    virtual QPainterPath selectionRegion ( const int pos1, const int pos2 ) const;
+    QPainterPath selectionRegion ( const int pos1, const int pos2 ) const override;
 
     /// inherited from BasicElement
-    virtual int positionOfChild(BasicElement* child) const;
+    int positionOfChild(BasicElement* child) const override;
 
-    virtual int endPosition() const;
+    int endPosition() const override;
 
 protected:
     bool moveHorSituation(FormulaCursor& newcursor, FormulaCursor& oldcursor,int pos1, int pos2);

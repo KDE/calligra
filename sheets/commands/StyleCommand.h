@@ -41,7 +41,7 @@ class StyleCommand : public AbstractRegionCommand
 {
 public:
     explicit StyleCommand(KUndo2Command *parent = 0);
-    virtual ~StyleCommand();
+    ~StyleCommand() override;
 
     // SetSelectionFontWorker
     // SetSelectionSizeWorker
@@ -168,11 +168,11 @@ public:
     }
 
 protected:
-    virtual bool process(Element*);
+    bool process(Element*) override;
 
-    virtual bool preProcessing();
-    virtual bool mainProcessing();
-    virtual bool postProcessing();
+    bool preProcessing() override;
+    bool mainProcessing() override;
+    bool postProcessing() override;
 
 private:
     QPen m_horizontalPen;

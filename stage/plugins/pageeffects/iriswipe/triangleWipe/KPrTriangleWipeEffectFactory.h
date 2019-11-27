@@ -26,8 +26,8 @@ class KPrTriangleWipeEffectFactory : public KPrPageEffectFactory
 {
 public:
     KPrTriangleWipeEffectFactory();
-    virtual ~KPrTriangleWipeEffectFactory();
-    virtual QString subTypeName(int subType) const;
+    ~KPrTriangleWipeEffectFactory() override;
+    QString subTypeName(int subType) const override;
 
     enum SubType {
         Up,

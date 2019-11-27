@@ -62,7 +62,7 @@ class KARBONUI_EXPORT KarbonView : public KoPAView
 
 public:
     KarbonView(KarbonPart *part, KarbonDocument* doc, QWidget* parent = 0);
-    virtual ~KarbonView();
+    ~KarbonView() override;
 
     /// Returns the view is attached to
    KarbonDocument * part() const;
@@ -76,7 +76,7 @@ public:
     /// Reimplemented from QWidget
     virtual void setCursor(const QCursor &);
     /// Reimplemented from QWidget
-    virtual void dropEvent(QDropEvent *e);
+    void dropEvent(QDropEvent *e) override;
 
 
     KoCanvasResourceManager *resourceManager() const;
@@ -119,7 +119,7 @@ public Q_SLOTS:
 
     void pathSnapToGrid();
 
-    void selectionChanged();
+    void selectionChanged() override;
 
     void editGuides();
     void showPalette();
@@ -142,11 +142,11 @@ protected Q_SLOTS:
 
 protected:
     /// Use own configuaration dialog
-    virtual void openConfiguration();
+    void openConfiguration() override;
 
-    virtual void updateReadWrite(bool readwrite);
-    virtual void resizeEvent(QResizeEvent* event);
-    virtual void dragEnterEvent(QDragEnterEvent * event);
+    void updateReadWrite(bool readwrite) override;
+    void resizeEvent(QResizeEvent* event) override;
+    void dragEnterEvent(QDragEnterEvent * event) override;
 
     void createStrokeDock();
     void createColorDock();

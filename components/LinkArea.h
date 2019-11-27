@@ -38,7 +38,7 @@ class LinkArea : public QQuickItem
 
 public:
     explicit LinkArea(QQuickItem* parent = 0);
-    virtual ~LinkArea();
+    ~LinkArea() override;
 
     Calligra::Components::Document* document() const;
     void setDocument( Calligra::Components::Document* newDocument );
@@ -55,9 +55,9 @@ Q_SIGNALS:
     void controllerZoomChanged();
 
 protected:
-    virtual void mousePressEvent(QMouseEvent* event);
-    virtual void mouseReleaseEvent(QMouseEvent* event);
-    virtual void mouseDoubleClickEvent(QMouseEvent* event);
+    void mousePressEvent(QMouseEvent* event) override;
+    void mouseReleaseEvent(QMouseEvent* event) override;
+    void mouseDoubleClickEvent(QMouseEvent* event) override;
 
 private:
     class Private;

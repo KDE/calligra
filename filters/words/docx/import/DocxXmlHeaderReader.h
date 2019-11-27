@@ -37,8 +37,8 @@ class DocxXmlHeaderReader : public DocxXmlDocumentReader
 {
 public:
     explicit DocxXmlHeaderReader(KoOdfWriters *writers);
-    virtual ~DocxXmlHeaderReader();
-    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
+    ~DocxXmlHeaderReader() override;
+    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0) override;
 
     QString content();
 

@@ -59,16 +59,16 @@ class FormulaImpl : public Formula {
 public:
     QString m_formula;
     explicit FormulaImpl(const QString &formula) : Formula(), m_formula(formula) {}
-    virtual bool isShared() const { return false; }
-    virtual ~FormulaImpl() {}
+    bool isShared() const override { return false; }
+    ~FormulaImpl() override {}
 };
 
 class SharedFormula : public Formula {
 public:
     Cell *m_referencedCell;
     explicit SharedFormula(Cell *referencedCell) : Formula(), m_referencedCell(referencedCell) {}
-    virtual bool isShared() const { return true; }
-    virtual ~SharedFormula() {}
+    bool isShared() const override { return true; }
+    ~SharedFormula() override {}
 };
 
 class Cell

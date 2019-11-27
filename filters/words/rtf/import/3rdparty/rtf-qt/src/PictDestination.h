@@ -32,11 +32,11 @@ namespace RtfReader
       public:
 	PictDestination( Reader *reader, AbstractRtfOutput *output, const QString &name );
 
-	virtual ~PictDestination();
+	~PictDestination() override;
 
-	virtual void handleControlWord( const QByteArray &controlWord, bool hasValue, const int value );
-	virtual void handlePlainText( const QByteArray &plainText );
-	virtual void aboutToEndDestination();
+	void handleControlWord( const QByteArray &controlWord, bool hasValue, const int value ) override;
+	void handlePlainText( const QByteArray &plainText ) override;
+	void aboutToEndDestination() override;
 
       private:
 	// The hexadecimal version of the data for the image that is currently being built

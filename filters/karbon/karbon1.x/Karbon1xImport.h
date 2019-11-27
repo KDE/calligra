@@ -34,9 +34,9 @@ class KarbonImport : public KoFilter
 
 public:
     KarbonImport(QObject* parent, const QVariantList&);
-    virtual ~KarbonImport();
+    ~KarbonImport() override;
 
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
 
 protected:
     bool parseRoot(QIODevice* io);

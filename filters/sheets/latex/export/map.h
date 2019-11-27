@@ -57,7 +57,7 @@ public:
      *
      * The destructor must remove the list of little zones.
      */
-    virtual ~Map();
+    ~Map() override;
 
     /**
      * Accessors

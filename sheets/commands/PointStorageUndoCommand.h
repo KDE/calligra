@@ -51,7 +51,7 @@ public:
 
     PointStorageUndoCommand(QAbstractItemModel *const model, int role, KUndo2Command *parent = 0);
 
-    virtual void undo();
+    void undo() override;
 
     void add(const QVector<Pair> &pairs);
 

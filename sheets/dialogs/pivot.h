@@ -42,7 +42,7 @@ namespace Calligra{
 
     public:
       Pivot(QWidget* parent,Selection* selection);
-      ~Pivot();
+      ~Pivot() override;
 
     private Q_SLOTS:
       void slotUser2Clicked();

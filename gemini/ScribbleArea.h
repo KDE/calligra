@@ -33,7 +33,7 @@ class ScribbleArea : public QQuickPaintedItem
 
 public:
     explicit ScribbleArea(QQuickItem* parent = 0);
-    virtual ~ScribbleArea();
+    ~ScribbleArea() override;
 
     Q_INVOKABLE void clear();
 
@@ -50,11 +50,11 @@ Q_SIGNALS:
     void paintingStarted();
 
 protected:
-    virtual bool event(QEvent* event);
-    virtual void mousePressEvent(QMouseEvent *event);
-    virtual void mouseMoveEvent(QMouseEvent *event);
-    virtual void mouseReleaseEvent(QMouseEvent *event);
-    virtual void paint(QPainter* painter);
+    bool event(QEvent* event) override;
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
+    void paint(QPainter* painter) override;
 
 private:
     void drawLineTo(const QPointF &endPoint);

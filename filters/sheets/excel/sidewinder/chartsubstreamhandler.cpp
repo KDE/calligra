@@ -38,8 +38,8 @@ public:
     KoChart::Value* m_value;
 
     static const unsigned int id;
-    unsigned int rtti() const { return this->id; }
-    virtual const char* name() const { return "BRAI"; }
+    unsigned int rtti() const override { return this->id; }
+    const char* name() const override { return "BRAI"; }
     static Record *createRecord(Workbook *book, void *arg) { return new BRAIRecord(book, arg); }
 
     BRAIRecord(Swinder::Workbook *book, void *arg) : Record(book), m_handler(static_cast<ChartSubStreamHandler*>(arg))
@@ -47,11 +47,11 @@ public:
         m_worksheetHandler = dynamic_cast<WorksheetSubStreamHandler*>(m_handler->parentHandler());
         m_value = 0;
     }
-    virtual ~BRAIRecord() { delete m_value; }
+    ~BRAIRecord() override { delete m_value; }
 
-    virtual void dump(std::ostream&) const { /*TODO*/ }
+    void dump(std::ostream&) const override { /*TODO*/ }
 
-    virtual void setData(unsigned size, const unsigned char* data, const unsigned int* /*continuePositions*/)
+    void setData(unsigned size, const unsigned char* data, const unsigned int* /*continuePositions*/) override
     {
         if (size < 8) {
             setIsValid(false);
@@ -85,22 +85,22 @@ class CrtMlFrtRecord : public Record
 {
 public:
     static const unsigned int id;
-    unsigned int rtti() const { return this->id; }
-    virtual const char* name() const { return "CrtMlFrt"; }
+    unsigned int rtti() const override { return this->id; }
+    const char* name() const override { return "CrtMlFrt"; }
     static Record *createRecord(Workbook *book, void *arg) { return new CrtMlFrtRecord(book, arg); }
     CrtMlFrtRecord(Swinder::Workbook *book, void *arg) : Record(book), m_handler(static_cast<ChartSubStreamHandler*>(arg)), m_xmlTkParent(0) {
         m_worksheetHandler = dynamic_cast<WorksheetSubStreamHandler*>(m_handler->parentHandler());
     }
-    virtual ~CrtMlFrtRecord() { qDeleteAll(m_tokens); }
+    ~CrtMlFrtRecord() override { qDeleteAll(m_tokens); }
     unsigned xmlTkParent() const { return m_xmlTkParent; }
     const QList<XmlTk*>& tokens() const { return m_tokens; }
-    virtual void dump(std::ostream& out) const {
+    void dump(std::ostream& out) const override {
         QStringList tokens;
         foreach(XmlTk* t, m_tokens)
             tokens.append( QString("%1(%2)=%3").arg(QString::fromUtf8(xmlTkTagName(XmlTkTags(t->m_xmlTkTag)))).arg(t->type()).arg(t->value()) );
         out << qPrintable(QString("[%1]").arg(tokens.join(", ")));
     }
-    virtual void setData(unsigned size, const unsigned char* data, const unsigned int* /*continuePositions*/) {
+    void setData(unsigned size, const unsigned char* data, const unsigned int* /*continuePositions*/) override {
         if (size < 20) {
             setIsValid(false);
             return;

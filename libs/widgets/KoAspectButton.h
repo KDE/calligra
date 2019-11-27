@@ -32,7 +32,7 @@ class KOWIDGETS_EXPORT KoAspectButton : public QAbstractButton {
 public:
     /// constructor
     explicit KoAspectButton(QWidget *parent);
-    ~KoAspectButton() Q_DECL_OVERRIDE;
+    ~KoAspectButton() override;
 
     /// Returns of keeping aspect ratio is on or off
     bool keepAspectRatio() const;
@@ -54,10 +54,10 @@ Q_SIGNALS:
 
 protected:
     /// reimplemented
-    void mouseReleaseEvent(QMouseEvent *) Q_DECL_OVERRIDE;
-    void paintEvent (QPaintEvent *) Q_DECL_OVERRIDE;
-    QSize sizeHint () const Q_DECL_OVERRIDE;
-    void keyReleaseEvent (QKeyEvent *e) Q_DECL_OVERRIDE;
+    void mouseReleaseEvent(QMouseEvent *) override;
+    void paintEvent (QPaintEvent *) override;
+    QSize sizeHint () const override;
+    void keyReleaseEvent (QKeyEvent *e) override;
 
 private:
     class Private;

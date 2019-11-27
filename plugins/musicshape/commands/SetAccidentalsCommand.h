@@ -29,8 +29,8 @@ class MusicShape;
 class SetAccidentalsCommand : public KUndo2Command {
 public:
     SetAccidentalsCommand(MusicShape* shape, MusicCore::Note* note, int accidentals);
-    virtual void redo();
-    virtual void undo();
+    void redo() override;
+    void undo() override;
 private:
     MusicShape* m_shape;
     MusicCore::Note* m_note;

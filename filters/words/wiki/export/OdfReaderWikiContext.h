@@ -45,7 +45,7 @@ class OdfReaderWikiContext : public OdfReaderContext
 {
  public:
     OdfReaderWikiContext(KoStore *store, QFile &file);
-    virtual ~OdfReaderWikiContext();
+    ~OdfReaderWikiContext() override;
 
     void pushStyle(KoOdfStyle*);
     KoOdfStyle *popStyle();

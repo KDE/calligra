@@ -36,7 +36,7 @@ public:
     explicit StyleElement(BasicElement *parent = 0);
 
     /// @return The element's ElementType
-    ElementType elementType() const;
+    ElementType elementType() const override;
 };
 
 #endif // STYLEELEMENT_H

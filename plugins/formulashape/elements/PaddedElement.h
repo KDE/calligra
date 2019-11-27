@@ -38,10 +38,10 @@ public:
      * Calculate the size of the element and the positions of its children
      * @param am The AttributeManager providing information about attributes values
      */
-    void layout( const AttributeManager* am );
+    void layout( const AttributeManager* am ) override;
 
     /// @return The element's ElementType
-    ElementType elementType() const;   
+    ElementType elementType() const override;   
 };
 
 #endif // PADDEDELEMENT_H

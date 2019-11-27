@@ -30,42 +30,42 @@ class KOPAGEAPP_EXPORT KoPAMasterPage : public KoPAPageBase
 {
 public:
     explicit KoPAMasterPage();
-    ~KoPAMasterPage();
+    ~KoPAMasterPage() override;
 
     /// reimplemented
-    virtual void saveOdf( KoShapeSavingContext & context ) const;
+    void saveOdf( KoShapeSavingContext & context ) const override;
 
     /// @return the page layout set for this masterpage
-    KoPageLayout & pageLayout() { return m_pageLayout; }
-    const KoPageLayout & pageLayout() const { return m_pageLayout; }
+    KoPageLayout & pageLayout() override { return m_pageLayout; }
+    const KoPageLayout & pageLayout() const override { return m_pageLayout; }
 
     /// Set the page layout to @p layout
     void setPageLayout(const KoPageLayout& layout) { m_pageLayout = layout; }
 
     /// reimplemented
-    virtual bool displayMasterShapes();
+    bool displayMasterShapes() override;
 
     /// reimplemented
-    virtual void setDisplayMasterShapes( bool display );
+    void setDisplayMasterShapes( bool display ) override;
 
     /// reimplemented
-    virtual bool displayMasterBackground();
+    bool displayMasterBackground() override;
 
     /// reimplemented
-    virtual void setDisplayMasterBackground( bool display );
+    void setDisplayMasterBackground( bool display ) override;
 
     /// reimplemented
-    virtual bool displayShape(KoShape *shape) const;
+    bool displayShape(KoShape *shape) const override;
 
     /// reimplemented
-    virtual void pageUpdated();
+    void pageUpdated() override;
 
     /// reimplemented
-    virtual void paintPage( QPainter & painter, KoZoomHandler & zoomHandler );
+    void paintPage( QPainter & painter, KoZoomHandler & zoomHandler ) override;
 
 protected:
     /// Reimplemented from KoPageBase
-    virtual void loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &loadingContext );
+    void loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &loadingContext ) override;
 
     KoPageLayout m_pageLayout;
 };

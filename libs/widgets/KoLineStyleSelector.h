@@ -31,7 +31,7 @@ class KOWIDGETS_EXPORT KoLineStyleSelector : public QComboBox
     Q_OBJECT
 public:
     explicit KoLineStyleSelector(QWidget *parent = nullptr);
-    ~KoLineStyleSelector() Q_DECL_OVERRIDE;
+    ~KoLineStyleSelector() override;
 
     /**
      * Adds a new line style to the combobox.
@@ -60,7 +60,7 @@ public:
     QVector<qreal> lineDashes() const;
 
 protected:
-    void paintEvent(QPaintEvent *pe) Q_DECL_OVERRIDE;
+    void paintEvent(QPaintEvent *pe) override;
 
 private:
     class Private;

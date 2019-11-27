@@ -38,7 +38,7 @@ class SpellCheckMenu : public QObject
     Q_OBJECT
 public:
     explicit SpellCheckMenu(const Sonnet::Speller &speller, SpellCheck *spellCheck);
-    ~SpellCheckMenu();
+    ~SpellCheckMenu() override;
 
     QPair<QString, QAction*> menuAction();
     void setMisspelled(const QString &word, int position,int length);

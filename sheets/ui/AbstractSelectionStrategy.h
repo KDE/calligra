@@ -53,11 +53,11 @@ public:
     /**
      * Destructor.
      */
-    virtual ~AbstractSelectionStrategy();
+    ~AbstractSelectionStrategy() override;
 
-    virtual void handleMouseMove(const QPointF& mouseLocation, Qt::KeyboardModifiers modifiers);
-    virtual KUndo2Command* createCommand();
-    virtual void finishInteraction(Qt::KeyboardModifiers modifiers);
+    void handleMouseMove(const QPointF& mouseLocation, Qt::KeyboardModifiers modifiers) override;
+    KUndo2Command* createCommand() override;
+    void finishInteraction(Qt::KeyboardModifiers modifiers) override;
 
     /**
      * Checks, if there is a size grip for the (normal) selection at

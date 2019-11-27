@@ -35,7 +35,7 @@ class InformationModule : public FunctionModule
 public:
     explicit InformationModule(QObject* parent, const QVariantList& args = QVariantList());
 
-    QString descriptionFileName() const;
+    QString descriptionFileName() const override;
 };
 
 } // namespace Sheets

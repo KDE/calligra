@@ -31,9 +31,9 @@ class KPrPageSelectStrategyActive : public KPrPageSelectStrategyBase
 {
 public:
     explicit KPrPageSelectStrategyActive(KoPACanvasBase *canvas);
-    ~KPrPageSelectStrategyActive();
+    ~KPrPageSelectStrategyActive() override;
 
-    virtual const KoPAPageBase *page() const;
+    const KoPAPageBase *page() const override;
 
 private:
     KoPACanvasBase *m_canvas;

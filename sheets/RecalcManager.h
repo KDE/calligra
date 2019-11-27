@@ -66,7 +66,7 @@ public:
     /**
      * Destructor.
      */
-    ~RecalcManager();
+    ~RecalcManager() override;
 
     /**
      * Recalculates the cells referring to cells in \p region .

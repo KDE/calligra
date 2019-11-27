@@ -47,7 +47,7 @@ public:
             , m_fileItem(item){
     }
 
-    ~KoFileListItem() {
+    ~KoFileListItem() override {
     }
 
     const KFileItem &fileItem() const {

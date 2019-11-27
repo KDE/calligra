@@ -40,17 +40,17 @@ class ChartDatabaseSelectorFactory : public QObject, public KoShapeConfigFactory
 public:
     /// constructor
     ChartDatabaseSelectorFactory(Map *map) : QObject(map), m_map(map) {}
-    ~ChartDatabaseSelectorFactory() {}
+    ~ChartDatabaseSelectorFactory() override {}
 
     /// reimplemented method from superclass
-    KoShapeConfigWidgetBase* createConfigWidget(KoShape* shape);
+    KoShapeConfigWidgetBase* createConfigWidget(KoShape* shape) override;
     /// reimplemented method from superclass
-    QString name() const;
+    QString name() const override;
 
     /// reimplemented method from superclass
-    bool showForShapeId(const QString &id) const;
+    bool showForShapeId(const QString &id) const override;
     /// reimplemented method from superclass
-    int sortingOrder() const {
+    int sortingOrder() const override {
         return 1;
     }
 

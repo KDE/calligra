@@ -34,7 +34,7 @@ class FLAKE_EXPORT KoInputDeviceHandlerRegistry : public KoGenericRegistry<KoInp
 {
 public:
     KoInputDeviceHandlerRegistry();
-    ~KoInputDeviceHandlerRegistry();
+    ~KoInputDeviceHandlerRegistry() override;
 
     /**
      * Return an instance of the KoInputDeviceHandlerRegistry

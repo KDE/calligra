@@ -49,7 +49,7 @@ public:
 
     explicit SheetPropertiesDialog(QWidget *parent = 0);
 
-    ~SheetPropertiesDialog();
+    ~SheetPropertiesDialog() override;
 
 
     Qt::LayoutDirection layoutDirection() const;

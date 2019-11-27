@@ -111,7 +111,7 @@ class NoteObject : public Object
 {
 public:
     NoteObject(unsigned long id) : Object(Note, id) {}
-    virtual ~NoteObject() {}
+    ~NoteObject() override {}
     /// Returns the comment.
     QString note() const {
         return m_note;
@@ -133,7 +133,7 @@ public:
     KoChart::Chart* m_chart;
 
     explicit ChartObject(unsigned long id) : Object(Chart, id), m_chart(new KoChart::Chart) {}
-    virtual ~ChartObject() { delete m_chart; }
+    ~ChartObject() override { delete m_chart; }
     bool operator==(const ChartObject &other) const { return this == &other; }
     bool operator!=(const ChartObject &other) const { return ! (*this == other); }
 

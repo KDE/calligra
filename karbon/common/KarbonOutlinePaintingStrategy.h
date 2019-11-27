@@ -30,9 +30,9 @@ class KARBONCOMMON_EXPORT KarbonOutlinePaintingStrategy : public KoShapeManagerP
 {
 public:
     explicit KarbonOutlinePaintingStrategy(KoShapeManager *shapeManager);
-    ~KarbonOutlinePaintingStrategy();
+    ~KarbonOutlinePaintingStrategy() override;
     /// reimplemented from KoShapeManagerPaintingStrategy
-    virtual void paint(KoShape * shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext);
+    void paint(KoShape * shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext) override;
 private:
     KoShapeStroke *m_stroke;
 };

@@ -47,7 +47,7 @@ public:
      * @param canvas the canvas for centering the dialog and providing undobuffer
      */
     KWFrameDialog(const QList<KoShape *> &selectedShapes, KWDocument *document, KWCanvas *canvas = 0);
-    ~KWFrameDialog();
+    ~KWFrameDialog() override;
 
     /**
      * Create a list of factories that will be able to create widgets to configure shapes.

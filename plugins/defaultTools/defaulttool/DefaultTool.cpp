@@ -77,13 +77,13 @@ class NopInteractionStrategy : public KoInteractionStrategy
 public:
     explicit NopInteractionStrategy(KoToolBase* parent) : KoInteractionStrategy(parent) {}
 
-    virtual KUndo2Command* createCommand()
+    KUndo2Command* createCommand() override
     {
         return 0;
     }
 
-    virtual void handleMouseMove(const QPointF& /*mouseLocation*/, Qt::KeyboardModifiers /*modifiers*/) {}
-    virtual void finishInteraction(Qt::KeyboardModifiers /*modifiers*/) {}
+    void handleMouseMove(const QPointF& /*mouseLocation*/, Qt::KeyboardModifiers /*modifiers*/) override {}
+    void finishInteraction(Qt::KeyboardModifiers /*modifiers*/) override {}
 };
 
 class SelectionHandler : public KoToolSelection
@@ -95,7 +95,7 @@ public:
         Q_ASSERT(m_selection);
     }
 
-    bool hasSelection() {
+    bool hasSelection() override {
         return m_selection->count();
     }
 

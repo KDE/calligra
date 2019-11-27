@@ -31,11 +31,11 @@ class STAGE_EXPORT KPrAnimateMotion : public KPrAnimationBase
 {
 public:
     explicit KPrAnimateMotion(KPrShapeAnimation *shapeAnimation);
-    virtual ~KPrAnimateMotion();
+    ~KPrAnimateMotion() override;
 
-    virtual bool loadOdf( const KoXmlElement &element, KoShapeLoadingContext &context );
-    virtual bool saveOdf(KoPASavingContext & paContext) const;
-    virtual void init(KPrAnimationCache *animationCache, int step);
+    bool loadOdf( const KoXmlElement &element, KoShapeLoadingContext &context ) override;
+    bool saveOdf(KoPASavingContext & paContext) const override;
+    void init(KPrAnimationCache *animationCache, int step) override;
     QPainterPath pathOutline() const;
     KoPathShape *path() const;
     KoPathShape *getPath(qreal zoom, const QSizeF &pageSize, bool absolutePosition = true) const;
@@ -44,7 +44,7 @@ public:
     qreal currentZoom() const;
 
 protected:
-    virtual void next(int currentTime);
+    void next(int currentTime) override;
 
 private:
     KoPathShape *m_motionPath;

@@ -41,19 +41,19 @@ public:
         layers = sourcePage->shapes();
         sourcePage->removeAllShapes();
     }
-    ~MergePageCommand() {
+    ~MergePageCommand() override {
         if (mine) {
             qDeleteAll(layers);
         }
     }
-    void redo() {
+    void redo() override {
         for (int i = 0; i < layers.count(); ++i) {
             targetPage->addShape(layers.at(i));
         }
         mine = false;
         doc->emitUpdate(targetPage);
     }
-    void undo() {
+    void undo() override {
         for (int i = 0; i < layers.count(); ++i) {
             targetPage->removeShape(layers.at(i));
         }
@@ -83,16 +83,16 @@ public:
             newPage->addShape(layers.at(i));
         }
     }
-    ~AddPageCommand() {
+    ~AddPageCommand() override {
         if (mine) {
             delete newPage;
         }
     }
-    void redo() {
+    void redo() override {
         doc->insertPage(newPage, doc->pages().count());
         mine = false;
     }
-    void undo() {
+    void undo() override {
         doc->takePage(newPage);
         mine = true;
     }

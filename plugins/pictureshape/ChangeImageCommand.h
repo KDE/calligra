@@ -31,12 +31,12 @@ public:
     ChangeImageCommand(PictureShape *shape, KoImageData *newImageData, KUndo2Command *parent=0);
     ChangeImageCommand(PictureShape *shape, const QRectF &croppingRect, KUndo2Command *parent=0);
     ChangeImageCommand(PictureShape *shape, PictureShape::ColorMode colorMode, KUndo2Command *parent=0);
-    virtual ~ChangeImageCommand();
+    ~ChangeImageCommand() override;
 
     /// redo the command
-    virtual void redo();
+    void redo() override;
     /// revert the actions done in redo
-    virtual void undo();
+    void undo() override;
 
 Q_SIGNALS:
     void sigExecuted();

@@ -43,9 +43,9 @@ public:
     }
 
 protected:
-    virtual bool preProcessing();
-    virtual bool mainProcessing();
-    virtual bool postProcessing();
+    bool preProcessing() override;
+    bool mainProcessing() override;
+    bool postProcessing() override;
 
 private:
     QColor m_color;

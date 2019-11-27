@@ -33,14 +33,14 @@ class SpreadsheetImpl  : public DocumentImpl
     Q_OBJECT
 public:
     explicit SpreadsheetImpl(QObject* parent = 0);
-    ~SpreadsheetImpl();
+    ~SpreadsheetImpl() override;
 
-    virtual bool load(const QUrl& url);
-    virtual int currentIndex();
-    virtual void setCurrentIndex(int newValue);
-    virtual int indexCount() const;
-    virtual QUrl urlAtPoint(QPoint point);
-    virtual QObject* part() const;
+    bool load(const QUrl& url) override;
+    int currentIndex() override;
+    void setCurrentIndex(int newValue) override;
+    int indexCount() const override;
+    QUrl urlAtPoint(QPoint point) override;
+    QObject* part() const override;
 
 private Q_SLOTS:
     void updateDocumentSize(const QSize& size);

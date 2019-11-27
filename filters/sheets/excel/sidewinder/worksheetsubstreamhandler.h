@@ -81,21 +81,21 @@ class WorksheetSubStreamHandler : public SubStreamHandler, public FormulaDecoder
 {
 public:
     WorksheetSubStreamHandler(Sheet* sheet, const GlobalsSubStreamHandler* globals);
-    virtual ~WorksheetSubStreamHandler();
+    ~WorksheetSubStreamHandler() override;
     Sheet* sheet() const;
 
     std::map<unsigned long, Object*>& sharedObjects() const;
     std::vector<unsigned long>& charts() const;
 
-    virtual void handleRecord(Record* record);
+    void handleRecord(Record* record) override;
 
 public:
     // from FormulaDecoder
-    virtual const std::vector<QString>& externSheets() const;
-    virtual QString nameFromIndex(unsigned index) const;
-    virtual QString externNameFromIndex(unsigned index) const;
-    virtual FormulaTokens sharedFormulas(const std::pair<unsigned, unsigned>& formulaCellPos) const;
-    virtual DataTableRecord* tableRecord(const std::pair<unsigned, unsigned>& formulaCellPos) const;
+    const std::vector<QString>& externSheets() const override;
+    QString nameFromIndex(unsigned index) const override;
+    QString externNameFromIndex(unsigned index) const override;
+    FormulaTokens sharedFormulas(const std::pair<unsigned, unsigned>& formulaCellPos) const override;
+    DataTableRecord* tableRecord(const std::pair<unsigned, unsigned>& formulaCellPos) const override;
 
 private:
     void handleBOF(BOFRecord* record);

@@ -46,7 +46,7 @@ class KPrShapeAnimationDocker : public QWidget
     Q_OBJECT
 public:
     explicit KPrShapeAnimationDocker(QWidget *parent = 0);
-    virtual ~KPrShapeAnimationDocker();
+    ~KPrShapeAnimationDocker() override;
     void setView(KoPAViewBase *view);
 
     /**
@@ -181,7 +181,7 @@ private Q_SLOTS:
     /// load predefined animations
     void initializeView();
 protected:
-     bool eventFilter(QObject *ob, QEvent *ev);
+     bool eventFilter(QObject *ob, QEvent *ev) override;
 
 private:
     /// Return a pointer to the KPrShapeAnimations for the given page

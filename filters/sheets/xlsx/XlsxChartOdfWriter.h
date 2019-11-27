@@ -37,7 +37,7 @@ class XlsxChartOdfWriter : public KoOdfChartWriter
 public:
     explicit XlsxChartOdfWriter(KoChart::Chart* chart,
 				const MSOOXML::DrawingMLTheme* const contextWithThemeInfo = nullptr);
-    ~XlsxChartOdfWriter();
+    ~XlsxChartOdfWriter() override;
 
 
 private:
@@ -45,13 +45,13 @@ private:
     // All of these are virtual functions called from other functions (mainly
     // saveContent()) in the parent class.
 
-    QString genChartAreaStyle(KoGenStyle& style, KoGenStyles& styles, KoGenStyles& mainStyles);
-    QString genPlotAreaStyle(KoGenStyle& style, KoGenStyles& styles, KoGenStyles& mainStyles);
+    QString genChartAreaStyle(KoGenStyle& style, KoGenStyles& styles, KoGenStyles& mainStyles) override;
+    QString genPlotAreaStyle(KoGenStyle& style, KoGenStyles& styles, KoGenStyles& mainStyles) override;
     void addDataThemeToStyle(KoGenStyle& style,
-			     int dataNumber, int maxNumData = 1, bool strokes = true);
+			     int dataNumber, int maxNumData = 1, bool strokes = true) override;
 
-    QColor calculateColorFromGradientStop(const KoChart::Gradient::GradientStop& grad);
-    QColor labelFontColor() const;
+    QColor calculateColorFromGradientStop(const KoChart::Gradient::GradientStop& grad) override;
+    QColor labelFontColor() const override;
 
 private:
     const MSOOXML::DrawingMLTheme* m_theme;

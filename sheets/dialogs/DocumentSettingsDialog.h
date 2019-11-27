@@ -101,7 +101,7 @@ class DocumentSettingsDialog : public KPageDialog
     Q_OBJECT
 public:
     explicit DocumentSettingsDialog(Selection* selection, QWidget* parent);
-    ~DocumentSettingsDialog();
+    ~DocumentSettingsDialog() override;
 
 public Q_SLOTS:
     void slotApply();

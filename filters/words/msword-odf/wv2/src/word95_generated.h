@@ -1137,7 +1137,7 @@ struct TAP : public Shared {
      * Attention: This struct allocates memory on the heap
      */
     TAP(const TAP &rhs);
-    ~TAP();
+    ~TAP() override;
 
     TAP &operator=(const TAP &rhs);
 
@@ -5204,7 +5204,7 @@ struct PAP : public Shared {
      * Attention: This struct allocates memory on the heap
      */
     PAP(const PAP &rhs);
-    ~PAP();
+    ~PAP() override;
 
     PAP &operator=(const PAP &rhs);
 

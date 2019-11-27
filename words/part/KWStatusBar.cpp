@@ -67,11 +67,11 @@ public:
         addWidget(m_label);
     }
 protected:
-    virtual void enterEvent(QEvent*)
+    void enterEvent(QEvent*) override
     {
         setCurrentIndex(1);
     }
-    virtual void leaveEvent(QEvent*)
+    void leaveEvent(QEvent*) override
     {
         if (m_widget) {
             if (m_widget->hasFocus()) {
@@ -82,7 +82,7 @@ protected:
             }
         }
     }
-    virtual bool eventFilter(QObject *watched, QEvent *event)
+    bool eventFilter(QObject *watched, QEvent *event) override
     {
         if (watched == m_widget && event->type() == QEvent::FocusOut && !m_widget->hasFocus()) {
             setCurrentIndex(0);

@@ -38,7 +38,7 @@ Q_OBJECT
 public:
     explicit FormulaData(FormulaElement *element);
     
-    ~FormulaData();
+    ~FormulaData() override;
 
     /// @return formulaElement that represents the data
     FormulaElement* formulaElement() const;

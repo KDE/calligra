@@ -36,7 +36,7 @@ class KPrPageLayouts : public QObject
   Q_OBJECT
 public:
     explicit KPrPageLayouts(QObject *parent = 0);
-    ~KPrPageLayouts();
+    ~KPrPageLayouts() override;
 
     bool saveOdf( KoPASavingContext & context ) const;
 

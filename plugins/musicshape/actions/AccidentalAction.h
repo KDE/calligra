@@ -26,15 +26,15 @@ class AccidentalAction : public AbstractNoteMusicAction
 public:
     AccidentalAction(int accidentals, SimpleEntryTool* tool);
 
-    virtual void renderPreview(QPainter& painter, const QPointF& point);
-    virtual void mousePress(MusicCore::Chord* chord, MusicCore::Note* note, qreal distance, const QPointF& pos);
+    void renderPreview(QPainter& painter, const QPointF& point) override;
+    void mousePress(MusicCore::Chord* chord, MusicCore::Note* note, qreal distance, const QPointF& pos) override;
 
     //! To avoid 'mousePress() was hidden' warning
-    virtual void mousePress(MusicCore::Staff* staff, int bar, const QPointF& pos) {
+    void mousePress(MusicCore::Staff* staff, int bar, const QPointF& pos) override {
         AbstractNoteMusicAction::mousePress(staff, bar, pos);
     }
     //! To avoid 'mousePress() was hidden' warning
-    virtual void mousePress(MusicCore::StaffElement* se, qreal distance, const QPointF& pos) {
+    void mousePress(MusicCore::StaffElement* se, qreal distance, const QPointF& pos) override {
         AbstractNoteMusicAction::mousePress(se, distance, pos);
     }
 private:

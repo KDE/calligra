@@ -35,7 +35,7 @@ class KWDebugWidget : public QWidget
 
 public:
     explicit KWDebugWidget(QWidget *parent = 0);
-    virtual ~KWDebugWidget();
+    ~KWDebugWidget() override;
 
     friend class KWDebugDocker;
 

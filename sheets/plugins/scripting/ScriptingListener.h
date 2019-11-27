@@ -57,7 +57,7 @@ class ScriptingCellListener : public QObject
     Q_OBJECT
 public:
     explicit ScriptingCellListener(Calligra::Sheets::Sheet *sheet, const QRect& area);
-    virtual ~ScriptingCellListener();
+    ~ScriptingCellListener() override;
 
 Q_SIGNALS:
 

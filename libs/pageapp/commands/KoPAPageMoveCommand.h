@@ -37,12 +37,12 @@ public:
     KoPAPageMoveCommand( KoPADocument *document, KoPAPageBase *page, KoPAPageBase *after, KUndo2Command *parent = 0 );
     KoPAPageMoveCommand( KoPADocument *document, const QList<KoPAPageBase *> &pages, KoPAPageBase *after, KUndo2Command *parent = 0 );
     void init( const QList<KoPAPageBase *> &pages );
-    virtual ~KoPAPageMoveCommand();
+    ~KoPAPageMoveCommand() override;
 
     /// redo the command
-    void redo();
+    void redo() override;
     /// revert the actions done in redo
-    void undo();
+    void undo() override;
 
 private:
     KoPADocument * m_document;

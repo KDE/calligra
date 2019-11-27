@@ -93,10 +93,10 @@ public:
 
     FolderItem(QObject *parent = 0): ListItem(parent) {}
 
-    QVariant data(int role) const;
+    QVariant data(int role) const override;
     QHash<int, QByteArray> roleNames() const;
 
-    inline QString id() const { return m_path; }
+    inline QString id() const override { return m_path; }
     inline qreal revision() const { return m_revision;}
     inline bool thumb_exists() const { return m_thumb_exists;}
     inline qreal bytes() const { return m_bytes;}

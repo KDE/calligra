@@ -49,7 +49,7 @@ public:
     /**
      * Destructor.
      */
-    ~Bar();
+    ~Bar() override;
 
     /**
      * Returns the sheet this bar is part of.

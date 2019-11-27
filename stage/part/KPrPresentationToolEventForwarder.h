@@ -30,7 +30,7 @@ class KPrPresentationToolEventForwarder : public QWidget
 
 public:
     explicit KPrPresentationToolEventForwarder(KoPACanvasBase *canvas);
-    ~KPrPresentationToolEventForwarder();
+    ~KPrPresentationToolEventForwarder() override;
 
     void receiveMousePressEvent(QMouseEvent *event);
     void receiveMouseMoveEvent(QMouseEvent *event);

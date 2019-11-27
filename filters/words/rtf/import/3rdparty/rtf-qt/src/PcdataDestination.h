@@ -32,11 +32,11 @@ namespace RtfReader
       public:
 	PcdataDestination( Reader *reader, AbstractRtfOutput *output, const QString &name );
 
-	virtual ~PcdataDestination();
+	~PcdataDestination() override;
 
-	virtual void handleControlWord( const QByteArray &controlWord, bool hasValue, const int value );
-	virtual void handlePlainText( const QByteArray &plainText );
-	virtual void aboutToEndDestination() = 0;
+	void handleControlWord( const QByteArray &controlWord, bool hasValue, const int value ) override;
+	void handlePlainText( const QByteArray &plainText ) override;
+	void aboutToEndDestination() override = 0;
 
       protected:
 	QString m_pcdata;

@@ -68,7 +68,7 @@ public:
      * @param parent the widget this dialog will use as a child.
      */
     explicit KoPrintingDialog(QWidget *parent);
-    virtual ~KoPrintingDialog();
+    ~KoPrintingDialog() override;
 
     /**
      * Set the shape manager that should be used to print.
@@ -86,14 +86,14 @@ public:
      * Return the printer used to print.
      * @return the printer used to print.
      */
-    QPrinter &printer();
+    QPrinter &printer() override;
 
 public Q_SLOTS:
 
     /**
      * @see KoPrintJob::startPrinting
      */
-    virtual void startPrinting(RemovePolicy removePolicy = DoNotDelete);
+    void startPrinting(RemovePolicy removePolicy = DoNotDelete) override;
 
 protected:
     /**

@@ -38,7 +38,7 @@ class KPrSlidesSorterDocumentModel: public QAbstractListModel
     Q_OBJECT
 public:
     KPrSlidesSorterDocumentModel(KPrViewModeSlidesSorter *viewModeSlidesSorter, QWidget *parent, KoPADocument *document = 0);
-    ~KPrSlidesSorterDocumentModel();
+    ~KPrSlidesSorterDocumentModel() override;
 
     /**
      * Set the current document
@@ -46,26 +46,26 @@ public:
      */
     void setDocument(KoPADocument *document);
 
-    virtual QModelIndex index(int row, int column, const QModelIndex &parent) const;
+    QModelIndex index(int row, int column, const QModelIndex &parent) const override;
 
-    QVariant data(const QModelIndex &index, int role) const;
+    QVariant data(const QModelIndex &index, int role) const override;
 
-    virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
 
-    int rowCount(const QModelIndex &parent) const;
+    int rowCount(const QModelIndex &parent) const override;
 
-    virtual QStringList mimeTypes() const;
+    QStringList mimeTypes() const override;
 
-    virtual QMimeData* mimeData(const QModelIndexList &indexes) const;
+    QMimeData* mimeData(const QModelIndexList &indexes) const override;
 
-    virtual Qt::DropActions supportedDragActions() const;
-    virtual Qt::DropActions supportedDropActions() const;
+    Qt::DropActions supportedDragActions() const override;
+    Qt::DropActions supportedDropActions() const override;
 
-    virtual bool removeRows(int row, int count, const QModelIndex &parent);
+    bool removeRows(int row, int count, const QModelIndex &parent) override;
 
-    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
 
-    virtual bool dropMimeData (const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent);
+    bool dropMimeData (const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) override;
 
     /**
      * Drop selected slides (copy/move) if a modifier key is pressed

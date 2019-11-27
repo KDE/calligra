@@ -39,7 +39,7 @@ class KOWIDGETS_EXPORT KoZoomHandler : public KoViewConverter
 public:
 
     KoZoomHandler();
-    ~KoZoomHandler() Q_DECL_OVERRIDE = default;
+    ~KoZoomHandler() override = default;
     
     /**
      * @return the conversion factor between document and view, that
@@ -98,7 +98,7 @@ public:
      * Change the zoom level, keeping the resolution unchanged.
      * @param zoom the zoom factor (e.g. 1.0 for 100%)
      */
-    void setZoom(qreal zoom) Q_DECL_OVERRIDE;
+    void setZoom(qreal zoom) override;
 
     /**
      * Change the zoom mode
@@ -145,74 +145,74 @@ public:
      * Convert a coordinate in pt to pixels.
      * @param documentPoint the point in the document coordinate system of a KoShape.
      */
-    QPointF documentToView(const QPointF &documentPoint) const Q_DECL_OVERRIDE;
+    QPointF documentToView(const QPointF &documentPoint) const override;
 
     /**
      * Convert a coordinate in pixels to pt.
      * @param viewPoint the point in the coordinate system of the widget, or window.
      */
-    QPointF viewToDocument(const QPointF &viewPoint) const Q_DECL_OVERRIDE;
+    QPointF viewToDocument(const QPointF &viewPoint) const override;
 
     /**
      * Convert a rectangle in pt to pixels.
      * @param documentRect the rect in the document coordinate system of a KoShape.
      */
-    QRectF documentToView(const QRectF &documentRect) const Q_DECL_OVERRIDE;
+    QRectF documentToView(const QRectF &documentRect) const override;
 
     /**
      * Convert a rectangle in pixels to pt.
      * @param viewRect the rect in the coordinate system of the widget, or window.
      */
-    QRectF viewToDocument(const QRectF &viewRect) const Q_DECL_OVERRIDE;
+    QRectF viewToDocument(const QRectF &viewRect) const override;
 
     /**
      * Convert a size in pt to pixels.
      * @param documentSize the size in pt.
      * @return the size in pixels.
      */
-    QSizeF documentToView(const QSizeF &documentSize) const Q_DECL_OVERRIDE;
+    QSizeF documentToView(const QSizeF &documentSize) const override;
 
     /**
      * Convert a size in pixels to pt.
      * @param viewSize the size in pixels.
      * @return the size in pt.
      */
-    QSizeF viewToDocument(const QSizeF &viewSize) const Q_DECL_OVERRIDE;
+    QSizeF viewToDocument(const QSizeF &viewSize) const override;
 
     /**
      * Convert a single x coordinate in pt to pixels.
      * @param documentX the x coordinate in pt.
      * @return the x coordinate in pixels.
      */
-    qreal documentToViewX(qreal documentX) const Q_DECL_OVERRIDE;
+    qreal documentToViewX(qreal documentX) const override;
 
     /**
      * Convert a single y coordinate in pt to pixels.
      * @param documentY the y coordinate in pt.
      * @return the y coordinate in pixels.
      */
-    qreal documentToViewY(qreal documentY) const Q_DECL_OVERRIDE;
+    qreal documentToViewY(qreal documentY) const override;
 
     /**
      * Convert a single x coordinate in pixels to pt.
      * @param viewX the x coordinate in pixels.
      * @return the x coordinate in pt.
      */
-    qreal viewToDocumentX(qreal viewX) const Q_DECL_OVERRIDE;
+    qreal viewToDocumentX(qreal viewX) const override;
 
     /**
      * Convert a single y coordinate in pixels to pt.
      * @param viewY the y coordinate in pixels.
      * @return the y coordinate in pt.
      */
-    qreal viewToDocumentY(qreal viewY) const Q_DECL_OVERRIDE;
+    qreal viewToDocumentY(qreal viewY) const override;
 
     /**
      * Get the zoom levels of the individual x and y axis. Copy them to the pointer parameters.
      * @param zoomX a pointer to a qreal which will be modified to set the horizontal zoom.
      * @param zoomY a pointer to a qreal which will be modified to set the vertical zoom.
      */
-    void zoom(qreal *zoomX, qreal *zoomY) const Q_DECL_OVERRIDE;
+    void zoom(qreal *zoomX, qreal *zoomY) const override;
 
     using KoViewConverter::zoom;
 

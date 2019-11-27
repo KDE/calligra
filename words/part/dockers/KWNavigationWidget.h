@@ -47,7 +47,7 @@ class KWNavigationWidget : public QWidget
 
 public:
     explicit KWNavigationWidget(QWidget *parent = 0);
-    virtual ~KWNavigationWidget();
+    ~KWNavigationWidget() override;
 
     friend class KWNavigationDocker;
 

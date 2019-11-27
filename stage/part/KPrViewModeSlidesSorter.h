@@ -48,31 +48,31 @@ class KPrViewModeSlidesSorter : public KoPAViewMode
     Q_OBJECT
 public:
     KPrViewModeSlidesSorter(KoPAView *view, KoPACanvasBase *canvas);
-    ~KPrViewModeSlidesSorter();
+    ~KPrViewModeSlidesSorter() override;
 
-    void paint(KoPACanvasBase *canvas, QPainter &painter, const QRectF &paintRect);
+    void paint(KoPACanvasBase *canvas, QPainter &painter, const QRectF &paintRect) override;
     void paintEvent(KoPACanvas *canvas, QPaintEvent *event);
-    void tabletEvent(QTabletEvent *event, const QPointF &point);
-    void mousePressEvent(QMouseEvent *event, const QPointF &point);
-    void mouseDoubleClickEvent(QMouseEvent *event, const QPointF &point);
-    void mouseMoveEvent(QMouseEvent *event, const QPointF &point);
-    void mouseReleaseEvent(QMouseEvent *event, const QPointF &point);
-    void shortcutOverrideEvent(QKeyEvent *event);
-    void keyPressEvent(QKeyEvent *event);
-    void keyReleaseEvent(QKeyEvent *event);
-    void wheelEvent(QWheelEvent *event, const QPointF &point);
+    void tabletEvent(QTabletEvent *event, const QPointF &point) override;
+    void mousePressEvent(QMouseEvent *event, const QPointF &point) override;
+    void mouseDoubleClickEvent(QMouseEvent *event, const QPointF &point) override;
+    void mouseMoveEvent(QMouseEvent *event, const QPointF &point) override;
+    void mouseReleaseEvent(QMouseEvent *event, const QPointF &point) override;
+    void shortcutOverrideEvent(QKeyEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
+    void keyReleaseEvent(QKeyEvent *event) override;
+    void wheelEvent(QWheelEvent *event, const QPointF &point) override;
 
-    void activate(KoPAViewMode *previousViewMode);
-    void deactivate();
+    void activate(KoPAViewMode *previousViewMode) override;
+    void deactivate() override;
 
     /**
      * Change the KPrView active page
      * @param page pointer to the new active page
      */
-    void updateActivePage(KoPAPageBase *page);
+    void updateActivePage(KoPAPageBase *page) override;
 
-    void addShape(KoShape *shape);
-    void removeShape(KoShape *shape);
+    void addShape(KoShape *shape) override;
+    void removeShape(KoShape *shape) override;
 
     /**
       * Return a list with the pointer to the selected slides

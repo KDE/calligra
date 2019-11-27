@@ -59,7 +59,7 @@ class KOODF_EXPORT KoOdfLineNumberingConfiguration : public QObject
 public:
 
     KoOdfLineNumberingConfiguration();
-    ~KoOdfLineNumberingConfiguration();
+    ~KoOdfLineNumberingConfiguration() override;
     KoOdfLineNumberingConfiguration(const KoOdfLineNumberingConfiguration &other);
     KoOdfLineNumberingConfiguration &operator=(const KoOdfLineNumberingConfiguration &other);
 

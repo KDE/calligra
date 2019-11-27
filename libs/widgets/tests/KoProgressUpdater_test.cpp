@@ -42,7 +42,7 @@ public:
         {
         }
 
-    void run(ThreadWeaver::JobPointer, ThreadWeaver::Thread *)
+    void run(ThreadWeaver::JobPointer, ThreadWeaver::Thread *) override
         {
             for (int i = 1; i < m_steps + 1; ++i) {
                 for (int j = 1; j < 10000; ++j){}
@@ -73,7 +73,7 @@ public:
         {
         }
 
-    virtual void run()
+    void run() override
         {
             for (int i = 1; i < m_steps + 1; ++i) {
                 sleep(1);
@@ -109,23 +109,23 @@ public:
         {
         }
 
-    int maximum() const
+    int maximum() const override
         {
             return max;
         }
 
-    void setValue( int v )
+    void setValue( int v ) override
         {
             value = v;
         }
 
-    void setRange( int minimum, int maximum )
+    void setRange( int minimum, int maximum ) override
         {
             min = minimum;
             max = maximum;
         }
 
-    void setFormat( const QString & format )
+    void setFormat( const QString & format ) override
         {
             formatString = format;
         }

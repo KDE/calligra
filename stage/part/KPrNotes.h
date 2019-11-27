@@ -33,44 +33,44 @@ class KPrNotes : public KoPAPageBase
 {
 public:
     KPrNotes( KPrPage * page, KPrDocument * document );
-    ~KPrNotes();
+    ~KPrNotes() override;
 
     /// Get the main text note shape for this presentation notes
     KoShape *textShape();
 
     /// reimplemented
-    virtual void saveOdf(KoShapeSavingContext &context) const;
+    void saveOdf(KoShapeSavingContext &context) const override;
 
     /// reimplemented
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
     /// reimplemented
-    virtual void paintComponent(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &paintcontext);
+    void paintComponent(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &paintcontext) override;
 
     /// Get the page layout for this presentation notes
-    virtual KoPageLayout &pageLayout();
+    KoPageLayout &pageLayout() override;
 
-    virtual const KoPageLayout& pageLayout() const;
+    const KoPageLayout& pageLayout() const override;
 
     /// update the page thumbnail to reflect current page
     void updatePageThumbnail();
 
     /// reimplemented
-    virtual bool displayMasterShapes();
+    bool displayMasterShapes() override;
     /// reimplemented
-    virtual void setDisplayMasterShapes( bool );
+    void setDisplayMasterShapes( bool ) override;
     /// reimplemented
-    virtual bool displayMasterBackground();
+    bool displayMasterBackground() override;
     /// reimplemented
-    virtual void setDisplayMasterBackground( bool );
+    void setDisplayMasterBackground( bool ) override;
     /// reimplemented
-    virtual bool displayShape(KoShape *shape) const;
+    bool displayShape(KoShape *shape) const override;
 
-    virtual QImage thumbImage(const QSize& = QSize(512, 512));
+    QImage thumbImage(const QSize& = QSize(512, 512)) override;
     /// reimplemented
     virtual QPixmap generateThumbnail( const QSize& );
     /// reimplemented
-    virtual void paintPage( QPainter & painter, KoZoomHandler & zoomHandler );
+    void paintPage( QPainter & painter, KoZoomHandler & zoomHandler ) override;
 
 private:
     KoShape *m_textShape;

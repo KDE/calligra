@@ -29,11 +29,11 @@ class KPrPresentationHighlightWidget : public KPrPresentationToolEventForwarder
     Q_OBJECT
 public:
     explicit KPrPresentationHighlightWidget(KoPACanvasBase *canvas);
-    ~KPrPresentationHighlightWidget();
+    ~KPrPresentationHighlightWidget() override;
 
 protected:
-    void mouseMoveEvent( QMouseEvent * event );
-    void paintEvent( QPaintEvent * event );
+    void mouseMoveEvent( QMouseEvent * event ) override;
+    void paintEvent( QPaintEvent * event ) override;
 
 private:
     QSize m_size;

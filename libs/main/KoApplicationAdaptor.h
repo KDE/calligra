@@ -41,7 +41,7 @@ class KOMAIN_EXPORT KoApplicationAdaptor : public QDBusAbstractAdaptor
     Q_CLASSINFO("D-Bus Interface", "org.kde.calligra.application")
 public:
     explicit KoApplicationAdaptor(KoApplication *parent);
-    virtual ~KoApplicationAdaptor();
+    ~KoApplicationAdaptor() override;
 
 public Q_SLOTS: // METHODS
 //    /**

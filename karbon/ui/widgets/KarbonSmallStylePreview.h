@@ -34,7 +34,7 @@ class KarbonSmallStylePreview : public QWidget
     Q_OBJECT
 public:
     explicit KarbonSmallStylePreview(QWidget* parent = 0L);
-    virtual ~KarbonSmallStylePreview();
+    ~KarbonSmallStylePreview() override;
 
 Q_SIGNALS:
     void fillApplied();

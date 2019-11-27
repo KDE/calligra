@@ -56,10 +56,10 @@ class ConsolidateDialog : public KoDialog
     Q_OBJECT
 public:
     ConsolidateDialog(QWidget* parent, Selection* selection);
-    virtual ~ConsolidateDialog();
+    ~ConsolidateDialog() override;
 
 public Q_SLOTS:
-    virtual void accept();
+    void accept() override;
 
 private Q_SLOTS:
     void slotAdd();

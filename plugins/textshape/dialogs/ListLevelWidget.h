@@ -33,13 +33,13 @@ class ListLevelWidget : public QWidget
 
 public:
     explicit ListLevelWidget(QWidget* parent = 0);
-    ~ListLevelWidget() {}
+    ~ListLevelWidget() override {}
 
     void setDisplay(const KoListLevelProperties &props);
     void save(KoListLevelProperties &props) const;
 
 protected:
-    void paintEvent(QPaintEvent *ev);
+    void paintEvent(QPaintEvent *ev) override;
 
 private Q_SLOTS:
     void labelFollowedByChanged(int);

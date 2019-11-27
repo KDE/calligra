@@ -26,8 +26,8 @@ class KPrClockWipeEffectFactory : public KPrPageEffectFactory
 {
 public:
     KPrClockWipeEffectFactory();
-    virtual ~KPrClockWipeEffectFactory();
-    virtual QString subTypeName(int subType) const;
+    ~KPrClockWipeEffectFactory() override;
+    QString subTypeName(int subType) const override;
 
     enum SubType {
         FromTwelveClockwise,

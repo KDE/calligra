@@ -44,7 +44,7 @@ class DocxFile : public FileCollector
 {
 public:
     DocxFile();
-    ~DocxFile();
+    ~DocxFile() override;
 
     /** When you have created all the content and added it using
      * addContentFile(), call this function once and it will write the

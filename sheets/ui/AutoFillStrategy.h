@@ -45,9 +45,9 @@ public:
     /**
      * Destructor.
      */
-    virtual ~AutoFillStrategy();
+    ~AutoFillStrategy() override;
 
-    virtual KUndo2Command* createCommand();
+    KUndo2Command* createCommand() override;
 
 private:
     class Private;

@@ -56,7 +56,7 @@ public:
     /**
      * Destructor.
      */
-    virtual ~AutoFillCommand();
+    ~AutoFillCommand() override;
 
     void setSourceRange(const QRect& range);
     void setTargetRange(const QRect& range);
@@ -64,7 +64,7 @@ public:
     /**
      * Executes the actual operation.
      */
-    virtual bool mainProcessing();
+    bool mainProcessing() override;
 
 public:
     static QStringList *other;
@@ -79,7 +79,7 @@ private:
                       const AutoFillSequence& _seqList,
                       bool down = true);
     // dummy
-    virtual Value newValue(Element*, int, int, bool*, Format::Type*) {
+    Value newValue(Element*, int, int, bool*, Format::Type*) override {
         return Value();
     }
 

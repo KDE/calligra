@@ -45,7 +45,7 @@ class OdfReaderDocxContext : public OdfReaderContext
 {
  public:
     OdfReaderDocxContext(KoStore *store, DocxFile *dxf);
-    virtual ~OdfReaderDocxContext();
+    ~OdfReaderDocxContext() override;
 
     QByteArray documentContent() const { return m_documentContent; }
     QByteArray commentsContent() const { return m_commentsContent; }

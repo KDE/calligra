@@ -31,16 +31,16 @@ class KOWIDGETS_EXPORT KoResourceModelBase : public QAbstractTableModel
     Q_OBJECT
 public:
     explicit KoResourceModelBase(QObject * parent = nullptr );
-    ~KoResourceModelBase() Q_DECL_OVERRIDE;
+    ~KoResourceModelBase() override;
 
     /// reimplemented
-    int rowCount(const QModelIndex &parent = QModelIndex()) const Q_DECL_OVERRIDE = 0;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override = 0;
     /// reimplemented
-    int columnCount ( const QModelIndex & parent = QModelIndex() ) const Q_DECL_OVERRIDE = 0;
+    int columnCount ( const QModelIndex & parent = QModelIndex() ) const override = 0;
     /// reimplemented
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE = 0;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override = 0;
     /// reimplemented
-    QModelIndex index ( int row, int column = 0, const QModelIndex & parent = QModelIndex() ) const Q_DECL_OVERRIDE = 0;
+    QModelIndex index ( int row, int column = 0, const QModelIndex & parent = QModelIndex() ) const override = 0;
 
     virtual QModelIndex indexFromResource(KoResource* resource) const =0;
     virtual QStringList assignedTagsList(KoResource *resource) const =0;

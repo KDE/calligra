@@ -56,7 +56,7 @@ class KWStatisticsWidget : public QWidget
 
 public:
     explicit KWStatisticsWidget(QWidget *parent = 0, bool shortVersion = false);
-    virtual ~KWStatisticsWidget();
+    ~KWStatisticsWidget() override;
 
     enum LayoutDirection {
         LayoutVertical,

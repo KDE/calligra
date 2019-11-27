@@ -40,9 +40,9 @@ namespace wvWare
          * Returns the header if there is any for the given mask. If we didn't find
          * any header the pair's values are 0, 0.
          */
-        virtual std::pair<U32, U32> findHeader( int sectionNumber, unsigned char mask ) const;
+        std::pair<U32, U32> findHeader( int sectionNumber, unsigned char mask ) const override;
 
-        virtual void set_headerMask( U8 sep_grpfIhdt );
+        void set_headerMask( U8 sep_grpfIhdt ) override;
 
     private:
         // Counts the '1' bits in <mask> from the lsb up to <limit> (exclusively)

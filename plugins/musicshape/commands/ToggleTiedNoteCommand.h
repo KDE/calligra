@@ -29,8 +29,8 @@ class MusicShape;
 class ToggleTiedNoteCommand : public KUndo2Command {
 public:
     ToggleTiedNoteCommand(MusicShape* shape, MusicCore::Note* note);
-    virtual void redo();
-    virtual void undo();
+    void redo() override;
+    void undo() override;
 private:
     MusicShape* m_shape;
     MusicCore::Note* m_note;

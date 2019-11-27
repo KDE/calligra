@@ -42,7 +42,7 @@ public:
 
 protected:
     /// reimplemented
-    virtual QString fetchMoreText();
+    QString fetchMoreText() override;
 
 public Q_SLOTS:
     void setDefaultLanguage(const QString &language);

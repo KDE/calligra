@@ -33,8 +33,8 @@ class SetClefCommand : public KUndo2Command
 {
 public:
     SetClefCommand(MusicShape* shape, MusicCore::Bar* bar, MusicCore::Staff* staff, MusicCore::Clef::ClefShape clefShape, int line, int octaveChange);
-    virtual void redo();
-    virtual void undo();
+    void redo() override;
+    void undo() override;
 private:
     MusicShape* m_shape;
     MusicCore::Bar* m_bar;

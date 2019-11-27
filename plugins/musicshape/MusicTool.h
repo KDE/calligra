@@ -28,16 +28,16 @@ class MusicTool : public KoToolBase
   Q_OBJECT
 public:
   explicit MusicTool( KoCanvasBase* canvas );
-  ~MusicTool();
+  ~MusicTool() override;
 
-  virtual void paint( QPainter& painter, const KoViewConverter& converter );
+  void paint( QPainter& painter, const KoViewConverter& converter ) override;
 
-  virtual void mousePressEvent( KoPointerEvent* event ) ;
-  virtual void mouseMoveEvent( KoPointerEvent* event );
-  virtual void mouseReleaseEvent( KoPointerEvent* event );
+  void mousePressEvent( KoPointerEvent* event ) override ;
+  void mouseMoveEvent( KoPointerEvent* event ) override;
+  void mouseReleaseEvent( KoPointerEvent* event ) override;
 
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
-  void deactivate();
+    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+  void deactivate() override;
 
   void addCommand(KUndo2Command* command);
     MusicShape* shape();
@@ -45,7 +45,7 @@ protected:
   /*
    * Create default option widget
    */
-    virtual QWidget * createOptionWidget();
+    QWidget * createOptionWidget() override;
 
 protected Q_SLOTS:
 Q_SIGNALS:

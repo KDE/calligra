@@ -80,7 +80,7 @@ public:
                      long options = 0,
                      const QStringList &findStrings = QStringList(),
                      bool hasSelection = false);
-    ~FindDlg();
+    ~FindDlg() override;
     bool searchInAllSheet() const;
     FindOption::searchTypeValue searchType() const {
         return m_findOptions->searchType();
@@ -111,7 +111,7 @@ public:
                        const QStringList &findStrings = QStringList(),
                        const QStringList &replaceStrings = QStringList(),
                        bool hasSelection = false);
-    ~SearchDlg();
+    ~SearchDlg() override;
     bool searchInAllSheet() const;
     FindOption::searchTypeValue searchType() const {
         return m_findOptions->searchType();

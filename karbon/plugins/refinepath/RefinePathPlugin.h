@@ -34,7 +34,7 @@ class RefinePathPlugin : public QObject, public KXMLGUIClient
     Q_OBJECT
 public:
     RefinePathPlugin(QObject *parent, const QVariantList &);
-    virtual ~RefinePathPlugin() {}
+    ~RefinePathPlugin() override {}
 
 private Q_SLOTS:
     void slotRefinePath();

@@ -29,12 +29,12 @@ class FLAKE_EXPORT SvgShapeFactory : public KoShapeFactoryBase
 Q_OBJECT
 public:
     SvgShapeFactory();
-    ~SvgShapeFactory();
+    ~SvgShapeFactory() override;
 
     // reimplemented from KoShapeFactoryBase
-    virtual bool supports(const KoXmlElement &element, KoShapeLoadingContext &context) const;
+    bool supports(const KoXmlElement &element, KoShapeLoadingContext &context) const override;
     // reimplemented from KoShapeFactoryBase
-    virtual KoShape *createShapeFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    KoShape *createShapeFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
     /// Adds an instance of this factory to the shape registry, if not already registered
     static void addToRegistry();

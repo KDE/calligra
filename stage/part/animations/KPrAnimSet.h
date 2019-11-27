@@ -27,14 +27,14 @@ class KPrAnimSet : public KPrAnimationBase
 {
 public:
     explicit KPrAnimSet(KPrShapeAnimation *shapeAnimation);
-    virtual ~KPrAnimSet();
+    ~KPrAnimSet() override;
 
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
-    virtual bool saveOdf(KoPASavingContext & paContext) const;
-    virtual bool saveAttribute(KoPASavingContext &paContext) const;
-    virtual void init(KPrAnimationCache *animationCache, int step);
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
+    bool saveOdf(KoPASavingContext & paContext) const override;
+    bool saveAttribute(KoPASavingContext &paContext) const override;
+    void init(KPrAnimationCache *animationCache, int step) override;
 protected:
-    virtual void next(int currentTime);
+    void next(int currentTime) override;
 
 private:
     bool m_visible;

@@ -34,7 +34,7 @@ class FactoryInit : public Factory
 
 public:
     explicit FactoryInit() : Factory() {}
-    virtual ~FactoryInit() {}
+    ~FactoryInit() override {}
 
 };
 }

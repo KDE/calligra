@@ -49,9 +49,9 @@ public:
     /**
      * Destructor.
      */
-    virtual ~SelectionStrategy();
+    ~SelectionStrategy() override;
 
-    virtual void handleMouseMove(const QPointF &position, Qt::KeyboardModifiers modifiers);
+    void handleMouseMove(const QPointF &position, Qt::KeyboardModifiers modifiers) override;
 
 private:
     class Private;

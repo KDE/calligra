@@ -42,7 +42,7 @@ class KOKROSS_EXPORT KoScriptingModule : public QObject
     Q_OBJECT
 public:
     KoScriptingModule(QObject *parent, const QString &name);
-    virtual ~KoScriptingModule();
+    ~KoScriptingModule() override;
 
     KoView *view() const;
     virtual KoDocument *doc() = 0;

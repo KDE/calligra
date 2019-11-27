@@ -36,13 +36,13 @@ class KOODF2_EXPORT KoOdfTextProperties : public KoOdfStyleProperties
 {
  public:
     KoOdfTextProperties();
-    virtual ~KoOdfTextProperties();
+    ~KoOdfTextProperties() override;
 
     // Inherited from KoOdfStyleProperties
-    virtual void clear();
+    void clear() override;
 
-    virtual bool readOdf(KoXmlStreamReader &reader);
-    virtual bool saveOdf(const QString &propertySet, KoXmlWriter *writer);
+    bool readOdf(KoXmlStreamReader &reader) override;
+    bool saveOdf(const QString &propertySet, KoXmlWriter *writer) override;
 
  private:
     class Private;

@@ -26,8 +26,8 @@ class VeeWipeEffectFactory : public KPrPageEffectFactory
 {
 public:
     VeeWipeEffectFactory();
-    virtual ~VeeWipeEffectFactory();
-    virtual QString subTypeName(int subType) const;
+    ~VeeWipeEffectFactory() override;
+    QString subTypeName(int subType) const override;
 
     enum SubType {
         FromTop,

@@ -26,8 +26,8 @@ class KPrSingleSweepWipeEffectFactory : public KPrPageEffectFactory
 {
 public:
     KPrSingleSweepWipeEffectFactory();
-    virtual ~KPrSingleSweepWipeEffectFactory();
-    virtual QString subTypeName(int subType) const;
+    ~KPrSingleSweepWipeEffectFactory() override;
+    QString subTypeName(int subType) const override;
 
     enum SubType {
         ClockwiseTop,

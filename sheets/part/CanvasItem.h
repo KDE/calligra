@@ -77,24 +77,24 @@ class CALLIGRA_SHEETS_COMMON_EXPORT CanvasItem : public QGraphicsWidget, public 
 
 public:
     explicit CanvasItem(Doc* doc, QGraphicsItem *parent = 0);
-    ~CanvasItem();
+    ~CanvasItem() override;
 
-    virtual QWidget* canvasWidget() {
+    QWidget* canvasWidget() override {
         return 0;
     }
-    virtual const QWidget* canvasWidget() const {
+    const QWidget* canvasWidget() const override {
         return 0;
     }
 
     /**
      * Return the widget that will be added to the scrollArea.
      */
-    virtual QGraphicsObject *canvasItem() { return this; }
+    QGraphicsObject *canvasItem() override { return this; }
 
     /**
      * Return the widget that will be added to the scrollArea.
      */
-    virtual const QGraphicsObject *canvasItem() const{ return this; }
+    const QGraphicsObject *canvasItem() const override{ return this; }
 
 
 public Q_SLOTS:
@@ -119,33 +119,33 @@ public Q_SLOTS:
     void updateAccessedCellRange(Sheet* sheet, const QPoint& location);
 
 Q_SIGNALS:
-    /* virtual */ void documentSizeChanged(const QSize&);
+    /* virtual */ void documentSizeChanged(const QSize&) override;
     void obscuredRangeChanged(const Calligra::Sheets::Sheet* sheet, const QSize&);
 
 public:
-    virtual void mousePressEvent(QGraphicsSceneMouseEvent* _ev);
-    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent* _ev);
+    void mousePressEvent(QGraphicsSceneMouseEvent* _ev) override;
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent* _ev) override;
 protected:
-    virtual void keyPressEvent(QKeyEvent* _ev) {
+    void keyPressEvent(QKeyEvent* _ev) override {
         CanvasBase::keyPressed(_ev);
     }
-    virtual void paint( QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0);
-    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent* _ev);
-    virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent*);
-    virtual void focusInEvent(QFocusEvent* _ev) {
+    void paint( QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0) override;
+    void mouseMoveEvent(QGraphicsSceneMouseEvent* _ev) override;
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent*) override;
+    void focusInEvent(QFocusEvent* _ev) override {
         CanvasBase::focusIn(_ev);
         QGraphicsWidget::focusInEvent(_ev);
     }
-    virtual void dragEnterEvent(QGraphicsSceneDragDropEvent*);
-    virtual void dragMoveEvent(QGraphicsSceneDragDropEvent*);
-    virtual void dragLeaveEvent(QGraphicsSceneDragDropEvent*);
-    virtual void dropEvent(QGraphicsSceneDragDropEvent*);
+    void dragEnterEvent(QGraphicsSceneDragDropEvent*) override;
+    void dragMoveEvent(QGraphicsSceneDragDropEvent*) override;
+    void dragLeaveEvent(QGraphicsSceneDragDropEvent*) override;
+    void dropEvent(QGraphicsSceneDragDropEvent*) override;
     /// reimplemented method from superclass
-    virtual QVariant inputMethodQuery(Qt::InputMethodQuery query) const {
+    QVariant inputMethodQuery(Qt::InputMethodQuery query) const override {
         return CanvasBase::inputMethodQuery(query);
     }
     /// reimplemented method from superclass
-    virtual void inputMethodEvent(QInputMethodEvent *event) {
+    void inputMethodEvent(QInputMethodEvent *event) override {
         CanvasBase::inputMethodEvent(event);
     }
     /// reimplemented method from superclass
@@ -154,35 +154,35 @@ protected:
     }
 
 private:
-    virtual bool eventFilter(QObject *o, QEvent *e) {
+    bool eventFilter(QObject *o, QEvent *e) override {
         return CanvasBase::eventFilter(o, e);
     }
 
 public:
-    virtual Selection* selection() const;
-    virtual Sheet* activeSheet() const;
-    virtual KoZoomHandler* zoomHandler() const;
-    virtual SheetView* sheetView(const Sheet* sheet) const;
+    Selection* selection() const override;
+    Sheet* activeSheet() const override;
+    KoZoomHandler* zoomHandler() const override;
+    SheetView* sheetView(const Sheet* sheet) const override;
 
-    virtual bool isViewLoading() const { return false; }
-    virtual void enableAutoScroll() {}
-    virtual void disableAutoScroll() {}
-    virtual void setVertScrollBarPos(qreal) {}
-    virtual void setHorizScrollBarPos(qreal) {}
+    bool isViewLoading() const override { return false; }
+    void enableAutoScroll() override {}
+    void disableAutoScroll() override {}
+    void setVertScrollBarPos(qreal) override {}
+    void setHorizScrollBarPos(qreal) override {}
 
-    virtual void update() { QGraphicsWidget::update(); }
-    virtual void update(const QRectF& rect) { QGraphicsWidget::update(rect); }
-    virtual Qt::LayoutDirection layoutDirection() const { return QGraphicsWidget::layoutDirection(); }
-    virtual QRectF rect() const { return QGraphicsWidget::rect(); }
-    virtual QSizeF size() const { return QGraphicsWidget::size(); }
-    virtual QPoint mapToGlobal(const QPointF& point) const { return QGraphicsWidget::mapToScene(point).toPoint(); /* TODO */ }
-    virtual void updateMicroFocus() { /*QGraphicsWidget::updateMicroFocus();*/ }
+    void update() override { QGraphicsWidget::update(); }
+    void update(const QRectF& rect) override { QGraphicsWidget::update(rect); }
+    Qt::LayoutDirection layoutDirection() const override { return QGraphicsWidget::layoutDirection(); }
+    QRectF rect() const override { return QGraphicsWidget::rect(); }
+    QSizeF size() const override { return QGraphicsWidget::size(); }
+    QPoint mapToGlobal(const QPointF& point) const override { return QGraphicsWidget::mapToScene(point).toPoint(); /* TODO */ }
+    void updateMicroFocus() override { /*QGraphicsWidget::updateMicroFocus();*/ }
 
-    virtual ColumnHeader* columnHeader() const;
-    virtual RowHeader* rowHeader() const;
-    virtual void setCursor(const QCursor &cursor);
+    ColumnHeader* columnHeader() const override;
+    RowHeader* rowHeader() const override;
+    void setCursor(const QCursor &cursor) override;
 
-    virtual void showContextMenu(const QPoint& globalPos) { Q_UNUSED(globalPos); }
+    void showContextMenu(const QPoint& globalPos) override { Q_UNUSED(globalPos); }
 private:
     Q_DISABLE_COPY(CanvasItem)
 

@@ -33,21 +33,21 @@ class KOPAGEAPP_EXPORT KoPACanvas : public QWidget, public KoPACanvasBase
 public:
     explicit KoPACanvas( KoPAViewBase * view, KoPADocument * doc, QWidget *parent = 0, Qt::WindowFlags f = 0);
 
-    void repaint();
+    void repaint() override;
 
-    QWidget* canvasWidget();
-    const QWidget* canvasWidget() const;
-
-    /// reimplemented method
-    virtual void updateCanvas( const QRectF& rc );
+    QWidget* canvasWidget() override;
+    const QWidget* canvasWidget() const override;
 
     /// reimplemented method
-    virtual void updateInputMethodInfo();
+    void updateCanvas( const QRectF& rc ) override;
+
+    /// reimplemented method
+    void updateInputMethodInfo() override;
 
     /// Recalculates the size of the canvas (needed when zooming or changing pagelayout)
-    void updateSize();
+    void updateSize() override;
 
-    void setCursor(const QCursor &cursor);
+    void setCursor(const QCursor &cursor) override;
 
 public Q_SLOTS:
 
@@ -67,34 +67,34 @@ Q_SIGNALS:
 
 protected:
     /// reimplemented method from superclass
-    bool event(QEvent *);
+    bool event(QEvent *) override;
     /// reimplemented method from superclass
-    void paintEvent( QPaintEvent* event );
+    void paintEvent( QPaintEvent* event ) override;
     /// reimplemented method from superclass
-    void tabletEvent( QTabletEvent *event );
+    void tabletEvent( QTabletEvent *event ) override;
     /// reimplemented method from superclass
-    void mousePressEvent( QMouseEvent *event );
+    void mousePressEvent( QMouseEvent *event ) override;
     /// reimplemented method from superclass
-    void mouseDoubleClickEvent( QMouseEvent *event );
+    void mouseDoubleClickEvent( QMouseEvent *event ) override;
     /// reimplemented method from superclass
-    void mouseMoveEvent( QMouseEvent *event );
+    void mouseMoveEvent( QMouseEvent *event ) override;
     /// reimplemented method from superclass
-    void mouseReleaseEvent( QMouseEvent *event );
+    void mouseReleaseEvent( QMouseEvent *event ) override;
     /// reimplemented method from superclass
-    void keyPressEvent( QKeyEvent *event );
+    void keyPressEvent( QKeyEvent *event ) override;
     /// reimplemented method from superclass
-    void keyReleaseEvent( QKeyEvent *event );
+    void keyReleaseEvent( QKeyEvent *event ) override;
     /// reimplemented method from superclass
-    void wheelEvent ( QWheelEvent * event );
+    void wheelEvent ( QWheelEvent * event ) override;
     /// reimplemented method from superclass
-    void closeEvent( QCloseEvent * event );
+    void closeEvent( QCloseEvent * event ) override;
     /// reimplemented method from superclass
-    virtual QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
+    QVariant inputMethodQuery(Qt::InputMethodQuery query) const override;
     /// reimplemented method from superclass
-    virtual void inputMethodEvent(QInputMethodEvent *event);
+    void inputMethodEvent(QInputMethodEvent *event) override;
 
     /// reimplemented method from superclass
-    virtual void resizeEvent( QResizeEvent * event );
+    void resizeEvent( QResizeEvent * event ) override;
 
     /**
      * Shows the default context menu

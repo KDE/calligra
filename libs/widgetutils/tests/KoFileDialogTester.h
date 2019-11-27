@@ -31,7 +31,7 @@ class KoFileDialogTester : public QWidget
     
 public:
     explicit KoFileDialogTester(QWidget *parent = 0);
-    ~KoFileDialogTester();
+    ~KoFileDialogTester() override;
     
 private Q_SLOTS:
 

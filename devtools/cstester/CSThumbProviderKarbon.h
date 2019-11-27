@@ -30,9 +30,9 @@ class CSThumbProviderKarbon : public CSThumbProvider
 {
 public:
     explicit CSThumbProviderKarbon(KarbonDocument *doc);
-    virtual ~CSThumbProviderKarbon();
+    ~CSThumbProviderKarbon() override;
 
-    virtual QVector<QImage> createThumbnails(const QSize &thumbSize);
+    QVector<QImage> createThumbnails(const QSize &thumbSize) override;
 
 private:
     KarbonDocument *m_doc;

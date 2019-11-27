@@ -95,7 +95,7 @@ public:
      * At least we take ownership ;)
      */
     Parser( OLEStorage* storage, OLEStreamReader* wordDocument );
-    virtual ~Parser();  // Don't forget to close everything properly here
+    ~Parser() override;  // Don't forget to close everything properly here
 
     /**
      * Is everything allright?

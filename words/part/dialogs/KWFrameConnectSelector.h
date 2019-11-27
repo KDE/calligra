@@ -40,12 +40,12 @@ public:
     /// load all info from the argument frame into this widget
     bool canOpen(KoShape *shape);
     /// reimplemented
-    void open(KoShape *shape);
+    void open(KoShape *shape) override;
     /// reimplemented
-    void save();
+    void save() override;
 
     /// reimplemented
-    virtual bool showOnShapeCreate() {
+    bool showOnShapeCreate() override {
         return true;
     }
 

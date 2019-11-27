@@ -30,7 +30,7 @@ public:
     const QString msg;
     InvalidFormatException() {}
     explicit InvalidFormatException(const QString &m) :msg(m) {}
-    ~InvalidFormatException() throw() {}
+    ~InvalidFormatException() throw() override {}
 };
 
 #endif

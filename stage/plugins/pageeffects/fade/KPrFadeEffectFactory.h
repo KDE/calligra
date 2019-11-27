@@ -27,8 +27,8 @@ class KPrFadeEffectFactory : public KPrPageEffectFactory
 {
 public:
     KPrFadeEffectFactory();
-    virtual ~KPrFadeEffectFactory();
-    virtual QString subTypeName(int subType) const;
+    ~KPrFadeEffectFactory() override;
+    QString subTypeName(int subType) const override;
 
     enum SubType {
         CrossFade,

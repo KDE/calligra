@@ -33,8 +33,8 @@ class ImageExport : public KoFilter
 
 public:
     ImageExport(QObject* parent, const QVariantList&);
-    virtual ~ImageExport() {}
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    ~ImageExport() override {}
+    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
 };
 
 #endif // IMAGEEXPORT_H

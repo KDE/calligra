@@ -122,7 +122,7 @@ class XlsxXmlDrawingReaderContext : public MSOOXML::MsooXmlReaderContext
 {
 public:
     XlsxXmlDrawingReaderContext(XlsxXmlWorksheetReaderContext* _worksheetReaderContext, Sheet* _sheet, const QString& _path, const QString& _file);
-    virtual ~XlsxXmlDrawingReaderContext();
+    ~XlsxXmlDrawingReaderContext() override;
 
     XlsxImport* import;
     QString path; // contains the path to the file which is being processed (i.e. 'xl/drawings')
@@ -138,8 +138,8 @@ class XlsxXmlDrawingReader : public MSOOXML::MsooXmlCommonReader
 {
 public:
     explicit XlsxXmlDrawingReader(KoOdfWriters *writers);
-    virtual ~XlsxXmlDrawingReader();
-    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
+    ~XlsxXmlDrawingReader() override;
+    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0) override;
 
 protected:
     KoFilter::ConversionStatus read_oneCellAnchor();

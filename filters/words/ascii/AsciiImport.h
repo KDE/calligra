@@ -33,8 +33,8 @@ class AsciiImport : public KoFilter
 
 public:
     AsciiImport(QObject *parent, const QVariantList &);
-    virtual ~AsciiImport();
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    ~AsciiImport() override;
+    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
 };
 
 #endif /* ASCIIIMPORT_H */

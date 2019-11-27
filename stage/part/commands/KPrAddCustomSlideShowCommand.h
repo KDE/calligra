@@ -32,12 +32,12 @@ class STAGE_TEST_EXPORT KPrAddCustomSlideShowCommand : public KUndo2Command
 public:
     explicit KPrAddCustomSlideShowCommand(KPrDocument *doc, KPrCustomSlideShowsModel *model, const QString &name, KUndo2Command *parent = 0);
 
-    virtual ~KPrAddCustomSlideShowCommand();
+    ~KPrAddCustomSlideShowCommand() override;
 
     /// redo the command
-    virtual void redo();
+    void redo() override;
     /// revert the actions done in redo
-    virtual void undo();
+    void undo() override;
 
 private:
     KPrDocument *m_doc;

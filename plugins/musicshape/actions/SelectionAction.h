@@ -26,8 +26,8 @@ class SelectionAction : public AbstractMusicAction
 public:
     explicit SelectionAction(SimpleEntryTool *tool);
 
-    virtual void mousePress(MusicCore::Staff* staff, int bar, const QPointF& pos);
-    virtual void mouseMove(MusicCore::Staff* staff, int bar, const QPointF& pos);
+    void mousePress(MusicCore::Staff* staff, int bar, const QPointF& pos) override;
+    void mouseMove(MusicCore::Staff* staff, int bar, const QPointF& pos) override;
 private:
     int m_firstBar;
     MusicCore::Staff* m_startStaff;

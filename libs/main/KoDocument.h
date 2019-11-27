@@ -104,7 +104,7 @@ public:
      * The destructor does not delete any attached KoView objects and it does not
      * delete the attached widget as returned by widget().
      */
-    virtual ~KoDocument();
+    ~KoDocument() override;
 
     /// XXX: Temporary!
     KoPart *documentPart() const;
@@ -163,7 +163,7 @@ public:
      *
      * @return the oasis mimetype or, if it hasn't one, the nativeformatmimetype.
      */
-    virtual QByteArray nativeOasisMimeType() const = 0;
+    QByteArray nativeOasisMimeType() const override = 0;
 
     /// Checks whether a given mimetype can be handled natively.
     bool isNativeFormat(const QByteArray& mimetype) const;
@@ -176,12 +176,12 @@ public:
      * Return the set of SupportedSpecialFormats that the application wants to
      * offer in the "Save" file dialog.
      */
-    virtual int supportedSpecialFormats() const;
+    int supportedSpecialFormats() const override;
 
     /**
      * Returns the actual mimetype of the document
      */
-    QByteArray mimeType() const;
+    QByteArray mimeType() const override;
 
     /**
      * @brief Sets the mime type for the document.
@@ -189,7 +189,7 @@ public:
      * When choosing "save as" this is also the mime type
      * selected by default.
      */
-    void setMimeType(const QByteArray & mimeType);
+    void setMimeType(const QByteArray & mimeType) override;
 
     /**
      * @brief Set the format in which the document should be saved.
@@ -200,9 +200,9 @@ public:
      * @param mimeType the mime type (format) to use.
      * @param specialOutputFlag is for "save as older version" etc.
      */
-    void setOutputMimeType(const QByteArray & mimeType, int specialOutputFlag = 0);
-    QByteArray outputMimeType() const;
-    int specialOutputFlag() const;
+    void setOutputMimeType(const QByteArray & mimeType, int specialOutputFlag = 0) override;
+    QByteArray outputMimeType() const override;
+    int specialOutputFlag() const override;
 
     /**
      * Returns true if this document was the result of opening a foreign
@@ -280,7 +280,7 @@ public:
     /**
      *  @return true if the document is empty.
      */
-    virtual bool isEmpty() const;
+    bool isEmpty() const override;
 
     /**
      *  @brief Sets the document to empty.
@@ -306,14 +306,14 @@ public:
      *  @brief Loads an OASIS document from a store.
      *  This is used for both the main document and embedded objects.
      */
-    virtual bool loadOasisFromStore(KoStore *store);
+    bool loadOasisFromStore(KoStore *store) override;
 
     /**
      *  @brief Saves a sub-document to a store.
      *
      *  You should not have to reimplement this.
      */
-    virtual bool saveToStore(KoStore *store, const QString& path);
+    bool saveToStore(KoStore *store, const QString& path) override;
 
     /**
      *  Reimplement this method to load the contents of your Calligra document,
@@ -388,7 +388,7 @@ public:
     /**
      * Checks whether the document is currently in the process of autosaving
      */
-    bool isAutosaving() const;
+    bool isAutosaving() const override;
 
     /**
      * Set whether the next openUrl call should check for an auto-saved file
@@ -455,7 +455,7 @@ public:
      * Return true if url() is a real filename, false if url() is
      * an internal url in the store, like "tar:/..."
      */
-    virtual bool isStoredExtern() const;
+    bool isStoredExtern() const override;
 
     /**
      * @return the page layout associated with this document (margins, pageSize, etc).
@@ -478,7 +478,7 @@ public:
     /**
      * Returns true if this document or any of its internal child documents are modified.
      */
-    Q_INVOKABLE bool isModified() const;
+    Q_INVOKABLE bool isModified() const override;
 
     /**
      * Returns true during loading (openUrl can be asynchronous)
@@ -513,7 +513,7 @@ public:
      * After using loadNativeFormat on a template, one wants
      * to set the url to QUrl()
      */
-    void resetURL();
+    void resetURL() override;
 
     bool hasExternURL() const;
 
@@ -736,15 +736,15 @@ protected:
 
 public:
 
-    QString localFilePath() const;
+    QString localFilePath() const override;
     void setLocalFilePath( const QString &localFilePath );
 
     virtual KoDocumentInfoDlg* createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const;
 
     bool isReadWrite() const;
 
-    QUrl url() const;
-    void setUrl(const QUrl &url);
+    QUrl url() const override;
+    void setUrl(const QUrl &url) override;
 
     virtual bool closeUrl(bool promptToSave = true);
 

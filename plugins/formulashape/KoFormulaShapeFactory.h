@@ -38,12 +38,12 @@ public:
     explicit KoFormulaShapeFactory();
 
     /// The destructor - reimplemented from KoShapeFactoryBase
-    ~KoFormulaShapeFactory();
+    ~KoFormulaShapeFactory() override;
 
     /// reimplemented
-    virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const;
+    KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const override;
 
-    virtual bool supports(const KoXmlElement& e, KoShapeLoadingContext &context) const;
+    bool supports(const KoXmlElement& e, KoShapeLoadingContext &context) const override;
 };
 
 #endif // KOFORMULASHAPEFACTORY_H

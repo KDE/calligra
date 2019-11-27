@@ -31,7 +31,7 @@ class KoPABackgroundToolWidget : public QWidget
     Q_OBJECT
 public:
     explicit KoPABackgroundToolWidget( KoPABackgroundTool *tool, QWidget *parent = 0 );
-    virtual ~KoPABackgroundToolWidget();
+    ~KoPABackgroundToolWidget() override;
 
 public Q_SLOTS:
     void slotActivePageChanged();

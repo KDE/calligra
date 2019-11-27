@@ -39,10 +39,10 @@ public:
     QString content() const;
     
     /// @return The element's ElementType
-    ElementType elementType() const;
+    ElementType elementType() const override;
     
-    virtual bool readMathMLContent(const KoXmlElement& element);
-    virtual void writeMathMLContent(KoXmlWriter* writer, const QString& ns) const;
+    bool readMathMLContent(const KoXmlElement& element) override;
+    void writeMathMLContent(KoXmlWriter* writer, const QString& ns) const override;
 private:
     QString m_content;
 };

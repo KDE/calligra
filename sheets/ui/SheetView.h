@@ -65,7 +65,7 @@ public:
     /**
      * Destructor.
      */
-    ~SheetView();
+    ~SheetView() override;
 
     /**
      * \return the Sheet

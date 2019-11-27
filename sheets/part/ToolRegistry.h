@@ -40,7 +40,7 @@ public:
      * Creates the registry.
      */
     ToolRegistry();
-    ~ToolRegistry();
+    ~ToolRegistry() override;
 
     /**
      * \return the singleton instance

@@ -35,20 +35,20 @@ class PrintJob : public KoPrintingDialog
 {
 public:
     explicit PrintJob(View *view);
-    virtual ~PrintJob();
+    ~PrintJob() override;
 
-    virtual int documentFirstPage() const;
-    virtual int documentLastPage() const;
-    virtual QAbstractPrintDialog::PrintDialogOptions printDialogOptions() const;
+    int documentFirstPage() const override;
+    int documentLastPage() const override;
+    QAbstractPrintDialog::PrintDialogOptions printDialogOptions() const override;
 
 public Q_SLOTS:
-    virtual void startPrinting(RemovePolicy removePolicy = DoNotDelete);
+    void startPrinting(RemovePolicy removePolicy = DoNotDelete) override;
 
 protected:
-    virtual QRectF preparePage(int pageNumber);
-    virtual void printPage(int pageNumber, QPainter &painter);
-    virtual QList<KoShape*> shapesOnPage(int pageNumber);
-    virtual QList<QWidget*> createOptionWidgets() const;
+    QRectF preparePage(int pageNumber) override;
+    void printPage(int pageNumber, QPainter &painter) override;
+    QList<KoShape*> shapesOnPage(int pageNumber) override;
+    QList<QWidget*> createOptionWidgets() const override;
 
 private:
     class Private;

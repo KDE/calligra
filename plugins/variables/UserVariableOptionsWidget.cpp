@@ -149,7 +149,7 @@ void UserVariableOptionsWidget::newClicked()
     {
     public:
         Validator(KoVariableManager *variableManager) : m_variableManager(variableManager) {}
-        virtual State validate(QString &input, int &) const
+        State validate(QString &input, int &) const override
         {
             QString s = input.trimmed();
             return s.isEmpty() || m_variableManager->userVariables().contains(s) ? Intermediate : Acceptable;

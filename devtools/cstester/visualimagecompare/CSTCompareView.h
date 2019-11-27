@@ -36,12 +36,12 @@ class CSTCompareView : public QWidget
 {
 public:
     explicit CSTCompareView(QWidget *parent = 0);
-    virtual ~CSTCompareView();
+    ~CSTCompareView() override;
 
     bool open(const QString &inDir1, const QString &inDir2, const QString &pdfDir, const QString &resultFile);
 
 protected:
-    virtual void keyPressEvent(QKeyEvent * event);
+    void keyPressEvent(QKeyEvent * event) override;
 
 private:
     int updateResult(int index);

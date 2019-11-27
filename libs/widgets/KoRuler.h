@@ -50,7 +50,7 @@ public:
      * @param viewConverter the view converter used to convert from point to pixel
      */
     KoRuler(QWidget* parent, Qt::Orientation orientation, const KoViewConverter* viewConverter);
-    ~KoRuler() Q_DECL_OVERRIDE;
+    ~KoRuler() override;
 
     /// For paragraphs each tab definition is represented by this struct.
     struct Tab {
@@ -93,10 +93,10 @@ public:
     QList<QAction*> popupActionList() const;
 
     /// reimplemented
-    QSize minimumSizeHint() const Q_DECL_OVERRIDE;
+    QSize minimumSizeHint() const override;
 
     /// reimplemented
-    QSize sizeHint() const Q_DECL_OVERRIDE;
+    QSize sizeHint() const override;
 
 public Q_SLOTS:
     /// Set the unit of the ruler
@@ -259,13 +259,13 @@ Q_SIGNALS:
 
 protected:
     /// reimplemented
-    void paintEvent(QPaintEvent* event) Q_DECL_OVERRIDE;
+    void paintEvent(QPaintEvent* event) override;
     /// reimplemented
-    void mousePressEvent(QMouseEvent *ev) Q_DECL_OVERRIDE;
+    void mousePressEvent(QMouseEvent *ev) override;
     /// reimplemented
-    void mouseReleaseEvent(QMouseEvent *ev) Q_DECL_OVERRIDE;
+    void mouseReleaseEvent(QMouseEvent *ev) override;
     /// reimplemented
-    void mouseMoveEvent(QMouseEvent *ev) Q_DECL_OVERRIDE;
+    void mouseMoveEvent(QMouseEvent *ev) override;
 
 private:
     KoRulerPrivate * const d;

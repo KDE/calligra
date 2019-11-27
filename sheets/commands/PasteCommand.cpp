@@ -50,7 +50,7 @@ public:
             , m_pasteOperation(Paste::OverWrite)
             , m_pasteFC(false) {
     }
-    virtual ~PasteCellCommand() {}
+    ~PasteCellCommand() override {}
 
     void addXmlElement(const Cell &cell, const KoXmlElement &element) {
         add(cell.cellPosition(), m_sheet);
@@ -62,7 +62,7 @@ public:
     bool                m_pasteFC; // FIXME What's that? ForceConditions?
 
 protected:
-    bool process(Element *element) {
+    bool process(Element *element) override {
         // Destination cell:
         Cell cell(m_sheet, element->rect().topLeft());
         const int xOffset = cell.column() - m_elements[cell].attribute("column").toInt();
@@ -71,14 +71,14 @@ protected:
                          m_pasteMode, m_pasteOperation, m_pasteFC);
     }
 
-    bool preProcessing() {
+    bool preProcessing() override {
         if (m_firstrun) {
             m_sheet->cellStorage()->startUndoRecording();
         }
         return true;
     }
 
-    bool mainProcessing() {
+    bool mainProcessing() override {
         if (m_reverse) {
             KUndo2Command::undo(); // undo child commands
             return true;
@@ -86,7 +86,7 @@ protected:
         return AbstractRegionCommand::mainProcessing();
     }
 
-    bool postProcessing() {
+    bool postProcessing() override {
         if (m_firstrun) {
             m_sheet->cellStorage()->stopUndoRecording(this);
         }

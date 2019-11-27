@@ -39,26 +39,26 @@ public:
     explicit KoFormulaTool( KoCanvasBase *canvas );
 
     /// The standard destructor
-    ~KoFormulaTool();
+    ~KoFormulaTool() override;
 
     /// reimplemented
-    void paint( QPainter &painter, const KoViewConverter &converter );
+    void paint( QPainter &painter, const KoViewConverter &converter ) override;
 
     /// reimplemented
-    void mousePressEvent( KoPointerEvent *event ) ;
+    void mousePressEvent( KoPointerEvent *event ) override ;
 
     /// reimplemented
-    void mouseDoubleClickEvent( KoPointerEvent *event );
+    void mouseDoubleClickEvent( KoPointerEvent *event ) override;
 
     /// reimplemented
-    void mouseMoveEvent( KoPointerEvent *event );
+    void mouseMoveEvent( KoPointerEvent *event ) override;
 
     /// reimplemented
-    void mouseReleaseEvent( KoPointerEvent *event );
+    void mouseReleaseEvent( KoPointerEvent *event ) override;
 
-    void keyPressEvent( QKeyEvent *event );
+    void keyPressEvent( QKeyEvent *event ) override;
 
-    void keyReleaseEvent( QKeyEvent *event );
+    void keyReleaseEvent( QKeyEvent *event ) override;
 
     void remove( bool backSpace );
 
@@ -73,10 +73,10 @@ public:
 
 public Q_SLOTS:
     /// Called when this tool instance is activated and fills m_formulaShape
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
 
     /// Called when this tool instance is deactivated
-    void deactivate();
+    void deactivate() override;
 
     /// Insert the element tied to the given @p action
     void insert( const QString& action );
@@ -95,15 +95,15 @@ public Q_SLOTS:
     
 protected:
     /// Create default option widget
-    QWidget* createOptionWidget();
+    QWidget* createOptionWidget() override;
 
-    virtual void copy() const;
+    void copy() const override;
 
-    virtual void deleteSelection();
+    void deleteSelection() override;
 
-    virtual bool paste();
+    bool paste() override;
 
-    virtual QStringList supportedPasteMimeTypes() const;
+    QStringList supportedPasteMimeTypes() const override;
     
 private:
     /// Repaint the cursor and selection

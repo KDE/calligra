@@ -30,8 +30,8 @@ class CSVFilter : public KoFilter
 
 public:
     CSVFilter(QObject* parent, const QVariantList&);
-    virtual ~CSVFilter() {}
+    ~CSVFilter() override {}
 
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
 };
 #endif // CSVIMPORT_H

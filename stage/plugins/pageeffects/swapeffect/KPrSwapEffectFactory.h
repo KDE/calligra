@@ -26,8 +26,8 @@ class KPrSwapEffectFactory : public KPrPageEffectFactory
 {
 public:
     KPrSwapEffectFactory();
-    virtual ~KPrSwapEffectFactory();
-    virtual QString subTypeName(int subType) const;
+    ~KPrSwapEffectFactory() override;
+    QString subTypeName(int subType) const override;
 
     enum SubType {
         Horizontal

@@ -36,9 +36,9 @@ class Pdf2OdgImport : public KoFilter
 
 public:
     Pdf2OdgImport(QObject* parent, const QVariantList&);
-    virtual ~Pdf2OdgImport();
+    ~Pdf2OdgImport() override;
 
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
 
     KoFilter::ConversionStatus convert(int pageNumber, QFile &in);
     void convert(const KoXmlElement &rootElement, int pageNumber);

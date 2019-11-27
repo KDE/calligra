@@ -35,7 +35,7 @@ class KPrEndOfSlideShowPage : public KPrPage
 {
 public:
     KPrEndOfSlideShowPage( const QRectF & screenRect, KPrDocument * document );
-    ~KPrEndOfSlideShowPage();
+    ~KPrEndOfSlideShowPage() override;
 };
 
 #endif /* KPRENDOFSLIDESHOWPAGE_H */

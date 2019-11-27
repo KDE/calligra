@@ -50,7 +50,7 @@ public:
     /**
      * @brief Destructor
      */
-    ~KoPASavingContext();
+    ~KoPASavingContext() override;
 
     /**
      * @brief Add style name of master to lookup table

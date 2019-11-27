@@ -50,7 +50,7 @@ public:
      * @param parent a parent widget for the purpose of centering the dialog
      */
     explicit ChartDialog(const QList<KoChart::ChartShape*> &selectedCharts, QWidget *parent = 0);
-    ~ChartDialog();
+    ~ChartDialog() override;
 
     /**
      * Create a list of factories that will be able to create widgets to configure shapes.

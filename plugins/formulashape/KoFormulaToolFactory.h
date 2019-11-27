@@ -37,10 +37,10 @@ public:
     explicit KoFormulaToolFactory();
 
     /// The destructor - reimplemented from KoToolFactoryBase
-    ~KoFormulaToolFactory();
+    ~KoFormulaToolFactory() override;
 
     /// @return an instance of KoFormulaTool
-    KoToolBase* createTool( KoCanvasBase* canvas );
+    KoToolBase* createTool( KoCanvasBase* canvas ) override;
 };
 
 #endif

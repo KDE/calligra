@@ -49,7 +49,7 @@ public:
     /**
      * Destructor.
      */
-    ~Sheet();
+    ~Sheet() override;
 
     /**
      * Returns the number of parts this piece of music contains.

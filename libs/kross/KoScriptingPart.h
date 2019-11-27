@@ -54,7 +54,7 @@ public:
     /**
     * Destructor.
     */
-    virtual ~KoScriptingPart();
+    ~KoScriptingPart() override;
 
     /**
     * \return the \a KoScriptingModule instance that is the top-level module for

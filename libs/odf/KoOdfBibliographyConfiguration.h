@@ -45,7 +45,7 @@ class KOODF_EXPORT KoOdfBibliographyConfiguration : public QObject
 public:
 
     KoOdfBibliographyConfiguration();
-    ~KoOdfBibliographyConfiguration();
+    ~KoOdfBibliographyConfiguration() override;
     KoOdfBibliographyConfiguration(const KoOdfBibliographyConfiguration &other);
     KoOdfBibliographyConfiguration &operator=(const KoOdfBibliographyConfiguration &other);
 

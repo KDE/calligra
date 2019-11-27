@@ -26,8 +26,8 @@ class KPrSpiralWipeEffectFactory : public KPrPageEffectFactory
 {
 public:
     KPrSpiralWipeEffectFactory();
-    virtual ~KPrSpiralWipeEffectFactory();
-    virtual QString subTypeName(int subType) const;
+    ~KPrSpiralWipeEffectFactory() override;
+    QString subTypeName(int subType) const override;
 
     enum SubType {
         ClockwiseTopLeftIn,

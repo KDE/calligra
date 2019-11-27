@@ -46,18 +46,18 @@ class KPrPresentationDrawWidget : public KPrPresentationToolEventForwarder
 
 public :
     explicit KPrPresentationDrawWidget(KoPACanvasBase *canvas);
-    ~KPrPresentationDrawWidget();
+    ~KPrPresentationDrawWidget() override;
 
     /** Draw on the Presentation */
-    void paintEvent( QPaintEvent * event );
+    void paintEvent( QPaintEvent * event ) override;
 
     /** Get all the mouse event needed to paint */
-    void mouseMoveEvent( QMouseEvent * e );
-    void mousePressEvent( QMouseEvent * e );
-    void mouseReleaseEvent( QMouseEvent * e );
+    void mouseMoveEvent( QMouseEvent * e ) override;
+    void mousePressEvent( QMouseEvent * e ) override;
+    void mouseReleaseEvent( QMouseEvent * e ) override;
 
     /** Popup menu for colors and sizes */
-    void contextMenuEvent( QContextMenuEvent * event );
+    void contextMenuEvent( QContextMenuEvent * event ) override;
 
 public Q_SLOTS:
     void updateColor( QAction * );

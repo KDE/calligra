@@ -49,7 +49,7 @@ class KOPAGEAPP_EXPORT KoPAPageBase : public KoShapeContainer
 {
 public:
     explicit KoPAPageBase();
-    virtual ~KoPAPageBase();
+    ~KoPAPageBase() override;
 
     /**
      * @brief Save a page
@@ -59,17 +59,17 @@ public:
      * @param context the pageapp saving context
      * @return true on success, false otherwise
      */
-    virtual void saveOdf( KoShapeSavingContext & context ) const = 0;
+    void saveOdf( KoShapeSavingContext & context ) const override = 0;
 
     /// reimplemented
-    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context );
+    bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context ) override;
 
 
     /// @return the layout of the page
     virtual KoPageLayout & pageLayout() = 0;
     virtual const KoPageLayout & pageLayout() const = 0;
 
-    virtual void paintComponent(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &paintcontext);
+    void paintComponent(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &paintcontext) override;
 
     /**
      * @brief Paint background
@@ -129,10 +129,10 @@ public:
     virtual void pageUpdated();
 
     /// reimplemented
-    virtual QSizeF size() const;
+    QSizeF size() const override;
 
     // reimplemented
-    virtual QRectF boundingRect() const;
+    QRectF boundingRect() const override;
 
     /**
      * Returns the bounding rectangle of the pages content

@@ -35,7 +35,7 @@ class ConversionModule : public FunctionModule
 public:
     explicit ConversionModule(QObject* parent, const QVariantList& args = QVariantList());
 
-    QString descriptionFileName() const;
+    QString descriptionFileName() const override;
 };
 
 } // namespace Sheets

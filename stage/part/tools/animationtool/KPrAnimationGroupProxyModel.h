@@ -30,7 +30,7 @@ class KPrAnimationGroupProxyModel : public QSortFilterProxyModel
     Q_OBJECT
 public:
     explicit KPrAnimationGroupProxyModel(QObject *parent = 0);
-    ~KPrAnimationGroupProxyModel();
+    ~KPrAnimationGroupProxyModel() override;
 
     /**
      * @brief Takes a source model index to set the group to be displayed
@@ -47,7 +47,7 @@ public:
     void forceUpdateModel();
 
 protected:
-    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const;
+    bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
 
 private:
     int m_currentGroup;

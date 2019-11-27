@@ -30,7 +30,7 @@ class ToolManager : public QQuickItem
     Q_PROPERTY(QObject* currentTool READ currentTool NOTIFY currentToolChanged);
 public:
     explicit ToolManager(QQuickItem* parent = 0);
-    virtual ~ToolManager();
+    ~ToolManager() override;
 
     QObject* currentTool() const;
 

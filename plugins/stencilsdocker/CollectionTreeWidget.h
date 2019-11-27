@@ -36,8 +36,8 @@ class SheetDelegate: public QItemDelegate
 public:
     SheetDelegate(QTreeView* view, QWidget* parent);
 
-    virtual void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
-    virtual QSize sizeHint(const QStyleOptionViewItem& opt, const QModelIndex& index) const;
+    void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const override;
+    QSize sizeHint(const QStyleOptionViewItem& opt, const QModelIndex& index) const override;
 
 private:
     QTreeView* m_view;
@@ -49,14 +49,14 @@ class CollectionTreeWidget : public QTreeWidget
 
 public:
     explicit CollectionTreeWidget(QWidget* parent);
-    ~CollectionTreeWidget();
+    ~CollectionTreeWidget() override;
     void setFamilyMap(QMap<QString, CollectionItemModel*> map);
     void regenerateFilteredMap();
     void setFilter(QRegExp regExp);
 
 protected:
-    void contextMenuEvent(QContextMenuEvent* e);
-    void resizeEvent(QResizeEvent* e);
+    void contextMenuEvent(QContextMenuEvent* e) override;
+    void resizeEvent(QResizeEvent* e) override;
 
 private:
     QListView::ViewMode m_viewMode;

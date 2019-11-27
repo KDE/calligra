@@ -47,7 +47,7 @@ namespace wvWare
 
         Functor( ParserT& parser, F f, const Data& data )
             : m_parser( &parser ), f_( f ), m_data( data ) {}
-        virtual void operator()() const { (m_parser->*f_)( m_data ); }
+        void operator()() const override { (m_parser->*f_)( m_data ); }
 
     private:
         ParserT* m_parser;

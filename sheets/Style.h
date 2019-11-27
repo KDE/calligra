@@ -326,10 +326,10 @@ public:
      */
     explicit CustomStyle(const QString& name, CustomStyle* parent = 0);
 	CustomStyle(const CustomStyle& style);
-    virtual ~CustomStyle();
+    ~CustomStyle() override;
     CustomStyle& operator=(const CustomStyle& other);
 
-    virtual StyleType type() const;
+    StyleType type() const override;
     void setType(StyleType type);
 
     void setName(QString const & name);
@@ -348,7 +348,7 @@ public:
      */
     int usage() const;
 
-    virtual QSet<Style::Key> definedKeys(const StyleManager *) const;
+    QSet<Style::Key> definedKeys(const StyleManager *) const override;
 private:
     friend class StyleManager;
 
@@ -420,16 +420,16 @@ class NamedStyle : public SubStyle
 {
 public:
     NamedStyle(const QString& n) : SubStyle(), name(n) {}
-    virtual Style::Key type() const {
+    Style::Key type() const override {
         return Style::NamedStyleKey;
     }
-    virtual void dump() const {
+    void dump() const override {
         debugSheetsStyle << debugData();
     }
-    virtual QString debugData(bool withName = true) const {
+    QString debugData(bool withName = true) const override {
         QString out; if (withName) out = SubStyle::name(Style::NamedStyleKey) + ' '; out += name; return out;
     }
-    virtual uint koHash() const { return uint(type()) ^ qHash(name); }
+    uint koHash() const override { return uint(type()) ^ qHash(name); }
     QString name;
 };
 
@@ -448,16 +448,16 @@ class SubStyleOne : public SubStyle
 {
 public:
     SubStyleOne(const Value1& v = Value1()) : SubStyle(), value1(v) {}
-    virtual Style::Key type() const {
+    Style::Key type() const override {
         return key;
     }
-    virtual void dump() const {
+    void dump() const override {
         debugSheetsStyle << debugData();
     }
-    virtual QString debugData(bool withName = true) const {
+    QString debugData(bool withName = true) const override {
         QString out; if (withName) out = name(key) + ' '; QDebug qdbg(&out); qdbg << value1; return out;
     }
-    virtual uint koHash() const { return uint(type()) ^ qHash(value1); }
+    uint koHash() const override { return uint(type()) ^ qHash(value1); }
     Value1 value1;
 };
 

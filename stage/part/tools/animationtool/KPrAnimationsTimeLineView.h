@@ -46,7 +46,7 @@ public:
      * @param model a KPrAnimationGroupProxyModel pointer
      */
     void setModel(KPrAnimationGroupProxyModel *model);
-    void resizeEvent(QResizeEvent *event);
+    void resizeEvent(QResizeEvent *event) override;
 
     /**
       * Return the filter model for animation groups
@@ -77,7 +77,7 @@ public:
     void setCurrentIndex(const QModelIndex &index);
 
     int rowCount() const;
-    virtual QSize sizeHint() const;
+    QSize sizeHint() const override;
 
     /** Helper classes to get the column range that the view has to display*/
     int startColumn() const;

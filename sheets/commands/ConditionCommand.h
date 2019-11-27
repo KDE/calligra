@@ -42,8 +42,8 @@ public:
     void setConditionList(const QLinkedList<Conditional>& list);
 
 protected:
-    virtual bool process(Element* element);
-    virtual bool mainProcessing();
+    bool process(Element* element) override;
+    bool mainProcessing() override;
 
 private:
     Conditions m_conditions;

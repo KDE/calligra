@@ -36,24 +36,24 @@ class OdtReaderWikiBackend : public OdfTextReaderBackend
 {
  public:
     explicit OdtReaderWikiBackend();
-    virtual ~OdtReaderWikiBackend();
+    ~OdtReaderWikiBackend() override;
 
     // ----------------------------------------------------------------
     // Text level functions: paragraphs, headings, sections, frames, objects, etc
 
-    void elementTextH(KoXmlStreamReader &reader, OdfReaderContext *context);
-    void elementTextP(KoXmlStreamReader &reader, OdfReaderContext *context);
-    void elementTextList(KoXmlStreamReader &reader, OdfReaderContext *context);
+    void elementTextH(KoXmlStreamReader &reader, OdfReaderContext *context) override;
+    void elementTextP(KoXmlStreamReader &reader, OdfReaderContext *context) override;
+    void elementTextList(KoXmlStreamReader &reader, OdfReaderContext *context) override;
 
     // ----------------------------------------------------------------
     // Paragraph level functions: spans, annotations, notes, text content itself, etc.
 
-    void elementTextSpan(KoXmlStreamReader &reader, OdfReaderContext *context);
-    void elementTextS(KoXmlStreamReader &reader, OdfReaderContext *context);
+    void elementTextSpan(KoXmlStreamReader &reader, OdfReaderContext *context) override;
+    void elementTextS(KoXmlStreamReader &reader, OdfReaderContext *context) override;
 
-    void elementTextListItem(KoXmlStreamReader &reader, OdfReaderContext *context);
+    void elementTextListItem(KoXmlStreamReader &reader, OdfReaderContext *context) override;
 
-    void characterData(KoXmlStreamReader &reader, OdfReaderContext *context);
+    void characterData(KoXmlStreamReader &reader, OdfReaderContext *context) override;
 
 private:
     void outputTextStyle(KoXmlStreamReader &reader, OdfReaderWikiContext *wikiContext);

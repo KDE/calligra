@@ -38,8 +38,8 @@ public:
     KPageWidgetItem* pageItem(const QString &name) const;
 
 protected:
-    void accept();
-    void reject();
+    void accept() override;
+    void reject() override;
 
 private Q_SLOTS:
     void slotApplyClicked();

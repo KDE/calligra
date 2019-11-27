@@ -27,7 +27,7 @@ class DocumentStructureTest : public QObject
     Q_OBJECT
 public:
     DocumentStructureTest();
-    ~DocumentStructureTest();
+    ~DocumentStructureTest() override;
 
 private Q_SLOTS:
     void init();

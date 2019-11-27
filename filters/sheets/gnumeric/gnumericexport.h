@@ -42,9 +42,9 @@ class GNUMERICExport : public KoFilter
 
 public:
     GNUMERICExport(QObject *parent, const QVariantList&);
-    virtual ~GNUMERICExport() {}
+    ~GNUMERICExport() override {}
 
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
 
 private:
     QDomElement GetCellStyle(QDomDocument gnumeric_doc, const Calligra::Sheets::Cell& cell, int currentcolumn, int currentrow);

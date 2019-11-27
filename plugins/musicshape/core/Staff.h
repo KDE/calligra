@@ -49,7 +49,7 @@ public:
     /**
      * Destructor.
      */
-    ~Staff();
+    ~Staff() override;
 
     /**
      * Returns the part this staff is part of.

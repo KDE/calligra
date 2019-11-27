@@ -41,7 +41,7 @@ class InsertGuidesToolOptionWidget : public QWidget
 public:
 
     explicit InsertGuidesToolOptionWidget(QWidget *parent = 0);
-    ~InsertGuidesToolOptionWidget();
+    ~InsertGuidesToolOptionWidget() override;
 
 Q_SIGNALS:
     void createGuides(GuidesTransaction *transaction);

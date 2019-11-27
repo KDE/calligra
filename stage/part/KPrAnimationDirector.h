@@ -56,7 +56,7 @@ public:
     };
 
     KPrAnimationDirector( KoPAView * view, KoPACanvas * canvas, const QList<KoPAPageBase*> & pages, KoPAPageBase* currentPage );
-    virtual ~KPrAnimationDirector();
+    ~KPrAnimationDirector() override;
 
     void paint(QPainter& painter, const QRectF &paintRect);
     void paintEvent( QPaintEvent* event );

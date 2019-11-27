@@ -27,19 +27,19 @@ class KoShape;
 class KPrPlaceholderTextStrategy : public KPrPlaceholderStrategy
 {
 public:
-    virtual ~KPrPlaceholderTextStrategy();
+    ~KPrPlaceholderTextStrategy() override;
 
-    virtual KoShape *createShape(KoDocumentResourceManager *documentResources);
+    KoShape *createShape(KoDocumentResourceManager *documentResources) override;
 
-    virtual void paint( QPainter & painter, const KoViewConverter &converter, const QRectF & rect, KoShapePaintingContext &paintcontext);
+    void paint( QPainter & painter, const KoViewConverter &converter, const QRectF & rect, KoShapePaintingContext &paintcontext) override;
 
-    virtual void saveOdf( KoShapeSavingContext & context );
+    void saveOdf( KoShapeSavingContext & context ) override;
 
-    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context );
+    bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext & context ) override;
 
-    virtual void init(KoDocumentResourceManager *documentResources);
+    void init(KoDocumentResourceManager *documentResources) override;
 
-    virtual KoShapeUserData * userData() const;
+    KoShapeUserData * userData() const override;
 
 protected:
     KPrPlaceholderTextStrategy( const QString & presentationClass );

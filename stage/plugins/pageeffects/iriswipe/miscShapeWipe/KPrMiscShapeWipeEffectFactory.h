@@ -26,8 +26,8 @@ class KPrMiscShapeWipeEffectFactory : public KPrPageEffectFactory
 {
 public:
     KPrMiscShapeWipeEffectFactory();
-    virtual ~KPrMiscShapeWipeEffectFactory();
-    virtual QString subTypeName(int subType) const;
+    ~KPrMiscShapeWipeEffectFactory() override;
+    QString subTypeName(int subType) const override;
 
     enum SubType {
         Heart,

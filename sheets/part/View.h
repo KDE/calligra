@@ -92,7 +92,7 @@ public:
     View(KoPart *part, QWidget *parent, Doc *document);
 
     /** Destroys the view */
-    ~View();
+    ~View() override;
 
     /** \return the document this view displays. */
     Doc* doc() const;
@@ -374,12 +374,12 @@ public:
 
 protected: // reimplementations
     // QWidget interface
-    virtual void keyPressEvent(QKeyEvent * _ev);
+    void keyPressEvent(QKeyEvent * _ev) override;
     // KoView interface
-    virtual void updateReadWrite(bool readwrite);
-    virtual KoPrintJob * createPrintJob();
+    void updateReadWrite(bool readwrite) override;
+    KoPrintJob * createPrintJob() override;
 public:
-    virtual KoZoomController *zoomController() const;
+    KoZoomController *zoomController() const override;
 
 Q_SIGNALS:
     /** Indicates that the document's read/write state has changed. */

@@ -48,7 +48,7 @@ public:
     /**
      * Destructor.
      */
-    virtual ~KoFindOptionSet();
+    ~KoFindOptionSet() override;
 
     /**
      * Retrieve a specific option.

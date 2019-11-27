@@ -36,11 +36,11 @@ class CalendarTool : public CellTool
     Q_OBJECT
 public:
     explicit CalendarTool(KoCanvasBase* canvas);
-    ~CalendarTool();
+    ~CalendarTool() override;
 
 public Q_SLOTS:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
-    virtual void deactivate();
+    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void deactivate() override;
 
     /**
      * This actually inserts the calendar. It reads the configuration
@@ -50,7 +50,7 @@ public Q_SLOTS:
     void insertCalendar(const QDate &start, const QDate &end);
 
 private:
-    virtual QList<QPointer<QWidget> > createOptionWidgets();
+    QList<QPointer<QWidget> > createOptionWidgets() override;
     void setText(Sheet* sheet, int row, int column, const QString& text, bool asString = false);
 
 private:

@@ -58,21 +58,21 @@ public:
      * @param part The KoPart that owns the document. XXX: should be removed!
      */
     explicit DocBase(KoPart *part);
-    ~DocBase();
+    ~DocBase() override;
 
     /**
      * @return list of all documents
      */
     static QList<DocBase*> documents();
 
-    virtual void setReadWrite(bool readwrite = true);
+    void setReadWrite(bool readwrite = true) override;
 
     /// reimplemented from KoDocument
-    virtual QByteArray nativeFormatMimeType() const { return SHEETS_MIME_TYPE; }
+    QByteArray nativeFormatMimeType() const override { return SHEETS_MIME_TYPE; }
     /// reimplemented from KoDocument
-    virtual QByteArray nativeOasisMimeType() const {return SHEETS_MIME_TYPE;}
+    QByteArray nativeOasisMimeType() const override {return SHEETS_MIME_TYPE;}
     /// reimplemented from KoDocument
-    virtual QStringList extraNativeMimeTypes() const
+    QStringList extraNativeMimeTypes() const override
     {
         return QStringList() << "application/vnd.oasis.opendocument.spreadsheet-template"
                              << "application/x-kspread";
@@ -109,20 +109,20 @@ public:
      * \ingroup OpenDocument
      * Main saving method.
      */
-    virtual bool saveOdf(SavingContext &documentContext);
+    bool saveOdf(SavingContext &documentContext) override;
 
     /**
      * \ingroup OpenDocument
      * Main loading method. Wrapper around Odf::loadDocument.
      * @see Map::loadOdf
      */
-    virtual bool loadOdf(KoOdfReadStore & odfStore);
+    bool loadOdf(KoOdfReadStore & odfStore) override;
 protected:
     class Private;
     Private * const d;
 
-    virtual void paintContent(QPainter & painter, const QRect & rect);
-    virtual bool loadXML(const KoXmlDocument& doc, KoStore *store);
+    void paintContent(QPainter & painter, const QRect & rect) override;
+    bool loadXML(const KoXmlDocument& doc, KoStore *store) override;
 
 private:
     Q_DISABLE_COPY(DocBase)

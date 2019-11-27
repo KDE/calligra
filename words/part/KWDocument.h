@@ -67,37 +67,37 @@ public:
      * Constructor, normally called by the KWFactory::createPartObject()
      */
     explicit KWDocument(KoPart *part);
-    ~KWDocument();
+    ~KWDocument() override;
 
     // KoShapeBasedDocumentBase interface
     /// reimplemented from KoShapeBasedDocumentBase
-    virtual void addShape(KoShape *shape);
+    void addShape(KoShape *shape) override;
     /// reimplemented from KoShapeBasedDocumentBase
-    virtual void removeShape(KoShape *shape);
+    void removeShape(KoShape *shape) override;
     // reimplemented from KoShapeBasedDocumentBase
-    virtual void shapesRemoved(const QList<KoShape*> &shapes, KUndo2Command *command);
+    void shapesRemoved(const QList<KoShape*> &shapes, KUndo2Command *command) override;
 
     // KoDocument interface
     /// reimplemented from KoDocument
-    virtual QPixmap generatePreview(const QSize& size);
+    QPixmap generatePreview(const QSize& size) override;
     /// reimplemented from KoDocument
-    virtual void paintContent(QPainter&, const QRect&);
+    void paintContent(QPainter&, const QRect&) override;
     /// reimplemented from KoDocument
-    virtual bool loadXML(const KoXmlDocument &doc, KoStore *store);
+    bool loadXML(const KoXmlDocument &doc, KoStore *store) override;
     /// reimplemented from KoDocumentBase
-    virtual bool loadOdf(KoOdfReadStore &odfStore);
+    bool loadOdf(KoOdfReadStore &odfStore) override;
     /// reimplemented from KoDocumentBase
-    virtual bool saveOdf(SavingContext &documentContext);
+    bool saveOdf(SavingContext &documentContext) override;
     /// reimplemented from KoDocument
-    virtual int pageCount() const {
+    int pageCount() const override {
         return pageManager()->pageCount();
     }
     /// reimplemented from KoDocument
-    virtual QByteArray nativeFormatMimeType() const { return WORDS_MIME_TYPE; }
+    QByteArray nativeFormatMimeType() const override { return WORDS_MIME_TYPE; }
     /// reimplemented from KoDocument
-    virtual QByteArray nativeOasisMimeType() const { return WORDS_MIME_TYPE; }
+    QByteArray nativeOasisMimeType() const override { return WORDS_MIME_TYPE; }
     /// reimplemented from KoDocument
-    virtual QStringList extraNativeMimeTypes() const
+    QStringList extraNativeMimeTypes() const override
     {
         return QStringList() << "application/vnd.oasis.opendocument.text-master"
                              << "application/vnd.oasis.opendocument.text-template";
@@ -181,7 +181,7 @@ public:
     void firePageSetupChanged();
 
     // reimplemented slot from KoDocument
-    virtual void initEmpty();
+    void initEmpty() override;
 
     bool layoutFinishedAtleastOnce() const { return m_mainFramesetEverFinished; }
 
@@ -199,7 +199,7 @@ public:
     //TODO: refactor the shapeController so it can be completely per document maybe? Then it can be added to the resourceManager
     KoShapeController *shapeController() const { return m_shapeController; }
 
-    KoDocumentInfoDlg* createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const;
+    KoDocumentInfoDlg* createDocumentInfoDialog(QWidget *parent, KoDocumentInfo *docInfo) const override;
 
 public Q_SLOTS:
     /**
@@ -249,7 +249,7 @@ private Q_SLOTS:
 
 protected:
     /// reimplemented from KoDocument
-    virtual void setupOpenFileSubProgress();
+    void setupOpenFileSubProgress() override;
 
 private:
     friend class KWDLoader;

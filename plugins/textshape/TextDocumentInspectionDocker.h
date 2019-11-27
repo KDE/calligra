@@ -36,11 +36,11 @@ class TextDocumentInspectionDocker : public QDockWidget, public KoCanvasObserver
     Q_OBJECT
 public:
     explicit TextDocumentInspectionDocker(QWidget *parent = 0);
-    virtual ~TextDocumentInspectionDocker();
+    ~TextDocumentInspectionDocker() override;
     /// reimplemented from KoCanvasObserverBase
-    virtual QString observerName() const { return QStringLiteral("TextDocumentInspectionDocker"); }
-    virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas();
+    QString observerName() const override { return QStringLiteral("TextDocumentInspectionDocker"); }
+    void setCanvas(KoCanvasBase *canvas) override;
+    void unsetCanvas() override;
 
 private Q_SLOTS:
     void onShapeSelectionChanged();

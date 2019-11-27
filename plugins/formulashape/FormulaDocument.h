@@ -40,15 +40,15 @@ class FormulaDocument : public KoDocument
 {
 public:
     explicit FormulaDocument(KoFormulaShape *parent);
-    ~FormulaDocument();
+    ~FormulaDocument() override;
     
 
     /// reimplemented from KoDocument
-    virtual QByteArray nativeFormatMimeType() const { return FORMULA_MIME_TYPE; }
+    QByteArray nativeFormatMimeType() const override { return FORMULA_MIME_TYPE; }
     /// reimplemented from KoDocument
-    virtual QByteArray nativeOasisMimeType() const {return FORMULA_MIME_TYPE; }
+    QByteArray nativeOasisMimeType() const override {return FORMULA_MIME_TYPE; }
     /// reimplemented from KoDocument
-    virtual QStringList extraNativeMimeTypes() const
+    QStringList extraNativeMimeTypes() const override
     {
         return QStringList() << "application/x-kformula"
                              << "application/vnd.oasis.opendocument.formula-template"
@@ -56,13 +56,13 @@ public:
 
     }
 
-    bool loadOdf( KoOdfReadStore &odfStore );
-    bool loadXML( const KoXmlDocument &doc, KoStore *store );
+    bool loadOdf( KoOdfReadStore &odfStore ) override;
+    bool loadXML( const KoXmlDocument &doc, KoStore *store ) override;
     
-    bool saveOdf( SavingContext &context );
+    bool saveOdf( SavingContext &context ) override;
     KoView *createViewInstance( QWidget *parent );
     
-    void paintContent( QPainter &painter, const QRect &rect ); 
+    void paintContent( QPainter &painter, const QRect &rect ) override; 
     
 private:
     class Private;

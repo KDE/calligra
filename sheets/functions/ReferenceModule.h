@@ -35,7 +35,7 @@ class ReferenceModule : public FunctionModule
 public:
     explicit ReferenceModule(QObject* parent, const QVariantList& args = QVariantList());
 
-    QString descriptionFileName() const;
+    QString descriptionFileName() const override;
 };
 
 } // namespace Sheets

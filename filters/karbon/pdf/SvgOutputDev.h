@@ -37,7 +37,7 @@ class SvgOutputDev : public OutputDev
 {
 public:
     explicit SvgOutputDev(const QString &fileName);
-    virtual ~SvgOutputDev();
+    ~SvgOutputDev() override;
 
     bool isOk();
 

@@ -45,19 +45,19 @@ public:
     SpellCheck();
 
     /// reimplemented from superclass
-    void finishedWord(QTextDocument *document, int cursorPosition);
+    void finishedWord(QTextDocument *document, int cursorPosition) override;
 
     /// reimplemented from superclass
-    void finishedParagraph(QTextDocument *document, int cursorPosition);
+    void finishedParagraph(QTextDocument *document, int cursorPosition) override;
 
     /// reimplemented from superclass
-    void startingSimpleEdit(QTextDocument *document, int cursorPosition);
+    void startingSimpleEdit(QTextDocument *document, int cursorPosition) override;
 
     /// reimplemented from superclass
-    void checkSection(QTextDocument *document, int startPosition, int endPosition);
+    void checkSection(QTextDocument *document, int startPosition, int endPosition) override;
 
     ///reimplemented from superclass
-    void setCurrentCursorPosition(QTextDocument *document, int cursorPosition);
+    void setCurrentCursorPosition(QTextDocument *document, int cursorPosition) override;
 
     QStringList availableBackends() const;
     QStringList availableLanguages() const;

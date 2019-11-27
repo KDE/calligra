@@ -50,7 +50,7 @@ class DerivedClass : public TestClass
 public:
     DerivedClass() : TestClass() {}
     DerivedClass(const QString& s) : TestClass(s) {}
-    virtual int type() const {
+    int type() const override {
         return 1;
     }
 };

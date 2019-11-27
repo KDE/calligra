@@ -46,7 +46,7 @@ public:
      * @param parent the parent view
      */
     KWGui(const QString &viewMode, KWView *parent);
-    ~KWGui();
+    ~KWGui() override;
 
     /**
      * Return the canvas child.
@@ -86,7 +86,7 @@ public:
     }
 
 protected :
-    virtual void mouseMoveEvent(QMouseEvent *e);
+    void mouseMoveEvent(QMouseEvent *e) override;
 
 private Q_SLOTS:
     void pageSetupChanged();

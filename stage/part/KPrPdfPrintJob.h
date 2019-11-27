@@ -31,10 +31,10 @@ class KPrPdfPrintJob : public KoPAPrintJob
     Q_OBJECT
 public:
     explicit KPrPdfPrintJob(KPrView *view);
-    virtual ~KPrPdfPrintJob();
+    ~KPrPdfPrintJob() override;
 
 public Q_SLOTS:
-    virtual void startPrinting(RemovePolicy removePolicy = DoNotDelete);
+    void startPrinting(RemovePolicy removePolicy = DoNotDelete) override;
 };
 
 #endif // KPRPDFPRINTJOB_H

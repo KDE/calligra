@@ -38,7 +38,7 @@ public:
     void connectFlowingTextShapes();
 
 protected:
-    virtual void shapeInserted(KoShape *shape, const KoXmlElement &element, KoShapeLoadingContext &context);
+    void shapeInserted(KoShape *shape, const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
 private:
     /**

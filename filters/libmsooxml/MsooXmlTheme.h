@@ -56,20 +56,20 @@ class KOMSOOXML_EXPORT DrawingMLColorSchemeItem : public DrawingMLColorSchemeIte
 {
 public:
     DrawingMLColorSchemeItem();
-    virtual QColor value() const { return color; }
+    QColor value() const override { return color; }
     QColor color;
-    DrawingMLColorSchemeItem* clone() const { return new DrawingMLColorSchemeItem(*this); }
+    DrawingMLColorSchemeItem* clone() const override { return new DrawingMLColorSchemeItem(*this); }
 };
 
 class KOMSOOXML_EXPORT DrawingMLColorSchemeSystemItem : public DrawingMLColorSchemeItemBase
 {
 public:
     DrawingMLColorSchemeSystemItem();
-    virtual QColor value() const;
+    QColor value() const override;
 
     QColor lastColor;
     QString systemColor; //!< ST_SystemColorVal (§20.1.10.58).;
-    DrawingMLColorSchemeSystemItem* clone() const { return new DrawingMLColorSchemeSystemItem(*this); }
+    DrawingMLColorSchemeSystemItem* clone() const override { return new DrawingMLColorSchemeSystemItem(*this); }
 };
 
 typedef QHash<QString, DrawingMLColorSchemeItemBase*> DrawingMLColorSchemeItemHash;
@@ -143,18 +143,18 @@ public:
 class KOMSOOXML_EXPORT DrawingMLSolidFill : public DrawingMLFillBase
 {
 public:
-    void writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, const QColor &color);
+    void writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, const QColor &color) override;
 
-    DrawingMLSolidFill* clone() const { return new DrawingMLSolidFill(*this); }
+    DrawingMLSolidFill* clone() const override { return new DrawingMLSolidFill(*this); }
 };
 
 class KOMSOOXML_EXPORT DrawingMLBlipFill : public DrawingMLFillBase
 {
 public:
     explicit DrawingMLBlipFill(const QString &filePath);
-    void writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, const QColor &color);
+    void writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, const QColor &color) override;
 
-    DrawingMLBlipFill* clone() const { return new DrawingMLBlipFill(*this); }
+    DrawingMLBlipFill* clone() const override { return new DrawingMLBlipFill(*this); }
 
 private:
     QString m_filePath;
@@ -166,9 +166,9 @@ public:
     // Simplified gradient constructor
     DrawingMLGradientFill(const QVector<qreal> &shadeModifier, const QVector<qreal> &tintModifier, const QVector<qreal> &satModifier,
                           const QVector<int> &alphaModifier, const QVector<int> &gradPositions, const QString &gradAngle);
-    void writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, const QColor &color);
+    void writeStyles(KoGenStyles& styles, KoGenStyle *graphicStyle, const QColor &color) override;
 
-    DrawingMLGradientFill* clone() const { return new DrawingMLGradientFill(*this); }
+    DrawingMLGradientFill* clone() const override { return new DrawingMLGradientFill(*this); }
 
 private:
     QVector<qreal> m_shadeModifier;

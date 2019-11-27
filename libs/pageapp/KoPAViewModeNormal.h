@@ -32,19 +32,19 @@ class KOPAGEAPP_EXPORT KoPAViewModeNormal : public KoPAViewMode
 {
 public:
     KoPAViewModeNormal( KoPAViewBase * view, KoPACanvasBase * m_canvas );
-    ~KoPAViewModeNormal();
+    ~KoPAViewModeNormal() override;
 
-    void paint(KoPACanvasBase* canvas, QPainter& painter, const QRectF &paintRect);
+    void paint(KoPACanvasBase* canvas, QPainter& painter, const QRectF &paintRect) override;
     //void paintEvent( KoPACanvas * canvas, QPaintEvent* event );
-    void tabletEvent( QTabletEvent *event, const QPointF &point );
-    void mousePressEvent( QMouseEvent *event, const QPointF &point );
-    void mouseDoubleClickEvent( QMouseEvent *event, const QPointF &point );
-    void mouseMoveEvent( QMouseEvent *event, const QPointF &point );
-    void mouseReleaseEvent( QMouseEvent *event, const QPointF &point );
-    void shortcutOverrideEvent( QKeyEvent *event );
-    void keyPressEvent( QKeyEvent *event );
-    void keyReleaseEvent( QKeyEvent *event );
-    void wheelEvent( QWheelEvent * event, const QPointF &point );
+    void tabletEvent( QTabletEvent *event, const QPointF &point ) override;
+    void mousePressEvent( QMouseEvent *event, const QPointF &point ) override;
+    void mouseDoubleClickEvent( QMouseEvent *event, const QPointF &point ) override;
+    void mouseMoveEvent( QMouseEvent *event, const QPointF &point ) override;
+    void mouseReleaseEvent( QMouseEvent *event, const QPointF &point ) override;
+    void shortcutOverrideEvent( QKeyEvent *event ) override;
+    void keyPressEvent( QKeyEvent *event ) override;
+    void keyReleaseEvent( QKeyEvent *event ) override;
+    void wheelEvent( QWheelEvent * event, const QPointF &point ) override;
 
     /**
      * @brief Switch the active view mode to work on master/normal pages
@@ -55,15 +55,15 @@ public:
      *
      * @param master if true work on master pages, if false work on normal pages
      */
-    virtual void setMasterMode( bool master );
+    void setMasterMode( bool master ) override;
 
-    virtual bool masterMode();
+    bool masterMode() override;
 
-    void addShape( KoShape *shape );
+    void addShape( KoShape *shape ) override;
 
-    void removeShape( KoShape *shape );
+    void removeShape( KoShape *shape ) override;
 
-    virtual void changePageLayout( const KoPageLayout &pageLayout, bool applyToDocument, KUndo2Command *parent = 0 );
+    void changePageLayout( const KoPageLayout &pageLayout, bool applyToDocument, KUndo2Command *parent = 0 ) override;
 
 private:
     void paintMargins( QPainter &painter, const KoViewConverter &converter );

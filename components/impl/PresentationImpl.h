@@ -33,14 +33,14 @@ class PresentationImpl : public DocumentImpl
     Q_OBJECT
 public:
     explicit PresentationImpl(QObject* parent = 0);
-    ~PresentationImpl();
+    ~PresentationImpl() override;
     
-    virtual bool load(const QUrl& url);
-    virtual int currentIndex();
-    virtual void setCurrentIndex(int newValue);
-    int indexCount() const;
-    virtual QUrl urlAtPoint(QPoint point);
-    virtual QObject* part() const;
+    bool load(const QUrl& url) override;
+    int currentIndex() override;
+    void setCurrentIndex(int newValue) override;
+    int indexCount() const override;
+    QUrl urlAtPoint(QPoint point) override;
+    QObject* part() const override;
 
 private:
     class Private;

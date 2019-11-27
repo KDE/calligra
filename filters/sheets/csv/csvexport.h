@@ -45,9 +45,9 @@ class CSVExport : public KoFilter
 
 public:
     CSVExport(QObject* parent, const QVariantList &);
-    virtual ~CSVExport() {}
+    ~CSVExport() override {}
 
-    virtual KoFilter::ConversionStatus convert(const QByteArray & from, const QByteArray & to);
+    KoFilter::ConversionStatus convert(const QByteArray & from, const QByteArray & to) override;
 
 private:
     QString exportCSVCell(const Calligra::Sheets::Doc* doc, Calligra::Sheets::Sheet const * const sheet,

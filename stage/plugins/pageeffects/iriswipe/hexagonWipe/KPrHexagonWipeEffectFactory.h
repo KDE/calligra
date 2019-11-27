@@ -26,8 +26,8 @@ class KPrHexagonWipeEffectFactory : public KPrPageEffectFactory
 {
 public:
     KPrHexagonWipeEffectFactory();
-    virtual ~KPrHexagonWipeEffectFactory();
-    virtual QString subTypeName(int subType) const;
+    ~KPrHexagonWipeEffectFactory() override;
+    QString subTypeName(int subType) const override;
 
     enum SubType {
         Horizontal,

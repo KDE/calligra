@@ -29,9 +29,9 @@ class KOPAGEAPP_EXPORT KoPAPageProvider : public KoPageProvider
 {
 public:
     KoPAPageProvider();
-    virtual ~KoPAPageProvider();
+    ~KoPAPageProvider() override;
 
-    virtual KoTextPage * page(KoShape * shape);
+    KoTextPage * page(KoShape * shape) override;
 
     void setPageData(int pageNumber, KoPAPageBase *page);
 

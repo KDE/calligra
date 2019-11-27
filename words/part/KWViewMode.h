@@ -55,7 +55,7 @@ class WORDS_EXPORT KWViewMode : public QObject
     Q_OBJECT
 public:
     KWViewMode();
-    virtual ~KWViewMode() {}
+    ~KWViewMode() override {}
 
     /// a two value return type for mapExposedRects()
     struct ViewMap {

@@ -55,7 +55,7 @@ public:
     /**
      * Destructor.
      */
-    ~ApplicationSettings();
+    ~ApplicationSettings() override;
 
     void load();
     void save() const;

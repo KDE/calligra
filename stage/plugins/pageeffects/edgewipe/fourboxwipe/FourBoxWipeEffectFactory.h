@@ -26,8 +26,8 @@ class FourBoxWipeEffectFactory : public KPrPageEffectFactory
 {
 public:
     FourBoxWipeEffectFactory();
-    virtual ~FourBoxWipeEffectFactory();
-    virtual QString subTypeName(int subType) const;
+    ~FourBoxWipeEffectFactory() override;
+    QString subTypeName(int subType) const override;
 
     enum SubType {
         CornersIn,

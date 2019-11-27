@@ -105,7 +105,7 @@ public:
     /**
      * Destructor.
      */
-    ~CellStorage();
+    ~CellStorage() override;
 
     /**
      * \return the sheet this CellStorage is for.

@@ -29,7 +29,7 @@ class InfoVariableFactory : public KoInlineObjectFactoryBase
 public:
     InfoVariableFactory();
 
-    virtual KoInlineObject *createInlineObject(const KoProperties *properties = 0) const;
+    KoInlineObject *createInlineObject(const KoProperties *properties = 0) const override;
 };
 
 #endif

@@ -39,7 +39,7 @@ class KPrPresenterViewWidget : public QWidget
     Q_OBJECT
 public:
     KPrPresenterViewWidget( KPrViewModePresentation *viewMode, const QList<KoPAPageBase *> &pages, KoPACanvas *canvas, QWidget *parent=0 );
-    ~KPrPresenterViewWidget();
+    ~KPrPresenterViewWidget() override;
     void setActivePage( KoPAPageBase *page );
     void setActivePage( int pageIndex );
     void updateWidget( const QSize &widgetSize, const QSize &canvasSize );

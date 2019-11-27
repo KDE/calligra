@@ -36,14 +36,14 @@ class KoPageNavigator : public QStackedWidget
 
 public:
     explicit KoPageNavigator(KoPAView *view);
-    virtual ~KoPageNavigator();
+    ~KoPageNavigator() override;
 
     void initActions();
 
 protected:
-    virtual void enterEvent(QEvent *event);
-    virtual void leaveEvent(QEvent *event);
-    virtual bool eventFilter(QObject *watched, QEvent *event);
+    void enterEvent(QEvent *event) override;
+    void leaveEvent(QEvent *event) override;
+    bool eventFilter(QObject *watched, QEvent *event) override;
 
 private Q_SLOTS:
     void updateDisplayLabel();

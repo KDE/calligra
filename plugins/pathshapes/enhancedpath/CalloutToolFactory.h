@@ -29,9 +29,9 @@ class CalloutToolFactory : public KoToolFactoryBase
 {
 public:
     CalloutToolFactory();
-    ~CalloutToolFactory();
+    ~CalloutToolFactory() override;
 
-    KoToolBase *createTool(KoCanvasBase *canvas);
+    KoToolBase *createTool(KoCanvasBase *canvas) override;
 };
 
 class CalloutPathTool : public KoPathTool
@@ -40,10 +40,10 @@ class CalloutPathTool : public KoPathTool
 public:
     CalloutPathTool(KoCanvasBase *canvas);
 
-    QList<QPointer<QWidget> > createOptionWidgets();
+    QList<QPointer<QWidget> > createOptionWidgets() override;
 
 public Q_SLOTS:
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
 };
 
 #endif

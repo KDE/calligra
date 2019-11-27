@@ -28,11 +28,11 @@ class WatermarkFilterEffect : public KoFilterEffect
 {
 public:
     WatermarkFilterEffect();
-    virtual ~WatermarkFilterEffect();
+    ~WatermarkFilterEffect() override;
 
-    virtual void save(KoXmlWriter& writer);
-    virtual bool load(const KoXmlElement& element, const KoFilterEffectLoadingContext& context);
-    virtual QImage processImage(const QImage& image, const KoFilterEffectRenderContext& context) const;
+    void save(KoXmlWriter& writer) override;
+    bool load(const KoXmlElement& element, const KoFilterEffectLoadingContext& context) override;
+    QImage processImage(const QImage& image, const KoFilterEffectRenderContext& context) const override;
 };
 
 #endif // WATERMARKFILTEREFFECT_H

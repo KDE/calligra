@@ -45,9 +45,9 @@ public:
         FontUnderline
     };
     ParagraphStylesModel();
-    ~ParagraphStylesModel();
-    virtual QVariant data(const QModelIndex& index, int role) const;
-    virtual int rowCount(const QModelIndex& parent) const;
+    ~ParagraphStylesModel() override;
+    QVariant data(const QModelIndex& index, int role) const override;
+    int rowCount(const QModelIndex& parent) const override;
 
     QObject* document() const;
     void setDocument(QObject* newDocument);

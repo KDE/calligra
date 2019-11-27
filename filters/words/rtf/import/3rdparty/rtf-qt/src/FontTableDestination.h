@@ -33,11 +33,11 @@ namespace RtfReader
       public:
 	FontTableDestination( Reader *reader, AbstractRtfOutput *output, const QString &name );
 
-	virtual ~FontTableDestination();
+	~FontTableDestination() override;
 
-	virtual void handleControlWord( const QByteArray &controlWord, bool hasValue, const int value );
-	virtual void handlePlainText( const QByteArray &plainText );
-	virtual void aboutToEndDestination();
+	void handleControlWord( const QByteArray &controlWord, bool hasValue, const int value ) override;
+	void handlePlainText( const QByteArray &plainText ) override;
+	void aboutToEndDestination() override;
 
       protected:
 	quint32 	m_currentFontTableIndex;

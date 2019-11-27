@@ -43,16 +43,16 @@ public:
     /**
      * Destructor.
      */
-    virtual ~NamedAreaCommand();
+    ~NamedAreaCommand() override;
 
     void setAreaName(const QString& name);
 
-    virtual void setReverse(bool reverse);
+    void setReverse(bool reverse) override;
 
 protected:
-    virtual bool preProcessing();
-    virtual bool mainProcessing();
-    virtual bool postProcessing();
+    bool preProcessing() override;
+    bool mainProcessing() override;
+    bool postProcessing() override;
 
 private:
     QString m_areaName;

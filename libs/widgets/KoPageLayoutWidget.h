@@ -35,7 +35,7 @@ class KOWIDGETS_EXPORT KoPageLayoutWidget : public QWidget
 
 public:
     KoPageLayoutWidget(QWidget *parent, const KoPageLayout &layout);
-    ~KoPageLayoutWidget() Q_DECL_OVERRIDE;
+    ~KoPageLayoutWidget() override;
 
     KoPageLayout pageLayout() const;
 

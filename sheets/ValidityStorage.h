@@ -42,10 +42,10 @@ public:
     ValidityStorage(const ValidityStorage& other) : QObject(other.parent()), RectStorage<Validity>(other) {}
 
 protected Q_SLOTS:
-    virtual void triggerGarbageCollection() {
+    void triggerGarbageCollection() override {
         QTimer::singleShot(g_garbageCollectionTimeOut, this, SLOT(garbageCollection()));
     }
-    virtual void garbageCollection() {
+    void garbageCollection() override {
         RectStorage<Validity>::garbageCollection();
     }
 };

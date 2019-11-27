@@ -36,7 +36,7 @@ class PIGMENTCMS_EXPORT KoColorTransformationFactoryRegistry : private KoGeneric
 {
     friend class KoColorSpace;
 public:
-    ~KoColorTransformationFactoryRegistry();
+    ~KoColorTransformationFactoryRegistry() override;
     /**
      * Add a KoColorTransformationFactory to the registry.
      */

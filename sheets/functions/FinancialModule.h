@@ -35,7 +35,7 @@ class FinancialModule : public FunctionModule
 public:
     explicit FinancialModule(QObject* parent, const QVariantList& args = QVariantList());
 
-    QString descriptionFileName() const;
+    QString descriptionFileName() const override;
 };
 
 } // namespace Sheets

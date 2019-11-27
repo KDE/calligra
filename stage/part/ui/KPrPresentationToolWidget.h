@@ -31,7 +31,7 @@ public:
     Ui::KPrPresentationTool presentationToolUi();
 
 protected:
-    virtual void paintEvent( QPaintEvent *event );
+    void paintEvent( QPaintEvent *event ) override;
 
 private:
     Ui::KPrPresentationTool m_uiWidget;

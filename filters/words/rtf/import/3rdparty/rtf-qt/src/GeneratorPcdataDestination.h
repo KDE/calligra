@@ -32,9 +32,9 @@ namespace RtfReader
       public:
 	GeneratorPcdataDestination( Reader *reader, AbstractRtfOutput *output, const QString &name );
 
-	virtual ~GeneratorPcdataDestination();
+	~GeneratorPcdataDestination() override;
 
-	virtual void aboutToEndDestination();
+	void aboutToEndDestination() override;
       };
 }
 

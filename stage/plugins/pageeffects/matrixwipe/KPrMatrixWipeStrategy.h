@@ -26,13 +26,13 @@ class KPrMatrixWipeStrategy : public KPrPageEffectStrategy
 {
 public:
     KPrMatrixWipeStrategy(int subType, const char * smilType, const char *smilSubType, bool reverse, bool smooth = false);
-    virtual ~KPrMatrixWipeStrategy();
+    ~KPrMatrixWipeStrategy() override;
 
-    virtual void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine );
+    void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine ) override;
 
-    virtual void paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data );
+    void paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data ) override;
 
-    virtual void next( const KPrPageEffect::Data &data );
+    void next( const KPrPageEffect::Data &data ) override;
     enum Direction {
         NotSmooth,
         TopToBottom,

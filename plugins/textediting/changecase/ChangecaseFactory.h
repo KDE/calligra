@@ -27,9 +27,9 @@ class KoTextEditingPlugin;
 class ChangecaseFactory : public KoTextEditingFactory {
 public:
     explicit ChangecaseFactory();
-    ~ChangecaseFactory() {}
+    ~ChangecaseFactory() override {}
 
-    KoTextEditingPlugin *create() const;
+    KoTextEditingPlugin *create() const override;
 };
 
 #endif

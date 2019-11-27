@@ -32,12 +32,12 @@ class FLAKE_EXPORT KoEventActionRemoveCommand : public KUndo2Command
 {
 public:
     KoEventActionRemoveCommand(KoShape *shape, KoEventAction *eventAction, KUndo2Command *parent = 0);
-    virtual ~KoEventActionRemoveCommand();
+    ~KoEventActionRemoveCommand() override;
 
     /// redo the command
-    void redo();
+    void redo() override;
     /// revert the actions done in redo
-    void undo();
+    void undo() override;
 
 private:
     KoEventActionRemoveCommandPrivate * const d;

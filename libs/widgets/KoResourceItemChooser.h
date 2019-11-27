@@ -51,7 +51,7 @@ public:
 
     /// \p usePreview shows the aside preview with the resource's image
     explicit KoResourceItemChooser(QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QWidget *parent = 0, bool usePreview = false);
-    ~KoResourceItemChooser() Q_DECL_OVERRIDE;
+    ~KoResourceItemChooser() override;
 
     /// Sets number of columns in the view and causes the number of rows to be calculated accordingly
     void setColumnCount(int columnCount);
@@ -111,7 +111,7 @@ public:
 
     void setSynced(bool sync);
 
-    bool eventFilter(QObject *object, QEvent *event) Q_DECL_OVERRIDE;
+    bool eventFilter(QObject *object, QEvent *event) override;
 
 Q_SIGNALS:
     /// Emitted when a resource was selected
@@ -131,7 +131,7 @@ private Q_SLOTS:
     void updateView();
 
 protected:
-    void showEvent(QShowEvent *event) Q_DECL_OVERRIDE;
+    void showEvent(QShowEvent *event) override;
 
 private:
     void updateButtonState();
@@ -139,7 +139,7 @@ private:
 
 
 
-    virtual void resizeEvent(QResizeEvent *event) Q_DECL_OVERRIDE;
+    void resizeEvent(QResizeEvent *event) override;
 
     /// Resource for a given model index
     /// @returns the resource pointer, 0 is index not valid

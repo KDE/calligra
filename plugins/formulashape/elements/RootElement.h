@@ -39,37 +39,37 @@ public:
     explicit RootElement(BasicElement *parent = 0);
 
     /// The standard destructor
-    ~RootElement();
+    ~RootElement() override;
 
     /**
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    const QList<BasicElement*> childElements() const;
+    const QList<BasicElement*> childElements() const override;
     
 //     QList<BasicElement*> elementsBetween(int pos1, int pos2) const;
 
     /// inherited from BasicElement
-    virtual bool replaceChild ( BasicElement* oldelement, BasicElement* newelement );
+    bool replaceChild ( BasicElement* oldelement, BasicElement* newelement ) override;
 
     /**
      * Render the element to the given QPainter
      * @param painter The QPainter to paint the element to
      * @param am The AttributeManager providing information about attributes values
      */
-    void paint( QPainter& painter, AttributeManager* am );
+    void paint( QPainter& painter, AttributeManager* am ) override;
 
     /**
      * Calculate the size of the element and the positions of its children
      * @param am The AttributeManager providing information about attributes values
      */
-    void layout( const AttributeManager* am );
+    void layout( const AttributeManager* am ) override;
 
     /// inherited from BasicElement
-    virtual bool setCursorTo(FormulaCursor& cursor, QPointF point);
+    bool setCursorTo(FormulaCursor& cursor, QPointF point) override;
 
     /// inherited from BasicElement
-    virtual bool moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor);
+    bool moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor) override;
 
 //     virtual QLineF cursorLine(int position) const;
 
@@ -77,20 +77,20 @@ public:
 //     virtual int positionOfChild(BasicElement* child) const;
 
     /// @return The element's ElementType
-    ElementType elementType() const;
+    ElementType elementType() const override;
 
     /// @return The element's length
-    virtual int endPosition() const;
+    int endPosition() const override;
 
 protected:
     ///update the selection in cursor so that a proper range is selected
 //     void fixSelection (FormulaCursor& cursor);
     
     /// Read root contents - reimplemented from BasicElement
-    bool readMathMLContent( const KoXmlElement& element );
+    bool readMathMLContent( const KoXmlElement& element ) override;
 
     /// Write root contents - reimplemented from BasicElement
-    void writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const;
+    void writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const override;
 
 private:
     /// The element that is the radicand of the root

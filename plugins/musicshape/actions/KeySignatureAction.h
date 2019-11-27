@@ -27,7 +27,7 @@ public:
     KeySignatureAction(SimpleEntryTool* tool, int accidentals);
     explicit KeySignatureAction(SimpleEntryTool* tool);
 
-    virtual void mousePress(MusicCore::Staff* staff, int bar, const QPointF& pos);
+    void mousePress(MusicCore::Staff* staff, int bar, const QPointF& pos) override;
 private:
     int m_accidentals;
     bool m_showDialog;

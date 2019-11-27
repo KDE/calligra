@@ -46,12 +46,12 @@ public:
     /**
      * Destructor.
      */
-    virtual ~FilterPopup();
+    ~FilterPopup() override;
 
     void updateFilter(Filter* filter) const;
 
 protected:
-    void closeEvent(QCloseEvent*);
+    void closeEvent(QCloseEvent*) override;
 
 private Q_SLOTS:
     void buttonClicked(QAbstractButton* button);

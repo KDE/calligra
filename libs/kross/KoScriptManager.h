@@ -48,7 +48,7 @@ public:
     /**
     * Destructor.
     */
-    virtual ~KoScriptManagerCollection();
+    ~KoScriptManagerCollection() override;
 
     /**
     * \return true if the collection was modified.
@@ -100,7 +100,7 @@ class KoScriptManagerDialog : public KoDialog
     Q_OBJECT
 public:
     explicit KoScriptManagerDialog();
-    virtual ~KoScriptManagerDialog();
+    ~KoScriptManagerDialog() override;
 
 private Q_SLOTS:
     void slotAccepted();

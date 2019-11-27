@@ -36,18 +36,18 @@ class MusicShape : public KoShape, public KoFrameShape
 {
 public:
     MusicShape();
-    virtual ~MusicShape();
+    ~MusicShape() override;
     /// reimplemented
-    virtual void paint( QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &paintcontext);
+    void paint( QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &paintcontext) override;
     void constPaint( QPainter& painter, const KoViewConverter& converter ) const;
 
     /// reimplemented
-    virtual void setSize( const QSizeF &newSize );
+    void setSize( const QSizeF &newSize ) override;
 
     /// reimplemented
-    virtual void saveOdf( KoShapeSavingContext & context ) const;
+    void saveOdf( KoShapeSavingContext & context ) const override;
     // reimplemented
-    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
+    bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) override;
 
     MusicCore::Sheet* sheet();
     void setSheet(MusicCore::Sheet* sheet, int firstSystem);
@@ -64,7 +64,7 @@ public:
     MusicShape* predecessor() { return m_predecessor; }
 protected:
     // reimplemented
-    virtual bool loadOdfFrameElement( const KoXmlElement & element, KoShapeLoadingContext & context );
+    bool loadOdfFrameElement( const KoXmlElement & element, KoShapeLoadingContext & context ) override;
 private:
     MusicCore::Sheet* m_sheet;
     int m_firstSystem;

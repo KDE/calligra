@@ -35,7 +35,7 @@ class RightToLeftPaintingStrategy : public KoShapeManagerPaintingStrategy
 {
 public:
     RightToLeftPaintingStrategy(KoShapeManager *shapeManager, KoCanvasBase *canvas);
-    virtual ~RightToLeftPaintingStrategy();
+    ~RightToLeftPaintingStrategy() override;
 
     /**
      * Paint the shape
@@ -45,7 +45,7 @@ public:
      * @param converter to convert between document and view coordinates.
      * @param paintContext painting context.
      */
-    virtual void paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext);
+    void paint(KoShape *shape, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext) override;
 
     /**
      * Adapt the rect the shape occupies
@@ -53,7 +53,7 @@ public:
      * @param shape the shape
      * @param rect rect which will be updated to give the rect the shape occupies.
      */
-    virtual void adapt(KoShape *shape, QRectF &rect);
+    void adapt(KoShape *shape, QRectF &rect) override;
 
 private:
     class Private;

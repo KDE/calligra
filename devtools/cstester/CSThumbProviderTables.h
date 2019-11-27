@@ -35,9 +35,9 @@ class CSThumbProviderTables : public CSThumbProvider
 {
 public:
     explicit CSThumbProviderTables(Calligra::Sheets::Doc *doc);
-    virtual ~CSThumbProviderTables();
+    ~CSThumbProviderTables() override;
 
-    virtual QVector<QImage> createThumbnails(const QSize &thumbSize);
+    QVector<QImage> createThumbnails(const QSize &thumbSize) override;
 
 private:
     Calligra::Sheets::Doc *m_doc;

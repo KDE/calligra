@@ -37,24 +37,24 @@ class STAGE_EXPORT KPrViewModePreviewShapeAnimations : public KoPAViewMode
     Q_OBJECT
 public:
     KPrViewModePreviewShapeAnimations(KoPAViewBase *view, KoPACanvasBase *canvas);
-    ~KPrViewModePreviewShapeAnimations();
+    ~KPrViewModePreviewShapeAnimations() override;
 
-    void paint(KoPACanvasBase *canvas, QPainter &painter, const QRectF &paintRect);
-    void tabletEvent(QTabletEvent *event, const QPointF &point);
-    void mousePressEvent(QMouseEvent *event, const QPointF &point);
-    void mouseDoubleClickEvent(QMouseEvent *event, const QPointF &point);
-    void mouseMoveEvent(QMouseEvent *event, const QPointF &point);
-    void mouseReleaseEvent(QMouseEvent *event, const QPointF &point);
-    void shortcutOverrideEvent(QKeyEvent *event);
-    void keyPressEvent(QKeyEvent *event);
-    void keyReleaseEvent(QKeyEvent *event);
-    void wheelEvent(QWheelEvent *event, const QPointF &point);
+    void paint(KoPACanvasBase *canvas, QPainter &painter, const QRectF &paintRect) override;
+    void tabletEvent(QTabletEvent *event, const QPointF &point) override;
+    void mousePressEvent(QMouseEvent *event, const QPointF &point) override;
+    void mouseDoubleClickEvent(QMouseEvent *event, const QPointF &point) override;
+    void mouseMoveEvent(QMouseEvent *event, const QPointF &point) override;
+    void mouseReleaseEvent(QMouseEvent *event, const QPointF &point) override;
+    void shortcutOverrideEvent(QKeyEvent *event) override;
+    void keyPressEvent(QKeyEvent *event) override;
+    void keyReleaseEvent(QKeyEvent *event) override;
+    void wheelEvent(QWheelEvent *event, const QPointF &point) override;
 
-    void activate(KoPAViewMode *previousViewMode);
-    void deactivate();
+    void activate(KoPAViewMode *previousViewMode) override;
+    void deactivate() override;
 
     /// reimplemented
-    virtual void updateActivePage(KoPAPageBase *page);
+    void updateActivePage(KoPAPageBase *page) override;
 
     /// Set the shape animation to be played
     void setShapeAnimation(KPrShapeAnimation *shapeAnimation);

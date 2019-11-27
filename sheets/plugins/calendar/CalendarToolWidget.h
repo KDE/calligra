@@ -64,7 +64,7 @@ public:
     /**
      * Virtual destructor.
      */
-    virtual ~CalendarToolWidget();
+    ~CalendarToolWidget() override;
 
 protected:
 

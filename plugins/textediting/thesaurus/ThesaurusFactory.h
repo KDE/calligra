@@ -27,9 +27,9 @@ class KoTextEditingPlugin;
 class ThesaurusFactory : public KoTextEditingFactory {
 public:
     explicit ThesaurusFactory();
-    ~ThesaurusFactory() {}
+    ~ThesaurusFactory() override {}
 
-    KoTextEditingPlugin *create() const;
+    KoTextEditingPlugin *create() const override;
 };
 
 #endif

@@ -40,7 +40,7 @@ class FLAKE_EXPORT KoDockRegistry : public KoGenericRegistry<KoDockFactoryBase*>
 {
 public:
     KoDockRegistry();
-    ~KoDockRegistry();
+    ~KoDockRegistry() override;
 
     /**
      * Return an instance of the KoDockRegistry

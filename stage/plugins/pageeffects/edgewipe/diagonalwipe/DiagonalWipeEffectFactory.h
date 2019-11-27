@@ -26,8 +26,8 @@ class DiagonalWipeEffectFactory : public KPrPageEffectFactory
 {
 public:
     DiagonalWipeEffectFactory();
-    virtual ~DiagonalWipeEffectFactory();
-    virtual QString subTypeName(int subType) const;
+    ~DiagonalWipeEffectFactory() override;
+    QString subTypeName(int subType) const override;
 
     enum SubType {
         FromTopLeft,

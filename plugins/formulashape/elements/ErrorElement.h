@@ -35,10 +35,10 @@ public:
      * @param painter The QPainter to paint the element to
      * @param am AttributeManager containing style info
      */
-    virtual void paint( QPainter& painter, AttributeManager* am );
+    void paint( QPainter& painter, AttributeManager* am ) override;
 
     /// @return The element's ElementType
-    ElementType elementType() const;
+    ElementType elementType() const override;
 };
 
 #endif // ERRORELEMENT_H

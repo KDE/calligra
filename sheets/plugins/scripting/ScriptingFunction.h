@@ -96,7 +96,7 @@ class ScriptingFunction : public QObject
 
 public:
     explicit ScriptingFunction(QObject* parent);
-    virtual ~ScriptingFunction();
+    ~ScriptingFunction() override;
 
     /// \return the name the function has.
     QString name() const;

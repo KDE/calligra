@@ -28,10 +28,10 @@ class GreyscaleFilterEffect : public KoFilterEffect
 {
 public:
     GreyscaleFilterEffect();
-    virtual ~GreyscaleFilterEffect();
-    virtual void save(KoXmlWriter& writer);
-    virtual bool load(const KoXmlElement& element, const KoFilterEffectLoadingContext& context);
-    virtual QImage processImage(const QImage& image, const KoFilterEffectRenderContext& context) const;
+    ~GreyscaleFilterEffect() override;
+    void save(KoXmlWriter& writer) override;
+    bool load(const KoXmlElement& element, const KoFilterEffectLoadingContext& context) override;
+    QImage processImage(const QImage& image, const KoFilterEffectRenderContext& context) const override;
 };
 
 #endif // GRAYSCALEFILTEREFFECT_H

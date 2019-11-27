@@ -33,9 +33,9 @@ class KPrTimeLineView: public QWidget
      Q_OBJECT
 public:
     explicit KPrTimeLineView(QWidget *parent = 0);
-    virtual QSize sizeHint() const;
-    virtual QSize minimumSizeHint() const;
-    virtual bool eventFilter(QObject *target, QEvent *event);
+    QSize sizeHint() const override;
+    QSize minimumSizeHint() const override;
+    bool eventFilter(QObject *target, QEvent *event) override;
 
 Q_SIGNALS:
     /// emitted if an item is clicked (returns the index of the item clicked
@@ -45,11 +45,11 @@ Q_SIGNALS:
     void timeValuesChanged(const QModelIndex&);
 
 private:
-    void keyPressEvent(QKeyEvent *event);
-    void mousePressEvent(QMouseEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
-    bool event(QEvent *event);
+    void keyPressEvent(QKeyEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
+    bool event(QEvent *event) override;
 
     /// Return the row under mouse y pos
     int rowAt(int ypos);
@@ -60,7 +60,7 @@ private:
     QRectF getRowRect(const int row, const int column);
 
     /// Helper method to paint view items
-    void paintEvent(QPaintEvent * event);
+    void paintEvent(QPaintEvent * event) override;
     /// main paint method
     void paintRow(QPainter *painter, int  row, int y, const int RowHeight);
     /// paint background of items

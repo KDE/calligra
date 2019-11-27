@@ -46,13 +46,13 @@ public:
      * Constructor; please use KWViewMode::create()
      */
     KWViewModeNormal();
-    ~KWViewModeNormal() {}
+    ~KWViewModeNormal() override {}
 
     using KWViewMode::documentToView;
 
-    virtual QPointF documentToView(const QPointF &point, KoViewConverter *viewConverter) const;
-    virtual QPointF viewToDocument(const QPointF &point, KoViewConverter *viewConverter) const;
-    virtual QSizeF contentsSize() const {
+    QPointF documentToView(const QPointF &point, KoViewConverter *viewConverter) const override;
+    QPointF viewToDocument(const QPointF &point, KoViewConverter *viewConverter) const override;
+    QSizeF contentsSize() const override {
         return m_contents;
     }
 
@@ -60,13 +60,13 @@ public:
     static const QString viewMode() {
         return "ModeNormal";
     }
-    virtual const QString type() const {
+    const QString type() const override {
         return KWViewModeNormal::viewMode();
     }
-    virtual QVector<ViewMap> mapExposedRects(const QRectF &clipRect, KoViewConverter *viewConverter) const;
+    QVector<ViewMap> mapExposedRects(const QRectF &clipRect, KoViewConverter *viewConverter) const override;
 
 protected:
-    void updatePageCache();
+    void updatePageCache() override;
 
     // a list with the top of the page location in view-coordinates, in unzoomed-pt.
     QList<qreal> m_pageTops;

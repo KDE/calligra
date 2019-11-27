@@ -39,10 +39,10 @@ public:
     virtual void setPageDirty(int pageNumber) = 0;
 
     /// reimplemented
-    virtual void doPostLayout(KoTextLayoutRootArea *rootArea, bool isNewRootArea);
-    virtual void updateAll();
-    virtual QRectF suggestRect(KoTextLayoutRootArea *rootArea);
-    virtual QList<KoTextLayoutObstruction *> relevantObstructions(KoTextLayoutRootArea *rootArea);
+    void doPostLayout(KoTextLayoutRootArea *rootArea, bool isNewRootArea) override;
+    void updateAll() override;
+    QRectF suggestRect(KoTextLayoutRootArea *rootArea) override;
+    QList<KoTextLayoutObstruction *> relevantObstructions(KoTextLayoutRootArea *rootArea) override;
 
     KWTextFrameSet *frameSet() {return m_textFrameSet;}
 

@@ -38,7 +38,7 @@ class STAGE_EXPORT KPrPreviewWidget : public QWidget
     Q_OBJECT
 public:
     explicit KPrPreviewWidget(QWidget *parent = 0);
-    ~KPrPreviewWidget();
+    ~KPrPreviewWidget() override;
 
     /**
      * Set a page effect
@@ -55,9 +55,9 @@ public:
     void runPreview();
 
 protected:
-    void paintEvent( QPaintEvent* event );
-    void resizeEvent( QResizeEvent* event );
-    void mousePressEvent( QMouseEvent* event );
+    void paintEvent( QPaintEvent* event ) override;
+    void resizeEvent( QResizeEvent* event ) override;
+    void mousePressEvent( QMouseEvent* event ) override;
 
 protected Q_SLOTS:
     void animate();

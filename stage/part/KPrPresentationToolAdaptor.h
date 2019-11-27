@@ -35,7 +35,7 @@ class KPrPresentationToolAdaptor : public QDBusAbstractAdaptor
 
 public:
     explicit KPrPresentationToolAdaptor(KPrPresentationTool *tool);
-    virtual ~KPrPresentationToolAdaptor();
+    ~KPrPresentationToolAdaptor() override;
 
 public Q_SLOTS: // METHODS
 

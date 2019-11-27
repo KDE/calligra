@@ -45,7 +45,7 @@ public:
     /**
      * Destructor.
      */
-    virtual ~TimeSignature();
+    ~TimeSignature() override;
 
     /**
      * Returns the number of beats in this time signature.
@@ -61,7 +61,7 @@ public:
      * Returns the type of the time signature.
      */
     TimeSignatureType type() const;
-    virtual int priority() const;
+    int priority() const override;
     
     QList<int> beatLengths() const;
 public Q_SLOTS:

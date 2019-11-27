@@ -33,10 +33,10 @@ class Changecase : public KoTextEditingPlugin
 public:
     Changecase();
 
-    void finishedWord(QTextDocument *document, int cursorPosition);
-    void finishedParagraph(QTextDocument *document, int cursorPosition);
-    void startingSimpleEdit(QTextDocument *document, int cursorPosition);
-    void checkSection(QTextDocument *document, int startPosition, int endPosition);
+    void finishedWord(QTextDocument *document, int cursorPosition) override;
+    void finishedParagraph(QTextDocument *document, int cursorPosition) override;
+    void startingSimpleEdit(QTextDocument *document, int cursorPosition) override;
+    void checkSection(QTextDocument *document, int startPosition, int endPosition) override;
 
 private Q_SLOTS:
     void process();

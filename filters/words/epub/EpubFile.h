@@ -37,7 +37,7 @@ class EpubFile : public FileCollector
 {
 public:
     EpubFile();
-    ~EpubFile();
+    ~EpubFile() override;
 
     // When you have created all the content and added it using
     // addContentFile(), call this function once and it will write the

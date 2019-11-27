@@ -37,11 +37,11 @@ class CalloutContainerModel : public KoShapeContainerDefaultModel
 public:
     CalloutContainerModel();
 
-    virtual void containerChanged(KoShapeContainer *container, KoShape::ChangeType type);
+    void containerChanged(KoShapeContainer *container, KoShape::ChangeType type) override;
 
-    virtual void childChanged(KoShape *shape, KoShape::ChangeType type);
+    void childChanged(KoShape *shape, KoShape::ChangeType type) override;
 
-    bool isChildLocked(const KoShape *child) const;
+    bool isChildLocked(const KoShape *child) const override;
 
     void setIgnore(KoShape *shape, bool state);
 

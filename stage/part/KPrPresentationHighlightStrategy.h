@@ -27,9 +27,9 @@ class KPrPresentationHighlightStrategy : public KPrPresentationStrategyBase
 {
 public :
     explicit KPrPresentationHighlightStrategy(KPrPresentationTool *tool);
-    ~KPrPresentationHighlightStrategy();
+    ~KPrPresentationHighlightStrategy() override;
 
-    bool keyPressEvent( QKeyEvent * event );
+    bool keyPressEvent( QKeyEvent * event ) override;
 };
 
 #endif /* KPRPRESENTATIONHIGHLIGHTSTRATEGY_H */

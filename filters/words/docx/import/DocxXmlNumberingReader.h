@@ -33,8 +33,8 @@ class DocxXmlNumberingReader : public DocxXmlDocumentReader
 {
 public:
     explicit DocxXmlNumberingReader(KoOdfWriters *writers);
-    virtual ~DocxXmlNumberingReader();
-    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
+    ~DocxXmlNumberingReader() override;
+    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0) override;
 
 protected:
 

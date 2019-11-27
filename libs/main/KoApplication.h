@@ -74,7 +74,7 @@ public:
     /**
      *  Destructor.
      */
-    virtual ~KoApplication();
+    ~KoApplication() override;
 
     /**
      * Call this to start the application.
@@ -105,7 +105,7 @@ public:
     QStringList mimeFilter(KoFilterManager::Direction direction) const;
 
     // Overridden to handle exceptions from event handlers.
-    bool notify(QObject *receiver, QEvent *event);
+    bool notify(QObject *receiver, QEvent *event) override;
 
     /**
      * Returns the current application object.

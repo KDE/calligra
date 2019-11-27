@@ -45,7 +45,7 @@ public:
     };
 
     explicit GeminiMainWindow(QWidget* parent = 0, Qt::WindowFlags flags = 0);
-    virtual ~GeminiMainWindow();
+    ~GeminiMainWindow() override;
 
     GeminiState currentState() const;
 

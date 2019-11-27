@@ -62,7 +62,7 @@ Q_SIGNALS:
 
 private:
     explicit DocumentManager(QObject *parent = 0);
-    virtual ~DocumentManager();
+    ~DocumentManager() override;
 
     class Private;
     Private * const d;

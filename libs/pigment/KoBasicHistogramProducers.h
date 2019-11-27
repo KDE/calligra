@@ -35,43 +35,43 @@ class PIGMENTCMS_EXPORT KoBasicHistogramProducer : public KoHistogramProducer
 public:
     explicit KoBasicHistogramProducer(const KoID& id, int channelCount, int nrOfBins);
     explicit KoBasicHistogramProducer(const KoID& id, int nrOfBins, const KoColorSpace *colorSpace);
-    virtual ~KoBasicHistogramProducer() {}
+    ~KoBasicHistogramProducer() override {}
 
-    virtual void clear();
+    void clear() override;
 
-    virtual void setView(qreal from, qreal size) {
+    void setView(qreal from, qreal size) override {
         m_from = from; m_width = size;
     }
 
-    virtual const KoID& id() const {
+    const KoID& id() const override {
         return m_id;
     }
-    virtual QList<KoChannelInfo *> channels() {
+    QList<KoChannelInfo *> channels() override {
         return m_colorSpace->channels();
     }
-    virtual qint32 numberOfBins() {
+    qint32 numberOfBins() override {
         return m_nrOfBins;
     }
-    virtual qreal viewFrom() const {
+    qreal viewFrom() const override {
         return m_from;
     }
-    virtual qreal viewWidth() const {
+    qreal viewWidth() const override {
         return m_width;
     }
 
-    virtual qint32 count() {
+    qint32 count() override {
         return m_count;
     }
 
-    virtual qint32 getBinAt(int channel, int position) {
+    qint32 getBinAt(int channel, int position) override {
         return m_bins.at(externalToInternal(channel)).at(position);
     }
 
-    virtual qint32 outOfViewLeft(int channel) {
+    qint32 outOfViewLeft(int channel) override {
         return m_outLeft.at(externalToInternal(channel));
     }
 
-    virtual qint32 outOfViewRight(int channel) {
+    qint32 outOfViewRight(int channel) override {
         return m_outRight.at(externalToInternal(channel));
     }
 
@@ -105,9 +105,9 @@ class PIGMENTCMS_EXPORT KoBasicU8HistogramProducer : public KoBasicHistogramProd
 {
 public:
     KoBasicU8HistogramProducer(const KoID& id, const KoColorSpace *colorSpace);
-    virtual void addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, const KoColorSpace *colorSpace);
-    virtual QString positionToString(qreal pos) const;
-    virtual qreal maximalZoom() const {
+    void addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, const KoColorSpace *colorSpace) override;
+    QString positionToString(qreal pos) const override;
+    qreal maximalZoom() const override {
         return 1.0;
     }
 };
@@ -116,18 +116,18 @@ class PIGMENTCMS_EXPORT KoBasicU16HistogramProducer : public KoBasicHistogramPro
 {
 public:
     KoBasicU16HistogramProducer(const KoID& id, const KoColorSpace *colorSpace);
-    virtual void addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, const KoColorSpace *colorSpace);
-    virtual QString positionToString(qreal pos) const;
-    virtual qreal maximalZoom() const;
+    void addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, const KoColorSpace *colorSpace) override;
+    QString positionToString(qreal pos) const override;
+    qreal maximalZoom() const override;
 };
 
 class PIGMENTCMS_EXPORT KoBasicF32HistogramProducer : public KoBasicHistogramProducer
 {
 public:
     KoBasicF32HistogramProducer(const KoID& id, const KoColorSpace *colorSpace);
-    virtual void addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, const KoColorSpace *colorSpace);
-    virtual QString positionToString(qreal pos) const;
-    virtual qreal maximalZoom() const;
+    void addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, const KoColorSpace *colorSpace) override;
+    QString positionToString(qreal pos) const override;
+    qreal maximalZoom() const override;
 };
 
 
@@ -154,9 +154,9 @@ public:
     KoBasicHistogramProducerFactory(const KoID& id, const QString& modelId, const QString& depthId )
             : KoHistogramProducerFactory(id), m_modelId(modelId), m_depthId(depthId) {
     }
-    virtual ~KoBasicHistogramProducerFactory() {}
+    ~KoBasicHistogramProducerFactory() override {}
 
-    virtual KoHistogramProducer *generate() {
+    KoHistogramProducer *generate() override {
         KoHistogramProducer *producer = 0;
         const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(m_modelId, m_depthId, 0);
         if (cs) {
@@ -165,10 +165,10 @@ public:
         return producer;
 
     }
-    virtual bool isCompatibleWith(const KoColorSpace* colorSpace) const {
+    bool isCompatibleWith(const KoColorSpace* colorSpace) const override {
         return colorSpace->colorModelId().id() == m_modelId || colorSpace->colorDepthId().id() == m_depthId;
     }
-    virtual float preferrednessLevelWith(const KoColorSpace* colorSpace) const {
+    float preferrednessLevelWith(const KoColorSpace* colorSpace) const override {
         return 0.5 * ( (colorSpace->colorModelId().id() == m_modelId) + (colorSpace->colorDepthId().id() == m_depthId) );
     }
 protected:
@@ -185,10 +185,10 @@ class PIGMENTCMS_EXPORT KoGenericRGBHistogramProducer : public KoBasicHistogramP
 {
 public:
     KoGenericRGBHistogramProducer();
-    virtual void addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, const KoColorSpace *colorSpace);
-    virtual QString positionToString(qreal pos) const;
-    virtual qreal maximalZoom() const;
-    virtual QList<KoChannelInfo *> channels();
+    void addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, const KoColorSpace *colorSpace) override;
+    QString positionToString(qreal pos) const override;
+    qreal maximalZoom() const override;
+    QList<KoChannelInfo *> channels() override;
 protected:
     QList<KoChannelInfo *> m_channelsList;
 };
@@ -199,17 +199,17 @@ class  PIGMENTCMS_EXPORT KoGenericRGBHistogramProducerFactory : public KoHistogr
 public:
     KoGenericRGBHistogramProducerFactory();
 
-    virtual ~KoGenericRGBHistogramProducerFactory() {}
+    ~KoGenericRGBHistogramProducerFactory() override {}
 
-    virtual KoHistogramProducer *generate() {
+    KoHistogramProducer *generate() override {
         return new KoGenericRGBHistogramProducer();
     }
 
-    virtual bool isCompatibleWith(const KoColorSpace*) const {
+    bool isCompatibleWith(const KoColorSpace*) const override {
         return true;
     }
 
-    virtual float preferrednessLevelWith(const KoColorSpace*) const {
+    float preferrednessLevelWith(const KoColorSpace*) const override {
         return 0.0;
     }
 };
@@ -224,11 +224,11 @@ class  PIGMENTCMS_EXPORT KoGenericLabHistogramProducer : public KoBasicHistogram
 {
 public:
     KoGenericLabHistogramProducer();
-    virtual ~KoGenericLabHistogramProducer();
-    virtual void addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, const KoColorSpace *colorSpace);
-    virtual QString positionToString(qreal pos) const;
-    virtual qreal maximalZoom() const;
-    virtual QList<KoChannelInfo *> channels();
+    ~KoGenericLabHistogramProducer() override;
+    void addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, const KoColorSpace *colorSpace) override;
+    QString positionToString(qreal pos) const override;
+    qreal maximalZoom() const override;
+    QList<KoChannelInfo *> channels() override;
 protected:
     QList<KoChannelInfo *> m_channelsList;
 };
@@ -238,17 +238,17 @@ class /*PIGMENTCMS_EXPORT*/ KoGenericLabHistogramProducerFactory : public KoHist
 {
 public:
     KoGenericLabHistogramProducerFactory();
-    virtual ~KoGenericLabHistogramProducerFactory() {}
+    ~KoGenericLabHistogramProducerFactory() override {}
 
-    virtual KoHistogramProducer *generate() {
+    KoHistogramProducer *generate() override {
         return new KoGenericLabHistogramProducer();
     }
 
-    virtual bool isCompatibleWith(const KoColorSpace*) const {
+    bool isCompatibleWith(const KoColorSpace*) const override {
         return true;
     }
 
-    virtual float preferrednessLevelWith(const KoColorSpace*) const {
+    float preferrednessLevelWith(const KoColorSpace*) const override {
         return 0.0;
     }
 };

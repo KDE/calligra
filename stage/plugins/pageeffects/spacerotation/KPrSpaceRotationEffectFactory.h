@@ -26,8 +26,8 @@ class KPrSpaceRotationEffectFactory : public KPrPageEffectFactory
 {
 public:
     KPrSpaceRotationEffectFactory();
-    virtual ~KPrSpaceRotationEffectFactory();
-    virtual QString subTypeName(int subType) const;
+    ~KPrSpaceRotationEffectFactory() override;
+    QString subTypeName(int subType) const override;
 
     enum SubType {
         FromBottom,

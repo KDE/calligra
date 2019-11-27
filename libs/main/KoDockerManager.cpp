@@ -41,16 +41,16 @@ class ToolDockerFactory : public KoDockFactoryBase
 public:
     ToolDockerFactory() : KoDockFactoryBase() { }
 
-    QString id() const {
+    QString id() const override {
         return "sharedtooldocker";
     }
 
-    QDockWidget* createDockWidget() {
+    QDockWidget* createDockWidget() override {
         KoToolDocker * dockWidget = new KoToolDocker();
         return dockWidget;
     }
 
-    DockPosition defaultDockPosition() const {
+    DockPosition defaultDockPosition() const override {
         return DockRight;
     }
 };

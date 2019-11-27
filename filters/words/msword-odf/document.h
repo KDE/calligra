@@ -74,22 +74,22 @@ public:
              KoXmlWriter* bodyWriter, KoXmlWriter* metaWriter, KoXmlWriter* manifestWriter,
              KoStore* store, KoGenStyles* mainStyles,
              LEInputStream& wordDocument, POLE::Stream& table, LEInputStream *data, LEInputStream *si);
-    virtual ~Document();
+    ~Document() override;
 
-    virtual void setProgress(const int percent);
+    void setProgress(const int percent) override;
 
-    virtual void bodyStart();
-    virtual void bodyEnd();
+    void bodyStart() override;
+    void bodyEnd() override;
 
-    virtual void headerStart(wvWare::HeaderData::Type type);
-    virtual void headerEnd();
-    virtual void headersMask(QList<bool> mask);
+    void headerStart(wvWare::HeaderData::Type type) override;
+    void headerEnd() override;
+    void headersMask(QList<bool> mask) override;
 
-    virtual void footnoteStart();
-    virtual void footnoteEnd();
+    void footnoteStart() override;
+    void footnoteEnd() override;
 
-    virtual void annotationStart();
-    virtual void annotationEnd();
+    void annotationStart() override;
+    void annotationEnd() override;
 
     /**
      * Call the wv2 parser and check if our handlers are fine after the parsing

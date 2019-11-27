@@ -34,7 +34,7 @@ class FLAKE_EXPORT KoToolRegistry : public KoGenericRegistry<KoToolFactoryBase*>
 {
 public:
     KoToolRegistry();
-    ~KoToolRegistry();
+    ~KoToolRegistry() override;
 
     /**
      * Return an instance of the KoToolRegistry

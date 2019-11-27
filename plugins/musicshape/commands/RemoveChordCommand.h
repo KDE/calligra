@@ -29,8 +29,8 @@ class MusicShape;
 class RemoveChordCommand : public KUndo2Command {
 public:
     RemoveChordCommand(MusicShape* shape, MusicCore::Chord* chord);
-    virtual void redo();
-    virtual void undo();
+    void redo() override;
+    void undo() override;
 private:
     MusicCore::Chord* m_chord;
     MusicShape* m_shape;

@@ -27,10 +27,10 @@ class KPrWindShieldWipeStrategy : public KPrSweepWipeStrategy
 {
 public:
     KPrWindShieldWipeStrategy( int subType, const char * smilType, const char *smilSubType, bool reverse );
-    virtual ~KPrWindShieldWipeStrategy();
+    ~KPrWindShieldWipeStrategy() override;
 
-    virtual void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine );
-    virtual void paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data );
+    void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine ) override;
+    void paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data ) override;
 };
 
 #endif // KPRWINDSHIELDWIPESTRATEGY_H

@@ -53,7 +53,7 @@ public:
      * @param canvas the canvas this tool will be working for.
      */
     explicit DefaultTool( KoCanvasBase *canvas );
-    virtual ~DefaultTool();
+    ~DefaultTool() override;
 
     enum CanvasResource {
         HotPosition = 1410100299
@@ -61,23 +61,23 @@ public:
 
 public:
 
-    virtual bool wantsAutoScroll() const;
-    virtual void paint( QPainter &painter, const KoViewConverter &converter );
+    bool wantsAutoScroll() const override;
+    void paint( QPainter &painter, const KoViewConverter &converter ) override;
 
-    virtual void repaintDecorations();
-
-    ///reimplemented
-    virtual void copy() const;
+    void repaintDecorations() override;
 
     ///reimplemented
-    virtual void deleteSelection();
+    void copy() const override;
 
     ///reimplemented
-    virtual bool paste();
+    void deleteSelection() override;
+
     ///reimplemented
-    virtual QStringList supportedPasteMimeTypes() const;
+    bool paste() override;
     ///reimplemented
-    virtual KoToolSelection* selection();
+    QStringList supportedPasteMimeTypes() const override;
+    ///reimplemented
+    KoToolSelection* selection() override;
 
     /**
      * Returns which selection handle is at params point (or NoHandle if none).
@@ -91,9 +91,9 @@ public:
 
 public Q_SLOTS:
     /// Activate the tool and paint selection handles
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
     /// Deactivate the tool and remove selection handles
-    virtual void deactivate();
+    void deactivate() override;
 
 private Q_SLOTS:
     void selectionAlignHorizontalLeft();
@@ -116,19 +116,19 @@ private Q_SLOTS:
 
 public: // Events
 
-    virtual void mousePressEvent( KoPointerEvent *event );
-    virtual void mouseMoveEvent( KoPointerEvent *event );
-    virtual void mouseReleaseEvent( KoPointerEvent *event );
-    virtual void mouseDoubleClickEvent( KoPointerEvent *event );
+    void mousePressEvent( KoPointerEvent *event ) override;
+    void mouseMoveEvent( KoPointerEvent *event ) override;
+    void mouseReleaseEvent( KoPointerEvent *event ) override;
+    void mouseDoubleClickEvent( KoPointerEvent *event ) override;
 
-    virtual void keyPressEvent(QKeyEvent *event);
+    void keyPressEvent(QKeyEvent *event) override;
 
-    virtual void customMoveEvent( KoPointerEvent * event );
+    void customMoveEvent( KoPointerEvent * event ) override;
 
 protected:
-    QList<QPointer<QWidget> > createOptionWidgets();
+    QList<QPointer<QWidget> > createOptionWidgets() override;
 
-    virtual KoInteractionStrategy *createStrategy(KoPointerEvent *event);
+    KoInteractionStrategy *createStrategy(KoPointerEvent *event) override;
 
 private:
     void setupActions();
@@ -147,7 +147,7 @@ private:
     // convenience method;
     KoSelection * koSelection();
 
-    void canvasResourceChanged( int key, const QVariant & res );
+    void canvasResourceChanged( int key, const QVariant & res ) override;
 
     /// selects guide line at given position
     void selectGuideAtPosition( const QPointF &position );

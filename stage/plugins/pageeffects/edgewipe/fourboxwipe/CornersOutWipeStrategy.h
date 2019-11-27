@@ -26,14 +26,14 @@ class CornersOutWipeStrategy : public KPrPageEffectStrategy
 {
 public:
     explicit CornersOutWipeStrategy(bool reverse);
-    virtual ~CornersOutWipeStrategy();
+    ~CornersOutWipeStrategy() override;
 
     /// reimplemented from KPrPageEffectStrategy
-    virtual void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine );
+    void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine ) override;
     /// reimplemented from KPrPageEffectStrategy
-    virtual void paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data );
+    void paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data ) override;
     /// reimplemented from KPrPageEffectStrategy
-    virtual void next( const KPrPageEffect::Data &data );
+    void next( const KPrPageEffect::Data &data ) override;
 
 private:
     /// calculates clip path for given step

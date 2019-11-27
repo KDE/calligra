@@ -28,7 +28,7 @@ class RecentFileManager : public QObject
     Q_OBJECT
 public:
     explicit RecentFileManager(QObject *parent = 0);
-    ~RecentFileManager();
+    ~RecentFileManager() override;
 
     /// @return the size of the recent files list
     Q_INVOKABLE int size();

@@ -32,9 +32,9 @@ namespace RtfReader
       public:
 	DocumentCommentPcdataDestination( Reader *reader, AbstractRtfOutput *output, const QString &name );
 
-	virtual ~DocumentCommentPcdataDestination();
+	~DocumentCommentPcdataDestination() override;
 
-	virtual void aboutToEndDestination();
+	void aboutToEndDestination() override;
       };
 }
 

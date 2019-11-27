@@ -49,7 +49,7 @@ public:
      * @param parent the parent frameset
      */
     KWFrame(KoShape *shape, KWFrameSet *parent);
-    virtual ~KWFrame();
+    ~KWFrame() override;
 
     /**
      * Each frame will be rendered by a shape which also holds the position etc.

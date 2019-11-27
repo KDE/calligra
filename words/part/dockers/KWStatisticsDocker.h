@@ -45,10 +45,10 @@ class KWStatisticsDocker : public QDockWidget, public KoCanvasObserverBase
 
 public:
     explicit KWStatisticsDocker();
-    ~KWStatisticsDocker();
+    ~KWStatisticsDocker() override;
     /// reimplemented from KoCanvasObserver
-    virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas();
+    void setCanvas(KoCanvasBase *canvas) override;
+    void unsetCanvas() override;
 
 private:
     bool m_canvasReset;
@@ -65,9 +65,9 @@ class KWStatisticsDockerFactory : public KoDockFactoryBase
 {
 public:
     KWStatisticsDockerFactory();
-    virtual QString id() const;
-    virtual QDockWidget* createDockWidget();
-    DockPosition defaultDockPosition() const {
+    QString id() const override;
+    QDockWidget* createDockWidget() override;
+    DockPosition defaultDockPosition() const override {
         return DockMinimized;
     }
 };

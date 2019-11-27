@@ -81,7 +81,7 @@ public:
                                QTextStream *output = 0);
 
     /// destructor
-    virtual ~KoProgressUpdater();
+    ~KoProgressUpdater() override;
 
     /**
      * Start a new task.

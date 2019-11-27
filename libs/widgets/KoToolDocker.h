@@ -37,17 +37,17 @@ class KOWIDGETS_EXPORT KoToolDocker : public QDockWidget, public KoCanvasObserve
     Q_OBJECT
 public:
     explicit KoToolDocker(QWidget *parent = nullptr);
-    ~KoToolDocker() Q_DECL_OVERRIDE;
+    ~KoToolDocker() override;
 
     void resetWidgets();
 
     /// reimplemented
-    void setCanvas(KoCanvasBase *canvas) Q_DECL_OVERRIDE;
-    void unsetCanvas() Q_DECL_OVERRIDE;
+    void setCanvas(KoCanvasBase *canvas) override;
+    void unsetCanvas() override;
 
 
 protected:
-    void resizeEvent(QResizeEvent* event) Q_DECL_OVERRIDE; ///< reimplemented from QWidget
+    void resizeEvent(QResizeEvent* event) override; ///< reimplemented from QWidget
 public Q_SLOTS:
     /**
      * Update the option widgets to the argument one, removing the currently set widget.

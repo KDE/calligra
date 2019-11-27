@@ -40,10 +40,10 @@ class DocxXmlStylesReader : public DocxXmlDocumentReader
 public:
     explicit DocxXmlStylesReader(KoOdfWriters *writers);
 
-    virtual ~DocxXmlStylesReader();
+    ~DocxXmlStylesReader() override;
 
     //! Reads/parses the file. The output goes mainly to KoGenStyles* KoOdfWriters::mainStyles
-    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
+    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0) override;
 
 protected:
     KoFilter::ConversionStatus read_docDefaults();

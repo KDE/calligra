@@ -32,11 +32,11 @@ class CreateTool : public Tool
 {
 public:
     CreateTool(Canvas * canvas);
-    virtual ~CreateTool();
+    ~CreateTool() override;
 
-    virtual void mouseReleaseEvent(QMouseEvent *e);
+    void mouseReleaseEvent(QMouseEvent *e) override;
 
-    virtual void paint(QPainter & p);
+    void paint(QPainter & p) override;
 
 protected:
 };
@@ -45,11 +45,11 @@ class SelectTool : public Tool
 {
 public:
     SelectTool(Canvas * canvas);
-    virtual ~SelectTool();
+    ~SelectTool() override;
 
-    virtual void mouseReleaseEvent(QMouseEvent *e);
+    void mouseReleaseEvent(QMouseEvent *e) override;
 
-    virtual void paint(QPainter & p);
+    void paint(QPainter & p) override;
 
 protected:
 };
@@ -58,11 +58,11 @@ class RemoveTool : public Tool
 {
 public:
     RemoveTool(Canvas * canvas);
-    virtual ~RemoveTool();
+    ~RemoveTool() override;
 
-    virtual void mouseReleaseEvent(QMouseEvent *e);
+    void mouseReleaseEvent(QMouseEvent *e) override;
 
-    virtual void paint(QPainter & p);
+    void paint(QPainter & p) override;
 
 protected:
 };

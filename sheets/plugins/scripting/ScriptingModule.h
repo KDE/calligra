@@ -60,7 +60,7 @@ public:
     /**
     * Destructor.
     */
-    virtual ~ScriptingModule();
+    ~ScriptingModule() override;
 
     /**
     * \return The \a KSpread::View instance this module provides access to or
@@ -84,7 +84,7 @@ public:
     * This method overwrites the one from the \a KoScriptingModule class
     * to allow us to return our \a Calligra::Sheets::Doc here.
     */
-    virtual KoDocument* doc();
+    KoDocument* doc() override;
 
 public Q_SLOTS:
 

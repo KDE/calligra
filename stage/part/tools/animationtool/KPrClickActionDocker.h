@@ -50,8 +50,8 @@ private Q_SLOTS:
     void selectionChanged();
 
     /// reimplemented
-    virtual void setCanvas( KoCanvasBase *canvas );
-    virtual void unsetCanvas() { m_canvas = 0; m_view = 0; }
+    void setCanvas( KoCanvasBase *canvas ) override;
+    void unsetCanvas() override { m_canvas = 0; m_view = 0; }
 private:
     KoPAViewBase *m_view;
     KPrSoundCollection *m_soundCollection;

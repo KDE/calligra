@@ -36,11 +36,11 @@ class WORDS_EXPORT KWViewModePreview : public KWViewMode
 public:
     /// constructor
     explicit KWViewModePreview();
-    ~KWViewModePreview() {}
+    ~KWViewModePreview() override {}
 
-    virtual QPointF documentToView(const QPointF &point, KoViewConverter *viewConverter) const;
-    virtual QPointF viewToDocument(const QPointF &point, KoViewConverter *viewConverter) const;
-    virtual QSizeF contentsSize() const;
+    QPointF documentToView(const QPointF &point, KoViewConverter *viewConverter) const override;
+    QPointF viewToDocument(const QPointF &point, KoViewConverter *viewConverter) const override;
+    QSizeF contentsSize() const override;
 
     /**
      * The preview can show several pages in a row for easy overview.
@@ -62,16 +62,16 @@ public:
         return "ModePreview";
     }
     /// return a string identification of this viewMode
-    const QString type() const {
+    const QString type() const override {
         return KWViewModePreview::viewMode();
     }
-    QVector<ViewMap> mapExposedRects(const QRectF &viewRect, KoViewConverter *viewConverter) const;
+    QVector<ViewMap> mapExposedRects(const QRectF &viewRect, KoViewConverter *viewConverter) const override;
 
     /// set the gap between the pages
     void setGap(int gap);
 
 protected:
-    void updatePageCache();
+    void updatePageCache() override;
 
 private:
     int m_pagesPerRow;

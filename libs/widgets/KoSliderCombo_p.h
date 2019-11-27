@@ -45,9 +45,9 @@ class KoSliderComboContainer : public QMenu
 Q_OBJECT
 public:
     KoSliderComboContainer(KoSliderCombo *parent) : QMenu(parent ), m_parent(parent) {}
-    ~KoSliderComboContainer() Q_DECL_OVERRIDE = default;
+    ~KoSliderComboContainer() override = default;
 protected:
-    void mousePressEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
+    void mousePressEvent(QMouseEvent *e) override;
 private:
     KoSliderCombo *m_parent;
 };

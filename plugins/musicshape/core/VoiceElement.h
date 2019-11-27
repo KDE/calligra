@@ -41,7 +41,7 @@ public:
     /**
      * Destructor.
      */
-    virtual ~VoiceElement();
+    ~VoiceElement() override;
 
     /**
      * Returns the staff this music element should be displayed on. It can also be nullptr, for example if the element

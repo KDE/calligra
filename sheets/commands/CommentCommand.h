@@ -39,8 +39,8 @@ public:
     void setComment(const QString& comment);
 
 protected:
-    virtual bool process(Element* element);
-    virtual bool mainProcessing();
+    bool process(Element* element) override;
+    bool mainProcessing() override;
 
 private:
     QString m_comment;

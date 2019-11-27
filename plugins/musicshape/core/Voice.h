@@ -46,7 +46,7 @@ public:
     /**
      * Destructor.
      */
-    ~Voice();
+    ~Voice() override;
 
     /**
      * Returns the part this voice is part of.

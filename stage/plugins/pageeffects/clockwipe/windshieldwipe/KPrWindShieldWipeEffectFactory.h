@@ -26,8 +26,8 @@ class KPrWindShieldWipeEffectFactory : public KPrPageEffectFactory
 {
 public:
     KPrWindShieldWipeEffectFactory();
-    virtual ~KPrWindShieldWipeEffectFactory();
-    virtual QString subTypeName(int subType) const;
+    ~KPrWindShieldWipeEffectFactory() override;
+    QString subTypeName(int subType) const override;
 
     enum SubType {
         Right,

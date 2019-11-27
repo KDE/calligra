@@ -79,21 +79,21 @@ class CALLIGRA_SHEETS_COMMON_EXPORT Canvas : public QWidget, public CanvasBase
 
 public:
     explicit Canvas(View* view);
-    ~Canvas();
+    ~Canvas() override;
 
     View* view() const;
 
     /// reimplemented method from KoCanvasBase
-    virtual QWidget* canvasWidget() {
+    QWidget* canvasWidget() override {
         return this;
     }
-    virtual const QWidget* canvasWidget() const {
+    const QWidget* canvasWidget() const override {
         return this;
     }
 
-    virtual Sheet* activeSheet() const;
-    virtual Calligra::Sheets::Selection* selection() const;
-    virtual void setCursor(const QCursor &cursor);
+    Sheet* activeSheet() const override;
+    Calligra::Sheets::Selection* selection() const override;
+    void setCursor(const QCursor &cursor) override;
 
 public Q_SLOTS:
     void setDocumentOffset(const QPoint& offset) {
@@ -104,75 +104,75 @@ public Q_SLOTS:
     }
 
 Q_SIGNALS:
-    /* virtual */ void documentSizeChanged(const QSize&);
+    /* virtual */ void documentSizeChanged(const QSize&) override;
 
 protected:
-    virtual bool event(QEvent *e);
-    virtual void keyPressEvent(QKeyEvent* _ev) {
+    bool event(QEvent *e) override;
+    void keyPressEvent(QKeyEvent* _ev) override {
         CanvasBase::keyPressed(_ev);
     }
-    virtual void paintEvent(QPaintEvent* _ev);
-    virtual void mousePressEvent(QMouseEvent* _ev);
-    virtual void mouseReleaseEvent(QMouseEvent* _ev);
-    virtual void mouseMoveEvent(QMouseEvent* _ev);
-    virtual void mouseDoubleClickEvent(QMouseEvent*);
-    virtual void focusInEvent(QFocusEvent* _ev) {
+    void paintEvent(QPaintEvent* _ev) override;
+    void mousePressEvent(QMouseEvent* _ev) override;
+    void mouseReleaseEvent(QMouseEvent* _ev) override;
+    void mouseMoveEvent(QMouseEvent* _ev) override;
+    void mouseDoubleClickEvent(QMouseEvent*) override;
+    void focusInEvent(QFocusEvent* _ev) override {
         CanvasBase::focusIn(_ev);
         QWidget::focusInEvent(_ev);
     }
-    virtual void dragEnterEvent(QDragEnterEvent*);
-    virtual void dragMoveEvent(QDragMoveEvent*);
-    virtual void dragLeaveEvent(QDragLeaveEvent*);
-    virtual void dropEvent(QDropEvent*);
+    void dragEnterEvent(QDragEnterEvent*) override;
+    void dragMoveEvent(QDragMoveEvent*) override;
+    void dragLeaveEvent(QDragLeaveEvent*) override;
+    void dropEvent(QDropEvent*) override;
     /// reimplemented method from superclass
-    virtual QVariant inputMethodQuery(Qt::InputMethodQuery query) const {
+    QVariant inputMethodQuery(Qt::InputMethodQuery query) const override {
         return CanvasBase::inputMethodQuery(query);
     }
     /// reimplemented method from superclass
-    virtual void inputMethodEvent(QInputMethodEvent *event) {
+    void inputMethodEvent(QInputMethodEvent *event) override {
         CanvasBase::inputMethodEvent(event);
     }
     /// reimplemented method from superclass
-    virtual void tabletEvent(QTabletEvent *e) {
+    void tabletEvent(QTabletEvent *e) override {
         CanvasBase::tabletEvent(e);
     }
 
 public:
-    virtual void update() {
+    void update() override {
         QWidget::update();
     }
-    virtual void update(const QRectF& rect) {
+    void update(const QRectF& rect) override {
         QWidget::update(rect.toRect());
     }
-    virtual Qt::LayoutDirection layoutDirection() const {
+    Qt::LayoutDirection layoutDirection() const override {
         return QWidget::layoutDirection();
     }
-    virtual QRectF rect() const {
+    QRectF rect() const override {
         return QWidget::rect();
     }
-    virtual QSizeF size() const {
+    QSizeF size() const override {
         return QWidget::size();
     }
-    virtual QPoint mapToGlobal(const QPointF& point) const {
+    QPoint mapToGlobal(const QPointF& point) const override {
         return QWidget::mapToGlobal(point.toPoint());
     }
-    virtual void updateMicroFocus() {
+    void updateMicroFocus() override {
         QWidget::updateMicroFocus();
     }
 
-    virtual KoZoomHandler* zoomHandler() const;
-    virtual bool isViewLoading() const;
-    virtual SheetView* sheetView(const Sheet* sheet) const;
-    virtual void enableAutoScroll();
-    virtual void disableAutoScroll();
-    virtual void showContextMenu(const QPoint& globalPos);
-    virtual ColumnHeader* columnHeader() const;
-    virtual RowHeader* rowHeader() const;
+    KoZoomHandler* zoomHandler() const override;
+    bool isViewLoading() const override;
+    SheetView* sheetView(const Sheet* sheet) const override;
+    void enableAutoScroll() override;
+    void disableAutoScroll() override;
+    void showContextMenu(const QPoint& globalPos) override;
+    ColumnHeader* columnHeader() const override;
+    RowHeader* rowHeader() const override;
 private:
-    virtual void setVertScrollBarPos(qreal pos);
-    virtual void setHorizScrollBarPos(qreal pos);
+    void setVertScrollBarPos(qreal pos) override;
+    void setHorizScrollBarPos(qreal pos) override;
 
-    virtual bool eventFilter(QObject *o, QEvent *e) {
+    bool eventFilter(QObject *o, QEvent *e) override {
         return CanvasBase::eventFilter(o, e);
     }
 

@@ -90,7 +90,7 @@ class Document : public QObject
 
 public:
     explicit Document(QObject* parent = 0);
-    ~Document();
+    ~Document() override;
 
     QUrl source() const;
     void setSource(const QUrl& value);

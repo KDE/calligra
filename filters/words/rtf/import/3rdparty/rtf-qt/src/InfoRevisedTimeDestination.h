@@ -32,9 +32,9 @@ namespace RtfReader
       public:
 	InfoRevisedTimeDestination( Reader *reader, AbstractRtfOutput *output, const QString &name );
 
-	virtual ~InfoRevisedTimeDestination();
+	~InfoRevisedTimeDestination() override;
 
-	virtual void aboutToEndDestination();
+	void aboutToEndDestination() override;
       };
 }
 

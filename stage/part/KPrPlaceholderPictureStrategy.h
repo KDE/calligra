@@ -25,9 +25,9 @@
 class KPrPlaceholderPictureStrategy : public KPrPlaceholderStrategy
 {
 public:
-    virtual ~KPrPlaceholderPictureStrategy();
+    ~KPrPlaceholderPictureStrategy() override;
 
-    virtual KoShape *createShape(KoDocumentResourceManager *documenResources);
+    KoShape *createShape(KoDocumentResourceManager *documenResources) override;
 
 protected:
     KPrPlaceholderPictureStrategy();

@@ -70,7 +70,7 @@ class Calligra::Sheets::StyleStorageLoaderJob : public QRunnable
 {
 public:
     StyleStorageLoaderJob(StyleStorage* storage, const QList<QPair<QRegion, Style> >& styles);
-    virtual void run();
+    void run() override;
     void waitForFinished();
     bool isFinished();
     QList<QPair<QRegion, Style> > data() const { return m_styles; }

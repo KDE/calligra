@@ -124,7 +124,7 @@ class Theme : public QObject
     Q_PROPERTY(QString fontPath READ fontPath WRITE setFontPath NOTIFY fontPathChanged)
 public:
     explicit Theme(QObject* parent = 0);
-    virtual ~Theme();
+    ~Theme() override;
 
     /**
      * Getter for property #id.
@@ -255,7 +255,7 @@ Q_SIGNALS:
     void fontCacheRebuilt();
 
 protected:
-    virtual bool eventFilter(QObject*, QEvent*);
+    bool eventFilter(QObject*, QEvent*) override;
 
 private:
     class Private;

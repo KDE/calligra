@@ -50,10 +50,10 @@ public:
     /**
      * Destructor.
      */
-    virtual ~HyperlinkStrategy();
+    ~HyperlinkStrategy() override;
 
-    virtual void handleMouseMove(const QPointF& mouseLocation, Qt::KeyboardModifiers modifiers);
-    virtual void finishInteraction(Qt::KeyboardModifiers modifiers);
+    void handleMouseMove(const QPointF& mouseLocation, Qt::KeyboardModifiers modifiers) override;
+    void finishInteraction(Qt::KeyboardModifiers modifiers) override;
 
 private:
     class Private;

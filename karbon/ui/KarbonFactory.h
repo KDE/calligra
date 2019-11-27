@@ -41,9 +41,9 @@ class KARBONUI_EXPORT KarbonFactory : public KPluginFactory
 
 public:
     explicit KarbonFactory();
-    ~KarbonFactory();
+    ~KarbonFactory() override;
 
-    virtual QObject* create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword);
+    QObject* create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword) override;
 
     static const KSharedConfig::Ptr &karbonConfig();
     static const KoComponentData &global();

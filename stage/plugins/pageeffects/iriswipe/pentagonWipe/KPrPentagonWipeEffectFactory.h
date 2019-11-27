@@ -26,8 +26,8 @@ class KPrPentagonWipeEffectFactory : public KPrPageEffectFactory
 {
 public:
     KPrPentagonWipeEffectFactory();
-    virtual ~KPrPentagonWipeEffectFactory();
-    virtual QString subTypeName(int subType) const;
+    ~KPrPentagonWipeEffectFactory() override;
+    QString subTypeName(int subType) const override;
 
     enum SubType {
         Up,

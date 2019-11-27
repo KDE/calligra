@@ -26,8 +26,8 @@ class KPrParallelSnakesWipeEffectFactory : public KPrPageEffectFactory
 {
 public:
     KPrParallelSnakesWipeEffectFactory();
-    virtual ~KPrParallelSnakesWipeEffectFactory();
-    virtual QString subTypeName(int subType) const;
+    ~KPrParallelSnakesWipeEffectFactory() override;
+    QString subTypeName(int subType) const override;
 
     enum SubType {
         VerticalTopSameIn,

@@ -38,7 +38,7 @@ class KOODF2_EXPORT KoOdfPageLayout : public KoOdfStyleBase
 {
  public:
     KoOdfPageLayout();
-    ~KoOdfPageLayout();
+    ~KoOdfPageLayout() override;
 
     QString pageUsage() const;
     void setPageUsage(const QString &family);
@@ -58,8 +58,8 @@ class KOODF2_EXPORT KoOdfPageLayout : public KoOdfStyleBase
     KoOdfHeaderFooterProperties *footerProperties() const;
 
     // Reimplemented from KoOdfStyleBase
-    bool readOdf(KoXmlStreamReader &reader);
-    bool saveOdf(KoXmlWriter *writer);
+    bool readOdf(KoXmlStreamReader &reader) override;
+    bool saveOdf(KoXmlWriter *writer) override;
 
  private:
     class Private;

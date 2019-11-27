@@ -47,13 +47,13 @@ class Thesaurus : public KoTextEditingPlugin
 
 public:
     Thesaurus();
-    ~Thesaurus();
+    ~Thesaurus() override;
 
-    void finishedWord(QTextDocument *document, int cursorPosition);
-    void finishedParagraph(QTextDocument *document, int cursorPosition);
-    void startingSimpleEdit(QTextDocument *document, int cursorPosition);
+    void finishedWord(QTextDocument *document, int cursorPosition) override;
+    void finishedParagraph(QTextDocument *document, int cursorPosition) override;
+    void startingSimpleEdit(QTextDocument *document, int cursorPosition) override;
 
-     void checkSection(QTextDocument *document, int startPosition, int endPosition);
+     void checkSection(QTextDocument *document, int startPosition, int endPosition) override;
 
 private Q_SLOTS:
     void process();

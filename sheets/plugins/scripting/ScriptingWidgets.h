@@ -59,7 +59,7 @@ public:
     /**
     * Destructor.
     */
-    virtual ~ScriptingSheetsListView();
+    ~ScriptingSheetsListView() override;
 
     enum SelectionType { SingleSelect, MultiSelect };
     enum EditorType { Disabled, Cell, Range };
@@ -121,7 +121,7 @@ private:
     void initialize();
     void finalize();
 
-    virtual void showEvent(QShowEvent* event);
+    void showEvent(QShowEvent* event) override;
 };
 
 #endif

@@ -140,8 +140,8 @@ public Q_SLOTS:
     void slotSelect();
 
 protected:
-    virtual void paintEvent(QPaintEvent *_ev);
-    virtual void mousePressEvent(QMouseEvent *_ev);
+    void paintEvent(QPaintEvent *_ev) override;
+    void mousePressEvent(QMouseEvent *_ev) override;
 
     Qt::PenStyle penStyle;
     QColor penColor;
@@ -162,7 +162,7 @@ class GeneralTab : public QWidget
 
 public:
     GeneralTab(QWidget * parent, CellFormatDialog * _dlg);
-    ~GeneralTab();
+    ~GeneralTab() override;
 
     bool apply(CustomStyle * style);
 
@@ -323,8 +323,8 @@ Q_SIGNALS:
     void redraw();
     void choosearea(QMouseEvent * _ev);
 protected:
-    virtual void paintEvent(QPaintEvent *_ev);
-    virtual void mousePressEvent(QMouseEvent* _ev);
+    void paintEvent(QPaintEvent *_ev) override;
+    void mousePressEvent(QMouseEvent* _ev) override;
     bool oneCol;
     bool oneRow;
 };
@@ -367,7 +367,7 @@ public:
 Q_SIGNALS:
     void clicked(BorderButton *);
 protected:
-    virtual void mousePressEvent(QMouseEvent *_ev);
+    void mousePressEvent(QMouseEvent *_ev) override;
     Qt::PenStyle penStyle;
     QColor penColor;
     int penWidth;
@@ -468,8 +468,8 @@ public Q_SLOTS:
     void slotSelect();
 
 protected:
-    virtual void paintEvent(QPaintEvent *_ev);
-    virtual void mousePressEvent(QMouseEvent *_ev);
+    void paintEvent(QPaintEvent *_ev) override;
+    void mousePressEvent(QMouseEvent *_ev) override;
 
     Qt::BrushStyle brushStyle;
     QColor brushColor;
@@ -535,7 +535,7 @@ class CellFormatPageProtection : public QWidget, public Ui::ProtectionWidget
 
 public:
     CellFormatPageProtection(QWidget * parent, CellFormatDialog * _dlg);
-    ~CellFormatPageProtection();
+    ~CellFormatPageProtection() override;
     ///when protection is set through Style Manager
     void apply(CustomStyle * style);
     void apply(StyleCommand * _obj);
@@ -562,7 +562,7 @@ public:
     CellFormatDialog(QWidget* parent, Selection* selection);
     CellFormatDialog(QWidget* parent, Selection* selection, CustomStyle* style, StyleManager* manager);
 
-    ~CellFormatDialog();
+    ~CellFormatDialog() override;
 
     void init();
     void initGUI();

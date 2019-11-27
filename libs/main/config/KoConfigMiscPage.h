@@ -36,7 +36,7 @@ class KOMAIN_EXPORT KoConfigMiscPage : public KoVBox
 
 public:
     explicit KoConfigMiscPage(KoDocument* doc, KoDocumentResourceManager *documentResources, char* name = 0L);
-    ~KoConfigMiscPage();
+    ~KoConfigMiscPage() override;
 
     void apply();
 

@@ -35,7 +35,7 @@ class KOMAIN_EXPORT KoConfigGridPage : public QWidget
 
 public:
     explicit KoConfigGridPage(KoDocument* doc, char* name = 0L);
-    ~KoConfigGridPage();
+    ~KoConfigGridPage() override;
 
     void apply();
 

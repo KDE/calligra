@@ -77,36 +77,36 @@ public:
     /**
      * Destroys the document.
      */
-    ~Doc();
+    ~Doc() override;
 
 
 
-    virtual bool completeSaving(KoStore* _store);
+    bool completeSaving(KoStore* _store) override;
 
 
     /**
      * \ingroup NativeFormat
      * Main saving method.
      */
-    virtual QDomDocument saveXML();
+    QDomDocument saveXML() override;
 
     /**
      * \ingroup NativeFormat
      * Main loading method.
      */
-    virtual bool loadXML(const KoXmlDocument& doc, KoStore *store);
+    bool loadXML(const KoXmlDocument& doc, KoStore *store) override;
 
-    virtual int supportedSpecialFormats() const;
+    int supportedSpecialFormats() const override;
 
     virtual bool loadChildren(KoStore* _store);
 
     bool docData(QString const & xmlTag, QDomDocument & data);
 
     // reimplemented; paints the thumbnail
-    virtual void paintContent(QPainter & painter, const QRect & rect);
+    void paintContent(QPainter & painter, const QRect & rect) override;
     virtual void paintContent(QPainter & painter, const QRect & rect, Sheet* sheet);
 
-    void initConfig();
+    void initConfig() override;
     void saveConfig();
 
     void addIgnoreWordAll(const QString & word);
@@ -118,7 +118,7 @@ public:
     void loadConfigFromFile();
     bool configLoadFromFile() const;
 
-    virtual bool saveOdf(SavingContext &documentContext);
+    bool saveOdf(SavingContext &documentContext) override;
 
     /**
      * Requests an update of all attached user interfaces (views).
@@ -127,7 +127,7 @@ public:
 
 
 public Q_SLOTS:
-    virtual void initEmpty();
+    void initEmpty() override;
 
 Q_SIGNALS:
     /**
@@ -148,7 +148,7 @@ protected:
     /**
      * @reimp Overloaded function of KoDocument.
      */
-    virtual bool completeLoading(KoStore*);
+    bool completeLoading(KoStore*) override;
 
 private:
     Q_DISABLE_COPY(Doc)

@@ -82,7 +82,7 @@ public:
     /**
     * Destructor.
     */
-    virtual ~ScriptingWriter() {}
+    ~ScriptingWriter() override {}
 
 public Q_SLOTS:
 

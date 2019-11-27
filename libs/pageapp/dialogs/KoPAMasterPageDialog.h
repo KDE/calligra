@@ -33,7 +33,7 @@ class KoPAMasterPageDialog : public KoDialog
     Q_OBJECT
 public:
     explicit KoPAMasterPageDialog(KoPADocument *document, KoPAMasterPage *activeMaster, QWidget *parent = 0);
-    ~KoPAMasterPageDialog();
+    ~KoPAMasterPageDialog() override;
 
     KoPAMasterPage *selectedMasterPage();
 

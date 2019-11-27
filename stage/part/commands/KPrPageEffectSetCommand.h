@@ -31,12 +31,12 @@ class STAGE_EXPORT KPrPageEffectSetCommand : public KUndo2Command
 {
 public:
     KPrPageEffectSetCommand(KoPAPageBase * page, KPrPageEffect * pageEffect, KUndo2Command *parent = 0);
-    virtual ~KPrPageEffectSetCommand();
+    ~KPrPageEffectSetCommand() override;
 
     /// redo the command
-    void redo();
+    void redo() override;
     /// revert the actions done in redo
-    void undo();
+    void undo() override;
 
 private:
     KoPAPageBase * m_page;

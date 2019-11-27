@@ -62,14 +62,14 @@ public:
     And() {}
     And(const And& other);
     And& operator=(const And& other);
-    virtual ~And() {
+    ~And() override {
         qDeleteAll(list);
     }
-    virtual Type type() const {
+    Type type() const override {
         return AbstractCondition::And;
     }
-    virtual bool loadOdf(const KoXmlElement& parent);
-    virtual void saveOdf(KoXmlWriter& xmlWriter) {
+    bool loadOdf(const KoXmlElement& parent) override;
+    void saveOdf(KoXmlWriter& xmlWriter) override {
         if (!list.count())
             return;
         xmlWriter.startElement("table:filter-and");
@@ -77,7 +77,7 @@ public:
             list[i]->saveOdf(xmlWriter);
         xmlWriter.endElement();
     }
-    virtual bool evaluate(const Database& database, int index) const {
+    bool evaluate(const Database& database, int index) const override {
         for (int i = 0; i < list.count(); ++i) {
             // lazy evaluation, stop on first false
             if (!list[i]->evaluate(database, index))
@@ -85,16 +85,16 @@ public:
         }
         return true;
     }
-    virtual bool isEmpty() const {
+    bool isEmpty() const override {
         return list.isEmpty();
     }
-    virtual QHash<QString, Filter::Comparison> conditions(int fieldNumber) const {
+    QHash<QString, Filter::Comparison> conditions(int fieldNumber) const override {
         QHash<QString, Filter::Comparison> result;
         for (int i = 0; i < list.count(); ++i)
             result.unite(list[i]->conditions(fieldNumber));
         return result;
     }
-    virtual void removeConditions(int fieldNumber) {
+    void removeConditions(int fieldNumber) override {
         QList<AbstractCondition*> newList;
         for (int i = 0; i < list.count(); ++i) {
             list[i]->removeConditions(fieldNumber);
@@ -108,7 +108,7 @@ public:
     bool operator!=(const And& other) const {
         return !listsAreEqual(list, other.list);
     }
-    virtual QString dump() const {
+    QString dump() const override {
         QString result = "\t";
         for (int i = 0; i < list.count(); ++i) {
             if (i)
@@ -131,14 +131,14 @@ public:
     Or() {}
     Or(const Or& other);
     Or& operator=(const Or& other);
-    virtual ~Or() {
+    ~Or() override {
         qDeleteAll(list);
     }
-    virtual Type type() const {
+    Type type() const override {
         return AbstractCondition::Or;
     }
-    virtual bool loadOdf(const KoXmlElement& element);
-    virtual void saveOdf(KoXmlWriter& xmlWriter) {
+    bool loadOdf(const KoXmlElement& element) override;
+    void saveOdf(KoXmlWriter& xmlWriter) override {
         if (!list.count())
             return;
         xmlWriter.startElement("table:filter-or");
@@ -146,7 +146,7 @@ public:
             list[i]->saveOdf(xmlWriter);
         xmlWriter.endElement();
     }
-    virtual bool evaluate(const Database& database, int index) const {
+    bool evaluate(const Database& database, int index) const override {
         for (int i = 0; i < list.count(); ++i) {
             // lazy evaluation, stop on first true
             if (list[i]->evaluate(database, index))
@@ -154,16 +154,16 @@ public:
         }
         return false;
     }
-    virtual bool isEmpty() const {
+    bool isEmpty() const override {
         return list.isEmpty();
     }
-    virtual QHash<QString, Filter::Comparison> conditions(int fieldNumber) const {
+    QHash<QString, Filter::Comparison> conditions(int fieldNumber) const override {
         QHash<QString, Filter::Comparison> result;
         for (int i = 0; i < list.count(); ++i)
             result.unite(list[i]->conditions(fieldNumber));
         return result;
     }
-    virtual void removeConditions(int fieldNumber) {
+    void removeConditions(int fieldNumber) override {
         QList<AbstractCondition*> newList;
         for (int i = 0; i < list.count(); ++i) {
             list[i]->removeConditions(fieldNumber);
@@ -177,7 +177,7 @@ public:
     bool operator!=(const Or& other) const {
         return !listsAreEqual(list, other.list);
     }
-    virtual QString dump() const {
+    QString dump() const override {
         QString result = "\t";
         for (int i = 0; i < list.count(); ++i) {
             if (i)
@@ -220,12 +220,12 @@ public:
             , dataType(other.dataType) {
     }
     Condition& operator=(const Condition& other);
-    virtual ~Condition() {}
+    ~Condition() override {}
 
-    virtual Type type() const {
+    Type type() const override {
         return AbstractCondition::Condition;
     }
-    virtual bool loadOdf(const KoXmlElement& element) {
+    bool loadOdf(const KoXmlElement& element) override {
         if (element.hasAttributeNS(KoXmlNS::table, "field-number")) {
             bool ok = false;
             fieldNumber = element.attributeNS(KoXmlNS::table, "field-number", QString()).toInt(&ok);
@@ -283,7 +283,7 @@ public:
         }
         return true;
     }
-    virtual void saveOdf(KoXmlWriter& xmlWriter) {
+    void saveOdf(KoXmlWriter& xmlWriter) override {
         if (fieldNumber < 0)
             return;
         xmlWriter.startElement("table:filter-condition");
@@ -339,7 +339,7 @@ public:
             xmlWriter.addAttribute("table:data-type", "number");
         xmlWriter.endElement();
     }
-    virtual bool evaluate(const Database& database, int index) const {
+    bool evaluate(const Database& database, int index) const override {
         const Sheet* sheet = database.range().lastSheet();
         const QRect range = database.range().lastRange();
         const int start = database.orientation() == Qt::Vertical ? range.left() : range.top();
@@ -368,16 +368,16 @@ public:
         }
         return false;
     }
-    virtual bool isEmpty() const {
+    bool isEmpty() const override {
         return fieldNumber == -1;
     }
-    virtual QHash<QString, Filter::Comparison> conditions(int fieldNumber) const {
+    QHash<QString, Filter::Comparison> conditions(int fieldNumber) const override {
         QHash<QString, Filter::Comparison> result;
         if (this->fieldNumber == fieldNumber)
             result.insert(value, operation);
         return result;
     }
-    virtual void removeConditions(int fieldNumber) {
+    void removeConditions(int fieldNumber) override {
         if (this->fieldNumber == fieldNumber) {
 //             debugSheets <<"removing condition for fieldNumber" << fieldNumber;
             this->fieldNumber = -1;
@@ -399,7 +399,7 @@ public:
     bool operator!=(const Condition& other) const {
         return !operator==(other);
     }
-    virtual QString dump() const {
+    QString dump() const override {
         QString result = QString("fieldNumber: %1 ").arg(fieldNumber);
         switch (operation) {
         case Match:     result += "Match"; break;

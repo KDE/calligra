@@ -57,17 +57,17 @@ public:
     /**
     * \return the id the docker has. This will be always "Scripting".
     */
-    virtual QString id() const;
+    QString id() const override;
 
     /**
     * \return the default docking area.
     */
-    virtual KoDockFactoryBase::DockPosition defaultDockPosition() const;
+    KoDockFactoryBase::DockPosition defaultDockPosition() const override;
 
     /**
     * \return a newly created \a KoScriptingDocker instance.
     */
-    virtual QDockWidget *createDockWidget();
+    QDockWidget *createDockWidget() override;
 
 private:
     /// The parent QWidget instance.
@@ -145,7 +145,7 @@ public:
     /**
     * Destructor.
     */
-    virtual ~KoScriptingActionDocker();
+    ~KoScriptingActionDocker() override;
 
 public Q_SLOTS:
 

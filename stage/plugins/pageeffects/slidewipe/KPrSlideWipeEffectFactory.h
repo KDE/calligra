@@ -26,8 +26,8 @@ class KPrSlideWipeEffectFactory : public KPrPageEffectFactory
 {
 public:
     KPrSlideWipeEffectFactory();
-    virtual ~KPrSlideWipeEffectFactory();
-    virtual QString subTypeName(int subType) const;
+    ~KPrSlideWipeEffectFactory() override;
+    QString subTypeName(int subType) const override;
 
     enum SubType {
         FromLeft,       // the new page is coming from the left

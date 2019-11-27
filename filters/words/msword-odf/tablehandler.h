@@ -104,10 +104,10 @@ public:
     WordsTableHandler(KoXmlWriter* bodyWriter, KoGenStyles* mainStyles);
 
     //////// TableHandler interface
-    virtual void tableRowStart(wvWare::SharedPtr<const wvWare::Word97::TAP> tap);
-    virtual void tableRowEnd();
-    virtual void tableCellStart();
-    virtual void tableCellEnd();
+    void tableRowStart(wvWare::SharedPtr<const wvWare::Word97::TAP> tap) override;
+    void tableRowEnd() override;
+    void tableCellStart() override;
+    void tableCellEnd() override;
 
     ///////// Our own interface
     Document* document() const {

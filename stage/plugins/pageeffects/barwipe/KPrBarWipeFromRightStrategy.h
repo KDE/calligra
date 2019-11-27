@@ -27,13 +27,13 @@ class KPrBarWipeFromRightStrategy : public KPrPageEffectStrategy
 {
 public:
     KPrBarWipeFromRightStrategy();
-    virtual ~KPrBarWipeFromRightStrategy();
+    ~KPrBarWipeFromRightStrategy() override;
 
-    virtual void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine );
+    void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine ) override;
 
-    virtual void paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data );
+    void paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data ) override;
 
-    virtual void next( const KPrPageEffect::Data &data );
+    void next( const KPrPageEffect::Data &data ) override;
 };
 
 #endif // KPRBARWIPEFROMRIGHTSTRATEGY_H

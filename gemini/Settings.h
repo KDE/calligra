@@ -36,7 +36,7 @@ class Settings : public QObject
 
 public:
     explicit Settings( QObject* parent = 0);
-    virtual ~Settings();
+    ~Settings() override;
 
 public Q_SLOTS:
 

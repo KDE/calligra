@@ -21,7 +21,7 @@ public:
     QString publicFetchMoreText() {
         return fetchMoreText();
     }
-    virtual void start() { }
+    void start() override { }
 };
 
 void TestSpellCheck::testFetchMoreText()

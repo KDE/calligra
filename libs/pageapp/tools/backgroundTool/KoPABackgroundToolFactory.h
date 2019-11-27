@@ -28,9 +28,9 @@ class KoPABackgroundToolFactory : public KoToolFactoryBase
 public:
     KoPABackgroundToolFactory();
     ///reimplemented from KoToolFactoryBase
-    virtual ~KoPABackgroundToolFactory();
+    ~KoPABackgroundToolFactory() override;
     ///reimplemented from KoToolFactoryBase
-    virtual KoToolBase * createTool( KoCanvasBase *canvas );
+    KoToolBase * createTool( KoCanvasBase *canvas ) override;
 };
 
 #endif //KOPABACKGROUNDTOOLFACTORY_H

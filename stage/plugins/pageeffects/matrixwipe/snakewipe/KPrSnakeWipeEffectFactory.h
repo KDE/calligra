@@ -26,8 +26,8 @@ class KPrSnakeWipeEffectFactory : public KPrPageEffectFactory
 {
 public:
     KPrSnakeWipeEffectFactory();
-    virtual ~KPrSnakeWipeEffectFactory();
-    virtual QString subTypeName(int subTypeId) const;
+    ~KPrSnakeWipeEffectFactory() override;
+    QString subTypeName(int subTypeId) const override;
 
     enum SubType {
         FromLeft,       // the new page is coming from the left

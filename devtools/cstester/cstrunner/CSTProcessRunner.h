@@ -34,7 +34,7 @@ class CSTProcessRunner : public QObject
     Q_OBJECT
 public:
     CSTProcessRunner(const QString &documentDir, const QString &resultDir, int concurrentProcesses, bool pickup);
-    ~CSTProcessRunner();
+    ~CSTProcessRunner() override;
 
 public Q_SLOTS:
     void start();

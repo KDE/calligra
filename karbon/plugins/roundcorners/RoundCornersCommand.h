@@ -32,12 +32,12 @@ class RoundCornersCommand : public KUndo2Command
 {
 public:
     RoundCornersCommand(KoPathShape * path, qreal radius, KUndo2Command * parent = 0);
-    virtual ~RoundCornersCommand();
+    ~RoundCornersCommand() override;
 
     /// redo the command
-    void redo();
+    void redo() override;
     /// revert the actions done in redo
-    void undo();
+    void undo() override;
 
 private:
     void roundPath();

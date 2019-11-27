@@ -59,7 +59,7 @@ public:
     /**
      * Destructor.
      */
-    virtual ~KoFindStyle();
+    ~KoFindStyle() override;
 
     /**
      * Return the list of documents currently being used for searching.
@@ -75,7 +75,7 @@ public:
     /**
      * Reimplemented from KoFindBase::clearMatches()
      */
-    virtual void clearMatches();
+    void clearMatches() override;
 
 protected:
     /**
@@ -83,11 +83,11 @@ protected:
      *
      * \note Replace is currently not supported in this class.
      */
-    virtual void replaceImplementation(const KoFindMatch& match, const QVariant& value);
+    void replaceImplementation(const KoFindMatch& match, const QVariant& value) override;
     /**
      * Reimplemented from KoFindBase::findImplementation()
      */
-    virtual void findImplementation(const QString& pattern, KoFindBase::KoFindMatchList& matchList);
+    void findImplementation(const QString& pattern, KoFindBase::KoFindMatchList& matchList) override;
 
 private:
     class Private;

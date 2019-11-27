@@ -52,10 +52,10 @@ public:
     //KoFormulaShape();
 
     /// The basic destructor
-    ~KoFormulaShape();
+    ~KoFormulaShape() override;
 
     /// inherited from KoShape
-    void paint( QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
+    void paint( QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
 
     void updateLayout();
 
@@ -80,9 +80,9 @@ public:
      * @param element element which represents the shape in odf
      * @return false if loading failed
      */
-    bool loadOdf( const KoXmlElement& element, KoShapeLoadingContext& context );
+    bool loadOdf( const KoXmlElement& element, KoShapeLoadingContext& context ) override;
 
-    virtual bool loadOdfFrameElement(const KoXmlElement& element, KoShapeLoadingContext& context);
+    bool loadOdfFrameElement(const KoXmlElement& element, KoShapeLoadingContext& context) override;
     bool loadOdfEmbedded(const KoXmlElement &mathElement, KoShapeLoadingContext &context);
 
     /**
@@ -91,7 +91,7 @@ public:
      * OpenDocument 9.2 Drawing Shapes.
      * @see saveOdfAttributes
      */
-    void saveOdf( KoShapeSavingContext& context ) const;
+    void saveOdf( KoShapeSavingContext& context ) const override;
 
     KoDocumentResourceManager *resourceManager() const;
 

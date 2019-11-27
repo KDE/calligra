@@ -47,7 +47,7 @@ public:
     /**
      * Destructor
      */
-    ~KoColorPopupAction() Q_DECL_OVERRIDE;
+    ~KoColorPopupAction() override;
 
 public Q_SLOTS:
     /// Sets a new color to be displayed

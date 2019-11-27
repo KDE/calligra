@@ -26,8 +26,8 @@ class KPrSaloonDoorWipeEffectFactory : public KPrPageEffectFactory
 {
 public:
     KPrSaloonDoorWipeEffectFactory();
-    virtual ~KPrSaloonDoorWipeEffectFactory();
-    virtual QString subTypeName(int subType) const;
+    ~KPrSaloonDoorWipeEffectFactory() override;
+    QString subTypeName(int subType) const override;
 
     enum SubType {
         FromTop,

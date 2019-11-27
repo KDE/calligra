@@ -50,7 +50,7 @@ public:
     /**
      * Destructor.
      */
-    virtual ~AbstractRegionCommand();
+    ~AbstractRegionCommand() override;
 
     /**
      * \return the Sheet this AbstractRegionCommand works on
@@ -77,12 +77,12 @@ public:
     /**
      * Executes the actual operation.
      */
-    virtual void redo();
+    void redo() override;
 
     /**
      * Executes the actual operation in reverse order.
      */
-    virtual void undo();
+    void undo() override;
 
     /**
      * Sets reverse mode to \b reverse .

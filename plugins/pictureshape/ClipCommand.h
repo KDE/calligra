@@ -26,11 +26,11 @@ class ClipCommand : public KUndo2Command
 {
 public:
     ClipCommand(PictureShape *shape, bool clip);
-    virtual ~ClipCommand();
+    ~ClipCommand() override;
 
-    virtual void redo();
+    void redo() override;
 
-    virtual void undo();
+    void undo() override;
 
 private:
     PictureShape *m_pictureShape;

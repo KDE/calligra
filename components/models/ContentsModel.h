@@ -55,10 +55,10 @@ public:
     };
     
     explicit ContentsModel(QObject* parent = 0);
-    virtual ~ContentsModel();
+    ~ContentsModel() override;
 
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const Q_DECL_OVERRIDE;
-    virtual int rowCount(const QModelIndex& parent = QModelIndex{}) const Q_DECL_OVERRIDE;
+    QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
+    int rowCount(const QModelIndex& parent = QModelIndex{}) const override;
 
     Document* document() const;
     void setDocument(Document* newDocument);
@@ -94,7 +94,7 @@ Q_SIGNALS:
     void useToCChanged();
 
 protected:
-    virtual QHash<int, QByteArray> roleNames() const;
+    QHash<int, QByteArray> roleNames() const override;
 
 private Q_SLOTS:
     void updateImpl();

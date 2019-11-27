@@ -70,7 +70,7 @@ class KOODFREADER_EXPORT OdsReader : public OdfReader
 {
  public:
     OdsReader();
-    ~OdsReader();
+    ~OdsReader() override;
 
  protected:
     // All readElement*() are named after the full qualifiedName of

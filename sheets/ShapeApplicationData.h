@@ -44,7 +44,7 @@ public:
     /**
      * Destructor.
      */
-    virtual ~ShapeApplicationData();
+    ~ShapeApplicationData() override;
 
     void setAnchoredToCell(bool state);
     bool isAnchoredToCell() const;

@@ -63,9 +63,9 @@ struct PAP;
 class WordsReplacementHandler : public wvWare::InlineReplacementHandler
 {
 public:
-    virtual wvWare::U8 hardLineBreak();
-    virtual wvWare::U8 nonBreakingHyphen();
-    virtual wvWare::U8 nonRequiredHyphen();
+    wvWare::U8 hardLineBreak() override;
+    wvWare::U8 nonBreakingHyphen() override;
+    wvWare::U8 nonRequiredHyphen() override;
 };
 
 
@@ -74,35 +74,35 @@ class WordsTextHandler : public QObject, public wvWare::TextHandler
     Q_OBJECT
 public:
     WordsTextHandler(wvWare::SharedPtr<wvWare::Parser> parser, KoXmlWriter* bodyWriter, KoGenStyles* mainStyles);
-    ~WordsTextHandler();
+    ~WordsTextHandler() override;
 
     //////// TextHandler interface
 
-    virtual void sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP> sep);
-    virtual void sectionEnd();
-    virtual void pageBreak();
-    virtual void headersFound(const wvWare::HeaderFunctor& parseHeaders);
-    virtual void footnoteFound(wvWare::FootnoteData data, wvWare::UString characters,
+    void sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP> sep) override;
+    void sectionEnd() override;
+    void pageBreak() override;
+    void headersFound(const wvWare::HeaderFunctor& parseHeaders) override;
+    void footnoteFound(wvWare::FootnoteData data, wvWare::UString characters,
                                wvWare::SharedPtr<const wvWare::Word97::SEP> sep,
                                wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
-                               const wvWare::FootnoteFunctor& parseFootnote);
-    virtual void annotationFound(wvWare::UString characters,
+                               const wvWare::FootnoteFunctor& parseFootnote) override;
+    void annotationFound(wvWare::UString characters,
                                  wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
-                                 const wvWare::AnnotationFunctor& parseAnnotation);
+                                 const wvWare::AnnotationFunctor& parseAnnotation) override;
 
-    virtual void paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphProperties> paragraphProperties, wvWare::SharedPtr<const wvWare::Word97::CHP> chp);
-    virtual void paragraphEnd();
-    virtual void fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<const wvWare::Word97::CHP> chp);
-    virtual void fieldSeparator(const wvWare::FLD* fld, wvWare::SharedPtr<const wvWare::Word97::CHP> chp);
-    virtual void fieldEnd(const wvWare::FLD* fld, wvWare::SharedPtr<const wvWare::Word97::CHP> chp);
-    virtual void runOfText(const wvWare::UString& text, wvWare::SharedPtr<const wvWare::Word97::CHP> chp);
+    void paragraphStart(wvWare::SharedPtr<const wvWare::ParagraphProperties> paragraphProperties, wvWare::SharedPtr<const wvWare::Word97::CHP> chp) override;
+    void paragraphEnd() override;
+    void fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<const wvWare::Word97::CHP> chp) override;
+    void fieldSeparator(const wvWare::FLD* fld, wvWare::SharedPtr<const wvWare::Word97::CHP> chp) override;
+    void fieldEnd(const wvWare::FLD* fld, wvWare::SharedPtr<const wvWare::Word97::CHP> chp) override;
+    void runOfText(const wvWare::UString& text, wvWare::SharedPtr<const wvWare::Word97::CHP> chp) override;
 
-    virtual void tableRowFound(const wvWare::TableRowFunctor& functor, wvWare::SharedPtr<const wvWare::Word97::TAP> tap);
-    virtual void tableEndFound();
-    virtual void bookmarkStart( const wvWare::BookmarkData& data );
-    virtual void bookmarkEnd( const wvWare::BookmarkData& data );
+    void tableRowFound(const wvWare::TableRowFunctor& functor, wvWare::SharedPtr<const wvWare::Word97::TAP> tap) override;
+    void tableEndFound() override;
+    void bookmarkStart( const wvWare::BookmarkData& data ) override;
+    void bookmarkEnd( const wvWare::BookmarkData& data ) override;
 
-    virtual void msodrawObjectFound(const unsigned int globalCP, const wvWare::PictureData* data);
+    void msodrawObjectFound(const unsigned int globalCP, const wvWare::PictureData* data) override;
 
     ///////// Our own interface
 

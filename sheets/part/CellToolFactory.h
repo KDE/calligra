@@ -36,9 +36,9 @@ class CALLIGRA_SHEETS_COMMON_EXPORT CellToolFactory : public KoToolFactoryBase
 {
 public:
     explicit CellToolFactory(const QString& id);
-    ~CellToolFactory();
+    ~CellToolFactory() override;
 
-    KoToolBase* createTool(KoCanvasBase* canvas);
+    KoToolBase* createTool(KoCanvasBase* canvas) override;
 
     void setPriority(int priority);
     void setToolTip(const QString& toolTip);

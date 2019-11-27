@@ -35,14 +35,14 @@ class TextContentsModelImpl : public QObject, public Calligra::Components::Conte
     Q_OBJECT
 public:
     TextContentsModelImpl(KoDocument* document, KoCanvasBase* canvas);
-    ~TextContentsModelImpl();
+    ~TextContentsModelImpl() override;
 
-    virtual int rowCount() const Q_DECL_OVERRIDE;
-    virtual QVariant data(int index, Calligra::Components::ContentsModel::Role role) const Q_DECL_OVERRIDE;
-    virtual void setThumbnailSize(const QSize& size) Q_DECL_OVERRIDE;
-    virtual QImage thumbnail(int index, int width) const Q_DECL_OVERRIDE;
+    int rowCount() const override;
+    QVariant data(int index, Calligra::Components::ContentsModel::Role role) const override;
+    void setThumbnailSize(const QSize& size) override;
+    QImage thumbnail(int index, int width) const override;
 
-    virtual void setUseToC(bool newValue) Q_DECL_OVERRIDE;
+    void setUseToC(bool newValue) override;
 
 Q_SIGNALS:
     void listContentsCompleted();

@@ -40,59 +40,59 @@ public:
     explicit FractionElement(BasicElement *parent = 0);
    
     /// The standard destructor 
-    ~FractionElement();
+    ~FractionElement() override;
 
     /**
      * Render the element to the given QPainter
      * @param painter The QPainter to paint the element to
      * @param am The AttributeManager providing information about attributes values
      */
-    void paint( QPainter& painter, AttributeManager* am );
+    void paint( QPainter& painter, AttributeManager* am ) override;
 
     /**
      * Calculate the size of the element and the positions of its children
      * @param am The AttributeManager providing information about attributes values
      */
-    void layout( const AttributeManager* am );
+    void layout( const AttributeManager* am ) override;
 
     /**
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    const QList<BasicElement*> childElements() const;
+    const QList<BasicElement*> childElements() const override;
 
     /// inherited from BasicElement
-    virtual bool replaceChild ( BasicElement* oldelement, BasicElement* newelement );
+    bool replaceChild ( BasicElement* oldelement, BasicElement* newelement ) override;
 
     /// inherited from BasicElement
-    virtual bool setCursorTo(FormulaCursor& cursor, QPointF point);
+    bool setCursorTo(FormulaCursor& cursor, QPointF point) override;
 
     /// inherited from BasicElement
-    virtual bool moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor);
+    bool moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor) override;
     
     /// inherited from BasicElement
-    virtual int endPosition() const;
+    int endPosition() const override;
     
     /// inherited from BasicElement
-    virtual int positionOfChild(BasicElement* child) const;
+    int positionOfChild(BasicElement* child) const override;
     
     /// inherited from BasicElement
 //     virtual QLineF cursorLine(int position) const;
     
     /// @return The default value of the attribute for this element
-    QString attributesDefaultValue( const QString& attribute ) const;
+    QString attributesDefaultValue( const QString& attribute ) const override;
     
     /// @return The element's ElementType
-    ElementType elementType() const;
+    ElementType elementType() const override;
 
-    virtual QList<BasicElement*> elementsBetween(int pos1, int pos2) const;
+    QList<BasicElement*> elementsBetween(int pos1, int pos2) const override;
     
 protected:
     /// Read all content from the node - reimplemented by child elements
-    bool readMathMLContent( const KoXmlElement& parent );
+    bool readMathMLContent( const KoXmlElement& parent ) override;
 
     /// Write all content to the KoXmlWriter - reimplemented by the child elements
-    void writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const;   
+    void writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const override;   
 
 private:
     /// Layout the fraction in a bevelled way

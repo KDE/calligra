@@ -41,40 +41,40 @@ public:
         stack=new KUndo2QStack();
         manager=new KoShapeManager(this);
     }
-    ~MockCanvas() {
+    ~MockCanvas() override {
         delete stack;
     }
 
-    void gridSize(qreal *, qreal *) const {}
-    bool snapToGrid() const  {
+    void gridSize(qreal *, qreal *) const override {}
+    bool snapToGrid() const override  {
         return false;
     }
 
-    void addCommand(KUndo2Command* c) {
+    void addCommand(KUndo2Command* c) override {
 //         c->redo();
         stack->push(c);
     }
-    KoShapeManager *shapeManager() const  {
+    KoShapeManager *shapeManager() const override  {
         return manager;
     }
-    void updateCanvas(const QRectF&)  {}
-    KoToolProxy * toolProxy() const {
+    void updateCanvas(const QRectF&) override  {}
+    KoToolProxy * toolProxy() const override {
         return 0;
     }
-    KoViewConverter *viewConverter() const {
+    KoViewConverter *viewConverter() const override {
         return 0;
     }
-    QWidget* canvasWidget() {
+    QWidget* canvasWidget() override {
         return 0;
     }
-    const QWidget* canvasWidget() const {
+    const QWidget* canvasWidget() const override {
         return 0;
     }
-    KoUnit unit() const {
+    KoUnit unit() const override {
         return KoUnit(KoUnit::Millimeter);
     }
-    void updateInputMethodInfo() {}
-    void setCursor(const QCursor &) {}
+    void updateInputMethodInfo() override {}
+    void setCursor(const QCursor &) override {}
 };
 
 void TestCursor::moveCursor()

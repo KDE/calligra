@@ -51,7 +51,7 @@ class ImageDataItem : public QQuickItem
 
 public:
     explicit ImageDataItem(QQuickItem* parent = 0);
-    virtual ~ImageDataItem();
+    ~ImageDataItem() override;
     
     /**
      * Getter for property #data.
@@ -66,7 +66,7 @@ Q_SIGNALS:
     void dataChanged();
 
 protected:
-    virtual QSGNode* updatePaintNode(QSGNode* node, QQuickItem::UpdatePaintNodeData*) Q_DECL_OVERRIDE;
+    QSGNode* updatePaintNode(QSGNode* node, QQuickItem::UpdatePaintNodeData*) override;
 
 private:
     class Private;

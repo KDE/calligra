@@ -41,12 +41,12 @@ class MockShape : public KoShape
 {
 public:
     MockShape() : KoShape() {}
-    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &) {
+    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &) override {
         Q_UNUSED(painter);
         Q_UNUSED(converter);
     }
-    virtual void saveOdf(KoShapeSavingContext &) const {}
-    virtual bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &) {
+    void saveOdf(KoShapeSavingContext &) const override {}
+    bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &) override {
         return true;
     }
 };

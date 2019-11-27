@@ -54,7 +54,7 @@ public:
     /**
      * Destructor
      */
-    virtual ~KWOdfWriter();
+    ~KWOdfWriter() override;
 
     /**
      *  @brief Writes an OASIS OpenDocument to a store.

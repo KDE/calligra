@@ -60,7 +60,7 @@ public:
     };
 
     KPrHtmlExport();
-    ~KPrHtmlExport();
+    ~KPrHtmlExport() override;
     void exportHtml(const Parameter &parameters);
 
     /**

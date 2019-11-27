@@ -33,10 +33,10 @@ class XFigImportFilter : public KoFilter
 
 public:
     XFigImportFilter( QObject* parent, const QVariantList& );
-    virtual ~XFigImportFilter();
+    ~XFigImportFilter() override;
 
 public: // KoFilter API
-    virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
+    KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to ) override;
 };
 
 #endif

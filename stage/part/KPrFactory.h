@@ -32,9 +32,9 @@ class STAGE_EXPORT KPrFactory : public KPluginFactory
     Q_OBJECT
 public:
     explicit KPrFactory();
-    ~KPrFactory();
+    ~KPrFactory() override;
 
-    virtual QObject* create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword);
+    QObject* create(const char* iface, QWidget* parentWidget, QObject *parent, const QVariantList& args, const QString& keyword) override;
     static const KoComponentData &componentData();
 
     static KAboutData* aboutData();

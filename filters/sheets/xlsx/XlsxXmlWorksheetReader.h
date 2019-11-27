@@ -48,10 +48,10 @@ class XlsxXmlWorksheetReader : public MSOOXML::MsooXmlCommonReader
 public:
     explicit XlsxXmlWorksheetReader(KoOdfWriters *writers);
 
-    virtual ~XlsxXmlWorksheetReader();
+    ~XlsxXmlWorksheetReader() override;
 
     //! Reads/parses the XML.
-    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
+    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0) override;
 
 protected:
     KoFilter::ConversionStatus readInternal();
@@ -158,7 +158,7 @@ public:
         QMap<QString, QString> _oleBeginFrames,
         QVector<XlsxXmlDocumentReaderContext::AutoFilter>& autoFilters);
 
-    virtual ~XlsxXmlWorksheetReaderContext();
+    ~XlsxXmlWorksheetReaderContext() override;
 
     Sheet* sheet;
     const uint worksheetNumber;

@@ -32,7 +32,7 @@ public:
     explicit PhantomElement(BasicElement *parent = 0);
 
     /// @return The element's ElementType
-    ElementType elementType() const;
+    ElementType elementType() const override;
 };
 
 #endif // PHANTOMELEMENT_H

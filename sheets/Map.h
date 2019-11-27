@@ -85,7 +85,7 @@ public:
     /**
      * This deletes all sheets contained in this map.
      */
-    virtual ~Map();
+    ~Map() override;
 
     /**
      * \return the document this map belongs to
@@ -103,8 +103,8 @@ public:
     bool isReadWrite() const;
 
     // KoDataCenterBase interface
-    virtual bool completeLoading(KoStore *store);
-    virtual bool completeSaving(KoStore *store, KoXmlWriter *manifestWriter, KoShapeSavingContext * context);
+    bool completeLoading(KoStore *store) override;
+    bool completeSaving(KoStore *store, KoXmlWriter *manifestWriter, KoShapeSavingContext * context) override;
 
     /**
      * \return a pointer to the binding manager

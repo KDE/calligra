@@ -33,13 +33,13 @@ class FormulaPart : public KoPart
 public:
     explicit FormulaPart(QObject *parent);
 
-    virtual ~FormulaPart();
+    ~FormulaPart() override;
 
     /// reimplemented
-    virtual KoView *createViewInstance(KoDocument *document, QWidget *parent);
+    KoView *createViewInstance(KoDocument *document, QWidget *parent) override;
 
     /// reimplemented
-    virtual KoMainWindow *createMainWindow();
+    KoMainWindow *createMainWindow() override;
 };
 
 #endif

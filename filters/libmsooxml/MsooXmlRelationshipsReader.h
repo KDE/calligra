@@ -48,11 +48,11 @@ class MsooXmlRelationshipsReader : public MSOOXML::MsooXmlReader
 public:
     explicit MsooXmlRelationshipsReader(KoOdfWriters *writers);
 
-    virtual ~MsooXmlRelationshipsReader();
+    ~MsooXmlRelationshipsReader() override;
 
     //! Reads/parses the file of format *.xml.rels.
     //! The output goes to MsooXmlRelationships structure.
-    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
+    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0) override;
 
     //! @return key for use in MsooXmlRelationships::target()
     static inline QString relKey(const QString& path, const QString& file, const QString& id) {

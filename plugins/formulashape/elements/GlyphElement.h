@@ -36,19 +36,19 @@ public:
     explicit GlyphElement(BasicElement *parent = 0);
 
     /// @return The element's ElementType
-    ElementType elementType() const;
+    ElementType elementType() const override;
 
     /// Process @p raw and render it to @p path
-    QRectF renderToPath( const QString& raw, QPainterPath& path ) const;
+    QRectF renderToPath( const QString& raw, QPainterPath& path ) const override;
 
     /// get width of character, for layouting
     qreal getWidth(const AttributeManager *am);
 
 
 private:
-    bool readMathMLAttributes( const KoXmlElement& element );
-    void writeMathMLAttributes( KoXmlWriter* writer ) const;
-    void writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const;
+    bool readMathMLAttributes( const KoXmlElement& element ) override;
+    void writeMathMLAttributes( KoXmlWriter* writer ) const override;
+    void writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const override;
 
     QChar m_char;         // Char to be shown
     QString m_fontFamily; // Font family to use

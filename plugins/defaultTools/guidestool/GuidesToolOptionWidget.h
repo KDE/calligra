@@ -32,7 +32,7 @@ class GuidesToolOptionWidget : public QWidget
 
 public:
     explicit GuidesToolOptionWidget(QWidget *parent = 0);
-    ~GuidesToolOptionWidget();
+    ~GuidesToolOptionWidget() override;
 
     /// Sets horizontal guide lines
     void setHorizontalGuideLines(const QList<qreal> &lines);

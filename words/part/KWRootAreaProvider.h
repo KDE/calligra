@@ -47,17 +47,17 @@ class KWRootAreaProvider : public KWRootAreaProviderBase
 public:
     //KWRootAreaProvider(KWTextFrameSet *textFrameSet, KoShape *shape, KoTextShapeData *data);
     explicit KWRootAreaProvider(KWTextFrameSet *textFrameSet);
-    virtual ~KWRootAreaProvider();
+    ~KWRootAreaProvider() override;
 
     void addDependentProvider(KWRootAreaProviderBase *provider, int pageNumber);
 
-    virtual void clearPages(int pageNumber);
-    virtual void setPageDirty(int pageNumber);
+    void clearPages(int pageNumber) override;
+    void setPageDirty(int pageNumber) override;
 
     /// reimplemented
-    virtual KoTextLayoutRootArea *provide(KoTextDocumentLayout *documentLayout, const RootAreaConstraint &constraints, int requestedPosition, bool *isNewArea);
-    virtual void releaseAllAfter(KoTextLayoutRootArea *afterThis);
-    virtual void doPostLayout(KoTextLayoutRootArea *rootArea, bool isNewRootArea);
+    KoTextLayoutRootArea *provide(KoTextDocumentLayout *documentLayout, const RootAreaConstraint &constraints, int requestedPosition, bool *isNewArea) override;
+    void releaseAllAfter(KoTextLayoutRootArea *afterThis) override;
+    void doPostLayout(KoTextLayoutRootArea *rootArea, bool isNewRootArea) override;
 
 private:
     QList<KWRootAreaPage *> m_pages;

@@ -75,13 +75,13 @@ public:
      */
     explicit KoPAView(KoPart *part, KoPADocument *document, KoPAFlags withModeBox, QWidget *parent);
 
-    virtual ~KoPAView();
+    ~KoPAView() override;
 
     //  KoPAViewBase/KoView overrides
 
-    void addImages(const QVector<QImage> &imageList, const QPoint &insertAt);
+    void addImages(const QVector<QImage> &imageList, const QPoint &insertAt) override;
 
-    KoZoomController* zoomController() const;
+    KoZoomController* zoomController() const override;
 
     KoCopyController* copyController() const;
 
@@ -89,23 +89,23 @@ public:
 
     QAction * deleteSelectionAction() const;
 
-    void updateReadWrite( bool readwrite );
+    void updateReadWrite( bool readwrite ) override;
 
     KoRuler *horizontalRuler();
     KoRuler *verticalRuler();
 
     KoCanvasController *canvasController() const;
     /// @return the canvas for the application
-    KoPACanvasBase * kopaCanvas() const;
+    KoPACanvasBase * kopaCanvas() const override;
     /// @return the document for the application
-    KoPADocument * kopaDocument() const;
+    KoPADocument * kopaDocument() const override;
     /// @return Page that is shown in the canvas
-    KoPAPageBase* activePage() const;
+    KoPAPageBase* activePage() const override;
 
     /// Set page shown in the canvas to @p page
-    void setActivePage( KoPAPageBase * page );
+    void setActivePage( KoPAPageBase * page ) override;
 
-    void navigatePage( KoPageApp::PageNavigation pageNavigation );
+    void navigatePage( KoPageApp::PageNavigation pageNavigation ) override;
 
     /// @return the shape manager used for this view
     KoShapeManager* shapeManager() const;
@@ -118,20 +118,20 @@ public:
      *
      * @param mode the new view mode
      */
-    void setViewMode( KoPAViewMode* mode );
+    void setViewMode( KoPAViewMode* mode ) override;
 
     /**
      * Set the active page and updates the UI
      */
-    void doUpdateActivePage( KoPAPageBase * page );
+    void doUpdateActivePage( KoPAPageBase * page ) override;
 
     /**
      * Paste the page if everything is ok
      */
-    void pagePaste();
+    void pagePaste() override;
 
     /// reimplemented
-    virtual KoPrintJob * createPrintJob();
+    KoPrintJob * createPrintJob() override;
 
     /**
      * Get the thumbnail for the page.
@@ -158,13 +158,13 @@ public:
                               const char * format = 0, int quality = -1 );
 
     /// Update page navigation actions
-    void updatePageNavigationActions();
+    void updatePageNavigationActions() override;
 
     /// Shows/hides the rulers
-    void setShowRulers(bool show);
+    void setShowRulers(bool show) override;
 
     /// Insert a new page after the current one
-    void insertPage();
+    void insertPage() override;
 
     void centerPage();
 
@@ -197,7 +197,7 @@ protected:
     KoPADocumentStructureDocker* documentStructureDocker() const;
 
     bool isMasterUsed( KoPAPageBase * page );
-    void editPaste();
+    void editPaste() override;
 
     void hideCustomCentralWidget();
 
@@ -210,7 +210,7 @@ public Q_SLOTS:
      * @param actions which should be enabled/disabled
      * @param enable new state of the actions
      */
-    void setActionEnabled( int actions, bool enable );
+    void setActionEnabled( int actions, bool enable ) override;
 
     /// Copy Page
     void copyPage();

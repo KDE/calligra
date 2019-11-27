@@ -47,7 +47,7 @@ public:
     /**
      * Destructor.
      */
-    virtual ~DatabaseManager();
+    ~DatabaseManager() override;
 
     /**
      * Creates a unique database name.

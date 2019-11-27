@@ -44,10 +44,10 @@ class STAGE_EXPORT KPrView : public KoPAView
     friend class KPrConfigureSlideShowDialog;
 public:
     explicit KPrView(KPrPart *part, KPrDocument *document, QWidget *parent = 0);
-    ~KPrView();
+    ~KPrView() override;
 
     using KoPAViewBase::viewConverter;
-    virtual KoViewConverter * viewConverter( KoPACanvasBase * canvas);
+    KoViewConverter * viewConverter( KoPACanvasBase * canvas) override;
 
     /**
      * Get the document object the view was initialised with
@@ -139,7 +139,7 @@ public Q_SLOTS:
 protected:
     void initGUI();
     void initActions();
-    virtual bool event(QEvent* event);
+    bool event(QEvent* event) override;
 
 protected Q_SLOTS:
     void createAnimation();
@@ -183,7 +183,7 @@ private:
     int m_zoom;
     KoZoomMode::Mode m_zoomMode;
 
-    virtual KoPrintJob *createPdfPrintJob();
+    KoPrintJob *createPdfPrintJob() override;
 };
 
 #endif /* KPRVIEW_H */

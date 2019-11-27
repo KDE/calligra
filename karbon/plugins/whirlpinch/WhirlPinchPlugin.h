@@ -36,7 +36,7 @@ class WhirlPinchPlugin : public QObject, public KXMLGUIClient
     Q_OBJECT
 public:
     WhirlPinchPlugin(QObject *parent, const QVariantList &);
-    virtual ~WhirlPinchPlugin() {}
+    ~WhirlPinchPlugin() override {}
 
 private Q_SLOTS:
     void slotWhirlPinch();

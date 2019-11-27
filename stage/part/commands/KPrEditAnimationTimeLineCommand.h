@@ -32,12 +32,12 @@ class KPrEditAnimationTimeLineCommand : public KUndo2Command
 public:
     KPrEditAnimationTimeLineCommand(KPrShapeAnimation *animation, const int begin, const int duration, KUndo2Command *parent = 0);
 
-    virtual ~KPrEditAnimationTimeLineCommand();
+    ~KPrEditAnimationTimeLineCommand() override;
 
     /// redo the command
-    void redo();
+    void redo() override;
     /// revert the actions done in redo
-    void undo();
+    void undo() override;
 
 private:
     KPrShapeAnimation *m_animation;

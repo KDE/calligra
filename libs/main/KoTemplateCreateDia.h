@@ -43,7 +43,7 @@ class KOMAIN_EXPORT KoTemplateCreateDia : public KoDialog
 private:
     KoTemplateCreateDia( const QString &templatesResourcePath,
                          const QString &filePath, const QPixmap &thumbnail, QWidget *parent=0 );
-    ~KoTemplateCreateDia();
+    ~KoTemplateCreateDia() override;
 
 public:
     static void createTemplate(const QString &templatesResourcePath, const char *suffix,

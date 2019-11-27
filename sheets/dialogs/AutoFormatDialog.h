@@ -44,7 +44,7 @@ class AutoFormatDialog : public KoDialog
     Q_OBJECT
 public:
     explicit AutoFormatDialog(QWidget* parent, Selection* selection);
-    ~AutoFormatDialog();
+    ~AutoFormatDialog() override;
 
 private Q_SLOTS:
     void slotActivated(int index);

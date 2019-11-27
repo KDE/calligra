@@ -26,10 +26,10 @@ class KPrBoxSnakesWipeStrategy : public KPrMatrixWipeStrategy
 {
 public:
     KPrBoxSnakesWipeStrategy(int horRepeat, int verRepeat, bool clockwise, bool reverse);
-    virtual ~KPrBoxSnakesWipeStrategy();
+    ~KPrBoxSnakesWipeStrategy() override;
 protected:
-    virtual int maxIndex(int columns, int rows);
-    virtual int squareIndex(int x, int y, int columns, int rows);
+    int maxIndex(int columns, int rows) override;
+    int squareIndex(int x, int y, int columns, int rows) override;
 private:
     int m_horRepeat;
     int m_verRepeat;

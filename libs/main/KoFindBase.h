@@ -45,7 +45,7 @@ public:
     typedef QList<KoFindMatch> KoFindMatchList;
 
     explicit KoFindBase(QObject *parent = 0);
-    virtual ~KoFindBase();
+    ~KoFindBase() override;
 
     /**
      * Retrieve a list of all matches that were found since the

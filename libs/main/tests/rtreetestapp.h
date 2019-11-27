@@ -60,7 +60,7 @@ class Canvas : public QWidget
 
 public:
     Canvas();
-    virtual ~Canvas() {}
+    ~Canvas() override {}
 
     void updateCanvas();
     void insert(QRectF & rect);
@@ -79,11 +79,11 @@ public Q_SLOTS:
     void paintTree(bool paintTree);
 
 protected:
-    void mouseMoveEvent(QMouseEvent *e);
-    void mousePressEvent(QMouseEvent *e);
-    void mouseReleaseEvent(QMouseEvent *e);
+    void mouseMoveEvent(QMouseEvent *e) override;
+    void mousePressEvent(QMouseEvent *e) override;
+    void mouseReleaseEvent(QMouseEvent *e) override;
 
-    void paintEvent(QPaintEvent * e);
+    void paintEvent(QPaintEvent * e) override;
 
 private:
     qreal m_zoom;

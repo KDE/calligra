@@ -27,16 +27,16 @@ class KPrPlaceholderTool : public KoToolBase
     Q_OBJECT
 public:
     explicit KPrPlaceholderTool(KoCanvasBase *canvas);
-    virtual ~KPrPlaceholderTool();
+    ~KPrPlaceholderTool() override;
 
-    virtual void paint( QPainter &painter, const KoViewConverter &converter );
+    void paint( QPainter &painter, const KoViewConverter &converter ) override;
 
-    virtual void mousePressEvent( KoPointerEvent *event );
-    virtual void mouseMoveEvent( KoPointerEvent *event );
-    virtual void mouseReleaseEvent( KoPointerEvent *event );
+    void mousePressEvent( KoPointerEvent *event ) override;
+    void mouseMoveEvent( KoPointerEvent *event ) override;
+    void mouseReleaseEvent( KoPointerEvent *event ) override;
 
 public Q_SLOTS:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
 };
 
 #endif /* KPRPLACEHOLDERTOOL_H */

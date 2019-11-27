@@ -54,7 +54,7 @@ class CALLIGRA_SHEETS_ODF_EXPORT StyleStorage : public QObject
 public:
     explicit StyleStorage(Map* map);
     StyleStorage(const StyleStorage& other);
-    virtual ~StyleStorage();
+    ~StyleStorage() override;
 
     /**
      * Composes the style for \p point. All substyles intersecting \p point are considered.

@@ -35,15 +35,15 @@ class XlsxImport : public MSOOXML::MsooXmlImport
     Q_OBJECT
 public:
     XlsxImport(QObject * parent, const QVariantList &);
-    virtual ~XlsxImport();
+    ~XlsxImport() override;
 
 protected:
-    virtual bool acceptsSourceMimeType(const QByteArray& mime) const;
+    bool acceptsSourceMimeType(const QByteArray& mime) const override;
 
-    virtual bool acceptsDestinationMimeType(const QByteArray& mime) const;
+    bool acceptsDestinationMimeType(const QByteArray& mime) const override;
 
-    virtual KoFilter::ConversionStatus parseParts(KoOdfWriters *writers,
-            MSOOXML::MsooXmlRelationships *relationships, QString& errorMessage);
+    KoFilter::ConversionStatus parseParts(KoOdfWriters *writers,
+            MSOOXML::MsooXmlRelationships *relationships, QString& errorMessage) override;
 
     class Private;
     Private * const d;

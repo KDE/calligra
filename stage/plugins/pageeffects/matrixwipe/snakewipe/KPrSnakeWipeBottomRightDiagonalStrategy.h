@@ -26,9 +26,9 @@ class KPrSnakeWipeBottomRightDiagonalStrategy : public KPrSnakeWipeDiagonalStrat
 {
 public:
     KPrSnakeWipeBottomRightDiagonalStrategy();
-    virtual ~KPrSnakeWipeBottomRightDiagonalStrategy();
+    ~KPrSnakeWipeBottomRightDiagonalStrategy() override;
 protected:
-    virtual int squareIndex(int x, int y, int columns, int rows);
+    int squareIndex(int x, int y, int columns, int rows) override;
 };
 
 #endif // KPRSNAKEWIPEBOTTOMRIGHTDIAGONALSTRATEGY_H

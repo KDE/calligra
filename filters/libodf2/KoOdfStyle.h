@@ -37,7 +37,7 @@ class KOODF2_EXPORT KoOdfStyle : public KoOdfStyleBase
 {
  public:
     KoOdfStyle();
-    ~KoOdfStyle();
+    ~KoOdfStyle() override;
 
     QString family() const;
     void setFamily(const QString &family);
@@ -59,8 +59,8 @@ class KOODF2_EXPORT KoOdfStyle : public KoOdfStyleBase
     void    setProperty(const QString &propertySet, const QString &property, const QString &value);
 
     // Reimplemented from KoOdfStyleBase
-    bool readOdf(KoXmlStreamReader &reader);
-    bool saveOdf(KoXmlWriter *writer);
+    bool readOdf(KoXmlStreamReader &reader) override;
+    bool saveOdf(KoXmlWriter *writer) override;
 
  private:
     class Private;

@@ -48,32 +48,32 @@ public:
     explicit RowElement(BasicElement *parent = 0);
 
     /// The standard destructor
-    virtual ~RowElement();
+    ~RowElement() override;
 
     /**
      * Calculate the size of the element and the positions of its children
      * @param am The AttributeManager providing information about attributes values
      */
-    virtual void layout( const AttributeManager* am );
+    void layout( const AttributeManager* am ) override;
 
     /**
      * Render the element to the given QPainter
      * @param painter The QPainter to paint the element to
      * @param am AttributeManager containing style info
      */
-    virtual void paint( QPainter& painter, AttributeManager* am );
+    void paint( QPainter& painter, AttributeManager* am ) override;
     
     /// inherited from BasicElement
-    virtual void paintEditingHints ( QPainter& painter, AttributeManager* am );
+    void paintEditingHints ( QPainter& painter, AttributeManager* am ) override;
     
     /**
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    const QList<BasicElement*> childElements() const;
+    const QList<BasicElement*> childElements() const override;
 
     /// inherited from BasicElement
-    virtual QList< BasicElement* > elementsBetween ( int pos1, int pos2 ) const;
+    QList< BasicElement* > elementsBetween ( int pos1, int pos2 ) const override;
 
     /// inherited from BasicElement
     virtual bool insertChild( int position, BasicElement* child );
@@ -85,57 +85,57 @@ public:
     bool removeChild( BasicElement* child);
 
     ///inherited form BasicElement
-    virtual bool replaceChild ( BasicElement* oldelement, BasicElement* newelement );
+    bool replaceChild ( BasicElement* oldelement, BasicElement* newelement ) override;
 
     /**
      * Implement the cursor behaviour for the element
      * @param cursor the cursor
      * @return A this pointer if the element accepts if not the element to asked instead
      */
-    bool acceptCursor( const FormulaCursor& cursor );
+    bool acceptCursor( const FormulaCursor& cursor ) override;
 
     /// inherited from BasicElement
-    virtual bool moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor);
+    bool moveCursor(FormulaCursor& newcursor, FormulaCursor& oldcursor) override;
 
     /// inherited from BasicElement
-    virtual bool setCursorTo(FormulaCursor& cursor, QPointF point);
+    bool setCursorTo(FormulaCursor& cursor, QPointF point) override;
 
     /// @return The element's ElementType
-    ElementType elementType() const;
+    ElementType elementType() const override;
 
     /** Reimplemented from parent class
      *
      *  This stretches the children inside, then readjusts their vertical offsets
      */
-    virtual void stretch();
+    void stretch() override;
 
     /// inherited from BasicElement
-    virtual int endPosition() const;
+    int endPosition() const override;
 
     /// inherited from BasicElement
-    virtual int positionOfChild(BasicElement* child) const;
+    int positionOfChild(BasicElement* child) const override;
 
     /// inherited from BasicElement
-    virtual QLineF cursorLine(int position) const;
+    QLineF cursorLine(int position) const override;
 
     /// inherited from BasicElement
-    virtual BasicElement* elementAfter ( int position ) const;
+    BasicElement* elementAfter ( int position ) const override;
 
     /// inherited from BasicElement
-    virtual BasicElement* elementBefore ( int position ) const;
+    BasicElement* elementBefore ( int position ) const override;
 
     /// inherited from BasicElement
-    virtual bool isEmpty() const;
+    bool isEmpty() const override;
 
     /// inherited from Basic
-    virtual bool isInferredRow() const;
+    bool isInferredRow() const override;
 
 protected:
     /// Read contents of the row element
-    bool readMathMLContent( const KoXmlElement& parent );
+    bool readMathMLContent( const KoXmlElement& parent ) override;
 
     /// Write all content to the KoXmlWriter - reimplemented by the child elements
-    void writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const;
+    void writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const override;
 
     /// A list of the child elements
     QList<BasicElement*> m_childElements;

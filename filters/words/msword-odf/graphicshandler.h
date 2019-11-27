@@ -90,30 +90,30 @@ private:
     class DrawClient : public ODrawToOdf::Client
     {
     private:
-        virtual QRectF getRect(const MSO::OfficeArtClientAnchor&);
-        virtual QRectF getReserveRect(void);
-        virtual QString getPicturePath(const quint32 pib);
-        virtual bool onlyClientData(const MSO::OfficeArtClientData& o);
-        virtual void processClientData(const MSO::OfficeArtClientTextBox* ct,
+        QRectF getRect(const MSO::OfficeArtClientAnchor&) override;
+        QRectF getReserveRect(void) override;
+        QString getPicturePath(const quint32 pib) override;
+        bool onlyClientData(const MSO::OfficeArtClientData& o) override;
+        void processClientData(const MSO::OfficeArtClientTextBox* ct,
                                        const MSO::OfficeArtClientData& o,
-                                       Writer& out);
-        virtual void processClientTextBox(const MSO::OfficeArtClientTextBox& ct,
+                                       Writer& out) override;
+        void processClientTextBox(const MSO::OfficeArtClientTextBox& ct,
                                           const MSO::OfficeArtClientData* cd,
-                                          Writer& out);
-        virtual bool processRectangleAsTextBox(const MSO::OfficeArtClientData& cd);
-        virtual KoGenStyle createGraphicStyle(const MSO::OfficeArtClientTextBox* ct,
+                                          Writer& out) override;
+        bool processRectangleAsTextBox(const MSO::OfficeArtClientData& cd) override;
+        KoGenStyle createGraphicStyle(const MSO::OfficeArtClientTextBox* ct,
                                               const MSO::OfficeArtClientData* cd,
                                               const DrawStyle& ds,
-                                              Writer& out);
-        virtual void addTextStyles(const MSO::OfficeArtClientTextBox* clientTextbox,
+                                              Writer& out) override;
+        void addTextStyles(const MSO::OfficeArtClientTextBox* clientTextbox,
                                    const MSO::OfficeArtClientData* clientData,
-                                   KoGenStyle& style, Writer& out);
+                                   KoGenStyle& style, Writer& out) override;
 
-        virtual QColor toQColor(const MSO::OfficeArtCOLORREF& c);
-        virtual QString formatPos(qreal v);
+        QColor toQColor(const MSO::OfficeArtCOLORREF& c) override;
+        QString formatPos(qreal v) override;
 
-        virtual const MSO::OfficeArtDggContainer* getOfficeArtDggContainer();
-        virtual const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid);
+        const MSO::OfficeArtDggContainer* getOfficeArtDggContainer() override;
+        const MSO::OfficeArtSpContainer* getMasterShapeContainer(quint32 spid) override;
 
         WordsGraphicsHandler* const gh;
     public:
@@ -126,7 +126,7 @@ public:
                          KoStore* store, KoGenStyles* mainStyles,
                          const wvWare::Drawings* p_drawings,
                          const wvWare::Word97::FIB& fib);
-    ~WordsGraphicsHandler();
+    ~WordsGraphicsHandler() override;
 
     /**
      * Set the appropriate writer for object properties and content.
@@ -138,13 +138,13 @@ public:
      * This method gets called when a floating object is found by wv2 parser.
      * @param globalCP actual character position in the WordDocument stream.
      */
-    virtual void handleFloatingObject(unsigned int globalCP);
+    void handleFloatingObject(unsigned int globalCP) override;
 
     /**
      * This method gets called when an inline object is found by wv2 parser.
      * @param data PictureData as defined in functordata.h
      */
-    virtual QString handleInlineObject(const wvWare::PictureData& data, const bool isBulletPicture = false);
+    QString handleInlineObject(const wvWare::PictureData& data, const bool isBulletPicture = false) override;
 
     /**
      * Get the DrawStyle to access document background properties and defaults.

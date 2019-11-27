@@ -64,14 +64,14 @@ public:
         Q_ASSERT(m_transform);
     }
 
-    ~KoLcmsColorConversionTransformation()
+    ~KoLcmsColorConversionTransformation() override
     {
         cmsDeleteTransform(m_transform);
     }
 
 public:
 
-    virtual void transform(const quint8 *src, quint8 *dst, qint32 numPixels) const
+    void transform(const quint8 *src, quint8 *dst, qint32 numPixels) const override
     {
         Q_ASSERT(m_transform);
 

@@ -46,18 +46,18 @@ class GoalSeekDialog : public KoDialog
 
 public:
     GoalSeekDialog(QWidget* parent, Selection* selection);
-    ~GoalSeekDialog();
+    ~GoalSeekDialog() override;
 
 protected:
-    virtual void closeEvent(QCloseEvent *);
+    void closeEvent(QCloseEvent *) override;
 
 protected Q_SLOTS:
     void textChanged();
 
 protected Q_SLOTS: // reimplementations
     // KoDialog interface
-    virtual void accept();
-    virtual void reject();
+    void accept() override;
+    void reject() override;
 
 private:
     class Private;

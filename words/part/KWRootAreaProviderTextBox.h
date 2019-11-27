@@ -31,16 +31,16 @@ class KWRootAreaProviderTextBox : public KWRootAreaProviderBase
 {
 public:
     explicit KWRootAreaProviderTextBox(KWTextFrameSet *textFrameSet);
-    virtual ~KWRootAreaProviderTextBox();
+    ~KWRootAreaProviderTextBox() override;
 
-    virtual void clearPages(int pageNumber);
-    virtual void setPageDirty(int pageNumber);
+    void clearPages(int pageNumber) override;
+    void setPageDirty(int pageNumber) override;
 
     /// reimplemented
-    virtual KoTextLayoutRootArea *provide(KoTextDocumentLayout *documentLayout, const RootAreaConstraint &constraints, int requestedPosition, bool *isNewArea);
-    virtual void releaseAllAfter(KoTextLayoutRootArea *afterThis);
-    virtual void doPostLayout(KoTextLayoutRootArea *rootArea, bool isNewRootArea);
-    virtual QRectF suggestRect(KoTextLayoutRootArea *rootArea);
+    KoTextLayoutRootArea *provide(KoTextDocumentLayout *documentLayout, const RootAreaConstraint &constraints, int requestedPosition, bool *isNewArea) override;
+    void releaseAllAfter(KoTextLayoutRootArea *afterThis) override;
+    void doPostLayout(KoTextLayoutRootArea *rootArea, bool isNewRootArea) override;
+    QRectF suggestRect(KoTextLayoutRootArea *rootArea) override;
 private:
     QList<KoTextLayoutRootArea*> m_rootAreaCache;
 };

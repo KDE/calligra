@@ -36,9 +36,9 @@ class CalendarToolFactory : public QObject, public CellToolFactory
     Q_OBJECT
 public:
     explicit CalendarToolFactory(QObject *parent, const QVariantList& args);
-    ~CalendarToolFactory();
+    ~CalendarToolFactory() override;
 
-    KoToolBase* createTool(KoCanvasBase* canvas);
+    KoToolBase* createTool(KoCanvasBase* canvas) override;
 };
 
 } // namespace Sheets

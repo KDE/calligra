@@ -53,17 +53,17 @@ public:
      * Constructor.
      */
     explicit DateVariable(DateType type);
-    virtual ~DateVariable();
+    ~DateVariable() override;
 
     ///reimplemented
-    void saveOdf(KoShapeSavingContext & context);
+    void saveOdf(KoShapeSavingContext & context) override;
 
     ///reimplemented
-    bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context);
+    bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext & context) override;
 
     void readProperties(const KoProperties *props);
 
-    QWidget *createOptionsWidget();
+    QWidget *createOptionsWidget() override;
 
     const QString & definition() const {
         return m_definition;

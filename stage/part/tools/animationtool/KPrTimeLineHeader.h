@@ -32,10 +32,10 @@ class KPrTimeLineHeader : public QWidget
     Q_OBJECT
 public:
     explicit KPrTimeLineHeader(QWidget *parent);
-    QSize minimumSizeHint() const;
-    QSize sizeHint() const {return minimumSizeHint();}
+    QSize minimumSizeHint() const override;
+    QSize sizeHint() const override {return minimumSizeHint();}
 protected:
-    void paintEvent(QPaintEvent *event);
+    void paintEvent(QPaintEvent *event) override;
     /// Helper methods used to paint the header
     /// main paint method
     void paintHeader(QPainter *painter, const int RowHeight);
@@ -45,7 +45,7 @@ protected:
 
     /// Paint the scale for the bar column
     void paintTimeScale(QPainter *painter, const QRect &rect);
-    bool eventFilter(QObject *target, QEvent *event);
+    bool eventFilter(QObject *target, QEvent *event) override;
     KPrAnimationsTimeLineView *m_mainView;
 };
 

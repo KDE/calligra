@@ -52,7 +52,7 @@ public:
     /**
      * Destructor.
      */
-    ~PartGroup();
+    ~PartGroup() override;
 
     /**
      * Returns the sheet this group is part of.

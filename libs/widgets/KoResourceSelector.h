@@ -53,7 +53,7 @@ public:
     explicit KoResourceSelector( QSharedPointer<KoAbstractResourceServerAdapter> resourceAdapter, QWidget * parent = 0 );
 
     /// Destroys the resource selector
-    ~KoResourceSelector() Q_DECL_OVERRIDE;
+    ~KoResourceSelector() override;
 
     /// Sets the resource adaptor to get resources from
     void setResourceAdapter(QSharedPointer<KoAbstractResourceServerAdapter>resourceAdapter);
@@ -76,11 +76,11 @@ Q_SIGNALS:
 
 protected:
     /// reimplemented
-    void paintEvent( QPaintEvent * ) Q_DECL_OVERRIDE;
+    void paintEvent( QPaintEvent * ) override;
     /// reimplemented
-    void mousePressEvent( QMouseEvent * ) Q_DECL_OVERRIDE;
+    void mousePressEvent( QMouseEvent * ) override;
     /// reimplemented
-    void mouseMoveEvent( QMouseEvent * event ) Q_DECL_OVERRIDE;
+    void mouseMoveEvent( QMouseEvent * event ) override;
 
 private Q_SLOTS:
     void indexChanged( int index );

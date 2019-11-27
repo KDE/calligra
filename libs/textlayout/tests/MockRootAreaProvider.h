@@ -31,12 +31,12 @@ public:
     MockRootAreaProvider();
 
     /// reimplemented
-    virtual KoTextLayoutRootArea *provide(KoTextDocumentLayout *documentLayout, const RootAreaConstraint &constraints, int requestedPosition, bool *isNewArea);
-    virtual void releaseAllAfter(KoTextLayoutRootArea *afterThis);
-    virtual void doPostLayout(KoTextLayoutRootArea *rootArea, bool isNewRootArea);
-    virtual QRectF suggestRect(KoTextLayoutRootArea *rootArea);
-    virtual QList<KoTextLayoutObstruction *> relevantObstructions(KoTextLayoutRootArea *rootArea);
-    virtual void updateAll();
+    KoTextLayoutRootArea *provide(KoTextDocumentLayout *documentLayout, const RootAreaConstraint &constraints, int requestedPosition, bool *isNewArea) override;
+    void releaseAllAfter(KoTextLayoutRootArea *afterThis) override;
+    void doPostLayout(KoTextLayoutRootArea *rootArea, bool isNewRootArea) override;
+    QRectF suggestRect(KoTextLayoutRootArea *rootArea) override;
+    QList<KoTextLayoutObstruction *> relevantObstructions(KoTextLayoutRootArea *rootArea) override;
+    void updateAll() override;
 
     void setSuggestedRect(QRectF rect);
 

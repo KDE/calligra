@@ -49,7 +49,7 @@ public:
 
     explicit StyleStorageUndoCommand(StyleStorage *storage, KUndo2Command *parent = 0);
 
-    virtual void undo();
+    void undo() override;
 
     void add(const QList<Pair> &pairs);
 

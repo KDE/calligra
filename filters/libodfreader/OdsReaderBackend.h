@@ -73,7 +73,7 @@ class KOODFREADER_EXPORT OdsReaderBackend : public OdfReaderBackend
 {
  public:
     explicit OdsReaderBackend();
-    virtual ~OdsReaderBackend();
+    ~OdsReaderBackend() override;
 
     // ----------------------------------------------------------------
     // ODS document level functions

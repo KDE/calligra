@@ -214,7 +214,7 @@ void KWPageSettingsDialog::pageStyleCloneClicked()
     class Validator : public QValidator {
     public:
         Validator(KWDocument *document) : QValidator(), m_document(document) {}
-        virtual State validate(QString &input, int&) const {
+        State validate(QString &input, int&) const override {
             return input.trimmed().isEmpty() || m_document->pageManager()->pageStyle(input).isValid() ? Intermediate : Acceptable;
         }
     private:

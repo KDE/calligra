@@ -36,7 +36,7 @@ class KoEditColorSetWidget : public QWidget
     Q_OBJECT
 public:
     KoEditColorSetWidget(const QList<KoColorSet *> &palettes, const QString &activePalette, QWidget *parent = 0);
-    ~KoEditColorSetWidget() Q_DECL_OVERRIDE;
+    ~KoEditColorSetWidget() override;
 
     /**
      * Return the active color set. The caller takes ownership of that color set.
@@ -95,7 +95,7 @@ public:
     /**
      * Destructor
      */
-    ~KoEditColorSetDialog() Q_DECL_OVERRIDE;
+    ~KoEditColorSetDialog() override;
 
 private:
     KoEditColorSetWidget *ui;

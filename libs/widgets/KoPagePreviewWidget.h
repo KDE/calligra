@@ -34,10 +34,10 @@ class KOWIDGETS_EXPORT KoPagePreviewWidget : public QWidget {
     Q_OBJECT
 public:
     explicit KoPagePreviewWidget(QWidget *parent = nullptr);
-    ~KoPagePreviewWidget();
+    ~KoPagePreviewWidget() override;
 
 protected:
-    void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
+    void paintEvent(QPaintEvent *event) override;
 
 public Q_SLOTS:
     void setPageLayout(const KoPageLayout &layout);

@@ -62,14 +62,14 @@ public:
     {
     }
 
-    ~RadioLayout() Q_DECL_OVERRIDE
+    ~RadioLayout() override
     {
         foreach( const Item & item, items )
             delete item.child;
         items.clear();
     }
 
-    void setGeometry (const QRect &geom) Q_DECL_OVERRIDE {
+    void setGeometry (const QRect &geom) override {
         QSize prefSize = calcSizes();
 
         qreal columnWidth, rowHeight;
@@ -116,34 +116,34 @@ public:
         return prefSize;
     }
 
-    QLayoutItem *itemAt (int index) const Q_DECL_OVERRIDE {
+    QLayoutItem *itemAt (int index) const override {
         if( index < count() )
             return items.at(index).child;
         else
             return 0;
     }
 
-    QLayoutItem *takeAt (int index) Q_DECL_OVERRIDE {
+    QLayoutItem *takeAt (int index) override {
         Q_ASSERT(index < count());
         Item item = items.takeAt(index);
         return item.child;
     }
 
-    int count () const Q_DECL_OVERRIDE {
+    int count () const override {
         return items.count();
     }
 
-    void addItem(QLayoutItem *) Q_DECL_OVERRIDE {
+    void addItem(QLayoutItem *) override {
         Q_ASSERT(0);
     }
 
-    QSize sizeHint() const Q_DECL_OVERRIDE {
+    QSize sizeHint() const override {
         if(preferred.isEmpty())
             const_cast<RadioLayout*> (this)->calcSizes();
         return preferred;
     }
 
-    QSize minimumSize() const Q_DECL_OVERRIDE {
+    QSize minimumSize() const override {
         if(minimum.isEmpty())
             const_cast<RadioLayout*> (this)->calcSizes();
         return minimum;

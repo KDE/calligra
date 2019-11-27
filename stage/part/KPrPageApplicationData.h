@@ -29,7 +29,7 @@ class STAGE_EXPORT KPrPageApplicationData : public KoShapeApplicationData
 {
 public:
    KPrPageApplicationData();
-   ~KPrPageApplicationData();
+   ~KPrPageApplicationData() override;
 
    /**
     * Get the page effect used to go to this page

@@ -78,7 +78,7 @@ private:
 
     friend class KoResourceBundle;
 
-    KoAbstractGradient* createResource( const QString & filename ) Q_DECL_OVERRIDE {
+    KoAbstractGradient* createResource( const QString & filename ) override {
 
         QString fileExtension;
         int index = filename.lastIndexOf('.');
@@ -96,7 +96,7 @@ private:
         return grad;
     }
 
-    QList< KoAbstractGradient* > sortedResources() Q_DECL_OVERRIDE {
+    QList< KoAbstractGradient* > sortedResources() override {
         QList< KoAbstractGradient* > resources = KoResourceServer<KoAbstractGradient>::sortedResources();
         QList< KoAbstractGradient* > sorted;
         if (m_foregroundToTransparent && resources.contains(m_foregroundToTransparent)) {

@@ -71,7 +71,7 @@ public:
      * The destructor must remove the list of frames.
      */
 
-    virtual ~Cell();
+    ~Cell() override;
 
     /* ==== getters ==== */
 
@@ -117,7 +117,7 @@ public:
     /**
      * Helpful functions
      */
-    void     analyze(const QDomNode);
+    void     analyze(const QDomNode) override;
     void     analyzeText(const QDomNode);
     void     analyzeResult(const QDomNode);
     void     generate(QTextStream&, Table*);

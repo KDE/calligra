@@ -33,7 +33,7 @@ class STAGE_EXPORT KPrPart : public KoPart
 public:
     explicit KPrPart(QObject *parent);
 
-    virtual ~KPrPart();
+    ~KPrPart() override;
 
     void setDocument(KPrDocument *document);
 
@@ -43,14 +43,14 @@ public:
      * @param parent the KoMainWindow used as parent for the widget.
      * @param alwaysShow always show the widget even if the user has configured it to not show.
      */
-    void showStartUpWidget(KoMainWindow *parent, bool alwaysShow);
+    void showStartUpWidget(KoMainWindow *parent, bool alwaysShow) override;
 
     /// reimplemented
-    virtual KoView *createViewInstance(KoDocument *document, QWidget *parent);
+    KoView *createViewInstance(KoDocument *document, QWidget *parent) override;
     /// reimplemented
-    virtual QGraphicsItem *createCanvasItem(KoDocument *document);
+    QGraphicsItem *createCanvasItem(KoDocument *document) override;
     /// reimplemented
-    virtual KoMainWindow *createMainWindow();
+    KoMainWindow *createMainWindow() override;
 protected Q_SLOTS:
     /// Quits Stage with error message from m_errorMessage.
     void showErrorAndDie();

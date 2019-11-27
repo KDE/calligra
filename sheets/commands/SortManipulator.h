@@ -37,9 +37,9 @@ class CALLIGRA_SHEETS_COMMON_EXPORT SortManipulator : public AbstractDFManipulat
 {
 public:
     SortManipulator();
-    virtual ~SortManipulator();
+    ~SortManipulator() override;
 
-    virtual bool process(Element* element);
+    bool process(Element* element) override;
 
     /** true if rows are to be sorted, false if columns are */
     void setSortRows(bool v) {
@@ -73,11 +73,11 @@ public:
     void clearCriteria();
 
 protected:
-    virtual bool preProcessing();
-    virtual bool postProcessing();
-    virtual Value newValue(Element *element, int col, int row,
-                           bool *parse, Format::Type *fmtType);
-    virtual Style newFormat(Element *element, int col, int row);
+    bool preProcessing() override;
+    bool postProcessing() override;
+    Value newValue(Element *element, int col, int row,
+                           bool *parse, Format::Type *fmtType) override;
+    Style newFormat(Element *element, int col, int row) override;
 
     /** sort the data, filling the "sorted" structure */
     void sort(Element *element);

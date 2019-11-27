@@ -40,16 +40,16 @@ class SnapGuideDocker : public QDockWidget, public KoCanvasObserverBase
 public:
     /// Creates the stroke docker
     SnapGuideDocker();
-    virtual ~SnapGuideDocker();
+    ~SnapGuideDocker() override;
 
 private Q_SLOTS:
     void locationChanged(Qt::DockWidgetArea area);
 
 private:
     /// reimplemented
-    virtual QString observerName() const { return QStringLiteral("SnapGuideDocker"); }
-    virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas();
+    QString observerName() const override { return QStringLiteral("SnapGuideDocker"); }
+    void setCanvas(KoCanvasBase *canvas) override;
+    void unsetCanvas() override;
 
 private:
     class Private;

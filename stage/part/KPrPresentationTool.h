@@ -44,26 +44,26 @@ class KPrPresentationTool : public KoToolBase
     Q_OBJECT
 public:
     explicit KPrPresentationTool( KPrViewModePresentation &viewMode );
-    ~KPrPresentationTool();
+    ~KPrPresentationTool() override;
 
-    bool wantsAutoScroll() const;
+    bool wantsAutoScroll() const override;
 
-    void paint( QPainter &painter, const KoViewConverter &converter );
+    void paint( QPainter &painter, const KoViewConverter &converter ) override;
 
-    void mousePressEvent( KoPointerEvent *event );
-    void mouseDoubleClickEvent( KoPointerEvent *event );
-    void mouseMoveEvent( KoPointerEvent *event );
-    void mouseReleaseEvent( KoPointerEvent *event );
-    void keyPressEvent( QKeyEvent *event );
-    void keyReleaseEvent( QKeyEvent *event );
-    void wheelEvent( KoPointerEvent * event );
+    void mousePressEvent( KoPointerEvent *event ) override;
+    void mouseDoubleClickEvent( KoPointerEvent *event ) override;
+    void mouseMoveEvent( KoPointerEvent *event ) override;
+    void mouseReleaseEvent( KoPointerEvent *event ) override;
+    void keyPressEvent( QKeyEvent *event ) override;
+    void keyReleaseEvent( QKeyEvent *event ) override;
+    void wheelEvent( KoPointerEvent * event ) override;
 
     KPrPresentationStrategyBase *strategy();
     KPrViewModePresentation & viewModePresentation();
 
 public Q_SLOTS:
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
-    void deactivate();
+    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void deactivate() override;
     void highlightPresentation();
     void drawOnPresentation();
     void blackPresentation();
@@ -72,7 +72,7 @@ public Q_SLOTS:
 private:
     void finishEventActions();
     void switchStrategy( KPrPresentationStrategyBase * strategy );
-    bool eventFilter( QObject * obj, QEvent * event );
+    bool eventFilter( QObject * obj, QEvent * event ) override;
 
     /**
      * Returns true if shape is a TextShape and event->point is over hyperlink

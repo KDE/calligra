@@ -46,9 +46,9 @@ public:
     /**
      * Destructor.
      */
-    virtual ~PasteStrategy();
+    ~PasteStrategy() override;
 
-    virtual KUndo2Command* createCommand();
+    KUndo2Command* createCommand() override;
 
 private:
     class Private;

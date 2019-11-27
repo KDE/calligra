@@ -28,8 +28,8 @@ class KWPageToolFactory : public KoToolFactoryBase {
 public:
     /// constructor
     KWPageToolFactory();
-    ~KWPageToolFactory();
+    ~KWPageToolFactory() override;
 
-    KoToolBase* createTool(KoCanvasBase *canvas);
+    KoToolBase* createTool(KoCanvasBase *canvas) override;
 };
 #endif

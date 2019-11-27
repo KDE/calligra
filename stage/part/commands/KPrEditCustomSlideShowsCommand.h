@@ -31,12 +31,12 @@ class STAGE_TEST_EXPORT KPrEditCustomSlideShowsCommand: public KUndo2Command
 public:
     KPrEditCustomSlideShowsCommand(KPrDocument *doc, const QString &name, QList<KoPAPageBase *> newCustomShow, KUndo2Command *parent = 0);
 
-    virtual ~KPrEditCustomSlideShowsCommand();
+    ~KPrEditCustomSlideShowsCommand() override;
 
     /// redo the command
-    virtual void redo();
+    void redo() override;
     /// revert the actions done in redo
-    virtual void undo();
+    void undo() override;
 
 private:
     KPrDocument *m_doc;

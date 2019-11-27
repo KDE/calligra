@@ -31,8 +31,8 @@ class STAGE_EXPORT KPrAnimationSubStep : public QParallelAnimationGroup, KPrAnim
 {
 public:
     KPrAnimationSubStep();
-    virtual ~KPrAnimationSubStep();
-    virtual void init(KPrAnimationCache *animationCache, int step);
+    ~KPrAnimationSubStep() override;
+    void init(KPrAnimationCache *animationCache, int step);
     virtual bool saveOdf(KoPASavingContext & paContext, bool startStep) const;
     virtual void deactivate();
 };

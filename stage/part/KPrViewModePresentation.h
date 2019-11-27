@@ -37,27 +37,27 @@ class STAGE_EXPORT KPrViewModePresentation : public KoPAViewMode
 
 public:
     KPrViewModePresentation( KoPAViewBase * view, KoPACanvasBase * m_canvas );
-    ~KPrViewModePresentation();
+    ~KPrViewModePresentation() override;
 
-    KoViewConverter * viewConverter( KoPACanvasBase * canvas );
+    KoViewConverter * viewConverter( KoPACanvasBase * canvas ) override;
 
-    void paint(KoPACanvasBase* canvas, QPainter& painter, const QRectF &paintRect);
-    void tabletEvent( QTabletEvent *event, const QPointF &point );
-    void mousePressEvent( QMouseEvent *event, const QPointF &point );
-    void mouseDoubleClickEvent( QMouseEvent *event, const QPointF &point );
-    void mouseMoveEvent( QMouseEvent *event, const QPointF &point );
-    void mouseReleaseEvent( QMouseEvent *event, const QPointF &point );
-    void shortcutOverrideEvent( QKeyEvent *event );
-    void keyPressEvent( QKeyEvent *event );
-    void keyReleaseEvent( QKeyEvent *event );
-    void wheelEvent( QWheelEvent * event, const QPointF &point );
-    void closeEvent( QCloseEvent * event );
+    void paint(KoPACanvasBase* canvas, QPainter& painter, const QRectF &paintRect) override;
+    void tabletEvent( QTabletEvent *event, const QPointF &point ) override;
+    void mousePressEvent( QMouseEvent *event, const QPointF &point ) override;
+    void mouseDoubleClickEvent( QMouseEvent *event, const QPointF &point ) override;
+    void mouseMoveEvent( QMouseEvent *event, const QPointF &point ) override;
+    void mouseReleaseEvent( QMouseEvent *event, const QPointF &point ) override;
+    void shortcutOverrideEvent( QKeyEvent *event ) override;
+    void keyPressEvent( QKeyEvent *event ) override;
+    void keyReleaseEvent( QKeyEvent *event ) override;
+    void wheelEvent( QWheelEvent * event, const QPointF &point ) override;
+    void closeEvent( QCloseEvent * event ) override;
 
-    void activate( KoPAViewMode * previousViewMode );
-    void deactivate();
+    void activate( KoPAViewMode * previousViewMode ) override;
+    void deactivate() override;
 
     /// reimplemented
-    virtual void updateActivePage( KoPAPageBase *page );
+    void updateActivePage( KoPAPageBase *page ) override;
 
     /**
      * @brief Activate the saved view mode

@@ -47,7 +47,7 @@ public:
     /**
      * Destructor.
      */
-    ~Note();
+    ~Note() override;
 
     /**
      * Returns the staff for this note.

@@ -40,8 +40,8 @@ class DocxXmlSettingsReader : public MSOOXML::MsooXmlCommonReader
 {
 public:
     explicit DocxXmlSettingsReader(KoOdfWriters *writers);
-    virtual ~DocxXmlSettingsReader();
-    virtual KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0);
+    ~DocxXmlSettingsReader() override;
+    KoFilter::ConversionStatus read(MSOOXML::MsooXmlReaderContext* context = 0) override;
 
 protected:
     KoFilter::ConversionStatus read_settings();

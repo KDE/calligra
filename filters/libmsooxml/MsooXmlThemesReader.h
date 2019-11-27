@@ -61,10 +61,10 @@ public:
     //! On successful reading, @a theme will be written with theme definition.
     explicit MsooXmlThemesReader(KoOdfWriters *writers);
 
-    virtual ~MsooXmlThemesReader();
+    ~MsooXmlThemesReader() override;
 
     //! Reads/parses the file. The output goes mainly to KoGenStyles* KoOdfWriters::mainStyles
-    virtual KoFilter::ConversionStatus read(MsooXmlReaderContext* context = 0);
+    KoFilter::ConversionStatus read(MsooXmlReaderContext* context = 0) override;
 
 protected:
     KoFilter::ConversionStatus readInternal();

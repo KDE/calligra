@@ -36,20 +36,20 @@ class ChartDatabaseSelector : public KoShapeConfigWidgetBase
 public:
     /// constructor
     explicit ChartDatabaseSelector(Map *map);
-    ~ChartDatabaseSelector();
+    ~ChartDatabaseSelector() override;
 
     /// reimplemented
-    void open(KoShape *shape);
+    void open(KoShape *shape) override;
     /// reimplemented
-    void save();
+    void save() override;
 
     /// reimplemented
-    virtual bool showOnShapeCreate() {
+    bool showOnShapeCreate() override {
         return true;
     }
 
 protected:
-    virtual void showEvent(QShowEvent* event);
+    void showEvent(QShowEvent* event) override;
 
 private:
     class Private;

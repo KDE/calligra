@@ -78,7 +78,7 @@ public:
     /**
      * Destructor.
      */
-    virtual ~Selection();
+    ~Selection() override;
 
     /**
      * \return the canvas this selection works for.
@@ -142,7 +142,7 @@ public:
      * @param point the point's location
      * @param sheet the sheet the point belongs to
      */
-    virtual Element* eor(const QPoint& point, Sheet* sheet = 0);
+    Element* eor(const QPoint& point, Sheet* sheet = 0) override;
 
     /**
      * The anchor is the starting point of a range. For points marker and anchor are the same
@@ -239,7 +239,7 @@ public:
     /**
      * Deletes all elements of the region. The result is an empty region.
      */
-    virtual void clear();
+    void clear() override;
 
 
     /**
@@ -312,37 +312,37 @@ protected:
     /**
      * @internal used to create derived Points
      */
-    virtual Region::Point* createPoint(const QPoint&) const;
+    Region::Point* createPoint(const QPoint&) const override;
 
     /**
      * @internal used to create derived Points
      */
-    virtual Region::Point* createPoint(const QString&) const;
+    Region::Point* createPoint(const QString&) const override;
 
     /**
      * @internal used to create derived Points
      */
-    virtual Region::Point* createPoint(const Region::Point&) const;
+    Region::Point* createPoint(const Region::Point&) const override;
 
     /**
      * @internal used to create derived Ranges
      */
-    virtual Region::Range* createRange(const QRect&) const;
+    Region::Range* createRange(const QRect&) const override;
 
     /**
      * @internal used to create derived Ranges
      */
-    virtual Region::Range* createRange(const Region::Point&, const Region::Point&) const;
+    Region::Range* createRange(const Region::Point&, const Region::Point&) const override;
 
     /**
      * @internal used to create derived Ranges
      */
-    virtual Region::Range* createRange(const QString&) const;
+    Region::Range* createRange(const QString&) const override;
 
     /**
      * @internal used to create derived Ranges
      */
-    virtual Region::Range* createRange(const Region::Range&) const;
+    Region::Range* createRange(const Region::Range&) const override;
 
     /**
      * Dilates the region and emits the changed() signal.

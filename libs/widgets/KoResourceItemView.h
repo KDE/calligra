@@ -35,10 +35,10 @@ class KoResourceItemView : public KoTableView
 public:
 
     explicit KoResourceItemView(QWidget *parent = nullptr);
-    ~KoResourceItemView() Q_DECL_OVERRIDE { disconnect(); }
+    ~KoResourceItemView() override { disconnect(); }
 
     /// reimplemented
-    bool viewportEvent(QEvent *event) Q_DECL_OVERRIDE;
+    bool viewportEvent(QEvent *event) override;
 
 Q_SIGNALS:
 
@@ -46,8 +46,8 @@ Q_SIGNALS:
     void contextMenuRequested(const QPoint &);
 
 protected:
-    void contextMenuEvent(QContextMenuEvent *event) Q_DECL_OVERRIDE;
-    void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected) Q_DECL_OVERRIDE;
+    void contextMenuEvent(QContextMenuEvent *event) override;
+    void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected) override;
 
 private:
     KoIconToolTip m_tip;

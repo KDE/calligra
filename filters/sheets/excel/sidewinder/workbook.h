@@ -57,7 +57,7 @@ public:
     /**
      * Destroys the workbook.
      */
-    virtual ~Workbook();
+    ~Workbook() override;
 
     /**
      * Returns the used KoStore or NULL if not KoStore was set.

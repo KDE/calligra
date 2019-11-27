@@ -38,7 +38,7 @@ class STAGE_EXPORT KPrPage : public KoPAPage, public KPrPageData
 {
 public:
     KPrPage( KoPAMasterPage * masterPage, KPrDocument * document );
-    virtual ~KPrPage();
+    ~KPrPage() override;
 
     /**
      * Get the page data
@@ -57,10 +57,10 @@ public:
     KPrNotes *pageNotes();
 
     /// reimplemented
-    virtual void shapeAdded( KoShape * shape );
+    void shapeAdded( KoShape * shape ) override;
 
     /// reimplemented
-    virtual void shapeRemoved( KoShape * shape );
+    void shapeRemoved( KoShape * shape ) override;
 
     /**
      * Set the layout to use on the page
@@ -82,37 +82,37 @@ public:
      *
      * @return KoPageApp::Slide
      */
-    virtual KoPageApp::PageType pageType() const;
+    KoPageApp::PageType pageType() const override;
 
     QString declaration(KPrDeclarations::Type type) const;
 
     /// reimplemented
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
     /// reimplemented
-    virtual bool displayShape(KoShape *shape) const;
+    bool displayShape(KoShape *shape) const override;
 
 protected:
     /// reimplemented
-    virtual void saveOdfPageContent( KoPASavingContext & paContext ) const;
+    void saveOdfPageContent( KoPASavingContext & paContext ) const override;
 
     /// reimplemented
-    virtual void saveOdfPageStyleData( KoGenStyle &style, KoPASavingContext &paContext ) const;
+    void saveOdfPageStyleData( KoGenStyle &style, KoPASavingContext &paContext ) const override;
 
     /// reimplemented
-    virtual void loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &loadingContext );
+    void loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &loadingContext ) override;
 
     /// reimplemented
-    virtual void loadOdfPageExtra( const KoXmlElement &element, KoPALoadingContext & loadingContext );
+    void loadOdfPageExtra( const KoXmlElement &element, KoPALoadingContext & loadingContext ) override;
 
     /// reimplemented
-    virtual bool saveOdfAnimations(KoPASavingContext & paContext) const;
+    bool saveOdfAnimations(KoPASavingContext & paContext) const override;
 
     /// reimplemented
-    virtual bool saveOdfPresentationNotes(KoPASavingContext &paContext) const;
+    bool saveOdfPresentationNotes(KoPASavingContext &paContext) const override;
 
     /// reimplemented
-    virtual KoShapeManagerPaintingStrategy * getPaintingStrategy() const;
+    KoShapeManagerPaintingStrategy * getPaintingStrategy() const override;
 
 private:
     class Private;

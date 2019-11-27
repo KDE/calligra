@@ -64,11 +64,11 @@ public:
                        const QVector<QPointF> &previousOffsets, const QVector<QPointF> &newOffsets,
                        KUndo2Command *parent = 0);
     /// Destuctor.
-    ~KoShapeMoveCommand();
+    ~KoShapeMoveCommand() override;
     /// redo the command
-    void redo();
+    void redo() override;
     /// revert the actions done in redo
-    void undo();
+    void undo() override;
 
     /// update newPositions list with new positions.
     void setNewPositions(const QVector<QPointF> &newPositions);

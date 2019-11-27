@@ -29,20 +29,20 @@ public:
     const QString msg;
     IOException() {}
     explicit IOException(const QString &m) :msg(m) {}
-    ~IOException() throw() {}
+    ~IOException() throw() override {}
 };
 
 class IncorrectValueException : public IOException {
 public:
     explicit IncorrectValueException(const QString &msg) :IOException(msg) {}
     IncorrectValueException(qint64 /*pos*/, const char* errMsg) :IOException(errMsg) {}
-    ~IncorrectValueException() throw() {}
+    ~IncorrectValueException() throw() override {}
 };
 
 class EOFException : public IOException {
 public:
     explicit EOFException(const QString &msg = QString()) :IOException(msg) {}
-    ~EOFException() throw() {}
+    ~EOFException() throw() override {}
 };
 
 class LEInputStream {

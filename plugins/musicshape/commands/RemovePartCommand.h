@@ -30,8 +30,8 @@ class MusicShape;
 class RemovePartCommand : public KUndo2Command {
 public:
     RemovePartCommand(MusicShape* shape, MusicCore::Part* part);
-    virtual void redo();
-    virtual void undo();
+    void redo() override;
+    void undo() override;
 private:
     MusicCore::Sheet* m_sheet;
     MusicCore::Part* m_part;

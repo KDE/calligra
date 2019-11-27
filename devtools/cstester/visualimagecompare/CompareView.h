@@ -36,16 +36,16 @@ class CompareView : public QWidget
 public:
     explicit CompareView(QWidget *parent = 0);
     CompareView(const QImage &image1, const QImage &image2, const QString &name1, const QString &name2, QWidget *parent = 0);
-    virtual ~CompareView();
+    ~CompareView() override;
 
     void update(const QImage &image1, const QImage &image2, const QString &name1, const QString &name2, const QImage &forcedDeltaView);
 
     static QImage difference(const QImage &image1, const QImage &image2);
 
 protected:
-    virtual void keyPressEvent(QKeyEvent * event);
+    void keyPressEvent(QKeyEvent * event) override;
 
-    virtual void resizeEvent(QResizeEvent *event);
+    void resizeEvent(QResizeEvent *event) override;
 
 protected Q_SLOTS:
     void currentChanged(int currentIndex);

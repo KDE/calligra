@@ -33,47 +33,47 @@ public:
     explicit SubSupElement( BasicElement* parent = 0, ElementType elementType = SubSupScript);
 
     /// The destructor
-    ~SubSupElement();
+    ~SubSupElement() override;
 
     /**
      * Obtain a list of all child elements of this element
      * @return a QList with pointers to all child elements
      */
-    const QList<BasicElement*> childElements() const;
+    const QList<BasicElement*> childElements() const override;
 
     /// inherited from BasicElement
-    virtual bool replaceChild ( BasicElement* oldElement, BasicElement* newElement );
+    bool replaceChild ( BasicElement* oldElement, BasicElement* newElement ) override;
 
     /**
      * Render the element to the given QPainter
      * @param painter The QPainter to paint the element to
      * @param am AttributeManager containing style info
      */
-    void paint( QPainter& painter, AttributeManager* am );
+    void paint( QPainter& painter, AttributeManager* am ) override;
 
     /**
      * Calculate the size of the element and the positions of its children
      * @param am The AttributeManager providing information about attributes values
      */
-    void layout( const AttributeManager* am );
+    void layout( const AttributeManager* am ) override;
 
     /// @return The default value of the attribute for this element
-    QString attributesDefaultValue( const QString& attribute ) const; 
+    QString attributesDefaultValue( const QString& attribute ) const override; 
 
     /// @return The element's ElementType
-    ElementType elementType() const;
+    ElementType elementType() const override;
 
-    virtual int endPosition() const;
+    int endPosition() const override;
 
-    virtual bool moveCursor ( FormulaCursor& newcursor, FormulaCursor& oldcursor );
+    bool moveCursor ( FormulaCursor& newcursor, FormulaCursor& oldcursor ) override;
 
-    virtual bool setCursorTo ( FormulaCursor& cursor, QPointF point );
+    bool setCursorTo ( FormulaCursor& cursor, QPointF point ) override;
 protected:
     /// Read all content from the node
-    bool readMathMLContent( const KoXmlElement& element );
+    bool readMathMLContent( const KoXmlElement& element ) override;
 
     /// Write all content to the KoXmlWriter
-    void writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const;
+    void writeMathMLContent( KoXmlWriter* writer, const QString& ns ) const override;
 
 private:
     /// The base element 
