@@ -52,6 +52,8 @@
 #include <KoBorder.h>
 #include <KoShadowStyle.h>
 
+#include <algorithm>
+
 static int compareTabs(KoText::Tab &tab1, KoText::Tab &tab2)
 {
     return tab1.position < tab2.position;
@@ -1893,7 +1895,7 @@ void KoParagraphStyle::loadOdfProperties(KoShapeLoadingContext &scontext)
 void KoParagraphStyle::setTabPositions(const QVector<KoText::Tab> &tabs)
 {
     QVector<KoText::Tab> newTabs = tabs;
-    qSort(newTabs.begin(), newTabs.end(), compareTabs);
+    std::sort(newTabs.begin(), newTabs.end(), compareTabs);
     QList<QVariant> list;
     foreach(const KoText::Tab &tab, tabs) {
         QVariant v;

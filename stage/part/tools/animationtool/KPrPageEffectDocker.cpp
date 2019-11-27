@@ -42,6 +42,8 @@
 #include "pageeffects/KPrPageEffectFactory.h"
 #include "commands/KPrPageEffectSetCommand.h"
 
+#include <algorithm>
+
 bool orderFactoryByName( const KPrPageEffectFactory * factory1, const KPrPageEffectFactory * factory2 )
 {
     return factory1->name() < factory2->name();
@@ -59,7 +61,7 @@ KPrPageEffectDocker::KPrPageEffectDocker( QWidget* parent, Qt::WindowFlags flags
 
     QList<KPrPageEffectFactory*> factories = KPrPageEffectRegistry::instance()->values();
 
-    qSort( factories.begin(), factories.end(), orderFactoryByName );
+    std::sort( factories.begin(), factories.end(), orderFactoryByName );
 
     foreach ( KPrPageEffectFactory * factory, factories )
     {

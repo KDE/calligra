@@ -29,6 +29,8 @@
 
 #include <QTextFrame>
 
+#include <algorithm>
+
 static QVector<SortKeyPair> sortKeys;
 
 BibliographyGenerator::BibliographyGenerator(QTextDocument *bibDocument, const QTextBlock &block, KoBibliographyInfo *bibInfo)
@@ -74,7 +76,7 @@ static QList<KoInlineCite *> sort(QList<KoInlineCite *> cites, const QVector<Sor
 {
     sortKeys = keys;
     sortKeys << QPair<QString, Qt::SortOrder>("identifier", Qt::AscendingOrder);
-    qSort(cites.begin(), cites.end(), lessThan);
+    std::sort(cites.begin(), cites.end(), lessThan);
     return cites;
 }
 

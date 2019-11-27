@@ -47,6 +47,9 @@
 #include "ChartTableModel.h"
 #include "ChartDebug.h"
 
+// Other
+#include <algorithm>
+
 using namespace KoChart;
 
 
@@ -420,7 +423,7 @@ QList<DataSet*> ChartProxyModel::Private::createDataSetsFromRegion(QList<DataSet
     // that are later used for the data sets
     Table *internalTable = shape ? shape->tableSource()->get(shape->internalModel()) : 0;
     QList<int> sortedDataKeys = sortedDataRegions.keys();
-    qSort(sortedDataKeys);
+    std::sort(sortedDataKeys.begin(), sortedDataKeys.end());
     foreach(int key, sortedDataKeys) {
         QVector<QRect> rects = sortedDataRegions[key];
         QVector<QRect> dataRects;

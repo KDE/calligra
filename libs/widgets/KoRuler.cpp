@@ -38,6 +38,8 @@
 
 #include <KoViewConverter.h>
 
+#include <algorithm>
+
 // the distance in pixels of a mouse position considered outside the rule
 static const int OutsideRulerThreshold = 20;
 //
@@ -664,7 +666,7 @@ void HorizontalDistancesPaintingStrategy::drawMeasurements(const KoRulerPrivate 
     points << d->effectiveActiveRangeStart();
     points << d->effectiveActiveRangeEnd();
     points << d->rulerLength;
-    qSort(points.begin(), points.end());
+    std::sort(points.begin(), points.end());
     QListIterator<qreal> i(points);
     i.next();
     while (i.hasNext() && i.hasPrevious()) {
@@ -1041,7 +1043,7 @@ void KoRuler::updateTabs(const QList<KoRuler::Tab> &tabs, qreal tabDistance)
 QList<KoRuler::Tab> KoRuler::tabs() const
 {
     QList<Tab> answer = d->tabs;
-    qSort(answer.begin(), answer.end(), compareTabs);
+    std::sort(answer.begin(), answer.end(), compareTabs);
 
     return answer;
 }

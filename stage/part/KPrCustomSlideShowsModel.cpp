@@ -37,6 +37,9 @@
 #include <QApplication>
 #include <QMenu>
 
+//Other
+#include <algorithm>
+
 KPrCustomSlideShowsModel::KPrCustomSlideShowsModel(KPrDocument *document, QObject *parent)
     : QAbstractListModel(parent)
     , m_customSlideShows(document->customSlideShows())
@@ -352,7 +355,7 @@ bool KPrCustomSlideShowsModel::doCustomSlideShowAction(const CustomShowActions &
         //delete de slides on the current custom show
         //delete command use indexes because the custom show could have
         //more than one copy of the same slide.
-        qSort(indexes);
+        std::sort(indexes.begin(), indexes.end());
         int i = 0;
         foreach(int row, indexes) {
             selectedSlideShow.removeAt(row - i);

@@ -26,6 +26,8 @@
 
 #include <QDebug>
 
+#include <algorithm>
+
 static const quint32 ENDOFCHAIN = 0xFFFFFFFE;
 static const quint32 FATSECT = 0xFFFFFFFD;
 static const quint32 FREESECT = 0xFFFFFFFF;
@@ -256,7 +258,7 @@ void CFBWriter::DirectoryEntry::buildChildrenTree()
         return;
     }
     QList<QString> names = children.keys();
-    qSort(names.begin(), names.end(), compareNames);
+    std::sort(names.begin(), names.end(), compareNames);
     QList<DirectoryEntry*> entries;
     foreach (const QString& name, names) {
         entries.append(children[name]);

@@ -35,6 +35,7 @@
 #include <QMultiMap>
 
 #include <climits>
+#include <algorithm>
 
 using namespace MusicCore;
 
@@ -460,7 +461,7 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, Voice* voice, c
     painter.setPen(m_style->noteDotPen(color));
     foreach (Staff* s, dots.keys()) {
         QList<int> lines = dots.values(s);
-        qSort(lines);
+        std::sort(lines.begin(), lines.end());
 
         int lastLine = INT_MIN;
         bool moveGroupDown = true;

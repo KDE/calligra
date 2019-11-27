@@ -34,6 +34,8 @@
 #include <klocalizedstring.h>
 #include <QDebug>
 
+#include <algorithm>
+
 StylesModel::StylesModel(KoStyleManager *manager, AbstractStylesModel::Type modelType, QObject *parent)
     : AbstractStylesModel(parent),
       m_styleManager(0),
@@ -340,7 +342,7 @@ void StylesModel::updateParagraphStyles()
     m_styleList.clear();
 
     QList<KoParagraphStyle *> styles = m_styleManager->paragraphStyles();
-    qSort(styles.begin(), styles.end(), sortParagraphStyleByName);
+    std::sort(styles.begin(), styles.end(), sortParagraphStyleByName);
 
     foreach(KoParagraphStyle *style, styles) {
         if (style != m_styleManager->defaultParagraphStyle()) { //The default character style is not user selectable. It only provides individual property defaults and is not a style per say.
@@ -403,7 +405,7 @@ void StylesModel::updateCharacterStyles()
     }
 
     QList<KoCharacterStyle *> styles = m_styleManager->characterStyles();
-    qSort(styles.begin(), styles.end(), sortCharacterStyleByName);
+    std::sort(styles.begin(), styles.end(), sortCharacterStyleByName);
 
     foreach(KoCharacterStyle *style, styles) {
         if (style != m_styleManager->defaultCharacterStyle()) { //The default character style is not user selectable. It only provides individual property defaults and is not a style per say.

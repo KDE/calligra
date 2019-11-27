@@ -31,6 +31,8 @@
 #include <KoShapeController.h>
 #include <QPainter>
 
+#include <algorithm>
+
 KoPathToolSelection::KoPathToolSelection(KoPathTool * tool)
         : m_tool(tool)
 {
@@ -161,7 +163,7 @@ QList<KoPathPointData> KoPathToolSelection::selectedSegmentsData() const
     QList<KoPathPointData> pointData;
 
     QList<KoPathPointData> pd(selectedPointsData());
-    qSort(pd);
+    std::sort(pd.begin(), pd.end());
 
     KoPathPointData last(0, KoPathPointIndex(-1, -1));
     KoPathPointData lastSubpathStart(0, KoPathPointIndex(-1, -1));

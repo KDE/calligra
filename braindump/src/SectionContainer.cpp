@@ -41,6 +41,8 @@
 #include "RootSection.h"
 #include "ViewManager.h"
 
+#include <algorithm>
+
 SectionContainer::SectionContainer(Section* section, RootSection* _rootSection) : m_section(0), m_layer(0), m_rootSection(0), m_sectionModel(0)
 {
     initContainer(section, _rootSection);
@@ -136,7 +138,7 @@ void SectionContainer::saveOdf(KoShapeSavingContext & context) const
     context.xmlWriter().startElement("braindump:section");
 
     QList<KoShape*> shapes = m_layer->shapes();
-    qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
+    std::sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
 
     foreach(KoShape * shape, shapes) {
         shape->saveOdf(context);

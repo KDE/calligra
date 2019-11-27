@@ -25,6 +25,8 @@
 
 #include <QDebug>
 
+#include <algorithm>
+
 const qreal RIDICULOUSLY_LARGE_NEGATIVE_INDENT = -5E6;
 #define MIN_WIDTH   0.01f
 
@@ -154,7 +156,7 @@ void RunAroundHelper::createLineParts()
         QVector<QRectF> lineParts;
         QRectF rightLineRect = m_lineRect;
         bool lastRightRectValid = false;
-        qSort(m_validObstructions.begin(), m_validObstructions.end(), KoTextLayoutObstruction::compareRectLeft);
+        std::sort(m_validObstructions.begin(), m_validObstructions.end(), KoTextLayoutObstruction::compareRectLeft);
         // Divide rect to parts, part can be invalid when obstructions are not disjunct.
         foreach (KoTextLayoutObstruction *validObstruction, m_validObstructions) {
             QRectF leftLineRect = validObstruction->getLeftLinePart(rightLineRect);

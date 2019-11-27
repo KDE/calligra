@@ -29,6 +29,8 @@
 #include "KPrPageLayout.h"
 #include "KPrPageLayoutSharedSavingData.h"
 
+#include <algorithm>
+
 class KPrPageLayoutWrapper
 {
 public:
@@ -121,8 +123,8 @@ bool KPrPageLayouts::loadOdf( KoPALoadingContext & context )
     }
     QList<KPrPageLayout *> documentLayouts = m_pageLayouts.values();
 
-    qSort( documentLayouts.begin(), documentLayouts.end(), compareLayouts );
-    qSort( defaultLayouts.begin(), defaultLayouts.end(), compareLayouts );
+    std::sort( documentLayouts.begin(), documentLayouts.end(), compareLayouts );
+    std::sort( defaultLayouts.begin(), defaultLayouts.end(), compareLayouts );
 
     QList<KPrPageLayout *>::const_iterator docIt = documentLayouts.constBegin();
     QList<KPrPageLayout *>::const_iterator defaultIt = defaultLayouts.constBegin();

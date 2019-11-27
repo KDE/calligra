@@ -28,6 +28,8 @@
 
 #include "TextDebug.h"
 
+#include <algorithm>
+
 bool sortAnchor(KoAnchorInlineObject *a1, KoAnchorInlineObject *a2)
 {
     return a1->position() > a2->position();
@@ -48,7 +50,7 @@ DeleteAnchorsCommand::DeleteAnchorsCommand(const QList<KoShapeAnchor*> &anchorOb
             m_anchorRanges.append(anchorRange);
         }
     }
-    qSort(m_anchorObjects.begin(), m_anchorObjects.end(), sortAnchor);
+    std::sort(m_anchorObjects.begin(), m_anchorObjects.end(), sortAnchor);
 }
 
 DeleteAnchorsCommand::~DeleteAnchorsCommand()

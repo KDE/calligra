@@ -39,6 +39,8 @@
 #include <QtAlgorithms>
 #include <QList>
 
+#include <algorithm>
+
 ShowChangesCommand::ShowChangesCommand(bool showChanges, QTextDocument *document, KoCanvasBase *canvas, KUndo2Command *parent) :
     KoTextCommandBase (parent),
     m_document(document),
@@ -111,7 +113,7 @@ void ShowChangesCommand::insertDeletedChanges()
 {
     QVector<KoChangeTrackerElement *> elementVector;
     KoTextDocument(m_textEditor->document()).changeTracker()->getDeletedChanges(elementVector);
-    qSort(elementVector.begin(), elementVector.end());
+    std::sort(elementVector.begin(), elementVector.end());
 }
 
 void ShowChangesCommand::checkAndAddAnchoredShapes(int position, int length)
@@ -157,7 +159,7 @@ void ShowChangesCommand::removeDeletedChanges()
 {
     QVector<KoChangeTrackerElement *> elementVector;
     m_changeTracker->getDeletedChanges(elementVector);
-    qSort(elementVector.begin(), elementVector.end());
+    std::sort(elementVector.begin(), elementVector.end());
 }
 
 void ShowChangesCommand::checkAndRemoveAnchoredShapes(int position, int length)

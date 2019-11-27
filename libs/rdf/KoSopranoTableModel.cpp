@@ -25,6 +25,8 @@
 #include <kdebug.h>
 #include <klocalizedstring.h>
 
+#include <algorithm>
+
 KoSopranoTableModel::KoSopranoTableModel(KoDocumentRdf *rdf)
         : m_rdf(rdf)
 {
@@ -311,7 +313,7 @@ void KoSopranoTableModel::deleteTriples(const QModelIndexList &srclist)
         int r = src.row();
         rowsToRemoveDesc << r;
     }
-    qSort(rowsToRemoveDesc.begin(), rowsToRemoveDesc.end(), qGreater<int>());
+    std:sort(rowsToRemoveDesc.begin(), rowsToRemoveDesc.end(), qGreater<int>());
     int r;
     foreach (r, rowsToRemoveDesc) {
         Soprano::Statement st = m_statementIndex[ r ];

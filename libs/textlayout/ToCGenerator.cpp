@@ -41,6 +41,8 @@
 #include <KoBookmark.h>
 #include <KoTextRangeManager.h>
 
+#include <algorithm>
+
 static const QString INVALID_HREF_TARGET = "INVALID_HREF";
 
 ToCGenerator::ToCGenerator(QTextDocument *tocDocument, KoTableOfContentsGeneratorInfo *tocInfo)
@@ -293,7 +295,7 @@ void ToCGenerator::generateEntry(int outlineLevel, QTextCursor &cursor, QTextBlo
                             tabEntry->tab.position = KoTextLayoutArea::MaximumTabPos;
                         } // else the position is already parsed into tab.position
                         tabList.append(QVariant::fromValue<KoText::Tab>(tabEntry->tab));
-                        qSort(tabList.begin(), tabList.end(), compareTab);
+                        std::sort(tabList.begin(), tabList.end(), compareTab);
                         blockFormat.setProperty(KoParagraphStyle::TabPositions, QVariant::fromValue<QList<QVariant> >(tabList));
                         cursor.setBlockFormat(blockFormat);
                         break;

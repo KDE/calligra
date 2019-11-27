@@ -38,6 +38,8 @@
 
 #include "commands/ApplyFilterCommand.h"
 
+#include <algorithm>
+
 using namespace Calligra::Sheets;
 
 class FilterPopup::Private
@@ -105,7 +107,7 @@ void FilterPopup::Private::initGUI(FilterPopup* parent, const Cell& cell, const 
                                    : !(conditions[conditions.keys()[0]] == Filter::Match ||
                                        conditions[conditions.keys()[0]] == Filter::Empty);
     QList<QString> sortedItems = items.toList();
-    qSort(sortedItems);
+    std::sort(sortedItems.begin(), sortedItems.end());
     bool isAll = true;
     QCheckBox* item;
     for (int i = 0; i < sortedItems.count(); ++i) {

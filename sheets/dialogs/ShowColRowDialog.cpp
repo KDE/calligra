@@ -42,6 +42,9 @@
 // commands
 #include "commands/RowColumnManipulators.h"
 
+// Other
+#include <algorithm>
+
 using namespace Calligra::Sheets;
 
 ShowColRow::ShowColRow(QWidget* parent, Selection* selection, Type _type)
@@ -81,7 +84,7 @@ ShowColRow::ShowColRow(QWidget* parent, Selection* selection, Type _type)
             if (col->isHidden())
                 listInt.append(col->column());
         }
-        qSort(listInt);
+        std::sort(listInt.begin(), listInt.end());
         for (QList<int>::ConstIterator it = listInt.constBegin(); it != listInt.constEnd(); ++it) {
             if (!showColNumber)
                 listCol += i18n("Column: %1", Cell::columnName(*it));

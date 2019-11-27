@@ -29,6 +29,8 @@
 #include "SheetsDebug.h"
 #include "calligra_sheets_limits.h"
 
+#include <algorithm>
+
 // Use dynamic_cast instead of cached root node
 // this is much slower but it is here so it is easy to check that still all works.
 //#define DYNAMIC_CAST
@@ -426,7 +428,7 @@ void RTree<T>::load(const QList<QPair<QRegion, T> >& data)
         }
     }
 
-    qSort(indices.begin(), indices.end(), LoadDataIndexCompare(rectData));
+    std::sort(indices.begin(), indices.end(), LoadDataIndexCompare(rectData));
 
     QList<QPair<Node*, qreal> > nodes;
     // create LeafNodes
@@ -445,7 +447,7 @@ void RTree<T>::load(const QList<QPair<QRegion, T> >& data)
         indices.resize(nodes.size());
         for (int i = 0; i < indices.size(); i++) indices[i] = i;
 
-        qSort(indices.begin(), indices.end(), NodeLoadDataIndexCompare(nodes));
+        std::sort(indices.begin(), indices.end(), NodeLoadDataIndexCompare(nodes));
 
         QList<QPair<Node*, qreal> > newNodes;
 

@@ -47,6 +47,7 @@
 #include <QTimer>
 #include <FlakeDebug.h>
 
+#include <algorithm>
 
 void KoShapeManager::Private::updateTree()
 {
@@ -87,7 +88,7 @@ void KoShapeManager::Private::updateTree()
 void KoShapeManager::Private::paintGroup(KoShapeGroup *group, QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintContext)
 {
     QList<KoShape*> shapes = group->shapes();
-    qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
+    std::sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
     foreach(KoShape *child, shapes) {
         // we paint recursively here, so we do not have to check recursively for visibility
         if (!child->isVisible())
@@ -259,7 +260,7 @@ void KoShapeManager::paint(QPainter &painter, const KoViewConverter &converter, 
         }
     }
 
-    qSort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
+    std::sort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
 
     foreach (KoShape *shape, sortedShapes) {
         if (shape->parent() != 0 && shape->parent()->isClipped(shape))
@@ -431,7 +432,7 @@ KoShape *KoShapeManager::shapeAt(const QPointF &position, KoFlake::ShapeSelectio
 {
     d->updateTree();
     QList<KoShape*> sortedShapes(d->tree.contains(position));
-    qSort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
+    std::sort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
     KoShape *firstUnselectedShape = 0;
     for (int count = sortedShapes.count() - 1; count >= 0; count--) {
         KoShape *shape = sortedShapes.at(count);

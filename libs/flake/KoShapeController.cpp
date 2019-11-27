@@ -43,6 +43,8 @@
 #include <kpagedialog.h>
 #include <klocalizedstring.h>
 
+#include <algorithm>
+
 class KoShapeController::Private
 {
 public:
@@ -72,7 +74,7 @@ public:
 
                 int pageCount = 0;
                 QList<KoShapeConfigFactoryBase*> panels = factory->panelFactories();
-                qSort(panels.begin(), panels.end(), KoShapeConfigFactoryBase::compare);
+                std::sort(panels.begin(), panels.end(), KoShapeConfigFactoryBase::compare);
                 QList<KoShapeConfigWidgetBase*> widgets;
                 foreach(KoShapeConfigFactoryBase *panelFactory, panels) {
                     if (! panelFactory->showForShapeId(shape->shapeId()))

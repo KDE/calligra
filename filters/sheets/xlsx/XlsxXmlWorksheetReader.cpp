@@ -70,7 +70,8 @@
 
 #include <MsooXmlReader_p.h>
 
-#include <math.h>
+#include <cmath>
+#include <algorithm>
 
 // ----------------------------------------------------------------
 // Include implementation of common tags
@@ -562,7 +563,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetHelper(const QStrin
             priorityActualIndex.push_back(QPair<int, int>(diffFormulasList.at(index).second, index));
             ++index;
         }
-        qSort(priorityActualIndex);
+        std::sort(priorityActualIndex.begin(), priorityActualIndex.end());
 
         // Finally we have the list sorted and we can store the conditions in right priority order
         index = 0;

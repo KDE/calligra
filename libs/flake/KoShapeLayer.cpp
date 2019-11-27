@@ -25,6 +25,8 @@
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 
+#include <algorithm>
+
 KoShapeLayer::KoShapeLayer()
         : KoShapeContainer(new SimpleShapeContainerModel())
 {
@@ -60,7 +62,7 @@ QRectF KoShapeLayer::boundingRect() const
 void KoShapeLayer::saveOdf(KoShapeSavingContext & context) const
 {
     QList<KoShape*> shapes = this->shapes();
-    qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
+    std::sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
 
     foreach(KoShape* shape, shapes) {
         shape->saveOdf(context);

@@ -9,6 +9,8 @@
 #include <KoTextShapeData.h>
 #include <MockShapes.h>
 
+#include <algorithm>
+
 TestTextFrameSorting::TestTextFrameSorting()
 {
 }
@@ -21,7 +23,7 @@ void TestTextFrameSorting::testSimpleSorting()
     frame2->shape()->setSize(QSizeF(100, 100));
     KWFrame *frame3 = createFrame(QPointF(10, 110), tfs);
 
-    qSort(tfs.m_frames.begin(), tfs.m_frames.end(), KWTextFrameSet::sortTextFrames);
+    std::sort(tfs.m_frames.begin(), tfs.m_frames.end(), KWTextFrameSet::sortTextFrames);
 
     QCOMPARE(tfs.m_frames[0], frame1);
     QCOMPARE(tfs.m_frames[1], frame2);
@@ -34,7 +36,7 @@ void TestTextFrameSorting::testSimpleSorting()
     KWFrame *frame4 = createFrame(QPointF(10, 1000), tfs); // page 2
     KWFrame *frame5 = createFrame(QPointF(120, 1000), tfs);
 
-    qSort(tfs.m_frames.begin(), tfs.m_frames.end(), KWTextFrameSet::sortTextFrames);
+    std::sort(tfs.m_frames.begin(), tfs.m_frames.end(), KWTextFrameSet::sortTextFrames);
 
     QCOMPARE(tfs.m_frames[0], frame1);
     QCOMPARE(tfs.m_frames[1], frame2);
@@ -51,7 +53,7 @@ void TestTextFrameSorting::testSimpleSorting2() // cascading usecase
     KWFrame *frame3 = createFrame(QPointF(10, 240), tfs);
     KWFrame *frame1 = createFrame(QPointF(10, 10), tfs);
 
-    qSort(tfs.m_frames.begin(), tfs.m_frames.end(), KWTextFrameSet::sortTextFrames);
+    std::sort(tfs.m_frames.begin(), tfs.m_frames.end(), KWTextFrameSet::sortTextFrames);
 
     QCOMPARE(tfs.m_frames[0], frame1);
     QCOMPARE(tfs.m_frames[1], frame2);
@@ -67,7 +69,7 @@ void TestTextFrameSorting::testSimpleSorting2() // cascading usecase
     KWFrame *frame23 = createFrame(QPointF(120, 1200), tfs);
     KWFrame *frame22 = createFrame(QPointF(10, 1110), tfs);
 
-    qSort(tfs.m_frames.begin(), tfs.m_frames.end(), KWTextFrameSet::sortTextFrames);
+    std::sort(tfs.m_frames.begin(), tfs.m_frames.end(), KWTextFrameSet::sortTextFrames);
 
     QCOMPARE(tfs.m_frames[0], frame1);
     QCOMPARE(tfs.m_frames[1], frame2);
@@ -115,7 +117,7 @@ void TestTextFrameSorting::testSortingOnPagespread()
     QCOMPARE(KWTextFrameSet::sortTextFrames(frame2, frame4), true);
     QCOMPARE(KWTextFrameSet::sortTextFrames(frame1, frame4), false);
 
-    qSort(tfs.m_frames.begin(), tfs.m_frames.end(), KWTextFrameSet::sortTextFrames);
+    std::sort(tfs.m_frames.begin(), tfs.m_frames.end(), KWTextFrameSet::sortTextFrames);
 
     QCOMPARE(tfs.m_frames[0], frame3);
     QCOMPARE(tfs.m_frames[1], frame2);
@@ -139,7 +141,7 @@ void TestTextFrameSorting::testRtlSorting()
     page.pageStyle().setPageLayout(layout);
     tfs.setPageManager(&pm);
 
-    qSort(tfs.m_frames.begin(), tfs.m_frames.end(), KWTextFrameSet::sortTextFrames);
+    std::sort(tfs.m_frames.begin(), tfs.m_frames.end(), KWTextFrameSet::sortTextFrames);
 
     // in RTL columns also sort right-to-left
     QCOMPARE(tfs.m_frames[0], frame2);
@@ -157,7 +159,7 @@ void TestTextFrameSorting::testSortingById()
     frame2->setSortingId(2);
     frame3->setSortingId(3);
 
-    qSort(tfs.m_frames.begin(), tfs.m_frames.end(), KWTextFrameSet::sortTextFrames);
+    std::sort(tfs.m_frames.begin(), tfs.m_frames.end(), KWTextFrameSet::sortTextFrames);
 
     QCOMPARE(tfs.m_frames[0], frame1);
     QCOMPARE(tfs.m_frames[1], frame2);
@@ -176,7 +178,7 @@ void TestTextFrameSorting::testCopyAfterTextSorting()
     QCOMPARE(tfs.m_frames[0], frame2);
     QCOMPARE(tfs.m_frames[1], frame3);
 
-    qSort(tfs.m_frames.begin(), tfs.m_frames.end(), KWTextFrameSet::sortTextFrames);
+    std::sort(tfs.m_frames.begin(), tfs.m_frames.end(), KWTextFrameSet::sortTextFrames);
 
     QCOMPARE(tfs.m_frames[0], frame3);
     QCOMPARE(tfs.m_frames[1], frame2);

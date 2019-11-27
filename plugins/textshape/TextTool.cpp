@@ -109,6 +109,8 @@
 
 #include <KoDocumentRdfBase.h>
 
+#include <algorithm>
+
 class TextToolSelection : public KoToolSelection
 {
 public:
@@ -850,7 +852,7 @@ void TextTool::updateSelectedShape(const QPointF &point, bool noDocumentChange)
     else
         repaintCaret();
     QList<KoShape*> sortedShapes = canvas()->shapeManager()->shapesAt(area, true);
-    qSort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
+    std::sort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
     for (int count = sortedShapes.count() - 1; count >= 0; count--) {
         KoShape *shape = sortedShapes.at(count);
 

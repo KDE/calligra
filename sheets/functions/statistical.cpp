@@ -1853,7 +1853,7 @@ Value func_large(valVector args, ValueCalc *calc, FuncExtra *)
     if (k >= number || number - k - 1 >= array.count())
         return Value::errorVALUE();
 
-    qSort(array);
+    std::sort(array.begin(), array.end());
     double d = array.at(number - k - 1);
     return Value(d);
 }
@@ -2047,7 +2047,7 @@ Value func_median(valVector args, ValueCalc *calc, FuncExtra *)
     if (number == 0)
         return Value::errorVALUE();
 
-    qSort(array);
+    std::sort(array.begin(), array.end());
     double d;
     if (number % 2) // odd
         d = array.at((number - 1) / 2);
@@ -2206,7 +2206,7 @@ Value func_percentile(valVector args, ValueCalc *calc, FuncExtra*)
         return Value::errorVALUE();
 
     // sort values
-    qSort(array);
+    std::sort(array.begin(), array.end());
 
     if (number == 1)
         return Value(array[0]); // only one value
@@ -2313,7 +2313,7 @@ Value func_rank(valVector args, ValueCalc *calc, FuncExtra*)
     func_array_helper(args[1], calc, array, number);
 
     // sort array
-    qSort(array);
+    std::sort(array.begin(), array.end());
 
     for (int i = 0; i < array.count(); ++i) {
         if (descending)
@@ -2415,7 +2415,7 @@ Value func_quartile(valVector args, ValueCalc *calc, FuncExtra*)
         return Value::errorVALUE();
 
     // sort values
-    qSort(array);
+    std::sort(array.begin(), array.end());
 
     if (number == 1)
         return Value(array[0]); // only one value
@@ -2556,7 +2556,7 @@ Value func_small(valVector args, ValueCalc *calc, FuncExtra *)
     if (k > number || k - 1 >= array.count())
         return Value::errorVALUE();
 
-    qSort(array);
+    std::sort(array.begin(), array.end());
     double d = array.at(k - 1);
     return Value(d);
 }
@@ -2857,7 +2857,7 @@ Value func_trimmean(valVector args, ValueCalc *calc, FuncExtra *)
     if (valCount == 0)
         return Value::errorVALUE();
 
-    qSort(array);
+    std::sort(array.begin(), array.end());
 
     for (int i = cutOff; i < valCount - cutOff ; ++i)
         res += array[i];

@@ -38,6 +38,8 @@
 #include <QPainterPath>
 #include <WordsDebug.h>
 
+#include <algorithm>
+
 KWCopyShape::KWCopyShape(KoShape *original, const KWPageManager *pageManager)
         : KoShape()
         ,m_original(original)
@@ -67,7 +69,7 @@ void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter, KoS
     if (container) {
         QList<KoShape*> sortedObjects = container->shapes();
         sortedObjects.append(m_original);
-        qSort(sortedObjects.begin(), sortedObjects.end(), KoShape::compareShapeZIndex);
+        std::sort(sortedObjects.begin(), sortedObjects.end(), KoShape::compareShapeZIndex);
 
         // Do the following to revert the absolute transformation of the
         // container that is re-applied in shape->absoluteTransformation()

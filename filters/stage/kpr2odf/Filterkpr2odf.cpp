@@ -24,6 +24,7 @@
 // POSIX
 #include <cmath>
 #include <cfloat>
+#include <algorithm>
 
 //Qt includes
 #include <QByteArray>
@@ -1700,7 +1701,7 @@ void Filterkpr2odf::saveAnimations(KoXmlWriter* content)
 {
     content->startElement("presentation:animations");
     QList<int> keys = m_pageAnimations.keys();
-    qSort(keys);  //we need to store the effects in the order of their keys
+    std::sort(keys.begin(), keys.end());  //we need to store the effects in the order of their keys
     foreach(int key, keys) {
         QList<QString> effectList = m_pageAnimations.value(key);
         if (effectList.size() > 1) { //if it's just 1 effect we don't add the group tag

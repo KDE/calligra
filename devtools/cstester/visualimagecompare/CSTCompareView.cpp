@@ -28,6 +28,8 @@
 #include <QGridLayout>
 #include <QKeyEvent>
 
+#include <algorithm>
+
 CSTCompareView::CSTCompareView(QWidget *parent)
 : QWidget(parent)
 #ifdef HAS_POPPLER
@@ -191,7 +193,7 @@ int CSTCompareView::updateResult(int index)
 
     m_data.clear();
     m_data.append(filename.join(" "));
-    qSort(pageNumbers);
+    std::sort(pageNumbers.begin(), pageNumbers.end());
     foreach(int n, pageNumbers)
         m_data.append(QString::number(n));
 

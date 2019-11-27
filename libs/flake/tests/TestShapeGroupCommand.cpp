@@ -27,6 +27,8 @@
 
 #include <QTest>
 
+#include <algorithm>
+
 TestShapeGroupCommand::TestShapeGroupCommand()
         : toplevelGroup(0), sublevelGroup(0), strokeGroup(0)
         , cmd1(0), cmd2(0), strokeCmd(0)
@@ -196,7 +198,7 @@ void TestShapeGroupCommand::testSublevelGroup()
 
     // check that the shapes are added in the correct order
     QList<KoShape*> childOrder(sublevelGroup->shapes());
-    qSort(childOrder.begin(), childOrder.end(), KoShape::compareShapeZIndex);
+    std::sort(childOrder.begin(), childOrder.end(), KoShape::compareShapeZIndex);
     QList<KoShape*> expectedOrder;
     expectedOrder << sublevelShape2 << sublevelShape1;
     QCOMPARE(childOrder, expectedOrder);

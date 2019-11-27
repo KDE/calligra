@@ -28,6 +28,8 @@
 #include <QPainter>
 #include <QPainterPath>
 
+#include <algorithm>
+
 KoShapeContainerPrivate::KoShapeContainerPrivate(KoShapeContainer *q)
     : KoShapePrivate(q),
     model(0)
@@ -168,7 +170,7 @@ void KoShapeContainer::paint(QPainter &painter, const KoViewConverter &converter
         return;
 
     QList<KoShape*> sortedObjects = d->model->shapes();
-    qSort(sortedObjects.begin(), sortedObjects.end(), KoShape::compareShapeZIndex);
+    std::sort(sortedObjects.begin(), sortedObjects.end(), KoShape::compareShapeZIndex);
 
     // Do the following to revert the absolute transformation of the container
     // that is re-applied in shape->absoluteTransformation() later on. The transformation matrix

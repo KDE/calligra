@@ -149,7 +149,7 @@ KoModeBox::KoModeBox(KoCanvasControllerWidget *canvas, const QString &appName)
         addToolAction(toolAction);
     }
 
-    qSort(d->toolActions.begin(), d->toolActions.end(), compareToolActions);
+    std::sort(d->toolActions.begin(), d->toolActions.end(), compareToolActions);
 
     // Update visibility of toolActions
     updateShownTools(QList<QString>());

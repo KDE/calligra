@@ -36,6 +36,8 @@
 #include <KoPAPageBase.h>
 #include <KoPageLayout.h>
 
+#include <algorithm>
+
 /*
 TODO: bs.wmf stroke in red with MSword and in brown with Words ??
 */
@@ -106,7 +108,7 @@ void WmfExport::paintDocument(KarbonDocument* document)
     }
 
     QList<KoShape*> shapes = page->shapes();
-    qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
+    std::sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
 
     // Export layers.
     foreach(KoShape * shape, shapes) {

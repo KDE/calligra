@@ -199,7 +199,7 @@ void KWPageSettingsDialog::onDocumentUnitChange(const KoUnit &unit)
 void KWPageSettingsDialog::reloadPageStyles()
 {
     QStringList pagestyles = m_document->pageManager()->pageStyles().keys();
-    qSort(pagestyles);
+    std::sort(pagestyles.begin(), pagestyles.end());
     m_pageStylesView->clear();
     m_pageStylesView->addItems(pagestyles);
     m_pageStylesView->setCurrentRow(pagestyles.indexOf(m_pageStyle.name()));

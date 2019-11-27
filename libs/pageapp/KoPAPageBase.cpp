@@ -41,6 +41,7 @@
 
 #include <QPainter>
 
+#include <algorithm>
 
 KoPAPageBase::KoPAPageBase()
 : KoShapeContainer( new KoPAPageContainerModel() )
@@ -91,7 +92,7 @@ void KoPAPageBase::saveOdfPageContent( KoPASavingContext & paContext ) const
 void KoPAPageBase::saveOdfLayers(KoPASavingContext &paContext) const
 {
     QList<KoShape*> shapes(this->shapes());
-    qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
+    std::sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
     foreach(KoShape* shape, shapes) {
         KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>(shape);
         if (layer) {
@@ -111,7 +112,7 @@ void KoPAPageBase::saveOdfShapes( KoShapeSavingContext &context ) const
     QList<KoShape*> shapes(this->shapes());
     QList<KoShape*> tlshapes( shapes );
 
-    qSort( tlshapes.begin(), tlshapes.end(), KoShape::compareShapeZIndex );
+    std::sort( tlshapes.begin(), tlshapes.end(), KoShape::compareShapeZIndex );
 
     foreach( KoShape *shape, tlshapes ) {
         shape->saveOdf( context );

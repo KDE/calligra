@@ -26,6 +26,7 @@
 #include <klocalizedstring.h>
 #include <FlakeDebug.h>
 #include <limits.h>
+#include <algorithm>
 
 
 class KoShapeReorderCommandPrivate
@@ -90,7 +91,7 @@ static void prepare(KoShape *s, QHash<KoShape*, QList<KoShape*> > &newOrder, KoS
             // get all toplevel shapes
             children = manager->topLevelShapes();
         }
-        qSort(children.begin(), children.end(), KoShape::compareShapeZIndex);
+        std::sort(children.begin(), children.end(), KoShape::compareShapeZIndex);
         // the append and prepend are needed so that the raise/lower of all shapes works as expected.
         children.append(0);
         children.prepend(0);
@@ -129,7 +130,7 @@ KoShapeReorderCommand *KoShapeReorderCommand::createCommand(const QList<KoShape*
     QList<KoShape*> changedShapes;
     QHash<KoShape*, QList<KoShape*> > newOrder;
     QList<KoShape*> sortedShapes(shapes);
-    qSort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
+    std::sort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
     if (move == BringToFront || move == LowerShape) {
         for (int i = 0; i < sortedShapes.size(); ++i) {
             prepare(sortedShapes.at(i), newOrder, manager, move);

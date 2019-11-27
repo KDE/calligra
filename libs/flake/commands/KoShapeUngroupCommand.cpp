@@ -24,17 +24,19 @@
 
 #include <klocalizedstring.h>
 
+#include <algorithm>
+
 KoShapeUngroupCommand::KoShapeUngroupCommand(KoShapeContainer *container, const QList<KoShape *> &shapes,
         const QList<KoShape*> &topLevelShapes, KUndo2Command *parent)
     : KoShapeGroupCommand(*(new KoShapeGroupCommandPrivate(container, shapes)), parent)
 {
     QList<KoShape*> orderdShapes(shapes);
-    qSort(orderdShapes.begin(), orderdShapes.end(), KoShape::compareShapeZIndex);
+    std::sort(orderdShapes.begin(), orderdShapes.end(), KoShape::compareShapeZIndex);
     d->shapes = orderdShapes;
 
     QList<KoShape*> ancestors = d->container->parent()? d->container->parent()->shapes(): topLevelShapes;
     if (ancestors.count()) {
-        qSort(ancestors.begin(), ancestors.end(), KoShape::compareShapeZIndex);
+        std::sort(ancestors.begin(), ancestors.end(), KoShape::compareShapeZIndex);
         QList<KoShape*>::const_iterator it(qFind(ancestors, d->container));
 
         Q_ASSERT(it != ancestors.constEnd());

@@ -30,6 +30,8 @@
 
 #include <QPainter>
 
+#include <algorithm>
+
 static bool beforeThan(KoInlineNote *note1, KoInlineNote *note2)
 {
     return (note1->getPosInDocument() < note2->getPosInDocument());
@@ -76,7 +78,7 @@ bool KoTextLayoutEndNotesArea::layout(FrameIterator *cursor)
 
     KoInlineTextObjectManager *manager = KoTextDocument(documentLayout()->document()).inlineTextObjectManager();
     QList<KoInlineNote *> list = QList<KoInlineNote *>(manager->endNotes());
-    qSort(list.begin(), list.end(), beforeThan); //making a list of endnotes in the order they appear
+    std::sort(list.begin(), list.end(), beforeThan); //making a list of endnotes in the order they appear
     while (cursor->endNoteIndex < list.length())
     {
         KoInlineNote *note = list[cursor->endNoteIndex];

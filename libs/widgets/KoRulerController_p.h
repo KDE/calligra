@@ -39,6 +39,8 @@
 
 #include <KoRuler.h>
 
+#include <algorithm>
+
 static int compareTabs(KoText::Tab &tab1, KoText::Tab &tab2)
 {
     return tab1.position < tab2.position;
@@ -164,7 +166,7 @@ public:
 
         QTextBlockFormat bf;
         QVector<KoText::Tab> sortedList = tabList;
-        qSort(sortedList.begin(), sortedList.end(), compareTabs);
+        std::sort(sortedList.begin(), sortedList.end(), compareTabs);
         QList<QVariant> list;
         foreach(const KoText::Tab & tab, sortedList) {
             QVariant v;

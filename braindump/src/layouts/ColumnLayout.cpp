@@ -28,6 +28,8 @@
 
 #include <Utils.h>
 
+#include <algorithm>
+
 ColumnLayout::ColumnLayout() : Layout("columnlayout"), m_isUpdating(false)
 {
 }
@@ -92,7 +94,7 @@ void ColumnLayout::relayout()
         qDebug() << _shape << _shape->absolutePosition(KoFlake::TopLeftCorner).y() << " " << _shape->position().y();
     }
     qDebug() << "</moh>";
-    qSort(m_shapes.begin(), m_shapes.end(), shapeIsLessThan);
+    std:sort(m_shapes.begin(), m_shapes.end(), shapeIsLessThan);
     // Update position
     qreal y = 0;
     qDebug() << "<Updating>";

@@ -169,8 +169,8 @@ bool KPrPageLayout::operator<( const KPrPageLayout & other ) const
     if ( m_placeholders.size() == other.m_placeholders.size() ) {
         QList<KPrPlaceholder *> placeholders( m_placeholders );
         QList<KPrPlaceholder *> otherPlaceholders( other.m_placeholders );
-        qSort( placeholders.begin(), placeholders.end(), comparePlaceholder );
-        qSort( otherPlaceholders.begin(), otherPlaceholders.end(), comparePlaceholder );
+        std::sort( placeholders.begin(), placeholders.end(), comparePlaceholder );
+        std::sort( otherPlaceholders.begin(), otherPlaceholders.end(), comparePlaceholder );
 
         QList<KPrPlaceholder *>::ConstIterator it( placeholders.constBegin() );
         QList<KPrPlaceholder *>::ConstIterator otherIt( otherPlaceholders.constBegin() );
@@ -203,8 +203,8 @@ bool KPrPageLayout::compareByContent( const KPrPageLayout & pl1, const KPrPageLa
     if ( pl1.m_placeholders.size() == pl2.m_placeholders.size() ) {
         QList<KPrPlaceholder *> placeholders( pl1.m_placeholders );
         QList<KPrPlaceholder *> otherPlaceholders( pl2.m_placeholders );
-        qSort( placeholders.begin(), placeholders.end(), comparePlaceholderByPosition );
-        qSort( otherPlaceholders.begin(), otherPlaceholders.end(), comparePlaceholderByPosition );
+        std::sort( placeholders.begin(), placeholders.end(), comparePlaceholderByPosition );
+        std::sort( otherPlaceholders.begin(), otherPlaceholders.end(), comparePlaceholderByPosition );
 
         QList<KPrPlaceholder *>::iterator it( placeholders.begin() );
         QList<KPrPlaceholder *>::iterator otherIt( otherPlaceholders.begin() );

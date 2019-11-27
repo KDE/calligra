@@ -39,6 +39,8 @@
 #include <KoSectionEnd.h>
 #include <KoShapeController.h>
 
+#include <algorithm>
+
 bool DeleteCommand::SectionDeleteInfo::operator<(const DeleteCommand::SectionDeleteInfo &other) const
 {
     // At first we remove sections that lays deeper in tree
@@ -374,7 +376,7 @@ void DeleteCommand::finalizeSectionHandling(QTextCursor *cur, DeleteVisitor &v)
     }
 
     // Now lets deal with KoSectionModel
-    qSort(m_sectionsToRemove.begin(), m_sectionsToRemove.end());
+    std::sort(m_sectionsToRemove.begin(), m_sectionsToRemove.end());
     deleteSectionsFromModel();
 }
 

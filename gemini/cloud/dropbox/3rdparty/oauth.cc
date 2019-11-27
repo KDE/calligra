@@ -27,6 +27,8 @@
 #include <QStringList>
 #include <QDebug>
 
+#include <algorithm>
+
 OAuth::OAuth():
     m_consumer_key("7y6cr1w19khjkft"),
     m_consumer_secret("jyxb5gu2dp7npz6")
@@ -128,7 +130,7 @@ QString OAuth::oauth_signature(QString method,QUrl *url,QString oAuthHeader)
         parameters[i] = parameter;
     }
 
-    qSort(parameters);
+    std::sort(parameters.begin(), parameters.end());
 
     QString parametersString;
     QPair<QString,QString> parameter;

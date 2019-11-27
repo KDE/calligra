@@ -26,11 +26,13 @@
 
 #include <klocalizedstring.h>
 
+#include <algorithm>
+
 // static
 KoShapeGroupCommand * KoShapeGroupCommand::createCommand(KoShapeGroup *container, const QList<KoShape *> &shapes, KUndo2Command *parent)
 {
     QList<KoShape*> orderedShapes(shapes);
-    qSort(orderedShapes.begin(), orderedShapes.end(), KoShape::compareShapeZIndex);
+    std::sort(orderedShapes.begin(), orderedShapes.end(), KoShape::compareShapeZIndex);
     if (!orderedShapes.isEmpty()) {
         KoShape * top = orderedShapes.last();
         container->setParent(top->parent());
@@ -120,7 +122,7 @@ void KoShapeGroupCommand::redo()
     int zIndex=0;
     QList<KoShape*> shapes(d->container->shapes());
     if (!shapes.isEmpty()) {
-        qSort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
+        std::sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
         zIndex = shapes.last()->zIndex();
     }
 

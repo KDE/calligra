@@ -59,6 +59,8 @@
 #include <QApplication>
 #include <QClipboard>
 
+#include <algorithm>
+
 enum ButtonIds
 {
     Button_Raise,
@@ -319,7 +321,7 @@ void KoPADocumentStructureDocker::addLayer()
             layer->setName(name);
             QList<KoShape*> layers(canvas->koPAView()->activePage()->shapes());
             if (!layers.isEmpty()) {
-                qSort(layers.begin(), layers.end(), KoShape::compareShapeZIndex);
+                std::sort(layers.begin(), layers.end(), KoShape::compareShapeZIndex);
                 layer->setZIndex(layers.last()->zIndex() + 1);
             }
             KUndo2Command *cmd = new KoShapeCreateCommand(m_doc, layer, 0);

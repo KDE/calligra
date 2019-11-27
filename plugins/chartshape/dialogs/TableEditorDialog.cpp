@@ -35,6 +35,9 @@
 #include "ChartTableView.h"
 #include "ChartDebug.h"
 
+//Other
+#include <algorithm>
+
 
 using namespace KoChart;
 
@@ -287,7 +290,7 @@ void TableEditorDialog::deleteSelectedRowsOrColumns( Qt::Orientation orientation
 
     // Use qGreater<int>() as comparator to remove rows in reversed order
     // to not change the indexes of the selected rows
-    qSort( rowsToBeRemoved.begin(), rowsToBeRemoved.end(), qGreater<int>() );
+    std::sort( rowsToBeRemoved.begin(), rowsToBeRemoved.end(), qGreater<int>() );
 
     foreach( int row, rowsToBeRemoved ) {
         Q_ASSERT( row >= 0 );

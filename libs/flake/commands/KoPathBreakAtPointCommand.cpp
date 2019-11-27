@@ -23,6 +23,8 @@
 #include "KoPathPoint.h"
 #include <klocalizedstring.h>
 
+#include <algorithm>
+
 /*
  * The algorithm to break a multiple open or closed subpaths is:
  * Subpath is closed
@@ -36,7 +38,7 @@ KoPathBreakAtPointCommand::KoPathBreakAtPointCommand(const QList<KoPathPointData
         , m_deletePoints(true)
 {
     QList<KoPathPointData> sortedPointDataList(pointDataList);
-    qSort(sortedPointDataList);
+    std::sort(sortedPointDataList.begin(), sortedPointDataList.end());
     setText(kundo2_i18n("Break subpath at points"));
 
     QList<KoPathPointData>::const_iterator it(sortedPointDataList.constBegin());
