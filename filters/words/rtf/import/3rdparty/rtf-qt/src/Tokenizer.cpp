@@ -58,6 +58,12 @@ namespace RtfReader
         } else if ( token->name == "\\" ) {
             token->type = Plain;
             token->name = "\\";
+        } else if ( token->name == "{" ) {
+            token->type = Plain;
+            token->name = "{";
+        } else if ( token->name == "}" ) {
+            token->type = Plain;
+            token->name = "}";
         } else if ( token->name == "*" ) {
           // don't need anything else here
         } else {
