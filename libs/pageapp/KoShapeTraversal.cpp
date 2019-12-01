@@ -24,6 +24,8 @@
 #include <KoShape.h>
 #include <KoShapeContainer.h>
 
+#include <algorithm>
+
 KoShape * KoShapeTraversal::nextShape( const KoShape * current )
 {
     return nextShapeStep( current, 0 );
@@ -82,7 +84,7 @@ KoShape * KoShapeTraversal::nextShapeStep( const KoShape * current, const KoShap
 
     if ( parent ) {
         const QList<KoShape*> shapes = parent->shapes();
-        QList<KoShape*>::const_iterator it( qFind( shapes, current ) );
+        QList<KoShape*>::const_iterator it( std::find( shapes.begin(), shapes.end(), current ) );
         Q_ASSERT( it != shapes.end() );
 
         if ( it == shapes.end() ) {
@@ -128,7 +130,7 @@ KoShape * KoShapeTraversal::previousShapeStep( const KoShape * current, const Ko
     if ( parent ) {
         if ( previous == 0 ) {
             const QList<KoShape*> shapes = parent->shapes();
-            QList<KoShape*>::const_iterator it( qFind( shapes, current ) );
+            QList<KoShape*>::const_iterator it( std::find( shapes.begin(), shapes.end(), current ) );
             Q_ASSERT( it != shapes.end() );
 
             if ( it == shapes.end() ) {
