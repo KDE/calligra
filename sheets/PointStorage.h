@@ -173,7 +173,7 @@ public:
             return defaultVal;
         const QVector<int>::const_iterator cstart(m_cols.begin() + m_rows.value(row - 1));
         const QVector<int>::const_iterator cend((row < m_rows.count()) ? (m_cols.begin() + m_rows.value(row)) : m_cols.end());
-        const QVector<int>::const_iterator cit = qBinaryFind(cstart, cend, col);
+        const QVector<int>::const_iterator cit = std::lower_bound(cstart, cend, col);
         // is the col not present?
         if (cit == cend)
             return defaultVal;
@@ -193,7 +193,7 @@ public:
         const int rowStart = (row - 1 < m_rows.count()) ? m_rows.value(row - 1) : m_data.count();
         const int rowLength = (row < m_rows.count()) ? m_rows.value(row) - rowStart : -1;
         const QVector<int> cols = m_cols.mid(rowStart, rowLength);
-        QVector<int>::const_iterator cit = qBinaryFind(cols, col);
+        QVector<int>::const_iterator cit = std::lower_bound(cols.begin(), cols.end(), col);
         // column's missing?
         if (cit == cols.constEnd())
             return defaultVal;
@@ -422,7 +422,7 @@ public:
                     const int srcRow = row + rect.height();
                     const QVector<int>::const_iterator cstart2((srcRow - 1 < m_rows.count()) ? m_cols.begin() + m_rows.value(srcRow - 1) : m_cols.end());
                     const QVector<int>::const_iterator cend2((srcRow < m_rows.count()) ? (m_cols.begin() + m_rows.value(srcRow)) : m_cols.end());
-                    const QVector<int>::const_iterator cit2 = qBinaryFind(cstart2, cend2, column);
+                    const QVector<int>::const_iterator cit2 = std::lower_bound(cstart2, cend2, column);
                     // column's missing?
                     if (cit2 == cend2) {
                         m_cols.remove(rowStart + col);
@@ -459,7 +459,7 @@ public:
                     const QVector<int>::const_iterator cend(((row < m_rows.count())) ? (m_cols.begin() + m_rows.value(row)) : m_cols.end());
                     const QVector<int>::const_iterator cit = qUpperBound(cstart, cend, cols2.value(col));
                     // Destination column:
-                    const QVector<int>::const_iterator dstcit = qBinaryFind(cols.begin(), cols.end(), column);
+                    const QVector<int>::const_iterator dstcit = std::lower_bound(cols.begin(), cols.end(), column);
                     if (dstcit != cols.end()) { // destination column exists
                         // replace the existing destination value
                         const int dstCol = (dstcit - cols.constBegin());
