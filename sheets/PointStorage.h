@@ -27,6 +27,8 @@
 #include "Region.h"
 #include "calligra_sheets_limits.h"
 
+#include <algorithm>
+
 // #define KSPREAD_POINT_STORAGE_HASH
 
 namespace Calligra
@@ -125,7 +127,7 @@ public:
         else {
             const QVector<int>::const_iterator cstart(m_cols.begin() + m_rows.value(row - 1));
             const QVector<int>::const_iterator cend((row < m_rows.count()) ? (m_cols.begin() + m_rows.value(row)) : m_cols.end());
-            const QVector<int>::const_iterator cit = qLowerBound(cstart, cend, col);
+            const QVector<int>::const_iterator cit = std::lower_bound(cstart, cend, col);
             // column's missing?
             if (cit == cend || *cit != col) {
                 // determine the index where the data and column has to be inserted
@@ -521,7 +523,7 @@ public:
                         const int row2 = row + rect.height();
                         const QVector<int>::const_iterator cstart2(m_cols.begin() + m_rows.value(row2 - 1));
                         const QVector<int>::const_iterator cend2((row2 < m_rows.count()) ? (m_cols.begin() + m_rows.value(row2)) : m_cols.end());
-                        const QVector<int>::const_iterator cit2 = qLowerBound(cstart2, cend2, cols.value(col));
+                        const QVector<int>::const_iterator cit2 = std::lower_bound(cstart2, cend2, cols.value(col));
                         // column's missing?
                         if (cit2 == cend2 || *cit2 != cols.value(col)) {
                             // determine the index where the data and column has to be inserted
@@ -716,7 +718,7 @@ public:
         Q_ASSERT(1 <= row && row <= KS_rowMax);
         const QVector<int>::const_iterator cstart((row - 1 < m_rows.count()) ? m_cols.begin() + m_rows.value(row - 1) : m_cols.end());
         const QVector<int>::const_iterator cend((row < m_rows.count()) ? (m_cols.begin() + m_rows.value(row)) : m_cols.end());
-        const QVector<int>::const_iterator cit = qLowerBound(cstart, cend, col);
+        const QVector<int>::const_iterator cit = std::lower_bound(cstart, cend, col);
         if (cit == cstart) {
             if (newCol)
                 *newCol = 0;

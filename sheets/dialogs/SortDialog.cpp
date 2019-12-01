@@ -225,14 +225,14 @@ void SortDialog::Private::insertIndex(int index, Qt::Orientation orientation) co
 {
     if (orientation == Qt::Vertical) /* data grouped in columns; criteria/header per row */ {
         Q_ASSERT(1 <= index && index <= KS_colMax);
-        QList<int>::Iterator it = qLowerBound(rows.begin(), rows.end(), index);
+        QList<int>::Iterator it = std::lower_bound(rows.begin(), rows.end(), index);
         if (*it == index) {
             return;
         }
         rows.insert(it, index);
     } else /* data grouped in rows; criteria/header per column */ {
         Q_ASSERT(1 <= index && index <= KS_rowMax);
-        QList<int>::Iterator it = qLowerBound(columns.begin(), columns.end(), index);
+        QList<int>::Iterator it = std::lower_bound(columns.begin(), columns.end(), index);
         if (*it == index) {
             return;
         }
