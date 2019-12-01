@@ -288,9 +288,9 @@ void TableEditorDialog::deleteSelectedRowsOrColumns( Qt::Orientation orientation
             rowsToBeRemoved.append( row );
     }
 
-    // Use qGreater<int>() as comparator to remove rows in reversed order
+    // Use std::greater<int>() as comparator to remove rows in reversed order
     // to not change the indexes of the selected rows
-    std::sort( rowsToBeRemoved.begin(), rowsToBeRemoved.end(), qGreater<int>() );
+    std::sort( rowsToBeRemoved.begin(), rowsToBeRemoved.end(), std::greater<int>() );
 
     foreach( int row, rowsToBeRemoved ) {
         Q_ASSERT( row >= 0 );
