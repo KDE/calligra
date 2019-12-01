@@ -457,7 +457,7 @@ public:
                     // find the insertion position
                     const QVector<int>::const_iterator cstart((row - 1 < m_rows.count()) ? m_cols.begin() + m_rows.value(row - 1) : m_cols.end());
                     const QVector<int>::const_iterator cend(((row < m_rows.count())) ? (m_cols.begin() + m_rows.value(row)) : m_cols.end());
-                    const QVector<int>::const_iterator cit = qUpperBound(cstart, cend, cols2.value(col));
+                    const QVector<int>::const_iterator cit = std::upper_bound(cstart, cend, cols2.value(col));
                     // Destination column:
                     const QVector<int>::const_iterator dstcit = std::lower_bound(cols.begin(), cols.end(), column);
                     if (dstcit != cols.end()) { // destination column exists
@@ -568,7 +568,7 @@ public:
             if (index == -1)   // not found
                 *newRow = 0;
             else
-                *newRow = qUpperBound(m_rows, index) - m_rows.begin();
+                *newRow = std::upper_bound(m_rows.begin(), m_rows.end(), index) - m_rows.begin();
         }
         return m_data.value(index);
     }
@@ -603,7 +603,7 @@ public:
             if (index == -1)   // not found
                 *newRow = 0;
             else
-                *newRow = qUpperBound(m_rows, index) - m_rows.begin();
+                *newRow = std::upper_bound(m_rows.begin(), m_rows.end(), index) - m_rows.begin();
         }
         return m_data.value(index);
     }
@@ -652,7 +652,7 @@ public:
             if (index == -1)   // not found
                 *newRow = 0;
             else
-                *newRow = qUpperBound(m_rows, index) - m_rows.begin();
+                *newRow = std::upper_bound(m_rows.begin(), m_rows.end(), index) - m_rows.begin();
         }
         return m_data.value(index);
     }
@@ -673,7 +673,7 @@ public:
         }
         const QVector<int>::const_iterator cstart(m_cols.begin() + m_rows.value(row - 1));
         const QVector<int>::const_iterator cend((row < m_rows.count()) ? (m_cols.begin() + m_rows.value(row)) : m_cols.end());
-        const QVector<int>::const_iterator cit = qUpperBound(cstart, cend, col);
+        const QVector<int>::const_iterator cit = std::upper_bound(cstart, cend, col);
         if (cit == cend || *cit <= col) {
             if (newCol)
                 *newCol = 0;
@@ -703,7 +703,7 @@ public:
             if (index == -1)   // not found
                 *newRow = 0;
             else
-                *newRow = qUpperBound(m_rows, index) - m_rows.begin();
+                *newRow = std::upper_bound(m_rows.begin(), m_rows.end(), index) - m_rows.begin();
         }
         return m_data.value(index);
     }
@@ -788,7 +788,7 @@ public:
      * \see data()
      */
     int row(int index) const {
-        return qUpperBound(m_rows, index) - m_rows.begin();
+        return std::upper_bound(m_rows.begin(), m_rows.end(), index) - m_rows.begin();
     }
 
     /**

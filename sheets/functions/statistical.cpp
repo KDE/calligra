@@ -1300,7 +1300,7 @@ Value func_frequency(valVector args, ValueCalc*, FuncExtra*)
     for (uint v = 0; v < bins.count(); ++v) {
         if (!bins.element(v).isNumber())
             continue;
-        it = qUpperBound(begin, data.constEnd(), bins.element(v).asFloat());
+        it = std::upper_bound(begin, data.constEnd(), bins.element(v).asFloat());
         // exact match?
         if (*it == numToDouble(bins.element(v).asFloat()))
             ++it;

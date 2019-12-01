@@ -51,7 +51,7 @@ public:
     {}
     Map* map;
     RTree<SharedSubStyle> tree;
-    QMap<int, bool> usedColumns; // FIXME Stefan: Use QList and qUpperBound() for insertion.
+    QMap<int, bool> usedColumns; // FIXME Stefan: Use QList and std::upper_bound() for insertion.
     QMap<int, bool> usedRows;
     QRegion usedArea;
     QHash<Style::Key, QList<SharedSubStyle> > subStyles;
