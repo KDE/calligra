@@ -22,7 +22,6 @@
 #ifndef SCRIPTING_TOOL_H
 #define SCRIPTING_TOOL_H
 
-#include <QSignalMapper>
 #include <QAction>
 
 #include <kdebug.h>
@@ -65,13 +64,11 @@ public:
         KoCanvasBase* c = v ? v->canvasBase() : 0;
         m_toolproxy = c ? c->toolProxy() : 0;
 
-        m_signalMapper = new QSignalMapper(this);
         QHash<QString, QAction*> actionhash = actions();
         for (QHash<QString, QAction*>::const_iterator it = actionhash.constBegin(); it != actionhash.constEnd(); ++it) {
-            connect(it.value(), SIGNAL(triggered()), m_signalMapper, SLOT(map()));
-            m_signalMapper->setMapping(it.value() , it.key());
+            QString key = it.key();
+            connect(it.value(), &QAction::triggered, this, [this, key] { actionTriggered(key); });
         }
-        connect(m_signalMapper, SIGNAL(mapped(QString)), this, SIGNAL(actionTriggered(QString)));
 
         connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)), this, SIGNAL(changedTool()));
     }
@@ -155,7 +152,6 @@ Q_SIGNALS:
 private:
     Module* m_module;
     KoToolProxy* m_toolproxy;
-    QSignalMapper* m_signalMapper;
 };
 
 }

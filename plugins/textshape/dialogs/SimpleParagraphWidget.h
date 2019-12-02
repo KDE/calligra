@@ -39,7 +39,6 @@ class StylesModel;
 class DockerStylesComboModel;
 class StylesDelegate;
 
-class QSignalMapper;
 namespace Lists {class ListStyleItem;};
 
 class SimpleParagraphWidget : public QWidget

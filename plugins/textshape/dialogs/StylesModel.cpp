@@ -28,7 +28,6 @@
 #include <QImage>
 #include <QList>
 #include <QSharedPointer>
-#include <QSignalMapper>
 #include <QCollator>
 
 #include <klocalizedstring.h>
@@ -41,7 +40,6 @@ StylesModel::StylesModel(KoStyleManager *manager, AbstractStylesModel::Type mode
       m_styleManager(0),
       m_currentParagraphStyle(0),
       m_defaultCharacterStyle(0),
-      m_styleMapper(new QSignalMapper(this)),
       m_provideStyleNone(false)
 {
     m_modelType = modelType;
@@ -55,8 +53,6 @@ StylesModel::StylesModel(KoStyleManager *manager, AbstractStylesModel::Type mode
 
         m_provideStyleNone = true;
     }
-
-    connect(m_styleMapper, SIGNAL(mapped(int)), this, SLOT(updateName(int)));
 }
 
 StylesModel::~StylesModel()
@@ -321,9 +317,9 @@ void StylesModel::addParagraphStyle(KoParagraphStyle *style)
         ++index;
     }
     beginInsertRows(QModelIndex(), index, index);
-    m_styleList.insert(begin, style->styleId());
-    m_styleMapper->setMapping(style, style->styleId());
-    connect(style, SIGNAL(nameChanged(QString)), m_styleMapper, SLOT(map()));
+    int styleId = style->styleId();
+    m_styleList.insert(begin, styleId);
+    connect(style, &KoParagraphStyle::nameChanged, this, [this, styleId] { updateName(styleId); });
     endInsertRows();
 }
 
@@ -346,9 +342,9 @@ void StylesModel::updateParagraphStyles()
 
     foreach(KoParagraphStyle *style, styles) {
         if (style != m_styleManager->defaultParagraphStyle()) { //The default character style is not user selectable. It only provides individual property defaults and is not a style per say.
-            m_styleList.append(style->styleId());
-            m_styleMapper->setMapping(style, style->styleId());
-            connect(style, SIGNAL(nameChanged(QString)), m_styleMapper, SLOT(map()));
+            int styleId = style->styleId();
+            m_styleList.append(styleId);
+            connect(style, &KoParagraphStyle::nameChanged, this, [this, styleId] { updateName(styleId); });
         }
     }
 
@@ -382,8 +378,8 @@ void StylesModel::addCharacterStyle(KoCharacterStyle *style)
     beginInsertRows(QModelIndex(), index, index);
     m_styleList.insert(index, style->styleId());
     endInsertRows();
-    m_styleMapper->setMapping(style, style->styleId());
-    connect(style, SIGNAL(nameChanged(QString)), m_styleMapper, SLOT(map()));
+    int styleId = style->styleId();
+    connect(style, &KoParagraphStyle::nameChanged, this, [this, styleId] (const QString &) { updateName(styleId); });
 }
 
 bool sortCharacterStyleByName(KoCharacterStyle *style1, KoCharacterStyle *style2)
@@ -409,9 +405,9 @@ void StylesModel::updateCharacterStyles()
 
     foreach(KoCharacterStyle *style, styles) {
         if (style != m_styleManager->defaultCharacterStyle()) { //The default character style is not user selectable. It only provides individual property defaults and is not a style per say.
-            m_styleList.append(style->styleId());
-            m_styleMapper->setMapping(style, style->styleId());
-            connect(style, SIGNAL(nameChanged(QString)), m_styleMapper, SLOT(map()));
+            int styleId = style->styleId();
+            m_styleList.append(styleId);
+            connect(style, &KoParagraphStyle::nameChanged, this, [this, styleId] { updateName(styleId); });
         }
     }
 
@@ -423,8 +419,7 @@ void StylesModel::removeParagraphStyle(KoParagraphStyle *style)
 {
     int row = m_styleList.indexOf(style->styleId());
     beginRemoveRows(QModelIndex(), row, row);
-    m_styleMapper->removeMappings(style);
-    disconnect(style, SIGNAL(nameChanged(QString)), m_styleMapper, SLOT(map()));
+    disconnect(style, &KoParagraphStyle::nameChanged, this, nullptr);
     m_styleList.removeAt(row);
     endRemoveRows();
 }
@@ -434,8 +429,7 @@ void StylesModel::removeCharacterStyle(KoCharacterStyle *style)
 {
     int row = m_styleList.indexOf(style->styleId());
     beginRemoveRows(QModelIndex(), row, row);
-    m_styleMapper->removeMappings(style);
-    disconnect(style, SIGNAL(nameChanged(QString)), m_styleMapper, SLOT(map()));
+    disconnect(style, &KoParagraphStyle::nameChanged, this, nullptr);
     m_styleList.removeAt(row);
     endRemoveRows();
 }

@@ -26,7 +26,11 @@
 class KoFormulaShape;
 class FormulaEditor;
 class FormulaCommand;
-class QSignalMapper;
+
+struct TemplateAction {
+    QAction *action;
+    QString data;
+};
 
 /**
  * @short The flake tool for a formula
@@ -122,7 +126,7 @@ private:
 
     QList<FormulaEditor*> m_cursorList;
 
-    QSignalMapper* m_signalMapper;
+    std::vector<TemplateAction> m_templateActions;
 };
 
 #endif

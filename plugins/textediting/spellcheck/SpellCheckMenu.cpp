@@ -27,7 +27,6 @@
 
 #include <QMenu>
 #include <QAction>
-#include <QSignalMapper>
 
 SpellCheckMenu::SpellCheckMenu(const Sonnet::Speller &speller, SpellCheck *spellCheck)
     : QObject(spellCheck),
@@ -37,7 +36,6 @@ SpellCheckMenu::SpellCheckMenu(const Sonnet::Speller &speller, SpellCheck *spell
     m_ignoreWordAction(0),
     m_addToDictionaryAction(0),
     m_suggestionsMenu(0),
-    m_suggestionsSignalMapper(new QSignalMapper(this)),
     m_currentMisspelledPosition(-1)
 {
     m_suggestionsMenuAction = new KActionMenu(i18n("Spelling"), this);
@@ -54,9 +52,6 @@ SpellCheckMenu::SpellCheckMenu(const Sonnet::Speller &speller, SpellCheck *spell
 
     // m_ignoreWordAction = new QAction(i18n("Ignore Word"), this);
     // connect(m_ignoreWordAction, SIGNAL(triggered()), this, SLOT(ignoreWord()));
-
-    connect(m_suggestionsSignalMapper, SIGNAL(mapped(QString)),
-            this, SLOT(replaceWord(QString)));
 
     setEnabled(false);
     setVisible(false);
@@ -85,8 +80,7 @@ void SpellCheckMenu::createSuggestionsMenu()
         for (int i = 0; i < m_suggestions.count(); ++i) {
             const QString &suggestion = m_suggestions.at(i);
             QAction *action = new QAction(suggestion, m_suggestionsMenu);
-            connect(action, SIGNAL(triggered()), m_suggestionsSignalMapper, SLOT(map()));
-            m_suggestionsSignalMapper->setMapping(action, suggestion);
+            connect(action, &QAction::triggered, [this, suggestion] { replaceWord(suggestion); });
             m_suggestionsMenu->addAction(action);
         }
     }

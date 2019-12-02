@@ -91,7 +91,6 @@
 #include <QTabWidget>
 #include <QTextDocumentFragment>
 #include <QToolTip>
-#include <QSignalMapper>
 #include <QGraphicsObject>
 #include <QLinearGradient>
 #include <QBitmap>
@@ -184,16 +183,13 @@ TextTool::TextTool(KoCanvasBase *canvas)
     }
 
     // setup the context list.
-    QSignalMapper *signalMapper = new QSignalMapper(this);
-    connect(signalMapper, SIGNAL(mapped(QString)), this, SLOT(startTextEditingPlugin(QString)));
     QList<QAction*> list;
     list.append(this->action("format_font"));
     foreach (const QString &key, KoTextEditingRegistry::instance()->keys()) {
         KoTextEditingFactory *factory =  KoTextEditingRegistry::instance()->value(key);
         if (factory && factory->showInMenu()) {
             QAction *a = new QAction(factory->title(), this);
-            connect(a, SIGNAL(triggered()), signalMapper, SLOT(map()));
-            signalMapper->setMapping(a, factory->id());
+            connect(a, &QAction::triggered, [this, factory] { startTextEditingPlugin(factory->id()); });
             list.append(a);
             addAction(QString("apply_%1").arg(factory->id()), a);
         }

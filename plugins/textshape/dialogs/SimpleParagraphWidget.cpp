@@ -62,7 +62,6 @@
 #include <QFlags>
 #include <QMenu>
 #include <QWidgetAction>
-#include <QSignalMapper>
 
 #include <QDebug>
 

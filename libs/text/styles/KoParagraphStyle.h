@@ -721,7 +721,6 @@ public:
 
 
 Q_SIGNALS:
-    void nameChanged(const QString &newName);
     void styleApplied(const KoParagraphStyle*) const;
 
 private:

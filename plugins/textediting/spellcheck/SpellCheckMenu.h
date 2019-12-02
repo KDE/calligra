@@ -30,7 +30,6 @@ class KActionMenu;
 class QAction;
 class QAction;
 class QMenu;
-class QSignalMapper;
 class SpellCheck;
 
 class SpellCheckMenu : public QObject
@@ -63,7 +62,6 @@ private:
     QAction *m_addToDictionaryAction;
     QMenu *m_suggestionsMenu;
     int m_lengthMisspelled;
-    QSignalMapper *m_suggestionsSignalMapper;
     int m_currentMisspelledPosition;
     QString m_currentMisspelled;
     QStringList m_suggestions;

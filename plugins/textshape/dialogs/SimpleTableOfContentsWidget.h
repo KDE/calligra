@@ -30,7 +30,6 @@ class ReferencesTool;
 class KoStyleManager;
 class KoTableOfContentsGeneratorInfo;
 class TableOfContentsPreview;
-class QSignalMapper;
 class TableOfContentsTemplate;
 
 class SimpleTableOfContentsWidget : public QWidget
@@ -62,7 +61,6 @@ private:
     QList<TableOfContentsPreview *> m_previewGenerator;
     ItemChooserAction *m_chooser;
     ReferencesTool *m_referenceTool;
-    QSignalMapper *m_signalMapper;
     TableOfContentsTemplate *m_templateGenerator;
 };
 

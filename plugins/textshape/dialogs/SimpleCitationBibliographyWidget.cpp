@@ -28,13 +28,11 @@
 #include <QDebug>
 
 #include <QWidget>
-#include <QSignalMapper>
 
 SimpleCitationBibliographyWidget::SimpleCitationBibliographyWidget(ReferencesTool *tool, QWidget *parent)
         : QWidget(parent),
           m_blockSignals(false),
-          m_referenceTool(tool),
-          m_signalMapper(0)
+          m_referenceTool(tool)
 {
     widget.setupUi(this);
     Q_ASSERT(tool);
@@ -66,18 +64,10 @@ void SimpleCitationBibliographyWidget::setStyleManager(KoStyleManager *sm)
 void SimpleCitationBibliographyWidget::prepareTemplateMenu()
 {
     m_previewGenerator.clear();
-    if (m_signalMapper) {
-        delete m_signalMapper;
-        m_signalMapper = 0;
-    }
     qDeleteAll(m_templateList.begin(), m_templateList.end());
     m_templateList.clear();
 
-    m_signalMapper = new QSignalMapper();
-
     m_templateList = m_templateGenerator->templates();
-
-    connect(m_signalMapper, SIGNAL(mapped(int)), this, SLOT(pixmapReady(int)));
 
     m_chooser = widget.addBibliography->addItemChooser(1);
 
@@ -87,8 +77,7 @@ void SimpleCitationBibliographyWidget::prepareTemplateMenu()
         preview->setStyleManager(KoTextDocument(m_referenceTool->editor()->document()).styleManager());
         preview->setPreviewSize(QSize(200,120));
         preview->updatePreview(info);
-        connect(preview, SIGNAL(pixmapGenerated()), m_signalMapper, SLOT(map()));
-        m_signalMapper->setMapping(preview, index);
+        connect(preview, &BibliographyPreview::pixmapGenerated, [this, index] { pixmapReady(index); });
         m_previewGenerator.append(preview);
         ++index;
 
@@ -118,7 +107,7 @@ void SimpleCitationBibliographyWidget::pixmapReady(int templateId)
 {
     // +1 to the templateId is because formattingButton does not allow id = 0
     widget.addBibliography->addItem(m_chooser, m_previewGenerator.at(templateId)->previewPixmap(), templateId + 1);
-    disconnect(m_previewGenerator.at(templateId), SIGNAL(pixmapGenerated()), m_signalMapper, SLOT(map()));
+    disconnect(m_previewGenerator.at(templateId), &BibliographyPreview::pixmapGenerated, this, nullptr);
     m_previewGenerator.at(templateId)->deleteLater();
 }
 

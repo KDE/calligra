@@ -38,7 +38,6 @@
 #include <QAction>
 #include <QPainter>
 #include <QFile>
-#include <QSignalMapper>
 #include <QFileDialog>
 
 #include <KoShapeSavingContext.h>
@@ -54,13 +53,16 @@
 #include "FormulaRenderer.h"
 #include <QClipboard>
 
+// this adds const to non-const objects (like std::as_const)
+template <typename T> Q_DECL_CONSTEXPR typename std::add_const<T>::type &koAsConst(T &t) noexcept { return t; }
+// prevent rvalue arguments:
+template <typename T> void koAsConst(const T &&) = delete;
 
 
 KoFormulaTool::KoFormulaTool( KoCanvasBase* canvas ) : KoToolBase( canvas ),
                                                        m_formulaShape( 0 ),
                                                        m_formulaEditor( 0 )
 {
-    m_signalMapper = new QSignalMapper(this);
     setupActions();
     setTextMode(true);
 }
@@ -114,23 +116,25 @@ void KoFormulaTool::activate(ToolActivation toolActivation, const QSet<KoShape*>
         m_formulaEditor = new FormulaEditor( m_formulaShape->formulaData());
     }
     connect(m_formulaShape->formulaData(), SIGNAL(dataChanged(FormulaCommand*,bool)), this, SLOT(updateCursor(FormulaCommand*,bool)));
-    connect(m_signalMapper, SIGNAL(mapped(QString)), this, SLOT(insert(QString)));
+    for (const TemplateAction &templateAction : koAsConst(m_templateActions)) {
+        connect(templateAction.action, &QAction::triggered, this, [this, templateAction] { insert(templateAction.data); });
+    }
     //Only for debugging:
     connect(action("write_elementTree"),SIGNAL(triggered(bool)), m_formulaShape->formulaData(), SLOT(writeElementTree()));
 }
 
 void KoFormulaTool::deactivate()
 {
+    for (const TemplateAction &templateAction : koAsConst(m_templateActions)) {
+        disconnect(templateAction.action, &QAction::triggered, this, nullptr);
+    }
     disconnect(m_formulaShape->formulaData(),0,this,0);
-    disconnect(m_signalMapper,0,this,0);
     if (canvas()) {
         m_cursorList.append(m_formulaEditor);
         debugFormula << "Appending cursor";
     }
     if (m_cursorList.count() > 20) { // don't let it grow indefinitely
-        //TODO: is this save?
-        delete m_cursorList[0];
-        m_cursorList.removeAt(0);
+        delete m_cursorList.takeAt(0);
     }
     m_formulaShape = 0;
 }
@@ -481,12 +485,11 @@ void KoFormulaTool::setupActions()
 void KoFormulaTool::addTemplateAction(const QString &caption, const QString &name, const QString &data,
                                       const char *iconName)
 {
-    QAction * action;
-    action = new QAction( caption, this );
-    m_signalMapper->setMapping(action, data);
-    addAction( name , action );
+    QAction *action = new QAction( caption, this );
+    addAction(name , action);
     action->setIcon(QIcon::fromTheme(QLatin1String(iconName)));
-    connect( action, SIGNAL(triggered()), m_signalMapper, SLOT(map()));
+    m_templateActions.push_back(TemplateAction { action, data });
+    // the connection takes place when this KoToolBase is activated
 }
 
 

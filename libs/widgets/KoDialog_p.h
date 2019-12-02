@@ -22,7 +22,6 @@
 
 #include "KoDialog.h"
 #include <QPointer>
-#include <QSignalMapper>
 #include <QSize>
 #include <QHash>
 
@@ -76,7 +75,6 @@ protected:
 
     QDialogButtonBox *mButtonBox;
     QHash<int, QPushButton *> mButtonList;
-    QSignalMapper mButtonSignalMapper;
 
 protected Q_SLOTS:
     void queuedLayoutUpdate();
