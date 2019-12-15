@@ -330,7 +330,7 @@ if (GHNS)
     find_package(NewStuff)
     set_package_properties(Attica PROPERTIES
         DESCRIPTION "Attica is used for Get Hot New Stuff."
-        URL "https://projects.kde.org/projects/kdesupport/attica"
+        URL "https://commits.kde.org/attica"
         TYPE OPTIONAL
     )
 
