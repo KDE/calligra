@@ -23,9 +23,8 @@
 namespace RtfReader
 {
     ColorTableDestination::ColorTableDestination( Reader *reader, AbstractRtfOutput *output, const QString &name ) :
-      Destination( reader, output, name )
+      Destination( reader, output, name ), m_currentColor(Qt::black), m_colorSet(false)
     {
-	m_currentColor = Qt::black; // this is our default color
     }
 
     ColorTableDestination::~ColorTableDestination()
@@ -33,6 +32,7 @@ namespace RtfReader
 
     void ColorTableDestination::handleControlWord( const QByteArray &controlWord, bool hasValue, const int value )
     {
+	bool handled = true;
 	if ( controlWord == "red" ) {
 	    m_currentColor.setRed( value );
 	} else if (controlWord == "green" ) {
@@ -40,14 +40,18 @@ namespace RtfReader
 	} else if (controlWord == "blue" ) {
 	    m_currentColor.setBlue( value );
 	} else {
+	    handled = false;
             qCDebug(lcRtf) << "unexpected control word in colortbl:" << controlWord;
+	}
+	if ( handled ) {
+	    m_colorSet = true;
 	}
     }
 
     void ColorTableDestination::handlePlainText( const QByteArray &plainText )
     {
 	if ( plainText == ";" ) {
-	    m_output->appendToColourTable( m_currentColor );
+	    m_output->appendToColourTable( m_colorSet ?  m_currentColor : QColor() );
 	    resetCurrentColor();
 	} else {
             qCDebug(lcRtf) << "unexpected text in ColorTableDestination:" << plainText;
@@ -57,5 +61,6 @@ namespace RtfReader
     void ColorTableDestination::resetCurrentColor()
     {
 	m_currentColor = Qt::black;
+	m_colorSet = false;
     }
 }

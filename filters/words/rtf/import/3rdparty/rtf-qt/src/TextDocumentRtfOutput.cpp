@@ -161,22 +161,22 @@ namespace RtfReader
     {
 	QColor colour = m_colourTable.value( colourIndex );
 	if ( colour.isValid() ) {
-	  m_textCharFormatStack.top().setForeground( colour );
-	  m_cursor->setCharFormat( m_textCharFormatStack.top() );
+	    m_textCharFormatStack.top().setForeground( colour );
 	} else {
-          qCDebug(lcRtf) << "invalid colour at index:" << colourIndex;
+	    m_textCharFormatStack.top().clearForeground();
 	}
+	m_cursor->setCharFormat( m_textCharFormatStack.top() );
     }
 
     void TextDocumentRtfOutput::setHighlightColour( const int colourIndex )
     {
 	QColor colour = m_colourTable.value( colourIndex );
 	if ( colour.isValid() ) {
-	  m_textCharFormatStack.top().setBackground( colour );
-	  m_cursor->setCharFormat( m_textCharFormatStack.top() );
+	    m_textCharFormatStack.top().setBackground( colour );
 	} else {
-          qCDebug(lcRtf) << "invalid colour at index:" << colourIndex;
+	    m_textCharFormatStack.top().clearBackground();
 	}
+	m_cursor->setCharFormat( m_textCharFormatStack.top() );
     }
 
     void TextDocumentRtfOutput::setParagraphPatternBackgroundColour( const int colourIndex )
@@ -184,10 +184,10 @@ namespace RtfReader
 	QColor colour = m_colourTable.value( colourIndex );
 	if ( colour.isValid() ) {
 	    m_paragraphFormat.setBackground( colour );
-	    m_cursor->setBlockFormat( m_paragraphFormat );
 	} else {
-            qCDebug(lcRtf) << "invalid colour at index:" << colourIndex;
+	    m_paragraphFormat.clearBackground();
 	}
+	m_cursor->setBlockFormat( m_paragraphFormat );
     }
 
     void TextDocumentRtfOutput::setFont( const int fontIndex )

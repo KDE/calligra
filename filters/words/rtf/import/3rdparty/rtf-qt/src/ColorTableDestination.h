@@ -42,6 +42,7 @@ namespace RtfReader
 
 	// The colour that is currently being built
 	QColor m_currentColor;
+	bool m_colorSet;
       };
 }
 
