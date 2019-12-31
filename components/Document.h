@@ -50,6 +50,7 @@ class Document : public QObject
     Q_PROPERTY(Calligra::Components::DocumentType::Type documentType READ documentType NOTIFY documentTypeChanged)
     Q_PROPERTY(Calligra::Components::DocumentStatus::Status status READ status NOTIFY statusChanged)
     Q_PROPERTY(QSize documentSize READ documentSize NOTIFY documentSizeChanged)
+    Q_PROPERTY(bool readOnly READ readOnly WRITE setReadOnly NOTIFY readOnlyChanged)
 
     /**
      * \property currentIndex
@@ -94,6 +95,9 @@ public:
 
     QUrl source() const;
     void setSource(const QUrl& value);
+
+    bool readOnly() const;
+    void setReadOnly(bool readOnly);
 
     DocumentType::Type documentType() const;
     DocumentStatus::Status status() const;
@@ -143,6 +147,7 @@ Q_SIGNALS:
     void sourceChanged();
     void statusChanged();
     void documentChanged();
+    void readOnlyChanged();
     void documentSizeChanged();
     void documentTypeChanged();
     void textEditorChanged();

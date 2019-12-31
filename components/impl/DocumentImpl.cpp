@@ -43,6 +43,7 @@ public:
         , canvasController{nullptr}
         , zoomController{nullptr}
         , document{nullptr}
+        , readOnly{false}
     { }
 
     DocumentType::Type type;
@@ -52,6 +53,7 @@ public:
     KoZoomController* zoomController;
     QSize documentSize;
     KoDocument* document;
+    bool readOnly;
 };
 
 DocumentImpl::DocumentImpl(QObject* parent)
@@ -120,12 +122,19 @@ void DocumentImpl::setFinder(KoFindBase* newFinder)
     d->finder = newFinder;
 }
 
+void DocumentImpl::setReadOnly(bool readOnly)
+{
+    d->readOnly = readOnly;
+}
+
 void DocumentImpl::createAndSetCanvasController(KoCanvasBase* canvas)
 {
     auto controller = new ComponentsKoCanvasController{new KActionCollection{this}};
     d->canvasController = controller;
     controller->setCanvas(canvas);
-    KoToolManager::instance()->addController(controller);
+    if (!d->readOnly) {
+        KoToolManager::instance()->addController(controller);
+    }
     connect(controller, &ComponentsKoCanvasController::documentSizeChanged, this, &DocumentImpl::setDocumentSize);
 }
 

@@ -43,7 +43,7 @@ using namespace Calligra::Components;
 class Document::Private
 {
 public:
-    Private(Document* qq) : q{qq}, impl{nullptr}, status{DocumentStatus::Unloaded}
+    Private(Document* qq) : q{qq}, impl{nullptr}, status{DocumentStatus::Unloaded}, readOnly{false}
     { }
 
     void updateImpl();
@@ -53,6 +53,7 @@ public:
     QUrl source;
     DocumentImpl* impl;
     DocumentStatus::Status status;
+    bool readOnly;
 };
 
 Document::Document(QObject* parent)
@@ -84,6 +85,7 @@ void Document::setSource(const QUrl& value)
         emit documentTypeChanged();
 
         if(d->impl) {
+            d->impl->setReadOnly(d->readOnly);
             if(d->impl->load(d->source)) {
                 d->status = DocumentStatus::Loaded;
                 connect(d->impl->canvasController()->canvas()->shapeManager(), SIGNAL(selectionChanged()), SIGNAL(textEditorChanged()));
@@ -96,6 +98,20 @@ void Document::setSource(const QUrl& value)
 
         emit indexCountChanged();
         emit statusChanged();
+    }
+}
+
+bool Document::readOnly() const
+{
+    return d->readOnly;
+}
+
+void Document::setReadOnly(bool readOnly)
+{
+    if (d->readOnly != readOnly) {
+        d->readOnly = readOnly;
+
+        emit readOnlyChanged();
     }
 }
 

@@ -64,6 +64,8 @@ public:
     KoDocument* koDocument() const;
     virtual QObject* part() const = 0;
 
+    void setReadOnly(bool readOnly);
+
 Q_SIGNALS:
     void documentSizeChanged();
     void currentIndexChanged();
