@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2007 Martin Pfeiffer <hubipete@gmx.net>
+   Copyright (C) 2020 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,6 +26,7 @@
 
 class QComboBox;
 class QDoubleSpinBox;
+class QTimeEdit;
 class QPushButton;
 class KPrPageEffect;
 class KPrPageEffectFactory;
@@ -57,6 +59,7 @@ protected:
 protected Q_SLOTS:
     void slotSubTypeChanged( int index );
     void slotDurationChanged( double duration );
+    void slotTransitionChanged();
 
     void cleanup( QObject* object );
 
@@ -68,6 +71,8 @@ private:
     QComboBox* m_subTypeCombo;
     QPushButton *m_applyToAllSlidesButton;
     QDoubleSpinBox* m_durationSpinBox;
+    QComboBox *m_transitionType;
+    QDoubleSpinBox* m_transitionTime;
     KPrViewModePreviewPageEffect *m_previewMode;
 };
 

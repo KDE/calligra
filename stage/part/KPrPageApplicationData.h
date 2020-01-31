@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2020 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,7 +22,15 @@
 
 #include "stage_export.h"
 
+#include "KPrPageTransition.h"
+
 #include <KoShapeApplicationData.h>
+
+#include <QDebug>
+
+class KoGenStyle;
+class KoShapeLoadingContext;
+class KoXmlElement;
 
 class KPrPageEffect;
 
@@ -41,8 +50,18 @@ public:
     */
    void setPageEffect( KPrPageEffect * effect );
 
+   /**
+    * Get the page transition
+    */
+   KPrPageTransition &pageTransition();
+   /**
+    * Set the page transition
+    */
+   void setPageTransition(const KPrPageTransition &transition);
+
 private:
    KPrPageEffect * m_pageEffect;
+   KPrPageTransition m_pageTransition;
 };
 
 #endif // KPRPAGEAPPLICATIONDATA_H

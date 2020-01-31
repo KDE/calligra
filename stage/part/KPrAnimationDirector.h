@@ -26,6 +26,8 @@
 #include <QPair>
 #include <QTimeLine>
 #include <QTransform>
+#include <QTimer>
+
 #include <KoZoomHandler.h>
 #include "KPrShapeAnimations.h"
 
@@ -41,6 +43,7 @@ class KPrPageEffectRunner;
 class KPrPage;
 class KPrShapeAnimation;
 
+
 class KPrAnimationDirector : public QObject
 {
     Q_OBJECT
@@ -53,6 +56,13 @@ public:
         NextStep,
         NextPage,
         LastPage
+    };
+
+    enum State
+    {
+        PresentationState,
+        EntryEffectState,
+        EntryAnimationState
     };
 
     KPrAnimationDirector( KoPAView * view, KoPACanvas * canvas, const QList<KoPAPageBase*> & pages, KoPAPageBase* currentPage );
@@ -97,6 +107,8 @@ public:
 
     void deactivate();
 
+    KoPAPageBase *page(int index) const;
+
 protected:
     // set the page to be shon and update the UI
     void updateActivePage( KoPAPageBase * page );
@@ -135,9 +147,16 @@ protected:
 
     // helper method for freeing the resources of the animations
     void clearAnimations();
-
     // check if there is a set animation in m_animations
     bool hasAnimation() const;
+    bool animationRunning() const;
+    bool moreAnimationSteps() const;
+
+    bool hasPageEffect() const;
+    bool pageEffectRunning() const;
+
+    bool hasAutoSlideTransition() const;
+    void startAutoSlideTransition();
 
     void updatePageAnimation();
     void updateStepAnimation();
@@ -147,6 +166,9 @@ protected Q_SLOTS:
     void updateZoom( const QSize & size );
     // acts on the time line event
     void animate();
+
+    void nextPage();
+    void slotTimelineFinished();
 
 private:
     KoPAView * m_view;
@@ -166,6 +188,9 @@ private:
     // true when there is an animation in this step
     bool m_hasAnimation;
     KPrAnimationCache * m_animationCache;
+
+    State m_state;
+    QTimer m_autoTransitionTimer;
 };
 
 #endif /* KPRANIMATIONDIRECTOR_H */

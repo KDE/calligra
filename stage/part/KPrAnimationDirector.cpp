@@ -51,9 +51,11 @@
 #include "pageeffects/KPrPageEffectRunner.h"
 #include "pageeffects/KPrPageEffect.h"
 #include "KPrShapeAnimations.h"
+#include "KPrPageTransition.h"
 #include "StageDebug.h"
 
 #include "animations/KPrAnimationCache.h"
+
 
 KPrAnimationDirector::KPrAnimationDirector( KoPAView * view, KoPACanvas * canvas, const QList<KoPAPageBase*> & pages, KoPAPageBase* currentPage )
 : m_view( view )
@@ -64,6 +66,7 @@ KPrAnimationDirector::KPrAnimationDirector( KoPAView * view, KoPACanvas * canvas
 , m_maxShapeDuration( 0 )
 , m_hasAnimation( false )
 , m_animationCache( 0 )
+, m_state(PresentationState)
 {
     Q_ASSERT( !m_pages.empty() );
     m_animationCache = new KPrAnimationCache();
@@ -87,8 +90,16 @@ KPrAnimationDirector::KPrAnimationDirector( KoPAView * view, KoPACanvas * canvas
     m_canvas->masterShapeManager()->setPaintingStrategy( new KPrShapeManagerAnimationStrategy( m_canvas->masterShapeManager(), m_animationCache,
                                                              new KPrPageSelectStrategyActive( m_view->kopaCanvas() ) ) );
 
-    if ( hasAnimation() ) {
-        startTimeLine( m_animations.at(m_stepIndex)->totalDuration() );
+
+    m_autoTransitionTimer.setSingleShot(true);
+    connect(&m_autoTransitionTimer, SIGNAL(timeout()), this, SLOT(nextPage()));
+    connect(&m_timeLine, SIGNAL(finished()), this, SLOT(slotTimelineFinished()));
+    if (hasAutoSlideTransition()) {
+        if (hasPageEffect() || hasAnimation()) {
+            nextStep();
+        } else {
+            startAutoSlideTransition();
+        }
     }
 }
 
@@ -152,6 +163,11 @@ KoViewConverter * KPrAnimationDirector::viewConverter()
 int KPrAnimationDirector::numPages() const
 {
     return m_pages.size();
+}
+
+KoPAPageBase *KPrAnimationDirector::page(int index) const
+{
+    return m_pages.value(index);
 }
 
 int KPrAnimationDirector::currentPage() const
@@ -233,10 +249,6 @@ void KPrAnimationDirector::navigateToPage( int index )
     updateStepAnimation();
     // trigger a repaint
     m_canvas->update();
-
-    if ( hasAnimation() ) {
-        startTimeLine( m_animations.at(m_stepIndex)->totalDuration() );
-    }
 }
 
 void KPrAnimationDirector::updateActivePage( KoPAPageBase * page )
@@ -342,10 +354,6 @@ bool KPrAnimationDirector::changePage( Navigation navigation )
     // trigger a repaint
     m_canvas->update();
 
-    if ( hasAnimation() ) {
-        startTimeLine( m_animations.at(m_stepIndex)->totalDuration() );
-    }
-
     return false;
 }
 
@@ -390,6 +398,7 @@ bool KPrAnimationDirector::nextStep()
     if ( m_stepIndex < numStepsInPage() - 1 ) {
         // if there are sub steps go to the next substep
         ++m_stepIndex;
+        m_state = EntryAnimationState;
         updateStepAnimation();
         startTimeLine(m_animations.at(m_stepIndex)->totalDuration());
     }
@@ -422,6 +431,7 @@ bool KPrAnimationDirector::nextStep()
             newPainter.setRenderHint( QPainter::Antialiasing );
             paintStep( newPainter );
 
+            m_state = EntryEffectState;
             m_pageEffectRunner = new KPrPageEffectRunner( oldPage, newPage, m_canvas, effect );
             startTimeLine( effect->duration() );
         }
@@ -431,11 +441,22 @@ bool KPrAnimationDirector::nextStep()
             updateStepAnimation();
             m_canvas->update();
             if ( hasAnimation() ) {
+                m_state = EntryAnimationState;
                 startTimeLine( m_animations.at(m_stepIndex)->totalDuration() );
+            } else if (hasAutoSlideTransition()) {
+                m_state = PresentationState;
+                startAutoSlideTransition();
+            } else {
+                m_state = PresentationState;
             }
         }
     }
     return false;
+}
+
+void KPrAnimationDirector::nextPage()
+{
+    nextStep();
 }
 
 void KPrAnimationDirector::previousStep()
@@ -465,10 +486,38 @@ void KPrAnimationDirector::previousStep()
     finishAnimations();
 }
 
+bool KPrAnimationDirector::hasAutoSlideTransition() const
+{
+    return KPrPage::pageData( m_pages[m_pageIndex] )->pageTransition().type() == KPrPageTransition::Automatic;
+}
+
+void KPrAnimationDirector::startAutoSlideTransition()
+{
+    m_autoTransitionTimer.start(KPrPage::pageData( m_pages[m_pageIndex] )->pageTransition().milliseconds());
+}
+
+bool KPrAnimationDirector::pageEffectRunning() const
+{
+    return m_pageEffectRunner;
+}
+
+bool KPrAnimationDirector::hasPageEffect() const
+{
+    return KPrPage::pageData( m_pages[m_pageIndex] )->pageEffect() != nullptr;
+}
+
+bool KPrAnimationDirector::animationRunning() const
+{
+    return hasAnimation() && m_timeLine.state() != QTimeLine::NotRunning;
+}
 
 bool KPrAnimationDirector::hasAnimation() const
 {
     return m_animations.size() > 0;
+}
+bool KPrAnimationDirector::moreAnimationSteps() const
+{
+    return m_stepIndex < m_animations.size() - 1;
 }
 
 void KPrAnimationDirector::animate()
@@ -488,6 +537,7 @@ void KPrAnimationDirector::finishAnimations()
 {
     m_animationCache->endStep(m_stepIndex);
     m_canvas->update();
+    m_state = PresentationState;
 }
 
 void KPrAnimationDirector::startTimeLine( int duration )
@@ -502,8 +552,44 @@ void KPrAnimationDirector::startTimeLine( int duration )
     m_timeLine.start();
 }
 
+void KPrAnimationDirector::slotTimelineFinished()
+{
+    switch (m_state) {
+        case PresentationState:
+            break;
+        case EntryEffectState:
+            if (hasAutoSlideTransition()) {
+                if (hasAnimation()) {
+                    nextStep();
+                } else {
+                    m_state = PresentationState;
+                    startAutoSlideTransition();
+                }
+            } else {
+                m_state = PresentationState;
+            }
+            break;
+        case EntryAnimationState:
+            if (hasAutoSlideTransition()) {
+                if (moreAnimationSteps()) {
+                    nextStep();
+                } else if (hasAutoSlideTransition()) {
+                    m_state = PresentationState;
+                    startAutoSlideTransition();
+                } else {
+                    m_state = PresentationState;
+                }
+            } else {
+                m_state = PresentationState;
+            }
+            break;
+    }
+}
+
 void KPrAnimationDirector::deactivate()
 {
+    m_state = PresentationState;
+    m_autoTransitionTimer.stop();
     foreach (KPrAnimationStep *step, m_animations) {
         step->deactivate();
     }

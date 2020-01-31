@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2020 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -38,4 +39,14 @@ KPrPageEffect * KPrPageApplicationData::pageEffect()
 void KPrPageApplicationData::setPageEffect( KPrPageEffect * effect )
 {
     m_pageEffect = effect;
+}
+
+KPrPageTransition &KPrPageApplicationData::pageTransition()
+{
+    return m_pageTransition;
+}
+
+void KPrPageApplicationData::setPageTransition( const KPrPageTransition &pageTransition )
+{
+    m_pageTransition = pageTransition;
 }

@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2007 Martin Pfeiffer <hubipete@gmx.net>
    Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2020 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -38,9 +39,11 @@
 #include "KPrPage.h"
 #include "KPrPageApplicationData.h"
 #include "KPrViewModePreviewPageEffect.h"
+#include "KPrPageTransition.h"
 #include "pageeffects/KPrPageEffectRegistry.h"
 #include "pageeffects/KPrPageEffectFactory.h"
 #include "commands/KPrPageEffectSetCommand.h"
+#include "commands/KPrPageTransitionSetCommand.h"
 
 #include <algorithm>
 
@@ -90,6 +93,27 @@ KPrPageEffectDocker::KPrPageEffectDocker( QWidget* parent, Qt::WindowFlags flags
     connect( m_durationSpinBox, SIGNAL(valueChanged(double)),
              this, SLOT(slotDurationChanged(double)) );
 
+    m_transitionType = new QComboBox(this);
+    m_transitionType->addItem(i18n("Manual"));
+    m_transitionType->addItem(i18n("Automatic"));
+    // NOTE: Not used as the definition in odf spec does not make sence to me (danders)
+    // m_transitionType->addItem(i18n("Semi-Automatic"));
+
+    m_transitionTime = new QDoubleSpinBox( this );
+    m_transitionTime->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    
+    QLabel *label = new QLabel(this);
+    label->setText(i18n("Slide Transition:"));
+    QHBoxLayout* transitionLayout = new QHBoxLayout();
+    transitionLayout->addWidget(label);
+    transitionLayout->addWidget(m_transitionType);
+    transitionLayout->addWidget(m_transitionTime);
+
+    connect( m_transitionTime, SIGNAL(valueChanged(double)),
+             this, SLOT(slotTransitionChanged()));
+    connect( m_transitionType, SIGNAL(currentIndexChanged(int)),
+             this, SLOT(slotTransitionChanged()));
+
     m_applyToAllSlidesButton = new QPushButton(i18n("Apply To All Slides"));
 
     connect(m_applyToAllSlidesButton, SIGNAL(clicked()),
@@ -100,6 +124,7 @@ KPrPageEffectDocker::KPrPageEffectDocker( QWidget* parent, Qt::WindowFlags flags
     layout->setMargin(0);
     layout->addLayout( optionLayout);
     layout->addWidget( m_subTypeCombo );
+    layout->addLayout(transitionLayout);
     layout->addWidget(m_applyToAllSlidesButton);
 
     // The following widget activates a special feature in the
@@ -168,6 +193,13 @@ void KPrPageEffectDocker::slotActivePageChanged()
         m_durationSpinBox->blockSignals( true );
         m_durationSpinBox->setValue( duration );
         m_durationSpinBox->blockSignals( false );
+
+        m_transitionType->blockSignals(true);
+        m_transitionType->setCurrentIndex(pageData->pageTransition().type());
+        m_transitionType->blockSignals(false);
+        m_transitionTime->blockSignals(true);
+        m_transitionTime->setValue(pageData->pageTransition().duration());
+        m_transitionTime->blockSignals(false);
     }
     else {
         // disable the page effect docker as effects are only there on a normal page
@@ -224,6 +256,14 @@ void KPrPageEffectDocker::slotDurationChanged( double duration )
     }
 }
 
+void KPrPageEffectDocker::slotTransitionChanged()
+{
+    KPrPageTransition transition;
+    transition.setType(static_cast<KPrPageTransition::Type>(m_transitionType->currentIndex()));
+    transition.setDuration(m_transitionTime->value());
+    m_view->kopaCanvas()->addCommand(new KPrPageTransitionSetCommand(m_view->activePage(), transition));
+}
+
 void KPrPageEffectDocker::slotApplyToAllSlides()
 {
     m_view->kopaCanvas()->addCommand(KPrPageEffectDocker::applyToAllSlidesCommand());
@@ -238,15 +278,25 @@ KUndo2Command * KPrPageEffectDocker::applyToAllSlidesCommand()
     KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Apply Slide Effect to all Slides"));
     const KPrPageEffectFactory *factory = m_effectId != "" ? KPrPageEffectRegistry::instance()->value(m_effectId) : 0;
 
+    const KPrPageTransition &transition = KPrPage::pageData(m_view->activePage())->pageTransition();
     foreach (KoPAPageBase *page, m_pages) {
         if (page != m_view->activePage()) {
             if (factory) {
                 KPrPageEffect *currentPageEffect(createPageEffect(factory, m_subType, m_duration));
-                new KPrPageEffectSetCommand(page, currentPageEffect, cmd);
+                KPrPageEffect *oldPageEffect = KPrPage::pageData(page)->pageEffect();
+                if (oldPageEffect != currentPageEffect) {
+                    new KPrPageEffectSetCommand(page, currentPageEffect, cmd);
+                } else {
+                    delete currentPageEffect;
+                }
             } else {
-                KPrPageEffect *currentPageEffect = 0;
-                new KPrPageEffectSetCommand(page, currentPageEffect, cmd);
+                KPrPageEffect *oldPageEffect = KPrPage::pageData(page)->pageEffect();
+                if (oldPageEffect) {
+                    KPrPageEffect *currentPageEffect = nullptr;
+                    new KPrPageEffectSetCommand(page, currentPageEffect, cmd);
+                }
             }
+            new KPrPageTransitionSetCommand(page, transition, cmd);
         }
     }
 

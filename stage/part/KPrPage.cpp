@@ -176,6 +176,8 @@ bool KPrPage::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &contex
             }
         }
     }
+    // load page transition
+    data->pageTransition().loadOdfAttributes(element, context);
     return true;
 }
 
@@ -226,6 +228,7 @@ void KPrPage::saveOdfPageStyleData( KoGenStyle &style, KoPASavingContext &paCont
     if ( pageEffect ) {
         pageEffect->saveOdfSmilAttributes( style );
     }
+    data->pageTransition().saveOdfAttributes(style);
 }
 
 void KPrPage::loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &loadingContext )
