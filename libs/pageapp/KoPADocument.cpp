@@ -79,11 +79,16 @@ KoPADocument::KoPADocument(KoPart *part)
     d(new Private())
 {
     d->inlineTextObjectManager = resourceManager()->resource(KoText::InlineTextObjectManager).value<KoInlineTextObjectManager*>();
-    Q_ASSERT(d->inlineTextObjectManager);
+    // Do not assert, it should be possible to run wo InlineTextObjectManager
+    // This is used by unit tests, so these will fail
+    // Q_ASSERT(d->inlineTextObjectManager);
+    if (d->inlineTextObjectManager) {
+        connect(documentInfo(), SIGNAL(infoUpdated(QString,QString)),
+                d->inlineTextObjectManager, SLOT(documentInformationUpdated(QString,QString)));
+    } else {
+        warnPageApp<<"Could not find resource 'KoText::InlineTextObjectManager'";
+    }
     d->rulersVisible = false;
-    connect(documentInfo(), SIGNAL(infoUpdated(QString,QString)),
-            d->inlineTextObjectManager, SLOT(documentInformationUpdated(QString,QString)));
-
     resourceManager()->setUndoStack(undoStack());
     resourceManager()->setOdfDocument(this);
     // this is needed so the text shape have a shape controller set when loaded, it is needed for copy and paste
