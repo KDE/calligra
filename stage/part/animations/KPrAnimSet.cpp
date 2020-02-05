@@ -84,6 +84,12 @@ bool KPrAnimSet::saveAttribute(KoPASavingContext &paContext) const
 
 void KPrAnimSet::init(KPrAnimationCache *animationCache, int step)
 {
+    // HACK to avoid sequential animations to be dispayed before they are meant to on second run.
+    // This is probably due to some state in the qt classes not being properly reset,
+    // but this is most likely because we use them in a very special way.
+    if (m_begin == 0) {
+        m_begin = 1;
+    }
     m_animationCache = animationCache;
     animationCache->init(step, m_shapeAnimation->shape(), m_shapeAnimation->textBlockUserData(), "visibility", !m_visible);
     animationCache->init(step + 1, m_shapeAnimation->shape(), m_shapeAnimation->textBlockUserData(), "visibility", m_visible);

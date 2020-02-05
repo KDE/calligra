@@ -177,7 +177,7 @@ private:
     QMap<KoShape *, QMap<QString, QVariant> > m_currentShapeValues;
     QMap<QTextBlockUserData *, QMap<QString, QVariant> > m_currentTextBlockDataValues;
     int m_step;
-    bool m_next;
+    QMap<KoShape*, bool> m_next;
     QSizeF m_pageSize;
     qreal m_zoom;
 };

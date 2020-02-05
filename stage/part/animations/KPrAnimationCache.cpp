@@ -70,8 +70,9 @@ void KPrAnimationCache::setValue(int step, QTextBlockUserData *textBlockData, co
 
 QVariant KPrAnimationCache::value(KoShape *shape, const QString &id, const QVariant &defaultValue) const
 {
-    if (m_currentShapeValues.contains(shape))
+    if (m_currentShapeValues.contains(shape)) {
         return m_currentShapeValues.value(shape).value(id, defaultValue);
+    }
     return defaultValue;
 }
 
@@ -153,7 +154,7 @@ void KPrAnimationCache::init(int step, KoShape *shape, QTextBlockUserData *textB
 void KPrAnimationCache::update(KoShape *shape, QTextBlockUserData *textBlockUserData, const QString &id, const QVariant &value)
 {
     if (textBlockUserData) {
-        if (id == "transform" && !m_next) {
+        if (id == "transform" && !m_next[shape]) {
             QTransform transform = m_currentTextBlockDataValues[textBlockUserData][id].value<QTransform>();
             m_currentTextBlockDataValues[textBlockUserData][id] = transform * value.value<QTransform>();
         }
@@ -162,7 +163,7 @@ void KPrAnimationCache::update(KoShape *shape, QTextBlockUserData *textBlockUser
         }
     }
     else {
-        if (id == "transform" && !m_next) {
+        if (id == "transform" && !m_next[shape]) {
             QTransform transform = m_currentShapeValues[shape][id].value<QTransform>();
             m_currentShapeValues[shape][id] = transform * value.value<QTransform>();
         }
@@ -171,7 +172,7 @@ void KPrAnimationCache::update(KoShape *shape, QTextBlockUserData *textBlockUser
         }
     }
     if (id == "transform") {
-        m_next = false;
+        m_next[shape] = false;
     }
 }
 
@@ -197,7 +198,9 @@ void KPrAnimationCache::endStep(int step)
 
 void KPrAnimationCache::next()
 {
-    m_next = true;
+    for (KoShape *s : m_next.keys()) {
+        m_next[s] = true;
+    }
 }
 
 
@@ -230,6 +233,6 @@ void KPrAnimationCache::clear()
     m_currentTextBlockDataValues.clear();
     m_shapeValuesStack.clear();
     m_textBlockDataValuesStack.clear();
-    m_next = false;
+    m_next.clear();
     m_step = 0;
 }
