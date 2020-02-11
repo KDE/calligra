@@ -15,6 +15,7 @@
   <name xml:lang="fi">Calligra Stage</name>
   <name xml:lang="fr">Calligra Stage</name>
   <name xml:lang="gl">Calligra Stage</name>
+  <name xml:lang="ia">Calligra Stage</name>
   <name xml:lang="id">Calligra Stage</name>
   <name xml:lang="it">Calligra Stage</name>
   <name xml:lang="ko">Calligra 스테이지</name>
@@ -145,6 +146,7 @@
       <li xml:lang="fi">Helppo siirtyminen diasta toiseen esityksen aikana</li>
       <li xml:lang="fr">Passage facile d'une planche à une autre pendant une présentation</li>
       <li xml:lang="gl">Permite cambiar facilmente entre diapositivas durante as presentacións.</li>
+      <li xml:lang="ia">Facilemente commuta inter diapositivas durante un presentation</li>
       <li xml:lang="id">Secara mudah beralih antara slide selagi presentasi</li>
       <li xml:lang="it">Cambia facilmente le diapositive durante una presentazione</li>
       <li xml:lang="ko">프레젠테이션 중에 간편하게 슬라이드 전환</li>
@@ -169,6 +171,7 @@
       <li xml:lang="fi">Muistiinpanojen lisäys dioihisi</li>
       <li xml:lang="fr">Ajoutez des notes à vos planches</li>
       <li xml:lang="gl">Permite engadir notas ás presentacións.</li>
+      <li xml:lang="ia">Adde notas per tu diapositiva</li>
       <li xml:lang="id">Penambahan catatan Anda untuk slide Anda</li>
       <li xml:lang="it">Aggiungi note alle tue diapositive</li>
       <li xml:lang="ko">슬라이드에 메모 추가</li>
@@ -192,6 +195,7 @@
       <li xml:lang="fi">Useimpien ODF-siirtymien tuki</li>
       <li xml:lang="fr">Prend en charge la plupart des transitions ODF</li>
       <li xml:lang="gl">Compatíbel coa meirande parte das transicións dos ficheiros ODF.</li>
+      <li xml:lang="ia">Supporta le majoritate del transitiones de file ODF</li>
       <li xml:lang="id">Dukungan beberapa transisi file ODF</li>
       <li xml:lang="it">Supporta la maggior parte delle transizioni dei file ODF</li>
       <li xml:lang="ko">대부분의 ODF 파일 전환 지원</li>
