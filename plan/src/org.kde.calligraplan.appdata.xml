@@ -21,7 +21,7 @@
   <name xml:lang="ia">Plan</name>
   <name xml:lang="id">Plan</name>
   <name xml:lang="it">Plan</name>
-  <name xml:lang="ko">플랜</name>
+  <name xml:lang="ko">Plan</name>
   <name xml:lang="nl">Plan</name>
   <name xml:lang="pl">Plan</name>
   <name xml:lang="pt">Plan</name>
@@ -77,7 +77,7 @@
     <p xml:lang="ia">Plan es un application pro gerer projectos. Illo es destinate pro gerer projectos moderatemente grande con ressources multiple.</p>
     <p xml:lang="id">Plan adalah aplikasi pengelolaan projek. Ini dimaksudkan untuk mengelola projek yang cukup besar dengan banyak sumberdaya</p>
     <p xml:lang="it">Plan è un'applicazione di gestione progetti. È pensato per gestire progetti abbastanza grandi con risorse multiple.</p>
-    <p xml:lang="ko">플랜은 프로젝트 관리 응용 프로그램입니다. 여러 리소스를 사용하여 적당히 큰 프로젝트를 관리하기 위한 것입니다.</p>
+    <p xml:lang="ko">Plan은 프로젝트 관리 프로그램입니다. 여러 리소스를 사용하여 적당히 큰 프로젝트를 관리하기 위한 것입니다.</p>
     <p xml:lang="nl">Plan is een toepassing voor projectbeheer. Het is bedoeld voor het beheer van middelgrote projecten met meerdere hulpbronnen.</p>
     <p xml:lang="pl">Plan jest programem do zarządzania projektem. Jest przeznaczony do zarządzania umiarkowanie dużymi projektami zawierającymi wiele zasobów.</p>
     <p xml:lang="pt">O Plan é uma aplicação de gestão de projectos. Pretende ser usada para gerir projectos relativamente grandes com vários recursos.</p>
@@ -102,7 +102,7 @@
     <p xml:lang="ia">Characteristicas:</p>
     <p xml:lang="id">Fitur:</p>
     <p xml:lang="it">Funzionalità:</p>
-    <p xml:lang="ko">기능 :</p>
+    <p xml:lang="ko">기능:</p>
     <p xml:lang="nl">Mogelijkheden:</p>
     <p xml:lang="pl">Cechy:</p>
     <p xml:lang="pt">Funcionalidades:</p>
@@ -129,7 +129,7 @@
       <li xml:lang="ia">Vistas multiple: Diagrammas de Gantt, Vista de ressource, vista de contos</li>
       <li xml:lang="id">Tampilan multipel: Bagan Gant, Tampilan Sumberdaya, Tampilan Akun</li>
       <li xml:lang="it">Viste multiple: diagrammi di Gantt, vista delle risorse, vista degli account</li>
-      <li xml:lang="ko">여러 보기: Gant 차트, 리소스 보기, 계정 보기</li>
+      <li xml:lang="ko">다양한 보기: 간트 차트, 리소스 보기, 계정 보기</li>
       <li xml:lang="nl">Meerdere weergaven: Gant-kaarten, hulpbronweergave, accountweergave</li>
       <li xml:lang="pl">Wiele widoków: wykresy Ganta, widok zasobów, widok kont</li>
       <li xml:lang="pt">Diversas áreas: Diagramas de Gantt, Área de Recursos, Área de Contas</li>
@@ -152,7 +152,7 @@
       <li xml:lang="gl">Usa estruturas estándar: estrutura de división do traballo (WBS), estrutura de división dos recursos (RBS), estrutura de división dos custos (CBS).</li>
       <li xml:lang="id">Penggunaan struktur standar: Work breakdown structure (WBS), Resource breakdown structure (RBS), Cost breakdown structure (CBS)</li>
       <li xml:lang="it">Utilizza strutture standard: strutture di scomposizione del lavoro (WBS), strutture di scomposizione delle risorse (RBS), strutture di scomposizione dei costi (CBS)</li>
-      <li xml:lang="ko">표준 구조 사용 : 업무 분석 구조 (WBS), 리소스 분석 구조 (RBS), 비용 분석 구조 (CBS)</li>
+      <li xml:lang="ko">표준 구조 사용: 업무 분석 구조 (WBS), 리소스 분석 구조 (RBS), 비용 분석 구조 (CBS)</li>
       <li xml:lang="nl">Gebruikt standaard structuren: Work breakdown structure (WBS), Resource breakdown structure (RBS), Cost breakdown structure (CBS)</li>
       <li xml:lang="pl">Używa standardowych struktur: Struktura podziału pracy (WBS),  Struktura podziału zasobów (RBS), Struktura podziału kosztów (CBS)</li>
       <li xml:lang="pt">Usa estruturas padrão: estruturas de divisão de trabalho (WBS), estruturas de divisão de recursos (RBS), estruturas de divisão de custos (CBS)</li>
@@ -176,7 +176,7 @@
       <li xml:lang="ia">Nivello de detalios configurabile sur Diagramma de Gantt</li>
       <li xml:lang="id">Level detail yang dapat dikonfigurasi pada Bagan Gant</li>
       <li xml:lang="it">Livello di dettaglio configurabile per i diagrammi di Gantt</li>
-      <li xml:lang="ko">Gantt 차트의 세부 설정 가능 레벨</li>
+      <li xml:lang="ko">간트 차트의 자세한 정도 설정 가능</li>
       <li xml:lang="nl">Instelbaar detailniveau op Gant-kaart</li>
       <li xml:lang="pl">Ustawialny poziom szczegółów na wykresach Gantta</li>
       <li xml:lang="pt">Nível de detalhe configurável no Diagrama de Gantt</li>
@@ -222,7 +222,7 @@
       <li xml:lang="gl">Restricións de planificación configurábeis.</li>
       <li xml:lang="id">Kendala Penjadwalan Dapat Dikonfigurasi</li>
       <li xml:lang="it">Vincoli di pianificazione configurabili</li>
-      <li xml:lang="ko">구성 가능한 스케줄링 제약 조건</li>
+      <li xml:lang="ko">스케줄링 제약 조건 구성 가능</li>
       <li xml:lang="nl">Instelbare voorwaarden voor planning</li>
       <li xml:lang="pl">Ustawialne ograniczenia w planowaniu</li>
       <li xml:lang="pt">Restrições de Escalonamento Configuráveis</li>
