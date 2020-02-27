@@ -31,10 +31,11 @@ using namespace Calligra::Components;
 class ImageDataItem::Private
 {
 public:
-    Private()
+    Private() : imageChanged(false)
     { }
 
     QImage data;
+    bool imageChanged;
 };
 
 ImageDataItem::ImageDataItem(QQuickItem* parent)
@@ -59,6 +60,7 @@ void ImageDataItem::setData(const QImage& newValue)
         d->data = newValue;
         setImplicitWidth(d->data.width());
         setImplicitHeight(d->data.height());
+        d->imageChanged = true;
         update();
         emit dataChanged();
     }
@@ -79,9 +81,12 @@ QSGNode* ImageDataItem::updatePaintNode(QSGNode* node, QQuickItem::UpdatePaintNo
     }
     texNode->setRect(0, 0, w, h);
 
-    auto texture = window()->createTextureFromImage(d->data);
-    delete texNode->texture();
-    texNode->setTexture(texture);
+    if (!texNode->texture() || d->imageChanged) {
+        delete texNode->texture();
+        auto texture = window()->createTextureFromImage(d->data);
+        texNode->setTexture(texture);
+        d->imageChanged = false;
+    }
 
     return texNode;
 }
