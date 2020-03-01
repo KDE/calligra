@@ -248,7 +248,7 @@
       <li xml:lang="x-test">xxODT (Open Document Text) supportxx</li>
     </ul>
   </description>
-  <url type="homepage">http://www.calligra.org/words/</url>
+  <url type="homepage">https://www.calligra.org/words/</url>
   <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=calligrawords</url>
   <screenshots>
     <screenshot type="default">

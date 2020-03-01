@@ -415,7 +415,7 @@
       <li xml:lang="zh-CN">可通过工具，形状和停靠栏插件扩展功能</li>
     </ul>
   </description>
-  <url type="homepage">http://www.calligra.org/karbon/</url>
+  <url type="homepage">https://www.calligra.org/karbon/</url>
   <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=karbon</url>
   <screenshots>
     <screenshot type="default">

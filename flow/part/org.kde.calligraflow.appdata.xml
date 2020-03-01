@@ -193,11 +193,11 @@
       <li xml:lang="x-test">xxSupport for Dia stencils.xx</li>
     </ul>
   </description>
-  <url type="homepage">http://www.calligra.org/flow/</url>
+  <url type="homepage">https://www.calligra.org/flow/</url>
   <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=calligraflow</url>
   <screenshots>
     <screenshot type="default">
-      <image>http://kde.org/images/screenshots/flow.png</image>
+      <image>https://cdn.kde.org/screenshots/flow/flow.png</image>
     </screenshot>
   </screenshots>
   <project_group>KDE</project_group>
