@@ -206,9 +206,9 @@
       <li xml:lang="x-test">xxSupports most ODF file transitionsxx</li>
     </ul>
   </description>
-  <url type="homepage">http://www.calligra.org/stage/</url>
+  <url type="homepage">https://www.calligra.org/stage/</url>
   <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=calligrastage</url>
-  <url type="help">http://docs.kde.org/development/en/calligra/stage/index.html</url>
+  <url type="help">https://docs.kde.org/?application=stage</url>
   <screenshots>
     <screenshot type="default">
       <image>http://kde.org/images/screenshots/stage.png</image>
