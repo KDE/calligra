@@ -48,7 +48,7 @@
   <summary xml:lang="id">Pengeditan Diagram &amp; Flowchart</summary>
   <summary xml:lang="it">Diagrammi di flusso e modifica di diagrammi</summary>
   <summary xml:lang="ja">フローチャートおよびダイアグラム図の作成</summary>
-  <summary xml:lang="ko">순서도와 다이어그램 편집</summary>
+  <summary xml:lang="ko">순서도 &amp; 다이어그램 편집</summary>
   <summary xml:lang="nl">Bewerking van stroomdiagrammen &amp; grafieken</summary>
   <summary xml:lang="pl">Edytowanie wykresów przepływu i diagramów</summary>
   <summary xml:lang="pt">Edição de Fluxogramas &amp; Diagramas</summary>
@@ -78,7 +78,7 @@
     <p xml:lang="id">Calligra Flow adalah aplikasi diagram dan flowchart yang mudah digunakan dengan integrasi yang kuat ke aplikasi Calligra lainnya. Ini memungkinkan Anda untuk memciptakan diagram jaringan, bagan organisasi, bagan alir, dan lainnya.</p>
     <p xml:lang="it">Calligra Flow è un'applicazione di facile utilizzo per creare diagrammi di flusso e altro con una stretta integrazione con le altre applicazioni di Calligra. Ti consente di creare diagrammi di rete, organigrammi, diagrammi di flusso e altro.</p>
     <p xml:lang="ja">Calligra Flow は簡単にダイアグラムやフローチャートを作成する事ができるアプリケーションです。作成した図は他の Calligra アプリケーションでも使用する事ができます。</p>
-    <p xml:lang="ko">Calligra Flow는 쉽게 사용할 수 있는 다이어그램 작성 및 순서도 프로그램으로 다른 Calligra 프로그램과의 긴밀한 통합되어 있습니다. 네트워크 다이어그램, 조직도, 순서도 등을 만들 수 있습니다.</p>
+    <p xml:lang="ko">Calligra Flow는 다른 Calligra 응용 프로그램과의 긴밀한 통합으로 다이어그램 작성 및 플로우차트응용 프로그램을 사용하기 쉽습니다. 네트워크 다이어그램, 조직도, 순서도 등을 만들 수 있습니다.</p>
     <p xml:lang="nl">Calligra Flow is een gemakkelijk te gebruiken toepassing voor het maken van diagrammen en flowcharts met nauwe integratie met de andere toepassingen van Calligra. Het stelt u in staat om netwerkdiagrammen, organisatiediagrammen, flowcharts en meer te maken.</p>
     <p xml:lang="pl">Przepływ Calligra jest łatwym w użyciu programem do rysowania diagramów i wykresów przepływu, będącym ściśle powiązanym z innymi programami Calligra. Umożliwia tworzenie diagramów sieciowych, wykresów organizacyjnych, wykresów przepływów i innych.</p>
     <p xml:lang="pt">O Calligra Flow é uma aplicação de diagramas e fluxogramas com uma integração forte com as outras aplicações do Calligra. Permite-lhe criar diagramas de rede, organigramas, fluxogramas, entre outros.</p>
@@ -104,7 +104,7 @@
     <p xml:lang="id">Fitur:</p>
     <p xml:lang="it">Funzionalità:</p>
     <p xml:lang="ja">機能:</p>
-    <p xml:lang="ko">기능:</p>
+    <p xml:lang="ko">기능 :</p>
     <p xml:lang="nl">Mogelijkheden:</p>
     <p xml:lang="pl">Cechy:</p>
     <p xml:lang="pt">Funcionalidades:</p>
@@ -182,7 +182,7 @@
       <li xml:lang="id">Dukungan untuk stensilan Dia</li>
       <li xml:lang="it">Supporta le forme di Dia.</li>
       <li xml:lang="ja">Dia ステンシルのサポート</li>
-      <li xml:lang="ko">Dia 스텐실 지원.</li>
+      <li xml:lang="ko">도표 스텐실 지원.</li>
       <li xml:lang="nl">Ondersteuning voor Dia-stencils.</li>
       <li xml:lang="pl">Obsługa wzorców Dia.</li>
       <li xml:lang="pt">Suporte para formas do Dia.</li>
