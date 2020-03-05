@@ -494,10 +494,18 @@ void SvgOutputDev::drawString(GfxState * state, const GooString * s)
     *d->body << "</text>" << endl;
 }
 
-void SvgOutputDev::drawImage(GfxState *state, Object */*ref*/, Stream *str,
+#ifdef HAVE_POPPLER_PRE_0_82
+void SvgOutputDev::drawImage(GfxState *state, Object *ref, Stream *str,
                              int width, int height, GfxImageColorMap *colorMap,
-                             bool /*interpolate*/, int *maskColors, bool /*inlineImg*/)
+                             bool interpolate, int *maskColors, bool inlineImg)
+#else
+void SvgOutputDev::drawImage(GfxState *state, Object *ref, Stream *str,
+                             int width, int height, GfxImageColorMap *colorMap,
+                             bool interpolate, const int *maskColors, bool inlineImg)
+#endif
 {
+    Q_UNUSED(interpolate)
+    Q_UNUSED(inlineImg)
     ImageStream * imgStr = new ImageStream(str, width, colorMap->getNumPixelComps(), colorMap->getBits());
     imgStr->reset();
 
