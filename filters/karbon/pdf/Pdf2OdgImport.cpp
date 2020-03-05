@@ -78,7 +78,11 @@ KoFilter::ConversionStatus Pdf2OdgImport::convert(const QByteArray& from, const 
     Q_ASSERT(m_document->pages().isEmpty());
 
     // read config file
+#ifdef HAVE_POPPLER_PRE_0_83
     globalParams = new GlobalParams();
+#else
+    globalParams = std::unique_ptr<GlobalParams>(new GlobalParams);
+#endif
     if (! globalParams)
         return KoFilter::NotImplemented;
 
@@ -90,7 +94,12 @@ KoFilter::ConversionStatus Pdf2OdgImport::convert(const QByteArray& from, const 
     }
 
     if (! pdfDoc->isOk()) {
+#ifdef HAVE_POPPLER_PRE_0_83
         delete globalParams;
+        globalParams = nullptr;
+#else
+        globalParams.reset();
+#endif
         delete pdfDoc;
         return KoFilter::StupidError;
     }
@@ -125,8 +134,12 @@ KoFilter::ConversionStatus Pdf2OdgImport::convert(const QByteArray& from, const 
         delete dev;
     }
     delete pdfDoc;
+#ifdef HAVE_POPPLER_PRE_0_83
     delete globalParams;
-    globalParams = 0;
+    globalParams = nullptr;
+#else
+    globalParams.reset();
+#endif
     return status;
 }
 
