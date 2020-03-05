@@ -172,7 +172,11 @@ void SvgOutputDev::eoFill(GfxState *state)
     *d->body << "/>" << endl;
 }
 
+#ifdef HAVE_POPPLER_PRE_0_83
 QString SvgOutputDev::convertPath(GfxPath *path)
+#else
+QString SvgOutputDev::convertPath(const GfxPath *path)
+#endif
 {
     if (! path)
         return QString();

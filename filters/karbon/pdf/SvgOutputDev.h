@@ -89,7 +89,11 @@ public:
     /// Dumps content to svg file
     void dumpContent();
 private:
+#ifdef HAVE_POPPLER_PRE_0_83
     QString convertPath(GfxPath *path);
+#else
+    QString convertPath(const GfxPath *path);
+#endif
     QString convertMatrix(const QMatrix &matrix);
     QString convertMatrix(const double * matrix);
     QString printFill();
