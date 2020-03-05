@@ -74,7 +74,7 @@ KoFilter::ConversionStatus ImageExport::convert(const QByteArray& from, const QB
 
     KarbonDocument *doc = dynamic_cast<KarbonDocument*>(m_chain->inputDocument());
     if (!doc) {
-        KoFilter::InternalError;
+        return KoFilter::InternalError;
     }
 
     KoPAPageBase *page = doc->pages().first();
