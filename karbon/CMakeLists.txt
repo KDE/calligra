@@ -42,7 +42,7 @@ install(TARGETS karbonpart  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/parts)
 ########### next target ###############
 
 if(NOT RELEASE_BUILD)
-    add_definitions(-DMAINTANER_WANTED_SPLASH)
+    #add_definitions(-DMAINTANER_WANTED_SPLASH)
 endif()
 
 set(karbon_KDEINIT_SRCS main.cpp )
