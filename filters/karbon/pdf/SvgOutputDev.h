@@ -66,10 +66,15 @@ public:
 #endif
 
     // images
+#ifdef HAVE_POPPLER_PRE_0_82
     void drawImage(GfxState *state, Object *ref, Stream *str,
                            int width, int height, GfxImageColorMap *colorMap,
                            bool interpolate, int *maskColors, bool inlineImg) override;
-
+#else
+    void drawImage(GfxState *state, Object *ref, Stream *str,
+                           int width, int height, GfxImageColorMap *colorMap,
+                           bool interpolate, const int *maskColors, bool inlineImg) override;
+#endif
     // styles
     void updateAll(GfxState *state) override;
     void updateFillColor(GfxState *state) override;

@@ -6,6 +6,10 @@ if(Poppler_VERSION VERSION_LESS "0.72.0")
     add_definitions("-DHAVE_POPPLER_PRE_0_72")
 endif()
 
+if(Poppler_VERSION VERSION_LESS "0.82.0")
+    add_definitions("-DHAVE_POPPLER_PRE_0_82")
+endif()
+
 if(Poppler_VERSION VERSION_LESS "0.83.0")
     add_definitions("-DHAVE_POPPLER_PRE_0_83")
 endif()
