@@ -6,6 +6,10 @@ if(Poppler_VERSION VERSION_LESS "0.72.0")
     add_definitions("-DHAVE_POPPLER_PRE_0_72")
 endif()
 
+if(Poppler_VERSION VERSION_LESS "0.83.0")
+    add_definitions("-DHAVE_POPPLER_PRE_0_83")
+endif()
+
 set(pdf2svg_PART_SRCS PdfImportDebug.cpp PdfImport.cpp SvgOutputDev.cpp )
 
 add_library(calligra_filter_pdf2svg MODULE ${pdf2svg_PART_SRCS})
