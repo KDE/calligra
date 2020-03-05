@@ -39,6 +39,10 @@
 #include <PDFDoc.h>
 #include <GlobalParams.h>
 
+#ifndef HAVE_POPPLER_PRE_0_83
+#include <memory>
+#endif
+
 K_PLUGIN_FACTORY_WITH_JSON(PdfImportFactory, "calligra_filter_pdf2svg.json",
                            registerPlugin<PdfImport>();)
 
@@ -61,7 +65,11 @@ KoFilter::ConversionStatus PdfImport::convert(const QByteArray& from, const QByt
     }
 
     // read config file
+#ifdef HAVE_POPPLER_PRE_0_83
     globalParams = new GlobalParams();
+#else
+    globalParams = std::unique_ptr<GlobalParams>(new GlobalParams);
+#endif
     if (! globalParams)
         return KoFilter::NotImplemented;
 
