@@ -89,7 +89,12 @@ KoFilter::ConversionStatus Pdf2OdgImport::convert(const QByteArray& from, const 
     GooString * fname = new GooString(QFile::encodeName(m_chain->inputFile()).data());
     PDFDoc * pdfDoc = new PDFDoc(fname, 0, 0, 0);
     if (! pdfDoc) {
+#ifdef HAVE_POPPLER_PRE_0_83
         delete globalParams;
+        globalParams = nullptr;
+#else
+        globalParams.reset();
+#endif
         return KoFilter::StupidError;
     }
 
