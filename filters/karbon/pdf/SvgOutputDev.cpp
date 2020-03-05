@@ -184,7 +184,11 @@ QString SvgOutputDev::convertPath(const GfxPath *path)
     QString output;
 
     for (int i = 0; i < path->getNumSubpaths(); ++i) {
+#ifdef HAVE_POPPLER_PRE_0_83
         GfxSubpath * subpath = path->getSubpath(i);
+#else
+        const GfxSubpath * subpath = path->getSubpath(i);
+#endif
         if (subpath->getNumPoints() > 0) {
             output += QString("M%1 %2").arg(subpath->getX(0)).arg(subpath->getY(0));
             int j = 1;
@@ -421,7 +425,11 @@ void SvgOutputDev::drawString(GfxState * state, const GooString * s)
 #endif
     int len = s->getLength();
     CharCode code;
+#ifdef HAVE_POPPLER_PRE_0_82
     Unicode *u = nullptr;
+#else
+    const Unicode *u = nullptr;
+#endif
     int uLen;
     double dx, dy, originX, originY;
     while (len > 0) {
