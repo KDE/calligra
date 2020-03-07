@@ -279,9 +279,9 @@
     <p xml:lang="x-test">xxCalligra uses the Open Document Format (ODF) as its main file format which makes it compatible with most other office applications including OpenOffice.org, LibreOffice and Microsoft Office. It can also import the native file formats of Microsoft Office with great accuracy, in many cases the best you can find.xx</p>
     <p xml:lang="zh-CN">Calligra使用开放文档格式(ODF)作为其主要文件格式，与大多数其他办公应用程序兼容，包括OpenOffice.org，LibreOffice和Microsoft Office。 它还可以非常准确地导入Microsoft Office的原生格式，在许多情况下，这是您可以找到最好的方式。</p>
   </description>
-  <url type="homepage">http://www.calligra.org/gemini/</url>
+  <url type="homepage">https://www.calligra.org/gemini/</url>
   <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=calligragemini</url>
-  <url type="help">http://userbase.kde.org/Gemini/Manual</url>
+  <!-- <url type="help">https://userbase.kde.org/Gemini/Manual</url> -->
   <screenshots>
     <screenshot type="default">
       <caption>A presentation loaded directly from DropBox, in Edit mode</caption>
