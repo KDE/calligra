@@ -1011,6 +1011,8 @@ QString KoDocument::checkImageMimeTypes(const QString &mimeType, const QUrl &url
     imageMimeTypes << "image/jpeg"
                    << "image/x-psd" << "image/photoshop" << "image/x-photoshop" << "image/x-vnd.adobe.photoshop" << "image/vnd.adobe.photoshop"
                    << "image/x-portable-pixmap" << "image/x-portable-graymap" << "image/x-portable-bitmap"
+                   << "application/illustrator"
+                   << "application/photoshop"
                    << "application/pdf"
                    << "image/x-exr"
                    << "image/x-xcf"
