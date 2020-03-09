@@ -17,18 +17,20 @@
  */
 
 import QtQuick 2.0
-import QtQuick.Controls 1.4 as QtControls
+import QtQuick.Controls 2.1 as QQC2
+import org.kde.kirigami 2.4 as Kirigami
+import QtQuick.Layouts 1.2
 import org.calligra 1.0
 
 Item {
     id: base;
     enabled: (visible && opacity > 0.0);
 
-    property alias title: dialogTitle.text;
-    property alias message: dialogText.text;
+    property alias title: dialog.title;
+    property alias message: dialogLabel.text;
     property variant buttons: null;
+    property alias textAlign: dialogLabel.horizontalAlignment;
     property alias modalBackgroundColor: modalFill.color;
-    property alias textAlign: dialogText.horizontalAlignment;
     property int progress: -1;
 
     property int defaultButton: 0;
@@ -50,6 +52,14 @@ Item {
         }
         base.opacity = 0;
         base.currentButton = base.defaultButton; 
+    }
+
+    onEnabledChanged: {
+        if (base.enabled) {
+            dialog.open();
+        } else {
+            dialog.close();
+        }
     }
 
     anchors.fill: parent;
@@ -106,148 +116,26 @@ Item {
         }
     }
 
-    Rectangle {
-        id: dialogBackground;
+    QQC2.Dialog {
+        id: dialog
+        modal: true
+        focus: true
+        x: (base.width - width) / 2
+        y: base.height / 2 - height
+        width: Math.min(base.width - Kirigami.Units.gridUnit * 4, Kirigami.Units.gridUnit * 20)
+        height: 200
 
-        anchors.centerIn: parent;
-
-        width: parent.width / 2;
-        height: Constants.GridHeight * 2 + dialogText.height + 32;
-
-        radius: 8;
-
-        gradient: Gradient {
-            GradientStop { position: 0; color: Settings.theme.color("components/dialog/background/start"); }
-            GradientStop { position: 0.4; color: Settings.theme.color("components/dialog/background/stop"); }
-        }
-
-        Rectangle {
-            id: dialogHeader;
-
-            anchors {
-                top: parent.top;
-                left: parent.left;
-                right: parent.right;
+        contentItem: ColumnLayout {
+            QQC2.Label {
+                id: dialogLabel
+                width: dialog.availableWidth
+                wrapMode: Label.Wrap
             }
 
-            height: Constants.GridHeight;
-            color: Settings.theme.color("components/dialog/header");
-            radius: 8;
-
-            Rectangle {
-                anchors {
-                    left: parent.left;
-                    right: parent.right;
-                    bottom: parent.bottom;
-                }
-                height: 8;
-                color: Settings.theme.color("components/dialog/header");
+            QQC2.BusyIndicator {
+                Layout.alignment: Qt.AlignHCenter
+                running: base.enabled
             }
-
-            Label {
-                id: dialogTitle;
-                anchors.centerIn: parent;
-                color: Settings.theme.color("components/dialog/headerText");
-                font: Settings.theme.font("title");
-            }
-
-            Shadow { anchors { left: parent.left; right: parent.right; top: parent.bottom; } }
-        }
-
-        Label {
-            id: dialogText;
-
-            anchors {
-                left: parent.left;
-                leftMargin: 8;
-                right: parent.right;
-                rightMargin: 8;
-            }
-
-            y: dialogHeader.height + 16;
-            elide: Text.ElideNone;
-            wrapMode: Text.Wrap;
-        }
-
-        Rectangle {
-            id: progressBase;
-            opacity: (progress > 0 && progressBar.width > 0) ? 1 : 0;
-            Behavior on opacity { NumberAnimation { duration: Constants.AnimationDuration; } }
-            anchors {
-                top: dialogText.bottom;
-                horizontalCenter: parent.horizontalCenter;
-                margins: 8;
-            }
-            height: Constants.LargeFontSize + 4;
-            width: 208;
-            radius: height / 2;
-            border {
-                width: 1;
-                color: Settings.theme.color("components/dialog/progress/border");
-            }
-            color: Settings.theme.color("components/dialog/progress/background");
-            Rectangle {
-                id: progressBar;
-                anchors {
-                    top: parent.top;
-                    left: parent.left;
-                    margins: 4;
-                }
-                radius: height / 2;
-                width: progress >= 0 ? (progress * 2) + 1: 100;
-                height: parent.height - 7;
-                Behavior on width { PropertyAnimation { duration: 100; } }
-                color: Settings.theme.color("components/dialog/progress/bar");
-            }
-        }
-        QtControls.BusyIndicator {
-            id: busy;
-            anchors.fill: progressBase;
-            opacity: (progress > -1 && progressBase.opacity === 0) ? 1 : 0;
-            running: opacity === 1;
-            Behavior on opacity { PropertyAnimation { duration: 100; } }
-        }
-
-        Row {
-            id: buttonRow;
-
-            anchors {
-                left: parent.left;
-                leftMargin: 8;
-                right: parent.right;
-                bottom: parent.bottom;
-                bottomMargin: 8;
-            }
-
-            height: Constants.GridHeight;
-            spacing: 8;
-
-            Repeater {
-                model: base.buttons;
-
-                delegate: Button {
-                    width: (parent.width / base.buttons.length) - 8;
-                    height: parent.height;
-                    radius: 8;
-
-                    text: modelData;
-                    color: Settings.theme.color("components/dialog/button");
-                    textColor: Settings.theme.color("components/dialog/buttonText");
-
-                    onClicked: { base.buttonClicked(index); base.hide(); }
-                    hasFocus: index === base.currentButton;
-                }
-            }
-        }
-    }
-
-    Shadow {
-        anchors {
-            left: dialogBackground.left;
-            leftMargin: dialogBackground.radius;
-            right: dialogBackground.right;
-            rightMargin: dialogBackground.radius;
-            top: dialogBackground.bottom;
         }
     }
 }
