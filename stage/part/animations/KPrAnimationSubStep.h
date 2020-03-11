@@ -32,7 +32,10 @@ class STAGE_EXPORT KPrAnimationSubStep : public QParallelAnimationGroup, KPrAnim
 public:
     KPrAnimationSubStep();
     ~KPrAnimationSubStep() override;
-    void init(KPrAnimationCache *animationCache, int step);
+
+    // Do not mark this 'override', sub-classing will fail
+    virtual void init(KPrAnimationCache *animationCache, int step); //NOLINT
+
     virtual bool saveOdf(KoPASavingContext & paContext, bool startStep) const;
     virtual void deactivate();
 };

@@ -70,7 +70,8 @@ public:
     KoShape *shape() const;
     QTextBlockUserData *textBlockUserData() const;
 
-    void init(KPrAnimationCache *animationCache, int step);
+    // Do not mark this 'override', sub-classing will fail
+    virtual void init(KPrAnimationCache *animationCache, int step); //NOLINT
 
     virtual void deactivate();
 
