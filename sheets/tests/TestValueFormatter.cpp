@@ -221,11 +221,11 @@ void TestValueFormatter::testCreateNumberFormat_data()
 
     // scientific
     Format::Type scient = Format::Scientific;
-    QTest::newRow("scientific: precision=0") << 123.0 << 0 << scient << def << "" << "" << false << "1E+2";
-    QTest::newRow("scientific: precision=1") << 123.0 << 1 << scient << def << "" << "" << false << "1.2E+2";
-    QTest::newRow("scientific: precision=2") << 123.0 << 2 << scient << def << "" << "" << false << "1.23E+2";
-    QTest::newRow("scientific: precision=3") << 123.0 << 3 << scient << def << "" << "" << false << "1.230E+2";
-    QTest::newRow("scientific: precision=-1") << 123.0 << -1 << scient << def << "" << "" << false << "1.23E+2";
+    QTest::newRow("scientific: precision=0") << 123.0 << 0 << scient << def << "" << "" << false << "1E+02";
+    QTest::newRow("scientific: precision=1") << 123.0 << 1 << scient << def << "" << "" << false << "1.2E+02";
+    QTest::newRow("scientific: precision=2") << 123.0 << 2 << scient << def << "" << "" << false << "1.23E+02";
+    QTest::newRow("scientific: precision=3") << 123.0 << 3 << scient << def << "" << "" << false << "1.230E+02";
+    QTest::newRow("scientific: precision=-1") << 123.0 << -1 << scient << def << "" << "" << false << "1.23E+02";
 
     QTest::newRow("scientific: format=0.E+0")    << 123.0 << 0 << scient << def << "" << "0.E+0" << false << "1E+2";
     QTest::newRow("scientific: format=0.0E+0")   << 123.0 << 0 << scient << def << "" << "0.0E+0" << false << "1.2E+2";
