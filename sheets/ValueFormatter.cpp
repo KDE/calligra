@@ -255,6 +255,7 @@ QString ValueFormatter::createNumberFormat(Number value, int precision,
     QString prefix, postfix;
     QString formatString(_formatString);
 
+    int numExpDigits = 0; // QString::number() will be used
     // try to split formatstring into prefix, formatstring and postfix.
     if (!formatString.isEmpty() ) {
         QRegExp re( QLatin1String( "^([^0#.,E+]*)([0#.,E+]*)(.*)$" ) );
@@ -274,6 +275,9 @@ QString ValueFormatter::createNumberFormat(Number value, int precision,
             precision = len - formatString.indexOf(QLatin1Char('.')) - 1;
         } else if (precision != -1) {
             precision = 0;
+        }
+        if (formatString.contains("E+")) {
+            numExpDigits = formatString.length() - formatString.indexOf("E+") - 2;
         }
     }
 
@@ -337,28 +341,25 @@ QString ValueFormatter::createNumberFormat(Number value, int precision,
         }
         break;
     case Format::Scientific: {
+        // TODO: port to QLocale or other (icu?) formatting
         const QString decimalSymbol = m_converter->settings()->locale()->decimalSymbol();
         localizedNumber = QString::number(val, 'E', p);
         if ((pos = localizedNumber.indexOf('.')) != -1) {
             localizedNumber.replace(pos, 1, decimalSymbol);
         }
-        // TODO: port to QLocale or other (icu?) formatting
-        int fpos = formatString.indexOf('E');
-        if (fpos > -1) {
-            // handle min-exponent-digits
-            int exp = 0;
-            for (int pos = fpos +2; pos < formatString.length() && formatString.at(pos).isDigit(); ++pos) {
-                ++exp;
-            }
-            if (exp == 0) {
-                exp = 2; // FIXME: proper default
-            }
-            for (int pos = localizedNumber.length() - 1; localizedNumber.at(pos).isDigit(); --pos) {
-                --exp;
-            }
-            int pos = localizedNumber.indexOf('E') + 2;
-            for (; exp > 0; --exp) {
-                localizedNumber.insert(pos, '0');
+        if (numExpDigits > 0) {
+            // adjust number of exponent digits
+            int firstDigit = localizedNumber.indexOf('E') + 2;
+            int digits = localizedNumber.length() - firstDigit;
+            if (digits > numExpDigits) {
+                // remove leading 0 if present
+                if (localizedNumber.at(firstDigit) == '0') {
+                    localizedNumber.remove(firstDigit, 1);
+                }
+            } else {
+                for (int i = digits; i < numExpDigits; ++i) {
+                    localizedNumber.insert(firstDigit, '0');
+                }
             }
         }
         break;
