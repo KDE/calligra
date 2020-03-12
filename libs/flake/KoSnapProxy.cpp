@@ -32,7 +32,7 @@ KoSnapProxy::KoSnapProxy(KoSnapGuide * snapGuide)
 
 QVector<QPointF> KoSnapProxy::pointsInRect(const QRectF &rect) const
 {
-    QVector<QPointF> points;
+    QVector<QPointF> result;
     QList<KoShape*> shapes = shapesInRect(rect);
     for (KoShape * shape : shapes) {
         // There exists a problem on msvc with for(each) and QVector<QPointF>
@@ -40,11 +40,11 @@ QVector<QPointF> KoSnapProxy::pointsInRect(const QRectF &rect) const
         for (int i = 0; i < points.count(); ++i) {
             const QPointF point(points[i]);
             if (rect.contains(point))
-                points.append(point);
+                result.append(point);
         }
     }
 
-    return points;
+    return result;
 }
 
 QList<KoShape*> KoSnapProxy::shapesInRect(const QRectF &rect, bool omitEditedShape) const
