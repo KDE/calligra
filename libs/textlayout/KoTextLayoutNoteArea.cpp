@@ -138,7 +138,11 @@ bool KoTextLayoutNoteArea::layout(FrameIterator *cursor)
 
     bool contNotNeeded = KoTextLayoutArea::layout(cursor);
 
-    d->labelYOffset += block.layout()->lineAt(0).ascent();
+    QTextLine blockLayoutLine = block.layout()->lineAt(0);
+
+    if (blockLayoutLine.isValid()) {
+        d->labelYOffset += blockLayoutLine.ascent();
+    }
 
     if (!contNotNeeded) {
         QString contNote = notesConfig->footnoteContinuationForward();
