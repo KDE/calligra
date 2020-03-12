@@ -435,7 +435,9 @@ bool KoTextLayoutTableArea::layoutTable(TableIterator *cursor)
 
 
         if (complete) {
-            setVirginPage(false);
+            if (cursor->row >= d->headerRows) {
+                setVirginPage(false);
+            }
             cursor->row++;
         }
     } while (complete && cursor->row < d->table->rows());
@@ -785,10 +787,6 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
         }
     }
 
-    if (noCellsFitted && row <= d->headerRows) {
-        d->totalMisFit = true;
-    }
-
     if (anyCellTried && noCellsFitted && !rowHasExactHeight && !allCellsFullyDone) {
         d->rowPositions[row+1] = d->rowPositions[row];
         nukeRow(cursor);
@@ -798,6 +796,10 @@ bool KoTextLayoutTableArea::layoutRow(TableIterator *cursor, qreal topBorderWidt
             cursor->row++;
         }
         return false; // we can't honour the anything inside so give up doing row
+    }
+
+    if (noCellsFitted && d->headerRows && row <= d->headerRows) {
+        d->totalMisFit = true;
     }
 
     if (!allCellsFullyDone) {
