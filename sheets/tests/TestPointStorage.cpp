@@ -199,6 +199,7 @@ void PointStorageTest::testDeletion()
     QCOMPARE(old,  0);
     old = storage.take(1, 2);
     QCOMPARE(old,  0);
+
     old = storage.take(2, 1);
     QCOMPARE(old,  0);
     old = storage.take(1, 1);
@@ -528,13 +529,18 @@ void PointStorageTest::testShiftUp()
     // (  ,  ,  ,10,  )
     // (11,  ,  ,  ,12)
 
+    QRect rect;
     QVector< QPair<QPoint, int> > old;
-    old = storage.removeShiftUp(QRect(2, 2, 2, 1));
+    rect = QRect(2, 2, 2, 1);
+    old = storage.removeShiftUp(rect);
+//     qDebug() << "moved two filled cells up onto filled cells:"<<rect<< endl << qPrintable( storage.dump() );
     QVERIFY(old.count() == 2);
     QVERIFY(old.contains(qMakePair(QPoint(2, 2),  5)));
     QVERIFY(old.contains(qMakePair(QPoint(3, 2),  6)));
 
-    old = storage.removeShiftUp(QRect(5, 5, 1, 1));
+    rect = QRect(5, 5, 1, 1);
+    old = storage.removeShiftUp(rect); // shift data from 6,5 -> 5,5
+//     qDebug() << "moved 1 cell from non-existent row onto filled cell:"<<rect << endl << qPrintable( storage.dump() );
     QVERIFY(old.count() == 1);
     QVERIFY(old.contains(qMakePair(QPoint(5, 5), 12)));
     // ( 1, 2,  ,  , 3)
@@ -550,6 +556,11 @@ void PointStorageTest::testShiftUp()
     QCOMPARE(storage.m_rows, rows);
     QCOMPARE(storage.m_cols, cols);
 
+    rect = QRect(1, 4, 1, 1);
+    old = storage.removeShiftUp(rect);
+//     qDebug() << "moved 1 filled cell onto unfilled cell:"<<rect << endl << qPrintable( storage.dump() );
+    QCOMPARE(old.count(), 0);
+
 
     // first row
     storage.clear();
@@ -559,13 +570,18 @@ void PointStorageTest::testShiftUp()
     // ( 1,  )
     // ( 2, 3)
     // (  , 4)
+//     qDebug() << "start:" << endl << qPrintable( storage.dump() );
 
     old = storage.removeShiftUp(QRect(1, 1, 2, 2));
+//     qDebug() << "moved 1 filled, 1 unfilled two rows up onto 1 row:"<<QRect(1, 1, 2, 2) << endl << qPrintable( storage.dump() );
+    qDebug() << old;
     QVERIFY(old.count() == 3);
     QVERIFY(old.contains(qMakePair(QPoint(1, 1),  1)));
     QVERIFY(old.contains(qMakePair(QPoint(1, 2),  2)));
     QVERIFY(old.contains(qMakePair(QPoint(2, 2),  3)));
     // (  , 4)
+    QCOMPARE(storage.rows(), 1);
+    QCOMPARE(storage.columns(), 2);
 
     data = QVector<int>() << 4;
     rows = QVector<int>() << 0;

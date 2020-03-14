@@ -175,7 +175,7 @@ public:
         const QVector<int>::const_iterator cend((row < m_rows.count()) ? (m_cols.begin() + m_rows.value(row)) : m_cols.end());
         const QVector<int>::const_iterator cit = std::lower_bound(cstart, cend, col);
         // is the col not present?
-        if (cit == cend)
+        if (cit == cend || col != *cit)
             return defaultVal;
         return m_data.value(m_rows.value(row - 1) + (cit - cstart));
     }
@@ -195,7 +195,7 @@ public:
         const QVector<int> cols = m_cols.mid(rowStart, rowLength);
         QVector<int>::const_iterator cit = std::lower_bound(cols.begin(), cols.end(), col);
         // column's missing?
-        if (cit == cols.constEnd())
+        if (cit == cols.constEnd() || col != *cit)
             return defaultVal;
         const int index = rowStart + (cit - cols.constBegin());
         // save the old data
@@ -403,8 +403,9 @@ public:
     QVector< QPair<QPoint, T> > removeShiftUp(const QRect& rect) {
         Q_ASSERT(1 <= rect.top() && rect.top() <= KS_rowMax);
         // row's missing?
-        if (rect.top() > m_rows.count())
+        if (rect.top() > m_rows.count()) {
             return QVector< QPair<QPoint, T> >();
+        }
         QVector< QPair<QPoint, T> > oldData;
         for (int row = rect.top(); row <= m_rows.count() && row <= KS_rowMax - rect.height(); ++row) {
             const int rowStart = m_rows.value(row - 1);
@@ -424,7 +425,7 @@ public:
                     const QVector<int>::const_iterator cend2((srcRow < m_rows.count()) ? (m_cols.begin() + m_rows.value(srcRow)) : m_cols.end());
                     const QVector<int>::const_iterator cit2 = std::lower_bound(cstart2, cend2, column);
                     // column's missing?
-                    if (cit2 == cend2) {
+                    if (cit2 == cend2 || *cit2 != column) {
                         m_cols.remove(rowStart + col);
                         m_data.remove(rowStart + col);
                         // adjust the offsets of the following rows
@@ -460,7 +461,7 @@ public:
                     const QVector<int>::const_iterator cit = std::upper_bound(cstart, cend, cols2.value(col));
                     // Destination column:
                     const QVector<int>::const_iterator dstcit = std::lower_bound(cols.begin(), cols.end(), column);
-                    if (dstcit != cols.end()) { // destination column exists
+                    if (dstcit != cols.end() && *dstcit == column) { // destination column exists
                         // replace the existing destination value
                         const int dstCol = (dstcit - cols.constBegin());
                         m_data[rowStart + dstCol] = m_data.value(rowStart2 + col);
