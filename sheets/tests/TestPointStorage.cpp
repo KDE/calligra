@@ -1108,7 +1108,7 @@ void PointStorageTest::testRowIteration()
     QCOMPARE(col, 0);
 
     storage.insert(5, 1, 5);
-
+//     qDebug() << qPrintable(storage.dump());
     QCOMPARE(storage.nextInRow(1, 1, &col), 5);
     QCOMPARE(col, 5);
     QCOMPARE(storage.nextInRow(1, 5, &col), 0);
@@ -1118,9 +1118,7 @@ void PointStorageTest::testRowIteration()
     QCOMPARE(col, 0);
 
     // reverse iteration
-    QEXPECT_FAIL("", "Will fix in the next release", Continue);
     QCOMPARE(storage.lastInRow(1, &col), 5);
-    QEXPECT_FAIL("", "Will fix in the next release", Continue);
     QCOMPARE(col, 5);
     col = -1;
 //     QCOMPARE(storage.prevInRow(KS_colMax + 1, 1, &col), 5);

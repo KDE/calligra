@@ -616,17 +616,22 @@ public:
      */
     T lastInRow(int row, int* newCol = 0) const {
         Q_ASSERT(1 <= row && row <= KS_rowMax);
+        if (m_rows.isEmpty()) {
+            if (newCol)
+                *newCol = 0;
+            return T();
+        }
+        // last row?
+        if (row == m_rows.count()) {
+            if (newCol)
+                *newCol = m_cols.value(m_data.count() - 1);
+            return m_data.last();
+        }
         // row's empty?
         if (m_rows.value(row - 1) == m_rows.value(row) || m_rows.value(row - 1) == m_data.count()) {
             if (newCol)
                 *newCol = 0;
             return T();
-        }
-        // last row ends on data vector end
-        if (row == m_rows.count()) {
-            if (newCol)
-                *newCol = m_cols.value(m_data.count() - 1);
-            return m_data.value(m_data.count() - 1);
         }
         if (newCol)
             *newCol = m_cols.value(m_rows.value(row) - 1);
