@@ -24,8 +24,6 @@ CheckForApp "calligraflow.exe", "flow"
 
 CheckForApp "karbon.exe", "karbon"
 
-CheckForApp "kexi.exe", "kexi"
-
 Set fso = Nothing
 Set wshSystemEnv = Nothing
 Set wshShell = Nothing

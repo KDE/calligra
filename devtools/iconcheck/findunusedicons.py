@@ -20,8 +20,6 @@ def createCalligraIconFile(calligraIconsFile):
             "! -path './flow/*' " + # not ported for 3.x currently
             "! -path './gemini/themes/*' " +
             "! -path './karbon/stencils/*' " +
-            "! -path './kexi/main/status/*' " +
-            "! -path './kexi/pics/*_newobj.png' " + # kexi calculates iconname here, needs more complex checl
             "! -path './plugins/karbonplugins/tools/CalligraphyTool/tutorial/*' " +
             "! -path './sheets/data/sheetstyles/*' " +
             "! -path './stage/pics/animations/*' " + # names are calculated when used, needs more complex check
@@ -76,17 +74,11 @@ groupPrefixes = [
 ]
 
 elsewhereUsedIcons = (
-    "application-x-kexi-connectiondata",
-    "application-x-kexiproject-shortcut",
-    "application-x-kexiproject-sqlite",
-    "application-x-kexiproject-sqlite2",
-    "application-x-kexiproject-sqlite3",
     "application-x-sqlite2",
     "application-x-sqlite3",
     "calligra-logo-black-glow",
     "calligra-logo-white-glow",
     "layout-elements", # stage UI element
-    "tableview_pen", "tableview_plus", "tableview_pointer", # kexi xpm bases
     "questionmark", # for unknown shapes
     "cursor_shear", "cursor_rotate", "cursor_connect", "zoom_out_cursor", "zoom_in_cursor" # cursor images
 )
