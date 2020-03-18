@@ -53,16 +53,16 @@ public:
     ChartShapeFactory();
     ~ChartShapeFactory() {}
 
-    bool supports(const KoXmlElement &element, KoShapeLoadingContext &context) const;
+    bool supports(const KoXmlElement &element, KoShapeLoadingContext &context) const override;
 
-    KoShape *createShape(const KoProperties* properties, KoDocumentResourceManager *documentResources) const;
+    KoShape *createShape(const KoProperties* properties, KoDocumentResourceManager *documentResources) const override;
 
-    virtual KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const;
+    KoShape *createDefaultShape(KoDocumentResourceManager *documentResources = 0) const override;
     // reimplemented to not create a default shape to just overwrite it afterwards
-    virtual KoShape *createShapeFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
-    virtual void newDocumentResourceManager(KoDocumentResourceManager *manager) const;
+    KoShape *createShapeFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
+    void newDocumentResourceManager(KoDocumentResourceManager *manager) const override;
 
-    QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
+    QList<KoShapeConfigWidgetBase*> createShapeOptionPanels() override;
 
 private:
     KoChart::ChartShape *createBarChart(KoDocumentResourceManager *documentResources, int subtype) const;

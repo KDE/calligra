@@ -38,7 +38,7 @@ class PieProxy : public QSortFilterProxyModel
 public:
     PieProxy(QObject *parent = 0) : QSortFilterProxyModel(parent) {}
 
-    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override
     {
         if (role == Qt::DisplayRole && orientation == Qt::Horizontal) {
             switch (section) {
@@ -48,11 +48,11 @@ public:
         }
         return QSortFilterProxyModel::headerData(section, orientation, role);
     }
-    bool filterAcceptsColumn(int source_column, const QModelIndex &/*source_parent*/) const
+    bool filterAcceptsColumn(int source_column, const QModelIndex &/*source_parent*/) const override
     {
         return source_column < 2;
     }
-    bool filterAcceptsRow(int source_row, const QModelIndex &/*source_parent*/) const
+    bool filterAcceptsRow(int source_row, const QModelIndex &/*source_parent*/) const override
     {
         return source_row != 0;
     }

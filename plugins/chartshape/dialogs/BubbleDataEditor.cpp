@@ -44,7 +44,7 @@ class DataProxy : public QSortFilterProxyModel
 public:
     DataProxy(QObject *parent = 0) : QSortFilterProxyModel(parent) {}
 
-    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override
     {
         if (role == Qt::DisplayRole) {
             if (orientation == Qt::Horizontal) {
@@ -55,11 +55,11 @@ public:
         }
         return QSortFilterProxyModel::headerData(section, orientation, role);
     }
-    bool filterAcceptsColumn(int source_column, const QModelIndex &/*source_parent*/) const
+    bool filterAcceptsColumn(int source_column, const QModelIndex &/*source_parent*/) const override
     {
         return source_column != 0; // skip categories
     }
-    bool insertColumns(int column, int count, const QModelIndex &parent)
+    bool insertColumns(int column, int count, const QModelIndex &parent) override
     {
         debugChartUiBubble<<column;
         Q_UNUSED(count);
@@ -85,7 +85,7 @@ public:
         }
         return true;
     }
-    bool insertRows(int row, int count, const QModelIndex &parent)
+    bool insertRows(int row, int count, const QModelIndex &parent) override
     {
         debugChartUiBubble<<row;
         Q_UNUSED(count);

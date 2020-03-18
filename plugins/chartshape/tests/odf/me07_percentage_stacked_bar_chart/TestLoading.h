@@ -35,7 +35,7 @@ public:
     TestLoading();
 
 private Q_SLOTS:
-    void initTestCase();
+    void initTestCase() override;
     void testInternalTable();
     void testDataSets();
     void testLegend();

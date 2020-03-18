@@ -32,7 +32,7 @@ public:
     ChartToolFactory();
     ~ChartToolFactory();
 
-    KoToolBase * createTool(KoCanvasBase *canvas);
+    KoToolBase * createTool(KoCanvasBase *canvas) override;
 };
 
 } // namespace KoChart
