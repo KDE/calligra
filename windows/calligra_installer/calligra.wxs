@@ -82,15 +82,6 @@
                     </Component>
 					
 					
-					<?if $(env.BUILDflow) = on ?>
-					<Component Id="FLOW.LNK" DiskId="1" Guid="{C52C9784-19E8-414d-B083-893EA8B79B83}">
-                        <CreateFolder/>
-							<Shortcut Id="ProgramMenu.CalligraFlow" Directory="ProgramMenuDir" Name="Calligra Flow"
-                                  WorkingDirectory='CALLIGRADIR' Icon="Icon.Flow.exe" IconIndex="0" Advertise="no"
-                                  Arguments="--style windowsvista" Target="[CALLIGRADIR]bin\calligraflow.exe" />
-					</Component>
-					<?endif ?>
-						
 					<?if $(env.BUILDkarbon) = on ?>
 					<Component Id="KARBON.LNK" DiskId="1" Guid="F784F8B3-1F5F-404f-8480-ECF870C03D5B">
                         <!-- CALLIGRA PROGRAM MENU -->
@@ -126,7 +117,6 @@
 					
 					<Component Id="DesktopShortcuts" DiskId="1" Guid="95136A79-458C-4c9d-860F-0319FD47B3EA">
 						<!-- CALLIGRA PROGRAM MENU -->
-						<!-- Removed Flow icon from Desktop until correct icon is available -->
                         						
 						<CreateFolder/>
                         <?if $(env.BUILDkarbon) = on ?>
@@ -196,9 +186,6 @@
             <ComponentRef Id="STARTAPP.VBS" />
 
 			
-			<?if $(env.BUILDflow) = on ?>
-				<ComponentRef Id="FLOW.LNK" />
-			<?endif ?>
 			<?if $(env.BUILDkarbon) = on ?>
 				<ComponentRef Id="KARBON.LNK" />
 			<?endif ?>
@@ -243,9 +230,6 @@
 		-->
 
         <!-- Icons -->
-        <?if $(env.BUILDflow) = on ?>
-			<Icon Id="Icon.Flow.exe" SourceFile="$(env.C2WINSTALL_INPUT)\bin\CALLIGRAFLOW.EXE" />
-        <?endif ?>
         <?if $(env.BUILDkarbon) = on ?>
 			<Icon Id="Icon.Karbon.exe" SourceFile="$(env.C2WINSTALL_INPUT)\bin\KARBON.EXE" />
         <?endif ?>

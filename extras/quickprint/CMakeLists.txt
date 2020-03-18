@@ -2,10 +2,6 @@
 set( QUICK_PRINT_SERVICES
 )
 
-if( SHOULD_BUILD_APP_FLOW )
-    set( QUICK_PRINT_SERVICES ${QUICK_PRINT_SERVICES} flow_print.desktop )
-endif()
-
 if( SHOULD_BUILD_APP_KARBON )
     set( QUICK_PRINT_SERVICES ${QUICK_PRINT_SERVICES} karbon_print.desktop )
 endif()

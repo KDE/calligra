@@ -59,7 +59,7 @@
     <xsl:template match="wix:File/@Id">
       <xsl:variable name="programNames">
         <!-- Always also put a final ',' to the last item -->
-        <xsl:text>braindump,calligraflow,calligrasheets,calligrastage,calligrawords,karbon,</xsl:text>
+        <xsl:text>braindump,calligrasheets,calligrastage,calligrawords,karbon,</xsl:text>
       </xsl:variable>
       <xsl:attribute name="Id">
         <xsl:call-template name="setId">

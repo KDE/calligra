@@ -8,7 +8,7 @@ add_library(calligrathumbnail MODULE ${calligrathumbnail_SRCS})
 target_link_libraries(calligrathumbnail komain KF5::KIOWidgets)
 install(TARGETS calligrathumbnail  DESTINATION ${PLUGIN_INSTALL_DIR})
 
-if( SHOULD_BUILD_APP_FLOW OR SHOULD_BUILD_APP_KARBON )
+if( SHOULD_BUILD_APP_KARBON )
     set(calligraimagethumbnail_SRCS calligracreator.cpp)
     add_library(calligraimagethumbnail MODULE ${calligraimagethumbnail_SRCS})
     set_target_properties(calligraimagethumbnail PROPERTIES COMPILE_FLAGS "-DNO_ICON_BLENDING")
@@ -20,8 +20,8 @@ endif()
 set( THUMBNAIL_SERVICES
 )
 
-# both flow and karbon load odg natively, so if any is build add support for odg
-if( SHOULD_BUILD_APP_FLOW OR SHOULD_BUILD_APP_KARBON )
+# karbon loads odg natively, so if it is built add support for odg
+if( SHOULD_BUILD_APP_KARBON )
     list( APPEND THUMBNAIL_SERVICES calligra_odg_thumbnail.desktop )
 endif()
 

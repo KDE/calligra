@@ -4,7 +4,6 @@ calligra_define_productset(DESKTOP "Calligra for Desktop"
     OPTIONAL
         # apps
         BRAINDUMP
-        FLOW
         KARBON
         SHEETS
         STAGE

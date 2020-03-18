@@ -139,19 +139,6 @@ Reference Guide
 
 --------------------------------------------------------------------------------
 
-Flow
-
-Introduction
-    Basically a copy of the goals described in the general Calligra handbook.
-Working with Calligra Flow
-    Working with stencils
-    Working with stencil sets
-    <more technologies?>
-<usecases>
-Reference Guide
-
---------------------------------------------------------------------------------
-
 Karbon
 
 Introduction

@@ -5,7 +5,6 @@ calligra_define_productset(OSX "Calligra for OS X Desktop"
     OPTIONAL
         # apps
         BRAINDUMP
-        FLOW
         KARBON
         SHEETS
         STAGE

@@ -17,7 +17,6 @@ def createCalligraIconFile(calligraIconsFile):
                        "-name 'docs' -o " +
                        "-name 'tests' \) -prune -o " +
             "! -path './braindump/data/states/states/*' " +
-            "! -path './flow/*' " + # not ported for 3.x currently
             "! -path './gemini/themes/*' " +
             "! -path './karbon/stencils/*' " +
             "! -path './plugins/karbonplugins/tools/CalligraphyTool/tutorial/*' " +

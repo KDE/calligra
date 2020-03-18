@@ -5,7 +5,6 @@
   <!ENTITY tables "<application>Calligra Tables</application>">
   <!ENTITY words "<application>Calligra Words</application>">
   <!ENTITY stage "<application>Calligra Stage</application>">
-  <!ENTITY flow "<application>Calligra Flow</application>">
   <!ENTITY plan "<application>Calligra Plan</application>">
   <!-- the following author entities have been added to user.entities in 4.10 branch and trunk of svn
        they can be removed from this file once they are present in the kdelibs minimum version required by &kappname; -->

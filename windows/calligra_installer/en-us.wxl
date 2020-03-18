@@ -15,7 +15,6 @@
 	<String Id="ApplicationNameWords">Calligra Words [C2WINSTALL_VERSIONSTRING]</String>
 	<String Id="ApplicationNameSheets">Calligra Sheets [C2WINSTALL_VERSIONSTRING]</String>
 	<String Id="ApplicationNameStage">Calligra Stage [C2WINSTALL_VERSIONSTRING]</String>
-	<String Id="ApplicationNameFlow">Calligra Flow [C2WINSTALL_VERSIONSTRING]</String>
 	<String Id="ApplicationNameKarbon">Karbon [C2WINSTALL_VERSIONSTRING]</String>
 	
 	<!-- Filetype assocations -->
