@@ -93,9 +93,9 @@ class KOODFREADER_EXPORT OdfReader
     DECLARE_READER_FUNCTION(OfficeBody);
 
     // ONE of these should be reimplemented by each subclass, respectively.
-    DECLARE_READER_FUNCTION(OfficeText) override;
-    DECLARE_READER_FUNCTION(OfficeSpreadsheet) override;
-    DECLARE_READER_FUNCTION(OfficePresentation) override;
+    virtual DECLARE_READER_FUNCTION(OfficeText);
+    virtual DECLARE_READER_FUNCTION(OfficeSpreadsheet);
+    virtual DECLARE_READER_FUNCTION(OfficePresentation);
 
     // ----------------------------------------------------------------
     // Other functions
