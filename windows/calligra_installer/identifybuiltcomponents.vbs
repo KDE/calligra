@@ -21,7 +21,6 @@ CheckForApp "calligrastage.exe", "stage"
 CheckForApp "calligrasheets.exe", "sheets"
 
 CheckForApp "calligraflow.exe", "flow"
-CheckForApp "calligraplan.exe", "plan"
 
 CheckForApp "karbon.exe", "karbon"
 

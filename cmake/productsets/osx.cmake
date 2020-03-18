@@ -7,7 +7,6 @@ calligra_define_productset(OSX "Calligra for OS X Desktop"
         BRAINDUMP
         FLOW
         KARBON
-        PLAN
         SHEETS
         STAGE
         WORDS

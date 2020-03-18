@@ -6,7 +6,6 @@ calligra_define_productset(DESKTOP "Calligra for Desktop"
         BRAINDUMP
         FLOW
         KARBON
-        PLAN
         SHEETS
         STAGE
         WORDS

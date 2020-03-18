@@ -22,7 +22,6 @@ def createCalligraIconFile(calligraIconsFile):
             "! -path './karbon/stencils/*' " +
             "! -path './kexi/main/status/*' " +
             "! -path './kexi/pics/*_newobj.png' " + # kexi calculates iconname here, needs more complex checl
-            "! -path './plan/about/*' " +
             "! -path './plugins/karbonplugins/tools/CalligraphyTool/tutorial/*' " +
             "! -path './sheets/data/sheetstyles/*' " +
             "! -path './stage/pics/animations/*' " + # names are calculated when used, needs more complex check
@@ -77,10 +76,6 @@ groupPrefixes = [
 ]
 
 elsewhereUsedIcons = (
-    "application-x-vnd.kde.plan",
-    "application-x-vnd.kde.plan.work",
-    "application-x-vnd.kde.kplato",
-    "application-x-vnd.kde.kplato.work",
     "application-x-kexi-connectiondata",
     "application-x-kexiproject-shortcut",
     "application-x-kexiproject-sqlite",

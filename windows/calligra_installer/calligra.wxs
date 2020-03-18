@@ -108,14 +108,6 @@
                                   Arguments="--style windowsvista" Target="[CALLIGRADIR]bin\krita.exe" />
 					</Component>
 					<?endif ?>
-					<?if $(env.BUILDplan) = on ?>
-					<Component Id="PLAN.LNK" DiskId="1" Guid="{76CFA135-95E0-4edb-9506-5E78F1EE3579}">
-                        <CreateFolder/>
-							<Shortcut Id="ProgramMenu.CalligraPlan" Directory="ProgramMenuDir" Name="Calligra Plan"
-                                  WorkingDirectory='CALLIGRADIR' Icon="Icon.Plan.exe" IconIndex="0" Advertise="no"
-                                  Arguments="--style windowsvista" Target="[CALLIGRADIR]bin\calligraplan.exe" />
-					</Component>
-					<?endif ?>
 					<?if $(env.BUILDsheets) = on ?>
 					<Component Id="SHEETS.LNK" DiskId="1" Guid="{3673F822-F0E4-4696-A01F-0A2941032733}">
                         <CreateFolder/>
@@ -158,13 +150,6 @@
 								Target="[CALLIGRADIR]bin\krita.exe"
 								WorkingDirectory='CALLIGRADIR' Icon="Icon.Krita.exe" IconIndex="0"
 								Arguments="--style windowsvista" />
-						<?endif ?>
-						<?if $(env.BUILDplan) = on ?>
-							<Shortcut Id="Desktop.CalligraPlan" Directory="DesktopFolder"
-								Name="Calligra Plan"
-								Target="[CALLIGRADIR]bin\calligraplan.exe"
-                                  WorkingDirectory='CALLIGRADIR' Icon="Icon.Plan.exe" IconIndex="0"
-                                  Arguments="--style windowsvista" />
 						<?endif ?>
                         <?if $(env.BUILDsheets) = on ?>
 							<Shortcut Id="Desktop.CalligraSheets" Directory="DesktopFolder" 
@@ -235,9 +220,6 @@
 			<?if $(env.BUILDkrita) = on ?>
 				<ComponentRef Id="KRITA.LNK" />
 			<?endif ?>
-			<?if $(env.BUILDplan) = on ?>
-				<ComponentRef Id="PLAN.LNK" />
-			<?endif ?>
 			<?if $(env.BUILDsheets) = on ?>
 				<ComponentRef Id="SHEETS.LNK" />
 			<?endif ?>
@@ -287,9 +269,6 @@
         <?endif ?>
         <?if $(env.BUILDkrita) = on ?>
 			<Icon Id="Icon.Krita.exe" SourceFile="$(env.C2WINSTALL_INPUT)\bin\KRITA.EXE" />
-        <?endif ?>
-        <?if $(env.BUILDplan) = on ?>
-			<Icon Id="Icon.Plan.exe" SourceFile="$(env.C2WINSTALL_INPUT)\bin\CALLIGRAPLAN.EXE" />
         <?endif ?>
         <?if $(env.BUILDsheets) = on ?>
 			<Icon Id="Icon.Sheets.exe" SourceFile="$(env.C2WINSTALL_INPUT)\bin\CALLIGRASHEETS.EXE" />
