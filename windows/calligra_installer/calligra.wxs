@@ -100,14 +100,6 @@
 							  Arguments="--style windowsvista" Target="[CALLIGRADIR]bin\karbon.exe" />
 					</Component>
 					<?endif ?>
-                    <?if $(env.BUILDkrita) = on ?>
-					<Component Id="KRITA.LNK" DiskId="1" Guid="{568D67B5-54E0-46b4-AC25-67864F776D6A}">
-                        <CreateFolder/>
-							<Shortcut Id="ProgramMenu.Krita" Directory="ProgramMenuDir" Name="Krita"
-                                  WorkingDirectory='CALLIGRADIR' Icon="Icon.Krita.exe" IconIndex="0" Advertise="no"
-                                  Arguments="--style windowsvista" Target="[CALLIGRADIR]bin\krita.exe" />
-					</Component>
-					<?endif ?>
 					<?if $(env.BUILDsheets) = on ?>
 					<Component Id="SHEETS.LNK" DiskId="1" Guid="{3673F822-F0E4-4696-A01F-0A2941032733}">
                         <CreateFolder/>
@@ -143,13 +135,6 @@
 							
                                   WorkingDirectory='CALLIGRADIR' Icon="Icon.Karbon.exe" IconIndex="0"
                                   Arguments="--style windowsvista" />
-						<?endif ?>
-                        <?if $(env.BUILDkrita) = on ?>
-							<Shortcut Id="Desktop.Krita" Directory="DesktopFolder" 
-								Name="Krita"
-								Target="[CALLIGRADIR]bin\krita.exe"
-								WorkingDirectory='CALLIGRADIR' Icon="Icon.Krita.exe" IconIndex="0"
-								Arguments="--style windowsvista" />
 						<?endif ?>
                         <?if $(env.BUILDsheets) = on ?>
 							<Shortcut Id="Desktop.CalligraSheets" Directory="DesktopFolder" 
@@ -217,9 +202,6 @@
 			<?if $(env.BUILDkarbon) = on ?>
 				<ComponentRef Id="KARBON.LNK" />
 			<?endif ?>
-			<?if $(env.BUILDkrita) = on ?>
-				<ComponentRef Id="KRITA.LNK" />
-			<?endif ?>
 			<?if $(env.BUILDsheets) = on ?>
 				<ComponentRef Id="SHEETS.LNK" />
 			<?endif ?>
@@ -266,9 +248,6 @@
         <?endif ?>
         <?if $(env.BUILDkarbon) = on ?>
 			<Icon Id="Icon.Karbon.exe" SourceFile="$(env.C2WINSTALL_INPUT)\bin\KARBON.EXE" />
-        <?endif ?>
-        <?if $(env.BUILDkrita) = on ?>
-			<Icon Id="Icon.Krita.exe" SourceFile="$(env.C2WINSTALL_INPUT)\bin\KRITA.EXE" />
         <?endif ?>
         <?if $(env.BUILDsheets) = on ?>
 			<Icon Id="Icon.Sheets.exe" SourceFile="$(env.C2WINSTALL_INPUT)\bin\CALLIGRASHEETS.EXE" />
