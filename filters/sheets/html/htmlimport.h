@@ -52,7 +52,7 @@ public:
     HTMLImport(QObject* parent, const QVariantList&);
     virtual ~HTMLImport();
 
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to) override;
 
 Q_SIGNALS:
     void completed();

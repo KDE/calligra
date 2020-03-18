@@ -59,8 +59,8 @@ protected Q_SLOTS:
     void updatePlaybackTime(qint64 currentTime);
 
 protected:
-    virtual void keyPressEvent(QKeyEvent *event); ///reimplemented
-    virtual void mousePressEvent(QMouseEvent *event); ///reimplemented
+    void keyPressEvent(QKeyEvent *event) override; ///reimplemented
+    void mousePressEvent(QMouseEvent *event) override; ///reimplemented
 
 
     Phonon::MediaObject *m_mediaObject;

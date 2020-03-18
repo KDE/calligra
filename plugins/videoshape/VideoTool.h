@@ -34,14 +34,14 @@ class VideoTool : public KoToolBase
     explicit VideoTool(KoCanvasBase *canvas);
     ~VideoTool();
 
-    virtual void paint( QPainter& painter, const KoViewConverter& converter );
-    virtual void mousePressEvent( KoPointerEvent* event ) ;
-    virtual void mouseMoveEvent( KoPointerEvent* event );
-    virtual void mouseReleaseEvent( KoPointerEvent* event );
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    void paint( QPainter& painter, const KoViewConverter& converter ) override;
+    void mousePressEvent( KoPointerEvent* event ) override;
+    void mouseMoveEvent( KoPointerEvent* event ) override;
+    void mouseReleaseEvent( KoPointerEvent* event ) override;
+    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
 
 protected:
-    QWidget *createOptionWidget();
+    QWidget *createOptionWidget() override;
 
 private Q_SLOTS:
     void changeUrlPressed();

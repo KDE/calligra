@@ -35,11 +35,11 @@ public:
     /// destructor
     virtual ~VideoEventAction();
 
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
-    virtual void saveOdf(KoShapeSavingContext &context) const;
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
+    void saveOdf(KoShapeSavingContext &context) const override;
 
-    virtual void start();
-    virtual void finish();
+    void start() override;
+    void finish() override;
 
 protected:
     VideoShape *m_shape;

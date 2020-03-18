@@ -134,10 +134,10 @@ public:
     /// @see holeSize()
     void setHoleSize(qreal value);
 
-    bool loadOdf(const KoXmlElement &plotAreaElement, KoShapeLoadingContext &context);
+    bool loadOdf(const KoXmlElement &plotAreaElement, KoShapeLoadingContext &context) override;
     bool loadOdfSeries(const KoXmlElement &seriesElement, KoShapeLoadingContext &context);
 
-    void saveOdf(KoShapeSavingContext &context) const;
+    void saveOdf(KoShapeSavingContext &context) const override;
     void saveOdfSubType(KoXmlWriter &bodyWriter, KoGenStyle &plotAreaStyle) const;
 
 
@@ -155,7 +155,7 @@ public:
 
     ChartShape *parent() const;
 
-    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
+    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
 
     bool registerKdDiagram(KChart::AbstractDiagram *diagram);
     bool deregisterKdDiagram(KChart::AbstractDiagram *diagram);

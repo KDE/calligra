@@ -58,10 +58,10 @@ public:
     QAction *createAction();
 
     /// reimplemented
-    virtual bool showOnShapeCreate() { return true; }
+    bool showOnShapeCreate() override { return true; }
 
 public Q_SLOTS:
-    void updateData();
+    void updateData() override;
 
 private:
     friend ChartTool;

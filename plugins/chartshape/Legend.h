@@ -61,19 +61,19 @@ public:
     void setExpansion(LegendExpansion expansion);
     void setAlignment(Qt::Alignment alignment);
     void setLegendPosition(Position position);
-    void setSize(const QSizeF &size);
+    void setSize(const QSizeF &size) override;
 
-    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
+    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
     void paintPixmap(QPainter &painter, const KoViewConverter &converter);
 
-    bool loadOdf(const KoXmlElement &legendElement, KoShapeLoadingContext &context);
-    void saveOdf(KoShapeSavingContext &context) const;
+    bool loadOdf(const KoXmlElement &legendElement, KoShapeLoadingContext &context) override;
+    void saveOdf(KoShapeSavingContext &context) const override;
 
     KChart::Legend *kdLegend() const;
 
     void rebuild();
     using KoShape::update;
-    void update() const;
+    void update() const override;
 
 Q_SIGNALS:
     void updateConfigWidget();

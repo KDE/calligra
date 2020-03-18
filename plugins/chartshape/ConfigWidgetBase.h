@@ -43,7 +43,7 @@ public:
 
     /// Calling open() with @p shape will call deactivate()
     /// reimplemented from KoShapeConfigWidgetBase
-    void open(KoShape *shape) {
+    void open(KoShape *shape) override {
         if (!shape) {
             deactivate();
             return;
@@ -72,7 +72,7 @@ public:
     }
 
     /// reimplemented from KoShapeConfigWidgetBase
-    void save() { Q_ASSERT(false); }
+    void save() override { Q_ASSERT(false); }
 
     /// Reimplement to update the ui
     virtual void updateData() {}

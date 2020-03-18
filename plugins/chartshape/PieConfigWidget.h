@@ -45,9 +45,9 @@ public:
     PieConfigWidget(QList<ChartType> types, QWidget *parent = 0);
     ~PieConfigWidget();
 
-    void open(ChartShape *shape);
+    void open(ChartShape *shape) override;
 
-    void updateData(ChartType type, ChartSubtype subtype);
+    void updateData(ChartType type, ChartSubtype subtype) override;
 
 public Q_SLOTS:
     void dataPointSelectionChanged(int index);

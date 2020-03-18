@@ -128,10 +128,10 @@ public:
                         const QBrush& brush, const QPen& pen,
                         const QPointF& point, const QSizeF& size );
 public: // abstract KChart::AbstractDiagram API
-    virtual void paint ( KChart::PaintContext* /*paintContext*/ ) {}
-    virtual void resize ( const QSizeF& /*area*/ ) {}
+    void paint ( KChart::PaintContext* /*paintContext*/ ) override {}
+    void resize ( const QSizeF& /*area*/ ) override {}
 protected: // abstract KChart::AbstractDiagram API
-    virtual const QPair<QPointF, QPointF> calculateDataBoundaries() const { return QPair<QPointF, QPointF>(); }
+    const QPair<QPointF, QPointF> calculateDataBoundaries() const override { return QPair<QPointF, QPointF>(); }
 };
 
 void MarkerPainterDummyDiagram::doPaintMarker(QPainter* painter, const KChart::MarkerAttributes& markerAttributes, const QBrush& brush, const QPen& pen, const QPointF& point, const QSizeF& size)

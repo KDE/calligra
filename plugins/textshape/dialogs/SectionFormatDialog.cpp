@@ -95,7 +95,7 @@ public:
     {
     }
 
-    virtual State validate(QString &input, int &pos) const
+    State validate(QString &input, int &pos) const override
     {
         Q_UNUSED(pos);
         if (m_section->name() == input || m_sectionModel->isValidNewName(input)) {

@@ -34,8 +34,8 @@ public:
     explicit PlotAreaCommand(PlotArea *plotArea);
     virtual ~PlotAreaCommand();
 
-    virtual void redo();
-    virtual void undo();
+    void redo() override;
+    void undo() override;
 
     void setOrientation(Qt::Orientation orientation);
 

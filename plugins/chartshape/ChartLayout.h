@@ -95,47 +95,47 @@ public:
      * 
      * @see setItemType()
      */
-    void add(KoShape *shape);
+    void add(KoShape *shape) override;
 
     /**
      * Removes a shape from the layout.
      */
-    void remove(KoShape *shape);
+    void remove(KoShape *shape) override;
 
     /**
      * Turns clipping of a shape on or off.
      */
-    void setClipped(const KoShape *shape, bool clipping);
+    void setClipped(const KoShape *shape, bool clipping) override;
 
     /**
      * @see setClipping
      */
-    bool isClipped(const KoShape *shape) const;
+    bool isClipped(const KoShape *shape) const override;
 
     /// reimplemented
-    virtual void setInheritsTransform(const KoShape *shape, bool inherit);
+    void setInheritsTransform(const KoShape *shape, bool inherit) override;
     /// reimplemented
-    virtual bool inheritsTransform(const KoShape *shape) const;
+    bool inheritsTransform(const KoShape *shape) const override;
 
     /**
      * Returns the number of shapes in this layout.
      */
-    int count() const;
+    int count() const override;
 
     /**
      * Returns a list of shapes in this layout.
      */
-    QList<KoShape*> shapes() const;
+    QList<KoShape*> shapes() const override;
 
     /**
      * Called whenever a property of the container (i.e. the ChartShape) is changed.
      */
-    void containerChanged(KoShapeContainer *container, KoShape::ChangeType type);
+    void containerChanged(KoShapeContainer *container, KoShape::ChangeType type) override;
 
     /**
      * Returns whether a shape is locked for user modifications.
      */
-    bool isChildLocked(const KoShape *shape) const;
+    bool isChildLocked(const KoShape *shape) const override;
 
     /**
      * Changes the item type of the shape to @p itemType
@@ -143,14 +143,14 @@ public:
      */
     void setItemType(const KoShape *shape, ItemType itemType);
 
-    void proposeMove(KoShape *child, QPointF &move);
+    void proposeMove(KoShape *child, QPointF &move) override;
 
     /**
      * Called whenever a property of a shape in this layout has changed.
      *
      * All layout items effected by this change will be re-layouted.
      */
-    void childChanged(KoShape *shape, KoShape::ChangeType type);
+    void childChanged(KoShape *shape, KoShape::ChangeType type) override;
 
     /**
      * Does the layouting of all visible shapes 

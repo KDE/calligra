@@ -47,20 +47,20 @@ public:
     ~ChartTool();
 
     /// reimplemented from superclass
-    virtual void paint(QPainter &painter, const KoViewConverter &converter);
+    void paint(QPainter &painter, const KoViewConverter &converter) override;
 
     /// reimplemented from superclass
-    virtual void mousePressEvent(KoPointerEvent *event) ;
+    void mousePressEvent(KoPointerEvent *event) override;
     /// reimplemented from superclass
-    virtual void mouseMoveEvent(KoPointerEvent *event);
+    void mouseMoveEvent(KoPointerEvent *event) override;
     /// reimplemented from superclass
-    virtual void mouseReleaseEvent(KoPointerEvent *event);
+    void mouseReleaseEvent(KoPointerEvent *event) override;
     /// reimplemented from superclass
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes);
+    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
     /// reimplemented from superclass
-    virtual void deactivate();
+    void deactivate() override;
     /// reimplemented from superclass
-    virtual QList<QPointer<QWidget> > createOptionWidgets();
+    QList<QPointer<QWidget> > createOptionWidgets() override;
 
 private Q_SLOTS:
     void setChartType(ChartType type, ChartSubtype subtype);

@@ -28,8 +28,8 @@ public:
     KPrSoundEventActionFactory();
     virtual ~KPrSoundEventActionFactory();
 
-    virtual KoEventAction * createEventAction();
-    virtual QWidget *createOptionWidget();
+    KoEventAction * createEventAction() override;
+    QWidget *createOptionWidget() override;
 };
 
 #endif /* KPRSOUNDEVENTACTIONFACTORY_H */

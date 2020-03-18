@@ -208,7 +208,7 @@ class CartesianAxis : public KChart::CartesianAxis
 public:
     CartesianAxis(KoChart::Axis *_axis) : KChart::CartesianAxis(), axis(_axis) {}
     virtual ~CartesianAxis() {}
-    virtual const QString customizedLabel(const QString& label) const {
+    const QString customizedLabel(const QString& label) const override {
         if (KoOdfNumberStyles::NumericStyleFormat *n = axis->numericStyleFormat())
             return KoOdfNumberStyles::format(label, *n);
         return label;

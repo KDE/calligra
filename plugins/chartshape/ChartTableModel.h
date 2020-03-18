@@ -56,9 +56,9 @@ public:
     QVariant headerData(int section, Qt::Orientation, int role = Qt::DisplayRole) const override;
 
     // KoChart::ChartModel interface
-    virtual QHash<QString, QVector<QRect> > cellRegion() const;
-    virtual bool setCellRegion(const QString& regionName);
-    virtual bool isCellRegionValid(const QString& regionName) const;
+    QHash<QString, QVector<QRect> > cellRegion() const override;
+    bool setCellRegion(const QString& regionName) override;
+    bool isCellRegionValid(const QString& regionName) const override;
 
     // Load and save the contained data in an ODF DOM tree.
     // FIXME: Move saving/loading logic to helper class like TableLoaderAndSaver,

@@ -60,12 +60,12 @@ public:
     /**
      * Executes the actual operation.
      */
-    virtual void redo();
+    void redo() override;
 
     /**
      * Executes the actual operation in reverse order.
      */
-    virtual void undo();
+    void undo() override;
 
     void setDataSetChartType(ChartType type, ChartSubtype subtype);
 

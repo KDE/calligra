@@ -45,11 +45,11 @@ public:
     virtual ~VideoShape();
 
     // reimplemented
-    virtual void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext);
+    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &paintcontext) override;
     // reimplemented
-    virtual void saveOdf(KoShapeSavingContext &context) const;
+    void saveOdf(KoShapeSavingContext &context) const override;
     // reimplemented
-    virtual bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context);
+    bool loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
     /**
      * Get the collection used in the shape.
@@ -66,7 +66,7 @@ public:
     VideoData *videoData() const;
 
 protected:
-    virtual bool loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context);
+    bool loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context) override;
 
 private Q_SLOTS:
     void updateThumbnail();

@@ -45,9 +45,9 @@ public:
     RingConfigWidget(QList<ChartType> types, QWidget *parent = 0);
     ~RingConfigWidget();
 
-    void open(ChartShape *shape);
+    void open(ChartShape *shape) override;
 
-    void updateData(ChartType type, ChartSubtype subtype);
+    void updateData(ChartType type, ChartSubtype subtype) override;
 
 public Q_SLOTS:
     void categorySelectionChanged(int index);

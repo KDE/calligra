@@ -54,7 +54,7 @@ public:
     DataSetConfigWidget(QList<ChartType> types, QWidget *parent = 0);
     ~DataSetConfigWidget();
 
-    void open(ChartShape* shape);
+    void open(ChartShape* shape) override;
     QAction * createAction();
 
     /// reimplemented
@@ -67,7 +67,7 @@ public:
     void updateMarkers();
 
 public Q_SLOTS:
-    void updateData(ChartType type, ChartSubtype subtype);
+    void updateData(ChartType type, ChartSubtype subtype) override;
 
     void slotShowFormatErrorBarDialog();
 

@@ -58,16 +58,16 @@ public:
     PlotAreaConfigWidget();
     ~PlotAreaConfigWidget();
 
-    void deactivate();
-    void open(KoShape* shape);
+    void deactivate() override;
+    void open(KoShape* shape) override;
     QAction * createAction();
 
     /// reimplemented
-    virtual bool showOnShapeCreate() { return true; }
+    bool showOnShapeCreate() override { return true; }
 
     /// Delete all open dialogs.
     /// This is called when e.g. the tool is deactivated.
-    void deleteSubDialogs(ChartType type = LastChartType);
+    void deleteSubDialogs(ChartType type = LastChartType) override;
 
     AxesConfigWidget *cartesianAxesConfigWidget() const;
     DataSetConfigWidget *cartesianDataSetConfigWidget() const;
@@ -80,7 +80,7 @@ public:
 public Q_SLOTS:
     void chartTypeSelected(QAction *action);
     void setThreeDMode(bool threeD);
-    void updateData();
+    void updateData() override;
 
     void slotShowTableEditor();
     void slotShowCellRegionDialog();

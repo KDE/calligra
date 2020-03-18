@@ -42,13 +42,13 @@ public:
     virtual ~VideoCollection();
 
     /// reimplemented
-    bool completeLoading(KoStore *store);
+    bool completeLoading(KoStore *store) override;
 
     /**
      * Save all videos to the store which are in the context
      * @return returns true if save was successful (no videos failed).
      */
-    bool completeSaving(KoStore *store, KoXmlWriter *manifestWriter, KoShapeSavingContext *context);
+    bool completeSaving(KoStore *store, KoXmlWriter *manifestWriter, KoShapeSavingContext *context) override;
 
     /**
      * Create a data object for the video data.

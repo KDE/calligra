@@ -46,19 +46,19 @@ public:
     ~ChartDocument();
 
     /// reimplemented from KoDocument
-    virtual QByteArray nativeFormatMimeType() const { return CHART_MIME_TYPE; }
+    QByteArray nativeFormatMimeType() const override { return CHART_MIME_TYPE; }
     /// reimplemented from KoDocument
-    virtual QByteArray nativeOasisMimeType() const { return CHART_MIME_TYPE; }
+    QByteArray nativeOasisMimeType() const override { return CHART_MIME_TYPE; }
     /// reimplemented from KoDocument
-    virtual QStringList extraNativeMimeTypes() const { return QStringList(); }
+    QStringList extraNativeMimeTypes() const override { return QStringList(); }
 
 
-    bool loadOdf(KoOdfReadStore &odfStore);
-    bool loadXML(const KoXmlDocument &doc, KoStore *store);
+    bool loadOdf(KoOdfReadStore &odfStore) override;
+    bool loadXML(const KoXmlDocument &doc, KoStore *store) override;
     
-    bool saveOdf(SavingContext &context);
+    bool saveOdf(SavingContext &context) override;
     
-    void paintContent(QPainter &painter, const QRect &rect); 
+    void paintContent(QPainter &painter, const QRect &rect) override;
     
 private:
     class Private;

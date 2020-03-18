@@ -37,7 +37,7 @@ Q_SIGNALS:
     void currentIndexChanged(const QModelIndex &index);
 
 protected Q_SLOTS:
-    void currentChanged(const QModelIndex &current, const QModelIndex &previous);
+    void currentChanged(const QModelIndex &current, const QModelIndex &previous) override;
 };
 
 }

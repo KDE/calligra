@@ -34,10 +34,10 @@ public:
     virtual ~ChartPart();
 
     /// reimplemented
-    virtual KoView *createViewInstance(KoDocument *document, QWidget *parent);
+    KoView *createViewInstance(KoDocument *document, QWidget *parent) override;
 
     /// reimplemented
-    virtual KoMainWindow *createMainWindow();
+    KoMainWindow *createMainWindow() override;
 };
 
 #endif

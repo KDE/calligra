@@ -60,7 +60,7 @@ public:
      *
      * @return  True if the password was set
      */
-    virtual bool setPassword(const QString &password);
+    bool setPassword(const QString &password) override;
 
     /*
      * Returns whether a store opened for reading is actually encrypted.
@@ -68,21 +68,21 @@ public:
      *
      * @return  True if the store is encrypted.
      */
-    virtual bool isEncrypted();
+    bool isEncrypted() override;
 
-    virtual QStringList directoryList() const;
+    QStringList directoryList() const override;
 
 protected:
 
     void init(const QByteArray &appIdentification);
-    virtual bool doFinalize();
-    virtual bool openWrite(const QString &name);
-    virtual bool openRead(const QString &name);
-    virtual bool closeWrite();
-    virtual bool closeRead();
-    virtual bool enterRelativeDirectory(const QString &dirName);
-    virtual bool enterAbsoluteDirectory(const QString &path);
-    virtual bool fileExists(const QString &absPath) const;
+    bool doFinalize() override;
+    bool openWrite(const QString &name) override;
+    bool openRead(const QString &name) override;
+    bool closeWrite() override;
+    bool closeRead() override;
+    bool enterRelativeDirectory(const QString &dirName) override;
+    bool enterAbsoluteDirectory(const QString &path) override;
+    bool fileExists(const QString &absPath) const override;
 
     /**
      * Tries and find a password for this document in KWallet.
@@ -97,7 +97,7 @@ protected:
      *
      * @return  The password this store is encrypted with.
      */
-    virtual QString password();
+    QString password() override;
 
     /**
      * Stores the password for this document in KWallet.

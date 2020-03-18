@@ -56,10 +56,10 @@ public:
     QAction * createAction();
 
     /// reimplemented
-    virtual bool showOnShapeCreate() { return true; }
+    virtual bool showOnShapeCreate() override { return true; }
 
 public Q_SLOTS:
-    void updateData();
+    void updateData() override;
 
     void setLegendOrientation(int boxEntryIndex);
     void setLegendAlignment(int boxEntryIndex);

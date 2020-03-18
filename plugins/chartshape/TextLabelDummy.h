@@ -29,9 +29,9 @@
 class TextLabelDummy : public KoShape
 {
 public:
-    void paint(QPainter&, const KoViewConverter&, KoShapePaintingContext &paintcontext);
-    bool loadOdf(const KoXmlElement&, KoShapeLoadingContext&);
-    void saveOdf(KoShapeSavingContext&) const;
+    void paint(QPainter&, const KoViewConverter&, KoShapePaintingContext &paintcontext) override;
+    bool loadOdf(const KoXmlElement&, KoShapeLoadingContext&) override;
+    void saveOdf(KoShapeSavingContext&) const override;
 };
 
 #endif

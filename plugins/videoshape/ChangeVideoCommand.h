@@ -32,9 +32,9 @@ public:
     ~ChangeVideoCommand();
 
     /// redo the command
-    virtual void redo();
+    void redo() override;
     /// revert the actions done in redo
-    virtual void undo();
+    void undo() override;
 
 private:
     bool m_first;

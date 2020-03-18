@@ -37,7 +37,7 @@ public:
     virtual ~KPrSoundEventActionWidget();
 
 public Q_SLOTS:
-    void setData( KPrEventActionData *eventActionData );
+    void setData( KPrEventActionData *eventActionData ) override;
 
 private Q_SLOTS:
     void soundComboChanged();

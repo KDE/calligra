@@ -103,7 +103,7 @@ public:
      * TODO: Not implemented yet. At the moment, DataSet's data and attribute
      * getter are used instead.
      */
-    virtual QVariant data(const QModelIndex &index, int role) const;
+    QVariant data(const QModelIndex &index, int role) const override;
 
     /**
      * Returns properties that are global to either a data set or a category,
@@ -117,19 +117,19 @@ public:
      * TODO: Not implemented yet. At the moment, DataSet's data and attribute
      * getter are used instead.
      */
-    virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
 
-    virtual QModelIndex parent(const QModelIndex &index) const;
+    QModelIndex parent(const QModelIndex &index) const override;
 
     /**
      * Returns the number of data sets in this model.
      */
-    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
 
     /**
      * Returns maximum the number of data points the data sets have.
      */
-    virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 
     // The following methods are specific to the chart
     void setFirstRowIsLabel(bool b);
@@ -164,13 +164,13 @@ public:
      * 
      * Effectively adds DataSet(s) to the model
      */
-    bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
+    bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
     /**
      * Remove @p count number of rows at position @p row.
      * 
      * Effectively removes DataSet(s) from the model
      */
-    bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
+    bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
 
     /**
      * Clears the list of data sets, but keeps them in a list of "removed"

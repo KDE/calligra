@@ -35,7 +35,7 @@ class CellRegionStringValidator : public QValidator
     explicit CellRegionStringValidator(KoChart::ChartModel *model);
     ~CellRegionStringValidator();
 	
-    State validate(QString &string, int & pos) const;
+    State validate(QString &string, int & pos) const override;
 	
  private:
     class Private;
