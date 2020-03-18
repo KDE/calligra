@@ -70,7 +70,7 @@ class KOODFREADER_EXPORT OdtReader : public OdfReader
 
  protected:
     // ODT document level functions
-    DECLARE_READER_FUNCTION(OfficeText);
+    DECLARE_READER_FUNCTION(OfficeText) override;
 
  private:
     // Not much here. Most are already in OdfReader.

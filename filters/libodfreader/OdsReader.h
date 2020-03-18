@@ -77,7 +77,7 @@ class KOODFREADER_EXPORT OdsReader : public OdfReader
     // the element in ODF that they handle.
 
     // ODS document level functions
-    DECLARE_READER_FUNCTION(OfficeSpreadsheet);
+    DECLARE_READER_FUNCTION(OfficeSpreadsheet) override;
 
  private:
     // Not much here. Most are already in OdfReader.
