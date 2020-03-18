@@ -27,7 +27,7 @@
 
 
 #define DECLARE_READER_FUNCTION(name) \
-    void readElement##name(KoXmlStreamReader &reader) override
+    void readElement##name(KoXmlStreamReader &reader)
 
 #define IMPLEMENT_READER_FUNCTION_START(readername, name)            \
 void readername::readElement##name(KoXmlStreamReader &reader)        \
