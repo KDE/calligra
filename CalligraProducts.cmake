@@ -348,7 +348,6 @@ calligra_define_productset(KARBON "Full Karbon (for Desktop)"
     REQUIRES
         APP_KARBON
         PLUGIN_KARBONPLUGINS
-        PLUGIN_STENCILSDOCKER
         PLUGIN_SHAPEFILTEREFFECTS
     OPTIONAL
         # extras
@@ -362,6 +361,7 @@ calligra_define_productset(KARBON "Full Karbon (for Desktop)"
         PLUGIN_PATHSHAPES
         PLUGIN_PICTURESHAPE
         PLUGIN_PLUGINSHAPE
+        PLUGIN_STENCILSDOCKER
         PLUGIN_TEXTEDITING
         PLUGIN_TEXTSHAPE
         PLUGIN_VARIABLES
@@ -411,6 +411,7 @@ calligra_define_productset(STAGE "Full Stage (for Desktop)"
         PLUGIN_PLUGINSHAPE
         PLUGIN_TEXTEDITING
         PLUGIN_TEXTSHAPE
+        PLUGIN_STENCILSDOCKER
         PLUGIN_VARIABLES
         PLUGIN_VECTORSHAPE
         PLUGIN_VIDEOSHAPE
@@ -433,6 +434,7 @@ calligra_define_productset(WORDS "Full Words (for Desktop)"
         PLUGIN_PICTURESHAPE
         PLUGIN_PLUGINSHAPE
         PLUGIN_SEMANTICITEMS
+        PLUGIN_STENCILSDOCKER
         PLUGIN_TEXTEDITING
         PLUGIN_TEXTSHAPE
         PLUGIN_VARIABLES
