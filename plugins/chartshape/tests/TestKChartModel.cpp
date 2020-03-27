@@ -118,28 +118,20 @@ void TestKChartModel::testDataSetInsertionAndRemoval()
     dataSet2.setYDataRegion(CellRegion(m_table, QRect(2, 1, 10, 1)));
     m_model->addDataSet(&dataSet1);
     m_model->addDataSet(&dataSet2);
-    qInfo()<<1<<m_testModel->m_numRows;
     QCOMPARE(m_testModel->m_numRows, 10);
-    qInfo()<<2<<m_testModel->m_numRows;
     QCOMPARE(m_testModel->m_numCols, 2);
-    qInfo()<<3<<m_testModel->m_numCols;
-    qInfo()<<4<<m_model->rowCount()<<m_model->columnCount();
     QCOMPARE(m_model->rowCount(), 10);
     QCOMPARE(m_model->columnCount(), 2);
     m_model->removeDataSet(&dataSet1);
     m_model->removeDataSet(&dataSet2);
-    qInfo()<<5<<m_testModel->m_numRows<<m_testModel->m_numCols;
     QCOMPARE(m_testModel->m_numRows, 0);
     QCOMPARE(m_testModel->m_numCols, 0);
-    qInfo()<<6<<m_model->rowCount()<<m_model->columnCount();
     QCOMPARE(m_model->columnCount(), 0);
     QCOMPARE(m_model->rowCount(), 0);
     m_model->addDataSet(&dataSet1);
     m_model->addDataSet(&dataSet2);
-    qInfo()<<7<<m_testModel->m_numRows<<m_testModel->m_numCols;
     QCOMPARE(m_testModel->m_numRows, 10);
     QCOMPARE(m_testModel->m_numCols, 2);
-    qInfo()<<8<<m_model->rowCount()<<m_model->columnCount();
     QCOMPARE(m_model->rowCount(), 10);
     QCOMPARE(m_model->columnCount(), 2);
 }
