@@ -112,6 +112,7 @@ void TestKChartModel::testDataSetInsertion()
 
 void TestKChartModel::testDataSetInsertionAndRemoval()
 {
+    m_model->setDataDirection(Qt::Vertical);
     DataSet dataSet1(0);
     DataSet dataSet2(1);
     dataSet1.setYDataRegion(CellRegion(m_table, QRect(1, 1, 10, 1)));
@@ -123,6 +124,7 @@ void TestKChartModel::testDataSetInsertionAndRemoval()
     QCOMPARE(m_model->rowCount(), 10);
     QCOMPARE(m_model->columnCount(), 2);
     m_model->removeDataSet(&dataSet1);
+    qInfo()<<4.1<<m_model->rowCount()<<m_model->columnCount();
     m_model->removeDataSet(&dataSet2);
     QCOMPARE(m_testModel->m_numRows, 0);
     QCOMPARE(m_testModel->m_numCols, 0);
@@ -134,6 +136,42 @@ void TestKChartModel::testDataSetInsertionAndRemoval()
     QCOMPARE(m_testModel->m_numCols, 2);
     QCOMPARE(m_model->rowCount(), 10);
     QCOMPARE(m_model->columnCount(), 2);
+
+    DataSet dataSet3(2);
+    dataSet3.setYDataRegion(CellRegion(m_table, QRect(3, 1, 10, 1)));
+    m_model->addDataSet(&dataSet3);
+    QCOMPARE(m_testModel->m_numRows, 10);
+    QCOMPARE(m_testModel->m_numCols, 3);
+    m_model->removeDataSet(&dataSet2);
+    QCOMPARE(m_testModel->m_numRows, 10);
+    QCOMPARE(m_testModel->m_numCols, 2);
+    m_model->removeDataSet(&dataSet1);
+    QCOMPARE(m_testModel->m_numRows, 10);
+    QCOMPARE(m_testModel->m_numCols, 1);
+    m_model->removeDataSet(&dataSet3);
+    QCOMPARE(m_testModel->m_numRows, 0);
+    QCOMPARE(m_testModel->m_numCols, 0);
+    
+    m_model->setDataDirection(Qt::Horizontal);
+    QVERIFY(m_model->dataDirection() == Qt::Horizontal);
+    m_model->addDataSet(&dataSet1);
+    QCOMPARE(m_testModel->m_numRows, 1);
+    QCOMPARE(m_testModel->m_numCols, 10);
+    m_model->addDataSet(&dataSet2);
+    QCOMPARE(m_testModel->m_numRows, 2);
+    QCOMPARE(m_testModel->m_numCols, 10);
+    m_model->addDataSet(&dataSet3);
+    QCOMPARE(m_testModel->m_numRows, 3);
+    QCOMPARE(m_testModel->m_numCols, 10);
+    m_model->removeDataSet(&dataSet2);
+    QCOMPARE(m_testModel->m_numRows, 2);
+    QCOMPARE(m_testModel->m_numCols, 10);
+    m_model->removeDataSet(&dataSet1);
+    QCOMPARE(m_testModel->m_numRows, 1);
+    QCOMPARE(m_testModel->m_numCols, 10);
+    m_model->removeDataSet(&dataSet3);
+    QCOMPARE(m_testModel->m_numRows, 0);
+    QCOMPARE(m_testModel->m_numCols, 0);
 }
 
 void TestKChartModel::testData()

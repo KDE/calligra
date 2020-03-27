@@ -593,30 +593,41 @@ void KChartModel::removeDataSet(DataSet *dataSet, bool silent)
         int newMaxDataSetSize = d->calcMaxDataSetSize(_dataSets);
 
         if (newMaxDataSetSize < oldMaxDataSetSize) {
-            if (d->dataDirection == Qt::Horizontal)
+            if (d->dataDirection == Qt::Horizontal) {
                 beginRemoveColumns(QModelIndex(), newMaxDataSetSize, oldMaxDataSetSize - 1);
-            else
+            } else {
                 beginRemoveRows(QModelIndex(), newMaxDataSetSize, oldMaxDataSetSize - 1);
+            }
             d->dataSets = _dataSets;
             d->biggestDataSetSize = newMaxDataSetSize;
-            if (d->dataDirection == Qt::Horizontal)
+            if (d->dataDirection == Qt::Horizontal) {
                 endRemoveColumns();
-            else
+            } else {
                 endRemoveRows();
+            }
         }
-
-        int columnAboutToBeRemoved = dataSetIndex * d->dataDimensions;
-        if (d->dataDirection == Qt::Horizontal)
-            beginRemoveRows(QModelIndex(), columnAboutToBeRemoved,
-                             columnAboutToBeRemoved + d->dataDimensions - 1);
-        else
-            beginRemoveColumns(QModelIndex(), columnAboutToBeRemoved,
-                                columnAboutToBeRemoved + d->dataDimensions - 1);
-        d->dataSets.removeAt(dataSetIndex);
-        if (d->dataDirection == Qt::Horizontal)
-            endRemoveRows();
-        else
-            endRemoveColumns();
+        // If the dataSet has been removed above we cannot remove it again.
+        // This should only happen when the last dataSet is removed
+        if (d->dataSets.contains(dataSet)) {
+            int first = dataSetIndex * d->dataDimensions;
+            int last = first + d->dataDimensions - 1;
+            if (d->dataDirection == Qt::Horizontal) {
+                beginRemoveRows(QModelIndex(), first, last);
+            } else {
+                beginRemoveColumns(QModelIndex(), first, last);
+            }
+            d->dataSets.removeAt(dataSetIndex);
+            if (d->dataDirection == Qt::Horizontal) {
+                endRemoveRows();
+            } else {
+                endRemoveColumns();
+            }
+        } else {
+            Q_ASSERT(d->dataSets.count() == 0);
+            // tell consumers that there is nothing left
+            beginResetModel();
+            endResetModel();
+        }
     }
 }
 
