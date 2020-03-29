@@ -50,6 +50,7 @@
 #include <FlakeDebug.h>
 
 #include <QColor>
+#include <QPainterPath>
 
 
 SvgParser::SvgParser(KoDocumentResourceManager *documentResourceManager)

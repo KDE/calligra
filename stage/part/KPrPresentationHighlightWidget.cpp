@@ -26,6 +26,7 @@
 #include <QMouseEvent>
 #include <QColor>
 #include <QPainter>
+#include <QPainterPath>
 
 KPrPresentationHighlightWidget::KPrPresentationHighlightWidget( KoPACanvasBase * canvas )
 : KPrPresentationToolEventForwarder(canvas)

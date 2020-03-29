@@ -17,6 +17,9 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "MusicStyle.h"
+
+#include <QPainterPath>
+
 using namespace MusicCore;
 
 MusicStyle::MusicStyle()

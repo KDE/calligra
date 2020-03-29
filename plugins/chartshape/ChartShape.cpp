@@ -31,6 +31,7 @@
 // Qt
 #include <QPointF>
 #include <QPainter>
+#include <QPainterPath>
 #include <QSizeF>
 #include <QTextDocument>
 #include <QStandardItemModel>

@@ -25,6 +25,7 @@
 // Qt
 #include <QPen>
 #include <QPainter>
+#include <QPainterPath>
 #include <QByteArray>
 #include <QBuffer>
 #include <QDataStream>

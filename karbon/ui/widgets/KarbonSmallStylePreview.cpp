@@ -40,6 +40,7 @@
 #include <QPushButton>
 #include <QLabel>
 #include <QPainter>
+#include <QPainterPath>
 #include <QPaintEvent>
 #include <QHBoxLayout>
 

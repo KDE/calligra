@@ -25,6 +25,7 @@
 #include <QPolygon>
 #include <QString>
 #include <QPainter>
+#include <QPainterPath>
 
 // Libsvm
 #include "SvmEnums.h"

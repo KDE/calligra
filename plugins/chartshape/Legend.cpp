@@ -30,6 +30,7 @@
 #include <QBrush>
 #include <QFont>
 #include <QImage>
+#include <QPainterPath>
 
 // Calligra
 #include <KoXmlReader.h>

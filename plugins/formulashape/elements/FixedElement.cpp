@@ -25,6 +25,7 @@
 #include <KoXmlReader.h>
 
 #include <QPainter>
+#include <QPainterPath>
 
 
 FixedElement::FixedElement( BasicElement* parent ) : BasicElement( parent )

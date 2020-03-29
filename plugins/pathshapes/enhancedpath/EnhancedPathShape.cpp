@@ -36,6 +36,8 @@
 #include <KoOdfWorkaround.h>
 #include <KoPathPoint.h>
 
+#include <QPainterPath>
+
 EnhancedPathShape::EnhancedPathShape(const QRect &viewBox)
 : m_viewBox(viewBox)
 , m_viewBoxOffset(0.0, 0.0)

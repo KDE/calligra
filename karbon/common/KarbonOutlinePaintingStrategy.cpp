@@ -25,6 +25,7 @@
 
 #include <QPen>
 #include <QPainter>
+#include <QPainterPath>
 
 class OutlineStroke : public KoShapeStroke {
 public:

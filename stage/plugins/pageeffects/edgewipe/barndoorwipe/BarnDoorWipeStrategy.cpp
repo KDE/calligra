@@ -21,6 +21,7 @@
 #include "BarnDoorWipeEffectFactory.h"
 #include <QWidget>
 #include <QPainter>
+#include <QPainterPath>
 
 const int StepCount = 250;
 

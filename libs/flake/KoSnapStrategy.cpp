@@ -28,6 +28,7 @@
 #include <KoGuidesData.h>
 
 #include <QPainter>
+#include <QPainterPath>
 
 #include <cmath>
 

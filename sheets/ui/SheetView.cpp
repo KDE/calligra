@@ -23,6 +23,7 @@
 #include <QCache>
 #include <QRect>
 #include <QPainter>
+#include <QPainterPath>
 #ifdef CALLIGRA_SHEETS_MT
 #include <QMutex>
 #include <QMutexLocker>

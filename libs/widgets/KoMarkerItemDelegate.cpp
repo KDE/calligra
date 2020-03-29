@@ -24,6 +24,7 @@
 #include <KoMarker.h>
 
 #include <QPainter>
+#include <QPainterPath>
 #include <QPen>
 
 KoMarkerItemDelegate::KoMarkerItemDelegate(KoMarkerData::MarkerPosition position, QObject *parent)

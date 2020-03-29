@@ -35,6 +35,7 @@
 #include "writeodf/writeodfdraw.h"
 
 #include <QDebug>
+#include <QPainterPath>
 #include <QTransform>
 #include <QBuffer>
 #include <QUrl>

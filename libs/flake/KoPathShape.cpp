@@ -50,6 +50,7 @@
 
 #include <FlakeDebug.h>
 #include <QPainter>
+#include <QPainterPath>
 
 #include <qnumeric.h> // for qIsNaN
 static bool qIsNaNPoint(const QPointF &p) {

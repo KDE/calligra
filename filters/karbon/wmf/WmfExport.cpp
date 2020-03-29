@@ -34,6 +34,8 @@
 #include <KoPatternBackground.h>
 #include <KoUnit.h>
 
+#include <QPainterPath>
+
 /*
 TODO: bs.wmf stroke in red with MSword and in brown with Words ??
 */

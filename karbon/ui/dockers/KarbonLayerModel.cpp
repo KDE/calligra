@@ -42,6 +42,7 @@
 
 #include <QMimeData>
 #include <QPainter>
+#include <QPainterPath>
 
 KoShapeContainer *shapeToContainer(KoShape *shape)
 {
