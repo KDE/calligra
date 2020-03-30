@@ -183,7 +183,7 @@
       <li xml:lang="ia">Interfacie de usator personalisabile con barra de instrumentos e stivatores (dockers) liberemente positionabile</li>
       <li xml:lang="id">Antarmuka pengguna yang dapat dikustomisasi dengan docker dan toolbar yang secara bebas dapat ditempatkan</li>
       <li xml:lang="it">Interfaccia utente personalizzabile con barre degli strumenti posizionabili liberamente e aree di aggancio</li>
-      <li xml:lang="ko">자유롭게 배치할 수 있는 도구 모음 및 고정 표시 도구가 있는 사용자 지정이 가능한 사용자 인터페이스</li>
+      <li xml:lang="ko">자유롭게 배치할 수 있는 도구 모음 및 고정 표시 도구가 있는 사용자 정의 가능한 사용자 인터페이스</li>
       <li xml:lang="nl">Aan te passen gebruikersinterface met vrij te plaatsen werkbalken en verankeringen</li>
       <li xml:lang="pl">Układ sterowania z dowolnie umieszczanymi paskami narzędzi i dokowaniami</li>
       <li xml:lang="pt">Interface de utilizador configurável com barras e áreas acopláveis livres</li>
@@ -404,7 +404,7 @@
       <li xml:lang="id">Dapat diekstensi dengan plugin penulisan untuk alat, shape, dan docker baru</li>
       <li xml:lang="it">Espandibile tramite la scrittura di estensioni per nuovi strumenti, forme e aree di aggancio</li>
       <li xml:lang="ko">새로운 도구, 모양 및 고정 표시 도구용 플러그인을 작성하여 확장 가능</li>
-      <li xml:lang="nl">Uit te breiden dor het schrijven van plug-ins voor nieuwe hulpmiddelen, vormen en verankering</li>
+      <li xml:lang="nl">Uit te breiden door het schrijven van plug-ins voor nieuwe hulpmiddelen, vormen en verankering</li>
       <li xml:lang="pl">Rozszerzalne wtyczki zapisu dla nowych narzędzi, kształtów i dokowań</li>
       <li xml:lang="pt">Modular, através da criação de 'plugins' para novas ferramentas, formas e áreas acopláveis</li>
       <li xml:lang="pt-BR">Expansível através da criação de plugins para novas ferramentas, formas e áreas acopláveis</li>
