@@ -81,12 +81,8 @@ function kundo2_aware_xgettext_internal() {
         
         ${MSGCAT} -F "${POT_PART_NORMAL}" "${POT_PART_QUNDOFORMAT}" > "${POT_MERGED}"
         MERGED_HEADER_LINE_COUNT=$(cat "${POT_MERGED}" | grep "^$" -B 100000 --max-count=1 | wc -l)
-        # Seems BSD tail does not have tail -n +NUM
-        MERGED_LINE_COUNT=$(cat "${POT_MERGED}" | wc -l)
-        MERGED_DATA_LENGTH=$(( MERGED_LINE_COUNT - MERGED_HEADER_LINE_COUNT ))
-
         KDE_HEADER="$(cat "${POT_PART_NORMAL}" | grep "^$" -B 100000 --max-count=1)"
-        MERGED_TAIL="$(cat "${POT_MERGED}" | tail -n $MERGED_DATA_LENGTH)"
+        MERGED_TAIL="$(cat "${POT_MERGED}" | tail -n +$MERGED_HEADER_LINE_COUNT)"
 
         # Print out the resulting .pot
         echo "$KDE_HEADER"
