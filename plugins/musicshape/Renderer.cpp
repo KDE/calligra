@@ -33,6 +33,7 @@
 #include "core/StaffSystem.h"
 
 #include <QMultiMap>
+#include <QPainterPath>
 
 #include <climits>
 #include <algorithm>

@@ -44,6 +44,7 @@
 #include "KoShapePaintingContext.h"
 
 #include <QPainter>
+#include <QPainterPath>
 #include <QTimer>
 #include <FlakeDebug.h>
 

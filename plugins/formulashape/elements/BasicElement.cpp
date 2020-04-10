@@ -32,6 +32,7 @@
 #include <KoXmlReader.h>
 
 #include <QPainter>
+#include <QPainterPath>
 #include <QVariant>
 
 

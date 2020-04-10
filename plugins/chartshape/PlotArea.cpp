@@ -29,6 +29,7 @@
 #include <QList>
 #include <QImage>
 #include <QPainter>
+#include <QPainterPath>
 
 // Calligra
 #include <KoXmlNS.h>

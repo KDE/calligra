@@ -40,6 +40,7 @@
 #include <PageAppDebug.h>
 
 #include <QPainter>
+#include <QPainterPath>
 
 #include <algorithm>
 

@@ -20,6 +20,8 @@
 
 #include <math.h>
 
+#include <QPainterPath>
+
 #include <VectorImageDebug.h>
 
 #include "EmfObjects.h"

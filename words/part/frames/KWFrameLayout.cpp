@@ -37,6 +37,7 @@
 #include <KoShapeBackground.h>
 #include <KoColumns.h>
 
+#include <QPainterPath>
 #include <QTextLayout>
 #include <QTextDocument>
 #include <QTextBlock>

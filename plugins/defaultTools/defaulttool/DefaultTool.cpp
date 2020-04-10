@@ -63,6 +63,7 @@
 
 #include <QAction>
 #include <QKeyEvent>
+#include <QPainterPath>
 #include <QClipboard>
 #include <QStandardPaths>
 

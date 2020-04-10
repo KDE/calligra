@@ -27,6 +27,7 @@
 
 #include <QDebug>
 #include <QColor>
+#include <QPainterPath>
 
 #include <cmath>
 #include <cstdlib>

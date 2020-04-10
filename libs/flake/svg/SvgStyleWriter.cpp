@@ -51,6 +51,7 @@
 #include <QBuffer>
 #include <QGradient>
 #include <QLinearGradient>
+#include <QPainterPath>
 #include <QRadialGradient>
 #include <QMimeDatabase>
 #include <QMimeType>

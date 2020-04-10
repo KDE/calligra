@@ -48,6 +48,7 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QMenu>
+#include <QPainterPath>
 
 #include "commands/KoPAPageMoveCommand.h"
 

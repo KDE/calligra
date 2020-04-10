@@ -21,6 +21,8 @@
 #include "FourBoxWipeEffectFactory.h"
 #include <QWidget>
 #include <QPainter>
+#include <QPainterPath>
+#include <QPainterPath>
 
 const int StepCount = 250;
 

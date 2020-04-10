@@ -30,6 +30,8 @@
 #include <KoSnapData.h>
 #include <KoGuidesData.h>
 
+#include <QPainterPath>
+
 void TestSnapStrategy::testOrthogonalSnap()
 {
     //Test case one - expected not to snap
