@@ -50,7 +50,7 @@
 #include <KChartChart>
 #include <KChartCartesianAxis>
 #include <KChartAbstractDiagram>
-
+#include <kchart_version.h>
 #include <KChartAbstractCartesianDiagram>
 #include <KChartBarAttributes>
 #include <KChartCartesianCoordinatePlane>
@@ -1313,6 +1313,9 @@ void PlotArea::paint(QPainter& painter, const KoViewConverter& converter, KoShap
     // is not not cut off.
     painter.setClipping(false);
     if (kdchartRect.width() > 10 && kdchartRect.height() > 10) {
+#if KCHART_VERSION < 0x020689
+            painter.setPen(QPen()); // ruler line needs a pen to be shown
+#endif
         d->kdChart->paint(&painter, kdchartRect);
     }
     //painter.restore();

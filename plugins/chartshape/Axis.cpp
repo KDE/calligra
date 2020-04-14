@@ -69,6 +69,7 @@
 #include <KChartThreeDLineAttributes>
 #include <KChartBackgroundAttributes>
 #include <KChartRulerAttributes>
+#include <kchart_version.h>
 
 // KoChart
 #include "PlotArea.h"
@@ -259,6 +260,9 @@ Axis::Private::Private(Axis *axis, AxisDimension dim)
 
     KChart::RulerAttributes attr = kdAxis->rulerAttributes();
     attr.setShowRulerLine(true);
+#if KCHART_VERSION >= 0x020689
+    attr.setRulerLinePen(QPen());
+#endif
     kdAxis->setRulerAttributes(attr);
 }
 
@@ -1008,6 +1012,18 @@ void Axis::clearDataSets()
     QList<DataSet*> list = d->dataSets;
     foreach(DataSet *dataSet, list)
         detachDataSet(dataSet, true);
+}
+
+bool Axis::showRuler() const
+{
+    return d->kdAxis->rulerAttributes().showRulerLine();
+}
+
+void Axis::setShowRuler(bool show)
+{
+    KChart::RulerAttributes attr = d->kdAxis->rulerAttributes();
+    attr.setShowRulerLine(!attr.showRulerLine());
+    d->kdAxis->setRulerAttributes(attr);
 }
 
 qreal Axis::majorInterval() const

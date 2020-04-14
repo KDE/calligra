@@ -86,6 +86,7 @@ public:
     QFont font() const;
     qreal fontSize() const;
     bool isVisible() const;
+    bool showRuler() const;
 
     void setTitleText(const QString &text);
     void setShowLabels(bool show);
@@ -125,6 +126,7 @@ public:
     void setFont(const QFont &font);
     void setFontSize(qreal size);
     void setVisible(bool visible);
+    void setShowRuler(bool show);
 
     KoOdfNumberStyles::NumericStyleFormat *numericStyleFormat() const;
     void SetNumericStyleFormat(KoOdfNumberStyles::NumericStyleFormat *numericStyleFormat) const;
