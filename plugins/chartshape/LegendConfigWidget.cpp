@@ -67,6 +67,8 @@ LegendConfigWidget::LegendConfigWidget()
 {
     setObjectName("LegendConfigWidget");
     d->ui.setupUi(this);
+    // FIXME: after 3.2 release: Implement fonts dialog
+    d->ui.legendEditFontButton->hide();
 
     connect(d->ui.showLegend, SIGNAL(toggled(bool)),
             this,             SIGNAL(showLegendChanged(bool)));
