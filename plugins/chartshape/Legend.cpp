@@ -53,6 +53,7 @@
 #include <KChartBackgroundAttributes>
 #include <KChartLegend>
 #include "KChartConvertions.h"
+#include "kchart_version.h"
 
 // KoChart
 #include "PlotArea.h"
@@ -352,6 +353,15 @@ void Legend::paint(QPainter &painter, const KoViewConverter &converter, KoShapeP
         background()->paint(painter, converter, paintContext, p);
     }
 
+#if KCHART_VERSION >= ((2<<16)|(6<<8)|(89))
+    disconnect (d->kdLegend, SIGNAL(propertiesChanged()), this, SLOT(slotKdLegendChanged()));
+
+    const QRect rect = ScreenConversions::scaleFromPtToPx(paintRect, painter);
+    ScreenConversions::scaleFromPtToPx(painter);
+    d->kdLegend->paint(&painter, rect);
+
+    connect (d->kdLegend, SIGNAL(propertiesChanged()), this, SLOT(slotKdLegendChanged()));
+#else
     // KChart thinks in pixels, Calligra in pt
     // KChart also for non-QWidget painting devices cares for the logicalDpi
     // Other than PlotArea we do not control the output size via the paint method,
@@ -381,6 +391,7 @@ void Legend::paint(QPainter &painter, const KoViewConverter &converter, KoShapeP
     //painter.restore();
     // Paint the cached pixmap
     //painter.drawImage(0, 0, d->image);
+#endif
 }
 
 
