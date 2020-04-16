@@ -124,3 +124,33 @@ QRect ScreenConversions::scaleFromPtToPx(const QRectF &rect, QPainter &painter)
     return QRect(scaleFromPtToPx(rect.topLeft(), paintDevice),
                  scaleFromPtToPx(rect.size(), paintDevice));
 }
+
+QSizeF ScreenConversions::toWidgetDpi(QWidget *widget, const QSizeF &size)
+{
+    QSizeF s = size;
+    const qreal scaleX = static_cast<qreal>(widget->logicalDpiX()) / KoDpi::dpiX();
+    const qreal scaleY = static_cast<qreal>(widget->logicalDpiY()) / KoDpi::dpiY();
+    s.setWidth(s.width() * scaleX);
+    s.setHeight(s.height() * scaleY);
+    return s;
+}
+
+QSizeF ScreenConversions::fromWidgetDpi(QWidget *widget, const QSizeF &size)
+{
+    QSizeF s = size;
+    const qreal scaleX = static_cast<qreal>(KoDpi::dpiX()) / widget->logicalDpiX();
+    const qreal scaleY = static_cast<qreal>(KoDpi::dpiY()) / widget->logicalDpiY();
+    s.setWidth(s.width() * scaleX);
+    s.setHeight(s.height() * scaleY);
+    return s;
+}
+
+void ScreenConversions::scaleToWidgetDpi(QWidget *widget, QPainter &painter)
+{
+    // only scale if we paint into a QWidget
+    if (dynamic_cast<QWidget*>(painter.device())) {
+        const qreal scaleX = static_cast<qreal>(KoDpi::dpiX()) / widget->logicalDpiX();
+        const qreal scaleY = static_cast<qreal>(KoDpi::dpiY()) / widget->logicalDpiY();
+        painter.scale(scaleX, scaleY);
+    }
+}

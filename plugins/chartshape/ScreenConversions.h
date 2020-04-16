@@ -51,6 +51,11 @@ public:
     static qreal pxToPtX(qreal px);
     static qreal pxToPtY(qreal px);
     static QSizeF scaleFromPxToPt(const QSize &size);
+
+    // auxcilliary
+    static QSizeF toWidgetDpi(QWidget *widget, const QSizeF &size);
+    static QSizeF fromWidgetDpi(QWidget *widget, const QSizeF &size);
+    static void scaleToWidgetDpi(QWidget *widget, QPainter &painter);
 };
 
 } // namespace KoChart

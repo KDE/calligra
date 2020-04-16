@@ -287,12 +287,11 @@ void Legend::setLegendPosition(Position position)
     d->position = position;
     d->pixmapRepaintRequested = true;
 }
-
+// Note that size is controlled by the KChart::Legend
+// via the propertyChanged() signal
+// so size will change dependent on amount of data
 void Legend::setSize(const QSizeF &newSize)
 {
-    QSize newSizePx = ScreenConversions::scaleFromPtToPx(newSize);
-    d->kdLegend->resize(newSizePx);
-    d->kdLegend->resizeLayout(newSizePx);
     KoShape::setSize(newSize);
 }
 
@@ -356,8 +355,11 @@ void Legend::paint(QPainter &painter, const KoViewConverter &converter, KoShapeP
 #if KCHART_VERSION >= ((2<<16)|(6<<8)|(89))
     disconnect (d->kdLegend, SIGNAL(propertiesChanged()), this, SLOT(slotKdLegendChanged()));
 
-    const QRect rect = ScreenConversions::scaleFromPtToPx(paintRect, painter);
+    // KChart thinks in pixels, Calligra in pt
     ScreenConversions::scaleFromPtToPx(painter);
+    const QRect rect = ScreenConversions::scaleFromPtToPx(paintRect, painter);
+    // KChart works with its logicalDpi which may differ from ours if set with --dpi <x,y>
+    ScreenConversions::scaleToWidgetDpi(d->kdLegend, painter);
     d->kdLegend->paint(&painter, rect);
 
     connect (d->kdLegend, SIGNAL(propertiesChanged()), this, SLOT(slotKdLegendChanged()));
@@ -568,8 +570,8 @@ void Legend::slotKdLegendChanged()
     // FIXME: Update legend properly by implementing all *DataChanged() slots
     // in KChartModel. Right now, only yDataChanged() is implemented.
     //d->kdLegend->forceRebuild();
-    QSize size = d->kdLegend->sizeHint();
-    setSize(ScreenConversions::scaleFromPxToPt(size));
+    QSizeF size = ScreenConversions::scaleFromPxToPt(d->kdLegend->sizeHint());
+    setSize(ScreenConversions::fromWidgetDpi(d->kdLegend, size));
     update();
 }
 
