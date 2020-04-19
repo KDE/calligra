@@ -77,6 +77,7 @@
 #include "commands/AddRemoveAxisCommand.h"
 #include "commands/GapCommand.h"
 #include "commands/PlotAreaCommand.h"
+#include "commands/DatasetCommand.h"
 #include "ChartDebug.h"
 
 
@@ -384,10 +385,8 @@ QList<QPointer<QWidget> > ChartTool::createOptionWidgets()
 
 
     DataSetConfigWidget *dataset = plotarea->cartesianDataSetConfigWidget();
-    connect(dataset, SIGNAL(dataSetChartTypeChanged(DataSet*,ChartType)),
-            this,   SLOT(setDataSetChartType(DataSet*,ChartType)));
-    connect(dataset, SIGNAL(dataSetChartSubTypeChanged(DataSet*,ChartSubtype)),
-            this,   SLOT(setDataSetChartSubType(DataSet*,ChartSubtype)));
+    connect(dataset, SIGNAL(dataSetChartTypeChanged(DataSet*,ChartType,ChartSubtype)),
+            this,   SLOT(setDataSetChartType(DataSet*,ChartType,ChartSubtype)));
     connect(dataset, SIGNAL(datasetBrushChanged(DataSet*,QColor,int)),
             this, SLOT(setDataSetBrush(DataSet*,QColor,int)));
     connect(dataset, SIGNAL(dataSetMarkerChanged(DataSet*,OdfSymbolType,OdfMarkerStyle)),
@@ -569,22 +568,17 @@ void ChartTool::setDataSetCategoryDataRegion(DataSet *dataSet, const CellRegion 
 }
 
 
-void ChartTool::setDataSetChartType(DataSet *dataSet, ChartType type)
+void ChartTool::setDataSetChartType(DataSet *dataSet, ChartType type, ChartSubtype subType)
 {
     Q_ASSERT(d->shape);
     Q_ASSERT(dataSet);
-    if (dataSet)
-        dataSet->setChartType(type);
+    if (dataSet) {
+        DatasetCommand *cmd = new DatasetCommand(dataSet, d->shape);
+        cmd->setDataSetChartType(type, subType);
+        canvas()->addCommand(cmd);
+    }
     d->shape->update();
     d->shape->legend()->update();
-}
-
-void ChartTool::setDataSetChartSubType(DataSet *dataSet, ChartSubtype subType)
-{
-    Q_ASSERT(dataSet);
-    if (dataSet)
-        dataSet->setChartSubType(subType);
-    d->shape->update();
 }
 
 

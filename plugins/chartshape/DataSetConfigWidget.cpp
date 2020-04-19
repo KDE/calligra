@@ -433,8 +433,11 @@ void DataSetConfigWidget::ui_dataSetHasChartTypeChanged(bool b)
     if (!dataSet) {
         return;
     }
-    emit dataSetChartTypeChanged(dataSet, b ? chart->chartType() : LastChartType);
-    emit dataSetChartSubTypeChanged(dataSet, b ? chart->chartSubType() : NoChartSubtype);
+    if (b) {
+        emit dataSetChartTypeChanged(dataSet, chart->chartType(), chart->chartSubType());
+    } else {
+        emit dataSetChartTypeChanged(dataSet, LastChartType, NoChartSubtype);
+    }
 }
 
 void DataSetConfigWidget::dataSetChartTypeSelected(QAction *action)
@@ -519,8 +522,7 @@ void DataSetConfigWidget::dataSetChartTypeSelected(QAction *action)
     if (iconName.size() > 0)
         d->ui.dataSetChartTypeMenu->setIcon(QIcon::fromTheme(iconName));
 
-    emit dataSetChartTypeChanged(dataSet, type);
-    emit dataSetChartSubTypeChanged(dataSet, subtype);
+    emit dataSetChartTypeChanged(dataSet, type, subtype);
 
     updateData(type, subtype);
 }

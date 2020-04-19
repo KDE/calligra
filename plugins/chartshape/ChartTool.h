@@ -85,8 +85,7 @@ private Q_SLOTS:
     void setDataSetLabelDataRegion(DataSet *dataSet, const CellRegion &region);
     void setDataSetCategoryDataRegion(DataSet *dataSet, const CellRegion &region);
 
-    void setDataSetChartType(DataSet *dataSet, ChartType type);
-    void setDataSetChartSubType(DataSet *dataSet, ChartSubtype subType);
+    void setDataSetChartType(DataSet *dataSet, ChartType type, ChartSubtype subType);
 
     void setDataSetShowCategory(DataSet *dataSet, bool b, int section = -1);
     void setDataSetShowNumber(DataSet *dataSet, bool b, int section = -1);

@@ -86,8 +86,7 @@ public Q_SLOTS:
     void ui_dataSetErrorBarTypeChanged();
 
 Q_SIGNALS:
-    void dataSetChartTypeChanged(DataSet *dataSet, ChartType type);
-    void dataSetChartSubTypeChanged(DataSet *dataSet, ChartSubtype subType);
+    void dataSetChartTypeChanged(DataSet *dataSet, ChartType type, ChartSubtype subType);
 
     void showVerticalLinesChanged(bool b);
     void showHorizontalLinesChanged(bool b);

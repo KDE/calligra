@@ -68,6 +68,8 @@ void DatasetCommand::redo()
     m_oldOdfSymbolType = m_dataSet->odfSymbolType();
     m_oldMarkerStyle = m_dataSet->markerStyle();
     m_oldAxis = m_dataSet->attachedAxis();
+    m_oldType = m_dataSet->chartType();
+    m_oldSubtype = m_dataSet->chartSubType();
 
     if (m_oldShowCategory != m_newShowCategory ||
         m_oldShowNumber != m_newShowNumber ||
@@ -98,7 +100,12 @@ void DatasetCommand::redo()
         m_oldAxis->detachDataSet(m_dataSet);
         m_newAxis->attachDataSet(m_dataSet);
     }
-
+    if (m_newType != m_oldType) {
+        m_dataSet->setChartType(m_newType);
+    }
+    if (m_newSubtype != m_oldSubtype) {
+        m_dataSet->setChartSubType(m_newSubtype);
+    }
     m_chart->updateAll();
 }
 
@@ -133,7 +140,12 @@ void DatasetCommand::undo()
         m_newAxis->detachDataSet(m_dataSet);
         m_oldAxis->attachDataSet(m_dataSet);
     }
-
+    if (m_newType != m_oldType) {
+        m_dataSet->setChartType(m_oldType);
+    }
+    if (m_newSubtype != m_oldSubtype) {
+        m_dataSet->setChartSubType(m_oldSubtype);
+    }
     m_chart->updateAll();
 }
 
