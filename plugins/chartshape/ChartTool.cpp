@@ -978,7 +978,6 @@ void ChartTool::addAxis(AxisDimension dimension, const QString& title)
 
     Axis *axis = new Axis(d->shape->plotArea(), dimension); // automatically adds axis to plot area
     if (axis == d->shape->plotArea()->secondaryYAxis()) {
-        axis->title()->rotate(90);
         axis->setOdfAxisPosition("end"); // right
     } else if (axis == d->shape->plotArea()->secondaryXAxis()) {
         axis->setOdfAxisPosition("end"); // top

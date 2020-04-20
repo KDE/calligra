@@ -51,28 +51,6 @@ void PlotAreaCommand::redo()
     if (m_oldOrientation != m_newOrientation) {
         m_plotArea->setVertical(m_newOrientation == Qt::Vertical);
     }
-    if (m_plotArea->chartType() == BarChartType) {
-        for (Axis *axis : m_plotArea->axes()) {
-            if (axis->title()->isVisible()) {
-                debugChartUiAxes<<axis->actualAxisPosition();
-                int rotation = axis->title()->rotation();
-                switch (axis->actualAxisPosition()) {
-                    case KChart::CartesianAxis::Bottom:
-                    case KChart::CartesianAxis::Top:
-                        axis->title()->rotate(-rotation);
-                        break;
-                    case KChart::CartesianAxis::Left:
-                        axis->title()->rotate(-rotation);
-                        axis->title()->rotate(-90);
-                        break;
-                    case KChart::CartesianAxis::Right:
-                        axis->title()->rotate(-rotation);
-                        axis->title()->rotate(90);
-                        break;
-                }
-            }
-        }
-    }
     m_chart->update();
     m_chart->relayout();
 }
@@ -81,28 +59,6 @@ void PlotAreaCommand::undo()
 {
     if (m_oldOrientation != m_newOrientation) {
         m_plotArea->setVertical(m_oldOrientation == Qt::Vertical);
-    }
-    if (m_plotArea->chartType() == BarChartType) {
-        for (Axis *axis : m_plotArea->axes()) {
-            if (axis->title()->isVisible()) {
-                debugChartUiAxes<<axis->actualAxisPosition();
-                int rotation = axis->title()->rotation();
-                switch (axis->actualAxisPosition()) {
-                    case KChart::CartesianAxis::Bottom:
-                    case KChart::CartesianAxis::Top:
-                        axis->title()->rotate(-rotation);
-                        break;
-                    case KChart::CartesianAxis::Left:
-                        axis->title()->rotate(-rotation);
-                        axis->title()->rotate(-90);
-                        break;
-                    case KChart::CartesianAxis::Right:
-                        axis->title()->rotate(-rotation);
-                        axis->title()->rotate(90);
-                        break;
-                }
-            }
-        }
     }
     KUndo2Command::undo();
     m_chart->update();

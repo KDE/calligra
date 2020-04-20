@@ -255,7 +255,6 @@ void PlotArea::Private::initAxes()
     new Axis(q, XAxisDimension);
     Axis *yAxis = new Axis(q, YAxisDimension);
     yAxis->setShowMajorGrid(true);
-    yAxis->title()->rotate(-90);
 
     updateAxesPosition();
 }
@@ -795,9 +794,7 @@ bool PlotArea::loadOdf(const KoXmlElement &plotAreaElement,
             Axis *axis = new Axis(this, dim);
             if (dim == YAxisDimension) {
                 if (axis == yAxis()) {
-                    axis->title()->rotate(-90);
                 } else if (axis == secondaryYAxis()) {
-                    axis->title()->rotate(90);
                 }
             }
             axis->loadOdf(n, context);

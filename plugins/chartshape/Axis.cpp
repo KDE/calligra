@@ -1426,6 +1426,13 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
         /*if (styleStack.hasProperty(KoXmlNS::chart, "origin")) {
             const qreal origin = KoUnit::parseValue(styleStack.property(KoXmlNS::chart, "origin"));
         }*/
+        styleStack.setTypeProperties("chart");
+        if (styleStack.hasProperty(KoXmlNS::chart, "axis-position")) {
+            d->axisPosition = styleStack.property(KoXmlNS::chart, "axis-position");
+        }
+        if (styleStack.hasProperty(KoXmlNS::chart, "axis-label-position")) {
+            d->axisLabelsPosition = styleStack.property(KoXmlNS::chart, "axis-label-position");
+        }
 
         styleStack.setTypeProperties("text");
         if (styleStack.hasProperty(KoXmlNS::fo, "font-size")) {
@@ -1471,12 +1478,6 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
             } else {
                 // TODO
             }
-        }
-        if (styleStack.hasProperty(KoXmlNS::chart, "axis-position")) {
-            d->axisPosition = styleStack.property(KoXmlNS::chart, "axis-position");
-        }
-        if (styleStack.hasProperty(KoXmlNS::chart, "axis-label-position")) {
-            d->axisLabelsPosition = styleStack.property(KoXmlNS::chart, "axis-label-position");
         }
     } else {
         setShowLabels(KoOdfWorkaround::fixMissingStyle_DisplayLabel(axisElement, context));

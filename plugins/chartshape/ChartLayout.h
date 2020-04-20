@@ -38,6 +38,8 @@
 
 namespace KoChart {
 
+class PlotArea;
+
 /**
  * A generic chart-style layout with 10 possible positions:
  *
@@ -190,6 +192,8 @@ private:
 
     qreal xOffset(const QRectF &left, const QRectF &right, bool center = false) const;
     qreal yOffset(const QRectF &top, const QRectF &bottom, bool center = false) const;
+
+    void rotateAxisTitles(PlotArea *plotarea);
 
 #ifdef COMPILING_TESTS
 public:

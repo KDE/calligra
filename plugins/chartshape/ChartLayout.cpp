@@ -268,6 +268,56 @@ qreal ChartLayout::yOffset(const QRectF &top, const QRectF &bottom, bool center)
     return center ? y / 2.0 : y;
 }
 
+void ChartLayout::rotateAxisTitles(PlotArea *plotarea) {
+    switch (plotarea->chartType()) {
+        case BarChartType: {
+            bool verticalXAxis = plotarea->isVertical();
+            for (Axis *axis : plotarea->axes()) {
+                KoShape *title = axis->title();
+                title->rotate(-title->rotation());
+                switch (axis->actualAxisPosition()) {
+                    case KChart::CartesianAxis::Bottom:
+                        title->rotate(verticalXAxis ? -90 : 0);
+                        break;
+                    case KChart::CartesianAxis::Top:
+                        title->rotate(verticalXAxis ? -90 : 0);
+                        break;
+                    case KChart::CartesianAxis::Left:
+                        title->rotate(verticalXAxis ? 0 : -90);
+                        break;
+                    case KChart::CartesianAxis::Right:
+                        title->rotate(verticalXAxis ? 0 : 90);
+                        break;
+                }
+            }
+            break;
+        }
+        case LineChartType:
+        case AreaChartType:
+        case ScatterChartType:
+        case BubbleChartType:
+        case StockChartType: {
+            for (Axis *axis : plotarea->axes()) {
+                KoShape *title = axis->title();
+                title->rotate(-title->rotation());
+                switch (axis->actualAxisPosition()) {
+                    case KChart::CartesianAxis::Left:
+                        title->rotate(-90);
+                        break;
+                    case KChart::CartesianAxis::Right:
+                        title->rotate(90);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            break;
+        }
+        default:
+            break;
+    }
+}
+
 void ChartLayout::calculateLayout()
 {
     QRectF area = m_containerRect;
@@ -307,6 +357,7 @@ void ChartLayout::calculateLayout()
         debugChartLayout<<"legend rect:"<<legendRect;
     }
 
+    rotateAxisTitles(plotarea);
     // sort axis titles as bottom, left, top, right
     QMap<int, KoShape*> axisTitles;
     QRectF bottomTitleRect; // 1
