@@ -270,28 +270,7 @@ qreal ChartLayout::yOffset(const QRectF &top, const QRectF &bottom, bool center)
 
 void ChartLayout::rotateAxisTitles(PlotArea *plotarea) {
     switch (plotarea->chartType()) {
-        case BarChartType: {
-            bool verticalXAxis = plotarea->isVertical();
-            for (Axis *axis : plotarea->axes()) {
-                KoShape *title = axis->title();
-                title->rotate(-title->rotation());
-                switch (axis->actualAxisPosition()) {
-                    case KChart::CartesianAxis::Bottom:
-                        title->rotate(verticalXAxis ? -90 : 0);
-                        break;
-                    case KChart::CartesianAxis::Top:
-                        title->rotate(verticalXAxis ? -90 : 0);
-                        break;
-                    case KChart::CartesianAxis::Left:
-                        title->rotate(verticalXAxis ? 0 : -90);
-                        break;
-                    case KChart::CartesianAxis::Right:
-                        title->rotate(verticalXAxis ? 0 : 90);
-                        break;
-                }
-            }
-            break;
-        }
+        case BarChartType:
         case LineChartType:
         case AreaChartType:
         case ScatterChartType:
@@ -300,7 +279,7 @@ void ChartLayout::rotateAxisTitles(PlotArea *plotarea) {
             for (Axis *axis : plotarea->axes()) {
                 KoShape *title = axis->title();
                 title->rotate(-title->rotation());
-                switch (axis->actualAxisPosition()) {
+                switch (axis->kchartAxisPosition()) {
                     case KChart::CartesianAxis::Left:
                         title->rotate(-90);
                         break;
