@@ -782,9 +782,11 @@ bool PlotArea::loadOdf(const KoXmlElement &plotAreaElement,
             continue;
 
         if (n.localName() == "axis") {
-            if (!n.hasAttributeNS(KoXmlNS::chart, "dimension"))
+            if (!n.hasAttributeNS(KoXmlNS::chart, "dimension")) {
                 // We have to know what dimension the axis is supposed to be..
+                qInfo()<<Q_FUNC_INFO<<"No axis dimension";
                 continue;
+            }
             const QString dimension = n.attributeNS(KoXmlNS::chart, "dimension", QString());
             AxisDimension dim;
             if      (dimension == "x") dim = XAxisDimension;
@@ -797,6 +799,7 @@ bool PlotArea::loadOdf(const KoXmlElement &plotAreaElement,
                 } else if (axis == secondaryYAxis()) {
                 }
             }
+            debugChartOdf<<"axis dimension"<<dimension<<dim;
             axis->loadOdf(n, context);
         }
     }

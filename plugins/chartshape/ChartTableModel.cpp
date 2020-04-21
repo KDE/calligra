@@ -99,6 +99,7 @@ bool ChartTableModel::loadOdf(const KoXmlElement &tableElement,
 {
     Q_UNUSED(context);
 
+    debugChartOdf<<"Load table";
     setRowCount(0);
     setColumnCount(0);
 
@@ -182,7 +183,7 @@ bool ChartTableModel::loadOdf(const KoXmlElement &tableElement,
             } // foreach table:table-row
         }
     }
-
+    debugChartOdf<<"Loaded table:"<<rowCount()<<','<<columnCount();
     return true;
 }
 

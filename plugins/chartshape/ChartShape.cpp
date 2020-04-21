@@ -1061,6 +1061,7 @@ bool ChartShape::loadOdfData(const KoXmlElement &tableElement,
     internalModel->loadOdf(tableElement, context);
 
     QString tableName = tableElement.attributeNS(KoXmlNS::table, "name");
+    debugChartOdf<<"Loaded table:"<<tableName;
     d->tableSource.add(tableName, internalModel);
     // TODO: d->tableSource.setAvoidNameClash(tableName)
     setInternalModel(internalModel);

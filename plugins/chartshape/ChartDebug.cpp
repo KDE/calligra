@@ -26,6 +26,12 @@ const QLoggingCategory &CHART_LOG()
     return category;
 }
 
+const QLoggingCategory &CHARTPARSE_LOG()
+{
+    static const QLoggingCategory category("calligra.plugin.chart.parse");
+    return category;
+}
+
 const QLoggingCategory &CHARTLAYOUT_LOG()
 {
     static const QLoggingCategory category("calligra.plugin.chart.layout");

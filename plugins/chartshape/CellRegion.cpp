@@ -46,9 +46,14 @@ class Parser
 {
 public:
     Parser(const QString & input)
-        : m_input(input)
-        , m_pos(m_input.constEnd())
+        : m_pos(m_input.constEnd())
     {
+        m_input = input;
+        if (m_input.contains(":.")) {
+            // FIXME
+            warnChartParse<<"Handle 'DotDoubleDot' in input string";
+            m_input.replace(QStringLiteral(":."), QChar(':'));
+        }
         m_delimiter.append(QChar::fromLatin1('.'));
         m_delimiter.append(QChar::fromLatin1(':'));
         m_delimiter.append(QChar::fromLatin1(';'));
@@ -78,8 +83,20 @@ private:
     inline bool parseRegion2();
     inline void setTableName(const QString &name);
 
+public:
+    QString toString(Token &token)
+    {
+        QString types = "Dot,DoubleDot,Space,Spacer,Identifier,End";
+        QString s = QString("Token[%1").arg(types.split(',').value(token.m_type));
+        if (token.m_type == Token::Identifier) {
+            s += ", " + token.m_identifier;
+        }
+        s += ']';
+        return s;
+    }
+
 private:
-    const QString m_input;
+    QString m_input;
     QString::ConstIterator m_pos;
     QList< QRect > m_result;
     Token m_currentToken;
@@ -99,12 +116,12 @@ void Parser::setTableName(const QString &name)
         m_tableName = strippedName;
     else
         if (strippedName != m_tableName)
-            debugChart << "More than one sheet referenced, this is currently not supported";
+            debugChartParse << "More than one sheet referenced, this is currently not supported";
 }
 
 bool Parser::parse()
 {
-    //debugChart << "Input " << m_input;
+    debugChartParse << "Input " << m_input;
     m_pos = m_input.constBegin();
     m_index = 0;
     m_currentToken = parseToken();
@@ -163,7 +180,9 @@ Parser::Token Parser::parseToken()
             identifier = m_input.mid(startPos, m_index - startPos);
     }
 
-    return Token(type, identifier);
+    Token t(type, identifier);
+    debugChartParse<<toString(t);
+    return t;
 }
 
 void Parser::eatWhitespaces()
@@ -188,31 +207,33 @@ bool Parser::parseRegionList()
 
 bool Parser::parseRegion()
 {
-    //debugChart << "parseRegion";
+    debugChartParse << "parseRegion";
     bool res = true;
     res &= parseRegion2();
     m_currentToken = parseToken();
-    //debugChart << "CurrentToken " << m_currentToken.m_identifier << m_currentToken.m_type;
+    debugChartParse << "CurrentToken " << m_currentToken.m_identifier << m_currentToken.m_type;
     if (m_currentToken.m_type == Token::DoubleDot) {
         const QPoint topLeft = m_currentPoint;
         m_currentToken = parseToken();
         res &= parseRegion2();
         //m_currentToken = parseToken();
         m_result.append(QRect(topLeft, m_currentPoint));
-        //debugChart << "DoubleDot";
+        debugChartParse << "DoubleDot"<<"result:"<<m_result;
     }
     else {
         m_result.append(QRect(m_currentPoint, m_currentPoint));
-        //debugChart << "NODoubleDot";
+        debugChartParse << "NoDoubleDot"<<"result:"<<m_result;;
     }
     
-    if (m_currentToken.m_type == Token::Space)
+    if (m_currentToken.m_type == Token::Space) {
         res &= parseRegionList();
-    else if (m_currentToken.m_type == Token::End)
+    } else if (m_currentToken.m_type == Token::End) {
+        debugChartParse<<"ParseRegion:"<<res<<toString(m_currentToken)<<m_result;;
         return res;
-    else
+    } else {
         res = false;
-
+    }
+    debugChartParse<<"ParseRegion:"<<res<<toString(m_currentToken)<<m_result;;
     return res;
 }
 

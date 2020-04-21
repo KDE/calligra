@@ -31,6 +31,12 @@ extern const QLoggingCategory &CHART_LOG();
 #define warnChart qCWarning(CHART_LOG)
 #define errorChart qCCritical(CHART_LOG)
 
+extern const QLoggingCategory &CHARTPARSE_LOG();
+
+#define debugChartParse qCDebug(CHARTPARSE_LOG)
+#define warnChartParse qCWarning(CHARTPARSE_LOG)
+#define errorChartParse qCCritical(CHARTPARSE_LOG)
+
 extern const QLoggingCategory &CHARTLAYOUT_LOG();
 
 #define debugChartLayout qCDebug(CHARTLAYOUT_LOG)<<Q_FUNC_INFO

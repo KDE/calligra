@@ -1355,6 +1355,8 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
 
         // NOTE: chart:dimension already handled by PlotArea before and passed
         // explicitly in the constructor.
+    } else {
+        warnChartOdf<<"No axis element";
     }
 
     if (axisElement.hasAttributeNS(KoXmlNS::chart, "style-name")) {
@@ -1480,6 +1482,7 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
             }
         }
     } else {
+        warnChartOdf<<"Axis element has no style information";
         setShowLabels(KoOdfWorkaround::fixMissingStyle_DisplayLabel(axisElement, context));
     }
 
@@ -1538,6 +1541,7 @@ bool Axis::loadOdf(const KoXmlElement &axisElement, KoShapeLoadingContext &conte
     }
     requestRepaint();
 
+    debugChartOdf<<"Loaded axis:"<<name()<<"dimension:"<<dimension();
     return true;
 }
 
