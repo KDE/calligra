@@ -318,6 +318,61 @@ void ChartLayout::rotateAxisTitles(PlotArea *plotarea) {
     }
 }
 
+void ChartLayout::layoutAxisTitles(int pos, const QMultiMap<int, KoShape*> &map, const QRectF &rect, const QRectF plotarea) const
+{
+    debugChartLayout<<pos<<rect;
+    const QList<KoShape*> shapes = map.values(pos);
+    if (shapes.isEmpty()) {
+        return;
+    }
+    QRectF layoutRect = rect;
+    QList<QRectF> rects;
+    switch (pos) {
+        case 1: // bottom
+        case 3: // top
+            layoutRect.adjust((plotarea.center().x() - layoutRect.center().x()) / 2., 0, 0, 0);
+            for (int i = shapes.count()-1; i >= 0; --i) {
+                if (!rects.isEmpty()) {
+                    layoutRect.adjust(0, rects.last().height(), 0, 0);
+                }
+                QRectF r = layoutRect;
+                QRectF itmRect = itemRect(shapes[i]);
+                r.setHeight(itmRect.height());
+                if (r.width() > itmRect.width()) {
+                    qreal w = (r.width() - itmRect.width()) / 2;
+                    r.adjust(w, 0, -w, 0);
+                }
+                rects.prepend(r);
+            }
+            for (int i = 0; i < shapes.count(); ++i) {
+                m_layoutItems[shapes[i]]->rect = rects.at(i);
+                debugChartLayout<<(pos==1?"bottom title":"top title")<<i<<':'<<dbg(shapes[i])<<rects.at(i)<<rects;
+            }
+            break;
+        case 2: // left
+        case 4: // right
+            layoutRect.adjust(0, (plotarea.center().y() - layoutRect.center().y()) / 2., 0, 0);
+            for (int i = shapes.count()-1; i >= 0; --i) {
+                if (!rects.isEmpty()) {
+                    layoutRect.adjust(rects.first().width(), 0, 0, 0);
+                }
+                QRectF r = layoutRect;
+                QRectF itmRect = itemRect(shapes[i]);
+                r.setWidth(itemRect(shapes[i]).width());
+                if (r.height() > itmRect.height()) {
+                    qreal h = (r.height() - itmRect.height()) / 2;
+                    r.adjust(0, h, 0, -h);
+                }
+                rects.prepend(r);
+            }
+            for (int i = 0; i < shapes.count(); ++i) {
+                m_layoutItems[shapes[i]]->rect = rects.at(i);
+                debugChartLayout<<(pos==2?"left title":"right title")<<i<<':'<<dbg(shapes[i])<<rects.at(i)<<rects;
+            }
+            break;
+    }
+}
+
 void ChartLayout::calculateLayout()
 {
     QRectF area = m_containerRect;
@@ -359,7 +414,7 @@ void ChartLayout::calculateLayout()
 
     rotateAxisTitles(plotarea);
     // sort axis titles as bottom, left, top, right
-    QMap<int, KoShape*> axisTitles;
+    QMultiMap<int, KoShape*> axisTitles;
     QRectF bottomTitleRect; // 1
     QRectF leftTitleRect; // 2
     QRectF topTitleRect; // 3
@@ -367,91 +422,230 @@ void ChartLayout::calculateLayout()
 
     KoShape *xtitle = m_shapes.value(XAxisTitleType);
     if (xtitle && xtitle->isVisible()) {
-        if (plotarea->chartType() == BarChartType && plotarea->isVertical()) {
-            debugChartLayout<<"x-axis is vertical: position="<<axisPosition(plotarea, XAxisTitleType);
-            if (axisPosition(plotarea, XAxisTitleType) == KChart::CartesianAxis::Top) {
-                rightTitleRect = itemRect(xtitle);
-                axisTitles.insert(4, xtitle);
-            } else {
-                leftTitleRect = itemRect(xtitle);
-                axisTitles.insert(2, xtitle);
-            }
-        } else {
-            debugChartLayout<<"x-axis is horizontal: position="<<axisPosition(plotarea, XAxisTitleType);
-            if (axisPosition(plotarea, XAxisTitleType) == KChart::CartesianAxis::Top) {
-                topTitleRect = itemRect(xtitle);
-                axisTitles.insert(3, xtitle);
-            } else {
-                bottomTitleRect = itemRect(xtitle);
+        switch (axisPosition(plotarea, XAxisTitleType)) {
+            case KChart::CartesianAxis::Bottom: {
+                QRectF r = itemRect(xtitle);
+                if (bottomTitleRect.isNull()) {
+                    bottomTitleRect = r;
+                } else {
+                    if (bottomTitleRect.width() < r.width()) {
+                        bottomTitleRect.setWidth(r.width());
+                    }
+                    bottomTitleRect.setHeight(bottomTitleRect.height() + r.height());
+                }
                 axisTitles.insert(1, xtitle);
+                break;
+            }
+            case KChart::CartesianAxis::Left: {
+                QRectF r = itemRect(xtitle);
+                if (leftTitleRect.isNull()) {
+                    leftTitleRect = r;
+                } else {
+                    leftTitleRect.setWidth(leftTitleRect.width() + r.width());
+                    if (leftTitleRect.height() < r.height()) {
+                        leftTitleRect.setHeight(r.height());
+                    }
+                }
+                axisTitles.insert(2, xtitle);
+                break;
+            }
+            case KChart::CartesianAxis::Top: {
+                QRectF r = itemRect(xtitle);
+                if (topTitleRect.isNull()) {
+                    topTitleRect = r;
+                } else {
+                    if (topTitleRect.width() < r.width()) {
+                        topTitleRect.setWidth(r.width());
+                    }
+                    topTitleRect.setHeight(topTitleRect.height() + r.height());
+                }
+                axisTitles.insert(3, xtitle);
+                break;
+            }
+            case KChart::CartesianAxis::Right: {
+                QRectF r = itemRect(xtitle);
+                if (rightTitleRect.isNull()) {
+                    rightTitleRect = r;
+                } else {
+                    rightTitleRect.setWidth(rightTitleRect.width() + r.width());
+                    if (rightTitleRect.height() < r.height()) {
+                        rightTitleRect.setHeight(r.height());
+                    }
+                }
+                axisTitles.insert(4, xtitle);
+                break;
             }
         }
     }
     KoShape *ytitle = m_shapes.value(YAxisTitleType);
     if (ytitle && ytitle->isVisible()) {
-        if (plotarea->chartType() == BarChartType && plotarea->isVertical()) {
-            debugChartLayout<<"y-axis is horizontal: position="<<axisPosition(plotarea, YAxisTitleType);
-            if (axisPosition(plotarea, YAxisTitleType) == KChart::CartesianAxis::Left) {
-                bottomTitleRect = itemRect(ytitle);
+        switch (axisPosition(plotarea, YAxisTitleType)) {
+            case KChart::CartesianAxis::Bottom: {
+                QRectF r = itemRect(ytitle);
+                if (bottomTitleRect.isNull()) {
+                    bottomTitleRect = r;
+                } else {
+                    if (bottomTitleRect.width() < r.width()) {
+                        bottomTitleRect.setWidth(r.width());
+                    }
+                    bottomTitleRect.setHeight(bottomTitleRect.height() + r.height());
+                }
                 axisTitles.insert(1, ytitle);
-                debugChartLayout<<"ytitle: add to left"<<leftTitleRect;
-            } else {
-                topTitleRect = itemRect(ytitle);
-                axisTitles.insert(3, ytitle);
+                break;
             }
-        } else {
-            if (axisPosition(plotarea, YAxisTitleType) == KChart::CartesianAxis::Left) {
-                leftTitleRect = itemRect(ytitle);
+            case KChart::CartesianAxis::Left: {
+                QRectF r = itemRect(ytitle);
+                if (leftTitleRect.isNull()) {
+                    leftTitleRect = r;
+                } else {
+                    leftTitleRect.setWidth(leftTitleRect.width() + r.width());
+                    if (leftTitleRect.height() < r.height()) {
+                        leftTitleRect.setHeight(r.height());
+                    }
+                }
                 axisTitles.insert(2, ytitle);
-                debugChartLayout<<"ytitle: add to left"<<leftTitleRect;
-            } else {
-                rightTitleRect = itemRect(ytitle);
+                break;
+            }
+            case KChart::CartesianAxis::Top: {
+                QRectF r = itemRect(ytitle);
+                if (topTitleRect.isNull()) {
+                    topTitleRect = r;
+                } else {
+                    if (topTitleRect.width() < r.width()) {
+                        topTitleRect.setWidth(r.width());
+                    }
+                    topTitleRect.setHeight(topTitleRect.height() + r.height());
+                }
+                axisTitles.insert(3, ytitle);
+                break;
+            }
+            case KChart::CartesianAxis::Right: {
+                QRectF r = itemRect(ytitle);
+                if (rightTitleRect.isNull()) {
+                    rightTitleRect = r;
+                } else {
+                    rightTitleRect.setWidth(rightTitleRect.width() + r.width());
+                    if (rightTitleRect.height() < r.height()) {
+                        rightTitleRect.setHeight(r.height());
+                    }
+                }
                 axisTitles.insert(4, ytitle);
+                break;
             }
         }
     }
     KoShape *sxtitle = m_shapes.value(SecondaryXAxisTitleType);
     debugChartLayout<<sxtitle<<(sxtitle && sxtitle->isVisible())<<SecondaryXAxisTitleType;
     if (sxtitle && sxtitle->isVisible()) {
-        if (plotarea->chartType() == BarChartType && plotarea->isVertical()) {
-            debugChartLayout<<"secondary-x-axis is vertical: position="<<axisPosition(plotarea, SecondaryXAxisTitleType);
-            if (axisPosition(plotarea, SecondaryXAxisTitleType) == KChart::CartesianAxis::Bottom) {
-                leftTitleRect = itemRect(sxtitle);
-                axisTitles.insert(2, sxtitle);
-            } else {
-                rightTitleRect = itemRect(sxtitle);
-                axisTitles.insert(4, sxtitle);
-            }
-        } else {
-            if (axisPosition(plotarea, SecondaryXAxisTitleType) == KChart::CartesianAxis::Bottom) {
-                bottomTitleRect = itemRect(sxtitle);
+        switch (axisPosition(plotarea, SecondaryXAxisTitleType)) {
+            case KChart::CartesianAxis::Bottom: {
+                QRectF r = itemRect(sxtitle);
+                if (bottomTitleRect.isNull()) {
+                    bottomTitleRect = r;
+                } else {
+                    if (bottomTitleRect.width() < r.width()) {
+                        bottomTitleRect.setWidth(r.width());
+                    }
+                    bottomTitleRect.setHeight(bottomTitleRect.height() + r.height());
+                }
                 axisTitles.insert(1, sxtitle);
-                debugChartLayout<<"sxtitle: add to bottom";
-            } else {
-                topTitleRect = itemRect(sxtitle);
+                break;
+            }
+            case KChart::CartesianAxis::Left: {
+                QRectF r = itemRect(sxtitle);
+                if (leftTitleRect.isNull()) {
+                    leftTitleRect = r;
+                } else {
+                    leftTitleRect.setWidth(leftTitleRect.width() + r.width());
+                    if (leftTitleRect.height() < r.height()) {
+                        leftTitleRect.setHeight(r.height());
+                    }
+                }
+                axisTitles.insert(2, sxtitle);
+                break;
+            }
+            case KChart::CartesianAxis::Top: {
+                QRectF r = itemRect(sxtitle);
+                if (topTitleRect.isNull()) {
+                    topTitleRect = r;
+                } else {
+                    if (topTitleRect.width() < r.width()) {
+                        topTitleRect.setWidth(r.width());
+                    }
+                    topTitleRect.setHeight(topTitleRect.height() + r.height());
+                }
                 axisTitles.insert(3, sxtitle);
+                break;
+            }
+            case KChart::CartesianAxis::Right: {
+                QRectF r = itemRect(sxtitle);
+                if (rightTitleRect.isNull()) {
+                    rightTitleRect = r;
+                } else {
+                    rightTitleRect.setWidth(rightTitleRect.width() + r.width());
+                    if (rightTitleRect.height() < r.height()) {
+                        rightTitleRect.setHeight(r.height());
+                    }
+                }
+                axisTitles.insert(4, sxtitle);
+                break;
             }
         }
     }
     KoShape *sytitle = m_shapes.value(SecondaryYAxisTitleType);
     if (sytitle && sytitle->isVisible()) {
-        if (plotarea->chartType() == BarChartType && plotarea->isVertical()) {
-            debugChartLayout<<"secondary-y-axis is horizontal: position="<<axisPosition(plotarea, SecondaryYAxisTitleType);
-            if (axisPosition(plotarea, SecondaryYAxisTitleType) == KChart::CartesianAxis::Right) {
-                topTitleRect = itemRect(sytitle);
-                axisTitles.insert(3, sytitle);
-                debugChartLayout<<"sytitle: add to top"<<topTitleRect;
-            } else {
-                bottomTitleRect = itemRect(sytitle);
+        switch (axisPosition(plotarea, SecondaryYAxisTitleType)) {
+            case KChart::CartesianAxis::Bottom: {
+                QRectF r = itemRect(sytitle);
+                if (bottomTitleRect.isNull()) {
+                    bottomTitleRect = r;
+                } else {
+                    if (bottomTitleRect.width() < r.width()) {
+                        bottomTitleRect.setWidth(r.width());
+                    }
+                    bottomTitleRect.setHeight(bottomTitleRect.height() + r.height());
+                }
                 axisTitles.insert(1, sytitle);
+                break;
             }
-        } else {
-            if (axisPosition(plotarea, SecondaryYAxisTitleType) == KChart::CartesianAxis::Right) {
-                rightTitleRect = itemRect(sytitle);
-                axisTitles.insert(4, sytitle);
-            } else {
-                leftTitleRect = itemRect(sytitle);
+            case KChart::CartesianAxis::Left: {
+                QRectF r = itemRect(sytitle);
+                if (leftTitleRect.isNull()) {
+                    leftTitleRect = r;
+                } else {
+                    leftTitleRect.setWidth(leftTitleRect.width() + r.width());
+                    if (leftTitleRect.height() < r.height()) {
+                        leftTitleRect.setHeight(r.height());
+                    }
+                }
                 axisTitles.insert(2, sytitle);
+                break;
+            }
+            case KChart::CartesianAxis::Top: {
+                QRectF r = itemRect(sytitle);
+                if (topTitleRect.isNull()) {
+                    topTitleRect = r;
+                } else {
+                    if (topTitleRect.width() < r.width()) {
+                        topTitleRect.setWidth(r.width());
+                    }
+                    topTitleRect.setHeight(topTitleRect.height() + r.height());
+                }
+                axisTitles.insert(3, sytitle);
+                break;
+            }
+            case KChart::CartesianAxis::Right: {
+                QRectF r = itemRect(sytitle);
+                if (rightTitleRect.isNull()) {
+                    rightTitleRect = r;
+                } else {
+                    rightTitleRect.setWidth(rightTitleRect.width() + r.width());
+                    if (rightTitleRect.height() < r.height()) {
+                        rightTitleRect.setHeight(r.height());
+                    }
+                }
+                axisTitles.insert(4, sytitle);
+                break;
             }
         }
     }
@@ -726,22 +920,10 @@ void ChartLayout::calculateLayout()
         debugChartLayout<<"legend"<<dbg(legend)<<legendRect<<legendRect.center();
     }
 
-    if (axisTitles.contains(1)) {
-        m_layoutItems[axisTitles[1]]->rect = bottomTitleRect;
-        debugChartLayout<<"bottom title"<<dbg(axisTitles[1])<<bottomTitleRect<<bottomTitleRect.center();
-    }
-    if (axisTitles.contains(2)) {
-        m_layoutItems[axisTitles[2]]->rect = leftTitleRect;
-        debugChartLayout<<"left title"<<dbg(axisTitles[2])<<leftTitleRect<<leftTitleRect.center();
-    }
-    if (axisTitles.contains(3)) {
-        m_layoutItems[axisTitles[3]]->rect = topTitleRect;
-        debugChartLayout<<"top title"<<dbg(axisTitles[3])<<topTitleRect<<topTitleRect.center();
-    }
-    if (axisTitles.contains(4)) {
-        m_layoutItems[axisTitles[4]]->rect = rightTitleRect;
-        debugChartLayout<<"right title"<<dbg(axisTitles[4])<<rightTitleRect<<rightTitleRect.center();
-    }
+    layoutAxisTitles(1, axisTitles, bottomTitleRect, plotareaRect);
+    layoutAxisTitles(2, axisTitles, leftTitleRect, plotareaRect);
+    layoutAxisTitles(3, axisTitles, topTitleRect, plotareaRect);
+    layoutAxisTitles(4, axisTitles, rightTitleRect, plotareaRect);
 
     if (plotarea && plotarea->isVisible()) {
         m_layoutItems[plotarea]->rect = plotareaRect;

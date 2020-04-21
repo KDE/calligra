@@ -195,6 +195,8 @@ private:
 
     void rotateAxisTitles(PlotArea *plotarea);
 
+    void layoutAxisTitles(int pos, const QMultiMap<int, KoShape*> &map, const QRectF &rect, const QRectF plotarea) const;
+
 #ifdef COMPILING_TESTS
 public:
 #endif
