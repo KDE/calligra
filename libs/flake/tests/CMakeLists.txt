@@ -43,7 +43,7 @@ flake_add_unit_test(TestPointRemoveCommand TestPointRemoveCommand.cpp  LINK_LIBR
 
 ########### next target ###############
 
-#flake_add_unit_test(TestRemoveSubpathCommand TestRemoveSubpathCommand.cpp  LINK_LIBRARIES flake Qt5::Test)
+flake_add_unit_test(TestRemoveSubpathCommand TestRemoveSubpathCommand.cpp  LINK_LIBRARIES flake Qt5::Test)
 
 ########### next target ###############
 
@@ -51,7 +51,7 @@ flake_add_unit_test(TestShapeAt TestShapeAt.cpp  LINK_LIBRARIES flake Qt5::Test)
 
 ########### next target ###############
 
-#flake_add_unit_test(TestShapePainting TestShapePainting.cpp  LINK_LIBRARIES flake Qt5::Test)
+flake_add_unit_test(TestShapePainting TestShapePainting.cpp  LINK_LIBRARIES flake Qt5::Test)
 
 ########### next target ###############
 
@@ -63,7 +63,7 @@ flake_add_unit_test(TestKoShapeRegistry TestKoShapeRegistry.cpp  LINK_LIBRARIES 
 
 ########### end ###############
 
-#flake_add_unit_test(TestShapeContainer TestShapeContainer.cpp  LINK_LIBRARIES flake Qt5::Test)
+flake_add_unit_test(TestShapeContainer TestShapeContainer.cpp  LINK_LIBRARIES flake Qt5::Test)
 
 ########### end ###############
 
@@ -99,7 +99,7 @@ flake_add_unit_test(TestShapeShadowCommand TestShapeShadowCommand.cpp  LINK_LIBR
 
 ########### end ###############
 
-#flake_add_unit_test(TestSegmentTypeCommand TestSegmentTypeCommand.cpp  LINK_LIBRARIES flake Qt5::Test)
+flake_add_unit_test(TestSegmentTypeCommand TestSegmentTypeCommand.cpp  LINK_LIBRARIES flake Qt5::Test)
 
 ########### end ###############
 
