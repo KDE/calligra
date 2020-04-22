@@ -1070,8 +1070,6 @@ calligra_drop_products_on_old_flag(words  PART_WORDS APP_WORDS)
 
 calligra_disable_product(APP_BRAINDUMP "Disabled, will (probably) be removed from Calligra")
 
-calligra_disable_product(DOC "Not maintained")
-
 #############################################
 ####     Calculate buildable products    ####
 #############################################
