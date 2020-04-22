@@ -4,7 +4,7 @@ include_directories(${FLAKE_INCLUDES} )
 
 add_subdirectory(styles)
 if(BUILD_TESTING)
-    add_subdirectory(tests)
+#     add_subdirectory(tests)
 endif()
 add_subdirectory(pics)
 
