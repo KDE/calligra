@@ -878,6 +878,8 @@ Axis::Axis(PlotArea *parent, AxisDimension dimension)
     d->titleData->setResizeMethod(KoTextShapeDataBase::AutoResize);
     d->title->setAdditionalStyleAttribute("chart:auto-position", "true");
     d->title->setAllowedInteraction(KoShape::ShearingAllowed, false);
+    d->title->setAllowedInteraction(KoShape::RotationAllowed, false);
+    d->title->setAllowedInteraction(KoShape::ResizeAllowed, false);
     d->title->setVisible(false); // Needed to avoid problems when creating secondary axes (Axis creation needs review/refactoring)
 
     connect(d->plotArea, SIGNAL(angleOffsetChanged(qreal)), this, SLOT(setAngleOffset(qreal)));
