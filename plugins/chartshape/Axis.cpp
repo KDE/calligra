@@ -260,9 +260,7 @@ Axis::Private::Private(Axis *axis, AxisDimension dim)
 
     KChart::RulerAttributes attr = kdAxis->rulerAttributes();
     attr.setShowRulerLine(true);
-#if KCHART_VERSION >= ((2<<16)|(6<<8)|(89))
     attr.setRulerLinePen(QPen());
-#endif
     kdAxis->setRulerAttributes(attr);
 }
 

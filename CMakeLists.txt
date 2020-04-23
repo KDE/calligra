@@ -454,7 +454,7 @@ set_package_properties(KF5Akonadi PROPERTIES
 ##
 ## Test for KChart
 ##
-macro_optional_find_package(KChart 2.6.0 QUIET)
+macro_optional_find_package(KChart 2.7.0 QUIET)
 set_package_properties(KChart PROPERTIES
     DESCRIPTION "Library for creating business charts (part of KDiagram)"
     URL "https://www.kde.org/"
