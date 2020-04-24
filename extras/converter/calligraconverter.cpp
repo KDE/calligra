@@ -167,8 +167,6 @@ int main(int argc, char **argv)
 
     QCommandLineParser parser;
     aboutData.setupCommandLine(&parser);
-    parser.addHelpOption();
-    parser.addVersionOption();
 
     parser.addPositionalArgument(QStringLiteral("in"), i18n("Input file"));
     parser.addPositionalArgument(QStringLiteral("out"), i18n("Output file"));

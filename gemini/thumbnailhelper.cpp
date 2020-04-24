@@ -68,8 +68,6 @@ int main( int argc, char** argv )
 
     QCommandLineParser parser;
     aboutData.setupCommandLine(&parser);
-    parser.addHelpOption();
-    parser.addVersionOption();
 
     parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("in"), i18n("Document to thumbnail"), QStringLiteral("local-url")));
     parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("out"), i18n("The full path for the thumbnail file"), QStringLiteral("local-url")));

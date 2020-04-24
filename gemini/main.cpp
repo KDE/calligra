@@ -62,8 +62,6 @@ int main( int argc, char** argv )
 
     QCommandLineParser parser;
     aboutData.setupCommandLine(&parser);
-    parser.addHelpOption();
-    parser.addVersionOption();
 
     parser.addPositionalArgument(QStringLiteral("[file(s)]"), i18n("Document to open"));
     parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("vkb"), i18n("Use the virtual keyboard")));

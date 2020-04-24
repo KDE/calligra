@@ -186,8 +186,6 @@ int main( int argc, char **argv )
 
     QCommandLineParser parser;
     aboutData.setupCommandLine(&parser);
-    parser.addHelpOption();
-    parser.addVersionOption();
 
     parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("apps"), i18n("Lists names of all available Calligra applications")));
     parser.addPositionalArgument(QStringLiteral("[FILE(S)]"), i18n("Files to open"));

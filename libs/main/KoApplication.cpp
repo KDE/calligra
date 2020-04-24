@@ -207,8 +207,6 @@ bool KoApplication::start()
     // process commandline parameters
     QCommandLineParser parser;
     aboutData.setupCommandLine(&parser);
-    parser.addHelpOption();
-    parser.addVersionOption();
 
     parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("print"), i18n("Only print and exit")));
     parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("template"), i18n("Open a new document based on the given template (desktopfile name)")));
