@@ -452,7 +452,7 @@ bool KoGenStyles::saveOdfStylesDotXml(KoStore* store, KoXmlWriter* manifestWrite
     if (!store->open("styles.xml"))
         return false;
 
-    manifestWriter->addManifestEntry("styles.xml",  "text/xml");
+    manifestWriter->addManifestEntry(store->currentPath() + "styles.xml",  "text/xml");
 
     KoStoreDevice stylesDev(store);
     KoXmlWriter* stylesWriter = KoOdfWriteStore::createOasisXmlWriter(&stylesDev, "office:document-styles");
