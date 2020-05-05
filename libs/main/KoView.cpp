@@ -368,7 +368,7 @@ KoMainWindow * KoView::mainWindow() const
     // in that case.
     KoMainWindow* mw = dynamic_cast<KoMainWindow *>(window());
     QWidget* parent = parentWidget();
-    while (!mw) {
+    while (!mw && parent) {
         mw = dynamic_cast<KoMainWindow*>(parent);
         parent = parent->parentWidget();
         if (!parent) {
