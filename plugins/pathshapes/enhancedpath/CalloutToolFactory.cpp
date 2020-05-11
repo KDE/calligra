@@ -54,7 +54,6 @@ CalloutPathTool::CalloutPathTool(KoCanvasBase *canvas)
     : KoPathTool(canvas)
 {
     QAction *a = action("convert-to-path");
-    qInfo()<<Q_FUNC_INFO<<a;
     if (a) {
         a->disconnect();
     }
