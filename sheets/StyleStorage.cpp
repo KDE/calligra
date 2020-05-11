@@ -908,8 +908,15 @@ Style StyleStorage::composeStyle(const QList<SharedSubStyle>& subStyles) const
         // first, load the attributes of the parent style(s)
         QList<CustomStyle*> parentStyles;
         CustomStyle *parentStyle = styleManager()->style(namedStyle->parentName());
-        // debugSheetsStyle <<"StyleStorage:" << namedStyle->name() <<"'s parent =" << namedStyle->parentName();
+        debugSheetsStyle <<"StyleStorage:" << namedStyle->name() <<"'s parent =" << namedStyle->parentName();
         while (parentStyle) {
+            if (namedStyle->name() == parentStyle->name()) {
+                // FIXME: This should not happen
+                // Afaics sometimes break because LO saves default style explicitly
+                errorSheetsStyle << "StyleStorage:" << "Style" << namedStyle->name() << "has itself as parent";
+                parentStyle = nullptr;
+                break;
+            }
             // debugSheetsStyle <<"StyleStorage:" << parentStyle->name() <<"'s parent =" << parentStyle->parentName();
             parentStyles.prepend(parentStyle);
             parentStyle = styleManager()->style(parentStyle->parentName());
