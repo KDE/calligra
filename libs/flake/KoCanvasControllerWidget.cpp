@@ -205,6 +205,7 @@ KoCanvasControllerWidget::KoCanvasControllerWidget(KActionCollection * actionCol
 
 KoCanvasControllerWidget::~KoCanvasControllerWidget()
 {
+    d->viewportWidget->canvas()->removeEventFilter(this);
     d->unsetCanvas();
     delete d;
 }
