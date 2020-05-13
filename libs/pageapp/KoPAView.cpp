@@ -180,11 +180,9 @@ KoPAView::~KoPAView()
     removeStatusBarItem(d->status);
     removeStatusBarItem(d->zoomActionWidget);
 
+    delete d->canvasController;
     delete d->zoomController;
-    // Delete only the view mode normal, let the derived class delete
-    // the currently active view mode if it is not view mode normal
-    // using a delete here can cause a crash if an object is deleted
-    d->viewModeNormal->deleteLater();
+    delete d->viewModeNormal;
 
     delete d;
 }
