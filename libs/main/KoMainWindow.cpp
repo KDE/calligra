@@ -105,6 +105,7 @@ public:
         mainWindowGuiIsBuilt = false;
         forQuit = false;
         activePart = 0;
+        rootView = 0;
         activeView = 0;
         firstTime = true;
         progress = 0;
@@ -176,7 +177,7 @@ public:
 
     KoMainWindow *parent;
     QPointer<KoDocument> rootDocument;
-    QList<KoView*> rootViews;
+    KoView *rootView;
 
     // PartManager
     QPointer<KoPart> rootPart;
@@ -439,12 +440,9 @@ KoMainWindow::~KoMainWindow()
     // safety first ;)
     setActivePart(0, 0);
 
-    if (d->rootViews.indexOf(d->activeView) == -1) {
+    if (d->rootView != d->activeView) {
         delete d->activeView;
         d->activeView = 0;
-    }
-    while (!d->rootViews.isEmpty()) {
-        delete d->rootViews.takeFirst();
     }
 
     if(d->noCleanup)
@@ -471,8 +469,8 @@ void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *part, bool deletePre
     d->partToOpen = 0;
 
     //debugMain <<"KoMainWindow::setRootDocument this =" << this <<" doc =" << doc;
-    QList<KoView*> oldRootViews = d->rootViews;
-    d->rootViews.clear();
+    KoView *oldRootView = d->rootView;
+    d->rootView = 0;
     KoDocument *oldRootDoc = d->rootDocument;
     KoPart *oldRootPart = d->rootPart;
 
@@ -512,7 +510,7 @@ void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *part, bool deletePre
 
         KoView *view = d->rootPart->createView(doc, this);
         setCentralWidget(view);
-        d->rootViews.append(view);
+        d->rootView = view;
 
         view->show();
         view->setFocus();
@@ -540,12 +538,11 @@ void KoMainWindow::setRootDocument(KoDocument *doc, KoPart *part, bool deletePre
     d->closeFile->setEnabled(enable);
     updateCaption();
 
-    setActivePart(d->rootPart, doc ? d->rootViews.first() : 0);
+    setActivePart(d->rootPart, d->rootView);
     emit restoringDone();
 
-    while(!oldRootViews.isEmpty()) {
-        delete oldRootViews.takeFirst();
-    }
+    delete oldRootView;
+
     if (oldRootPart && oldRootPart->viewCount() == 0) {
         //debugMain <<"No more views, deleting old doc" << oldRootDoc;
         oldRootDoc->clearUndoHistory();
@@ -704,9 +701,9 @@ KoDocument *KoMainWindow::rootDocument() const
 
 KoView *KoMainWindow::rootView() const
 {
-    if (d->rootViews.indexOf(d->activeView) != -1)
+    if (d->rootView != d->activeView)
         return d->activeView;
-    return d->rootViews.empty() ? nullptr : d->rootViews.first();
+    return d->rootView;
 }
 
 bool KoMainWindow::openDocument(const QUrl &url)
@@ -1278,10 +1275,6 @@ void KoMainWindow::chooseNewDocument(InitDocFlags initDocFlags)
 
     if (doc) {
         setRootDocument(0);
-        if(d->rootDocument)
-            d->rootDocument->clearUndoHistory();
-        delete d->rootDocument;
-        d->rootDocument = 0;
     }
 
     newpart->addMainWindow(this);
@@ -1381,11 +1374,7 @@ void KoMainWindow::slotFileClose()
 {
     if (queryClose()) {
         saveWindowSettings();
-        setRootDocument(0);   // don't delete this main window when deleting the document
-        if(d->rootDocument)
-            d->rootDocument->clearUndoHistory();
-        delete d->rootDocument;
-        d->rootDocument = 0;
+        setRootDocument(0);
         chooseNewDocument(InitDocFileClose);
     }
 }
@@ -1959,14 +1948,7 @@ KRecentFilesAction *KoMainWindow::recentAction() const
 
 KoView* KoMainWindow::currentView() const
 {
-    // XXX
-    if (d->activeView) {
-        return d->activeView;
-    }
-    else if (!d->rootViews.isEmpty()) {
-        return d->rootViews.first();
-    }
-    return 0;
+    return rootView();
 }
 
 void KoMainWindow::newView()
