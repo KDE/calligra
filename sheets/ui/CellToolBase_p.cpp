@@ -250,8 +250,9 @@ void CellToolBase::Private::processArrowKey(QKeyEvent *event)
     if (!sheet)
         return;
 
-    /* save changes to the current editor */
-    q->selection()->emitCloseEditor(true);
+    /* If we are not editing a formula, close the current editor. Otherwise we want to fill in the cell coordinates. */
+    if (!q->selection()->referenceSelectionMode())
+      q->selection()->emitCloseEditor(true);
 
     Calligra::Sheets::MoveTo direction = Bottom;
     bool makingSelection = event->modifiers() & Qt::ShiftModifier;
