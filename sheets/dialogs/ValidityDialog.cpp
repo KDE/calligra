@@ -611,6 +611,4 @@ void ValidityDialog::OkPressed()
     manipulator->setValidity(validity);
     manipulator->add(*m_selection);
     manipulator->execute(m_selection->canvas());
-
-    accept();
 }
