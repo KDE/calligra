@@ -27,6 +27,7 @@
   <name xml:lang="pt-BR">Karbon</name>
   <name xml:lang="ru">Karbon</name>
   <name xml:lang="sk">Karbon</name>
+  <name xml:lang="sl">Karbon</name>
   <name xml:lang="sv">Karbon</name>
   <name xml:lang="uk">Karbon</name>
   <name xml:lang="x-test">xxKarbonxx</name>
@@ -54,6 +55,7 @@
   <summary xml:lang="pt-BR">Imagens vetoriais</summary>
   <summary xml:lang="ru">Редактор векторной графики</summary>
   <summary xml:lang="sk">Škálovateľná grafika</summary>
+  <summary xml:lang="sl">Prilagodljiva grafika</summary>
   <summary xml:lang="sv">Skalbar grafik</summary>
   <summary xml:lang="uk">Програма для роботи з масштабованою графікою</summary>
   <summary xml:lang="x-test">xxScalable Graphicsxx</summary>
@@ -81,6 +83,7 @@
     <p xml:lang="pt">O Karbon é uma aplicação de desenho vectorial com uma interface simples de usar, facilmente configurável e modular. Isto torna o Karbon uma óptima aplicação para os utilizadores que começam a explorar o mundo dos gráficos vectoriais, assim como para os artistas que desejam criar arte vectorial espectacular.</p>
     <p xml:lang="pt-BR">Karbon é um aplicativo de desenho vetorial com uma interface simples de usar, facilmente configurável e expansível. Isso torna o Karbon um ótimo aplicativo para usuários que começam a explorar o mundo dos gráficos vetoriais, assim como para artistas que desejam criar arte vetorial espetacular.</p>
     <p xml:lang="sk">Karbon je vektorová kresliaca aplikácia s používateľským rozhraním jednoduchým na používanie, veľmi prispôsobiteľná a rozšíriteľná. Toto robí z Karbonu výbornú aplikáciu pre používateľov, ktorí začínajú objavovať sveet vektorovej grafiky, ako aj pre umelcov, ktorí chcú vytvárať dych vyrážajúce vektorové umenie.</p>
+    <p xml:lang="sl">Karbon je program za vektorsko risanje z enostavnim uporabniškim vmesnikom in je enostavno prilagodljiv in razširljiv. Zaradi tega je Karbon odličen program za uporabnike, ki začenjajo raziskovati svet vektorske grafike kot kot tudi za umetnike, ki želijo ustvariti osupljivo vektorsko umetnost.</p>
     <p xml:lang="sv">Karbon är ett vektorritprogram med ett användargränssnitt som är lätt att använda, ytterst anpassningsbart och utökningsbart. Det gör Karbon till ett utmärkt program för användare som börjar utforska vektorgrafikvärlden samt för konstnärer som vill skapa hänförande vektorkonst.</p>
     <p xml:lang="uk">Karbon — програма для векторного малювання з простим, гнучким та придатним до розширення інтерфейсом користувача. Це робить Karbon чудовою програмою для користувачів, які починають знайомитися зі світом векторної графіки, а також для художників, які хочуть створити захопливі векторні твори.</p>
     <p xml:lang="x-test">xxKarbon is a vector drawing application with a user interface that is easy to use, highly customizable and extensible. That makes Karbon a great application for users starting to explore the world of vector graphics as well as for artists wanting to create breathtaking vector art.xx</p>
@@ -108,6 +111,7 @@
     <p xml:lang="pt-BR">Funcionalidades:</p>
     <p xml:lang="ru">Возможности:</p>
     <p xml:lang="sk">Funkcie:</p>
+    <p xml:lang="sl">Možnosti:</p>
     <p xml:lang="sv">Funktioner:</p>
     <p xml:lang="uk">Можливості:</p>
     <p xml:lang="x-test">xxFeatures:xx</p>
@@ -136,6 +140,7 @@
       <li xml:lang="pt">Suporte do carregamento de imagens em ODG, SVG, WPG, WMF, EPS/PS</li>
       <li xml:lang="pt-BR">Suporte para carregamento de arquivos ODG, SVG, WPG, WMF e EPS/PS</li>
       <li xml:lang="sk">Podpora čítania pre ODG, SVG, WPG, WMF, EPS/PS</li>
+      <li xml:lang="sl">Podpora za nalaganje ODG, SVG, WPG, WMF, EPS/PS</li>
       <li xml:lang="sv">Stöd för att läsa in ODG, SVG, WPG, WMF, EPS/PS</li>
       <li xml:lang="uk">Підтримка завантаження даних ODG, SVG, WPG, WMF, EPS/PS.</li>
       <li xml:lang="x-test">xxLoading support for ODG, SVG, WPG, WMF, EPS/PSxx</li>
@@ -163,6 +168,7 @@
       <li xml:lang="pt">Suporte da gravação de imagens em ODG, SVG, PNG, PDF, WMF</li>
       <li xml:lang="pt-BR">Suporte para gravação de arquivos ODG, SVG, PNG, PDF e WMF</li>
       <li xml:lang="sk">Podpora zápisu pre ODG, SVG, PNG, PDF, WMF</li>
+      <li xml:lang="sl">Podpora za pisanje ODG, SVG, PNG, PDF, WMF</li>
       <li xml:lang="sv">Stöd för att skriva ut ODG, SVG, PNG, PDF, WMF</li>
       <li xml:lang="uk">Підтримка запису у форматах ODG, SVG, PNG, PDF, WMF.</li>
       <li xml:lang="x-test">xxWriting support for ODG, SVG, PNG, PDF, WMFxx</li>
@@ -189,6 +195,7 @@
       <li xml:lang="pt">Interface de utilizador configurável com barras e áreas acopláveis livres</li>
       <li xml:lang="pt-BR">Interface de usuário configurável com barras de ferramentas e áreas acopláveis que podem ser facilmente ajustadas</li>
       <li xml:lang="sk">Nastaviteľné používateľské rozhranie s voľne umiestniteľnými panelmi nástrojov a dockermi</li>
+      <li xml:lang="sl">Prilagodljiv uporabniški vmesnik s prosto nameščenimi orodnimi vrsticami in sidrišči</li>
       <li xml:lang="sv">Anpassningsbart användargränssnitt med verktygsrader och paneler som kan placeras fritt</li>
       <li xml:lang="uk">Придатний до налаштовування інтерфейс користувача з довільним розташуванням панелей інструментів та бічних панелей.</li>
       <li xml:lang="x-test">xxCustomizable user interface with freely placeable toolbars and dockersxx</li>
@@ -214,6 +221,7 @@
       <li xml:lang="pt">Área de camadas para o tratamento de documentos complexos, incluindo miniaturas da antevisão, suporte para o agrupamento de formas por arrastamento, o controlo da visibilidade das formas ou o seu bloqueio</li>
       <li xml:lang="pt-BR">Área de camadas para tratamento de documentos complexos, incluindo miniaturas, suporte a agrupamento de formas com arrastar e soltar, controle de visibilidade das formas ou seu bloqueio</li>
       <li xml:lang="sk">Docker vrstiev pre ľahkú manipuláciu so zložitými dokumentami vrátane náhľadu miniatúr, podpora pre zoskupovanie tvarov cez drag and drop, ovládanie viditeľnosti tvarov alebo zamykanie</li>
+      <li xml:lang="sl">Sloj sidrišč za enostavno upravljanje zapletenih dokumentov, vključno s predoglednimi sličicami, podporo za grupiranje oblik z vlečenjem in spuščanjem, nadzor vidnosti oblik ali zaklepanjem</li>
       <li xml:lang="sv">Lagerpanel för enkel hantering av komplexa dokument inklusive miniatyrbilder för förhandsgranskning, stöd för att gruppera former via drag och släpp, styra eller låsning synlighet av former</li>
       <li xml:lang="uk">Панель шарів для полегшення обробки складних документів з мініатюрами об’єктів, підтримка групування форм перетягуванням зі скиданням, керування показом форм та блокуванням.</li>
       <li xml:lang="x-test">xxLayer docker for easy handling of complex documents including preview thumbnails, support for grouping shapes via drag and drop, controlling visibility of shapes or lockingxx</li>
@@ -238,6 +246,7 @@
       <li xml:lang="pt">Ferramenta de edição de caminhos avançada, com grandes capacidade de edição no local</li>
       <li xml:lang="pt-BR">Ferramenta avançada para edição de caminhos, com ótima capacidade de edição no local</li>
       <li xml:lang="sk">Pokročilý nástroj na úpravu ciest s výbornými schopnosťami editácie na plátne</li>
+      <li xml:lang="sl">Napredno orodje za urejanje poti z odličnimi možnostmi urejanja na platnu</li>
       <li xml:lang="sv">Avancerat konturredigeringsverktyg med utmärkta redigeringsmöjligheter direkt på duken</li>
       <li xml:lang="uk">Інструмент редагування контурів з чудовими можливостями редагування безпосередньо на полотні.</li>
       <li xml:lang="x-test">xxAdvanced path editing tool with great on-canvas editing capabilitiesxx</li>
@@ -262,6 +271,7 @@
       <li xml:lang="pt">Diversas ferramentas de desenho para criar formas de caminhos, incluindo uma ferramenta de desenho de caminhos, uma ferramenta de lápis e uma ferramenta de desenho caligráfico</li>
       <li xml:lang="pt-BR">Diversas ferramentas de desenho para criar formas de caminhos, incluindo uma ferramenta de desenho de caminhos, uma ferramenta de lápis e uma ferramenta de desenho caligráfico</li>
       <li xml:lang="sk">Rôzne kresliace nástroje na vytváranie tvarov ciest vrátane nástroja na kreslenie cesty, nástroja ceruzky ako aj kaligrafického kresliaceho nástroja</li>
+      <li xml:lang="sl">Različna orodja za risanje za ustvarjanje oblik poti, vključno z orodjem za risanje poti, orodje kot svinčnik kot tudi orodje za risanje kaligrafije</li>
       <li xml:lang="sv">Diverse ritverktyg för att skapa konturformer som inkluderar ett konturritverktyg, ett pennverktyg samt ett kalligrafiskt ritverktyg</li>
       <li xml:lang="uk">Різноманітні інструменти малювання для створення контурів, зокрема інструмент малювання контуру, олівець та інструмент каліграфічного малювання.</li>
       <li xml:lang="x-test">xxVarious drawing tools for creating path shapes including a draw path tool, a pencil tool as well as a calligraphy drawing toolxx</li>
@@ -286,6 +296,7 @@
       <li xml:lang="pt">Ferramentas de gradientes e padrões para uma edição simples no local dos estilos dos gradientes e dos padrões</li>
       <li xml:lang="pt-BR">Ferramentas de gradientes e padrões para fácil edição no local dos estilos dos gradientes e dos padrões</li>
       <li xml:lang="sk">Nástroje na prechody a vzory pre ľahké editovanie na plátne štýlov prechodov a vzorov</li>
+      <li xml:lang="sl">Orodja za prelive in vzorce za enostavno urejanje prelivov in slogovnih vzorcev gradiv na platnu</li>
       <li xml:lang="sv">Tonings- och mönsterverktyg för enkelt redigering av tonings- och mönsterstilar direkt på duken</li>
       <li xml:lang="uk">Інструменти градієнта і візерунка для полегшення редагування на полотні областей з заповненням градієнтом і візерунком.</li>
       <li xml:lang="x-test">xxGradient and pattern tools for easy on-canvas editing of gradient and pattern stylesxx</li>
@@ -311,6 +322,7 @@
       <li xml:lang="pt">Capacidades de ajuste óptimas para o desenho e edição guiado (p.ex., ajustes à grelha, linhas-guias, nós de caminhos, áreas envolventes, posições ortogonais, intersecções de formas de caminhos ou extensões de linhas e caminhos)</li>
       <li xml:lang="pt-BR">Capacidades de melhor ajuste para desenho e edição guiado (p.ex., ajustes à grade, linhas-guias, nós de caminhos, caixas delimitadoras, posições ortogonais, intersecções de formas de caminhos ou extensões de linhas e caminhos)</li>
       <li xml:lang="sk">Schopnosti prichytenia na vrch pre sprevádzané kreslenie a editovanie (napr. prichytenie k mriežke, pomocné čiary, uzly cesty, hraničné boxy, ortogonálne polohy, priesečníky tvarov cesty alebo rozšírenia čiar a ciest)</li>
+      <li xml:lang="sl">Vrhunske zmogljivosti za vodeno risanje in urejanje (npr. pripenjanje na mrežo, vodilne črte, vozlišča poti, omejevalna polja, pravokotni položaji,presečišča oblik poti ali podaljški črt in poti)</li>
       <li xml:lang="sv">Väldigt bra låsfunktioner för att rita och redigera med styrning (t.ex. låsa till rutnät, styrlinjer, konturnoder, omgivande rutor, ortogonala positioner, korsningar av konturformer eller förlängningar av linjer och konturer)</li>
       <li xml:lang="uk">Можливості використання прилипання та малювання за напрямними (прилипання до сітки, напрямні, вузли контурів, обмежувальні рамки, ортогональне розташування, перетини та розширення ліній і контурів).</li>
       <li xml:lang="x-test">xxTop notch snapping facilities for guided drawing and editing (e.g. snapping to grid, guide lines, path nodes, bounding boxes, orthogonal positions, intersections of path shapes or extensions of lines and paths)xx</li>
@@ -336,6 +348,7 @@
       <li xml:lang="pt">Inclui diversas formas predefinidas, incluindo formas básicas como as estrelas, círculos/elipses, rectângulos, imagens</li>
       <li xml:lang="pt-BR">Inclui diversas formas predefinidas, incluindo formas básicas como estrelas, círculos/elipses, retângulos e imagens</li>
       <li xml:lang="sk">Obsahuje mnoho preddefinovaných tvarov vrátane základných tvarov ako hviezdy, kružnica/elipsa, obdĺžnik, obrázok</li>
+      <li xml:lang="sl">Vključuje veliko vnaprej določenih oblik, vključno z osnovnimi oblikami, kot so zvezde, krog/elipsa, pravokotnik, slika</li>
       <li xml:lang="sv">Innehåller många fördefinierade former inklusive grundläggande former som stjärnor, cirkel/ellips, rektangel, bild</li>
       <li xml:lang="uk">Передбачено багато готових форм, зокрема базові форми зірки, кола або еліпса, прямокутника та зображення.</li>
       <li xml:lang="x-test">xxIncludes many predefined shapes including basic shapes like stars, circle/ellipse, rectangle, imagexx</li>
@@ -360,6 +373,7 @@
       <li xml:lang="pt">Forma de texto artístico com suporte para caminhos de seguimento (i.e., texto ao longo de um caminho)</li>
       <li xml:lang="pt-BR">Forma de texto artístico com suporte para caminhos de seguimento (isto é, texto no caminho)</li>
       <li xml:lang="sk">Umelecký textový tvar s podporou pre nasledovacie obrysy cesty (napr. text na ceste)</li>
+      <li xml:lang="sl">Umetniške oblike besedil s podporo za bodoče obrise poti (npr. besedilo na poti)</li>
       <li xml:lang="sv">Artistisk textform med stöd för att följa konturlinjer (t.ex. text på en kontur)</li>
       <li xml:lang="uk">Форма художнього тексту для розташування тексту вздовж контуру.</li>
       <li xml:lang="x-test">xxArtistic text shape with support for following path outlines (i.e. text on path)xx</li>
@@ -384,6 +398,7 @@
       <li xml:lang="pt">Opções complexas com caminhos e efeitos como as operações booleanas com conjuntos, o alisamento de caminhos, o arredondamento e a afinação, para além da ondulação/embate</li>
       <li xml:lang="pt-BR">Operações complexas com caminhos e efeitos, como operações booleanas com conjuntos, o nivelamento de caminhos, o arredondamento e refinamento, assim como efeitos de ondulação/aperto</li>
       <li xml:lang="sk">Komplexné cestné operácie a efekty ako logické operácie, splošťovanie cesty, zaobľovanie a zjemňovanie ako aj efekty vírov.</li>
+      <li xml:lang="sl">Kompleksne operacije poti in učinki, kot so logične operacije, sploščevanje poti, zaokroževanje in rafiniranje, kot tudi učinki vrtinčenja in ščipanja</li>
       <li xml:lang="sv">Komplexa konturoperationer och effekter som Booleska mängdoperationer, konturutplattning, rundning och förfining samt virvla- och klämeffekter</li>
       <li xml:lang="uk">Складні дії над контурами та ефекти, зокрема набір булівських операцій, спрощення контуру, заокруглення та покращення, ефекти вихору та втягування</li>
       <li xml:lang="x-test">xxComplex path operations and effects like boolean set operations, path flattening, rounding and refining as well as whirl/pinch effectsxx</li>
@@ -409,6 +424,7 @@
       <li xml:lang="pt">Modular, através da criação de 'plugins' para novas ferramentas, formas e áreas acopláveis</li>
       <li xml:lang="pt-BR">Expansível através da criação de plugins para novas ferramentas, formas e áreas acopláveis</li>
       <li xml:lang="sk">Rozšíriteľný pomocou písania pluginov pre nové nástroje, tvary a dockery</li>
+      <li xml:lang="sl">Razširljivo s pisanjem vtičnikov za nova orodja, oblike in sidrišča</li>
       <li xml:lang="sv">Utökningsbart genom att skriva insticksprogram för nya verktyg, former och paneler</li>
       <li xml:lang="uk">Можливість розширення додатками нових інструментів, форм та панелей.</li>
       <li xml:lang="x-test">xxExtensible by writing plugins for new tools, shapes and dockersxx</li>

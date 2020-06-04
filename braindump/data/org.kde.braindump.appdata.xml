@@ -28,6 +28,7 @@
   <name xml:lang="pt-BR">Braindump</name>
   <name xml:lang="ru">Braindump</name>
   <name xml:lang="sk">Braindump</name>
+  <name xml:lang="sl">Braindump</name>
   <name xml:lang="sv">Braindump</name>
   <name xml:lang="tr">Braindump</name>
   <name xml:lang="uk">Braindump</name>
@@ -55,6 +56,7 @@
   <summary xml:lang="pt-BR">Juntando notas e ideias</summary>
   <summary xml:lang="ru">Программа для хранения заметок и идей</summary>
   <summary xml:lang="sk">Zbieranie poznámok a nápadov</summary>
+  <summary xml:lang="sl">Zbiranje zapiskov in idej</summary>
   <summary xml:lang="sv">Anteckningar och idéinsamling</summary>
   <summary xml:lang="tr">Notları ve fikirleri Toplama</summary>
   <summary xml:lang="uk">Програма для впорядковування нотаток та ідей</summary>
@@ -84,6 +86,7 @@
     <p xml:lang="pt">O Braindump é uma ferramenta para descarregar e organizar o conteúdo do seu cérebro (ideias, desenhos, imagens, textos, ...) para o seu computador. Permite criar e editar quadros, que são uma "tela" infinita onde poderá adicionar textos, imagens, gráficos, desenhos, etc.</p>
     <p xml:lang="pt-BR">Braindump é uma ferramenta para descarregar e organizar o conteúdo do seu cérebro (ideias, desenhos, imagens, textos, ...) para o seu computador. Permite-lhe criar e editar quadros, que são uma espécie de "tela infinita" onde poderá adicionar textos, imagens, gráficos, desenhos, etc.</p>
     <p xml:lang="sk">Braindump je nástroj na prenos a organizáciu obsahu vášho mozgu (nápady, kresby, obrázky, texty...) do vášho počítača. Umožňuje vytvárať a upravovať tabule, ktoré sú neurčitým plátnom, kam môžete pridávať texty, obrázky, grafy, kresby atď.</p>
+    <p xml:lang="sl">Braindump je orodje za zajem in organiziranje vsebine vaših možganov (ideje,risbe, slike, besedila…) v računalnik. Deluje tako, da omogoča ustvarjanjein ureditev tabel, ki so neskončno platno, na katerega lahko dodate besedila,slike, grafikoni, risbe itd.</p>
     <p xml:lang="sv">Braindump är ett verktyg för att hämta och organisera innehållet i din hjärna (idéer, ritningar, bilder, texter …) på datorn. Det fungerar genom att låta dig skapa och redigera skrivtavlor, som är oändliga ytor där du kan lägga till texter, bilder, diagram, ritningar, etc.</p>
     <p xml:lang="tr">Braindump, aklınızdaki içerikleri (fikirler, çizimler, resimler, metinler...) bilgisayarına dökmenize ve organize etmenize yardımcı olan bir araçtır. Metin, resim, çizelge, çizimler, vb. ekleyebileceğiniz sonsuz tuval olan beyaz tahtalar oluşturul düzenlemenize izin vererek çalışır.</p>
     <p xml:lang="uk">Braindump — програма для запису та упорядкування ваших думок (ідей, креслень, зображень, фрагментів тексту…) за допомогою вашого комп’ютера. У цій програмі ви можете створювати та редагувати так звані «дошки» — нескінченні полотна, на які можна додавати фрагменти тексту, зображення, діаграми, креслення тощо.</p>

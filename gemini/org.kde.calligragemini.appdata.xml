@@ -23,6 +23,7 @@
   <name xml:lang="pt-BR">Gemini</name>
   <name xml:lang="ru">Gemini</name>
   <name xml:lang="sk">Blíženci</name>
+  <name xml:lang="sl">Gemini</name>
   <name xml:lang="sv">Gemini</name>
   <name xml:lang="uk">Gemini</name>
   <name xml:lang="x-test">xxGeminixx</name>
@@ -46,6 +47,7 @@
   <summary xml:lang="pt">Pacote de Escritório</summary>
   <summary xml:lang="pt-BR">Suíte de Escritório</summary>
   <summary xml:lang="sk">Kancelársky balík</summary>
+  <summary xml:lang="sl">Pisarniški paket</summary>
   <summary xml:lang="sv">Kontorssvit</summary>
   <summary xml:lang="uk">Офісний комплект</summary>
   <summary xml:lang="x-test">xxOffice Suitexx</summary>
@@ -68,6 +70,7 @@
     <p xml:lang="pt">O pacote de Escritório do KDE para os dispositivos 2-em-1.</p>
     <p xml:lang="pt-BR">A suíte de escritório do KDE para dispositivos 2-em-1.</p>
     <p xml:lang="sk">KDE kancelásky balík pre zariadenia 2 v 1.</p>
+    <p xml:lang="sl">Pisarniški paket KDE za naprave dve v enem.</p>
     <p xml:lang="sv">KDE:s kontorssvit för surfplattor med tangentbord.</p>
     <p xml:lang="uk">Офісний комплект KDE для пристроїв «два в одному».</p>
     <p xml:lang="x-test">xxThe KDE Office suite for 2-in-1 devices.xx</p>
@@ -89,6 +92,7 @@
     <p xml:lang="pt">Os dispositivos 2-em-1, que conseguem actuar tanto como um 'tablet' puramente táctil como no formato clássico em concha de um portátil, estão a tornar-se rapidamente bastante populares e, depois do sucesso do Krita Gemini, a equipa por trás do projecto concluiu que existiam bastantes razões para aplicar o mesmo conceito nas outras aplicações, principalmente nas restantes aplicações do pacote Calligra. Em particular, o componente de processamento de texto Words e a ferramenta de apresentações Stage foram destinadas a passar por este tratamento.</p>
     <p xml:lang="pt-BR">Os dispositivos 2-em-1 que funcionam tanto como um tablet com tela sensível ao toque como no formato clássico de notebook estão tornando-se rapidamente muito populares e, depois do sucesso do Krita Gemini, a equipe que desenvolve o projeto concluiu que existiam muitos motivos para aplicar o mesmo conceito em outros aplicativos, principalmente nos que compõem a suíte Calligra. Em particular, o componente de processamento de texto Words e a ferramenta de apresentações Stage foram consideradas prontas para isso.</p>
     <p xml:lang="sk">Zariadenia 2 v 1, ktoré sa môžu správať ako dotykový tablet a klasický notebook, sa stávajú veľmi populárne a po úspechu Krita Gemini si tím uvedomil, že bolo mnoho dôvodov na použitie rovnakého konceptu pre ostatné aplikácie a hlavne pre tie v balíku Calligra. Hlavne komponent textového editora Words a prezentačný nástroj Stage boli považované za zrelé na toto ošetrenie.</p>
+    <p xml:lang="sl">Naprave dve v eni, ki lahko delujejo kot tablični računalnik ali kot klasičen prenosni računalnik hitro postajajo zelo priljubljeni, po uspehu paKrita Gemini, ekipa za njo je ugotovila, da obstaja veliko razlogov za uporabo istega koncept za druge programe, zlasti za druge v skupini Calligra. Zlasti komponenta besedilnega procesorja Words and predstavitveno orodje Stage je bilo ocenjeno kot zrelo za to zdravljenje.</p>
     <p xml:lang="sv">Surfplattor med tangentbord, som både kan fungera som en pekplatta och som en klassisk bärbar dator med uppvikningsbar skärm, håller snabbt på att bli mycket populära, och efter succén med Krita Gemini, insåg gruppen bakom det att det fanns många orsaker att applicera samma koncept för andra program, i synnerhet de övriga i Calligra-sviten. Särskilt ordbehandlingskomponenten Words och presentationsverktyget Stage ansågs mogna för denna behandling.</p>
     <p xml:lang="uk">Пристрої «два в одному», які можуть працювати у двох режимах — сенсорного планшета і класичного ноутбука, — швидко набувають популярності. Після успіху Krita Gemini, команда її розробників зауважила, що варто було б застосувати ту саму концепцію до інших програм, особливо інших програм із комплекту Calligra. Зокрема це стосується програми для редагування текстів Words та засобу роботи з презентаціями Stage.</p>
     <p xml:lang="x-test">xx2-in-1 devices which can act as both a touch only tablet and a classic clamshell notebook are fast becoming very popular, and after the success of Krita Gemini, the team behind it realised there were plenty of reasons to apply that same concept to other applications, and especially the others in the Calligra suite. In particular the word processor component Words and presentation tool Stage were deemed ripe for this treatment.xx</p>
@@ -110,6 +114,7 @@
     <p xml:lang="pt">Com essa realização, nasceu a vontade de criar o Calligra Gemini, uma aplicação que incorpora um processador de texto e uma componente de apresentações, que iria funcionar tanto como uma aplicação para computadores com um rato e teclado, assim como transformá-la numa aplicação táctil e amigável na hora, mudando a experiência para uma adequada para dispositivos puramente  tácteis , sem ter de mudar para uma aplicação diferente.</p>
     <p xml:lang="pt-BR">Com essa percepção nasceu a vontade de criar o Calligra Gemini, um aplicativo que incorpora os componentes de apresentação e processador de texto, que funcionaria como um aplicativo para computadores com mouse e teclado que poderiam rapidamente se transformar em um aplicativo amigável para uso com telas sensíveis ao toque, mudando a experiência para dispositivos exclusivamente táteis, sem o inconveniente de precisar mudar para um aplicativo diferente.</p>
     <p xml:lang="sk">S týmto sa zrodila túžba na vytvorenie Calligra Gemini, aplikácie zapuzdrujúcej textový editor a prezentačný nástroj, ktorá môže fungovať ako klasická desktopová aplikácia s myšou a klávesnicou a zmeniť sa na aplikáciu vhodnú na dotyk počas behu, zmenou skúsenosti na jednu vhodnú pre dotykové zariadenia bez nepohodlia a nutnosti prepínať sa do inej aplikácie.</p>
+    <p xml:lang="sl">S to uresničitvijo se je rodila želja po ustvarjanju Calligra Gemini, programom, ki vsebuje urejevalnik besedil in predstavitvene komponente, ki delujejo tako kot tradicionalna namizna aplikacija z miško in tipkovnico in se na poti spremeni v dotiku prijazno aplikacijo,spreminjanje izkušnje v tisto, ki je primerna za naprave na dotik brez neprijetnosti zaradi preklopa na drugo aplikacijo.</p>
     <p xml:lang="sv">Med denna insikt föddes önskan att skapa Calligra Gemini, ett program som innesluter ordbehandlings- och presentationskomponenterna och som både skulle fungera som ett traditionellt skrivbordsprogram med mus och tangentbord och omvandlas till ett pekvänligt program i farten, för att därmed ändra erfarenheten till en lämplig för alla pekenheter utan besväret med att behöva byta till ett annat program.</p>
     <p xml:lang="uk">Ідея щодо перетворення стандартних програм призвела до бажання створити Calligra Gemini, програму, яка б містила компоненти текстового редактора та засобу роботи з презентаціями і могла б працювати одразу у режимі традиційної комп'ютерної програми, у якій для керування використовується миша і клавіатура, та у режимі програми, зручної для керування за допомогою сенсорного пристрою, змінюючи режим роботи відповідно до режиму роботи пристрою. При цьому користувач може продовжувати роботу у тій самій програмі без незручного перемикання між різними програмами.</p>
     <p xml:lang="x-test">xxWith that realisation was born the desire to create Calligra Gemini, an application encasing word processor and presentation components which would function both as a traditional desktop application with a mouse and keyboard, and transform into a touch friendly application on the go, changing the experience to one suitable for all-touch devices without the inconvenience of having to switch to a different application.xx</p>
@@ -131,6 +136,7 @@
     <p xml:lang="pt">As aplicações do Gemini combinam o poder das aplicações principais do Calligra (no caso do Calligra Gemini, os pacotes principais para os computadores, nomeadamente o Words e o Stage), com experiências agradáveis e explicitamente optimizadas para ecrãs tácteis, baseadas nos mesmos tipos de documentos.</p>
     <p xml:lang="pt-BR">Os aplicativos do Gemini combinam o poder dos principais aplicativos do Calligra (no caso do Calligra Gemini, os aplicativos principais para computadores, no momento o Words e o Stage), com experiências agradáveis e otimizadas para telas sensíveis ao toque, baseadas nos mesmos tipos de documentos.</p>
     <p xml:lang="sk">Aplikácie Gemini zlučujú silu hlavných aplikácií Calligra (v pripade Calligra Gemini Words a Stage) s príjemným a optimalizovaným prostredím založeným na rovnakých typoch dokumentov.</p>
+    <p xml:lang="sl">Programi Gemini združujejo moč glavnih programov Calligra (v primeru Calligra Gemini glavne pisarniške namizne aplikacije na naslovumoment Words and Stage), s prijetnim in nazorno optimiziranim izkušnjami dotika, ki temeljijo na istih vrstah dokumentov.</p>
     <p xml:lang="sv">Gemini-programmen kombinerar Calligras kraftfulla huvudprogram (i fallet med Calligra Gemini, de viktigaste kontorsprogrammen för skrivbordet, för närvarande Words och Stage), med behaglig och explicit pekskärmsoptimerad upplevelse baserad på samma dokumenttyper.</p>
     <p xml:lang="uk">У програмах Gemini поєднується потужність основних програм Calligra для звичайних комп'ютерів (у випадку Calligra Gemini, це основні офісні програми, зокрема Words і Stage) та зручність користування на пристроях із сенсорним керуванням. При цьому тип документів лишається тим самим для обох режимів роботи.</p>
     <p xml:lang="x-test">xxThe Gemini applications combine the power of Calligra's main applications (in Calligra Gemini's case the main office desktop applications, at the moment Words and Stage), with pleasant and explicitly touch optimised experiences based around the same document types.xx</p>
@@ -152,6 +158,7 @@
     <p xml:lang="pt">O Calligra propriamente dita é um grande grupo de aplicações, dividido em três categorias principais: aplicações de Escritório, aplicações Gráficas e de Gestão de Projectos. Por favor, visite a página Web do Calligra para ver descrições completas das diversas ferramentas.</p>
     <p xml:lang="pt-BR">O Calligra em si é uma grande suíte de aplicativos, dividido em três categorias principais: aplicativos de escritório, aplicativos gráficos gráficos e de gerenciamento de projetos. Visite o site do Calligra para obter as descrições completas das diversas ferramentas.</p>
     <p xml:lang="sk">Samotná Calligra je veľký balík aplikácií, rozdelený na tri hlavné kategórie: Kancelárske aplikácie, grafické aplikácie a správu projektov. Prosím, navštívte stránku Calligra na zobrazenie plných popisov mnohých nástrojov.</p>
+    <p xml:lang="sl">Sama Calligra je velik nabor programov, razdeljena na tri glavne kategorije: Pisarniške aplikacije, Grafične aplikacije in ProjektUpravljanje. Obiščite spletno stran Calligra in si oglejte celotne opise teh orodij.</p>
     <p xml:lang="sv">Själva Calligra är en stor programsvit, delad i tre huvudkategorier: Kontorsprogram, grafikprogram och projekthantering. Besök gärna Calligras webbsida för att se fullständiga beskrivningar av de många verktygen.</p>
     <p xml:lang="uk">Calligra є великим комплектом програм, поділених на три основі категорії: офісні програми, графічні програми та програми для керування проєктами. Будь ласка, відвідайте сайт Calligra, щоб ознайомитися із повним описом багатьох інструментів.</p>
     <p xml:lang="x-test">xxCalligra itself is a large suite of applications, split into three main categories: Office applications, Graphics Applications and Project Management. Please visit the Calligra website to see full descriptions of the many tools.xx</p>
@@ -174,6 +181,7 @@
       <li xml:lang="pt">Funcionalidades Comuns</li>
       <li xml:lang="pt-BR">Funcionalidades comuns</li>
       <li xml:lang="sk">Bežné funkcie</li>
+      <li xml:lang="sl">Skupne možnosti</li>
       <li xml:lang="sv">Vanliga funktioner</li>
       <li xml:lang="uk">Загальні можливості</li>
       <li xml:lang="x-test">xxCommon Featuresxx</li>
@@ -196,6 +204,7 @@
     <p xml:lang="pt">As aplicações no pacote Calligra partilham alguns conceitos de UI comuns que lhe dão uma aparência mais moderna e adequada aos ecrãs amplos dos dias de hoje. Um deles é que a maioria da formatação é é efectuada com áreas acopláveis que são colocados ao lado das janelas , em vez de ser no topo. Isso deixa mais espaço disponível para o conteúdo actual dos documentos e evita a abertura de janelas em cima dela. Se o utilizador optar por isso, poderá reorganizar a colocação das áreas acopláveis à volta do documento ou deixá-las à solta e a flutuar de forma livre. A organização é gravada e reutilizada da próxima vez que abrir o Calligra.</p>
     <p xml:lang="pt-BR">Os aplicativos da suíte Calligra compartilham alguns conceitos comuns de interface do usuário que lhe dão uma aparência mais moderna e adequada às telas atuais dos dias atuais. Um deles é que a maioria da formatação é feita com áreas acopláveis que são colocadas ao lado das janelas, em vez de ser na parte superior. Isso deixa mais espaço disponível para o conteúdo atual dos documentos e evita a abertura de caixas de diálogo que ficariam sobre ele. Também é possível reorganizar a colocação das áreas acopláveis em torno do documento ou então destacá-las, deixando que flutuem de forma livre. A organização feita será lembrada e reutilizada na próxima vez que abrir o Calligra.</p>
     <p xml:lang="sk">Aplikácie balíka Calligra zdieľanú niektoré spoločné GUI koncepty, ktoré dávajú moderný vzhľad vhodnejší pre súčasné širokouhlé obrazovky. Jeden z nich je, že väčšina formátovania sa robí pomocou panelov po stranách okien namiesto umiestnenia hore. Týmto sa ušetrí miesto pre obsah dokumentu a zabráni sa otváraniu dialógov na vrchu. Ak si používateľ želá, môže si zmeniť umiestnenie panelov okolo oblasti dokumentu alebo ich odtrhnúť a umiestniť ich voľne. Usporiavanie sa uloží a znovu použije pri každom spustení Calligra.</p>
+    <p xml:lang="sl">Programi v zbirki Calligra imajo nekaj običajnih konceptov uporabniškega vmesnika, ki jim daje sodoben videz, ki je zelo primeren za današnje široke zaslone. Eden od pri tem je, da se večina oblikovanja izvede s pomočjo sidrišč, ki so nameščeni na strani oken namesto na vrhu. Tako je na voljo več prostora za dejansko vsebino dokumenta in se možno izogibati odpiranju pogovornih oken. Če uporabnik želi, lahko preuredi namestitev sidrišč okoli območja dokumentov ali jih celo odtrga in pusti, da prosto plavajo. Taka postavitev je shranjena in ponovno uporabljena naslednjič, ko se Calligra odpre.</p>
     <p xml:lang="sv">Programmen i Calligra-sviten delar några gemensamma användargränssnittskoncept som ger dem ett modernt utseende bättre lämpat för dagens breda skärmar. Ett av dem är att det mesta formateringen görs med paneler placerade vid fönstrets sidor istället för längst upp. Det ger mer utrymme tillgängligt för själva dokumentinnehållet och undviker att dialogrutor öppnas ovanpå det. Om användaren så önskar, går det att ändra placering av panelerna omkring dokumentområdet, eller till och med riva loss dem och låta dem flyta fritt. Placeringen sparas och återanvänds nästa gång Calligra startas.</p>
     <p xml:lang="uk">У програмах комплекту Calligra використовуються типові концепції інтерфейсу користувача, що надає програмам вигляду, зручного у користуванні на сучасних широкоформатних дисплеях. Однією з цих концепцій є використання для форматування даних бічних панелей, які розташовано праворуч і ліворуч від області редагування, а не над нею. Це збільшує область самого документа і зменшує кількість додаткових контекстних вікон, які могли б перекривати вміст документа. Якщо потрібно, розташування бічних панелей можна змінити. Можна навіть відірвати їх від основного вікна програми і змусити довільно розташовуватися поза ним. Програми зберігають компонування бічних панелей і відновлюють його під час наступного сеансу роботи Calligra.</p>
     <p xml:lang="x-test">xxThe applications in the Calligra Suite shares some common UI concepts that gives it a modern look better suited for the wide screens of today. One of them is that most formatting is done using dockers which are placed at the side of the windows instead of on the top. This makes more space available for the actual document contents and avoids opening dialogs on top of it. If the user chooses, s/he can rearrange the placement of the dockers around the document area or even tear loose them and let them float freely. The arrangement is saved and reused the next time Calligra is opened.xx</p>
@@ -218,6 +227,7 @@
       <li xml:lang="pt">Objectos Incorporados</li>
       <li xml:lang="pt-BR">Objetos incorporados</li>
       <li xml:lang="sk">Vložiteľné objekty</li>
+      <li xml:lang="sl">Vgrajeni predmeti</li>
       <li xml:lang="sv">Inbäddningsbara objekt</li>
       <li xml:lang="uk">Вмонтовані об'єкти</li>
       <li xml:lang="x-test">xxEmbeddable Objectsxx</li>
@@ -240,6 +250,7 @@
     <p xml:lang="pt">Existem diversos objectos e formas que poderá inserir no seu documento, como as formas geométricas, as formas de partituras musicais, entre muitas outras opções espantosas. Todas estas formas estão disponíveis em todas as aplicações, o que torna a implementação destes objectos muito mais simples.</p>
     <p xml:lang="pt-BR">Existem diversos objetos e formas que podem ser inseridas no seu documento, como formas geométricas, partituras musicais, entre muitas outras opções surpreendentes. Todas essas formas estão disponíveis em todos os aplicativos, o que torna muito mais simples a implementação destes objetos.</p>
     <p xml:lang="sk">Je veľa objektov a tvarov, ktoré môžete vložiť do vášho dokumentu, ako geometrické tvary, hudobné tvary a veľa iných úžasných možností. Všetky tieto tvary sú dostupné vo všetkých aplikáciách, čo zjednodušuje implementáciu týchto objektov.</p>
+    <p xml:lang="sl">V dokument lahko vstavite veliko predmetov in oblik, kot so geometrijske oblike, partiture glasbe in številne druge neverjetne možnosti.Vse te oblike so na voljo v vseh aplikacijah, kar omogoča veliko lažjo izvedbo teh predmetov.</p>
     <p xml:lang="sv">Det finns många objekt och former som kan infogas i ett dokument, såsom geometriska former, notblad och många andra fantastiska alternativ. Alla dessa former är tillgängliga i alla program, vilket gör det mycket enklare att implementera objekten.</p>
     <p xml:lang="uk">Передбачено можливість вставляння до ваших документів багатьох об'єктів та форм, зокрема геометричних форм, нотних записів, та ще багато чудових можливостей. Усі ці форми доступні у всіх програмах комплекту, що значно спрощує програмну реалізацію відповідних об'єктів.</p>
     <p xml:lang="x-test">xxThere are many objects and shapes that you can insert into your document, such as geometric shapes, sheet music score, and many more amazing options. All of these shapes are available in all applications, which makes implementing these objects much easier.xx</p>
@@ -264,6 +275,7 @@
       <li xml:lang="pt">Formato-padrão de ficheiros</li>
       <li xml:lang="pt-BR">Formato de arquivo padrão</li>
       <li xml:lang="sk">Štandardný formát súboru</li>
+      <li xml:lang="sl">Standardni format datotek</li>
       <li xml:lang="sv">Standardfilformat</li>
       <li xml:lang="uk">Стандартизований формат файлів</li>
       <li xml:lang="x-test">xxStandard file formatxx</li>
@@ -286,6 +298,7 @@
     <p xml:lang="pt">O Calligra usa o Open Document Format (ODF) como formato de ficheiro principal, o que o torna compatível com a maioria das outras aplicações de escritório, incluindo o  OpenOffice.org, LibreOffice e Microsoft Office. Também consegue importar os formatos de ficheiros nativos do Microsoft Office com grande precisão, sendo em muitos casos o melhor que poderá encontrar.</p>
     <p xml:lang="pt-BR">O Calligra usa o Open Document Format (ODF) como formato de arquivo principal, o que o torna compatível com a maioria dos outros aplicativos de escritório, incluindo o OpenOffice.org, LibreOffice e Microsoft Office. Também consegue importar os formatos de arquivo nativos do Microsoft Office com boa precisão, sendo em muitos casos a melhor opção que poderá encontrar.</p>
     <p xml:lang="sk">Calligra používa Open Document Format (ODF) ako svoj hlavný súborový formát, ktorý zaisťuje kompatibilitu s väčšinou iných kancelárskych aplikácií vrátane OpenOffice.org, LibreOffice a Microsoft Office s výbornou presnosťou, v mnohých prípadov, najlepšie, čo môžete nájsť.</p>
+    <p xml:lang="sl">Calligra kot glavni format datoteke uporablja odprt format dokumenta (ODF), ki je združljiv z večino drugih pisarniških aplikacij, vključno z OpenOffice.org, LibreOffice in Microsoft Office. Z veliko natančnostjo lahko uvozi tudi izvorno datoteko formata Microsoft Officea in v mnogih primerih kar najboljše kar lahko najdete.</p>
     <p xml:lang="sv">Calligra använder Open Document Format (ODF) som huvudfilformat, vilket gör det kompatibelt med de flesta kontorsprogram, inklusive OpenOffice.org,LibreOffice och Microsoft Office. Det kan också importera Microsoft Office egna filformat med stor noggrannhet, i många fall den bästa som går att finna.</p>
     <p xml:lang="uk">У Calligra основним форматом файлів є Open Document Format (ODF). Це робить комплект програмного забезпечення сумісним із більшістю інших офісних програм, зокрема OpenOffice.org, LibreOffice та Microsoft Office. Також передбачено можливості імпортування даних у типових форматах Microsoft Office із достатньою точністю, у багатьох випадках найкращою точністю серед доступних.</p>
     <p xml:lang="x-test">xxCalligra uses the Open Document Format (ODF) as its main file format which makes it compatible with most other office applications including OpenOffice.org, LibreOffice and Microsoft Office. It can also import the native file formats of Microsoft Office with great accuracy, in many cases the best you can find.xx</p>
@@ -313,6 +326,7 @@
       <caption xml:lang="pt">Uma apresentação carregada directamente do DropBox, no modo de Edição</caption>
       <caption xml:lang="pt-BR">Uma apresentação carregada diretamente do DropBox, no modo Edição</caption>
       <caption xml:lang="sk">Prezentácia načítaná priamo z DropBoxu, v editačnom režime</caption>
+      <caption xml:lang="sl">Predstavitev naložena direktno iz DropBoxa, v urejevalnem načinu</caption>
       <caption xml:lang="sv">En presentation inläst direkt från DropBox, i redigeringsläge</caption>
       <caption xml:lang="uk">Презентація, завантажена безпосередньо з DropBox, у режимі редагування</caption>
       <caption xml:lang="x-test">xxA presentation loaded directly from DropBox, in Edit modexx</caption>
@@ -337,6 +351,7 @@
       <caption xml:lang="pt">Um documento de texto no estilo gráfico tradicional (modo de Criação)</caption>
       <caption xml:lang="pt-BR">Um documento de texto no estilo gráfico tradicional (modo Criação)</caption>
       <caption xml:lang="sk">Textový dokument v tradičnom desktopovom štýle UI (režim vytvorenia)</caption>
+      <caption xml:lang="sl">Besedilni dokument v običajnem uporabniškem vmesniku v namiznem slogu (način ustvarjanja)</caption>
       <caption xml:lang="sv">Ett textdokument i användargränssnitt med traditionell skrivbordsstil (skapandeläge)</caption>
       <caption xml:lang="uk">Текстовий документ у традиційному інтерфейсі стільниці (режим створення)</caption>
       <caption xml:lang="x-test">xxA text document in the traditional desktop style UI (Create mode)xx</caption>
@@ -361,6 +376,7 @@
       <caption xml:lang="pt">Um documento de texto no modo de Criação com o painel de notas visível</caption>
       <caption xml:lang="pt-BR">Um documento de texto no modo Criação com o painel de notas visível</caption>
       <caption xml:lang="sk">Textový dokument v režime vytvorenia so zobrazeným panelom poznámok</caption>
+      <caption xml:lang="sl">Besedilni dokument v ustvarjalnem načinu s prikazano ploščo</caption>
       <caption xml:lang="sv">Ett textdokument i skapandeläge med visad anteckningspanel</caption>
       <caption xml:lang="uk">Текстовий документ у режимі створення із показаною панеллю нотаток</caption>
       <caption xml:lang="x-test">xxA text document in Create mode with the notes panel shownxx</caption>
