@@ -192,7 +192,7 @@ bool HideShowManipulator::preProcessing()
                     }
                 }
                 for (int row = range.top(); row <= range.bottom(); ++row) {
-                    if (!m_sheet->rowFormats()->isHidden(row)) {
+                    if (m_sheet->rowFormats()->isHidden(row)) {
                         region.add(QRect(1, row, KS_colMax, 1));
                     }
                 }
