@@ -105,6 +105,8 @@ KoShape *AnnotationTextShapeFactory::createDefaultShape(KoDocumentResourceManage
             document.setChangeTracker(changeTracker);
         }
 
+        document.setShapeController(documentResources->shapeController());
+
         //update the resources of the document
         annotation->updateDocumentData();
         annotation->setImageCollection(documentResources->imageCollection());
