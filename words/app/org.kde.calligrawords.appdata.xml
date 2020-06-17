@@ -28,7 +28,6 @@
   <name xml:lang="sv">Calligra Words</name>
   <name xml:lang="tr">Calligra Kelime İşlemci</name>
   <name xml:lang="uk">Calligra Words</name>
-  <name xml:lang="x-test">xxCalligra Wordsxx</name>
   <name xml:lang="zh-CN">Calligra Words</name>
   <summary>Word Processor</summary>
   <summary xml:lang="bs">Program za obradu teksta</summary>
@@ -58,7 +57,6 @@
   <summary xml:lang="sv">Ordbehandlare</summary>
   <summary xml:lang="tr">Kelime İşlemci</summary>
   <summary xml:lang="uk">Текстовий процесор</summary>
-  <summary xml:lang="x-test">xxWord Processorxx</summary>
   <summary xml:lang="zh-CN">文字处理器</summary>
   <description>
     <p>
@@ -89,7 +87,6 @@
     <p xml:lang="sv">Words är en intuitiv ordbehandlare och skrivbordspubliceringsprogram. Det gör att du kan skapa informativa och attraktiva dokument med nöje och enkelhet.</p>
     <p xml:lang="tr">Kelime İşlemci, sezgisel bir kelime işlemci ve masaüstü yayın uygulamasıdır. Bununla birlikte, zevkli ve kolaylıkla bilgilendirici ve çekici belgeler oluşturabilirsiniz.</p>
     <p xml:lang="uk">Words — інтуїтивно зрозуміла у користування програма для редагування текстів та приготування матеріалів для друку. За її допомогою ви можете створювати інформативні та візуально красиві документи із задоволенням та без напруження.</p>
-    <p xml:lang="x-test">xxWords is an intuitive word processor and desktop publisher application. With it, you can create informative and attractive documents with pleasure and ease.xx</p>
     <p>Features:</p>
     <p xml:lang="bs">Svojstva:</p>
     <p xml:lang="ca">Característiques:</p>
@@ -118,7 +115,6 @@
     <p xml:lang="sv">Funktioner:</p>
     <p xml:lang="tr">Özellikler:</p>
     <p xml:lang="uk">Можливості:</p>
-    <p xml:lang="x-test">xxFeatures:xx</p>
     <p xml:lang="zh-CN">功能：</p>
     <ul>
       <li>Frame-based editing</li>
@@ -147,7 +143,6 @@
       <li xml:lang="sv">Rambaserad redigering</li>
       <li xml:lang="tr">Çerçeve tabanlı düzenleme</li>
       <li xml:lang="uk">Редагування на основі блоків.</li>
-      <li xml:lang="x-test">xxFrame-based editingxx</li>
       <li>Allows embedding of Documents</li>
       <li xml:lang="bs">Dopušta ugradnju dokumenata</li>
       <li xml:lang="ca">Permet incrustar documents</li>
@@ -174,7 +169,6 @@
       <li xml:lang="sv">Tillåter att dokument inbäddas</li>
       <li xml:lang="tr">Belgelerin gömülmesine izin verir</li>
       <li xml:lang="uk">Вбудовування об’єктів до документів.</li>
-      <li xml:lang="x-test">xxAllows embedding of Documentsxx</li>
       <li>Customization of user interface</li>
       <li xml:lang="bs">Prilagođenje korisničkog interfejsa</li>
       <li xml:lang="ca">Personalització de la interfície d'usuari</li>
@@ -201,7 +195,6 @@
       <li xml:lang="sv">Anpassning av användargränssnitt</li>
       <li xml:lang="tr">Kullanıcı arayüzü özelleştirmesi</li>
       <li xml:lang="uk">Налаштовуваність інтерфейсу користувача.</li>
-      <li xml:lang="x-test">xxCustomization of user interfacexx</li>
       <li>Includes all features expected from a modern word processor</li>
       <li xml:lang="bs">Uključuje sve osobine koje se očekuju od modernog programa za obradu teksta</li>
       <li xml:lang="ca">Inclou totes les funcionalitats esperades d'un processador de textos modern</li>
@@ -227,7 +220,6 @@
       <li xml:lang="sv">Innehåller alla funktioner som förväntas av en modern ordbehandlare</li>
       <li xml:lang="tr">Modern bir kelime işlemciden beklenen tüm özellikleri sağlar</li>
       <li xml:lang="uk">Повний спектр можливостей сучасної програми для редагування тексту.</li>
-      <li xml:lang="x-test">xxIncludes all features expected from a modern word processorxx</li>
       <li>ODT (Open Document Text) support</li>
       <li xml:lang="bs">ODT (Open Document Text) podrška</li>
       <li xml:lang="ca">Admet ODT (Open Document Text)</li>
@@ -254,7 +246,6 @@
       <li xml:lang="sv">Stöd för ODT (Open Document Text)</li>
       <li xml:lang="tr">ODT (Açık Belge Metni) desteği</li>
       <li xml:lang="uk">Підтримка стандартів ODT (Open Document Text).</li>
-      <li xml:lang="x-test">xxODT (Open Document Text) supportxx</li>
     </ul>
   </description>
   <url type="homepage">https://www.calligra.org/words/</url>
