@@ -38,7 +38,14 @@ ReviewToolFactory::ReviewToolFactory()
     setToolType(dynamicToolType()+",calligrawords,calligraauthor");
     setIconName(koIconName("tool_review"));
     setPriority(30);
-    setActivationShapeId(TextShape_SHAPEID "," AnnotationShape_SHAPEID);
+
+    const QString apps("calligrawords,calligraauthor");
+    if (apps.split(',').contains(qApp->applicationName())) {
+        setActivationShapeId(TextShape_SHAPEID);
+    } else {
+        // HACK: non-existing id to disable this tool
+        setActivationShapeId(QStringLiteral("xxxReviewToolFactory_IDxxx"));
+    }
 }
 
 ReviewToolFactory::~ReviewToolFactory()

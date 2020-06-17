@@ -56,6 +56,8 @@ AnnotationTextShapeFactory::AnnotationTextShapeFactory() :
     t.properties = props;
     props->setProperty("demo", true);
     addTemplate(t);
+
+    setHidden(true);
 }
 
 KoShape *AnnotationTextShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
