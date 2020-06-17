@@ -25,7 +25,6 @@ Name[sk]=Definícia sémantickej položky
 Name[sv]=Definition av semantiskt objekt
 Name[tr]=Anlamsal öge tanımlaması
 Name[uk]=Визначення семантичного запису
-Name[x-test]=xxSemantic item definitionxx
 Name[zh_CN]=语义项定义
 Comment=Definition of a semantic item object
 Comment[bs]=Definicija objekta semantike
@@ -53,7 +52,6 @@ Comment[sk]=Definícia objektu sémantickej položky
 Comment[sv]=Definition av ett semantiskt objekt
 Comment[tr]=Bir anlamsal öge nesnesinin tanımı
 Comment[uk]=Визначення об’єкта семантичного запису
-Comment[x-test]=xxDefinition of a semantic item objectxx
 Comment[zh_CN]=语义项对象的定义
 
 Type=ServiceType

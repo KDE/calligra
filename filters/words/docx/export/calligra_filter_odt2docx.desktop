@@ -26,7 +26,6 @@ Name[sl]=Izvozni filter DOCX za MS Word
 Name[sv]=MS Word DOCX-exportfilter
 Name[tr]=MS Word DOCX Dışa Aktarma Filtresi
 Name[uk]=Фільтр експорту MS Word DOCX
-Name[x-test]=xxMS Word DOCX Export Filterxx
 Name[zh_CN]=Microsoft Word DOCX 导出过滤器
 X-KDE-Import=application/vnd.oasis.opendocument.text
 X-KDE-Export=application/vnd.openxmlformats-officedocument.wordprocessingml.document
