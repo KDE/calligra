@@ -28,7 +28,6 @@ Name[sl]=Vstavek za skripte
 Name[sv]=Skript-insticksprogram för Sheets
 Name[tr]=Çalışma sayfası betik desteği eklentisi
 Name[uk]=Додаток роботи зі скриптами для Sheets
-Name[x-test]=xxSheets Scripting Pluginxx
 X-KDE-ServiceTypes=Sheets/ViewPlugin
 Type=Service
 X-KDE-Library=krossmodulesheets

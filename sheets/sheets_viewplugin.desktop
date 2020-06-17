@@ -29,6 +29,5 @@ Comment[sk]=GUI funkcionalita pre Sheets
 Comment[sv]=Grafisk gränssnittsfunktion för Sheets
 Comment[tr]=Sheets için Arayüz işlevi
 Comment[uk]=Функціональність графічного інтерфейсу для Sheets
-Comment[x-test]=xxGUI functionality for Sheetsxx
 [PropertyDef::X-Sheets-Version]
 Type=int
