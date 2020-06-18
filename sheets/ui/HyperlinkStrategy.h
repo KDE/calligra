@@ -21,6 +21,7 @@
 #define CALLIGRA_SHEETS_HYPERLINK_STRATEGY
 
 #include "AbstractSelectionStrategy.h"
+#include "sheets_common_export.h"
 
 #include <Qt>
 #include <QRectF>
@@ -37,7 +38,7 @@ namespace Sheets
  *
  * \todo For the case, that this region is left, a drag is initiated.
  */
-class HyperlinkStrategy : public AbstractSelectionStrategy
+class CALLIGRA_SHEETS_COMMON_EXPORT HyperlinkStrategy : public AbstractSelectionStrategy
 {
 public:
     /**

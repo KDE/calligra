@@ -38,7 +38,7 @@ class RowFormat;
  * \ingroup Commands
  * \brief Resizes a column.
  */
-class ResizeColumnManipulator : public AbstractRegionCommand
+class CALLIGRA_SHEETS_COMMON_EXPORT ResizeColumnManipulator : public AbstractRegionCommand
 {
 public:
     explicit ResizeColumnManipulator(KUndo2Command *parent = 0);
@@ -62,7 +62,7 @@ private:
  * \ingroup Commands
  * \brief Resizes a row.
  */
-class ResizeRowManipulator : public AbstractRegionCommand
+class CALLIGRA_SHEETS_COMMON_EXPORT ResizeRowManipulator : public AbstractRegionCommand
 {
 public:
     explicit ResizeRowManipulator(KUndo2Command *parent = 0);
@@ -86,7 +86,7 @@ private:
  * \ingroup Commands
  * \brief Optimizes the height and the width of rows and columns, respectively.
  */
-class AdjustColumnRowManipulator : public AbstractRegionCommand
+class CALLIGRA_SHEETS_COMMON_EXPORT AdjustColumnRowManipulator : public AbstractRegionCommand
 {
 public:
     explicit AdjustColumnRowManipulator(KUndo2Command *parent = 0);
@@ -126,7 +126,7 @@ private:
  * \ingroup Commands
  * \brief Hides/Shows columns and/or rows.
  */
-class HideShowManipulator : public AbstractRegionCommand
+class CALLIGRA_SHEETS_COMMON_EXPORT HideShowManipulator : public AbstractRegionCommand
 {
 public:
     explicit HideShowManipulator(KUndo2Command *parent = 0);
@@ -158,7 +158,7 @@ private:
  * \ingroup Commands
  * \brief Inserts/Removes columns.
  */
-class InsertDeleteColumnManipulator : public AbstractRegionCommand
+class CALLIGRA_SHEETS_COMMON_EXPORT InsertDeleteColumnManipulator : public AbstractRegionCommand
 {
 public:
     explicit InsertDeleteColumnManipulator(KUndo2Command *parent = 0);
@@ -186,7 +186,7 @@ private:
  * \ingroup Commands
  * \brief Inserts/Removes rows.
  */
-class InsertDeleteRowManipulator : public AbstractRegionCommand
+class CALLIGRA_SHEETS_COMMON_EXPORT InsertDeleteRowManipulator : public AbstractRegionCommand
 {
 public:
     explicit InsertDeleteRowManipulator(KUndo2Command *parent = 0);

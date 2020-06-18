@@ -131,6 +131,7 @@ void SheetsEditor::renameClicked()
     if (name.isEmpty())
         return;
     sheet->setSheetName(name);
+    d->renamebtn->setText(sheet->sheetName());
 }
 
 void SheetsEditor::addClicked()

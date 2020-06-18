@@ -27,7 +27,7 @@
 class KoShape;
 #include "KoXmlReaderForward.h"
 
-#define MapResourceId 65227211
+#define ClearMapId 65227212 // FIXME use number range allocated in KoDocumentResourceManager::DocumentResource
 
 class TableShapePlugin : public QObject
 {
@@ -44,7 +44,9 @@ public:
     TableShapeFactory();
     ~TableShapeFactory();
 
-    virtual bool supports(const KoXmlElement &element, KoShapeLoadingContext &context) const;
+    KoShape *createDefaultShape(KoDocumentResourceManager *documentResources) const override;
+    KoShape *createShapeFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
+    bool supports(const KoXmlElement &element, KoShapeLoadingContext &context) const override;
 };
 
 #endif // CALLIGRA_SHEETS_TABLE_SHAPE_FACTORY

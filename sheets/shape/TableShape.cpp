@@ -21,11 +21,30 @@
 #include "TableShape.h"
 
 #include "TablePageManager.h"
+#include "DocBase.h"
 
 #include <QPainter>
 
+#include <KGuiItem>
+#include <KMessageBox>
+#include <KAboutData>
+
 #include <KoShapeContainer.h>
 #include <KoXmlNS.h>
+#include <KoStore.h>
+#include <KoShapeLoadingContext.h>
+#include <KoOdfLoadingContext.h>
+#include <KoShapeSavingContext.h>
+#include <KoXmlWriter.h>
+#include <KoEmbeddedDocumentSaver.h>
+#include <calligraversion.h>
+#include <KoComponentData.h>
+#include <KoUnit.h>
+#include <KoDpi.h>
+#include <KoDocumentResourceManager.h>
+#include <KoPart.h>
+#include <KoMainWindow.h>
+#include <KoDocumentBase.h>
 
 #include <SheetsDebug.h>
 #include <CellView.h>
@@ -40,215 +59,347 @@
 #include <SheetView.h>
 #include <Value.h>
 #include <odf/SheetsOdf.h>
+#include <FunctionModuleRegistry.h>
+#include <Doc.h>
+#include <Part.h>
+
+// Define the protocol used here for embedded documents' URL
+// This used to "store" but KUrl didn't like it,
+// so let's simply make it "tar" !
+#define STORE_PROTOCOL "tar"
+#define INTERNAL_PROTOCOL "intern"
+
+namespace Calligra {
+namespace Sheets {
+
+class TableShapePart : public KoPart
+{
+public:
+    TableShapePart() : KoPart(KoComponentData(KAboutData(QStringLiteral("spreadsheet"), QStringLiteral("Spreadsheet"),
+                               QStringLiteral(CALLIGRA_VERSION_STRING))), nullptr)
+    {}
+
+    KoMainWindow *createMainWindow() override {
+        return nullptr;//new KoMainWindow("application/vnd.oasis.opendocument.spreadsheet", componentData());
+    }
+protected:
+    KoView *createViewInstance(KoDocument */*document*/, QWidget */*parent*/) override { return nullptr; }
+};
+
+class TableShapeDoc : public DocBase
+{
+public:
+    TableShapeDoc() : DocBase(new TableShapePart()) {
+        FunctionModuleRegistry::instance()->loadFunctionModules();
+    }
+    void initConfig() override {}
+
+};
+}
+}
 
 using namespace Calligra::Sheets;
 
 class TableShape::Private
 {
 public:
-    int         columns;
-    int         rows;
+    Private(TableShape *parent) : q(parent), paintingDisabled(false) {}
+    TableShape *q;
+    Part part;
+    KoDocumentResourceManager *resourceManager;
+    KoDocumentBase *parentDoc;
+    QPointF topLeftOffset;
     SheetView*  sheetView;
     bool        isMaster;
     TablePageManager* pageManager;
+    Sheet* currentSheet;
+    QUrl url; // the docs url
+    bool paintingDisabled;
 
 public:
-    void adjustColumnDimensions(Sheet* sheet, double factor);
-    void adjustRowDimensions(Sheet* sheet, double factor);
+    QRect visibleCells() const;
 };
 
-void TableShape::Private::adjustColumnDimensions(Sheet* sheet, double factor)
+QRect TableShape::Private::visibleCells() const
 {
-    for (int col = 1; col <= columns; ++col) {
-        ColumnFormat* const columnFormat = sheet->nonDefaultColumnFormat(col);
-        columnFormat->setWidth(columnFormat->width() * factor);
-    }
+    const Sheet *sheet = sheetView->sheet();
+    QRectF rect(topLeftOffset, q->size());
+    qreal tmp;
+    QRect visibleCells;
+    visibleCells.setLeft(sheet->leftColumn(rect.left(), tmp));
+    visibleCells.setRight(sheet->rightColumn(rect.right())+1);
+    visibleCells.setTop(sheet->topRow(rect.top(), tmp));
+    visibleCells.setBottom(sheet->bottomRow(rect.bottom())+1);
+    return visibleCells;
 }
 
-void TableShape::Private::adjustRowDimensions(Sheet* sheet, double factor)
-{
-    for (int row = 1; row <= rows; ++row) {
-        sheet->rowFormats()->setRowHeight(row, row, sheet->rowFormats()->rowHeight(row) * factor);
-    }
-}
-
-
-
-TableShape::TableShape(int columns, int rows)
-        : d(new Private)
+TableShape::TableShape(KoDocumentResourceManager *resourceManager, KoDocumentBase *parentDoc, int firstColumn, int firstRow, int columns, int rows)
+    : KoFrameShape(KoXmlNS::draw, "object")
+    , d(new Private(this))
 {
     setObjectName(QLatin1String("TableShape"));
-    d->columns = columns;
-    d->rows = rows;
-    d->sheetView = 0;
+    debugSheetsTableShape<<this;
+    d->resourceManager = resourceManager;
+    d->parentDoc = parentDoc;
+    d->sheetView = nullptr;
     d->isMaster = false;
-    d->pageManager = 0;
+    d->pageManager = nullptr;
+    d->currentSheet = nullptr;
+    Doc *doc = new Doc(&d->part);
+    d->part.setDocument(doc);
+    if (parentDoc) {
+        parentDoc->setEmbeddedDocument(doc);
+    }
+    setMap();
 }
 
 TableShape::~TableShape()
 {
     delete d->pageManager;
     delete d->sheetView;
-    if (KoShape::userData()) {
-        map()->removeSheet(qobject_cast<Sheet*>(KoShape::userData())); // declare the sheet as deleted
-    }
     delete d;
 }
 
-int TableShape::columns() const
+KoDocumentResourceManager *TableShape::resourceManager() const
 {
-    return d->columns;
+    return d->resourceManager;
 }
 
-int TableShape::rows() const
+Doc *TableShape::document() const
 {
-    return d->rows;
-}
-
-void TableShape::setColumns(int columns)
-{
-    Q_ASSERT(columns > 0);
-    if(!sheet())
-        return;
-    const double factor = (double) d->columns / columns;
-    d->columns = columns;
-    d->adjustColumnDimensions(qobject_cast<Sheet*>(KoShape::userData()), factor);
-    setVisibleCellRange(QRect(1, 1, d->columns, d->rows));
-    d->sheetView->invalidate();
-    if (!d->pageManager) {
-        return;
-    }
-    PrintSettings settings = *sheet()->printSettings();
-    settings.setPrintRegion(Region(1, 1, d->columns, d->rows, sheet()));
-    d->pageManager->setPrintSettings(settings);
-}
-
-void TableShape::setRows(int rows)
-{
-    Q_ASSERT(rows > 0);
-    if(!sheet())
-        return;
-    const double factor = (double) d->rows / rows;
-    d->rows = rows;
-    d->adjustRowDimensions(qobject_cast<Sheet*>(KoShape::userData()), factor);
-    setVisibleCellRange(QRect(1, 1, d->columns, d->rows));
-    d->sheetView->invalidate();
-    if (!d->pageManager) {
-        return;
-    }
-    PrintSettings settings = *sheet()->printSettings();
-    settings.setPrintRegion(Region(1, 1, d->columns, d->rows, sheet()));
-    d->pageManager->setPrintSettings(settings);
+    return dynamic_cast<Doc*>(d->part.document());
 }
 
 void TableShape::paint(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &)
 {
+    if (d->paintingDisabled) {
+        return;
+    }
 #ifndef NDEBUG
     if (KoShape::parent()) {
-        debugSheets << KoShape::parent()->name() <<  KoShape::parent()->shapeId() << KoShape::parent()->boundingRect();
+        debugSheetsTableShape << KoShape::parent()->name() <<  KoShape::parent()->shapeId() << KoShape::parent()->boundingRect();
     }
 #endif
-    const QRectF paintRect = QRectF(QPointF(0.0, 0.0), size());
 
     applyConversion(painter, converter);
-    painter.setClipRect(paintRect, Qt::IntersectClip);
+    const QRectF clipRect = QRectF(QPointF(), size());
+    painter.setClipRect(clipRect, Qt::IntersectClip);
 
     // painting cell contents
     d->sheetView->setViewConverter(&converter);
-    d->sheetView->paintCells(painter, paintRect, QPointF(0.0, 0.0));
+    paintCells(painter);
+}
+
+void TableShape::paintCells(QPainter& painter)
+{
+    const Sheet *sheet = d->sheetView->sheet();
+    const QRectF paintRect = QRectF(QPointF(), size());
+    const QRect cells = visibleCells();
+    const QPointF topLeft(sheet->columnPosition(cells.left()), sheet->rowPosition(cells.top()));
+    painter.translate(-d->topLeftOffset);
+    d->sheetView->paintCells(painter, paintRect, topLeft, nullptr, cells);
 }
 
 bool TableShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    //debugSheets << "LOADING TABLE SHAPE";
-    if (sheet() && element.namespaceURI() == KoXmlNS::table && element.localName() == "table") {
-        if (!Odf::loadTableShape(sheet(), element, context)) return false;
+    debugSheetsTableShape << "loadOdf:"<<element.localName();
+    loadOdfAttributes(element, context, OdfAllAttributes);
+    bool r = loadOdfFrame(element, context);
+    setMap();
+    return r;
+}
 
-        const QRect usedArea = sheet()->usedArea();
-        d->columns = usedArea.width();
-        d->rows = usedArea.height();
+bool TableShape::loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadingContext &context)
+{
+    debugSheetsTableShape << "loadOdfFrameElement:"<<element.tagName();
+    if (element.tagName() == "object") {
+        return loadEmbeddedDocument(context.odfLoadingContext().store(),
+                                    element,
+                                    context);
+    }
+    warnSheetsTableShape << "Unknown frame element <" << element.tagName() << ">";
+    return false;
+}
 
-        QSizeF size(0.0, 0.0);
-        for (int col = 1; col <= d->columns; ++col) {
-            size.rwidth() += sheet()->columnFormat(col)->visibleWidth();
-        }
-        size.rheight() = sheet()->rowFormats()->totalVisibleRowHeight(1, d->rows);
-        KoShape::setSize(size);
+bool TableShape::loadEmbeddedDocument(KoStore *store, const KoXmlElement &objectElement, KoShapeLoadingContext &context)
+{
+    debugSheetsTableShape<<"loadEmbeddedDocument:"<<objectElement.localName();
+    if (!objectElement.hasAttributeNS(KoXmlNS::xlink, "href")) {
+        errorSheetsTableShape << "Object element has no valid xlink:href attribute";
+        return false;
+    }
+    QString href = objectElement.attributeNS(KoXmlNS::xlink, "href");
+    debugSheetsTableShape<<"loadEmbeddedDocument:"<<"href="<<href;
+    // It can happen that the url is empty e.g. when it is a
+    // presentation:placeholder.
+    if (href.isEmpty()) {
         return true;
     }
-    return false;
+    if (href[0] == '#') {
+        href.remove(0, 1);
+    }
+    // href can be:
+    // 1. relative inside this store, e.g: ./Object1
+    // 2. releative path to the outside filesystem, e.g: ../extern.ods
+    //    The first .. is just to get out of this store so in this case
+    //    extern.ods is in the same directory as store
+    // 3. absolute path to the filesystem
+    // 4. relative path to internet, e.g: TODO
+    // 5. absolute path to the internet: https://here.we/are/extern.ods
+    d->url = QUrl(href);
+    if (d->url.isRelative()) {
+        if (d->url.path().startsWith(QLatin1String("./"))) {
+            d->url.setPath(d->url.path().remove(0, 2));
+            d->url.setScheme(QStringLiteral(INTERNAL_PROTOCOL));
+        } else if (href.startsWith("..")) {
+            document()->setUrl(d->url);
+            // relative urls are relative this package, so the firts ../ must be removed
+            d->url.setPath(d->url.path().remove(0, 3));
+            // get the url from the document we are embedded in and prepend out relative  one
+            KoDocumentBase *doc = context.documentResourceManager()->odfDocument();
+            d->url = doc->url().adjusted(QUrl::RemoveFilename).resolved(QUrl(d->url));
+        } else {
+            // hmmm, taken from ChartShape, which case is this?
+            d->url.setScheme(QStringLiteral(INTERNAL_PROTOCOL));
+        }
+    } else {
+        // absolute url
+        document()->setUrl(d->url);
+    }
+
+    debugSheetsTableShape << "url=" << d->url;
+
+    bool res = true;
+    // hmmm, what about the STORE_PROTOCOL (tar), when does that happen? (ChartShape asserts)
+    if (d->url.scheme() == QStringLiteral(INTERNAL_PROTOCOL) || d->url.scheme() == QStringLiteral(STORE_PROTOCOL)) {
+        document()->setStoreInternal(true);
+        store->pushDirectory();
+        store->enterDirectory(d->url.path());
+        debugSheetsTableShape<<"loadEmbeddedDocument: load from store"<<store->currentPath();
+        res = document()->loadOasisFromStore(store);
+        debugSheetsTableShape<<"loadEmbeddedDocument: loaded"<<document()->map();
+        store->popDirectory();
+    } else {
+        // Reference to an external document.
+        document()->setStoreInternal(false);
+        if (d->url.isLocalFile()) {
+            debugSheetsTableShape<<"loadEmbeddedDocument: load local file"<<d->url;
+            res = document()->importDocument(d->url);
+        } else {
+            res = false;
+            // For security reasons we need to ask confirmation if the url is remote.
+            int result = KMessageBox::warningYesNoCancel(
+                0, i18n("This document contains an external link to a remote document\n%1", d->url.url()),
+                i18n("Confirmation Required"), KGuiItem(i18n("Download")), KGuiItem(i18n("Skip")));
+
+            if (result == KMessageBox::Cancel) {
+                //d->m_parent->setErrorMessage("USER_CANCELED");
+                return false;
+            }
+            if (result == KMessageBox::Yes) {
+                res = document()->openUrl(d->url);
+            }
+        }
+        document()->setReadWrite(false);
+    }
+    if (!res) {
+        QString errorMessage = document()->errorMessage();
+        warnSheetsTableShape<<"loadEmbeddedDocument: failed"<<errorMessage;
+        return false;
+    }
+    debugSheetsTableShape<<"loadEmbeddedDocument: loaded:"<<document()->url()<<document()->isStoredExtern();
+    return res;
 }
 
 void TableShape::saveOdf(KoShapeSavingContext & context) const
 {
-    if (!sheet())
+    if (!sheet()) {
+        warnSheetsTableShape<<"No sheet";
         return;
-    Odf::saveTableShape(sheet(), context);
+    }
+
+    KoXmlWriter&  bodyWriter = context.xmlWriter();
+
+    // Check if we're saving to a spreadsheet document. If not, embed a
+    // spreadsheet document.
+    //
+    // FIXME: From ChartShape:
+    //        The check isEmpty() fixes a crash that happened when a
+    //        chart shape was saved from Words.  There are two
+    //        problems with this fix:
+    //        1. Checking the tag hierarchy is hardly the right way to do this
+    //        2. The position doesn't seem to be saved yet.
+    //
+    //        Also, I have to check with the other apps, e.g. Calligra Sheets,
+    //        if it works there too.
+    //
+    QList<const char*>  tagHierarchy = bodyWriter.tagHierarchy();
+    if (tagHierarchy.isEmpty() || QString(tagHierarchy.last()) != "office:spreadsheet") {
+        bodyWriter.startElement("draw:frame");
+        // See also loadOdf() in loadOdfAttributes.
+        saveOdfAttributes(context, OdfAllAttributes);
+
+        bodyWriter.startElement("draw:object");
+        document()->setUrl(d->url); // restore, somebody resets
+        context.embeddedSaver().embedDocument(bodyWriter, document());
+        bodyWriter.endElement(); // draw:object
+
+        bodyWriter.endElement(); // draw:frame
+
+        // TODO This should go into embeddedSaver
+        debugSheetsTableShape<<"saving document: external:"<<document()->isStoredExtern()<<document()->url()<<document()->isModified();
+        // Note that internal docs are save by embeddedSaver()
+        if (document()->isStoredExtern() && document()->isModified()) {
+            document()->save();
+        }
+        return;
+    }
 }
 
-void TableShape::setMap(Map *map)
+void TableShape::setMap()
 {
-    if (map == 0)
-        return;
-    Sheet* const sheet = map->addNewSheet();
-    d->sheetView = new SheetView(sheet);
-    KoShape::setUserData(sheet);
-    d->isMaster = true;
-    setVisibleCellRange(QRect(1, 1, d->columns, d->rows));
-
-    connect(map, SIGNAL(damagesFlushed(QList<Damage*>)),
-            this, SLOT(handleDamages(QList<Damage*>)));
-
-    // Initialize the size using the default column/row dimensions.
-    QSize size;
-    for (int col = 1; col <= d->columns; ++col) {
-        size.rwidth() += sheet->columnFormat(col)->visibleWidth();
+    auto map = this->map();
+    Sheet* sheet = map->sheetList().value(0);
+    if (!sheet) {
+        sheet = map->addNewSheet();
     }
-    size.rheight() = sheet->rowFormats()->totalVisibleRowHeight(1, d->rows);
-    KoShape::setSize(size);
+    d->currentSheet = sheet;
+    d->sheetView = new SheetView(sheet);
+    d->isMaster = true;
+    updateVisibleCellRange();
+
+    connect(map, SIGNAL(damagesFlushed(QList<Damage*>)), this, SLOT(handleDamages(QList<Damage*>)));
 }
 
 void TableShape::setSize(const QSizeF& newSize)
 {
-    const QSizeF oldSize = size();
-    if (oldSize == newSize)
-        return;
-
-    QSizeF size2 = oldSize;
-    const qreal cellWidth = map()->defaultColumnFormat()->width();
-    const qreal cellHeight = map()->defaultRowFormat()->height();
-
-    // Note that the following four variables can also be negative
-    const qreal dx = newSize.width() - oldSize.width();
-    const qreal dy = newSize.height() - oldSize.height();
-    int numAddedCols = 0;
-    int numAddedRows = 0;
-
-    if (qAbs(dx) >= cellWidth) {
-        numAddedCols = int(dx / cellWidth);
-        size2.rwidth() += cellWidth * numAddedCols;
-    }
-    if (qAbs(dy) >= cellHeight) {
-        numAddedRows = int(dy / cellHeight);
-        size2.rheight() += cellHeight * numAddedRows;
-    }
-    if (qAbs(dx) >= cellWidth || qAbs(dy) >= cellHeight) {
-        d->columns += numAddedCols;
-        d->rows += numAddedRows;
-        setVisibleCellRange(QRect(1, 1, d->columns, d->rows));
-        d->sheetView->invalidate();
-        KoShape::setSize(size2);
+    KoShape::setSize(newSize);
+    if (sheet()) {
+        map()->addDamage(new SheetDamage(sheet(), SheetDamage::ContentChanged));
     }
 }
 
 Map* TableShape::map() const
 {
-    return qobject_cast<Sheet*>(KoShape::userData())->map();
+    return document()->map();
+}
+
+void TableShape::clear()
+{
+    delete d->pageManager;
+    d->pageManager = nullptr;
+    d->currentSheet = nullptr;
+    delete d->sheetView;
+    d->sheetView = nullptr;
+    auto m = map();
+    while (m->count() > 0) {
+        m->removeSheet(m->sheet(0));
+    }
 }
 
 Sheet* TableShape::sheet() const
 {
-    return qobject_cast<Sheet*>(KoShape::userData());
+    return d->currentSheet;
 }
 
 SheetView* TableShape::sheetView() const
@@ -259,29 +410,48 @@ SheetView* TableShape::sheetView() const
 void TableShape::setSheet(const QString& sheetName)
 {
     Sheet* const sheet = map()->findSheet(sheetName);
-    if (! sheet)
+    if (! sheet) {
         return;
+    }
+    d->currentSheet = sheet;
     delete d->sheetView;
     d->sheetView = new SheetView(sheet);
-    KoShape::setUserData(sheet);
-    setColumns(d->columns);
-    setRows(d->rows);
-    setVisibleCellRange(QRect(1, 1, d->columns, d->rows));
+    updateVisibleCellRange();
     update();
 }
 
-void TableShape::setVisibleCellRange(const QRect& cellRange)
+void TableShape::setTopLeftOffset(const QPointF &point)
 {
-    Q_ASSERT(KoShape::userData());
+    d->topLeftOffset = point;
+}
+
+QPointF TableShape::topLeftOffset() const
+{
+    return d->topLeftOffset;
+}
+
+QRect TableShape::visibleCells() const
+{
+    return d->visibleCells();
+}
+
+void TableShape::updateVisibleCellRange()
+{
+    if (!sheet()) {
+        return;
+    }
     if (!d->sheetView) {
         d->sheetView = new SheetView(sheet());
     }
-    d->sheetView->setPaintCellRange(cellRange & QRect(1, 1, d->columns, d->rows));
+    d->sheetView->setPaintCellRange(visibleCells());
 }
 
 void TableShape::shapeChanged(ChangeType type, KoShape *shape)
 {
     Q_UNUSED(shape);
+    if (!sheet()) {
+        return;
+    }
     // If this is a master table shape, the parent changed and we have no parent yet...
     if (d->isMaster && type == ParentChanged && !d->pageManager) {
         d->pageManager = new TablePageManager(this);
@@ -324,4 +494,9 @@ void TableShape::handleDamages(const QList<Damage*>& damages)
     }
 
     update();
+}
+
+void TableShape::setPaintingDisabled(bool disable)
+{
+    d->paintingDisabled = disable;
 }

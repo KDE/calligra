@@ -19,7 +19,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/interfaces
 # have their own translation domain
 ### TODO: The tableshape needs a rewrite,
 ### it has been obsoleted by the implementation of texttables
-#add_subdirectory( shape )
+add_subdirectory( shape )
 
 add_subdirectory( plugins )
 

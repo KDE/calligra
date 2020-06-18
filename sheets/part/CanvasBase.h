@@ -127,13 +127,14 @@ public:
      */
     void validateSelection();
 
+    void paint(QPainter* painter, const QRectF& painterRect); // maybe add a QRegion overload
+
 public:
     void setDocumentOffset(const QPoint& offset);
     void setDocumentSize(const QSizeF& size);
 
 protected:
     void keyPressed(QKeyEvent* _ev);
-    void paint(QPainter* painter, const QRectF& painterRect); // maybe add a QRegion overload
     void mousePressed(KoPointerEvent* _ev);
     void mouseReleased(KoPointerEvent* _ev);
     void mouseMoved(KoPointerEvent* _ev);

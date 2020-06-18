@@ -21,6 +21,7 @@
 #define CALLIGRA_SHEETS_FILTER_POPUP
 
 #include <QFrame>
+#include "sheets_common_export.h"
 
 class QAbstractButton;
 
@@ -32,7 +33,7 @@ class Cell;
 class Database;
 class Filter;
 
-class FilterPopup : public QFrame
+class CALLIGRA_SHEETS_COMMON_EXPORT FilterPopup : public QFrame
 {
     Q_OBJECT
 public:

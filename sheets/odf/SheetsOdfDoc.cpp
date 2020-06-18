@@ -59,6 +59,12 @@
 
 // This file contains functionality to load/save a DocBase
 
+// Define the protocol used here for embedded documents' URL
+// This used to "store" but KUrl didn't like it,
+// so let's simply make it "tar" !
+#define STORE_PROTOCOL "tar"
+#define INTERNAL_PROTOCOL "intern"
+
 namespace Calligra {
 namespace Sheets {
 
@@ -194,10 +200,9 @@ bool Odf::saveDocument(DocBase *doc, KoDocument::SavingContext &documentContext)
     documentContext.odfStore.closeContentWriter();
 
     //add manifest line for content.xml
-    manifestWriter->addManifestEntry("content.xml",  "text/xml");
+    manifestWriter->addManifestEntry(store->currentPath() + "content.xml",  "text/xml");
 
     mainStyles.saveOdfStylesDotXml(store, manifestWriter);
-
     if (!store->open("settings.xml"))
         return false;
 
@@ -228,7 +233,7 @@ bool Odf::saveDocument(DocBase *doc, KoDocument::SavingContext &documentContext)
         return false;
     }
 
-    manifestWriter->addManifestEntry("settings.xml", "text/xml");
+    manifestWriter->addManifestEntry(store->currentPath() + "settings.xml", "text/xml");
 
     doc->setModified(false);
 
