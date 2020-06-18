@@ -32,9 +32,11 @@ class Q_DECL_HIDDEN KoDocumentBase::Private {
 public:
     Private()
     : storeInternal(false)
+    , embeddedDocument(nullptr)
     {}
 
     bool storeInternal; // Store this doc internally even if url is external
+    KoDocumentBase *embeddedDocument;
 };
 
 KoDocumentBase::KoDocumentBase()
@@ -46,6 +48,16 @@ KoDocumentBase::KoDocumentBase()
 KoDocumentBase::~KoDocumentBase()
 {
     delete d;
+}
+
+void KoDocumentBase::setEmbeddedDocument(KoDocumentBase *doc)
+{
+    d->embeddedDocument = doc;
+}
+
+KoDocumentBase *KoDocumentBase::embeddedDocument() const
+{
+    return d->embeddedDocument;
 }
 
 void KoDocumentBase::setStoreInternal(bool i)

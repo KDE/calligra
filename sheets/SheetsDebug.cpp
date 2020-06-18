@@ -61,3 +61,9 @@ const QLoggingCategory &SHEETSDAMAGE_LOG()
     return category;
 }
 
+const QLoggingCategory &SHEETSTABLESHAPE_LOG()
+{
+    static const QLoggingCategory category("calligra.sheets.tableshape");
+    return category;
+}
+

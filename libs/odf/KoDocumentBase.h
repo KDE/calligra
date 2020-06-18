@@ -65,6 +65,9 @@ public:
      */
     virtual ~KoDocumentBase();
 
+    void setEmbeddedDocument(KoDocumentBase *doc);
+    KoDocumentBase *embeddedDocument() const;
+
     /**
      * Set when you want an external embedded document to be stored internally
      */

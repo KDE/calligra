@@ -711,6 +711,12 @@ void CellEditor::focusInEvent(QFocusEvent *event)
     KTextEdit::focusInEvent(event);
 }
 
+void CellEditor::keyReleaseEvent(QKeyEvent *event)
+{
+    // need to eat event or else it is delivered to others and weird things might happen
+    event->accept();
+}
+
 void CellEditor::focusOutEvent(QFocusEvent *event)
 {
     KTextEdit::focusOutEvent(event);

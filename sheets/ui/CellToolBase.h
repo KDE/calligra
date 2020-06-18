@@ -109,7 +109,7 @@ public Q_SLOTS:
     /**
      * Scrolls to the cell located at \p location.
      */
-    void scrollToCell(const QPoint &location);
+    virtual void scrollToCell(const QPoint &location);
 
     void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
     void deactivate() override;
@@ -126,9 +126,16 @@ protected:
      * The canvas scrolling offset in document coordinates.
      */
     virtual QPointF canvasOffset() const = 0;
+    virtual double canvasOffsetX() const;
+    virtual double canvasOffsetY() const;
+    virtual double canvasWidth() const;
+
     virtual int maxCol() const = 0;
     virtual int maxRow() const = 0;
     virtual SheetView* sheetView(const Sheet* sheet) const = 0;
+
+    QList<QAction*> popupMenuActionList() const;
+
 
 protected Q_SLOTS:
     void selectionChanged(const Region&);

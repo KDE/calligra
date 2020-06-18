@@ -870,6 +870,11 @@ CellToolBase::~CellToolBase()
     delete d;
 }
 
+QList<QAction*> CellToolBase::popupMenuActionList() const
+{
+    return d->popupActionList();
+}
+
 void CellToolBase::paint(QPainter &painter, const KoViewConverter &viewConverter)
 {
     KoShape::applyConversion(painter, viewConverter);
@@ -1184,6 +1189,7 @@ QList<QPointer<QWidget> >  CellToolBase::createOptionWidgets()
 // TODO: while this event sends the offset-adjusted position, the subsequent handleMouseMove calls do not. This means that they all contain the offset adjustment themselves, which is a needless duplication. Should be improved.
 KoInteractionStrategy* CellToolBase::createStrategy(KoPointerEvent* event)
 {
+    Sheet *const sheet = selection()->activeSheet();
     // Get info about where the event occurred.
     QPointF position = event->point - offset(); // the shape offset, not the scrolling one.
 
@@ -1205,13 +1211,13 @@ KoInteractionStrategy* CellToolBase::createStrategy(KoPointerEvent* event)
     Region::ConstIterator end = selection()->constEnd();
     for (Region::ConstIterator it = selection()->constBegin(); it != end; ++it) {
         const QRect range = (*it)->rect();
-        if (selection()->activeSheet()->cellCoordinatesToDocument(range).contains(position)) {
+        if (sheet->cellCoordinatesToDocument(range).contains(position)) {
             // Context menu with the right mouse button.
             if (event->button() == Qt::RightButton) {
                 // Setup the context menu.
                 setPopupActionList(d->popupActionList());
                 event->ignore();
-                return 0; // Act directly; no further strategy needed.
+                return nullptr; // Act directly; no further strategy needed.
             }
             hitSelection = true;
             break;
@@ -1221,22 +1227,22 @@ KoInteractionStrategy* CellToolBase::createStrategy(KoPointerEvent* event)
     // In which cell did the user click?
     qreal xpos;
     qreal ypos;
-    const int col = this->selection()->activeSheet()->leftColumn(position.x(), xpos);
-    const int row = this->selection()->activeSheet()->topRow(position.y(), ypos);
+    const int col = sheet->leftColumn(position.x(), xpos);
+    const int row = sheet->topRow(position.y(), ypos);
     // Check boundaries.
     if (col > maxCol() || row > maxRow()) {
         debugSheetsUI << "col or row is out of range:" << "col:" << col << " row:" << row;
     } else {
         // Context menu with the right mouse button.
         if (event->button() == Qt::RightButton) {
-            selection()->initialize(QPoint(col, row), selection()->activeSheet());
+            selection()->initialize(QPoint(col, row), sheet);
             // Setup the context menu.
             setPopupActionList(d->popupActionList());
             event->ignore();
-            return 0; // Act directly; no further strategy needed.
+            return nullptr; // Act directly; no further strategy needed.
         } else {
-            const Cell cell = Cell(selection()->activeSheet(), col, row).masterCell();
-            SheetView* const sheetView = this->sheetView(selection()->activeSheet());
+            const Cell cell = Cell(sheet, col, row).masterCell();
+            SheetView* const sheetView = this->sheetView(sheet);
 
             // Filter button hit.
             const double offsetX = canvas()->canvasController()->canvasOffsetX();
@@ -1248,7 +1254,7 @@ KoInteractionStrategy* CellToolBase::createStrategy(KoPointerEvent* event)
             if (sheetView->cellView(col, row).hitTestFilterButton(cell, cellViewRect, event->pos())) {
                 Database database = cell.database();
                 FilterPopup::showPopup(canvas()->canvasWidget(), cell, cellViewRect, &database);
-                return 0; // Act directly; no further strategy needed.
+                return nullptr; // Act directly; no further strategy needed.
             }
 
             // Hyperlink hit.
@@ -1379,6 +1385,21 @@ void CellToolBase::setLastEditorWithFocus(Editor editor)
     d->lastEditorWithFocus = editor;
 }
 
+double CellToolBase::canvasOffsetX() const
+{
+    return canvas()->viewConverter()->viewToDocumentX(canvas()->canvasController()->canvasOffsetX());
+}
+
+double CellToolBase::canvasOffsetY() const
+{
+    return canvas()->viewConverter()->viewToDocumentX(canvas()->canvasController()->canvasOffsetY());
+}
+
+double CellToolBase::canvasWidth() const
+{
+    return canvas()->viewConverter()->viewToDocumentX(canvas()->canvasWidget()->width());
+}
+
 bool CellToolBase::createEditor(bool clear, bool focus, bool captureArrows)
 {
     const Cell cell(selection()->activeSheet(), selection()->marker());
@@ -1406,8 +1427,7 @@ bool CellToolBase::createEditor(bool clear, bool focus, bool captureArrows)
         double min_h = cell.height();
 
         double xpos = selection()->activeSheet()->columnPosition(selection()->marker().x());
-        xpos += canvas()->viewConverter()->viewToDocumentX(canvas()->canvasController()->canvasOffsetX());
-
+        xpos += canvasOffsetX();
         Qt::LayoutDirection sheetDir = selection()->activeSheet()->layoutDirection();
         bool rtlText = cell.displayText().isRightToLeft();
 
@@ -1419,13 +1439,12 @@ bool CellToolBase::createEditor(bool clear, bool focus, bool captureArrows)
 
         // paint editor above correct cell if sheet direction is RTL
         if (sheetDir == Qt::RightToLeft) {
-            double dwidth = canvas()->viewConverter()->viewToDocumentX(canvas()->canvasWidget()->width());
+            double dwidth = canvasWidth();
             double w2 = qMax(w, min_w);
             xpos = dwidth - w2 - xpos;
         }
-
         double ypos = selection()->activeSheet()->rowPosition(selection()->marker().y());
-        ypos += canvas()->viewConverter()->viewToDocumentY(canvas()->canvasController()->canvasOffsetY());
+        ypos += canvasOffsetY();
 
         // Setup the editor's palette.
         const Style style = cell.effectiveStyle();

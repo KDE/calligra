@@ -41,12 +41,12 @@ public:
      */
     ~TablePageManager();
 
-    virtual QSizeF size(int page) const;
+    QSizeF size(int page) const override;
 
 protected:
-    virtual void clearPages();
-    virtual void insertPage(int page);
-    virtual void preparePage(int page);
+    void clearPages() override;
+    void insertPage(int page) override;
+    void preparePage(int page) override;
 
 private:
     class Private;

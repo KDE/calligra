@@ -67,4 +67,10 @@ extern const CALLIGRA_SHEETS_ODF_EXPORT QLoggingCategory &SHEETSDAMAGE_LOG(); //
 #define warnSheetsDamage qCWarning(SHEETSDAMAGE_LOG)
 #define errorSheetsDamage qCCritical(SHEETSDAMAGE_LOG)
 
+extern const CALLIGRA_SHEETS_ODF_EXPORT QLoggingCategory &SHEETSTABLESHAPE_LOG();
+
+#define debugSheetsTableShape qCDebug(SHEETSTABLESHAPE_LOG)
+#define warnSheetsTableShape qCWarning(SHEETSTABLESHAPE_LOG)
+#define errorSheetsTableShape qCCritical(SHEETSTABLESHAPE_LOG)
+
 #endif

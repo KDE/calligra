@@ -70,7 +70,7 @@ void TablePageManager::insertPage(int page)
     }
     TableShape* const shape = static_cast<TableShape*>(d->pages[page - 1]);
     const QRect cellRange = this->cellRange(page);
-    shape->setVisibleCellRange(cellRange);
+//     shape->setVisibleCellRange(cellRange);
     shape->KoShape::setSize(shape->sheet()->cellCoordinatesToDocument(cellRange).size());
 }
 

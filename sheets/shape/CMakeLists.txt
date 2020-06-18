@@ -4,31 +4,43 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/sheets
     ${CMAKE_BINARY_DIR}/sheets
     ${CMAKE_SOURCE_DIR}/sheets/ui
+    ${CMAKE_SOURCE_DIR}/sheets/database
+    ${CMAKE_SOURCE_DIR}/sheets/part
+    ${CMAKE_SOURCE_DIR}/sheets/commands
     ${KOMAIN_INCLUDES}
-	${KOTEXT_INCLUDES}
+    ${KOTEXT_INCLUDES}
     ${TEXTLAYOUT_INCLUDES}
-	)
+)
 
 ########### Flake Plugin library ###############
 
 set (tableshape_LIB_SRCS
     TablePageManager.cpp
     TableShape.cpp
-    TableShapeDeferredFactory.cpp
     TableTool.cpp
+    TableShapeFactory.cpp
     TableToolFactory.cpp
     SheetsEditor.cpp
+    ToolHeaders.cpp
+    ScreenConversions.cpp
    )
 
-add_library(calligra_shape_spreadsheet-deferred MODULE ${tableshape_LIB_SRCS})
-calligra_deferredplugin_desktop_to_json(calligra_shape_spreadsheet-deferred calligra_shape_spreadsheet-deferred.desktop)
-add_library(calligra_shape_spreadsheet MODULE TableShapeFactory.cpp)
+add_library(calligra_shape_spreadsheet MODULE ${tableshape_LIB_SRCS})
 calligra_shape_desktop_to_json(calligra_shape_spreadsheet calligra_shape_spreadsheet.desktop)
 
-target_link_libraries(calligra_shape_spreadsheet-deferred PUBLIC calligrasheetscommon PRIVATE KF5::Completion)
-target_link_libraries(calligra_shape_spreadsheet flake KF5::KDELibs4Support)
+target_link_libraries(calligra_shape_spreadsheet
+    PUBLIC
+        calligrasheetscommon
+        calligrasheetspart
+        flake
+        komain
+    PRIVATE
+        Qt5::PrintSupport
+        KF5::Completion
+)
+# target_link_libraries(calligra_shape_spreadsheet flake KF5::KDELibs4Support)
 
-install(TARGETS calligra_shape_spreadsheet-deferred DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/deferred)
+# install(TARGETS calligra_shape_spreadsheet-deferred DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/deferred)
 install(TARGETS calligra_shape_spreadsheet DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/shapes)
 
 ########### install files ###############
