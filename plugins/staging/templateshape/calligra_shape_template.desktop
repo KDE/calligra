@@ -32,6 +32,7 @@ Name[sl]=Oblika predloge
 Name[sv]=Mallform
 Name[tr]=Şablon Şekli
 Name[uk]=Форма-шаблон
+Name[x-test]=xxTemplate Shapexx
 Name[zh_CN]=模板形状
 X-KDE-ServiceTypes=Calligra/Shape
 Type=Service

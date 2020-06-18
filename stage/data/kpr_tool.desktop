@@ -28,6 +28,7 @@ Comment[sl]=Orodje za Calligra Stage
 Comment[sv]=Verktyg för Calligra Stage
 Comment[tr]=Calligra Stage Araç
 Comment[uk]=Інструмент для Calligra Stage
+Comment[x-test]=xxTool for Calligra Stagexx
 [PropertyDef::X-KPresenter-Version]
 Type=int
 [PropertyDef::X-KDE-PluginInfo-Name]

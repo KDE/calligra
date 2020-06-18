@@ -25,6 +25,7 @@
                 "Name[sk]": "Sven Langkamp",
                 "Name[sv]": "Sven Langkamp",
                 "Name[uk]": "Sven Langkamp",
+                "Name[x-test]": "xxSven Langkampxx",
                 "Name[zh_CN]": "Sven Langkamp"
             },
             {
@@ -51,6 +52,7 @@
                 "Name[sk]": "Friedrich W. H. Kossebau",
                 "Name[sv]": "Friedrich W. H. Kossebau",
                 "Name[uk]": "Friedrich W. H. Kossebau",
+                "Name[x-test]": "xxFriedrich W. H. Kossebauxx",
                 "Name[zh_CN]": "Friedrich W. H. Kossebau"
             }
         ],
@@ -76,6 +78,7 @@
         "Copyright[sk]": "Copyright 2010-2016 Sven Langkamp, Friedrich W. H. Kossebau",
         "Copyright[sv]": "Copyright 2010-2016 Sven Langkamp, Friedrich W. H. Kossebau",
         "Copyright[uk]": "© Sven Langkamp, Friedrich W. H. Kossebau, 2010–2016",
+        "Copyright[x-test]": "xxCopyright 2010-2016 Sven Langkamp, Friedrich W. H. Kossebauxx",
         "Copyright[zh_CN]": "Copyright 2010-2016 Sven Langkamp, Friedrich W. H. Kossebau",
         "Description": "PPTX file renderer",
         "Description[ca@valencia]": "Representació de fitxers PPTX",
@@ -97,6 +100,7 @@
         "Description[sk]": "Zobrazovač súborov PPTX",
         "Description[sv]": "PPTX-filåtergivning",
         "Description[uk]": "Засіб показу вмісту файлів PPTX",
+        "Description[x-test]": "xxPPTX file rendererxx",
         "Description[zh_CN]": "PPTX 文件渲染器",
         "Id": "okularGenerator_pptx_calligra",
         "License": "GPL",
@@ -125,6 +129,7 @@
         "Name[sk]": "PPTX Backend",
         "Name[sv]": "PPTX-gränssnitt",
         "Name[uk]": "Модуль обробки PPTX",
+        "Name[x-test]": "xxPPTX Backendxx",
         "Name[zh_CN]": "PPTX 后端",
         "ServiceTypes": [
             "okular/Generator"
