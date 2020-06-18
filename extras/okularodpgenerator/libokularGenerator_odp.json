@@ -26,6 +26,7 @@
                 "Name[sl]": "Sven Langkamp",
                 "Name[sv]": "Sven Langkamp",
                 "Name[uk]": "Sven Langkamp",
+                "Name[x-test]": "xxSven Langkampxx",
                 "Name[zh_CN]": "Sven Langkamp"
             },
             {
@@ -53,6 +54,7 @@
                 "Name[sl]": "Friedrich W. H. Kossebau",
                 "Name[sv]": "Friedrich W. H. Kossebau",
                 "Name[uk]": "Friedrich W. H. Kossebau",
+                "Name[x-test]": "xxFriedrich W. H. Kossebauxx",
                 "Name[zh_CN]": "Friedrich W. H. Kossebau"
             }
         ],
@@ -79,6 +81,7 @@
         "Copyright[sl]": "Copyright 2010-2016 Sven Langkamp, Friedrich W. H. Kossebau",
         "Copyright[sv]": "Copyright 2010-2016 Sven Langkamp, Friedrich W. H. Kossebau",
         "Copyright[uk]": "© Sven Langkamp, Friedrich W. H. Kossebau, 2010–2016",
+        "Copyright[x-test]": "xxCopyright 2010-2016 Sven Langkamp, Friedrich W. H. Kossebauxx",
         "Copyright[zh_CN]": "Copyright 2010-2016 Sven Langkamp, Friedrich W. H. Kossebau",
         "Description": "OpenDocument Presentation file renderer",
         "Description[ca@valencia]": "Representació de fitxers de presentacions d'OpenDocument",
@@ -101,6 +104,7 @@
         "Description[sl]": "Prikazovalnik datotek za predstavitev OpenDocument",
         "Description[sv]": "OpenDocument presentationsfilåtergivning",
         "Description[uk]": "Засіб показу вмісту файлів ODP",
+        "Description[x-test]": "xxOpenDocument Presentation file rendererxx",
         "Description[zh_CN]": "OpenDocument 演示文件渲染器",
         "Id": "okularGenerator_odp_calligra",
         "License": "GPL",
@@ -130,6 +134,7 @@
         "Name[sl]": "Zaledje ODP",
         "Name[sv]": "ODP-gränssnitt",
         "Name[uk]": "Модуль обробки ODP",
+        "Name[x-test]": "xxODP Backendxx",
         "Name[zh_CN]": "ODP 后端",
         "ServiceTypes": [
             "okular/Generator"

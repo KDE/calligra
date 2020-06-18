@@ -26,6 +26,7 @@ Name[sl]=Vtičnik Round Corners za Karbon
 Name[sv]=Karbon-insticksprogram för runda hörn
 Name[tr]=Karbon Yuvarlatılmış Köşe eklentisi
 Name[uk]=Додаток скруглення кутів для Karbon
+Name[x-test]=xxKarbon Round Corners pluginxx
 Name[zh_CN]=Karbon 圆角插件
 X-KDE-ServiceTypes=Karbon/ViewPlugin
 Type=Service

@@ -26,6 +26,7 @@
                 "Name[sl]": "Sven Langkamp",
                 "Name[sv]": "Sven Langkamp",
                 "Name[uk]": "Sven Langkamp",
+                "Name[x-test]": "xxSven Langkampxx",
                 "Name[zh_CN]": "Sven Langkamp"
             },
             {
@@ -53,6 +54,7 @@
                 "Name[sl]": "Friedrich W. H. Kossebau",
                 "Name[sv]": "Friedrich W. H. Kossebau",
                 "Name[uk]": "Friedrich W. H. Kossebau",
+                "Name[x-test]": "xxFriedrich W. H. Kossebauxx",
                 "Name[zh_CN]": "Friedrich W. H. Kossebau"
             }
         ],
@@ -79,6 +81,7 @@
         "Copyright[sl]": "Copyright 2012-2016 Sven Langkamp, Friedrich W. H. Kossebau",
         "Copyright[sv]": "Copyright 2012-2016 Sven Langkamp, Friedrich W. H. Kossebau",
         "Copyright[uk]": "© Sven Langkamp, Friedrich W. H. Kossebau, 2012–2016",
+        "Copyright[x-test]": "xxCopyright 2012-2016 Sven Langkamp, Friedrich W. H. Kossebauxx",
         "Copyright[zh_CN]": "Copyright 2012-2016 Sven Langkamp, Friedrich W. H. Kossebau",
         "Description": "DOC file renderer",
         "Description[ca@valencia]": "Representació de fitxers DOC",
@@ -101,6 +104,7 @@
         "Description[sl]": "Prikazovalnik besedilnih datotek DOC",
         "Description[sv]": "DOC-filåtergivning",
         "Description[uk]": "Засіб показу вмісту файлів DOC",
+        "Description[x-test]": "xxDOC file rendererxx",
         "Description[zh_CN]": "DOC 文件渲染器",
         "Id": "okularGenerator_doc_calligra",
         "License": "GPL",
@@ -129,6 +133,7 @@
         "Name[sl]": "Zaledje DOC",
         "Name[sv]": "DOC-gränssnitt",
         "Name[uk]": "Модуль обробки DOC",
+        "Name[x-test]": "xxDOC Backendxx",
         "Name[zh_CN]": "DOC 后端",
         "ServiceTypes": [
             "okular/Generator"

@@ -29,6 +29,7 @@ Name[sl]=Izvozni filter ODT v Epub2
 Name[sv]=ODT-till-Epub2-exportfilter
 Name[tr]=ODT'den Epub2'a Dışa Aktarma Filtresi
 Name[uk]=Фільтр експорту ODT до Epub2
+Name[x-test]=xxODT to Epub2 Export Filterxx
 Name[zh_CN]=ODT 到 Epub2 导出过滤器
 
 X-KDE-Export=application/epub+zip
