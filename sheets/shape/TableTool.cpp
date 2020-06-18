@@ -1,21 +1,22 @@
 /* This file is part of the KDE project
-   Copyright 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
-
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.
-*/
+ * Copyright 2020 Dag Andersen <dag.andersen@kdemail.net>
+ * Copyright 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+ *  
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ */
 
 // Local
 #include "TableTool.h"
@@ -35,10 +36,11 @@
 #include <QMarginsF>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QFontMetrics>
+#include <QMenu>
 
-#include <kcombobox.h>
 #include <KLocalizedString>
-#include <kpagedialog.h>
+#include <KPageDialog>
 
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
@@ -55,6 +57,8 @@
 #include <KoTextShapeData.h>
 #include <KoShapePaintingContext.h>
 #include <KoBorder.h>
+#include <kundo2command.h>
+#include <KoShapeManager.h>
 
 #include "SheetsDebug.h"
 #include "AutoFillStrategy.h"
@@ -74,19 +78,68 @@
 #include "FilterPopup.h"
 #include "RowColumnFormat.h"
 #include "RowFormatStorage.h"
-
-#include "commands/DataManipulators.h"
+#include "RecalcManager.h"
 
 #include "TableShape.h"
 #include "ToolHeaders.h"
-#include "ScreenConversions.h"
-#include "View.h"
-#include "Doc.h"
-#include "Canvas.h"
 
 #include <algorithm>
 
 #define TextShapeId "TextShapeID"
+
+namespace Calligra {
+namespace Sheets {
+
+class TableToolResizeCommand : public KUndo2Command
+{
+public:
+    TableToolResizeCommand(TableTool *tool, const QPointF &pos = QPointF(), const QSizeF &size = QSizeF(), KUndo2Command *parent = nullptr)
+        : KUndo2Command(parent)
+    {
+        setText(kundo2_i18n("Resize spreadsheet"));
+        m_tool = tool;
+        m_shape = tool->shape();
+        m_canvas = tool->canvas();
+        m_oldpos = m_shape->absolutePosition(KoFlake::TopLeftCorner);
+        m_oldsize = m_shape->size();
+        m_newpos = pos;
+        m_newsize = size;
+    }
+    bool isValid() const {
+        bool r = m_newpos != QPointF() && m_newsize != QSizeF();
+        r &= (m_newpos != m_oldpos || m_newsize != m_oldsize);
+        return r;
+    }
+    void setPos(const QPointF &pos) {
+        m_newpos = pos;
+    }
+    void setSize(const QSizeF &size) {
+        m_newsize = size;
+    }
+    void redo() override {
+        m_shape->setAbsolutePosition(m_newpos, KoFlake::TopLeftCorner);
+        m_shape->resize(m_newsize);
+        m_canvas->updateCanvas(QRectF(m_newpos, m_newsize) | QRectF(m_oldpos, m_oldpos));
+        m_tool->slotShapeChanged(m_shape);
+    }
+    void undo() override {
+        m_shape->setAbsolutePosition(m_oldpos, KoFlake::TopLeftCorner);
+        m_shape->resize(m_oldsize);
+        m_canvas->updateCanvas(QRectF(m_newpos, m_newsize) | QRectF(m_oldpos, m_oldpos));
+        m_tool->slotShapeChanged(m_shape);
+    }
+
+private:
+    TableTool *m_tool;
+    TableShape *m_shape;
+    KoCanvasBase *m_canvas;
+    QPointF m_oldpos;
+    QSizeF m_oldsize;
+    QPointF m_newpos;
+    QSizeF m_newsize;
+};
+}
+}
 
 using namespace Calligra::Sheets;
 
@@ -108,16 +161,17 @@ bool ScrollBar::event(QEvent *event)
 class TableTool::Private
 {
 public:
+    Private() : resizeCommand(nullptr) {}
     TableTool *q;
     Selection* selection;
     TableShape* tableShape;
-//     TableToolEditorShape *editorShape;
-    KComboBox* sheetComboBox;
     QWidget *optionWidget;
 
-    void setTools();
+    void setupTools();
     void paintTools(QPainter &painter, const KoViewConverter &viewConverter);
-    qreal xOffset, yOffset;
+    void resize(const KoPointerEvent *event);
+    QRect visibleCells() const;
+
     QMarginsF margins;
     QRectF toolRect;
     QRectF shapeRect;
@@ -125,8 +179,28 @@ public:
     QRectF rowRect;
     QRectF verticalScrollRect;
     QRectF horizontalScrollRect;
+    QRectF sheetNameRect;
+    QMarginsF resizeMargins;
+    QRectF resizeRect;
+    QRectF resizeAreaLeftRect;
+    QRectF resizeAreaLeftRectScaled;
+    QRectF resizeAreaRightRect;
+    QRectF resizeAreaRightRectScaled;
+    QRectF resizeAreaTopRect;
+    QRectF resizeAreaTopRectScaled;
+    QRectF resizeAreaBottomRect;
+    QRectF resizeAreaBottomRectScaled;
 
-    ToolType toolType;
+    QRectF resizeAreaTopLeftRect;
+    QRectF resizeAreaTopLeftRectScaled;
+    QRectF resizeAreaTopRightRect;
+    QRectF resizeAreaTopRightRectScaled;
+    QRectF resizeAreaBottomLeftRect;
+    QRectF resizeAreaBottomLeftRectScaled;
+    QRectF resizeAreaBottomRightRect;
+    QRectF resizeAreaBottomRightRectScaled;
+
+    ToolType toolPressed;
     ToolType focus;
 
     Tool::ColumnHeader columnHeader;
@@ -135,12 +209,101 @@ public:
     ScrollBar *verticalScrollBar;
 
     KoCanvasControllerWidget *controller;
+
+    QMap<Sheet*, QPoint> savedAnchors;
+    QMap<Sheet*, QPoint> savedMarkers;
+    QMap<Sheet*, QPoint> savedOffsets;
+
+    QAction separator;
+
+    QList<QAction*> sheetActions;
+
+    QPointF pressedPoint;
+
+    TableToolResizeCommand *resizeCommand;
 };
 
-void TableTool::Private::setTools()
+
+QRect TableTool::Private::visibleCells() const
 {
-    toolType = None;
-    margins.setLeft(18.);
+    Sheet *sheet = tableShape->sheet();
+    QRectF rect(tableShape->topLeftOffset(), shapeRect.size());
+    QRect cells;
+    qreal leftx;
+    cells.setLeft(sheet->leftColumn(rect.left(), leftx));
+    qreal rightx;
+    cells.setRight(sheet->leftColumn(rect.right(), rightx));
+    qreal topy;
+    cells.setTop(sheet->topRow(rect.top(), topy));
+    qreal bottomy;
+    cells.setBottom(sheet->topRow(rect.bottom(), bottomy));
+#if 0
+    qreal leftw = sheet->nonDefaultColumnFormat(cells.left())->width();
+    qreal rightw = sheet->nonDefaultColumnFormat(cells.right())->width();
+    qreal toph = sheet->rowFormats()->rowHeight(cells.top());
+    qreal bottomh = sheet->rowFormats()->rowHeight(cells.bottom());
+#endif
+    return cells;
+}
+
+void TableTool::Private::resize(const KoPointerEvent *event)
+{
+    QRectF oldrect = resizeRect;
+    QPointF dp = event->point - pressedPoint;
+
+    QPointF pos = shapeRect.topLeft();
+    QSizeF size = shapeRect.size();
+    switch (toolPressed) {
+        case ResizeAreaLeft:
+            pos.rx() += dp.rx();
+            size.setWidth(size.width() - dp.x());
+            break;
+        case ResizeAreaRight:
+            size.setWidth(size.width() + dp.x());
+            break;
+        case ResizeAreaTop:
+            pos.ry() += dp.ry();
+            size.setHeight(size.height() - dp.ry());
+            break;
+        case ResizeAreaBottom:
+            size.setHeight(size.height() + dp.ry());
+            break;
+        case ResizeAreaTopLeft:
+            pos.rx() += dp.rx();
+            size.setWidth(size.width() - dp.x());
+            pos.ry() += dp.ry();
+            size.setHeight(size.height() - dp.ry());
+            break;
+        case ResizeAreaTopRight:
+            size.setWidth(size.width() + dp.x());
+            pos.ry() += dp.ry();
+            size.setHeight(size.height() - dp.ry());
+            break;
+        case ResizeAreaBottomLeft:
+            pos.rx() += dp.rx();
+            size.setWidth(size.width() - dp.x());
+            size.setHeight(size.height() + dp.ry());
+            break;
+        case ResizeAreaBottomRight:
+            size.setWidth(size.width() + dp.x());
+            size.setHeight(size.height() + dp.ry());
+            break;
+        default:
+            return;
+    }
+    if (!resizeCommand) {
+        resizeCommand = new TableToolResizeCommand(q);
+    }
+    resizeCommand->setPos(pos);
+    resizeCommand->setSize(size);
+    resizeCommand->redo();
+
+    pressedPoint = event->point;
+}
+
+void TableTool::Private::setupTools()
+{
+    margins.setLeft(22.);
     margins.setRight(12.);
     margins.setTop(14.);
     margins.setBottom(12.);
@@ -154,15 +317,15 @@ void TableTool::Private::setTools()
     if (q->selection()->marker().x() > maxColumn) {
         maxColumn = q->selection()->marker().x();
     }
-    horizontalScrollRect = QRectF(shapeRect.left(), shapeRect.bottom(), shapeRect.width(), margins.bottom());
+    sheetNameRect = QRectF(toolRect.left(), shapeRect.bottom(), 40., margins.bottom());
+
+    horizontalScrollRect = QRectF(sheetNameRect.right(), shapeRect.bottom(), toolRect.width()-sheetNameRect.width()-margins.right(), margins.bottom());
     horizontalScrollBar->setFocusPolicy(Qt::StrongFocus);
     horizontalScrollBar->setInvertedControls(false);
     horizontalScrollBar->setMaximum(std::max(tableShape->size().width()*10, sheet->columnPosition(maxColumn)));
     horizontalScrollBar->setPageStep(tableShape->size().width());
     horizontalScrollBar->setSingleStep(1);
     horizontalScrollBar->setValue(tableShape->topLeftOffset().x());
-    horizontalScrollBar->show();
-    connect(horizontalScrollBar, SIGNAL(valueChanged(int)), q, SLOT(slotHorizontalScrollBarValueChanged(int)));
 
     int maxRow = used.height();
     if (q->selection()->marker().y() > maxRow) {
@@ -174,8 +337,6 @@ void TableTool::Private::setTools()
     verticalScrollBar->setPageStep(tableShape->size().height());
     verticalScrollBar->setSingleStep(1);
     verticalScrollBar->setValue(tableShape->topLeftOffset().y());
-    verticalScrollBar->show();
-    connect(verticalScrollBar, SIGNAL(valueChanged(int)), q, SLOT(slotVerticalScrollBarValueChanged(int)));
 
     columnRect = QRectF(shapeRect.left(), toolRect.top(), shapeRect.width(), margins.top());
     columnHeader.setGeometry(columnRect);
@@ -188,13 +349,31 @@ void TableTool::Private::setTools()
     rowHeader.setCanvas(controller->canvas());
     rowHeader.setScrollBars(horizontalScrollBar, verticalScrollBar);
     rowHeader.setSheetWidth(shapeRect.width());
+
+    resizeMargins = QMarginsF(5, 5, 5, 5);
+    resizeRect = toolRect + resizeMargins;
+    const QPointF center = resizeRect.center();
+    resizeAreaLeftRect = QRectF(resizeRect.left(), center.y()-resizeMargins.left()/2., resizeMargins.left(), resizeMargins.left());
+    resizeAreaRightRect = QRectF(resizeRect.right(), center.y()-resizeMargins.left()/2., resizeMargins.right(), resizeMargins.right()).translated(-resizeMargins.right(), 0);
+    resizeAreaTopRect = QRectF(center.x()-resizeMargins.top()/2., resizeRect.top(), resizeMargins.top(), resizeMargins.top());
+    resizeAreaBottomRect = QRectF(center.x()-resizeMargins.top()/2., resizeRect.bottom(), resizeMargins.bottom(), resizeMargins.bottom()).translated(0, -resizeMargins.bottom());
+
+    resizeAreaTopLeftRect = QRectF(resizeRect.left(), resizeRect.top(), resizeMargins.left(), resizeMargins.top());
+    resizeAreaTopRightRect = QRectF(resizeRect.right(), resizeRect.top(), resizeMargins.right(), resizeMargins.top()).translated(-resizeMargins.right(), 0);
+    resizeAreaBottomLeftRect = QRectF(resizeRect.left(), resizeRect.bottom(), resizeMargins.left(), resizeMargins.bottom()).translated(0, -resizeMargins.bottom());
+    resizeAreaBottomRightRect = QRectF(resizeRect.right(), resizeRect.bottom(), resizeMargins.right(), resizeMargins.bottom()).translated(-resizeMargins.bottom(), -resizeMargins.right());
+
 }
 
 void TableTool::Private::paintTools(QPainter &painter, const KoViewConverter &viewConverter)
 {
-    painter.translate(shapeRect.topLeft() - tableShape->position());
+    const QPointF position = tableShape->absolutePosition(KoFlake::TopLeftCorner);
+    painter.translate(shapeRect.topLeft() - position);
 
-    QRectF tr = toolRect.translated(-tableShape->position());
+    QRectF tr = resizeRect.translated(-position);
+    painter.fillRect(tr, Qt::white);
+
+    tr = toolRect.translated(-position);
     painter.fillRect(tr, qApp->palette().window());
 
     painter.save();
@@ -207,6 +386,23 @@ void TableTool::Private::paintTools(QPainter &painter, const KoViewConverter &vi
     QRectF paintRect;
 
     painter.save();
+    paintRect = sheetNameRect.translated(-position);
+    QString name = sheet->sheetName();
+    QFontMetrics fm(painter.font());
+    qreal sx = paintRect.width() / fm.width(name);
+    qreal sy = paintRect.height() / fm.height();
+    painter.translate(paintRect.center());
+    auto s = std::min(sx, sy);
+    painter.scale(s, s);
+    paintRect.setWidth(paintRect.width() / s);
+    paintRect.setHeight(paintRect.height() / s);
+    painter.translate(-paintRect.center());
+    painter.fillRect(paintRect, qApp->palette().window().color().lighter());
+    painter.setPen(Qt::black);
+    painter.drawText(paintRect, name, Qt::AlignLeft | Qt::AlignVCenter);
+    painter.restore();
+
+    painter.save();
     columnHeader.setSheet(sheet);
     paintRect = QRectF(QPointF(tableShape->topLeftOffset().x(), 0.0), columnRect.size());
     painter.translate(-paintRect.left(), -paintRect.height());
@@ -216,7 +412,7 @@ void TableTool::Private::paintTools(QPainter &painter, const KoViewConverter &vi
 
     painter.save();
     rowHeader.setSheet(sheet);
-    paintRect = QRectF(QPointF(0.0, tableShape->topLeftOffset().y()), rowRect.size());//rowRect.translated(-rowRect.width(), -rowRect.top());
+    paintRect = QRectF(QPointF(0.0, tableShape->topLeftOffset().y()), rowRect.size());
     painter.translate(-paintRect.width(), -paintRect.top());
     painter.setClipRect(paintRect);
     rowHeader.paint(&painter, paintRect);
@@ -233,8 +429,85 @@ void TableTool::Private::paintTools(QPainter &painter, const KoViewConverter &vi
     rect.translate(canvasScroll);
     verticalScrollBar->setGeometry(rect);
 
-    painter.setPen(QPen(Qt::lightGray, 0));
-    painter.drawRect(tr);
+    painter.save();
+    painter.setClipRect(resizeRect.translated(-position));
+
+    QColor color("#87CEFA");
+    QPen pen(color, 0);
+    QBrush brush(color);
+
+    resizeAreaLeftRectScaled = resizeAreaLeftRect;
+    resizeAreaRightRectScaled = resizeAreaRightRect;
+    resizeAreaTopRectScaled = resizeAreaTopRect;
+    resizeAreaBottomRectScaled = resizeAreaBottomRect;
+    resizeAreaTopLeftRectScaled = resizeAreaTopLeftRect;
+    resizeAreaTopRightRectScaled = resizeAreaTopRightRect;
+    resizeAreaBottomLeftRectScaled = resizeAreaBottomLeftRect;
+    resizeAreaBottomRightRectScaled = resizeAreaBottomRightRect;
+    const qreal scale = 1.0 / viewConverter.zoom();
+    if (scale != 1.0) {
+        QSizeF s1 = resizeAreaLeftRect.size() * scale;
+        QSizeF s2 = s1 - resizeAreaLeftRectScaled.size();
+        resizeAreaLeftRectScaled.setSize(s1);
+        resizeAreaLeftRectScaled.translate(-s2.width(), -s2.height() / 2.);
+
+        s1 = resizeAreaRightRect.size() * scale;
+        s2 = s1 - resizeAreaRightRectScaled.size();
+        resizeAreaRightRectScaled.setSize(s1);
+        resizeAreaRightRectScaled.translate(0, -s2.height() / 2.);
+
+        s1 = resizeAreaTopRect.size() * scale;
+        s2 = s1 - resizeAreaTopRectScaled.size();
+        resizeAreaTopRectScaled.setSize(s1);
+        resizeAreaTopRectScaled.translate(-s2.width() / 2., -s2.height());
+
+        s1 = resizeAreaBottomRect.size() * scale;
+        s2 = s1 - resizeAreaBottomRectScaled.size();
+        resizeAreaBottomRectScaled.setSize(s1);
+        resizeAreaBottomRectScaled.translate(-s2.width() / 2., 0);
+
+        s1 = resizeAreaTopLeftRect.size() * scale;
+        s2 = s1 - resizeAreaTopLeftRectScaled.size();
+        resizeAreaTopLeftRectScaled.setSize(s1);
+        resizeAreaTopLeftRectScaled.translate(-s2.width(), -s2.height());
+
+        s1 = resizeAreaTopRightRect.size() * scale;
+        s2 = s1 - resizeAreaTopRightRectScaled.size();
+        resizeAreaTopRightRectScaled.setSize(s1);
+        resizeAreaTopRightRectScaled.translate(0, -s2.height());
+
+        s1 = resizeAreaBottomLeftRect.size() * scale;
+        s2 = s1 - resizeAreaBottomLeftRectScaled.size();
+        resizeAreaBottomLeftRectScaled.setSize(s1);
+        resizeAreaBottomLeftRectScaled.translate(-s2.width(), 0);
+
+        s1 = resizeAreaBottomRightRect.size() * scale;
+        s2 = s1 - resizeAreaBottomRightRectScaled.size();
+        resizeAreaBottomRightRectScaled.setSize(s1);
+    }
+    paintRect = resizeAreaLeftRectScaled.translated(-position);
+    painter.fillRect(paintRect, brush);
+    paintRect = resizeAreaRightRectScaled.translated(-position);
+    painter.fillRect(paintRect, brush);
+    paintRect = resizeAreaTopRectScaled.translated(-position);
+    painter.fillRect(paintRect, brush);
+    paintRect = resizeAreaBottomRectScaled.translated(-position);
+    painter.fillRect(paintRect, brush);
+
+    paintRect = resizeAreaTopLeftRectScaled.translated(-position);
+    painter.fillRect(paintRect, brush);
+    paintRect = resizeAreaTopRightRectScaled.translated(-position);
+    painter.fillRect(paintRect, brush);
+    paintRect = resizeAreaBottomLeftRectScaled.translated(-position);
+    painter.fillRect(paintRect, brush);
+    paintRect = resizeAreaBottomRightRectScaled.translated(-position);
+    painter.fillRect(paintRect, brush);
+
+    QPainterPath path;
+    path.addRect(QRectF(resizeAreaTopLeftRectScaled.translated(-position).center(), resizeAreaBottomRightRectScaled.translated(-position).center()));
+    painter.setPen(pen);
+    painter.drawPath(path);
+    painter.restore();
 }
 
 
@@ -262,15 +535,7 @@ TableTool::TableTool(KoCanvasBase* canvas)
     d->tableShape = nullptr;
     d->optionWidget = nullptr;
 
-    QAction* importAction = new QAction(koIcon("document-import"), i18n("Import OpenDocument Spreadsheet File"), this);
-    importAction->setIconText(i18n("Import"));
-    addAction("import", importAction);
-    connect(importAction, SIGNAL(triggered()), this, SLOT(importDocument()));
-
-    QAction* exportAction = new QAction(koIcon("document-export"), i18n("Export OpenDocument Spreadsheet File"), this);
-    exportAction->setIconText(i18n("Export"));
-    addAction("export", exportAction);
-    connect(exportAction, SIGNAL(triggered()), this, SLOT(exportDocument()));
+    createActions();
 }
 
 TableTool::~TableTool()
@@ -281,11 +546,8 @@ TableTool::~TableTool()
 
 TableTool::ToolType TableTool::mouseOn(KoPointerEvent* event)
 {
-    if (!d->toolRect.contains(event->point)) {
-        return None;
-    }
     if (d->tableShape->hitTest(event->point)) {
-        return Shape;
+        return Table;
     }
     if (d->columnRect.contains(event->point)) {
         return ColumnHeader;
@@ -299,6 +561,33 @@ TableTool::ToolType TableTool::mouseOn(KoPointerEvent* event)
     if (d->verticalScrollRect.contains(event->point)) {
         return VScrollBar;
     }
+    if (d->sheetNameRect.contains(event->point)) {
+        return SheetName;
+    }
+    if (d->resizeAreaLeftRectScaled.adjusted(-8, -8, 8, 16).contains(event->point)) {
+        return ResizeAreaLeft;
+    }
+    if (d->resizeAreaRightRectScaled.adjusted(0, -8, 8, 16).contains(event->point)) {
+        return ResizeAreaRight;
+    }
+    if (d->resizeAreaTopRectScaled.adjusted(-8, -8, 16, 8).contains(event->point)) {
+        return ResizeAreaTop;
+    }
+    if (d->resizeAreaBottomRectScaled.adjusted(-8, 0, 16, 8).contains(event->point)) {
+        return ResizeAreaBottom;
+    }
+    if (d->resizeAreaTopLeftRectScaled.adjusted(-8, -8, 8, 8).contains(event->point)) {
+        return ResizeAreaTopLeft;
+    }
+    if (d->resizeAreaTopRightRectScaled.adjusted(-8, -8, 8, 8).contains(event->point)) {
+        return ResizeAreaTopRight;
+    }
+    if (d->resizeAreaBottomLeftRectScaled.adjusted(-8, -8, 8, 16).contains(event->point)) {
+        return ResizeAreaBottomLeft;
+    }
+    if (d->resizeAreaBottomRightRectScaled.adjusted(0, -8, 16, 8).contains(event->point)) {
+        return ResizeAreaBottomRight;
+    }
     return None;
 }
 
@@ -306,61 +595,83 @@ void TableTool::mousePressEvent(KoPointerEvent* event)
 {
     d->horizontalScrollBar->clearFocus();
     d->verticalScrollBar->clearFocus();
-    switch (mouseOn(event)) {
-        case Shape: {
-            d->toolType = Shape;
-            d->focus = Shape;
+    d->toolPressed = mouseOn(event);
+    d->pressedPoint = event->point;
+    switch (d->toolPressed) {
+        case Table: {
+            d->focus = Table;
+            m_lastMousePoint = event->point;
             CellToolBase::mousePressEvent(event);
             break;
         }
         case ColumnHeader: {
-            d->toolType = ColumnHeader;
             d->focus = ColumnHeader;
             selection()->emitCloseEditor(true);
             KoPointerEvent e(event, event->point - d->columnRect.topLeft() + d->tableShape->topLeftOffset());
             d->columnHeader.mousePress(&e);
             if (event->button() == Qt::RightButton) {
                 setPopupActionList(popupMenuActionList());
-                event->accept();
+                event->ignore();
             }
             break;
         }
         case RowHeader: {
-            d->toolType = RowHeader;
             d->focus = RowHeader;
             selection()->emitCloseEditor(true);
             KoPointerEvent e(event, event->point - d->rowRect.topLeft() + d->tableShape->topLeftOffset());
             d->rowHeader.mousePress(&e);
             if (event->button() == Qt::RightButton) {
                 setPopupActionList(popupMenuActionList());
-                event->accept();
+                event->ignore();
             }
             break;
         }
         case HScrollBar: {
-            d->toolType = HScrollBar;
             d->focus = HScrollBar;
             selection()->emitCloseEditor(true);
             d->horizontalScrollBar->setFocus();
-            QPoint pos = ScreenConversions::scaleFromPtToPx(event->point - d->horizontalScrollRect.topLeft());
+            const KoViewConverter *viewConverter = canvas()->viewConverter();
+            QPoint pos = viewConverter->documentToView(event->point - d->horizontalScrollRect.topLeft()).toPoint();
             QMouseEvent e(QEvent::MouseButtonPress, pos, event->globalPos(), event->globalPos(), event->button(), event->buttons(), event->modifiers());
             qApp->sendEvent(d->horizontalScrollBar, &e);
             canvas()->updateCanvas(d->toolRect);
             break;
         }
         case VScrollBar: {
-            d->toolType = VScrollBar;
             d->focus = VScrollBar;
             selection()->emitCloseEditor(true);
             d->verticalScrollBar->setFocus();
-            QPoint pos = ScreenConversions::scaleFromPtToPx(event->point - d->verticalScrollRect.topLeft());
+            const KoViewConverter *viewConverter = canvas()->viewConverter();
+            QPoint pos = viewConverter->documentToView(event->point - d->verticalScrollRect.topLeft()).toPoint();
             QMouseEvent e(QEvent::MouseButtonPress, pos, event->globalPos(), event->globalPos(), event->button(), event->buttons(), event->modifiers());
             qApp->sendEvent(d->verticalScrollBar, &e);
             canvas()->updateCanvas(d->toolRect);
             break;
         }
+        case SheetName: {
+            d->focus = SheetName;
+            selection()->emitCloseEditor(true);
+            if (event->button() == Qt::LeftButton) {
+                sheetSelectionCombo();
+                event->accept();
+            } else {
+                setPopupActionList(QList<QAction*>()<<action("sheets-editor"));
+                event->ignore();
+            }
+            break;
+        }
+        case ResizeAreaLeft:
+        case ResizeAreaRight:
+        case ResizeAreaTop:
+        case ResizeAreaBottom:
+        case ResizeAreaTopLeft:
+        case ResizeAreaTopRight:
+        case ResizeAreaBottomLeft:
+        case ResizeAreaBottomRight: {
+            d->focus = d->toolPressed;
+            break;
+        }
         default: {
-            d->toolType = None;
             d->focus = None;
             event->ignore();
             break;
@@ -370,44 +681,69 @@ void TableTool::mousePressEvent(KoPointerEvent* event)
 
 void TableTool::mouseReleaseEvent(KoPointerEvent* event)
 {
-    switch (d->toolType) {
-        case Shape: {
-            d->toolType = None;
+    if (d->resizeCommand) {
+        if (d->resizeCommand->isValid()) {
+            canvas()->addCommand(d->resizeCommand);
+        } else {
+            delete d->resizeCommand;
+        }
+        d->resizeCommand = nullptr;
+    }
+    switch (d->toolPressed) {
+        case Table: {
+            d->toolPressed = None;
             CellToolBase::mouseReleaseEvent(event);
             break;
         }
         case ColumnHeader: {
-            d->toolType = None;
+            d->toolPressed = None;
             KoPointerEvent e(event, event->point - d->columnRect.topLeft() + d->tableShape->topLeftOffset());
             d->columnHeader.mouseRelease(&e);
             canvas()->updateCanvas(d->toolRect);
             break;
         }
         case RowHeader: {
-            d->toolType = None;
+            d->toolPressed = None;
             KoPointerEvent e(event, event->point - d->rowRect.topLeft() + d->tableShape->topLeftOffset());
             d->rowHeader.mouseRelease(&e);
             canvas()->updateCanvas(d->toolRect);
             break;
         }
         case HScrollBar: {
-            d->toolType = None;
-            QPoint pos = ScreenConversions::scaleFromPtToPx(event->point - d->horizontalScrollRect.topLeft());
+            d->toolPressed = None;
+            const KoViewConverter *viewConverter = canvas()->viewConverter();
+            QPoint pos = viewConverter->documentToView(event->point - d->horizontalScrollRect.topLeft()).toPoint();
             QMouseEvent e(QEvent::MouseButtonRelease, pos, event->globalPos(), event->globalPos(), event->button(), event->buttons(), event->modifiers());
             qApp->sendEvent(d->horizontalScrollBar, &e);
             canvas()->updateCanvas(d->toolRect);
             break;
         }
         case VScrollBar: {
-            d->toolType = None;
-            QPoint pos = ScreenConversions::scaleFromPtToPx(event->point - d->verticalScrollRect.topLeft());
+            d->toolPressed = None;
+            const KoViewConverter *viewConverter = canvas()->viewConverter();
+            QPoint pos = viewConverter->documentToView(event->point - d->verticalScrollRect.topLeft()).toPoint();
             QMouseEvent e(QEvent::MouseButtonRelease, pos, event->globalPos(), event->globalPos(), event->button(), event->buttons(), event->modifiers());
             qApp->sendEvent(d->verticalScrollBar, &e);
             canvas()->updateCanvas(d->toolRect);
             break;
         }
+        case SheetName: {
+            d->toolPressed = None;
+            break;
+        }
+        case ResizeAreaLeft:
+        case ResizeAreaRight:
+        case ResizeAreaTop:
+        case ResizeAreaBottom:
+        case ResizeAreaTopLeft:
+        case ResizeAreaTopRight:
+        case ResizeAreaBottomLeft:
+        case ResizeAreaBottomRight: {
+            d->toolPressed = None;
+            break;
+        }
         default: {
-            d->toolType = None;
+            d->toolPressed = None;
             if (!d->toolRect.contains(event->point)) {
                 event->ignore();
             }
@@ -416,37 +752,160 @@ void TableTool::mouseReleaseEvent(KoPointerEvent* event)
     }
 }
 
+bool TableTool::autoScroll(ToolType type, KoPointerEvent* event)
+{
+    //TODO: improve autoscrolling
+    QRectF rect = d->tableShape->boundingRect();
+    if (type == Table || type == ColumnHeader) {
+        if (event->point.x() < rect.left()) {
+            if (event->point.x() >= m_lastMousePoint.x()) {
+                // no scroll
+                m_lastMousePoint.setX(event->point.x());
+                event->accept();
+                return false;
+            }
+        } else if (event->point.x() > rect.right()) {
+            if (event->point.x() <= m_lastMousePoint.x()) {
+                // no scroll
+                m_lastMousePoint.setX(event->point.x());
+                event->accept();
+                return false;
+            }
+        }
+        m_lastMousePoint.setX(event->point.x());
+    }
+    if (type == Table || type == RowHeader) {
+        if (event->point.y() < rect.top()) {
+            if (event->point.y() >= m_lastMousePoint.y()) {
+                // no scroll
+                m_lastMousePoint.setY(event->point.y());
+                event->accept();
+                return false;
+            }
+        } else if (event->point.y() > rect.bottom()) {
+            if (event->point.y() <= m_lastMousePoint.y()) {
+                // no scroll
+                m_lastMousePoint.setY(event->point.y());
+                event->accept();
+                return false;
+            }
+        }
+        m_lastMousePoint.setY(event->point.y());
+    }
+    return true;
+}
+
 void TableTool::mouseMoveEvent(KoPointerEvent* event)
 {
-    ToolType type = d->toolType == None ? mouseOn(event) : d->toolType;
+    setStatusText(QString());
+    ToolType type = d->toolPressed == None ? mouseOn(event) : d->toolPressed;
     switch (type) {
-        case Shape:
+        case Table:
+            if (event->buttons() & Qt::LeftButton) {
+                if (!autoScroll(type, event)) {
+                    break;
+                }
+            }
             CellToolBase::mouseMoveEvent(event);
             break;
         case ColumnHeader: {
+            if (event->buttons() & Qt::LeftButton) {
+                if (!autoScroll(type, event)) {
+                    break;
+                }
+            }
             KoPointerEvent e(event, event->point - d->columnRect.topLeft() + d->tableShape->topLeftOffset());
             d->columnHeader.mouseMove(&e);
             break;
         }
         case RowHeader: {
+            if (event->buttons() & Qt::LeftButton) {
+                if (!autoScroll(type, event)) {
+                    break;
+                }
+            }
             KoPointerEvent e(event, event->point - d->rowRect.topLeft() + d->tableShape->topLeftOffset());
-            qInfo()<<Q_FUNC_INFO<<event->point<<e.point;
             d->rowHeader.mouseMove(&e);
             break;
         }
         case HScrollBar: {
-            QPoint pos = ScreenConversions::scaleFromPtToPx(event->point - d->horizontalScrollRect.topLeft());
+            const KoViewConverter *viewConverter = canvas()->viewConverter();
+            QPoint pos = viewConverter->documentToView(event->point - d->horizontalScrollRect.topLeft()).toPoint();
             QMouseEvent e(QEvent::MouseMove, pos, event->globalPos(), event->globalPos(), event->button(), event->buttons(), event->modifiers());
             qApp->sendEvent(d->horizontalScrollBar, &e);
             canvas()->updateCanvas(d->toolRect);
             break;
         }
         case VScrollBar: {
-            QPoint pos = ScreenConversions::scaleFromPtToPx(event->point - d->verticalScrollRect.topLeft());
+            const KoViewConverter *viewConverter = canvas()->viewConverter();
+            QPoint pos = viewConverter->documentToView(event->point - d->verticalScrollRect.topLeft()).toPoint();
             QMouseEvent e(QEvent::MouseMove, pos, event->globalPos(), event->globalPos(), event->button(), event->buttons(), event->modifiers());
             qApp->sendEvent(d->verticalScrollBar, &e);
             canvas()->updateCanvas(d->toolRect);
             break;
+        }
+        case SheetName: {
+            break;
+        }
+        case ResizeAreaLeft:
+            canvas()->canvasWidget()->setCursor(Qt::SizeHorCursor);
+            if (d->toolPressed == ResizeAreaLeft) {
+                d->resize(event);
+            }
+            setStatusText(i18n("Resize to show more or fewer cells"));
+            return;
+        case ResizeAreaRight:
+            canvas()->canvasWidget()->setCursor(Qt::SizeHorCursor);
+            if (d->toolPressed == ResizeAreaRight) {
+                d->resize(event);
+            }
+            setStatusText(i18n("Resize to show more or fewer cells"));
+            return;
+        case ResizeAreaTop:
+            canvas()->canvasWidget()->setCursor(Qt::SizeVerCursor);
+            if (d->toolPressed == ResizeAreaTop) {
+                d->resize(event);
+            }
+            setStatusText(i18n("Resize to show more or fewer cells"));
+            return;
+        case ResizeAreaBottom: {
+            canvas()->canvasWidget()->setCursor(Qt::SizeVerCursor);
+            if (d->toolPressed == ResizeAreaBottom) {
+                d->resize(event);
+            }
+            setStatusText(i18n("Resize to show more or fewer cells"));
+            return;
+        }
+        case ResizeAreaTopLeft: {
+            canvas()->canvasWidget()->setCursor(Qt::SizeFDiagCursor);
+            if (d->toolPressed == ResizeAreaTopLeft) {
+                d->resize(event);
+            }
+            setStatusText(i18n("Resize to show more or fewer cells"));
+            return;
+        }
+        case ResizeAreaTopRight: {
+            canvas()->canvasWidget()->setCursor(Qt::SizeBDiagCursor);
+            if (d->toolPressed == ResizeAreaTopRight) {
+                d->resize(event);
+            }
+            setStatusText(i18n("Resize to show more or fewer cells"));
+            return;
+        }
+        case ResizeAreaBottomLeft: {
+            canvas()->canvasWidget()->setCursor(Qt::SizeBDiagCursor);
+            if (d->toolPressed == ResizeAreaBottomLeft) {
+                d->resize(event);
+            }
+            return;
+        }
+        case ResizeAreaBottomRight: {
+            canvas()->canvasWidget()->setCursor(Qt::SizeFDiagCursor);
+            if (d->toolPressed == ResizeAreaBottomRight) {
+                d->resize(event);
+            }
+            setStatusText(i18n("Resize to show more or fewer cells"));
+            return;
         }
         default:
             if (!d->toolRect.contains(event->point)) {
@@ -454,19 +913,22 @@ void TableTool::mouseMoveEvent(KoPointerEvent* event)
             }
             break;
     }
+    if (d->toolPressed == None && !(type == ColumnHeader || type == RowHeader)) {
+        canvas()->canvasWidget()->setCursor(Qt::ArrowCursor);
+    }
 }
 
 void TableTool::mouseDoubleClickEvent(KoPointerEvent* event)
 {
     switch (mouseOn(event)) {
-        case Shape: {
-            d->toolType = Shape;
-            d->focus = Shape;
+        case Table: {
+            d->toolPressed = Table;
+            d->focus = Table;
             CellToolBase::mouseDoubleClickEvent(event);
             break;
         }
         case ColumnHeader: {
-            d->toolType = ColumnHeader;
+            d->toolPressed = ColumnHeader;
             d->focus = ColumnHeader;
             selection()->emitCloseEditor(true);
             KoPointerEvent e(event, event->point - d->columnRect.topLeft());
@@ -474,7 +936,7 @@ void TableTool::mouseDoubleClickEvent(KoPointerEvent* event)
             break;
         }
         case RowHeader: {
-            d->toolType = RowHeader;
+            d->toolPressed = RowHeader;
             d->focus = RowHeader;
             selection()->emitCloseEditor(true);
             KoPointerEvent e(event, event->point - d->rowRect.topLeft());
@@ -482,29 +944,35 @@ void TableTool::mouseDoubleClickEvent(KoPointerEvent* event)
             break;
         }
         case HScrollBar: {
-            d->toolType = HScrollBar;
+            d->toolPressed = HScrollBar;
             d->focus = HScrollBar;
             selection()->emitCloseEditor(true);
             d->horizontalScrollBar->setFocus();
-            QPoint pos = ScreenConversions::scaleFromPtToPx(event->point - d->horizontalScrollRect.topLeft());
+            const KoViewConverter *viewConverter = canvas()->viewConverter();
+            QPoint pos = viewConverter->documentToView(event->point - d->horizontalScrollRect.topLeft()).toPoint();
             QMouseEvent e(QEvent::MouseButtonDblClick, pos, event->globalPos(), event->globalPos(), event->button(), event->buttons(), event->modifiers());
             qApp->sendEvent(d->horizontalScrollBar, &e);
             canvas()->updateCanvas(d->toolRect);
             break;
         }
         case VScrollBar: {
-            d->toolType = VScrollBar;
+            d->toolPressed = VScrollBar;
             d->focus = VScrollBar;
             selection()->emitCloseEditor(true);
             d->verticalScrollBar->setFocus();
-            QPoint pos = ScreenConversions::scaleFromPtToPx(event->point - d->verticalScrollRect.topLeft());
+            const KoViewConverter *viewConverter = canvas()->viewConverter();
+            QPoint pos = viewConverter->documentToView(event->point - d->verticalScrollRect.topLeft()).toPoint();
             QMouseEvent e(QEvent::MouseButtonDblClick, pos, event->globalPos(), event->globalPos(), event->button(), event->buttons(), event->modifiers());
             qApp->sendEvent(d->verticalScrollBar, &e);
             canvas()->updateCanvas(d->toolRect);
             break;
         }
+        case SheetName: {
+            openSheetsEditor();
+            break;
+        }
         default: {
-            d->toolType = None;
+            d->toolPressed = None;
             d->focus = None;
             if (!d->toolRect.contains(event->point)) {
                 event->ignore();
@@ -517,10 +985,7 @@ void TableTool::mouseDoubleClickEvent(KoPointerEvent* event)
 void TableTool::keyPressEvent(QKeyEvent* event)
 {
     switch(d->focus) {
-        case Shape:
-            if (event->key() == Qt::Key_Menu) {
-                setPopupActionList(popupMenuActionList());
-            }
+        case Table:
             CellToolBase::keyPressEvent(event);
             event->accept();
             break;
@@ -535,6 +1000,9 @@ void TableTool::keyPressEvent(QKeyEvent* event)
         case VScrollBar:
             event->accept();
             break;
+        case SheetName: {
+            break;
+        }
         default:
             break;
     }
@@ -548,29 +1016,7 @@ KoInteractionStrategy* TableTool::createStrategy(KoPointerEvent* event)
     return nullptr;
 }
 
-void TableTool::importDocument()
-{
-    const QString filterString =
-        QMimeDatabase().mimeTypeForName("application/vnd.oasis.opendocument.spreadsheet").filterString();
-    // TODO: i18n for title
-    QString file = QFileDialog::getOpenFileName(0, "Import", QString(), filterString);
-    if (file.isEmpty())
-        return;
-#if 0 // FIXME Stefan: Port!
-    d->tableShape->doc()->setModified(false);
-    if (! d->tableShape->doc()->importDocument(file))
-        return;
-#endif
-    updateSheetsList();
-//     if (Sheet* sheet = d->tableShape->sheet()) {
-//         QRect area = sheet->usedArea();
-//         if (area.width() > d->tableShape->columns())
-//             d->tableShape->setColumns(area.width());
-//         if (area.height() > d->tableShape->rows())
-//             d->tableShape->setRows(area.height());
-//     }
-}
-
+#if 0
 void TableTool::exportDocument()
 {
     const QString filterString =
@@ -583,6 +1029,7 @@ void TableTool::exportDocument()
     d->tableShape->doc()->exportDocument(file);
 #endif
 }
+#endif
 
 void TableTool::repaintDecorations()
 {
@@ -610,12 +1057,16 @@ void TableTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &sh
             break;
     }
     if (!d->tableShape) {
-        warnSheets << "No table shape found in selection.";
+        warnSheetsTableShape << Q_FUNC_INFO << "No table shape found in selection.";
         emit done();
         return;
     }
+    d->separator.setSeparator(true);
+    d->toolPressed = None;
+    d->focus = None;
+
     d->tableShape->setPaintingDisabled(true);
-    d->setTools();
+    d->setupTools();
 
     d->selection->setActiveSheet(d->tableShape->sheet());
     d->selection->setOriginSheet(d->tableShape->sheet());
@@ -625,22 +1076,34 @@ void TableTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &sh
     connect(d->selection, SIGNAL(changed(const Region&)), this, SLOT(slotSelectionChanged(const Region&)));
 
     activateSheet();
+
+    connect(d->horizontalScrollBar, SIGNAL(valueChanged(int)), this, SLOT(slotHorizontalScrollBarValueChanged(int)));
+    connect(d->verticalScrollBar, SIGNAL(valueChanged(int)), this, SLOT(slotVerticalScrollBarValueChanged(int)));
+    d->horizontalScrollBar->show();
+    d->verticalScrollBar->show();
 }
 
 void TableTool::deactivate()
 {
     d->horizontalScrollBar->hide();
     d->verticalScrollBar->hide();
+    disconnect(d->horizontalScrollBar, SIGNAL(valueChanged(int)), this, SLOT(slotHorizontalScrollBarValueChanged(int)));
+    disconnect(d->verticalScrollBar, SIGNAL(valueChanged(int)), this, SLOT(slotVerticalScrollBarValueChanged(int)));
+
+    disconnect(d->selection, SIGNAL(changed(const Region&)), this, SLOT(slotSelectionChanged(const Region&)));
 
     // undoing createShape crash if we where editing a cell and try to apply user input
     deleteEditor(false /*do not save*/);
     CellToolBase::deactivate();
 
-    disconnect(d->tableShape->sheet(), SIGNAL(documentSizeChanged(const QSizeF&)), this, SLOT(update()));
-    d->tableShape->setPaintingDisabled(false);
-    d->tableShape->update();
-    d->tableShape = nullptr;
-    canvas()->updateCanvas(d->toolRect);
+    if (d->tableShape) {
+        disconnect(d->tableShape->sheet(), SIGNAL(documentSizeChanged(const QSizeF&)), this, SLOT(update()));
+
+        d->tableShape->setPaintingDisabled(false);
+        d->tableShape->update();
+        d->tableShape = nullptr;
+    }
+    update();
 }
 
 void TableTool::paint(QPainter &painter, const KoViewConverter &viewConverter)
@@ -672,24 +1135,20 @@ QSizeF TableTool::size() const
     return d->tableShape->size();
 }
 
-double TableTool::canvasOffsetX() const
+qreal TableTool::canvasOffsetX() const
 {
-    double x = canvas()->viewConverter()->viewToDocumentX(-canvas()->canvasController()->scrollBarValue().x());
-    x += canvas()->documentOrigin().x();
-    return x;
+    return canvas()->viewConverter()->viewToDocumentX(canvas()->documentOrigin().x() - canvas()->canvasController()->scrollBarValue().x());
 }
 
-double TableTool::canvasOffsetY() const
+qreal TableTool::canvasOffsetY() const
 {
-    double y = canvas()->viewConverter()->viewToDocumentX(-canvas()->canvasController()->scrollBarValue().y());
-    y += canvas()->documentOrigin().y();
-    return y;
+    return canvas()->viewConverter()->viewToDocumentY(canvas()->documentOrigin().y() - canvas()->canvasController()->scrollBarValue().y());
 }
 
 // not used anywhere
 QPointF TableTool::canvasOffset() const
 {
-    return QPointF();
+    return QPointF(canvasOffsetX(), canvasOffsetY());
 }
 
 int TableTool::maxCol() const
@@ -708,30 +1167,50 @@ SheetView* TableTool::sheetView(const Sheet* sheet) const
     return d->tableShape->sheetView();
 }
 
-void TableTool::updateSheetsList()
-{
-    d->sheetComboBox->blockSignals(true);
-    d->sheetComboBox->clear();
-    Map *map = d->tableShape->map();
-    foreach(Sheet* sheet, map->sheetList()) {
-        if (sheet->isHidden())
-            continue;
-        d->sheetComboBox->addItem(sheet->sheetName());
-        //d->sheetComboBox->setCurrentIndex( d->sheetComboBox->count()-1 );
-    }
-    d->sheetComboBox->blockSignals(false);
-}
-
 void TableTool::update()
 {
-    canvas()->updateCanvas(d->toolRect);
+    canvas()->updateCanvas(d->resizeRect);
+}
+
+void TableTool::saveCurrentSheetSelection()
+{
+    /* save the current selection on this sheet */
+    Sheet *sheet = selection()->activeSheet();
+    if (sheet) {
+        d->savedAnchors.remove(sheet);
+        d->savedAnchors.insert(sheet, selection()->anchor());
+        d->savedMarkers.remove(sheet);
+        d->savedMarkers.insert(sheet, selection()->marker());
+        d->savedOffsets.remove(sheet);
+        d->savedOffsets.insert(sheet, QPoint(d->horizontalScrollBar->value(), d->verticalScrollBar->value()));
+    }
 }
 
 void TableTool::activateSheet()
 {
+    saveCurrentSheetSelection();
+    deleteEditor(true);
+
     Sheet *sheet = d->tableShape->sheet();
     if (sheet) {
         connect(sheet, SIGNAL(documentSizeChanged(const QSizeF&)), this, SLOT(update()));
+
+        /* see if there was a previous selection on this other sheet */
+        QMap<Sheet*, QPoint>::ConstIterator it = d->savedAnchors.constFind(sheet);
+        QMap<Sheet*, QPoint>::ConstIterator it2 = d->savedMarkers.constFind(sheet);
+
+        // restore the old anchor and marker
+        const QPoint newAnchor = (it == d->savedAnchors.constEnd()) ? QPoint(1, 1) : *it;
+        const QPoint newMarker = (it2 == d->savedMarkers.constEnd()) ? QPoint(1, 1) : *it2;
+
+        selection()->setActiveSheet(sheet);
+        selection()->setOriginSheet(sheet);
+        selection()->initialize(newAnchor);
+        selection()->update(newMarker);
+
+        QMap<Sheet*, QPoint>::ConstIterator it3 = d->savedOffsets.constFind(sheet);
+        d->horizontalScrollBar->setValue((it3 == d->savedOffsets.constEnd()) ? 0 : it3.value().x());
+        d->verticalScrollBar->setValue((it3 == d->savedOffsets.constEnd()) ? 0 : it3.value().y());
     }
     update();
 }
@@ -746,74 +1225,18 @@ void TableTool::sheetActivated(const QString& sheetName)
     activateSheet();
 }
 
-void TableTool::sheetsBtnClicked()
+void TableTool::openSheetsEditor()
 {
-    QPointer<KPageDialog> dialog = new KPageDialog();
-    dialog->setWindowTitle(i18n("Sheets"));
-    dialog->setStandardButtons(QDialogButtonBox::Ok);
-    dialog->setFaceType(KPageDialog::Plain);
-    SheetsEditor* editor = new SheetsEditor(d->tableShape);
-    dialog->layout()->addWidget(editor);
+    SheetsEditor *dialog = new SheetsEditor(d->tableShape);
+    connect(dialog, SIGNAL(sheetModified(Sheet*)), this, SLOT(slotSheetModified(Sheet*)));
+    connect(dialog, SIGNAL(sheetRemoved(int)), this, SLOT(slotSheetRemoved(int)));
     dialog->exec();
-    updateSheetsList();
     delete dialog;
 }
 
 QList<QPointer<QWidget> > TableTool::createOptionWidgets()
 {
-    if (!d->optionWidget) {
-        d->optionWidget = new QWidget();
-        d->optionWidget->setObjectName(QLatin1String("TableTool/Table Options"));
-
-        QVBoxLayout* l = new QVBoxLayout(d->optionWidget);
-        l->setMargin(0);
-        d->optionWidget->setLayout(l);
-
-        QGridLayout* layout = new QGridLayout();
-        l->addLayout(layout);
-
-        QLabel* label = nullptr;
-
-        QHBoxLayout* sheetlayout = new QHBoxLayout();
-        sheetlayout->setMargin(0);
-        sheetlayout->setSpacing(3);
-        layout->addLayout(sheetlayout, 0, 1);
-        d->sheetComboBox = new KComboBox(d->optionWidget);
-        sheetlayout->addWidget(d->sheetComboBox, 1);
-        Map *map = d->tableShape->map();
-        foreach(Sheet* s, map->sheetList()) {
-            d->sheetComboBox->addItem(s->sheetName());
-            //d->sheetComboBox->setCurrentIndex( d->sheetComboBox->count()-1 );
-        }
-        connect(d->sheetComboBox, SIGNAL(activated(QString)), this, SLOT(sheetActivated(QString)));
-
-        QPushButton *sheetbtn = new QPushButton(koIcon("table"), QString(), d->optionWidget);
-        sheetbtn->setFixedHeight(d->sheetComboBox->sizeHint().height());
-        connect(sheetbtn, SIGNAL(clicked()), this, SLOT(sheetsBtnClicked()));
-        sheetlayout->addWidget(sheetbtn);
-        label = new QLabel(i18n("Sheet:"), d->optionWidget);
-        label->setBuddy(d->sheetComboBox);
-        label->setToolTip(i18n("Selected Sheet"));
-        layout->addWidget(label, 0, 0);
-
-
-    //layout->setColumnStretch( 1, 1 );
-        layout->setRowStretch(6, 1);
-
-        // TODO implement (or remove)
-//         QToolBar* tb = new QToolBar(d->optionWidget);
-//         l->addWidget(tb);
-//         tb->setMovable(false);
-//         tb->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-//         tb->addAction(action("import"));
-//         tb->addAction(action("export"));
-
-        d->optionWidget->setWindowTitle(i18n("View Options"));
-
-    }
-    QList<QPointer<QWidget> > ow = CellToolBase::createOptionWidgets();
-    ow.append(d->optionWidget);
-    return ow;
+    return CellToolBase::createOptionWidgets();
 }
 
 void TableTool::slotHorizontalScrollBarValueChanged(int value)
@@ -834,6 +1257,9 @@ void TableTool::slotVerticalScrollBarValueChanged(int value)
 
 void TableTool::scrollToCell(const QPoint &location)
 {
+    if (location.x() > KS_colMax || location.y() > KS_rowMax) {
+        return;
+    }
     const Sheet *sheet = d->tableShape->sheet();
     const QRectF bounds(d->tableShape->topLeftOffset(), d->tableShape->size());
     const Cell cell = Cell(sheet, location).masterCell();
@@ -843,7 +1269,9 @@ void TableTool::scrollToCell(const QPoint &location)
     if (left < bounds.left()) {
         d->horizontalScrollBar->setValue(left);
     } else if (right > bounds.right()) {
-        d->horizontalScrollBar->setMaximum(right - bounds.width() + 1);
+        if (d->horizontalScrollBar->maximum() < right) {
+            d->horizontalScrollBar->setMaximum(right);
+        }
         d->horizontalScrollBar->setValue(right - bounds.width() + 1);
     }
 
@@ -852,7 +1280,121 @@ void TableTool::scrollToCell(const QPoint &location)
     if (top < bounds.top()) {
         d->verticalScrollBar->setValue(top);
     } else if (bottom > bounds.bottom()) {
-        d->verticalScrollBar->setMaximum(bottom - bounds.height() + 1);
+        if (d->verticalScrollBar->maximum() < bottom) {
+            d->verticalScrollBar->setMaximum(bottom);
+        }
         d->verticalScrollBar->setValue(bottom - bounds.height() + 1);
     }
+}
+
+void TableTool::recalcSheet()
+{
+    d->tableShape->map()->recalcManager()->recalcSheet(d->tableShape->sheet());
+}
+
+void TableTool::recalcMap()
+{
+    d->tableShape->map()->recalcManager()->recalcMap();
+}
+
+void TableTool::createActions()
+{
+#if 0
+    QAction* exportAction = new QAction(koIcon("document-export"), i18n("Export OpenDocument Spreadsheet File"), this);
+    exportAction->setIconText(i18n("Export"));
+    addAction("export", exportAction);
+    connect(exportAction, SIGNAL(triggered()), this, SLOT(exportDocument()));
+#endif
+
+    QAction *a = new QAction(i18n("Recalculate Sheet"), this);
+    a->setIcon(koIcon("view-refresh"));
+    a->setIconText(i18n("Recalculate"));
+    a->setShortcut(QKeySequence(Qt::SHIFT + Qt::Key_F9));
+    a->setToolTip(i18n("Recalculate the value of every cell in the current worksheet"));
+    addAction("RecalcWorkSheet", a);
+    connect(a, SIGNAL(triggered(bool)), this, SLOT(recalcSheet()));
+
+    a = new QAction(i18n("Recalculate Document"), this);
+    a->setIcon(koIcon("view-refresh"));
+    a->setIconText(i18n("Recalculate"));
+    a->setShortcut(QKeySequence(Qt::Key_F9));
+    a->setToolTip(i18n("Recalculate the value of every cell in all worksheets"));
+    addAction("RecalcWorkBook", a);
+    connect(a, SIGNAL(triggered(bool)), this, SLOT(recalcMap()));
+
+    a = new QAction(koIcon("document-edit"), i18n("Sheets..."), this);
+    addAction("sheets-editor", a);
+    connect(a, SIGNAL(triggered(bool)), this, SLOT(openSheetsEditor()));
+    a->setToolTip(i18n("Add, rename or remove sheet"));
+}
+
+QList<QAction*> TableTool::popupMenuActionList() const
+{
+    QList<QAction*> actions = CellToolBase::popupMenuActionList();
+    actions << &d->separator;
+    actions << action("RecalcWorkSheet");
+    actions << action("RecalcWorkBook");
+    return actions;
+}
+
+void TableTool::sheetSelected()
+{
+    QAction *action = qobject_cast<QAction*>(sender());
+    if (action && action->text() != d->tableShape->sheet()->sheetName()) {
+        sheetActivated(action->text());
+    }
+}
+void TableTool::sheetSelectionCombo()
+{
+    const Map *map = d->tableShape->map();
+    QMenu menu;
+    QList<QAction*> actions;
+    foreach(const QString &s, map->visibleSheets()) {
+        actions << new QAction(s, &menu);
+        connect(actions.last(), SIGNAL(triggered(bool)), this, SLOT(sheetSelected()));
+    }
+    menu.addActions(actions);
+    const KoViewConverter *viewConverter = canvas()->viewConverter();
+    const QPointF documentOrigin = canvas()->documentOrigin();
+    const QPoint canvasScroll(d->controller->canvasOffsetX(), d->controller->canvasOffsetY());
+    QRect rect = viewConverter->documentToView(d->sheetNameRect).translated(documentOrigin).toRect();
+    rect.translate(canvasScroll);
+    menu.exec(d->controller->mapToGlobal(rect.bottomLeft()));
+    return;
+}
+
+void TableTool::slotSheetAdded(Sheet*)
+{
+
+}
+void TableTool::slotSheetRemoved(int row)
+{
+    const QStringList names = d->tableShape->map()->visibleSheets();
+    d->tableShape->setSheet(names.value(0));
+    update();
+}
+
+void TableTool::slotSheetModified(Sheet *sheet)
+{
+    Q_ASSERT(sheet);
+    QString name = sheet->sheetName();
+    if (sheet->isHidden() && sheet == d->tableShape->sheet()) {
+        name = d->tableShape->map()->visibleSheets().value(0);
+    }
+    d->tableShape->setSheet(name);
+    update();
+}
+
+void TableTool::slotShapeChanged(KoShape *shape)
+{
+    if (shape == d->tableShape) {
+        QRectF old = d->resizeRect;
+        d->setupTools();
+        canvas()->updateCanvas(old | d->resizeRect);
+    }
+}
+
+TableShape *TableTool::shape() const
+{
+    return d->tableShape;
 }

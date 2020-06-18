@@ -1,26 +1,26 @@
 /* This file is part of the KDE project
-   Copyright 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
-
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.
-*/
+ * Copyright 2020 Dag Andersen <dag.andersen@kdemail.net>
+ * Copyright 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+ *  
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ */
 
 // Local
 #include "TableShape.h"
 
-#include "TablePageManager.h"
 #include "DocBase.h"
 
 #include <QPainter>
@@ -62,62 +62,38 @@
 #include <FunctionModuleRegistry.h>
 #include <Doc.h>
 #include <Part.h>
+#include <DependencyManager.h>
+#include <RecalcManager.h>
+
+#include "TableShapeFactory.h"
 
 // Define the protocol used here for embedded documents' URL
-// This used to "store" but KUrl didn't like it,
-// so let's simply make it "tar" !
 #define STORE_PROTOCOL "tar"
 #define INTERNAL_PROTOCOL "intern"
 
-namespace Calligra {
-namespace Sheets {
-
-class TableShapePart : public KoPart
-{
-public:
-    TableShapePart() : KoPart(KoComponentData(KAboutData(QStringLiteral("spreadsheet"), QStringLiteral("Spreadsheet"),
-                               QStringLiteral(CALLIGRA_VERSION_STRING))), nullptr)
-    {}
-
-    KoMainWindow *createMainWindow() override {
-        return nullptr;//new KoMainWindow("application/vnd.oasis.opendocument.spreadsheet", componentData());
-    }
-protected:
-    KoView *createViewInstance(KoDocument */*document*/, QWidget */*parent*/) override { return nullptr; }
-};
-
-class TableShapeDoc : public DocBase
-{
-public:
-    TableShapeDoc() : DocBase(new TableShapePart()) {
-        FunctionModuleRegistry::instance()->loadFunctionModules();
-    }
-    void initConfig() override {}
-
-};
-}
-}
 
 using namespace Calligra::Sheets;
+
 
 class TableShape::Private
 {
 public:
-    Private(TableShape *parent) : q(parent), paintingDisabled(false) {}
+    Private(TableShape *parent) : q(parent), paintingDisabled(false), adjust(true) {}
     TableShape *q;
-    Part part;
+    KoPart *part;
     KoDocumentResourceManager *resourceManager;
-    KoDocumentBase *parentDoc;
     QPointF topLeftOffset;
     SheetView*  sheetView;
     bool        isMaster;
-    TablePageManager* pageManager;
     Sheet* currentSheet;
     QUrl url; // the docs url
     bool paintingDisabled;
 
+    bool adjust;
+
 public:
     QRect visibleCells() const;
+    void adjustRowsAndColumns(const QSizeF &oldsize, const QSizeF &newsize);
 };
 
 QRect TableShape::Private::visibleCells() const
@@ -133,45 +109,69 @@ QRect TableShape::Private::visibleCells() const
     return visibleCells;
 }
 
-TableShape::TableShape(KoDocumentResourceManager *resourceManager, KoDocumentBase *parentDoc, int firstColumn, int firstRow, int columns, int rows)
+void TableShape::Private::adjustRowsAndColumns(const QSizeF &oldsize, const QSizeF &newsize)
+{
+    if (!adjust) {
+        return;
+    }
+    if (!sheetView) {
+        return;
+    }
+    Sheet *sheet = const_cast<Sheet*>(sheetView->sheet());
+    qreal sx = newsize.width() / oldsize.width();
+    qreal sy = newsize.height() / oldsize.height();
+    QRect cells = visibleCells();
+    for (int col = cells.left(); col < cells.right()-1; ++col) {
+        ColumnFormat* const columnFormat = sheet->nonDefaultColumnFormat(col);
+        qreal w = columnFormat->width();
+        columnFormat->setWidth(w * sx);
+    }
+    for (int row = cells.top(); row <= cells.bottom(); ++row) {
+        sheet->rowFormats()->setRowHeight(row, row, sheet->rowFormats()->rowHeight(row) * sy);
+    }
+    sheetView->invalidate();
+}
+
+TableShape::TableShape(KoPart *part, KoDocumentResourceManager *resourceManager)
     : KoFrameShape(KoXmlNS::draw, "object")
     , d(new Private(this))
 {
     setObjectName(QLatin1String("TableShape"));
-    debugSheetsTableShape<<this;
     d->resourceManager = resourceManager;
-    d->parentDoc = parentDoc;
     d->sheetView = nullptr;
     d->isMaster = false;
-    d->pageManager = nullptr;
     d->currentSheet = nullptr;
-    Doc *doc = new Doc(&d->part);
-    d->part.setDocument(doc);
-    if (parentDoc) {
-        parentDoc->setEmbeddedDocument(doc);
-    }
+    d->part = part;
+
     setMap();
 }
 
 TableShape::~TableShape()
 {
-    delete d->pageManager;
+    delete d->part;
     delete d->sheetView;
     delete d;
 }
 
+void TableShape::updateUrl()
+{
+    d->url = document()->url();
+}
 KoDocumentResourceManager *TableShape::resourceManager() const
 {
     return d->resourceManager;
 }
 
-Doc *TableShape::document() const
+TableShapeDoc *TableShape::document() const
 {
-    return dynamic_cast<Doc*>(d->part.document());
+    return dynamic_cast<TableShapeDoc*>(d->part->document());
 }
 
 void TableShape::paint(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &)
 {
+    if (!d->currentSheet) {
+        return;
+    }
     if (d->paintingDisabled) {
         return;
     }
@@ -313,6 +313,7 @@ bool TableShape::loadEmbeddedDocument(KoStore *store, const KoXmlElement &object
 
 void TableShape::saveOdf(KoShapeSavingContext & context) const
 {
+    debugSheetsTableShape<<Q_FUNC_INFO;
     if (!sheet()) {
         warnSheetsTableShape<<"No sheet";
         return;
@@ -345,14 +346,6 @@ void TableShape::saveOdf(KoShapeSavingContext & context) const
         bodyWriter.endElement(); // draw:object
 
         bodyWriter.endElement(); // draw:frame
-
-        // TODO This should go into embeddedSaver
-        debugSheetsTableShape<<"saving document: external:"<<document()->isStoredExtern()<<document()->url()<<document()->isModified();
-        // Note that internal docs are save by embeddedSaver()
-        if (document()->isStoredExtern() && document()->isModified()) {
-            document()->save();
-        }
-        return;
     }
 }
 
@@ -367,12 +360,21 @@ void TableShape::setMap()
     d->sheetView = new SheetView(sheet);
     d->isMaster = true;
     updateVisibleCellRange();
-
+    map->dependencyManager()->updateAllDependencies(map);
+    map->recalcManager()->recalcMap();
     connect(map, SIGNAL(damagesFlushed(QList<Damage*>)), this, SLOT(handleDamages(QList<Damage*>)));
+}
+
+void TableShape::resize(const QSizeF& newSize)
+{
+    d->adjust = false;
+    setSize(newSize);
+    d->adjust = true;
 }
 
 void TableShape::setSize(const QSizeF& newSize)
 {
+    d->adjustRowsAndColumns(size(), newSize);
     KoShape::setSize(newSize);
     if (sheet()) {
         map()->addDamage(new SheetDamage(sheet(), SheetDamage::ContentChanged));
@@ -386,8 +388,6 @@ Map* TableShape::map() const
 
 void TableShape::clear()
 {
-    delete d->pageManager;
-    d->pageManager = nullptr;
     d->currentSheet = nullptr;
     delete d->sheetView;
     d->sheetView = nullptr;
@@ -411,9 +411,12 @@ void TableShape::setSheet(const QString& sheetName)
 {
     Sheet* const sheet = map()->findSheet(sheetName);
     if (! sheet) {
+        debugSheetsTableShape<<Q_FUNC_INFO<<"unknown sheet:"<<sheetName;
         return;
     }
+    debugSheetsTableShape<<Q_FUNC_INFO<<"current:"<<d->currentSheet<<"new sheet:"<<sheetName<<sheet;
     d->currentSheet = sheet;
+// ###    d->topLeftOffset = QPointF(-sheet->canvasOffsetX(), -sheet->canvasOffsetY());
     delete d->sheetView;
     d->sheetView = new SheetView(sheet);
     updateVisibleCellRange();
@@ -423,6 +426,8 @@ void TableShape::setSheet(const QString& sheetName)
 void TableShape::setTopLeftOffset(const QPointF &point)
 {
     d->topLeftOffset = point;
+// ###    d->currentSheet->setCanvasOffsetX(-point.x());
+// ###    d->currentSheet->setCanvasOffsetY(-point.y());
 }
 
 QPointF TableShape::topLeftOffset() const
@@ -452,11 +457,6 @@ void TableShape::shapeChanged(ChangeType type, KoShape *shape)
     if (!sheet()) {
         return;
     }
-    // If this is a master table shape, the parent changed and we have no parent yet...
-    if (d->isMaster && type == ParentChanged && !d->pageManager) {
-        d->pageManager = new TablePageManager(this);
-        return;
-    }
     // Not the master table shape? Not embedded into a container?
     if (!d->isMaster || !KoShape::parent()) {
         return;
@@ -465,7 +465,6 @@ void TableShape::shapeChanged(ChangeType type, KoShape *shape)
     if (type != SizeChanged) {
         return;
     }
-    d->pageManager->layoutPages();
 }
 
 void TableShape::handleDamages(const QList<Damage*>& damages)

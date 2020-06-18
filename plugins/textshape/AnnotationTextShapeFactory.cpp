@@ -56,6 +56,8 @@ AnnotationTextShapeFactory::AnnotationTextShapeFactory() :
     t.properties = props;
     props->setProperty("demo", true);
     addTemplate(t);
+
+    setHidden(true);
 }
 
 KoShape *AnnotationTextShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
@@ -102,6 +104,8 @@ KoShape *AnnotationTextShapeFactory::createDefaultShape(KoDocumentResourceManage
             KoChangeTracker *changeTracker = documentResources->resource(KoText::ChangeTracker).value<KoChangeTracker*>();
             document.setChangeTracker(changeTracker);
         }
+
+        document.setShapeController(documentResources->shapeController());
 
         //update the resources of the document
         annotation->updateDocumentData();

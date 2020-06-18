@@ -24,6 +24,9 @@
 
 #include <KoShapeFactoryBase.h>
 
+class KoComponentData;
+class KAboutData;
+
 class KoShape;
 #include "KoXmlReaderForward.h"
 
@@ -47,6 +50,11 @@ public:
     KoShape *createDefaultShape(KoDocumentResourceManager *documentResources) const override;
     KoShape *createShapeFromOdf(const KoXmlElement &element, KoShapeLoadingContext &context) override;
     bool supports(const KoXmlElement &element, KoShapeLoadingContext &context) const override;
+    QList<KoShapeConfigWidgetBase*> createShapeOptionPanels();
+
+private:
+    static KoComponentData* s_global;
+    static KAboutData* s_aboutData;
 };
 
 #endif // CALLIGRA_SHEETS_TABLE_SHAPE_FACTORY

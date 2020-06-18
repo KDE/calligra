@@ -1,44 +1,45 @@
 /* This file is part of the KDE project
-   Copyright 2006 Robert Knight <robertknight@gmail.com>
-   Copyright 2006 Inge Wallin <inge@lysator.liu.se>
-   Copyright 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
-   Copyright 1999-2002,2004 Laurent Montel <montel@kde.org>
-   Copyright 2002-2005 Ariya Hidayat <ariya@kde.org>
-   Copyright 1999-2004 David Faure <faure@kde.org>
-   Copyright 2004-2005 Meni Livne <livne@kde.org>
-   Copyright 2001-2003 Philipp Mueller <philipp.mueller@gmx.de>
-   Copyright 2002-2003 Norbert Andres <nandres@web.de>
-   Copyright 2003 Hamish Rodda <rodda@kde.org>
-   Copyright 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright 2003 Lukas Tinkl <lukas@kde.org>
-   Copyright 2000-2002 Werner Trobin <trobin@kde.org>
-   Copyright 2002 Harri Porten <porten@kde.org>
-   Copyright 2002 John Dailey <dailey@vt.edu>
-   Copyright 2002 Daniel Naber <daniel.naber@t-online.de>
-   Copyright 1999-2000 Torben Weis <weis@kde.org>
-   Copyright 1999-2000 Stephan Kulow <coolo@kde.org>
-   Copyright 2000 Bernd Wuebben <wuebben@kde.org>
-   Copyright 2000 Wilco Greven <greven@kde.org>
-   Copyright 2000 Simon Hausmann <hausmann@kde.org
-   Copyright 1999 Michael Reiher <michael.reiher@gmx.de>
-   Copyright 1999 Boris Wedl <boris.wedl@kfunigraz.ac.at>
-   Copyright 1999 Reginald Stadlbauer <reggie@kde.org>
-
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.
-*/
+ * Copyright 2020 Dag Andersen <dag.andersen@kdemail.net>
+ * Copyright 2006 Robert Knight <robertknight@gmail.com>
+ * Copyright 2006 Inge Wallin <inge@lysator.liu.se>
+ * Copyright 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+ * Copyright 1999-2002,2004 Laurent Montel <montel@kde.org>
+ * Copyright 2002-2005 Ariya Hidayat <ariya@kde.org>
+ * Copyright 1999-2004 David Faure <faure@kde.org>
+ * Copyright 2004-2005 Meni Livne <livne@kde.org>
+ * Copyright 2001-2003 Philipp Mueller <philipp.mueller@gmx.de>
+ * Copyright 2002-2003 Norbert Andres <nandres@web.de>
+ * Copyright 2003 Hamish Rodda <rodda@kde.org>
+ * Copyright 2003 Joseph Wenninger <jowenn@kde.org>
+ * Copyright 2003 Lukas Tinkl <lukas@kde.org>
+ * Copyright 2000-2002 Werner Trobin <trobin@kde.org>
+ * Copyright 2002 Harri Porten <porten@kde.org>
+ * Copyright 2002 John Dailey <dailey@vt.edu>
+ * Copyright 2002 Daniel Naber <daniel.naber@t-online.de>
+ * Copyright 1999-2000 Torben Weis <weis@kde.org>
+ * Copyright 1999-2000 Stephan Kulow <coolo@kde.org>
+ * Copyright 2000 Bernd Wuebben <wuebben@kde.org>
+ * Copyright 2000 Wilco Greven <greven@kde.org>
+ * Copyright 2000 Simon Hausmann <hausmann@kde.org
+ * Copyright 1999 Michael Reiher <michael.reiher@gmx.de>
+ * Copyright 1999 Boris Wedl <boris.wedl@kfunigraz.ac.at>
+ * Copyright 1999 Reginald Stadlbauer <reggie@kde.org>
+ *  
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Library General Public License
+ * along with this library; see the file COPYING.LIB.  If not, write to
+ * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ */
 
 // Local
 #include "ToolHeaders.h"
@@ -59,7 +60,8 @@
 #include <kmessagebox.h>
 
 // Calligra
-#include "KoCanvasBase.h"
+#include <KoCanvasBase.h>
+#include <KoCanvasController.h>
 #include <KoZoomHandler.h>
 #include <KoPointerEvent.h>
 #include <KoGlobal.h>
@@ -153,7 +155,6 @@ qreal Tool::RowHeader::height() const
 qreal Tool::RowHeader::resizeAreaSize() const
 {
     qreal pix = m_pCanvas->viewConverter()->documentToViewY(2.0);
-    qInfo()<<Q_FUNC_INFO<<pix;
     return pix;
 }
 
@@ -163,12 +164,13 @@ int Tool::RowHeader::betweenRows(qreal pos) const
     qreal topBorderPos;
     int row = m_sheet->topRow(pos - resizeHeight, topBorderPos);
     if (row > 0 && row <= KS_rowMax) {
+        if (row == 1 && m_sheet->rowFormats()->isHiddenOrFiltered(row)) {
+            // if row is hidden and is the first row it shall not be resized
+            return 0;
+        }
         const qreal bottomBorderPos = topBorderPos + m_sheet->rowFormats()->rowHeight(row);
         Q_ASSERT(bottomBorderPos > topBorderPos);
-        if ((pos >= bottomBorderPos - resizeHeight) &&
-            (pos <= bottomBorderPos + resizeHeight) &&
-            !(row == 1 && m_sheet->rowFormats()->isHiddenOrFiltered(row))) // if row is hidden and is the first row it shall not be resized
-        {
+        if ((pos >= bottomBorderPos - resizeHeight) && (pos <= bottomBorderPos + resizeHeight)) {
             return row;
         }
     }
@@ -244,6 +246,7 @@ void Tool::RowHeader::mouseRelease(KoPointerEvent * _ev)
     double ev_PosY = _ev->point.y();
 
     if (m_bResize) {
+        ev_PosY = m_lastResizePos;
         // Remove size indicator painted by paintSizeIndicator
         removeSizeIndicator();
 
@@ -254,14 +257,12 @@ void Tool::RowHeader::mouseRelease(KoPointerEvent * _ev)
                 rect = m_selection->lastRange();
             }
         }
-        double height = 0.0;
-        double y = sheet->rowPosition(m_iResizedRow);
-        if (ev_PosY - y <= 0.0) {
-            height = 0.0;
-        } else {
+        qreal ev_PosY = _ev->point.y();
+        qreal y = sheet->rowPosition(m_iResizedRow);
+        qreal height = 0.0;
+        if (ev_PosY - y > resizeAreaSize()) {
             height = ev_PosY - y;
         }
-#if 1
         if (height != 0.0) {
             ResizeRowManipulator* command = new ResizeRowManipulator();
             command->setSheet(sheet);
@@ -283,7 +284,6 @@ void Tool::RowHeader::mouseRelease(KoPointerEvent * _ev)
                 m_pCanvas->canvasWidget()->update();
             }
         }
-#endif
         delete m_lSize;
         m_lSize = nullptr;
     } else if (m_bSelection) {
@@ -377,7 +377,6 @@ void Tool::RowHeader::mouseMove(KoPointerEvent* _ev)
 
     // The button is pressed and we are resizing ?
     if (m_bResize) {
-        qInfo()<<Q_FUNC_INFO<<m_iResizedRow<<ev_PosY<<':'<<scrollOffset()<<height();
         if (ev_PosY < scrollOffset()) {
             m_VScrollBar->setValue(m_VScrollBar->value() - m_VScrollBar->singleStep());
         } else if (ev_PosY > bottom) {
@@ -437,22 +436,34 @@ void Tool::RowHeader::paintSizeIndicator(KoPointerEvent *event)
     if (m_iResizePos < rowTop + viewConverter->viewToDocumentY(2)) {
         m_iResizePos = m_lastResizePos;
         hideRow = true;
+    } else if (height() + scrollOffset() <= m_iResizePos) {
+        m_iResizePos = height() + scrollOffset();
+    } else if (scrollOffset() > m_iResizePos) {
+        m_iResizePos = scrollOffset();
     }
     m_lastResizePos = m_iResizePos;
+    KoCanvasController *controller = m_pCanvas->canvasController();
+    const QPointF documentOrigin = m_pCanvas->documentOrigin();
+    const QPoint canvasScroll(controller->canvasOffsetX(), controller->canvasOffsetY());
     if (!m_rubberband) {
-        int x = viewConverter->documentToViewX(m_geometry.left());
+        int x = viewConverter->documentToViewY(m_geometry.left());
+        x += documentOrigin.x();
+        x += std::min(0, canvasScroll.x());
         int w = viewConverter->documentToViewX(width() + m_sheetWidth);
         m_rubberband = new QRubberBand(QRubberBand::Line, m_pCanvas->canvasWidget());
         m_rubberband->setGeometry(x, 0, w, 2);
         m_rubberband->show();
     }
     int yPos = viewConverter->documentToViewY(m_geometry.top() - scrollOffset() + (hideRow ? rowTop : m_iResizePos));
+    yPos += documentOrigin.y();
+    yPos += std::min(0, canvasScroll.y());
     m_rubberband->move(m_rubberband->geometry().left(), yPos);
+
     QString tip;
     if (hideRow) {
-        tip = i18n("Hide Row");
+        tip = i18n("Hide row %1", QString::number(m_iResizedRow));
     } else {
-        tip = i18n("Height: %1 %2", toUnitUserValue(m_iResizePos - rowTop), unitSymbol());
+        tip = i18n("Row %3 height: %1 %2", toUnitUserValue(m_iResizePos - rowTop), unitSymbol(), QString::number(m_iResizedRow));
     }
     if (!m_lSize) {
         int screenNo = QApplication::desktop()->screenNumber(m_pCanvas->canvasWidget());
@@ -466,15 +477,20 @@ void Tool::RowHeader::paintSizeIndicator(KoPointerEvent *event)
     }
     m_lSize->setText(tip);
     m_lSize->adjustSize();
+
     int xPos = viewConverter->documentToViewX(m_geometry.left());
-    yPos = viewConverter->documentToViewX(m_geometry.top());
-    yPos += viewConverter->documentToViewY(rowTop - scrollOffset());
+    xPos += documentOrigin.x();
+    xPos += std::min(0, canvasScroll.x());
+
+    yPos = viewConverter->documentToViewY(m_geometry.top() - scrollOffset() + rowTop);
+    yPos += documentOrigin.y();
+    yPos += std::min(0, canvasScroll.y());
+
     int w = viewConverter->documentToViewX(width());
     QPoint pos = (sheet->layoutDirection() == Qt::RightToLeft) ? QPoint(xPos + w - m_lSize->width() - 3, yPos - 3) : QPoint(xPos - 3, yPos - 3);
     pos -= QPoint(0, m_lSize->height());
     m_lSize->move(m_pCanvas->canvasWidget()->mapToGlobal(pos).x(), m_pCanvas->canvasWidget()->mapToGlobal(pos).y());
     m_lSize->show();
-    qInfo()<<Q_FUNC_INFO<<m_geometry<<"rowTop-vpy+h"<<rowTop<<scrollOffset()<<height()<<'='<<yPos<<':'<<pos<<';'<<m_lSize->geometry();
 }
 
 void Tool::RowHeader::removeSizeIndicator()
@@ -562,35 +578,7 @@ void Tool::RowHeader::paint(QPainter* painter, const QRectF& painterRect)
         } else if (highlighted) {
             painter->setFont(boldFont);
         }
-        QFontMetricsF fm(painter->font());
-        if (height < fm.ascent() - fm.descent()) {
-            // try to scale down the font to make it fit
-            QFont font = painter->font();
-            qreal maxSize = font.pointSizeF();
-            qreal minSize = maxSize / 2;
-            while (minSize > 1) {
-                font.setPointSizeF(minSize);
-                const QFontMetricsF fm2(font);
-                if (height >= fm2.ascent() - fm2.descent())
-                    break;
-                minSize /= 2;
-            }
-            while (minSize < 0.99 * maxSize) {
-                qreal middle = (maxSize + minSize) / 2;
-                font.setPointSizeF(middle);
-                const QFontMetricsF fm2(font);
-                if (height >= fm2.ascent() - fm2.descent()) {
-                    minSize = middle;
-                } else {
-                    maxSize = middle;
-                }
-            }
-            painter->setFont(font);
-            fm = QFontMetricsF(font);
-        }
-        if (height >= fm.ascent() - fm.descent()) {
-            painter->drawText(rect, Qt::AlignCenter, rowText);
-        }
+        painter->drawText(rect, Qt::AlignCenter, rowText);
 
         yPos += rawHeight;
         y++;
@@ -674,7 +662,6 @@ void Tool::ColumnHeader::setScrollBars(QScrollBar *hbar, QScrollBar *vbar)
 qreal Tool::ColumnHeader::resizeAreaSize() const
 {
     qreal pix = m_pCanvas->viewConverter()->documentToViewX(2.0);
-    qInfo()<<Q_FUNC_INFO<<pix;
     return pix;
 }
 
@@ -684,12 +671,13 @@ int Tool::ColumnHeader::betweenColumns(qreal pos) const
     qreal leftBorderPos;
     int column = m_sheet->leftColumn(pos - resizeWidth, leftBorderPos);
     if (column > 0 && column <= KS_colMax) {
+        if (column == 1 && m_sheet->columnFormat(column)->isHiddenOrFiltered()) {
+            // if column is hidden and is the first column it shall not be resized
+            return 0;
+        }
         const qreal rightBorderPos = leftBorderPos + m_sheet->columnFormat(column)->visibleWidth();
         Q_ASSERT(rightBorderPos > leftBorderPos);
-        if ((pos >= rightBorderPos - resizeWidth) &&
-            (pos <= rightBorderPos + resizeWidth) &&
-            !(column == 1 && m_sheet->columnFormat(column)->isHiddenOrFiltered())) // if column is hidden and is the first column it shall not be resized
-        {
+        if ((pos >= rightBorderPos - resizeWidth) && (pos <= rightBorderPos + resizeWidth)) {
             return column;
         }
     }
@@ -761,7 +749,7 @@ void Tool::ColumnHeader::mousePress(KoPointerEvent * _ev)
             if (tmpCol > KS_colMax) {
                 tmpCol = KS_colMax;
             }
-            //if col is hide and it's the first column
+            //if col is hidden and it's the first column
             //you mustn't resize it.
             if (ev_PosX >= x + w - resizeWidth &&
                 ev_PosX <= x + w + resizeWidth &&
@@ -772,7 +760,7 @@ void Tool::ColumnHeader::mousePress(KoPointerEvent * _ev)
             x += w;
         }
 
-        //if col is hide and it's the first column
+        //if col is hidden and it's the first column
         //you mustn't resize it.
         qreal tmp2;
         tmpCol = sheet->leftColumn(right - ev_PosX + 1, tmp2);
@@ -977,7 +965,6 @@ void Tool::ColumnHeader::mouseMove(KoPointerEvent* _ev)
     }
     // The button is pressed and we are resizing ?
     if (m_bResize) {
-        qInfo()<<Q_FUNC_INFO<<m_iResizedColumn<<ev_PosX<<':'<<scrollOffset()<<width();
         if (ev_PosX < scrollOffset()) {
             m_HScrollBar->setValue(m_HScrollBar->value() - m_HScrollBar->singleStep());
         } else if (ev_PosX > right) {
@@ -1063,26 +1050,33 @@ void Tool::ColumnHeader::paintSizeIndicator(KoPointerEvent *event)
 
     bool hideColumn = false;
     if (m_iResizePos < columnLeft + viewConverter->viewToDocumentX(2)) {
-        // Don't make the column have a height < 2 points.
+        // Don't make the column have a width < 2
         m_iResizePos = m_lastResizePos;
         hideColumn = true;
     }
     m_lastResizePos = m_iResizePos;
+    KoCanvasController *controller = m_pCanvas->canvasController();
+    const QPointF documentOrigin = m_pCanvas->documentOrigin();
+    const QPoint canvasScroll(controller->canvasOffsetX(), controller->canvasOffsetY());
     if (!m_rubberband) {
         int y = viewConverter->documentToViewY(m_geometry.top());
+        y += documentOrigin.y();
+        y += std::min(0, canvasScroll.y());
         int h = viewConverter->documentToViewY(height() + m_sheetHeight);
         m_rubberband = new QRubberBand(QRubberBand::Line, m_pCanvas->canvasWidget());
         m_rubberband->setGeometry(0, y, 2, h);
         m_rubberband->show();
     }
     int xPos = viewConverter->documentToViewX(m_geometry.left() - scrollOffset() + (hideColumn ? columnLeft : m_iResizePos));
+    xPos += documentOrigin.x();
+    xPos += std::min(0, canvasScroll.x());
     m_rubberband->move(xPos, m_rubberband->geometry().top());
-    qInfo()<<Q_FUNC_INFO<<m_geometry<<m_iResizePos<<m_rubberband->geometry();
+
     QString tip;
     if (hideColumn) {
-        tip = i18n("Hide Column");
+        tip = i18n("Hide column %1", columnName(m_iResizedColumn));
     } else {
-        tip = i18n("Width: %1 %2", toUnitUserValue(m_iResizePos - columnLeft), unitSymbol());
+        tip = i18n("Column %3 width: %1 %2", toUnitUserValue(m_iResizePos - columnLeft), unitSymbol(), columnName(m_iResizedColumn));
     }
     if (!m_lSize) {
         int screenNo = QApplication::desktop()->screenNumber(m_pCanvas->canvasWidget());
@@ -1096,9 +1090,15 @@ void Tool::ColumnHeader::paintSizeIndicator(KoPointerEvent *event)
     }
     m_lSize->setText(tip);
     m_lSize->adjustSize();
-    xPos = viewConverter->documentToViewX(m_geometry.left());
-    xPos += viewConverter->documentToViewY(columnLeft - scrollOffset());
+
+    xPos = viewConverter->documentToViewX(m_geometry.left() - scrollOffset() + columnLeft);
+    xPos += documentOrigin.x();
+    xPos += std::min(0, canvasScroll.x());
+
     int yPos = viewConverter->documentToViewX(m_geometry.top());
+    yPos += documentOrigin.y();
+    yPos += std::min(0, canvasScroll.y());
+
     QPoint pos = (sheet->layoutDirection() == Qt::RightToLeft) ? QPoint(xPos - 3 - m_lSize->width(), yPos - 3) : QPoint(xPos - 3, yPos - 3);
     pos -= QPoint(0, m_lSize->height());
     m_lSize->move(m_pCanvas->canvasWidget()->mapToGlobal(pos).x(), m_pCanvas->canvasWidget()->mapToGlobal(pos).y());
@@ -1134,6 +1134,15 @@ void Tool::ColumnHeader::resize(const QSizeF& size, const QSizeF& oldSize)
 QPalette Tool::ColumnHeader::palette() const
 {
     return qApp->palette();
+}
+
+QString Tool::ColumnHeader::columnName(int column) const
+{
+    QString name = Cell::columnName(column);
+    if (m_sheet && m_sheet->getShowColumnNumber()) {
+        name = QString::number(column);
+    }
+    return name;
 }
 
 void Tool::ColumnHeader::paint(QPainter *painter, const QRectF &painterRect)
@@ -1228,7 +1237,7 @@ void Tool::ColumnHeader::paint(QPainter *painter, const QRectF &painterRect)
         } else if (highlighted) {
             painter->setFont(boldFont);
         }
-        QString colText = sheet->getShowColumnNumber() ? QString::number(x) : Cell::columnName(x);
+        QString colText = columnName(x);
         QFontMetricsF fm(painter->font());
         if (width < fm.width(colText)) {
             // try to scale down the font to make it fit

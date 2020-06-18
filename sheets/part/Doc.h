@@ -107,7 +107,7 @@ public:
     virtual void paintContent(QPainter & painter, const QRect & rect, Sheet* sheet);
 
     void initConfig() override;
-    void saveConfig();
+    virtual void saveConfig();
 
     void addIgnoreWordAll(const QString & word);
     void clearIgnoreWordAll();

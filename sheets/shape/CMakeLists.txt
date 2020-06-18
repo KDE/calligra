@@ -15,15 +15,19 @@ include_directories(
 ########### Flake Plugin library ###############
 
 set (tableshape_LIB_SRCS
-    TablePageManager.cpp
     TableShape.cpp
     TableTool.cpp
     TableShapeFactory.cpp
     TableToolFactory.cpp
     SheetsEditor.cpp
     ToolHeaders.cpp
-    ScreenConversions.cpp
-   )
+    TableShapeConfigWidget.cpp
+)
+
+ki18n_wrap_ui(tableshape_LIB_SRCS
+    SheetsEditor.ui
+    TableShapeConfigWidget.ui
+)
 
 add_library(calligra_shape_spreadsheet MODULE ${tableshape_LIB_SRCS})
 calligra_shape_desktop_to_json(calligra_shape_spreadsheet calligra_shape_spreadsheet.desktop)
@@ -38,9 +42,7 @@ target_link_libraries(calligra_shape_spreadsheet
         Qt5::PrintSupport
         KF5::Completion
 )
-# target_link_libraries(calligra_shape_spreadsheet flake KF5::KDELibs4Support)
 
-# install(TARGETS calligra_shape_spreadsheet-deferred DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/deferred)
 install(TARGETS calligra_shape_spreadsheet DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/shapes)
 
 ########### install files ###############

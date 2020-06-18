@@ -34,7 +34,7 @@ public:
     TableToolFactory();
     ~TableToolFactory();
 
-    KoToolBase* createTool(KoCanvasBase* canvas);
+    KoToolBase* createTool(KoCanvasBase* canvas) override;
 };
 
 } // namespace Sheets

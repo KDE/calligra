@@ -557,7 +557,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
 
     // -- cell content actions --
 
-    action = new QAction(koIcon("deletecell"), i18n("All"), this);
+    action = new QAction(koIcon("deletecell"), i18n("Clear All"), this);
     action->setIconText(i18n("Clear All"));
     action->setToolTip(i18n("Clear all contents and formatting of the current cell"));
     addAction("clearAll", action);
@@ -1215,7 +1215,7 @@ KoInteractionStrategy* CellToolBase::createStrategy(KoPointerEvent* event)
             // Context menu with the right mouse button.
             if (event->button() == Qt::RightButton) {
                 // Setup the context menu.
-                setPopupActionList(d->popupActionList());
+                setPopupActionList(popupMenuActionList());
                 event->ignore();
                 return nullptr; // Act directly; no further strategy needed.
             }
@@ -1237,7 +1237,7 @@ KoInteractionStrategy* CellToolBase::createStrategy(KoPointerEvent* event)
         if (event->button() == Qt::RightButton) {
             selection()->initialize(QPoint(col, row), sheet);
             // Setup the context menu.
-            setPopupActionList(d->popupActionList());
+            setPopupActionList(popupMenuActionList());
             event->ignore();
             return nullptr; // Act directly; no further strategy needed.
         } else {

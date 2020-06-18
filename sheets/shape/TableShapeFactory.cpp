@@ -24,6 +24,7 @@
 
 #include <kpluginfactory.h>
 #include <KLocalizedString>
+#include <KAboutData>
 
 #include <KoIcon.h>
 #include <KoDocumentResourceManager.h>
@@ -34,12 +35,18 @@
 #include <KoXmlNS.h>
 #include <KoStyleStack.h>
 #include <KoDocumentBase.h>
+#include <KoComponentData.h>
 
 #include <Map.h>
 #include <TableShape.h>
 #include <TableToolFactory.h>
+#include "TableShapeConfigWidget.h"
+#include <Sheet.h>
 
 using namespace Calligra::Sheets;
+
+KoComponentData* TableShapeFactory::s_global = 0;
+KAboutData* TableShapeFactory::s_aboutData = 0;
 
 K_PLUGIN_FACTORY_WITH_JSON(TableShapePluginFactory, "calligra_shape_spreadsheet.json",
                            registerPlugin<TableShapePlugin>();)
@@ -67,8 +74,24 @@ TableShapeFactory::~TableShapeFactory()
 
 KoShape *TableShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
-    TableShape *shape = new TableShape(documentResources, documentResources->odfDocument());
+    if (!s_aboutData) {
+        s_aboutData = new KAboutData();
+    }
+    if (!s_global) {
+        s_global = new KoComponentData(*s_aboutData);
+    }
+    TableShapePart *part = new TableShapePart(*s_global);
+    TableShapeDoc *doc = new TableShapeDoc(part);
+    doc->setAutoSave(0); // disable
+    part->setDocument(doc);
+
+    TableShape *shape = new TableShape(part, documentResources);
     shape->setShapeId(TableShapeId);
+    if (shape->sheet()) {
+        // get a decent default size
+        QRect area (1,1,3,10);
+        shape->resize(shape->sheet()->cellCoordinatesToDocument(area).size());
+    }
     if (documentResources && documentResources->boolResource(ClearMapId)) {
         shape->clear();
     }
@@ -110,6 +133,13 @@ bool TableShapeFactory::supports(const KoXmlElement &element, KoShapeLoadingCont
         }
     }
     return false;
+}
+
+QList<KoShapeConfigWidgetBase*> TableShapeFactory::createShapeOptionPanels()
+{
+    QList<KoShapeConfigWidgetBase*> panels;
+    panels.append( new TableShapeConfigWidget() );
+    return panels;
 }
 
 #include "TableShapeFactory.moc"
