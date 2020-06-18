@@ -28,6 +28,7 @@
   <name xml:lang="sl">Calligra Stage</name>
   <name xml:lang="sv">Calligra Stage</name>
   <name xml:lang="uk">Calligra Stage</name>
+  <name xml:lang="x-test">xxCalligra Stagexx</name>
   <name xml:lang="zh-CN">Calligra Stage</name>
   <summary>Presentation</summary>
   <summary xml:lang="bs">Prezentacija</summary>
@@ -54,6 +55,7 @@
   <summary xml:lang="sl">Predstavitev</summary>
   <summary xml:lang="sv">Presentation</summary>
   <summary xml:lang="uk">Презентації</summary>
+  <summary xml:lang="x-test">xxPresentationxx</summary>
   <summary xml:lang="zh-CN">演示</summary>
   <description>
     <p>
@@ -83,6 +85,7 @@
     <p xml:lang="sl">Calligra Stage je program za enostavno in še vedno prilagodljivo izdelavo predstavitev. Enostavno lahko ustvarite predstavitve, ki vsebujejo bogato raznolikost elementov, od grafike do besedila, od grafikonov do slik. Calligra Stage je razširljiv prek vtičnega sistema, zato je enostavno dodati nove učinke, nove vsebinske elemente ali celo nove načine upravljanja predstavitve. Zaradi integracije s Calligro je vsa moč in prožnost vsebin Calligre na voljo tudi v programu Stage.</p>
     <p xml:lang="sv">Calligra Stage är ett lättanvänt men ändå flexibelt presentationsprogram. Du kan enkelt skapa presentationer som innehåller en rik variation av element, från grafik till text, från diagram till bilder. Calligra Stage är utökningsbar via ett insticksprogramsystem, så det är lätt att lägga till nya effekter, nya innehållselement eller till och med nya sätt att hantera presentationer. På grund av integration med Calligra är de kraftfulla och flexibla innehållselementen i Calligra tillgängliga för Stage.</p>
     <p xml:lang="uk">Calligra Stage — проста, але потужна програма для роботи з презентаціями. За її допомогою ви без проблем зможете створити презентацію з багатим набором елементів, від графіки до тексту, від діаграм до зображень. Можливості Calligra Stage можна розширити за допомогою системи додатків: ви можете додати нові ефекти, нові елементи вмісту і навіть нові способи керування презентацією. Через тісну інтеграцію з рештою програм Calligra ви можете скористатися усіма потужними та гнучкими елементами решти програм Calligra безпосередньо у Stage.</p>
+    <p xml:lang="x-test">xxCalligra Stage is an easy to use yet still flexible presentation application. You can easily create presentations containing a rich variety of elements, from graphics to text, from charts to images. Calligra Stage is extensible through a plugin system, so it is easy to add new effects, new content elements or even new ways of managing your presentation. Because of the integration with Calligra, all the power and flexibility of the Calligra content elements are available to Stage.xx</p>
     <p>Features:</p>
     <p xml:lang="bs">Svojstva:</p>
     <p xml:lang="ca">Característiques:</p>
@@ -109,6 +112,7 @@
     <p xml:lang="sl">Možnosti:</p>
     <p xml:lang="sv">Funktioner:</p>
     <p xml:lang="uk">Можливості:</p>
+    <p xml:lang="x-test">xxFeatures:xx</p>
     <p xml:lang="zh-CN">功能：</p>
     <ul>
       <li>Multiple master slides</li>
@@ -134,6 +138,7 @@
       <li xml:lang="sl">Večkratne matične predloge predstavitev</li>
       <li xml:lang="sv">Flera förlagssidor</li>
       <li xml:lang="uk">Використання декількох основних слайдів.</li>
+      <li xml:lang="x-test">xxMultiple master slidesxx</li>
       <li>Easily switch between slides during a presentation</li>
       <li xml:lang="bs">Lako prebacujte između slajdova tokom prezentacije</li>
       <li xml:lang="ca">Canvi senzill entre dispositives durant una presentació</li>
@@ -158,6 +163,7 @@
       <li xml:lang="sl">Enostavni prehodi med prosojnicami med predstavitvijo</li>
       <li xml:lang="sv">Enkelt byte mellan bilder under presentationer</li>
       <li xml:lang="uk">Просте перемикання між слайдами під час презентації.</li>
+      <li xml:lang="x-test">xxEasily switch between slides during a presentationxx</li>
       <li>Add notes for your slide</li>
       <li xml:lang="bs">Dodajte zabilješke za vaš slajd</li>
       <li xml:lang="ca">Permet afegir notes a les dispositives</li>
@@ -183,6 +189,7 @@
       <li xml:lang="sl">Dodajanje opomb na prosojnice</li>
       <li xml:lang="sv">Lägg till anteckningar för bilder</li>
       <li xml:lang="uk">Додавання нотаток до слайдів.</li>
+      <li xml:lang="x-test">xxAdd notes for your slidexx</li>
       <li>Supports most ODF file transitions</li>
       <li xml:lang="bs">Podržava većinu tranzicija ODF datoteka</li>
       <li xml:lang="ca">Accepta la majoria de les transicions de fitxer ODF</li>
@@ -207,6 +214,7 @@
       <li xml:lang="sl">Podprta je večina prevajanj iz ODF</li>
       <li xml:lang="sv">Stöder de flesta ODF-filövergångar</li>
       <li xml:lang="uk">Підтримка більшості переходів у файлах ODF.</li>
+      <li xml:lang="x-test">xxSupports most ODF file transitionsxx</li>
     </ul>
   </description>
   <url type="homepage">https://www.calligra.org/stage/</url>

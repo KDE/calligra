@@ -27,6 +27,7 @@
   <name xml:lang="sl">Calligra Sheets</name>
   <name xml:lang="sv">Calligra Sheets</name>
   <name xml:lang="uk">Calligra Sheets</name>
+  <name xml:lang="x-test">xxCalligra Sheetsxx</name>
   <name xml:lang="zh-CN">Calligra Sheets</name>
   <summary>Spreadsheet</summary>
   <summary xml:lang="bs">Tablica</summary>
@@ -54,6 +55,7 @@
   <summary xml:lang="sl">Preglednica</summary>
   <summary xml:lang="sv">Kalkylark</summary>
   <summary xml:lang="uk">Електронні таблиці</summary>
+  <summary xml:lang="x-test">xxSpreadsheetxx</summary>
   <summary xml:lang="zh-CN">电子表格</summary>
   <description>
     <p>
@@ -82,6 +84,7 @@
     <p xml:lang="sl">Calligra Sheets je orodje z mnogo možnostmi izračuna in urejanja preglednic. Uporabno je za hitro ustvarjanje in izračun različnih poslovnih preglednic, kot so kot prihodki in odhodki, delovni čas zaposlenih itd.</p>
     <p xml:lang="sv">Calligra Sheets är ett fullfjädrat beräknings- och kalkylarksverktyg. Använd det för att snabbt skapa och beräkna diverse affärsrelaterade kalkylark, såsom inkomster och utgifter, anställdas arbetstimmar, etc.</p>
     <p xml:lang="uk">Calligra Sheets — повноцінне середовище для обчислень та роботи з електронними таблицями. Програмою можна скористатися для швидкого створення та обчислень на різноманітних пов’язаних із бізнесом електронних таблицях, зокрема вхідних та вихідних рахунках, табелів робочого часу тощо.</p>
+    <p xml:lang="x-test">xxCalligra Sheets is a fully-featured calculation and spreadsheet tool. Use it to quickly create and calculate various business-related spreadsheets, such as income and expenditure, employee working hours, etc.xx</p>
     <p>Features:</p>
     <p xml:lang="bs">Svojstva:</p>
     <p xml:lang="ca">Característiques:</p>
@@ -109,6 +112,7 @@
     <p xml:lang="sl">Možnosti:</p>
     <p xml:lang="sv">Funktioner:</p>
     <p xml:lang="uk">Можливості:</p>
+    <p xml:lang="x-test">xxFeatures:xx</p>
     <p xml:lang="zh-CN">功能：</p>
     <ul>
       <li>Use shapes to take notes or mind maps</li>
@@ -136,6 +140,7 @@
       <li xml:lang="sl">Uporablja oblike za zbiranje opomb ali miselnih vzorcev</li>
       <li xml:lang="sv">Använd former för att göra anteckningar eller tankekartor</li>
       <li xml:lang="uk">Використання форм для зберігання нотаток або записів на пам’ять.</li>
+      <li xml:lang="x-test">xxUse shapes to take notes or mind mapsxx</li>
       <li xml:lang="zh-CN">使用图形来做笔记或脑图</li>
       <li>Large range of pre-defined templates</li>
       <li xml:lang="bs">Širok opseg predefinisanih predložaka</li>
@@ -161,6 +166,7 @@
       <li xml:lang="sl">Velik nabor vnaprej določenih predlog</li>
       <li xml:lang="sv">Stort antal fördefinierade mallar</li>
       <li xml:lang="uk">Широкий діапазон попередньо визначених шаблонів.</li>
+      <li xml:lang="x-test">xxLarge range of pre-defined templatesxx</li>
       <li xml:lang="zh-CN">大范围的预定义的模板</li>
       <li>Powerful and comprehensive formula list</li>
       <li xml:lang="bs">Moćna i kompaktna lista formula</li>
@@ -186,6 +192,7 @@
       <li xml:lang="sl">Zmogljiv in široko obsegajoč seznam formul</li>
       <li xml:lang="sv">Kraftfull och omfattande formellista</li>
       <li xml:lang="uk">Потужний і повний список функцій.</li>
+      <li xml:lang="x-test">xxPowerful and comprehensive formula listxx</li>
       <li xml:lang="zh-CN">强大的和全面的公式列表</li>
       <li>Work in a familiar environment</li>
       <li xml:lang="bs">Rad u poznatom okruženju</li>
@@ -211,6 +218,7 @@
       <li xml:lang="sl">Delo v že znanem okolju</li>
       <li xml:lang="sv">Arbeta i en välbekant omgivning</li>
       <li xml:lang="uk">Робота у знайомому середовищі.</li>
+      <li xml:lang="x-test">xxWork in a familiar environmentxx</li>
       <li xml:lang="zh-CN">在熟悉的环境中工作</li>
     </ul>
   </description>
