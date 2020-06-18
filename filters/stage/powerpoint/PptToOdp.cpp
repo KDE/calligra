@@ -3485,7 +3485,7 @@ void PptToOdp::processDeclaration(KoXmlWriter* xmlWriter)
 #if 0
             QString headerText = QString::fromLatin1(headerAtom->header, headerAtom->header.size());
             QString hdrName = findDeclaration(Header, headerText);
-            if (hdrName == 0 ) {
+            if (hdrName.isEmpty() ) {
                 hdrName = QString("hdr%1").arg(declaration.values(Header).count() + 1);
                 insertDeclaration(Header, hdrName, headerText);
             }
@@ -3495,7 +3495,7 @@ void PptToOdp::processDeclaration(KoXmlWriter* xmlWriter)
         if (headerFooterAtom && headerFooterAtom->fHasFooter && footerAtom) {
             QString footerText = QString::fromUtf16(footerAtom->footer.data(), footerAtom->footer.size());
             QString ftrName = findDeclaration(Footer, footerText);
-            if ( ftrName == 0) {
+            if ( ftrName.isEmpty() ) {
                 ftrName = QString("ftr%1").arg((declaration.values(Footer).count() + 1));
                 insertDeclaration(Footer, ftrName, footerText);
             }
@@ -3505,7 +3505,7 @@ void PptToOdp::processDeclaration(KoXmlWriter* xmlWriter)
             if(headerFooterAtom->fHasUserDate && userDateAtom) {
                 QString userDate = QString::fromUtf16(userDateAtom->userDate.data(), userDateAtom->userDate.size());
                 QString dtdName = findDeclaration(DateTime, userDate);
-                if ( dtdName == 0) {
+                if ( dtdName.isEmpty() ) {
                     dtdName = QString("dtd%1").arg((declaration.values(DateTime).count() + 1));
                     insertDeclaration(DateTime, dtdName, userDate);
                 }
@@ -3513,7 +3513,7 @@ void PptToOdp::processDeclaration(KoXmlWriter* xmlWriter)
             }
             if(headerFooterAtom->fHasTodayDate) {
                 QString dtdName = findDeclaration(DateTime, "");
-                if ( dtdName == 0) {
+                if ( dtdName.isEmpty() ) {
                     dtdName = QString("dtd%1").arg((declaration.values(DateTime).count() + 1));
                     insertDeclaration(DateTime, dtdName, "");
                 }
@@ -3568,7 +3568,7 @@ QString PptToOdp::findDeclaration(DeclarationType type, const QString &text) con
             return item.first;
         }
     }
-    return 0;
+    return QString();
 }
 
 QString PptToOdp::findNotesDeclaration(DeclarationType type, const QString &text) const
@@ -3581,7 +3581,7 @@ QString PptToOdp::findNotesDeclaration(DeclarationType type, const QString &text
             return item.first;
         }
     }
-    return 0;
+    return QString();
 }
 
 void PptToOdp::insertDeclaration(DeclarationType type, const QString &name, const QString &text)
