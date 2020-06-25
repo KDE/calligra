@@ -1266,7 +1266,8 @@ void View::setActiveSheet(Sheet* sheet, bool updateSheet)
     d->selection->clear();
     d->selection->setActiveSheet(d->activeSheet);
     d->selection->setOriginSheet(d->activeSheet);
-    d->selection->initialize(QRect(newMarker, newAnchor));
+    d->selection->initialize(newAnchor);
+    d->selection->update(newMarker);
 
     d->actions->showPageOutline->blockSignals(true);
     d->actions->showPageOutline->setChecked(d->activeSheet->isShowPageOutline());
