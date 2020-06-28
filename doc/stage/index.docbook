@@ -221,15 +221,6 @@ and 2005 &Anne-Marie.Mahfouf; &Anne-Marie.Mahfouf.mail;
 
 </chapter>
 
-<appendix id="installation">
-<title>Installation</title>
-
-&install.intro.documentation;
-
-&install.compile.documentation;
-
-</appendix>
-
 &documentation.index; 
 
 </book>

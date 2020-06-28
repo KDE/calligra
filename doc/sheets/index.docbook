@@ -178,19 +178,6 @@ Carl Schwan <email>carl@carlschwan.eu</email></para>
 &underGPL;
 </chapter>
 
-<appendix id="installation">
-<title>Installation</title>
-
-<para>&sheets; is part of &kde;'s &calligra; package and uses various
-&calligra; libraries. &calligra; itself is part of &kde; and depends on the
-general &kde; libraries.</para>
-<para>For instructions on acquiring and installing &kde;, &calligra; and
-&sheets; please visit
-<ulink url="http://www.kde.org">http://www.kde.org</ulink> and
-<ulink url="http://www.calligra.org">http://www.calligra.org</ulink>.</para>
-
-</appendix>
-
 &documentation.index;
 </book>
 
