@@ -128,6 +128,10 @@ void KoFormulaTool::deactivate()
     for (const TemplateAction &templateAction : koAsConst(m_templateActions)) {
         disconnect(templateAction.action, &QAction::triggered, this, nullptr);
     }
+    if (!m_formulaShape) {
+        // activated without shape
+        return;
+    }
     disconnect(m_formulaShape->formulaData(),0,this,0);
     if (canvas()) {
         m_cursorList.append(m_formulaEditor);
