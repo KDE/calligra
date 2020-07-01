@@ -730,6 +730,21 @@ public:
     //
     //////////////////////////////////////////////////////////////////////////
 
+    /// Return the vertical 'scroll' value for save/load and restore
+    /// when sheet is set to active sheet
+    int canvasOffsetX() const;
+    /// Return the horizontal 'scroll' value for save/load and restore
+    /// when sheet is set to active sheet
+    int canvasOffsetY() const;
+
+public Q_SLOTS:
+    /// Store the vertical 'scroll' value for save/load and restore
+    /// when sheet is set to active sheet
+    void setCanvasOffsetX(int value);
+    /// Store the horizontal 'scroll' value for save/load and restore
+    /// when sheet is set to active sheet
+    void setCanvasOffsetY(int value);
+
 Q_SIGNALS:
     /**
      * Emitted, if the document size changed.

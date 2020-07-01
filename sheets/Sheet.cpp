@@ -76,7 +76,7 @@ static QString createObjectName(const QString &sheetName)
 class Q_DECL_HIDDEN Sheet::Private
 {
 public:
-    Private(Sheet* sheet) : rows(sheet) {}
+    Private(Sheet* sheet) : rows(sheet), canvasOffsetX(0), canvasOffsetY(0) {}
 
     Map* workbook;
     SheetModel *model;
@@ -117,6 +117,9 @@ public:
 
     QImage backgroundImage;
     Sheet::BackgroundImageProperties backgroundProperties;
+
+    int canvasOffsetX;
+    int canvasOffsetY;
 };
 
 
@@ -1813,6 +1816,27 @@ void Sheet::applyDatabaseFilter(const Database &database)
     cellStorage()->setDatabase(database.range(), Database());
     cellStorage()->setDatabase(database.range(), database);
     map()->addDamage(new CellDamage(this, database.range(), CellDamage::Appearance));
+}
+
+int Sheet::canvasOffsetX() const
+{
+    return d->canvasOffsetX;
+}
+
+void Sheet::setCanvasOffsetX(int value)
+{
+    d->canvasOffsetX = value;
+}
+
+int Sheet::canvasOffsetY() const
+{
+    return d->canvasOffsetY;
+}
+
+void Sheet::setCanvasOffsetY(int value)
+{
+    qInfo()<<Q_FUNC_INFO<<sheetName()<<d->canvasOffsetY<<':'<<value;
+    d->canvasOffsetY = value;
 }
 
 /**********************

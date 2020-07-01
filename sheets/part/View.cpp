@@ -1189,6 +1189,11 @@ void View::setActiveSheet(Sheet* sheet, bool updateSheet)
     }
 
     const Sheet* oldSheet = d->activeSheet;
+    if (oldSheet) {
+        disconnect(d->canvas->canvasController()->proxyObject, SIGNAL(canvasOffsetXChanged(int)), oldSheet, SLOT(setCanvasOffsetX(int)));
+        disconnect(d->canvas->canvasController()->proxyObject, SIGNAL(canvasOffsetYChanged(int)), oldSheet, SLOT(setCanvasOffsetY(int)));
+    }
+
     d->activeSheet = sheet;
 
     if (d->activeSheet == 0) {
@@ -1238,6 +1243,11 @@ void View::setActiveSheet(Sheet* sheet, bool updateSheet)
 
     // tell the resource manager of the newly active page
     d->canvas->resourceManager()->setResource(KoCanvasResourceManager::CurrentPage, QVariant(sheet->map()->indexOf(sheet) + 1));
+
+    // update scroll bars
+    d->canvas->canvasController()->setScrollBarValue(QPoint(-d->activeSheet->canvasOffsetX(), -d->activeSheet->canvasOffsetY()));
+    connect(d->canvas->canvasController()->proxyObject, SIGNAL(canvasOffsetXChanged(int)), d->activeSheet, SLOT(setCanvasOffsetX(int)));
+    connect(d->canvas->canvasController()->proxyObject, SIGNAL(canvasOffsetYChanged(int)), d->activeSheet, SLOT(setCanvasOffsetY(int)));
 
     // Always repaint the visible cells.
     d->canvas->update();
