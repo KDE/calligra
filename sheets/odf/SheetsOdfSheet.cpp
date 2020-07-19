@@ -1741,9 +1741,10 @@ void Odf::loadSheetSettings(Sheet *sheet, const KoOasisSettings::NamedMap &setti
     int cursorY = qMin(KS_rowMax, qMax(1, items.parseConfigItemInt("CursorPositionY") + 1));
     sheet->map()->loadingInfo()->setCursorPosition(sheet, QPoint(cursorX, cursorY));
 
-    double offsetX = items.parseConfigItemDouble("xOffset");
-    double offsetY = items.parseConfigItemDouble("yOffset");
-    sheet->map()->loadingInfo()->setScrollingOffset(sheet, QPointF(offsetX, offsetY));
+    int offsetX = items.parseConfigItemInt("xOffset");
+    int offsetY = items.parseConfigItemInt("yOffset");
+    sheet->setCanvasOffsetX(offsetX);
+    sheet->setCanvasOffsetY(offsetY);
 
     sheet->setShowFormulaIndicator(items.parseConfigItemBool("ShowFormulaIndicator"));
     sheet->setShowCommentIndicator(items.parseConfigItemBool("ShowCommentIndicator"));
@@ -1766,6 +1767,9 @@ void Odf::saveSheetSettings(Sheet *sheet, KoXmlWriter &settingsWriter)
     settingsWriter.addConfigItem("lcmode", sheet->getLcMode());
     settingsWriter.addConfigItem("autoCalc", sheet->isAutoCalculationEnabled());
     settingsWriter.addConfigItem("ShowColumnNumber", sheet->getShowColumnNumber());
+
+    settingsWriter.addConfigItem("xOffset", sheet->canvasOffsetX());
+    settingsWriter.addConfigItem("yOffset", sheet->canvasOffsetY());
 }
 
 QString Odf::savePageLayout(PrintSettings *settings, KoGenStyles &mainStyles, bool formulas, bool zeros)
