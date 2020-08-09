@@ -148,6 +148,7 @@ QImage KoImageData::image() const
                 d->errorCode = OpenFailed;
             }
             else if (d->errorCode == Success && !d->image.load(d->temporaryFile->fileName(), d->suffix.toLatin1())) {
+                qWarning() << "Failed to open image" << d->temporaryFile->fileName() << "with format" << d->suffix;
                 d->errorCode = OpenFailed;
             }
             d->temporaryFile->close();
@@ -316,6 +317,7 @@ void KoImageData::setImage(const QByteArray &imageData, KoImageCollection *colle
             buffer.setData(imageData);
             buffer.open(QIODevice::ReadOnly);
             d->copyToTemporary(buffer);
+            d->suffix.clear(); // let QImage find out what the data contains
         }
 
         QCryptographicHash md5(QCryptographicHash::Md5);
