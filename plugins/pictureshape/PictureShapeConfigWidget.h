@@ -44,6 +44,9 @@ public:
     bool showOnShapeSelect() override;
 
 private:
+    void slotAccept();
+
+private:
     PictureShape *m_shape;
     KFileWidget *m_fileWidget;
 };
