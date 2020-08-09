@@ -845,8 +845,12 @@ void Autocorrect::readAutocorrectXmlEntry(const QString &fname, bool onlyCustomi
       QDomNodeList nl = doubleQuote.childNodes();
       if(nl.count()==1) {
         QDomElement element = nl.item(0).toElement();
-        m_typographicDoubleQuotes.begin = element.attribute(QLatin1String("begin")).at(0);
-        m_typographicDoubleQuotes.end = element.attribute(QLatin1String("end")).at(0);
+        const QString beginStr = element.attribute(QLatin1String("begin"));
+        const QString endStr = element.attribute(QLatin1String("end"));
+        if (!beginStr.isEmpty() && !endStr.isEmpty()) {
+            m_typographicDoubleQuotes.begin = beginStr.at(0);
+            m_typographicDoubleQuotes.end = endStr.at(0);
+        }
       }
     }
 
@@ -855,8 +859,12 @@ void Autocorrect::readAutocorrectXmlEntry(const QString &fname, bool onlyCustomi
       QDomNodeList nl = singleQuote.childNodes();
       if(nl.count()==1) {
         QDomElement element = nl.item(0).toElement();
-        m_typographicSingleQuotes.begin = element.attribute(QLatin1String("begin")).at(0);
-        m_typographicSingleQuotes.end = element.attribute(QLatin1String("end")).at(0);
+        const QString beginStr = element.attribute(QLatin1String("begin"));
+        const QString endStr = element.attribute(QLatin1String("end"));
+        if (!beginStr.isEmpty() && !endStr.isEmpty()) {
+            m_typographicSingleQuotes.begin = beginStr.at(0);
+            m_typographicSingleQuotes.end = endStr.at(0);
+        }
       }
     }
 
