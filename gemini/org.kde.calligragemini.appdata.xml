@@ -15,6 +15,7 @@
   <name xml:lang="fi">Gemini</name>
   <name xml:lang="fr">Gémeaux</name>
   <name xml:lang="gl">Gemini</name>
+  <name xml:lang="ia">Gemini</name>
   <name xml:lang="id">Gemini</name>
   <name xml:lang="it">Gemini</name>
   <name xml:lang="ko">Gemini</name>
@@ -39,6 +40,7 @@
   <summary xml:lang="fi">Toimisto-ohjelmisto</summary>
   <summary xml:lang="fr">Suite bureautique</summary>
   <summary xml:lang="gl">Suite de oficina</summary>
+  <summary xml:lang="ia">Suite de Office</summary>
   <summary xml:lang="id">Suite Perkantoran</summary>
   <summary xml:lang="it">Office Suite</summary>
   <summary xml:lang="ko">오피스 도구</summary>
@@ -61,6 +63,7 @@
     <p xml:lang="fi">KDE:n toimisto-ohjelmisto hybridilaitteille.</p>
     <p xml:lang="fr">La suite bureautique de KDE pour des périphériques 2-en-1.</p>
     <p xml:lang="gl">A suite de oficina de KDE para dispositivos 2 en 1.</p>
+    <p xml:lang="ia">Le suite de office de KDE per dispositivos 2-in-1.</p>
     <p xml:lang="id">Suite Perkantoran KDE untuk perangkat 2-in-1.</p>
     <p xml:lang="it">La suite Office di KDE per i dispositivi 2-in-1.</p>
     <p xml:lang="ko">2-in-1 장치용 KDE 오피스 도구입니다.</p>
