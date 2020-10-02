@@ -69,9 +69,6 @@ class StencilBoxDocker : public QDockWidget
 
     private Q_SLOTS:
         void reapplyFilter();
-#ifdef GHNS
-        void getHotNewStuff();
-#endif
         void manageStencilsFolder();
         //void regenerateProxyMap();
         void collectionsLoaded();

@@ -37,25 +37,6 @@
 #include <QStandardPaths>
 #include <QBoxLayout>
 
-/******************************************************************************
- * KoScriptManagerCollection
- */
-
-/*
-/// \internal class that inherits \a KNewStuffSecure to implement the GHNS-functionality.
-class KoScriptManagerNewStuff : public KNewStuffSecure
-{
-    public:
-        KoScriptManagerNewStuff(KoScriptManagerCollection *collection, const QString& type, QWidget *parentWidget = 0)
-            : KNewStuffSecure(type, parentWidget)
-            , m_collection(collection) {}
-        virtual ~KoScriptManagerNewStuff() {}
-    private:
-        KoScriptManagerCollection *m_collection;
-        virtual void installResource() { m_collection->module()->installPackage(m_tarName); }
-};
-*/
-
 class KoScriptManagerView : public Kross::ActionCollectionView
 {
 public:

@@ -129,10 +129,6 @@ target_link_libraries(kowidgets
         KF5::IconThemes
 )
 
-if(GHNS)
-    target_link_libraries(kowidgets PRIVATE KF5::NewStuff)
-endif ()
-
 if(X11_FOUND)
     target_link_libraries(kowidgets PRIVATE Qt5::X11Extras ${X11_LIBRARIES})
 endif()

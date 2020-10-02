@@ -44,10 +44,6 @@
 #include <kmessagebox.h>
 #include <klineedit.h>
 
-#ifdef GHNS
-#include <knewstuff3/downloaddialog.h>
-#endif
-
 #include <QStandardPaths>
 #include <QVBoxLayout>
 #include <QListView>
@@ -75,10 +71,6 @@ StencilBoxDocker::StencilBoxDocker(QWidget* parent)
     setWidget(mainWidget);
 
     m_menu = new QMenu();
-#ifdef GHNS
-    QAction *ghnsAction = m_menu->addAction(koIcon("get-hot-new-stuff"), i18n("Stencils Online"));
-    connect(ghnsAction, SIGNAL(triggered()), this, SLOT(getHotNewStuff()));
-#endif
     QAction *installAction = m_menu->addAction(koIcon("document-open-folder"), i18n("Add/Remove Stencil"));
     connect(installAction, SIGNAL(triggered()), this, SLOT(manageStencilsFolder()));
 
@@ -150,20 +142,6 @@ void StencilBoxDocker::collectionsLoaded()
 
     loaderThread.quit();
 }
-
-#ifdef GHNS
-void StencilBoxDocker::getHotNewStuff()
-{
-    KNS3::DownloadDialog dialog("calligra_stencils.knsrc", this);
-    dialog.exec();
-    if(!dialog.installedEntries().isEmpty()) {
-        KMessageBox::information(0, i18n("Stencils successfully installed."));
-    }
-    else if(!dialog.changedEntries().isEmpty()) {
-        KMessageBox::information(0, i18n("Stencils successfully uninstalled."));
-    }
-}
-#endif
 
 void StencilBoxDocker::manageStencilsFolder()
 {

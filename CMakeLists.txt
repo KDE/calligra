@@ -117,7 +117,6 @@ endif ()
 #############
 ############
 
-option(GHNS "support Get Hot New Stuff" OFF)
 option(PACKAGERS_BUILD "Build support of multiple CPU architectures in one binary. Should be used by packagers only." ON)
 
 #######################
@@ -308,23 +307,6 @@ set_package_properties(Qt5WebKit PROPERTIES
     )
 
 set(HAVE_OPENGL ${Qt5OpenGL_FOUND})
-
-
-if (GHNS)
-    find_package(Attica 3.0)
-    find_package(NewStuff)
-    set_package_properties(Attica PROPERTIES
-	DESCRIPTION "Attica is used for Get Hot New Stuff."
-	URL "https://commits.kde.org/attica"
-	TYPE OPTIONAL
-	)
-
-    if (NOT LIBATTICA_FOUND)
-	set(GHNS FALSE)
-    else ()
-	message(STATUS "WARNING: You are compiling with Get Hot New Stuff enabled. Do not do that when building distribution packages. GHNS is unusable these days until someone starts maintaining it again.")
-    endif ()
-endif ()
 
 find_package(X11)
 if(X11_FOUND)

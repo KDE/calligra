@@ -41,12 +41,6 @@
 
 #include <klocalizedstring.h>
 
-#ifdef GHNS
-#include <attica/version.h>
-#include <knewstuff3/downloaddialog.h>
-#include <knewstuff3/uploaddialog.h>
-#endif
-
 #include <KoIcon.h>
 #include <KoFileDialog.h>
 
@@ -83,8 +77,6 @@ public:
     KoResourceItemView *view;
     QButtonGroup *buttonGroup;
     QToolButton  *viewModeButton;
-
-    QString knsrcFile;
 
     bool usePreview;
     QScrollArea *previewScroller;
@@ -250,40 +242,6 @@ void KoResourceItemChooser::slotButtonClicked(int button)
         setCurrentItem(row, column);
         activated(d->model->index(row, column));
     }
-#ifdef GHNS
-    else if (button == Button_GhnsDownload) {
-
-        KNS3::DownloadDialog dialog(d->knsrcFile, this);
-        dialog.exec();
-
-        foreach (const KNS3::Entry & e, dialog.changedEntries()) {
-
-            foreach (const QString & file, e.installedFiles()) {
-                QFileInfo fi(file);
-                d->model->importResourceFile(fi.absolutePath() + '/' + fi.fileName() , false);
-            }
-
-            foreach (const QString & file, e.uninstalledFiles()) {
-                QFileInfo fi(file);
-                d->model->removeResourceFile(fi.absolutePath() + '/' + fi.fileName());
-            }
-        }
-    } else if (button == Button_GhnsUpload) {
-
-        QModelIndex index = d->view->currentIndex();
-        if (index.isValid()) {
-
-
-            KoResource *resource = resourceFromModelIndex(index);
-            if (resource) {
-                KNS3::UploadDialog dialog(d->knsrcFile, this);
-                dialog.setUploadFile(QUrl::fromLocalFile(resource->filename()));
-                dialog.setUploadName(resource->name());
-                dialog.exec();
-            }
-        }
-    }
-#endif
     updateButtonState();
 }
 
@@ -306,21 +264,8 @@ void KoResourceItemChooser::addCustomButton(QAbstractButton *button, int cell)
 }
 void KoResourceItemChooser::showGetHotNewStuff(bool showDownload, bool showUpload)
 {
-#ifdef GHNS
-
-    QAbstractButton *button = d->buttonGroup->button(Button_GhnsDownload);
-    showDownload ? button->show() : button->hide();
-
-    // attica < 2.9 is broken for upload, so don't show the upload button. 2.9 is released as 3.0
-    // because of binary incompatibility with 2.x.
-    if (LIBATTICA_VERSION_MAJOR < 3) return;
-
-    button = d->buttonGroup->button(Button_GhnsUpload);
-    showUpload ? button->show() : button->hide();
-#else
     Q_UNUSED(showDownload);
     Q_UNUSED(showUpload);
-#endif
 }
 
 void KoResourceItemChooser::showTaggingBar(bool show)
@@ -526,7 +471,7 @@ KoResource *KoResourceItemChooser::resourceFromModelIndex(const QModelIndex &ind
 
 void KoResourceItemChooser::setKnsrcFile(const QString &knsrcFileArg)
 {
-    d->knsrcFile = knsrcFileArg;
+    Q_UNUSED(knsrcFileArg)
 }
 
 QSize KoResourceItemChooser::viewSize() const
