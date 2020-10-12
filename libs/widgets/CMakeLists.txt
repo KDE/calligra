@@ -6,9 +6,6 @@ add_subdirectory( pics )
 include_directories(${KOTEXT_INCLUDES} ${KOODF_INCLUDES} ${PIGMENT_INCLUDES})
 include_directories(${CMAKE_SOURCE_DIR}/libs/widgetutils)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
-if (LIBATTICA_FOUND)
-    include_directories(${LIBATTICA_INCLUDE_DIR})
-endif ()
 
 set(kowidgets_LIB_SRCS
     KoFontComboBox.cpp
