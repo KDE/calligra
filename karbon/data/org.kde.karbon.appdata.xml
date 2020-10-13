@@ -214,7 +214,7 @@
       <li xml:lang="bs">Sloj lučki radnik za jednostavno rukovanje složenim dokumentima , uključujući pregled sličica , podršku za grupiranje oblika putem drag and drop , kontroliranje vidljivost oblika ili zaključavanje</li>
       <li xml:lang="ca">Acoblador de capa per a una gestió senzilla de documents complexos incloent la vista prèvia de miniatures, permet agrupar formes via arrossegar i deixar anar, controlar la visibilitat de les formes o el bloqueig.</li>
       <li xml:lang="ca-valencia">Acoblador de capa per a una gestió senzilla de documents complexos incloent la vista prèvia de miniatures, permet agrupar formes via arrossegar i deixar anar, controlar la visibilitat de les formes o el bloqueig.</li>
-      <li xml:lang="el">Προσάρτηση επιπέδων για εύκολο χειρισμό περίπλοκων κειμένων με εικόνες προεπισκόπησης, υποστήριξη για ομαδοποίηση σχημάτων με έλξη και εναπόθεση, έλεγχος ορατότητας σχημάτων ή κλείδωμα</li>
+      <li xml:lang="el">Προσάρτηση επιπέδων για εύκολο χειρισμό σύνθετων κειμένων με εικόνες προεπισκόπησης, υποστήριξη για ομαδοποίηση σχημάτων με έλξη και εναπόθεση, έλεγχος ορατότητας σχημάτων ή κλείδωμα</li>
       <li xml:lang="en-GB">Layer docker for easy handling of complex documents including preview thumbnails, support for grouping shapes via drag and drop, controlling visibility of shapes or locking</li>
       <li xml:lang="es">Panel de capas para un sencillo manejo de documentos complejos, que incluye vista previa de miniaturas y agrupación de figuras mediante la operación de arrastrar y soltar, controlando la visibilidad de las figuras o su bloqueo.</li>
       <li xml:lang="et">Kihtide dokk keerukamate dokumentide hõlpsaks töötlemiseks, kaasa arvatud pisipiltide eelvaatlus, kujundite rühmitamise toetamine ainult lohistamisega, kujundite nähtavuse ja lukustamise määramine</li>
@@ -398,7 +398,7 @@
       <li xml:lang="bs">Kompleksne staze poslovanja i učinci poput Booleova postavljanje poslovanja , put ravnanje , zaokruživanje i rafiniranje kao vrtlog / za hvatanje učinci</li>
       <li xml:lang="ca">Operacions complexes de camins i efectes com operacions de conjunts booleans, aplanament de camins, arrodoniment i afinació i també efectes de gir i pessic</li>
       <li xml:lang="ca-valencia">Operacions complexes de camins i efectes com operacions de conjunts booleans, aplanament de camins, arrodoniment i afinació i també efectes de gir i pessic</li>
-      <li xml:lang="el">Περίπλοκες λειτουργίες διαδρομών και εφέ όπως πράξεις συνόλων στο δυαδικό σύστημα, εξομάλυνση διαδρομών, εφέ στρογγύλευσης και εκλέπτυνσης καθώς επίσης και στροβιλισμού/καρφώματος</li>
+      <li xml:lang="el">Σύνθετες λειτουργίες διαδρομών και εφέ όπως πράξεις συνόλων στο δυαδικό σύστημα, εξομάλυνση διαδρομών, εφέ στρογγύλευσης και εκλέπτυνσης καθώς επίσης και στροβιλισμού/καρφώματος</li>
       <li xml:lang="en-GB">Complex path operations and effects like boolean set operations, path flattening, rounding and refining as well as whirl/pinch effects</li>
       <li xml:lang="es">Operaciones de ruta complejas y efectos como operaciones booleanas con conjuntos, aplanamiento de rutas, redondeo y refinación así como también efectos de arremolinar/apretar</li>
       <li xml:lang="et">Ka keerukamad kompleksjoone operatsioonid ja efektid, näiteks tõeväärtustega operatsioonid, kompleksjoonte lamendamine, ümardamine ja täpsustamine, keerise efekt jms</li>
