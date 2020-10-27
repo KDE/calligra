@@ -35,6 +35,9 @@
 #include <QMarginsF>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QFontMetrics>
+#include <QMenu>
+#include <QPainterPath>
 
 #include <kcombobox.h>
 #include <KLocalizedString>
