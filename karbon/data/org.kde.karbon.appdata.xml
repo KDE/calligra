@@ -14,6 +14,7 @@
   <name xml:lang="en-GB">Karbon</name>
   <name xml:lang="es">Karbon</name>
   <name xml:lang="et">Karbon</name>
+  <name xml:lang="eu">Karbon</name>
   <name xml:lang="fi">Karbon</name>
   <name xml:lang="fr">Karbon</name>
   <name xml:lang="gl">Karbon</name>
@@ -43,6 +44,7 @@
   <summary xml:lang="en-GB">Scalable Graphics</summary>
   <summary xml:lang="es">Gráficos escalables</summary>
   <summary xml:lang="et">Vektorgraafika</summary>
+  <summary xml:lang="eu">Grafiko eskalagarriak</summary>
   <summary xml:lang="fi">Skaalautuva grafiikka</summary>
   <summary xml:lang="fr">Graphisme vectoriel</summary>
   <summary xml:lang="gl">Gráficos de tamaño variábel</summary>
@@ -75,6 +77,7 @@
     <p xml:lang="en-GB">Karbon is a vector drawing application with a user interface that is easy to use, highly customisable and extensible. That makes Karbon a great application for users starting to explore the world of vector graphics as well as for artists wanting to create breathtaking vector art.</p>
     <p xml:lang="es">Karbon es una aplicación de dibujo vectorial que dispone de una interfaz de usuario intuitiva, altamente personalizable y extensible. Todo ello hace que Karbon sea una gran aplicación para aquellos usuarios que empiezan a explorar el mundo de los gráficos vectoriales, así como para los artistas que desean crear impresionantes piezas de arte vectorial.</p>
     <p xml:lang="et">Karbon on vektorgraafikarakendus hõlpsasti kasutatava, äärmiselt kohandatava ja laiendatava kasutajaliidesega. See muudab Karboni imeheaks abivahendiks algajale, kes alles uudistab vektorgraafika maailma, aga ka kunstnikele, kes soovivad luua hingematvalt kaunist vektorgraafikat.</p>
+    <p xml:lang="eu">Karbon, marrazketa bektorialeko aplikazio bat da, erabiltzen erraza den erabiltzaile-interfaze bat, norbere gustura oso egokigarria, duena. Hori dela eta, Karbon bikaina da grafiko bektorialen mundua esploratzen hasitako erabiltzaileentzat, baita arte bektorial txundigarriak sortu nahi dituzten artistentzat ere.</p>
     <p xml:lang="fi">Karbon on vektorigrafiikkasovellus, jonka käyttöliittymä on helppo ja laajasti mukautettavissa ja laajennettavissa. Karbon on näin loistava sovellus vektorigrafiikan maailmaan vasta tutustuville käyttäjille samoin kuin henkeäsalpaavaa vektoritaidetta luoville taiteilijoille.</p>
     <p xml:lang="fr">Karbon est une application de dessin vectoriel avec une interface facile à utiliser, personnalisable et extensible. Cela fait de Karbon une application majeure pour les utilisateurs s'initiant au dessin vectoriel et pour les artistes voulant créer des œuvres à couper le souffle.</p>
     <p xml:lang="gl">Karbon é unha aplicación de debuxo vectorial cunha interface de usuario fácil de usar, personalizar e ampliar. Iso fai de Karbon unha gran aplicación para usuarios que comezan a explorar o mundo das imaxes vectoriais, pero tamén para artistas que queren crear impresionantes obras de arte vectoriais.</p>
@@ -101,6 +104,7 @@
     <p xml:lang="en-GB">Features:</p>
     <p xml:lang="es">Características:</p>
     <p xml:lang="et">Omadused:</p>
+    <p xml:lang="eu">Ezaugarriak:</p>
     <p xml:lang="fi">Ominaisuuksia:</p>
     <p xml:lang="fr">Fonctionnalités :</p>
     <p xml:lang="gl">Funcionalidades:</p>
@@ -132,6 +136,7 @@
       <li xml:lang="en-GB">Loading support for ODG, SVG, WPG, WMF, EPS/PS</li>
       <li xml:lang="es">Admite la carga de ODG, SVG, WPG, WMF, EPS/PS</li>
       <li xml:lang="et">ODG, SVG, WPG, WMF, EPS/PS laadimise toetamine</li>
+      <li xml:lang="eu">ODG, SVG, WPG, WMF, EPS/PS zamatzeko euskarria</li>
       <li xml:lang="fi">Lukutuki ODG-, SVG-, WPG-, WMF- ja EPS/PS-muodoista</li>
       <li xml:lang="fr">Lecture des formats ODG, SVG, WPG, WMF, EPS/PS</li>
       <li xml:lang="gl">Posibilidade de cargar ODG, SVG, WPG, WMF e EPS/PS.</li>
@@ -161,6 +166,7 @@
       <li xml:lang="en-GB">Writing support for ODG, SVG, PNG, PDF, WMF</li>
       <li xml:lang="es">Admite la escritura de ODG, SVG, PNG, PDF, WMF</li>
       <li xml:lang="et">ODG, SVG, PNG, PDF, WMF kirjutamine toetamine</li>
+      <li xml:lang="eu">ODG, SVG, PNG, PDF, WMF idazteko euskarria</li>
       <li xml:lang="fi">Kirjoitustuki ODG-, SVG-, PNG-, PDF- ja WMF-muotoihin</li>
       <li xml:lang="fr">Écriture des formats ODG, SVG, PNG, PDF, WMF</li>
       <li xml:lang="gl">Posibilidade de xerar ODG, SVG, PNG, PDF e WMF.</li>
@@ -190,6 +196,7 @@
       <li xml:lang="en-GB">Customisable user interface with freely placeable toolbars and dockers</li>
       <li xml:lang="es">Interfaz de usuario personalizable con barras de herramientas y paneles que se pueden posicionar libremente en cualquier lugar.</li>
       <li xml:lang="et">Kohandatav kasutajaliides vabalt liigutatavate tööriistaribade ja dokkidega</li>
+      <li xml:lang="eu">Norbere gustura egokigarria den erabiltzaile-interfazea, askatasunez koka daitezkeen tresna-barra eta zamaketariekin</li>
       <li xml:lang="fi">Mukautettava käyttöliittymä, jonka työkalurivit ja telakat ovat vapaasti sijoitettavissa</li>
       <li xml:lang="fr">Interface utilisateur personnalisable avec des barres d'outil librement déplaçables.</li>
       <li xml:lang="gl">Interface de usuario personalizábel con barras de ferramentas e docas que poden recolocarse libremente.</li>
@@ -350,6 +357,7 @@
       <li xml:lang="en-GB">Includes many predefined shapes including basic shapes like stars, circle/ellipse, rectangle, image</li>
       <li xml:lang="es">Incluye muchas formas predefinidas, entre otras figuras básicas como estrellas, círculos/elipses, rectángulos, imágenes</li>
       <li xml:lang="et">Hulk valmiskujundeid, sealhulgas tähed, ringid ja ellipsid, ristkülikud, pildid</li>
+      <li xml:lang="eu">Aurrez definitutako forma ugari biltzen ditu, izarra, zirkulua/elipsea, laukizuzena, irudia, gisako oinarrizko formak barne</li>
       <li xml:lang="fi">Lukuisia esimääritettyjä muotoja (perusmuodot kuten tähdet, ympyrä ja soikio, nelikulmio, kuva)</li>
       <li xml:lang="fr">Inclut de nombreuses formes prédéfinies, telles que les étoiles, cercles/ellipses, rectangles, images</li>
       <li xml:lang="gl">Inclúe moitas formas predefinidas, entre elas formas básicas como estrelas, círculos, elipses, rectángulos e imaxes.</li>

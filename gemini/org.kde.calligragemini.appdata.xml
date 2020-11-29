@@ -13,6 +13,7 @@
   <name xml:lang="en-GB">Gemini</name>
   <name xml:lang="es">Gemini</name>
   <name xml:lang="et">Gemini</name>
+  <name xml:lang="eu">Gemini</name>
   <name xml:lang="fi">Gemini</name>
   <name xml:lang="fr">Gémeaux</name>
   <name xml:lang="gl">Gemini</name>
@@ -40,6 +41,7 @@
   <summary xml:lang="en-GB">Office Suite</summary>
   <summary xml:lang="es">Suite ofimática</summary>
   <summary xml:lang="et">Kontoritöö komplekt</summary>
+  <summary xml:lang="eu">Bulegorako suitea</summary>
   <summary xml:lang="fi">Toimisto-ohjelmisto</summary>
   <summary xml:lang="fr">Suite bureautique</summary>
   <summary xml:lang="gl">Suite de oficina</summary>
@@ -182,6 +184,7 @@
       <li xml:lang="en-GB">Common Features</li>
       <li xml:lang="es">Características comunes</li>
       <li xml:lang="et">Ühised omadused</li>
+      <li xml:lang="eu">Ezaugarri komunak</li>
       <li xml:lang="fi">Yhteiset ominaisuudet</li>
       <li xml:lang="fr">Fonctionnalités communes</li>
       <li xml:lang="gl">Funcionaliaddes comúns</li>
@@ -230,6 +233,7 @@
       <li xml:lang="en-GB">Embeddable Objects</li>
       <li xml:lang="es">Objetos incrustables</li>
       <li xml:lang="et">Põimitavad objektid</li>
+      <li xml:lang="eu">Objektu txertagarriak</li>
       <li xml:lang="fi">Upotettavat oliot</li>
       <li xml:lang="fr">Objets embarquables</li>
       <li xml:lang="gl">Obxectos incrustábeis</li>
@@ -280,6 +284,7 @@
       <li xml:lang="en-GB">Standard file format</li>
       <li xml:lang="es">Formato de archivos estándar</li>
       <li xml:lang="et">Standardne failivorming</li>
+      <li xml:lang="eu">Fitxategi-formatu estandarra</li>
       <li xml:lang="fi">Vakiotiedostomuoto</li>
       <li xml:lang="fr">Format de fichier standard</li>
       <li xml:lang="gl">Formato de ficheiro estándar</li>
@@ -333,6 +338,7 @@
       <caption xml:lang="en-GB">A presentation loaded directly from DropBox, in Edit mode</caption>
       <caption xml:lang="es">Una presentación cargada directamente de DropBox, en modo de edición</caption>
       <caption xml:lang="et">Otse DropBoxist laaditud esitlus muutmisrežiimis</caption>
+      <caption xml:lang="eu">Zuzenean DropBox-etik zamatutako aurkezpen bat, «Editzatzeko» moduan</caption>
       <caption xml:lang="fi">DropBoxista suoraan muokkaustilaan ladattu esitys</caption>
       <caption xml:lang="fr">Une présentation téléchargée directement à partir de DropBox en mode « Modification »</caption>
       <caption xml:lang="gl">Unha presentación cargada directamente de DropBox, en modo de edición</caption>
@@ -359,6 +365,7 @@
       <caption xml:lang="en-GB">A text document in the traditional desktop style UI (Create mode)</caption>
       <caption xml:lang="es">Un documento de texto con la interfaz de estilo de escritorio tradicional (en modo de creación)</caption>
       <caption xml:lang="et">Tekstidokument tavapärases töölauastiilis kasutajaliideses (dokumendi loomise režiim)</caption>
+      <caption xml:lang="eu">Testu dokumentu bat mahaigaineko erabiltzaile-interfaze estilo tradizionalean («Sortzeko» modua)</caption>
       <caption xml:lang="fi">Tekstiasiakirja perinteisessä työpöytäkäyttöliittymässä (luontitila)</caption>
       <caption xml:lang="fr">Un document de texte avec une interface utilisateur d'un bureau traditionnel (Mode « Création »)</caption>
       <caption xml:lang="gl">Un documento de texto na interface de usuario tradicional de escritorio (modo de creación)</caption>
@@ -385,6 +392,7 @@
       <caption xml:lang="en-GB">A text document in Create mode with the notes panel shown</caption>
       <caption xml:lang="es">Un documento de texto en el modo de creación que muestra el panel de notas</caption>
       <caption xml:lang="et">Tekstidokument loomisrežiimis, näha on märkmete paneel</caption>
+      <caption xml:lang="eu">Testu dokumentu bat «Sortzeko» moduan, oharren panela ikusten dela</caption>
       <caption xml:lang="fi">Tekstiasiakirja luontitilassa muistiinpanopaneeli näkyvillä</caption>
       <caption xml:lang="fr">Un document de texte en mode « Création » avec l'affichage d'un panneau de notes</caption>
       <caption xml:lang="gl">Un documento de texto no modo de creación co panel de notas visíbel</caption>
