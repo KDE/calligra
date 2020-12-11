@@ -37,15 +37,10 @@
 #include <KoGenStyles.h>
 #include <KoGenStyle.h>
 
-#include <khtml_part.h>
-#include <khtmlview.h>
-#include <dom/dom_text.h>
-#include <dom/dom2_views.h>
-#include <dom/dom_doc.h>
-#include <dom/dom_element.h>
-#include <dom/dom_string.h>
-//#include <dom/html_table.h>
-//#include <dom/html_misc.h>
+#include <QDomText>
+#include <QDomDocument>
+#include <QDomElement>
+#include <QString>
 
 //using namespace Calligra::Sheets;
 
@@ -182,24 +177,18 @@ KoFilter::ConversionStatus HTMLImport::loadUrl(const QUrl &url)
 
     QStringList sheets;
     {
-        KHTMLPart html;
-        html.view()->resize(600, 530);
-        html.setAutoloadImages(false);
-        html.setJScriptEnabled(false);
-        html.setPluginsEnabled(false);
-        html.setJavaEnabled(false);
-        html.setMetaRefreshEnabled(false);
+        QDomDocument doc("mydocument");
+        QFile file(url.toLocalFile());
+        if (!file.open(QIODevice::ReadOnly))
+            return KoFilter::ConversionStatus::StorageCreationError;
+        if (!doc.setContent(&file)) {
+            file.close();
+            return KoFilter::ConversionStatus::FileNotFound;
+        }
+        file.close();
+        QDomNodeList body = doc.elementsByTagName("body");
+        QDomNode docbody = body.item(0);
 
-        QEventLoop loop;
-        connect(&html, SIGNAL(completed()), &loop, SLOT(quit()));
-        QMetaObject::invokeMethod(&html,"openUrl", Qt::QueuedConnection, Q_ARG(QUrl,url));
-        //if (!html.openUrl(url)) { warnHtml << "Failed loadUrl" << url; return KoFilter::StupidError; }
-        loop.exec(QEventLoop::ExcludeUserInputEvents);
-
-        // body
-        DOM::Document doc = html.document();
-        DOM::NodeList body = doc.getElementsByTagName("body");
-        DOM::Node docbody = body.item(0);
         if (!docbody.isNull()) {
             m_states.push(InBody);
             bodyWriter->startElement("office:spreadsheet");
@@ -209,20 +198,21 @@ KoFilter::ConversionStatus HTMLImport::loadUrl(const QUrl &url)
         }
 
         // frames
-        DOM::NodeList frameset = doc.getElementsByTagName("frameset");
-        DOM::Node frame = frameset.item(0);
+        QDomNodeList frameset = doc.elementsByTagName("frameset");
+        QDomNode frame = frameset.item(0);
+
         if (!frame.isNull()) {
             for(uint i = 0; i < frameset.length(); ++i) {
-                for (DOM::Node n = frameset.item(i).firstChild(); !n.isNull(); n = n.nextSibling()) {
-                    DOM::Element f = n;
-                    if(!f.isNull() && f.nodeName().lower() == "frame" && f.getAttribute("name").string() == "frSheet")
-                        sheets.append(f.getAttribute("src").string());
+                for (QDomNode n = frameset.item(i).firstChild(); !n.isNull(); n = n.nextSibling()) {
+                    QDomElement f = n.toElement();
+                    if(!f.isNull() && f.nodeName().toLower() == "frame" && f.attribute("name") == "frSheet")
+                        sheets.append(f.attribute("src"));
                 }
             }
         }
     }
 
-    // the KHTMLPart and DOM::Document are no more and we can call us recursivly now.
+    // the  QDOMDocument is no more and we can call us recursively now.
     if(!sheets.isEmpty()) {
         m_states.push(InFrameset);
         foreach(const QString &src, sheets) {
@@ -235,16 +225,16 @@ KoFilter::ConversionStatus HTMLImport::loadUrl(const QUrl &url)
     return KoFilter::OK;
 }
 
-void HTMLImport::parseNode(DOM::Node node)
+void HTMLImport::parseNode(QDomNode node)
 {
     KoXmlWriter* bodyWriter = m_store->bodyWriter();
     //KoXmlWriter* contentWriter = m_store->contentWriter();
 
     // check if this is a text node.
-    DOM::Text t = node;
-    if (!t.isNull()) {
+    if (node.isText()) {
+        QDomText t = node.toText();
         if(!m_states.isEmpty() && m_states.top() == InCell) {
-            const QString s = t.data().string().trimmed();
+            const QString s = t.data().trimmed();
             if(!s.isEmpty()) {
                 //debugHtml<<"TEXT tagname=" << node.nodeName() << "TEXT="<<t.data().string();
                 bodyWriter->addAttribute("office:value-type", "string");
@@ -254,7 +244,7 @@ void HTMLImport::parseNode(DOM::Node node)
         return; // no children anymore...
     }
 
-    DOM::DOMString tag = node.nodeName().lower();
+    QString tag = node.nodeName().toLower();
 
     if(tag == "table") {
         m_states.push(InTable);
@@ -279,14 +269,14 @@ void HTMLImport::parseNode(DOM::Node node)
 
     //debugHtml<<"...START nodeName="<<node.nodeName();
 
-    DOM::Element e = node;
+    QDomElement e = node.toElement();
     bool go_recursive = true;
     if (!e.isNull()) {
         //parseStyle(e); // get the CSS information
         go_recursive = parseTag(e); // get the tag information
     }
     if (go_recursive) {
-        for (DOM::Node n = node.firstChild(); !n.isNull(); n = n.nextSibling()) {
+        for (QDomNode n = node.firstChild(); !n.isNull(); n = n.nextSibling()) {
             parseNode(n);
         }
     }
@@ -299,16 +289,12 @@ void HTMLImport::parseNode(DOM::Node node)
     //debugHtml<<"...END nodeName="<<node.nodeName();
 }
 
-bool HTMLImport::parseTag(DOM::Element element)
+bool HTMLImport::parseTag(QDomElement element)
 {
-    DOM::DOMString tag = element.tagName().lower();
+    QString tag = element.tagName().toLower();
 
     // Don't handle the content of comment- or script-nodes.
-    if (element.nodeType() == DOM::Node::COMMENT_NODE || tag == "script") {
-        return false;
-    }
-
-    return true;
+    return !(element.nodeType() == QDomNode::NodeType::CommentNode || tag == "script");
 }
 
 #include <htmlimport.moc>

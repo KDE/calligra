@@ -35,15 +35,11 @@
 // class Sheet;
 // }
 
-namespace DOM
-{
-    class Node;
-    class Element;
-}
-
 class KoOdfWriteStore;
 class KoXmlWriter;
 class KoGenStyles;
+class QDomNode;
+class QDomElement;
 
 class HTMLImport : public KoFilter
 {
@@ -59,8 +55,8 @@ Q_SIGNALS:
 
 private:
     KoFilter::ConversionStatus loadUrl(const QUrl &url);
-    void parseNode(DOM::Node n);
-    bool parseTag(DOM::Element e);
+    void parseNode(QDomNode n);
+    bool parseTag(QDomElement e);
     bool createStyle();
     bool createMeta();
 private:

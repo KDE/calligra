@@ -232,13 +232,8 @@ find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED
     )
 
 find_package(KF5Activities)
-find_package(KF5KHtml)
 
 set_package_properties(KF5Activities PROPERTIES
-    TYPE OPTIONAL
-    )
-set_package_properties(KF5KHtml PROPERTIES
-    PURPOSE "Required for HTML2ODS import filter"
     TYPE OPTIONAL
     )
 
@@ -994,7 +989,6 @@ calligra_drop_product_on_bad_condition( FILTER_PDF_TO_SVG
 calligra_drop_product_on_bad_condition( FILTER_HTML_TO_ODS
     NOT_WIN "not supported on Windows"
     NOT_COCOA "not supported with Qt Cocoa"
-    KF5KHtml_FOUND "KF5KHtml devel not found"
     )
 
 calligra_drop_product_on_bad_condition( FILTER_SHEETS_TO_HTML
