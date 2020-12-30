@@ -244,7 +244,7 @@
       <li xml:lang="es">Herramienta de edición avanzada de rutas con grandes capacidades de edición en el lienzo</li>
       <li xml:lang="et">Täiustatud kompleksjoone muutmise tööriist suurepäraste otse lõuendil redigeerimise võimalustega</li>
       <li xml:lang="fi">Edistynyt polunmuokkaustyökalu, jolla on erinomaiset muokkausominaisuudet</li>
-      <li xml:lang="fr">Outil d'édition de chemin avancé avec des capacités d'édition dans les canevas performantes</li>
+      <li xml:lang="fr">Outil avancé d'édition d'emplacement avec des capacités d'édition dans les canevas performantes</li>
       <li xml:lang="gl">Ferramenta avanzada de edición de rutas cunha gran funcionalidade de edición sobre o lenzo.</li>
       <li xml:lang="id">Alat pengeditan alur tingkat-lanjut dengan kemampuan pengeditan di kanvas yang bagus</li>
       <li xml:lang="it">Strumento avanzato di modifica di tracciati con grandi capacità di modifica sul posto</li>
@@ -269,7 +269,7 @@
       <li xml:lang="es">Diversas herramientas de dibujo para crear figuras con rutas, entre las que se incluyen una herramienta de dibujo de rutas, una herramienta de pincel y una herramienta de dibujo caligráfico.</li>
       <li xml:lang="et">Mitmesugused kompleksjoontest kujundite loomise vahendid, sealhulgas kompleksjoone joonistamise tööriist, pliiatsitööriist ning kalligraafia loomise tööriist</li>
       <li xml:lang="fi">Eri piirrostyökalut polkumuotojen luontiin: polunpiirto-, kynä- ja kalligrafinen piirrostyökalu</li>
-      <li xml:lang="fr">Outils de dessin variés incluant un outil de création de chemin, un crayon ainsi qu'un outil pour la calligraphie</li>
+      <li xml:lang="fr">Outils de dessin variés incluant un outil de création d'emplacement, un crayon ainsi qu'un outil pour la calligraphie</li>
       <li xml:lang="gl">Varias ferramentas de debuxo para crear formas de rutas, incluíndo unha ferramenta de debuxo de rutas, unha ferramenta de lapis, e unha ferramenta de debuxo caligráfico.</li>
       <li xml:lang="id">Berbagai alat menggambar untuk membuat bentuk alur termasuk alat alur gambar, alat pensil serta alat menggambar kaligrafi</li>
       <li xml:lang="it">Vari strumenti di disegno per creare percorsi e forme che include uno strumento di tracciati, un matita e uno strumento calligrafico</li>
@@ -320,7 +320,7 @@
       <li xml:lang="es">Capacidades de ajuste óptimas para el dibujo y la edición guiados (por ejemplo, ajustar a la rejilla, líneas guías, nodos de ruta, cuadros delimitadores, posiciones ortogonales, intersecciones de formas de rutas o extensiones de líneas y rutas)</li>
       <li xml:lang="et">Äärmiselt tulusad haardetööriistad juhtjoonte järgi joonistamiseks ja redigeerimiseks (nt tõmme alusvõrgule, juhtjooned, kompleksjoone sõlmed, piirdekastid, kompleksjoontest kujundite lõikekohad jms)</li>
       <li xml:lang="fi">Huippulaatuinen kiinnitysominaisuus ohjattuun piirtämiseen ja muokkaukseen (esim. kiinnitys ruudukkoon, apuviivoihin, rajauslaatikkoon, kohtisuoraan asemaan, leikkaukseen, polkumuotoon tai viivojen ja polkujen jatkeisiin)</li>
-      <li xml:lang="fr">Fonctionnalités d'alignement top-niveau pour guider le dessin et l'édition (p.ex. alignement sur la grille, chemin nodal, boîtes, positions orthogonales, intersections de formes ou extensions de lignes ou de formes)</li>
+      <li xml:lang="fr">Fonctionnalités d'alignement top-niveau pour guider le dessin et l'édition (p.ex. alignement sur la grille, lignes de guidage, nœuds d'emplacement, boîtes, positions orthogonales, intersections de formes ou extensions de lignes ou de formes)</li>
       <li xml:lang="gl">Funcionalidades de axuste de última xeración para editar e debuxar de maneira guiada (por exemplo, axustar á grade, liñas de guía, nodos de rutas, caixas de límites, posicións ortogonais, cruzamento de formas de rutas ou extensións de liñas e rutas).</li>
       <li xml:lang="id">Fasilitas snapping yang berada di atas untuk menggambar dan mengedit yang dipandu (mis. Snapping ke kisi, garis pandu, simpul alur, kotak pembatas, posisi ortogonal, persimpangan bentuk lintasan atau ekstensi garis dan alur)</li>
       <li xml:lang="it">Capacità di alto livello di regolazione per disegno e modifica guidata (ad es. aggancio alla griglia, linee guida, nodi di tracciato, riquadri collegati, posizioni ortgonali, intersezioni di forme di tracciato o estensioni di linee e tracciati)</li>
@@ -397,7 +397,7 @@
       <li xml:lang="es">Operaciones de ruta complejas y efectos como operaciones booleanas con conjuntos, aplanamiento de rutas, redondeo y refinación así como también efectos de arremolinar/apretar</li>
       <li xml:lang="et">Ka keerukamad kompleksjoone operatsioonid ja efektid, näiteks tõeväärtustega operatsioonid, kompleksjoonte lamendamine, ümardamine ja täpsustamine, keerise efekt jms</li>
       <li xml:lang="fi">Monimutkaiset polku-operaatiot ja -tehosteet kuten totuusarvo-operaatiot, polun tasoitus, pyöristys ja hienosäätö sekä pyörre- ja nipistystehosteet</li>
-      <li xml:lang="fr">Opérations de chemins complexes et effets tels que les opérateurs booléens, mise à plat et ajustements, de même que les effets de spirale et de pincement</li>
+      <li xml:lang="fr">Opérations d'emplacements complexes et effets tels que les opérateurs booléens, mise à plat et ajustements, de même que les effets de spirale et de pincement.</li>
       <li xml:lang="gl">Operacións de rutas complexas e efectos como operacións de grupos de valores booleanos; aplanamento, arredondamento e refinamento de rutas; así como efectos de xiro e picada.</li>
       <li xml:lang="id">Operasi dan efek alur yang rumit seperti operasi set boolean, perataan alur, pembulatan dan pemurnian serta efek pusaran/cubitan</li>
       <li xml:lang="it">Operazioni complesse su tracciati ed effetti del tipo operazioni su insiemi booleani, appiattimento di tracciati, arrotondamento e affinamento così come effetti di vortice/pizzico</li>
