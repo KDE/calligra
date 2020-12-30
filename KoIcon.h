@@ -33,12 +33,14 @@
  *
  * The naming pattern of the macros is like this:
  * * koIcon* returns a QIcon object
+ * * koIconFallback* returns a QIcon object for given name or fallback name
  * * koIconName* returns a QLatin1String (aligned with usual API where "iconName" property is of type QString)
  * * koIconNameCStr* returns a const char*
  */
 
 /// Use these macros for icons without any issues
 #define koIcon(name) (QIcon::fromTheme(QStringLiteral(name)))
+#define koIconFallback(name, fallbackName) (QIcon::fromTheme(QStringLiteral(name), QIcon::fromTheme(QStringLiteral(fallbackName))))
 #define koIconName(name) (QStringLiteral(name))
 #define koIconNameCStr(name) (name)
 /// Use these definitions in files where needed:

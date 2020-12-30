@@ -302,7 +302,7 @@ void KPrSlidesSorterDocumentModel::doDrop(QList<KoPAPageBase *> slides, KoPAPage
             QString seq = QKeySequence(Qt::ShiftModifier).toString();
             seq.chop(1);
             QAction *popupMoveAction = new QAction(i18n("&Move Here") + '\t' + seq, this);
-            popupMoveAction->setIcon(koIcon("go-jump"));
+            popupMoveAction->setIcon(koIconFallback("edit-move", "go-jump"));
             seq = QKeySequence(Qt::ControlModifier).toString();
             seq.chop(1);
             QAction *popupCopyAction = new QAction(i18n("&Copy Here") + '\t' + seq, this);
