@@ -152,12 +152,12 @@ public:
     Private(KarbonPart *part, KarbonDocument * doc)
             : karbonPart(part), part(doc)
             , colorBar(0), closePath(0), combinePath(0)
-            , separatePath(0), reversePath(0), intersectPath(0), subtractPath(0)
-            , unitePath(0), excludePath(0), pathSnapToGrid(0), configureAction(0)
-            , deleteSelectionAction(0), clipObjects(0), unclipObjects(0)
-            , flipVertical(0), flipHorizontal(0), viewAction(0)
-            , snapGridAction(0), showPageMargins(0), showGuidesAction(0)
-            , showPaletteAction(0)
+            , separatePath(0), reversePath(0), intersectPath(0)
+            , subtractPath(0), unitePath(0), excludePath(0)
+            , pathSnapToGrid(0), configureAction(0), clipObjects(0)
+            , unclipObjects(0), flipVertical(0), flipHorizontal(0)
+            , viewAction(0), snapGridAction(0), showPageMargins(0)
+            , showGuidesAction(0), showPaletteAction(0)
             , status(0), cursorCoords(0), smallPreview(0)
     {}
 
@@ -176,7 +176,6 @@ public:
     QAction * excludePath;
     QAction * pathSnapToGrid;
     QAction * configureAction;
-    QAction * deleteSelectionAction;
     QAction * clipObjects;
     QAction * unclipObjects;
     QAction * flipVertical;
@@ -470,41 +469,6 @@ void KarbonView::selectionDuplicate()
 {
     kopaCanvas()->toolProxy()->copy();
     kopaCanvas()->toolProxy()->paste();
-}
-
-void KarbonView::editSelectAll()
-{
-    KoSelection* selection = shapeManager()->selection();
-    if (! selection) {
-        return;
-    }
-    QList<KoShape*> shapes;
-    for (int i = 0; i < kopaDocument()->pages().count(); ++i) {
-        KoShapeLayer *l = dynamic_cast<KoShapeLayer*>(kopaDocument()->pages().at(i));
-        shapes += l->shapes();
-    }
-    debugKarbonUi << "shapes.size() =" << shapes.size();
-
-    foreach(KoShape* shape, shapes) {
-        selection->select(shape);
-        shape->update();
-    }
-
-    selectionChanged();
-}
-
-void KarbonView::editDeselectAll()
-{
-    KoSelection* selection = shapeManager()->selection();
-    if (selection)
-        selection->deselectAll();
-
-    selectionChanged();
-}
-
-void KarbonView::editDeleteSelection()
-{
-    kopaCanvas()->toolProxy()->deleteSelection();
 }
 
 void KarbonView::selectionDistributeHorizontalCenter()
@@ -906,25 +870,9 @@ void KarbonView::initActions()
     if (!mainWindow())
         return;
 
-    // edit ----->
-    QAction *action = actionCollection()->addAction(KStandardAction::Cut,  "edit_cut", 0, 0);
-    new KoCutController(kopaCanvas(), action);
-    action = actionCollection()->addAction(KStandardAction::Copy,  "edit_copy", 0, 0);
-    new KoCopyController(kopaCanvas(), action);
-    action = actionCollection()->addAction(KStandardAction::Paste,  "edit_paste", 0, 0);
-    new KoPasteController(kopaCanvas(), action);
-    actionCollection()->addAction(KStandardAction::SelectAll,  "edit_select_all", this, SLOT(editSelectAll()));
-    actionCollection()->addAction(KStandardAction::Deselect,  "edit_deselect_all", this, SLOT(editDeselectAll()));
-
     QAction *actionImportGraphic  = new QAction(i18n("&Import Graphic..."), this);
     actionCollection()->addAction("file_import", actionImportGraphic);
     connect(actionImportGraphic, SIGNAL(triggered()), this, SLOT(fileImportGraphic()));
-
-    d->deleteSelectionAction  = new QAction(koIcon("edit-delete"), i18n("D&elete"), this);
-    actionCollection()->addAction("edit_delete", d->deleteSelectionAction);
-    d->deleteSelectionAction->setShortcut(QKeySequence("Del"));
-    connect(d->deleteSelectionAction, SIGNAL(triggered()), this, SLOT(editDeleteSelection()));
-    connect(kopaCanvas()->toolProxy(), SIGNAL(selectionChanged(bool)), d->deleteSelectionAction, SLOT(setEnabled(bool)));
 
     QAction *actionEditGuides = new QAction(koIcon("edit-guides"), i18n("Edit Guides"), this);
     actionCollection()->addAction("edit_guides", actionEditGuides);
@@ -974,15 +922,6 @@ void KarbonView::initActions()
     d->showPaletteAction->setToolTip(i18n("Show or hide color palette"));
     d->showPaletteAction->setChecked(true);
     connect(d->showPaletteAction, SIGNAL(triggered()), this, SLOT(showPalette()));
-
-    action = actionCollection()->action("object_group");
-    if (action) {
-        action->setShortcut(QKeySequence("Ctrl+G"));
-    }
-    action = actionCollection()->action("object_ungroup");
-    if (action) {
-        action->setShortcut(QKeySequence("Ctrl+Shift+G"));
-    }
 
     d->clipObjects  = new QAction(i18n("&Clip Object"), this);
     actionCollection()->addAction("object_clip", d->clipObjects );
