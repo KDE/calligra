@@ -84,10 +84,6 @@ public:
     KarbonPaletteBarWidget *colorBar() const;
 
 public Q_SLOTS:
-    // editing:
-    void editSelectAll();
-    void editDeselectAll();
-    void editDeleteSelection();
 
     void selectionDuplicate();
     void selectionDistributeHorizontalCenter();
