@@ -106,7 +106,7 @@ bool OkularOdtGenerator::loadDocument( const QString &fileName, QVector<Okular::
     while (!m_doc->layoutFinishedAtleastOnce()) {
         QCoreApplication::processEvents();
 
-        if (!QCoreApplication::hasPendingEvents())
+        if (!QCoreApplication::eventDispatcher()->hasPendingEvents())
             break;
     }
 

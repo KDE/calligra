@@ -244,9 +244,8 @@ void VectorShape::paint(QPainter &painter, const KoViewConverter &converter, KoS
 #ifdef VECTORSHAPE_PAINT_UNTHREADED
     bool asynchronous = false;
 #else
-    // Since the backends may use QPainter::drawText we need to make sure to only
-    // use threads if the font-backend supports that what is in most cases.
-    bool asynchronous = QFontDatabase::supportsThreadedFontRendering();
+    // Since Qt 5.0, threaded font rendering is always supported
+    bool asynchronous = true;
 #endif
 
     QImage *cache = render(converter, asynchronous, useCache);

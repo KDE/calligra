@@ -667,7 +667,7 @@ bool GNUMERICFilter::setType(const Cell& kspread_cell,
                 GnumericDate::jul2greg(val, y, m, d);
                 kDebug(30521) << "     num:" << val << ", y:" << y << ", m:" << m << ", d:" << d;
 
-                date.setYMD(y, m, d);
+                date.setDate(y, m, d);
             } else
                 date = kspread_cell.value().asDate(kspread_cell.sheet()->map()->calculationSettings());
 

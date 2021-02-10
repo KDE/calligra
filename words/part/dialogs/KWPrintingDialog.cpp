@@ -46,7 +46,7 @@ KWPrintingDialog::KWPrintingDialog(KWDocument *document, KoShapeManager *shapeMa
 
     while (! m_document->layoutFinishedAtleastOnce()) {
         QCoreApplication::processEvents();
-        if (! QCoreApplication::hasPendingEvents())
+        if (! QCoreApplication::eventDispatcher()->hasPendingEvents())
             break;
     }
     printer().setFromTo(documentFirstPage(), documentLastPage());

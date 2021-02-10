@@ -102,6 +102,15 @@ TemplatesModel::TemplatesModel(QObject* parent)
     : QAbstractListModel(parent)
     , d(new Private())
 {
+}
+
+TemplatesModel::~TemplatesModel()
+{
+    delete d;
+}
+
+QHash<int, QByteArray> TemplatesModel::roleNames() const
+{
     QHash<int, QByteArray> roles;
     roles[TitleRole] = "text";
     roles[DescriptionRole] = "description";
@@ -110,12 +119,7 @@ TemplatesModel::TemplatesModel(QObject* parent)
     roles[UrlRole] = "url";
     roles[VariantCountRole] = "variantCount";
     roles[VariantsRole] = "variants";
-    setRoleNames(roles);
-}
-
-TemplatesModel::~TemplatesModel()
-{
-    delete d;
+    return roles;
 }
 
 QVariant TemplatesModel::data(const QModelIndex& index, int role) const

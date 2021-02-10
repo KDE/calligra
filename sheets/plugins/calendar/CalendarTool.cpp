@@ -181,7 +181,7 @@ void CalendarTool::insertCalendar(const QDate &start, const QDate &end)
         //go to the next date
         //@todo isn't there a better way, like current++ or something??
         QDate next = current.addDays(1);
-        current.setYMD(next.year(), next.month(), next.day());
+        current.setDate(next.year(), next.month(), next.day());
         col += 2;
     }
     sheet->doc()->endMacro();

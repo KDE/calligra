@@ -22,7 +22,6 @@ Boston, MA 02110-1301, USA.
 #include "KoDocumentEntry.h"
 #include "KoFilterEntry.h"
 #include "KoDocument.h"
-#include <KoConfig.h> // CALLIGRA_OLD_PLUGIN_METADATA
 
 #include "PriorityQueue_p.h"
 #include "KoFilterEdge.h"
@@ -121,11 +120,7 @@ void Graph::buildGraph()
     foreach(const KoDocumentEntry& part, parts) {
 
         QJsonObject metaData = part.metaData();
-#ifdef CALLIGRA_OLD_PLUGIN_METADATA
-        QStringList nativeMimeTypes = metaData.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
-#else
         QStringList nativeMimeTypes = metaData.value("X-KDE-ExtraNativeMimeTypes").toVariant().toStringList();
-#endif
         nativeMimeTypes += metaData.value("X-KDE-NativeMimeType").toString();
 
         foreach(const QString& nativeMimeType, nativeMimeTypes) {
@@ -213,11 +208,7 @@ QByteArray Graph::findCalligraPart() const
     // Be sure that v gets initialized correctly
     while (!v && partIt != partEnd) {
         QJsonObject metaData = (*partIt).metaData();
-#ifdef CALLIGRA_OLD_PLUGIN_METADATA
-        QStringList nativeMimeTypes = metaData.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
-#else
         QStringList nativeMimeTypes = metaData.value("X-KDE-ExtraNativeMimeTypes").toVariant().toStringList();
-#endif
         nativeMimeTypes += metaData.value("X-KDE-NativeMimeType").toString();
         QStringList::ConstIterator it = nativeMimeTypes.constBegin();
         QStringList::ConstIterator end = nativeMimeTypes.constEnd();
@@ -232,11 +223,7 @@ QByteArray Graph::findCalligraPart() const
     // Now we try to find the "cheapest" Calligra vertex
     while (partIt != partEnd) {
         QJsonObject metaData = (*partIt).metaData();
-#ifdef CALLIGRA_OLD_PLUGIN_METADATA
-        QStringList nativeMimeTypes = metaData.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
-#else
         QStringList nativeMimeTypes = metaData.value("X-KDE-ExtraNativeMimeTypes").toVariant().toStringList();
-#endif
         nativeMimeTypes += metaData.value("X-KDE-NativeMimeType").toString();
         QStringList::ConstIterator it = nativeMimeTypes.constBegin();
         QStringList::ConstIterator end = nativeMimeTypes.constEnd();

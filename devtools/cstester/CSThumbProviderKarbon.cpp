@@ -32,7 +32,7 @@
 void processEvents()
 {
     int i = 100;
-    while (QCoreApplication::hasPendingEvents() && i > 0) {
+    while (QCoreApplication::eventDispatcher()->hasPendingEvents() && i > 0) {
         --i;
         QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
     }

@@ -516,6 +516,7 @@ void SvgOutputDev::drawImage(GfxState *state, Object *ref, Stream *str,
                              bool interpolate, const int *maskColors, bool inlineImg)
 #endif
 {
+    Q_UNUSED(ref)
     Q_UNUSED(interpolate)
     Q_UNUSED(inlineImg)
     ImageStream * imgStr = new ImageStream(str, width, colorMap->getNumPixelComps(), colorMap->getBits());

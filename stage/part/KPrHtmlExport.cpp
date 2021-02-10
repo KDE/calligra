@@ -161,7 +161,7 @@ void KPrHtmlExport::moveResult(KJob *job)
         if(m_parameters.openBrowser){
             QUrl url = m_parameters.destination;
             url.setPath(url.path() + QLatin1String("/index.html"));
-            KRun::runUrl(url, "text/html", m_parameters.kprView);
+            KRun::runUrl(url, "text/html", m_parameters.kprView, KRun::RunFlags());
         }
     }
 }

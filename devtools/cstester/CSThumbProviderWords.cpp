@@ -58,7 +58,7 @@ QVector<QImage> CSThumbProviderWords::createThumbnails(const QSize &thumbSize)
     while (!m_doc->layoutFinishedAtleastOnce()) {
         QCoreApplication::processEvents();
 
-        if (!QCoreApplication::hasPendingEvents())
+        if (!QCoreApplication::eventDispatcher()->hasPendingEvents())
             break;
     }
 

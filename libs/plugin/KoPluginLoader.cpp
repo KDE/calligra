@@ -21,8 +21,6 @@
 
 #include "KoPluginLoader.h"
 
-#include <KoConfig.h> // CALLIGRA_OLD_PLUGIN_METADATA
-
 #include <KConfig>
 #include <KSharedConfig>
 #include <KConfigGroup>
@@ -188,14 +186,9 @@ QList<QPluginLoader *> KoPluginLoader::pluginLoaders(const QString &directory, c
         }
 
         if (!mimeType.isEmpty()) {
-#ifdef CALLIGRA_OLD_PLUGIN_METADATA
-            QStringList mimeTypes = metaData.value("MimeType").toString().split(';');
-            mimeTypes += metaData.value("X-KDE-ExtraNativeMimeTypes").toString().split(QLatin1Char(','));
-#else
             QJsonObject pluginData = metaData.value("KPlugin").toObject();
             QStringList mimeTypes = pluginData.value("MimeTypes").toVariant().toStringList();
             mimeTypes += metaData.value("X-KDE-ExtraNativeMimeTypes").toVariant().toStringList();
-#endif
             mimeTypes += metaData.value("X-KDE-NativeMimeType").toString();
             if (! mimeTypes.contains(mimeType)) {
                 return;

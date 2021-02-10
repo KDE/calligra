@@ -199,7 +199,7 @@ include(MacroEnsureVersion)
 include(MacroDesktopToJson)
 
 
-set(REQUIRED_KF5_VERSION "5.7.0")
+set(REQUIRED_KF5_VERSION "5.30.0")
 
 find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED
     COMPONENTS
@@ -241,12 +241,7 @@ if(KF5Activities_FOUND)
     set(HAVE_KACTIVITIES TRUE)
 endif()
 
-if(${KF5_VERSION} VERSION_LESS "5.16.0")
-    set(CALLIGRA_OLD_PLUGIN_METADATA TRUE)
-endif()
-
-
-set(REQUIRED_QT_VERSION "5.3.0")
+set(REQUIRED_QT_VERSION "5.6.0")
 
 find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED
     COMPONENTS
@@ -267,11 +262,6 @@ find_package(Qt5 ${REQUIRED_QT_VERSION} QUIET
     QuickWidgets
     Sql
 )
-
-# Qt5Declarative was removed in Qt 5.6.0 so search for it in a separate call
-# Including it in a collected find_package(Qt5 ...) call can lead to a fatal not-found error:
-# * Qt5 (required version >= 5.3.0)
-find_package(Qt5Declarative ${REQUIRED_QT_VERSION} QUIET)
 
 set_package_properties(Qt5DBus PROPERTIES
     TYPE RECOMMENDED

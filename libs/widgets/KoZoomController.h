@@ -72,7 +72,7 @@ public:
     KoZoomController(KoCanvasController *controller,
                      KoZoomHandler *zoomHandler,
                      KActionCollection *actionCollection,
-                     KoZoomAction::SpecialButtons specialButtons = nullptr,
+                     KoZoomAction::SpecialButtons specialButtons = KoZoomAction::SpecialButtons(),
                      QObject *parent = nullptr);
 
     /**
@@ -95,7 +95,7 @@ public:
                      KoZoomHandler *zoomHandler,
                      KActionCollection *actionCollection,
                      bool createZoomShortcuts,
-                     KoZoomAction::SpecialButtons specialButtons = nullptr,
+                     KoZoomAction::SpecialButtons specialButtons = KoZoomAction::SpecialButtons(),
                      QObject *parent = nullptr);
 
     /// destructor

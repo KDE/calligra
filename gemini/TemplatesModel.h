@@ -39,6 +39,7 @@ public:
     explicit TemplatesModel(QObject* parent = 0);
     ~TemplatesModel() override;
 
+    QHash<int, QByteArray> roleNames() const override;
     QVariant data(const QModelIndex& index, int role) const override;
     int rowCount(const QModelIndex& parent) const override;
 

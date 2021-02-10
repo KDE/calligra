@@ -48,18 +48,22 @@ TemplateVariantsModel::TemplateVariantsModel(QObject* parent)
     : QAbstractListModel(parent)
     , d(new Private())
 {
+}
+
+TemplateVariantsModel::~TemplateVariantsModel()
+{
+    delete d;
+}
+
+QHash<int, QByteArray> TemplateVariantsModel::roleNames() const
+{
     QHash<int, QByteArray> roles;
     roles[NameRole] = "text";
     roles[ColorRole] = "color";
     roles[ThumbnailRole] = "thumbnail";
     roles[SwatchRole] = "swatch";
     roles[UrlRole] = "url";
-    setRoleNames(roles);
-}
-
-TemplateVariantsModel::~TemplateVariantsModel()
-{
-    delete d;
+    return roles;
 }
 
 QVariant TemplateVariantsModel::data(const QModelIndex& index, int role) const

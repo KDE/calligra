@@ -46,7 +46,7 @@ CalendarToolWidget::CalendarToolWidget(QWidget* parent)
     //we start with a default calendar for the current month;
 
     QDate first_day_in_month = QDate::currentDate();
-    first_day_in_month.setYMD(first_day_in_month.year(), first_day_in_month.month(), 1);
+    first_day_in_month.setDate(first_day_in_month.year(), first_day_in_month.month(), 1);
 
     QDate last_day_in_month(first_day_in_month.year(), first_day_in_month.month(), first_day_in_month.daysInMonth());
 

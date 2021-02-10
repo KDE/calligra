@@ -201,13 +201,13 @@ void KoInlineNote::paint(QPainter &painter, QPaintDevice *pd, const QTextDocumen
     QFont font(format.font(), pd);
     QTextLayout layout(d->label, font, pd);
     layout.setCacheEnabled(true);
-    QList<QTextLayout::FormatRange> layouts;
+    QVector<QTextLayout::FormatRange> layouts;
     QTextLayout::FormatRange range;
     range.start = 0;
     range.length = d->label.length();
     range.format = format;
     layouts.append(range);
-    layout.setAdditionalFormats(layouts);
+    layout.setFormats(layouts);
 
     QTextOption option(Qt::AlignLeft | Qt::AlignAbsolute);
     option.setTextDirection(object.textDirection());

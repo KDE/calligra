@@ -403,14 +403,14 @@ void KoTextLayoutArea::drawListItem(QPainter *painter, QTextBlock &block)
 
             QTextLayout layout(result, font, d->documentLayout->paintDevice());
 
-            QList<QTextLayout::FormatRange> layouts;
+            QVector<QTextLayout::FormatRange> layouts;
             QTextLayout::FormatRange format;
             format.start = 0;
             format.length = blockData.counterText().length();
             format.format = blockData.labelFormat();
 
             layouts.append(format);
-            layout.setAdditionalFormats(layouts);
+            layout.setFormats(layouts);
 
             Qt::Alignment alignment = static_cast<Qt::Alignment>(listFormat.intProperty(KoListStyle::Alignment));
 

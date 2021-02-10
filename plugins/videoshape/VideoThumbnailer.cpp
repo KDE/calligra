@@ -112,7 +112,7 @@ bool VideoThumbnailer::isFrameInteresting(const QImage &frame)
     //taken from mplayerthumbs
     uint delta=0;
     uint avg=0;
-    uint bytes=frame.numBytes();
+    uint bytes=frame.byteCount();
     uint STEPS=bytes/2;
     QVarLengthArray<uchar> pivot(STEPS);
 

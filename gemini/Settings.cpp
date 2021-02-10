@@ -80,7 +80,8 @@ void Settings::setCurrentFile(const QString& fileName)
     else if (fileName != d->currentFile) {
         QUrl url(fileName);
         if(url.scheme() == "newfile") {
-            d->currentFileClass = url.queryItemValue("mimetype");
+            QUrlQuery query(url.query());
+            d->currentFileClass = query.queryItemValue("mimetype");
         }
         else {
             QMimeDatabase db;

@@ -61,7 +61,9 @@ public:
 
     void classBegin() override;
     void componentComplete() override;
-
+    
+    
+    QHash<int, QByteArray> roleNames() const override;
     QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 

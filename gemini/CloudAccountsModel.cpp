@@ -133,18 +133,22 @@ CloudAccountsModel::CloudAccountsModel(QObject* parent)
     : QAbstractListModel(parent)
     , d(new Private(this))
 {
+}
+
+CloudAccountsModel::~CloudAccountsModel()
+{
+    delete d;
+}
+
+QHash<int, QByteArray> CloudAccountsModel::roleNames() const
+{
     QHash<int, QByteArray> roles;
     roles[TextRole] = "text";
     roles[SelectedRole] = "selected";
     roles[AccountTypeRole] = "accountType";
     roles[StackComponentRole] = "stackComponent";
     roles[AccountDetailsRole] = "accountDetails";
-    setRoleNames(roles);
-}
-
-CloudAccountsModel::~CloudAccountsModel()
-{
-    delete d;
+    return roles;
 }
 
 QVariant CloudAccountsModel::data(const QModelIndex& index, int role) const

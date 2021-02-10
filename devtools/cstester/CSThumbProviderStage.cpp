@@ -28,6 +28,7 @@
 
 #include <QApplication>
 #include <QEventLoop>
+#include <QAbstractEventDispatcher>
 
 CSThumbProviderStage::CSThumbProviderStage(KoPADocument *doc)
 : m_doc(doc)
@@ -42,7 +43,7 @@ QVector<QImage> CSThumbProviderStage::createThumbnails(const QSize &thumbSize)
 {
     // make sure all is rendered before painting
     int i = 100;
-    while (QCoreApplication::hasPendingEvents() && i > 0) {
+    while (QCoreApplication::eventDispatcher()->hasPendingEvents() && i > 0) {
         --i;
         QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
     }
@@ -54,7 +55,7 @@ QVector<QImage> CSThumbProviderStage::createThumbnails(const QSize &thumbSize)
 
     // make sure there are no events this fixes a crash on shutdown
     i = 100;
-    while (QCoreApplication::hasPendingEvents() && i > 0) {
+    while (QCoreApplication::eventDispatcher()->hasPendingEvents() && i > 0) {
         --i;
         QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
     }

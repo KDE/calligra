@@ -50,6 +50,3 @@
 
 /* Defines if we use KActivities */
 #cmakedefine HAVE_KACTIVITIES 1
-
-/* Defines if the old plugin metadata for mimetypes is used */
-#cmakedefine CALLIGRA_OLD_PLUGIN_METADATA 1

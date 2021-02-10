@@ -89,18 +89,6 @@ DocumentListModel::DocumentListModel(QObject *parent)
 {
     qRegisterMetaType<DocumentInfo>();
 
-    QHash<int, QByteArray> roleNames = QAbstractListModel::roleNames();
-    roleNames[FileNameRole] = "fileName";
-    roleNames[FilePathRole] = "filePath";
-    roleNames[DocTypeRole] = "docType";
-    roleNames[SectionCategoryRole] = "sectionCategory";
-    roleNames[FileSizeRole] = "fileSize";
-    roleNames[AuthorNameRole] = "authorName";
-    roleNames[AccessedTimeRole] = "accessedTime";
-    roleNames[ModifiedTimeRole] = "modifiedTime";
-    roleNames[UUIDRole] = "uuid";
-    setRoleNames(roleNames);
-
     m_docTypes["odt"] = TextDocumentType;
     m_docTypes["doc"] = TextDocumentType;
     m_docTypes["docx"] = TextDocumentType;
@@ -115,6 +103,21 @@ DocumentListModel::DocumentListModel(QObject *parent)
 DocumentListModel::~DocumentListModel()
 {
     stopSearch();
+}
+
+QHash<int, QByteArray> DocumentListModel::roleNames() const
+{
+    QHash<int, QByteArray> roleNames = QAbstractListModel::roleNames();
+    roleNames[FileNameRole] = "fileName";
+    roleNames[FilePathRole] = "filePath";
+    roleNames[DocTypeRole] = "docType";
+    roleNames[SectionCategoryRole] = "sectionCategory";
+    roleNames[FileSizeRole] = "fileSize";
+    roleNames[AuthorNameRole] = "authorName";
+    roleNames[AccessedTimeRole] = "accessedTime";
+    roleNames[ModifiedTimeRole] = "modifiedTime";
+    roleNames[UUIDRole] = "uuid";
+    return roleNames;
 }
 
 void DocumentListModel::startSearch()
@@ -268,7 +271,8 @@ void DocumentListModel::setFilter(DocumentListModel::DocumentType newFilter)
 
 void DocumentListModel::componentComplete()
 {
-    reset();
+    beginResetModel();
+    endResetModel();
     startSearch();
 }
 

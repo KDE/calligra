@@ -912,7 +912,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         }
 
     } else {
-        option.setFlags(0);
+        option.setFlags(QTextOption::Flags());
         option.setTextDirection(Qt::LeftToRight);
     }
 
@@ -926,8 +926,8 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     if (cursor->lineTextStart == -1) {
         // first remove any drop-caps related formatting that's already there in the layout.
         // we'll do it all afresh now.
-        QList<QTextLayout::FormatRange> formatRanges = layout->additionalFormats();
-        for (QList< QTextLayout::FormatRange >::Iterator iter = formatRanges.begin();
+        QVector<QTextLayout::FormatRange> formatRanges = layout->formats();
+        for (QVector< QTextLayout::FormatRange >::Iterator iter = formatRanges.begin();
                 iter != formatRanges.end(); ) {
             if (iter->format.boolProperty(DropCapsAdditionalFormattingId)) {
                 iter = formatRanges.erase(iter);
@@ -935,8 +935,8 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                 ++iter;
             }
         }
-        if (formatRanges.count() != layout->additionalFormats().count())
-            layout->setAdditionalFormats(formatRanges);
+        if (formatRanges.count() != layout->formats().count())
+            layout->setFormats(formatRanges);
         bool dropCaps = pStyle.dropCaps();
         int dropCapsLength = pStyle.dropCapsLength();
         int dropCapsLines = pStyle.dropCapsLines();
@@ -1027,7 +1027,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
                 dropCapsFormatRange.start = 0;
                 dropCapsFormatRange.length = dropCapsLength;
                 formatRanges.append(dropCapsFormatRange);
-                layout->setAdditionalFormats(formatRanges);
+                layout->setFormats(formatRanges);
 
                 d->dropCapsNChars = dropCapsLength;
                 dropCapsAffectsNMoreLines = (d->dropCapsNChars > 0) ? dropCapsLines : 0;

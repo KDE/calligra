@@ -319,7 +319,7 @@ public:
         m_job = KIO::file_copy(m_url, destURL, 0600, flags);
 #ifndef QT_NO_DBUS
         KJobWidgets::setWindow(m_job, 0);
-        if (m_job->ui()) {
+        if (m_job->uiDelegate()) {
             KJobWidgets::setWindow(m_job, parentPart->currentMainwindow());
         }
 #endif
@@ -1673,8 +1673,7 @@ bool KoDocument::oldLoadAndParse(KoStore *store, const QString& filename, KoXmlD
         << " Error message: " << errorMsg << endl;
         d->lastErrorMessage = i18n("Parsing error in %1 at line %2, column %3\nError message: %4"
                                    , filename  , errorLine, errorColumn ,
-                                   QCoreApplication::translate("QXml", errorMsg.toUtf8(), 0,
-                                                               QCoreApplication::UnicodeUTF8));
+                                   QCoreApplication::translate("QXml", errorMsg.toUtf8(), 0));
         return false;
     }
     debugMain << "File" << filename << " loaded and parsed";

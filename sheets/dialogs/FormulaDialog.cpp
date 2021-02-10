@@ -92,7 +92,7 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
     QGridLayout *grid1 = new QGridLayout(page);
 
     searchFunct = new KLineEdit(page);
-    searchFunct->setClearButtonShown(true);
+    searchFunct->setClearButtonEnabled(true);
     searchFunct->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed));
 
     grid1->addWidget(searchFunct, 0, 0);

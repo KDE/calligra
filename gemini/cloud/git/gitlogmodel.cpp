@@ -57,6 +57,15 @@ GitLogModel::GitLogModel(QObject* parent)
     : QAbstractListModel(parent)
     , d(new Private)
 {
+}
+
+GitLogModel::~GitLogModel()
+{
+    delete d;
+}
+
+QHash<int, QByteArray> GitLogModel::roleNames() const
+{
     QHash<int, QByteArray> roleNames;
     roleNames[AuthorNameRole] = "authorName";
     roleNames[AuthorEmailRole] = "authorEmail";
@@ -64,12 +73,7 @@ GitLogModel::GitLogModel(QObject* parent)
     roleNames[OIDRole] = "oid";
     roleNames[ShortMessageRole] = "shortMessage";
     roleNames[MessageRole] = "message";
-    setRoleNames(roleNames);
-}
-
-GitLogModel::~GitLogModel()
-{
-    delete d;
+    return roleNames;
 }
 
 int GitLogModel::rowCount(const QModelIndex &parent) const
@@ -159,8 +163,8 @@ void GitLogModel::refreshLog()
         git_time_t time = git_commit_time(commit);
         entry->time = QDateTime::fromMSecsSinceEpoch(time * 1000);
 
-        entry->oid = QString::fromAscii(git_oid_tostr_s(git_commit_id(commit)));
-        entry->message = QString::fromAscii(git_commit_message(commit));
+        entry->oid = QString::fromLatin1(git_oid_tostr_s(git_commit_id(commit)));
+        entry->message = QString::fromLatin1(git_commit_message(commit));
         entry->shortMessage = entry->message.left(120).split(QRegExp("(\\r|\\n)")).first();
 
         d->entries.append(entry);

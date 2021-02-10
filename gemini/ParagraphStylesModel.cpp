@@ -62,6 +62,16 @@ public:
 ParagraphStylesModel::ParagraphStylesModel()
     : d(new Private(this))
 {
+}
+
+ParagraphStylesModel::~ParagraphStylesModel()
+{
+    delete d;
+}
+
+
+QHash<int, QByteArray> ParagraphStylesModel::roleNames() const
+{
     QHash<int,QByteArray> roleNames;
     roleNames[Name] = "name";
     roleNames[Current] = "current";
@@ -71,12 +81,7 @@ ParagraphStylesModel::ParagraphStylesModel()
     roleNames[FontWeight] = "fontWeight";
     roleNames[FontItalic] = "fontItalic";
     roleNames[FontUnderline] = "fontUnderline";
-    setRoleNames(roleNames);
-}
-
-ParagraphStylesModel::~ParagraphStylesModel()
-{
-    delete d;
+    return roleNames;
 }
 
 QVariant ParagraphStylesModel::data(const QModelIndex& index, int role) const

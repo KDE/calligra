@@ -110,13 +110,13 @@ bool KoTextLayoutNoteArea::layout(FrameIterator *cursor)
     }
     QFont font(format.font(), pd);
     d->textLayout = new QTextLayout(label, font, pd);
-    QList<QTextLayout::FormatRange> layouts;
+    QVector<QTextLayout::FormatRange> layouts;
     QTextLayout::FormatRange range;
     range.start = 0;
     range.length = label.length();
     range.format = format;
     layouts.append(range);
-    d->textLayout->setAdditionalFormats(layouts);
+    d->textLayout->setFormats(layouts);
 
     QTextOption option(Qt::AlignLeft | Qt::AlignAbsolute);
     d->textLayout->setTextOption(option);
@@ -148,13 +148,13 @@ bool KoTextLayoutNoteArea::layout(FrameIterator *cursor)
         QString contNote = notesConfig->footnoteContinuationForward();
         font.setBold(true);
         d->postLayout = new QTextLayout(contNote, font, pd);
-        QList<QTextLayout::FormatRange> contTextLayouts;
+        QVector<QTextLayout::FormatRange> contTextLayouts;
         QTextLayout::FormatRange contTextRange;
         contTextRange.start = 0;
         contTextRange.length = contNote.length();
         contTextRange.format = block.charFormat();;
         contTextLayouts.append(contTextRange);
-        d->postLayout->setAdditionalFormats(contTextLayouts);
+        d->postLayout->setFormats(contTextLayouts);
 
         QTextOption contTextOption(Qt::AlignLeft | Qt::AlignAbsolute);
         //option.setTextDirection();

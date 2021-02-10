@@ -101,7 +101,7 @@ bool NetAccess::download(const QUrl &u, QString &target, QWidget *window)
                 lastErrorMsg = new QString;
             }
             *lastErrorMsg = i18n("File '%1' is not readable", target);
-            lastErrorCode = ERR_COULD_NOT_READ;
+            lastErrorCode = ERR_CANNOT_READ;
         }
         return readable;
     }

@@ -30,7 +30,7 @@ KIO::RenameDialog_Result KPrHtmlExportUiDelegate::askFileRename ( KJob* job, con
                                                                   const QDateTime &ctimeDest, const QDateTime &mtimeSrc, const QDateTime &mtimeDest)
 {
     // Change options, remove rename possibility
-    options = (KIO::RenameDialog_Options)(options | KIO::M_NORENAME);
+    options = (KIO::RenameDialog_Options)(options | KIO::RenameDialog_NoRename);
     return KIO::JobUiDelegate::askFileRename(job, caption, src, dest, options, newDest, sizeSrc,
                                              sizeDest, ctimeSrc, ctimeDest, mtimeSrc, mtimeDest);
 }

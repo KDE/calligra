@@ -141,8 +141,8 @@ void CalligraCreator::onLoadingCompleted()
 ThumbCreator::Flags CalligraCreator::flags() const
 {
 #ifdef NO_ICON_BLENDING
-    return DrawFrame;
+    return None;
 #else
-    return (Flags)(DrawFrame | BlendIcon);
+    return BlendIcon;
 #endif
 }

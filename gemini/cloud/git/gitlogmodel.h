@@ -42,8 +42,9 @@ public:
     virtual ~GitLogModel();
 
     // Reimplemented from QAbstractListModel
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    QHash<int, QByteArray> roleNames() const override;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
     QString repoDir() const;
     void setRepoDir(const QString& repoDir);

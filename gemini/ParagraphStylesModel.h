@@ -46,6 +46,7 @@ public:
     };
     ParagraphStylesModel();
     ~ParagraphStylesModel() override;
+    QHash<int, QByteArray> roleNames() const override;
     QVariant data(const QModelIndex& index, int role) const override;
     int rowCount(const QModelIndex& parent) const override;
 

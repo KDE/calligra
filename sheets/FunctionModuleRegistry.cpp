@@ -143,7 +143,7 @@ void FunctionModuleRegistry::loadFunctionModules()
                 debugSheetsFormula << "Unable to create plugin factory for" << loader->fileName();
                 continue;
             }
-            FunctionModule* const module = qobject_cast<FunctionModule *>(factory->create());
+            FunctionModule* const module = factory->create<FunctionModule>();
             if (!module) {
                 debugSheetsFormula << "Unable to create function module for" << loader->fileName();
                 continue;
