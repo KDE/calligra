@@ -1750,6 +1750,11 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_VML_background()
             ELSE_WRONG_FORMAT
         }
     }
+    /* TODO only a solid or an image background are supported here. The ODF standard
+     * doesn't allow anything else anyway. There will thus be a need for a conversion
+     * from pattern info to an image, and switching to an image background mode if we
+     * want to support pattern backgrounds.
+     */
     const QString rId(m_currentVMLProperties.vmlStyle.value("v:fill@r:id"));
     if (!rId.isEmpty()) {
         const QString sourceName(m_context->relationships->target(m_context->path, m_context->file, rId));

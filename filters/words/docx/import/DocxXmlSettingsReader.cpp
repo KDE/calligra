@@ -269,7 +269,7 @@ KoFilter::ConversionStatus DocxXmlSettingsReader::read_displayBackgroundShape()
     const QXmlStreamAttributes attrs(attributes());
     TRY_READ_ATTR(val)
 
-    m_context->documentSettings["diplayBackgroundShape"] = val;
+    m_context->documentSettings["displayBackgroundShape"] = val;
 
     readNext();
     READ_EPILOGUE
