@@ -1,5 +1,5 @@
 
-#include "TestKoColorSpaceRegistry.h"
+#include "TestKoLcmsColorSpaceRegistry.h"
 
 #include <QTest>
 

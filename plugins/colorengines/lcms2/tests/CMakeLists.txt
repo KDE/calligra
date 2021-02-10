@@ -40,8 +40,8 @@ colorengine_lcms_add_unit_test(TestKoLcmsColorProfile
 
 ########### next target ###############
 
-colorengine_lcms_add_unit_test(TestKoColorSpaceRegistry
-    TestKoColorSpaceRegistry.cpp
+colorengine_lcms_add_unit_test(TestKoLcmsColorSpaceRegistry
+    TestKoLcmsColorSpaceRegistry.cpp
     LINK_LIBRARIES kowidgets pigmentcms KF5::I18n ${LCMS2_LIBRARIES} Qt5::Test
 )
 
