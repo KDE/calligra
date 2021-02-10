@@ -314,6 +314,7 @@ add_definitions(
     -DQT_NO_SIGNALS_SLOTS_KEYWORDS
     -DQT_NO_URL_CAST_FROM_STRING
     -DQT_NO_CAST_TO_ASCII
+    -DKF_DISABLE_DEPRECATED_BEFORE_AND_AT=0x053000
     )
 
 # only with this definition will all the FOO_TEST_EXPORT macro do something
