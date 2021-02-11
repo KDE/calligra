@@ -19,8 +19,6 @@
 
 #include "KPrConfigureSlideShowDialog.h"
 
-#include <QDesktopWidget>
-
 #include <klocalizedstring.h>
 
 #include "StageDebug.h"

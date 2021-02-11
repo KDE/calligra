@@ -42,7 +42,7 @@ class KPrPageEffectDocker : public QWidget
 
     Q_OBJECT
 public:
-    explicit KPrPageEffectDocker( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
+    explicit KPrPageEffectDocker( QWidget* parent = 0, Qt::WindowFlags flags = Qt::WindowFlags() );
 
     void setView( KoPAViewBase* view );
 

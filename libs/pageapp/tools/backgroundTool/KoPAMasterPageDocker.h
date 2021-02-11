@@ -28,7 +28,7 @@ class KoPAMasterPageDocker : public QWidget
 {
     Q_OBJECT
 public:
-    explicit KoPAMasterPageDocker( QWidget* parent = 0, Qt::WindowFlags flags = 0 ) { Q_UNUSED(parent); Q_UNUSED(flags); }
+    explicit KoPAMasterPageDocker( QWidget* parent = 0, Qt::WindowFlags flags = Qt::WindowFlags() ) { Q_UNUSED(parent); Q_UNUSED(flags); }
     void setView( KoPAView* view ) { Q_UNUSED(view); }
 };
 

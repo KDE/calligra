@@ -22,7 +22,6 @@
 #include <KoPACanvasBase.h>
 
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QKeyEvent>
 #include <QPainter>
 #include <QRect>

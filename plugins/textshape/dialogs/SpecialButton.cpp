@@ -21,7 +21,6 @@
 
 #include <QFrame>
 #include <QHBoxLayout>
-#include <QDesktopWidget>
 #include <QPixmap>
 #include <QLabel>
 #include <QHideEvent>

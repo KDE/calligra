@@ -326,7 +326,7 @@ void Tool::RowHeader::mouseRelease(KoPointerEvent * _ev)
     m_bResize = false;
 }
 
-void Tool::RowHeader::equalizeRow(double resize)
+void Tool::RowHeader::equalizeRow(double)
 {
 #if 0
     if (resize != 0.0) {
@@ -924,7 +924,7 @@ void Tool::ColumnHeader::mouseRelease(KoPointerEvent * _ev)
     m_bResize = false;
 }
 
-void Tool::ColumnHeader::equalizeColumn(double resize)
+void Tool::ColumnHeader::equalizeColumn(double)
 {
 #if 0
     if (resize != 0.0) {
@@ -1111,7 +1111,7 @@ void Tool::ColumnHeader::removeSizeIndicator()
     m_rubberband = nullptr;
 }
 
-void Tool::ColumnHeader::resize(const QSizeF& size, const QSizeF& oldSize)
+void Tool::ColumnHeader::resize(const QSizeF&, const QSizeF&)
 {
 #if 0
     register Sheet * const sheet = m_pCanvas->activeSheet();

@@ -308,6 +308,7 @@ else()
 endif()
 
 # use sane compile flags
+remove_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0)
 add_definitions(
     -DQT_USE_QSTRINGBUILDER
     -DQT_STRICT_ITERATORS
@@ -315,6 +316,7 @@ add_definitions(
     -DQT_NO_URL_CAST_FROM_STRING
     -DQT_NO_CAST_TO_ASCII
     -DKF_DISABLE_DEPRECATED_BEFORE_AND_AT=0x053000
+    -DQT_DISABLE_DEPRECATED_BEFORE=0x050600
     )
 
 # only with this definition will all the FOO_TEST_EXPORT macro do something

@@ -64,6 +64,7 @@
 #include <QCommandLineParser>
 #include <QMimeDatabase>
 #include <QTimer>
+#include <QScreen>
 
 #include <stdlib.h>
 
@@ -74,7 +75,6 @@
 
 
 #include "MainDebug.h"
-#include <QDesktopWidget>
 
 KoApplication* KoApplication::KoApp = 0;
 
@@ -114,7 +114,7 @@ public:
             else {
                 m_splash->setWindowFlags(Qt::Tool | Qt::FramelessWindowHint);
                 QRect r(QPoint(), m_splash->size());
-                m_splash->move(QApplication::desktop()->screenGeometry().center() - r.center());
+                m_splash->move(QGuiApplication::screens().at(0)->geometry().center() - r.center());
                 m_splash->setWindowTitle(qAppName());
                 foreach(QObject *o, m_splash->children()) {
                     QWidget *w = qobject_cast<QWidget*>(o);

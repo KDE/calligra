@@ -391,19 +391,19 @@ void KarbonView::fileImportGraphic()
     if (imageFilter.contains(currentMimeFilter)) {
         QImage image;
         if (!image.load(fname)) {
-            KMessageBox::error(0, i18n("Could not load image."), i18n("Import graphic"), 0);
+            KMessageBox::error(0, i18n("Could not load image."), i18n("Import graphic"), KMessageBox::Options());
             return;
         }
         KoShapeFactoryBase * factory = KoShapeRegistry::instance()->get("PictureShape");
         if (!factory) {
-            KMessageBox::error(0, i18n("Could not create image shape."), i18n("Import graphic"), 0);
+            KMessageBox::error(0, i18n("Could not create image shape."), i18n("Import graphic"), KMessageBox::Options());
             return;
         }
 
         KoShape *picture = factory->createDefaultShape(kopaDocument()->resourceManager());
         KoImageCollection *imageCollection = kopaDocument()->resourceManager()->imageCollection();
         if (!picture || !imageCollection) {
-            KMessageBox::error(0, i18n("Could not create image shape."), i18n("Import graphic"), 0);
+            KMessageBox::error(0, i18n("Could not create image shape."), i18n("Import graphic"), KMessageBox::Options());
             return;
         }
 

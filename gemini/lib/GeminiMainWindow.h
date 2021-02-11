@@ -44,7 +44,7 @@ public:
         ViewState = 3
     };
 
-    explicit GeminiMainWindow(QWidget* parent = 0, Qt::WindowFlags flags = 0);
+    explicit GeminiMainWindow(QWidget* parent = 0, Qt::WindowFlags flags = Qt::WindowFlags());
     ~GeminiMainWindow() override;
 
     GeminiState currentState() const;

@@ -35,7 +35,6 @@
 #include <QMenu>
 #include <QMouseEvent>
 #include <QDoubleSpinBox>
-#include <QDesktopWidget>
 
 #include <klocalizedstring.h>
 #include <WidgetsDebug.h>

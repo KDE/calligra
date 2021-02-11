@@ -31,7 +31,7 @@ class KOPAGEAPP_EXPORT KoPACanvas : public QWidget, public KoPACanvasBase
 {
     Q_OBJECT
 public:
-    explicit KoPACanvas( KoPAViewBase * view, KoPADocument * doc, QWidget *parent = 0, Qt::WindowFlags f = 0);
+    explicit KoPACanvas( KoPAViewBase * view, KoPADocument * doc, QWidget *parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
 
     void repaint() override;
 
