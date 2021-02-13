@@ -49,7 +49,7 @@ FullScreenPlayer::FullScreenPlayer(const QUrl &url)
     Phonon::createPath(m_mediaObject, m_videoWidget);
 
     m_audioOutput = new Phonon::AudioOutput(Phonon::VideoCategory);
-    connect(m_audioOutput, SIGNAL(mutedChanged(bool)), this, SLOT(muteStateChanged(bool)));
+    connect(m_audioOutput, &Phonon::AudioOutput::mutedChanged, this, &FullScreenPlayer::muteStateChanged);
 
     Phonon::createPath(m_mediaObject, m_audioOutput);
 
@@ -65,27 +65,27 @@ FullScreenPlayer::FullScreenPlayer(const QUrl &url)
     m_play = new QToolButton(this);
     m_play->setIcon(koIcon("media-playback-start"));
     m_play->setToolTip(i18n("Play"));
-    connect(m_play, SIGNAL(clicked()), this, SLOT(play()));
+    connect(m_play, &QAbstractButton::clicked, this, &FullScreenPlayer::play);
 
     m_pause = new QToolButton(this);
     m_pause->setIcon(koIcon("media-playback-pause"));
     m_pause->setToolTip(i18n("Pause"));
-    connect(m_pause, SIGNAL(clicked()), this, SLOT(pause()));
+    connect(m_pause, &QAbstractButton::clicked, this, &FullScreenPlayer::pause);
 
     m_stop = new QToolButton(this);
     m_stop->setIcon(koIcon("media-playback-stop"));
     m_stop->setToolTip(i18n("Stop"));
-    connect(m_stop, SIGNAL(clicked()), this, SLOT(stop()));
+    connect(m_stop, &QAbstractButton::clicked, this, &FullScreenPlayer::stop);
 
     m_volumeIconMuted = new QToolButton(this);
     m_volumeIconMuted->setIcon(koIcon("audio-volume-muted"));
     m_volumeIconMuted->setToolTip(i18n("Unmute"));
-    connect(m_volumeIconMuted, SIGNAL(clicked()), this, SLOT(unmute()));
+    connect(m_volumeIconMuted, &QAbstractButton::clicked, this, &FullScreenPlayer::unmute);
 
     m_volumeIconUnmuted = new QToolButton(this);
     m_volumeIconUnmuted->setIcon(koIcon("audio-volume-medium"));
     m_volumeIconUnmuted->setToolTip(i18n("Mute"));
-    connect(m_volumeIconUnmuted, SIGNAL(clicked()), this, SLOT(mute()));
+    connect(m_volumeIconUnmuted, &QAbstractButton::clicked, this, &FullScreenPlayer::mute);
 
     QHBoxLayout *playbackControls = new QHBoxLayout();
     playbackControls->addWidget(m_play);
@@ -107,10 +107,10 @@ FullScreenPlayer::FullScreenPlayer(const QUrl &url)
     setWindowState(Qt::WindowFullScreen);
 
     m_mediaObject->setCurrentSource(url);
-    connect(m_mediaObject, SIGNAL(finished()), this, SLOT(stop()));
-    connect(m_mediaObject, SIGNAL(stateChanged(Phonon::State,Phonon::State)),
-            this, SLOT(playStateChanged(Phonon::State,Phonon::State)));
-    connect(m_mediaObject, SIGNAL(tick(qint64)), this, SLOT(updatePlaybackTime(qint64)));
+    connect(m_mediaObject, &Phonon::MediaObject::finished, this, &FullScreenPlayer::stop);
+    connect(m_mediaObject, &Phonon::MediaObject::stateChanged,
+            this, &FullScreenPlayer::playStateChanged);
+    connect(m_mediaObject, &Phonon::MediaObject::tick, this, &FullScreenPlayer::updatePlaybackTime);
 
     play();
 

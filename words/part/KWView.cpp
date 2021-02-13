@@ -144,7 +144,7 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     m_document->annotationLayoutManager()->setShapeManager(m_canvas->shapeManager());
     m_document->annotationLayoutManager()->setCanvasBase(m_canvas);
     m_document->annotationLayoutManager()->setViewContentWidth(m_canvas->viewMode()->contentsSize().width());
-    connect(m_document->annotationLayoutManager(), SIGNAL(hasAnnotationsChanged(bool)), this, SLOT(hasNotes(bool)));
+    connect(m_document->annotationLayoutManager(), &KoAnnotationLayoutManager::hasAnnotationsChanged, this, &KWView::hasNotes);
     //We need to create associate widget before connect them in actions
     //Perhaps there is a better place for the WordCount widget creates here
     //If you know where to move it in a better place, just do it
@@ -152,16 +152,16 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
 
     setupActions();
 
-    connect(m_canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
+    connect(m_canvas->shapeManager()->selection(), &KoSelection::selectionChanged, this, &KWView::selectionChanged);
 
     m_find = new KoFindText(this);
     KoFindToolbar *toolbar = new KoFindToolbar(m_find, actionCollection(), this);
     toolbar->setVisible(false);
-    connect(m_find, SIGNAL(matchFound(KoFindMatch)), this, SLOT(findMatchFound(KoFindMatch)));
+    connect(m_find, &KoFindBase::matchFound, this, &KWView::findMatchFound);
     connect(m_find, SIGNAL(updateCanvas()), m_canvas, SLOT(update()));
     // The text documents to search in will potentially change when we add/remove shapes and after load
-    connect(m_document, SIGNAL(shapeAdded(KoShape*,KoShapeManager::Repaint)), this, SLOT(refreshFindTexts()));
-    connect(m_document, SIGNAL(shapeRemoved(KoShape*)), this, SLOT(refreshFindTexts()));
+    connect(m_document, &KWDocument::shapeAdded, this, &KWView::refreshFindTexts);
+    connect(m_document, &KWDocument::shapeRemoved, this, &KWView::refreshFindTexts);
 
 
     refreshFindTexts();
@@ -187,16 +187,16 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     connect(m_canvas, SIGNAL(documentSize(QSizeF)), m_zoomController, SLOT(setDocumentSize(QSizeF)));
     m_canvas->updateSize(); // to emit the doc size at least once
     m_zoomController->setZoom(m_document->config().zoomMode(), m_document->config().zoom() / 100.);
-    connect(m_zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)), this, SLOT(zoomChanged(KoZoomMode::Mode,qreal)));
+    connect(m_zoomController, &KoZoomController::zoomChanged, this, &KWView::zoomChanged);
 
     //Timer start in Fullscreen mode view.
     m_hideCursorTimer = new QTimer(this);
-    connect(m_hideCursorTimer, SIGNAL(timeout()), this, SLOT(hideCursor()));
+    connect(m_hideCursorTimer, &QTimer::timeout, this, &KWView::hideCursor);
 
     m_dfmExitButton = new QPushButton(i18n("Exit Fullscreen Mode"));
     addStatusBarItem(m_dfmExitButton, 0);
     m_dfmExitButton->setVisible(false);
-    connect(m_dfmExitButton, SIGNAL(clicked()), this, SLOT(exitFullscreenMode()));
+    connect(m_dfmExitButton, &QAbstractButton::clicked, this, &KWView::exitFullscreenMode);
 
 #ifdef SHOULD_BUILD_RDF
     if (KoDocumentRdf *rdf = dynamic_cast<KoDocumentRdf*>(m_document->documentRdf())) {
@@ -273,7 +273,7 @@ void KWView::setupActions()
     actionCollection()->addAction("format_frameset", m_actionFormatFrameSet);
     m_actionFormatFrameSet->setToolTip(i18n("Change how the shape behave"));
     m_actionFormatFrameSet->setEnabled(false);
-    connect(m_actionFormatFrameSet, SIGNAL(triggered()), this, SLOT(editFrameProperties()));
+    connect(m_actionFormatFrameSet, &QAction::triggered, this, &KWView::editFrameProperties);
 
     QAction *action = actionCollection()->addAction(KStandardAction::Prior,  "page_previous", this, SLOT(goToPreviousPage()));
 
@@ -284,7 +284,7 @@ void KWView::setupActions()
     m_actionCreateTemplate->setToolTip(i18n("Save this document and use it later as a template"));
     m_actionCreateTemplate->setWhatsThis(i18n("You can save this document as a template.<br><br>You can use this new template as a starting point for another document."));
     actionCollection()->addAction("extra_template", m_actionCreateTemplate);
-    connect(m_actionCreateTemplate, SIGNAL(triggered()), this, SLOT(createTemplate()));
+    connect(m_actionCreateTemplate, &QAction::triggered, this, &KWView::createTemplate);
 
     // -------------- Edit actions
     action = actionCollection()->addAction(KStandardAction::Cut,  "edit_cut", 0, 0);
@@ -296,15 +296,15 @@ void KWView::setupActions()
 
     action = new QAction(koIcon("edit-delete"), i18n("Delete"), this);
     action->setShortcut(QKeySequence("Del"));
-    connect(action, SIGNAL(triggered()), this, SLOT(editDeleteSelection()));
-    connect(canvasBase()->toolProxy(), SIGNAL(selectionChanged(bool)), action, SLOT(setEnabled(bool)));
+    connect(action, &QAction::triggered, this, &KWView::editDeleteSelection);
+    connect(canvasBase()->toolProxy(), &KoToolProxy::selectionChanged, action, &QAction::setEnabled);
     actionCollection()->addAction("edit_delete", action);
 
     // -------------- View menu
     action = new QAction(i18n("Show Formatting Characters"), this);
     action->setCheckable(true);
     actionCollection()->addAction("view_formattingchars", action);
-    connect(action, SIGNAL(toggled(bool)), this, SLOT(setShowFormattingChars(bool)));
+    connect(action, &QAction::toggled, this, &KWView::setShowFormattingChars);
     m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowFormattingCharacters, QVariant(false));
     action->setChecked(m_document->config().showFormattingChars()); // will change resource if true
     action->setToolTip(i18n("Toggle the display of non-printing characters"));
@@ -313,7 +313,7 @@ void KWView::setupActions()
     action = new QAction(i18n("Show Field Shadings"), this);
     action->setCheckable(true);
     actionCollection()->addAction("view_fieldshadings", action);
-    connect(action, SIGNAL(toggled(bool)), this, SLOT(setShowInlineObjectVisualization(bool)));
+    connect(action, &QAction::toggled, this, &KWView::setShowInlineObjectVisualization);
     m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowInlineObjectVisualization, QVariant(false));
     action->setChecked(m_document->config().showInlineObjectVisualization()); // will change resource if true
     action->setToolTip(i18n("Toggle the shaded background of fields"));
@@ -323,7 +323,7 @@ void KWView::setupActions()
     action->setToolTip(i18n("Turns the border display on and off"));
     action->setCheckable(true);
     actionCollection()->addAction("view_frameborders", action);
-    connect(action, SIGNAL(toggled(bool)), this, SLOT(toggleViewFrameBorders(bool)));
+    connect(action, &QAction::toggled, this, &KWView::toggleViewFrameBorders);
     m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowTextShapeOutlines, QVariant(false));
     action->setChecked(m_document->config().viewFrameBorders()); // will change resource if true
     action->setWhatsThis(i18n("Turns the border display on and off.<br/><br/>The borders are never printed. This option is useful to see how the document will appear on the printed page."));
@@ -331,7 +331,7 @@ void KWView::setupActions()
     action = new QAction(i18n("Show Table Borders"), this);
     action->setCheckable(true);
     actionCollection()->addAction("view_tableborders", action);
-    connect(action, SIGNAL(toggled(bool)), this, SLOT(setShowTableBorders(bool)));
+    connect(action, &QAction::toggled, this, &KWView::setShowTableBorders);
     m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowTableBorders, QVariant(false));
     action->setChecked(m_document->config().showTableBorders()); // will change resource if true
     action->setToolTip(i18n("Toggle the display of table borders"));
@@ -340,7 +340,7 @@ void KWView::setupActions()
     action = new QAction(i18n("Show Section Bounds"), this);
     action->setCheckable(true);
     actionCollection()->addAction("view_sectionbounds", action);
-    connect(action, SIGNAL(toggled(bool)), this, SLOT(setShowSectionBounds(bool)));
+    connect(action, &QAction::toggled, this, &KWView::setShowSectionBounds);
     m_canvas->resourceManager()->setResource(KoCanvasResourceManager::ShowSectionBounds, QVariant(false));
     action->setChecked(m_document->config().showSectionBounds()); // will change resource if true
     action->setToolTip(i18n("Toggle the display of section bounds"));
@@ -355,7 +355,7 @@ void KWView::setupActions()
                               "the rulers from being displayed.</p>"));
     action->setChecked(m_document->config().viewRulers());
     actionCollection()->addAction("show_ruler", action);
-    connect(action, SIGNAL(toggled(bool)), this, SLOT(showRulers(bool)));
+    connect(action, &QAction::toggled, this, &KWView::showRulers);
 
     action = m_document->gridData().gridToggleAction(m_canvas);
     actionCollection()->addAction("view_grid", action);
@@ -363,7 +363,7 @@ void KWView::setupActions()
     m_actionViewSnapToGrid = new KToggleAction(i18n("Snap to Grid"), this);
     actionCollection()->addAction("view_snaptogrid", m_actionViewSnapToGrid);
     m_actionViewSnapToGrid->setChecked(m_snapToGrid);
-    connect(m_actionViewSnapToGrid, SIGNAL(triggered()), this, SLOT(toggleSnapToGrid()));
+    connect(m_actionViewSnapToGrid, &QAction::triggered, this, &KWView::toggleSnapToGrid);
 
     KToggleAction *guides = KoStandardAction::showGuides(this, SLOT(setGuideVisibility(bool)), actionCollection());
     guides->setChecked(m_document->guidesData().showGuideLines());
@@ -371,14 +371,14 @@ void KWView::setupActions()
     KToggleAction *tAction = new KToggleAction(i18n("Show Status Bar"), this);
     tAction->setToolTip(i18n("Shows or hides the status bar"));
     actionCollection()->addAction("showStatusBar", tAction);
-    connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showStatusBar(bool)));
+    connect(tAction, &QAction::toggled, this, &KWView::showStatusBar);
 
     mainWindow()->actionCollection()->action("view_fullscreen")->setEnabled(false);
     tAction = new KToggleAction(i18n("Fullscreen Mode"), this);
     tAction->setToolTip(i18n("Set view in fullscreen mode"));
     tAction->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_F));
     actionCollection()->addAction("view_fullscreen", tAction);
-    connect(tAction, SIGNAL(toggled(bool)), this, SLOT(setFullscreenMode(bool)));
+    connect(tAction, &QAction::toggled, this, &KWView::setFullscreenMode);
 
 #ifdef SHOULD_BUILD_RDF
     action = new QAction(i18n("Semantic Stylesheets..."), this);
@@ -401,7 +401,7 @@ void KWView::setupActions()
     // -------------- Settings menu
     action = new QAction(koIcon("configure"), i18n("Configure..."), this);
     actionCollection()->addAction("configure", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(configure()));
+    connect(action, &QAction::triggered, this, &KWView::configure);
     // not sure why this isn't done through KStandardAction, but since it isn't
     // we ought to set the MenuRole manually so the item ends up in the appropriate
     // menu on OS X:
@@ -412,33 +412,33 @@ void KWView::setupActions()
     actionCollection()->addAction("format_page", action);
     action->setToolTip(i18n("Change properties of entire page"));
     action->setWhatsThis(i18n("Change properties of the entire page.<p>Currently you can change paper size, paper orientation, header and footer sizes, and column settings.</p>"));
-    connect(action, SIGNAL(triggered()), this, SLOT(formatPage()));
+    connect(action, &QAction::triggered, this, &KWView::formatPage);
 
     m_actionViewHeader = new QAction(i18n("Create Header"), this);
     actionCollection()->addAction("insert_header", m_actionViewHeader);
     if (m_currentPage.isValid())
         m_actionViewHeader->setEnabled(m_currentPage.pageStyle().headerPolicy() == Words::HFTypeNone);
-    connect(m_actionViewHeader, SIGNAL(triggered()), this, SLOT(enableHeader()));
+    connect(m_actionViewHeader, &QAction::triggered, this, &KWView::enableHeader);
 
     m_actionViewFooter = new QAction(i18n("Create Footer"), this);
     actionCollection()->addAction("insert_footer", m_actionViewFooter);
     if (m_currentPage.isValid())
         m_actionViewFooter->setEnabled(m_currentPage.pageStyle().footerPolicy() == Words::HFTypeNone);
-    connect(m_actionViewFooter, SIGNAL(triggered()), this, SLOT(enableFooter()));
+    connect(m_actionViewFooter, &QAction::triggered, this, &KWView::enableFooter);
 
     // -------- Show annotations (called Comments in the UI)
     tAction = new KToggleAction(i18n("Show Comments"), this);
     tAction->setToolTip(i18n("Shows comments in the document"));
     tAction->setChecked(m_canvas && m_canvas->showAnnotations());
     actionCollection()->addAction("view_notes", tAction);
-    connect(tAction, SIGNAL(toggled(bool)), this, SLOT(showNotes(bool)));
+    connect(tAction, &QAction::toggled, this, &KWView::showNotes);
 
     // -------- Statistics in the status bar
     KToggleAction *tActionBis = new KToggleAction(i18n("Word Count"), this);
     tActionBis->setToolTip(i18n("Shows or hides word counting in status bar"));
     tActionBis->setChecked(kwdocument()->config().statusBarShowWordCount());
     actionCollection()->addAction("view_wordCount", tActionBis);
-    connect(tActionBis, SIGNAL(toggled(bool)), this, SLOT(showWordCountInStatusBar(bool)));
+    connect(tActionBis, &QAction::toggled, this, &KWView::showWordCountInStatusBar);
     wordCount->setVisible(kwdocument()->config().statusBarShowWordCount());
 
     /* ********** From old kwview ****
@@ -617,7 +617,7 @@ void KWView::formatPage()
         if (item)
             dia->setCurrentPage(item);
     }
-    connect(dia, SIGNAL(finished(int)), this, SLOT(pageSettingsDialogFinished()));
+    connect(dia, &QDialog::finished, this, &KWView::pageSettingsDialogFinished);
     dia->show();
 }
 
@@ -664,7 +664,7 @@ void KWView::setFullscreenMode(bool status)
     }
 
     if (status) {
-         QTimer::singleShot(2000, this, SLOT(hideUI()));
+         QTimer::singleShot(2000, this, &KWView::hideUI);
     } else {
          mainWindow()->statusBar()->setVisible(true);
          static_cast<KoCanvasControllerWidget*>(m_gui->canvasController())->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
@@ -907,7 +907,7 @@ void KWView::goToPage(const KWPage &page)
 void KWView::showEvent(QShowEvent *e)
 {
     KoView::showEvent(e);
-    QTimer::singleShot(0, this, SLOT(updateStatusBarAction()));
+    QTimer::singleShot(0, this, &KWView::updateStatusBarAction);
 }
 
 bool KWView::event(QEvent* event)

@@ -52,7 +52,7 @@ KoPAConfigureDialog::KoPAConfigureDialog(KoPAView* parent)
     item->setHeader(i18n("Grid"));
     item->setIcon(koIcon("view-grid"));
 
-    connect(m_miscPage, SIGNAL(unitChanged(KoUnit)), m_gridPage, SLOT(slotUnitChanged(KoUnit)));
+    connect(m_miscPage, &KoConfigMiscPage::unitChanged, m_gridPage, &KoConfigGridPage::slotUnitChanged);
 
     m_docPage = new KoConfigDocumentPage( parent->koDocument() );
     item = addPage( m_docPage, i18nc( "@title:tab Document settings page", "Document" ) );
@@ -64,10 +64,10 @@ KoPAConfigureDialog::KoPAConfigureDialog(KoPAView* parent)
     item->setHeader(i18n("Author"));
     item->setIcon(koIcon("user-identity"));
 
-    connect( this, SIGNAL(accepted()), this, SLOT(slotApply()) );
-    connect( button(QDialogButtonBox::RestoreDefaults), SIGNAL(clicked(bool)), this, SLOT(slotDefault()));
-    connect( button(QDialogButtonBox::Apply), SIGNAL(clicked(bool)), this, SLOT(slotApply()) );
-    connect(this, SIGNAL(changed()), parent, SLOT(slotUpdateAuthorProfileActions()));
+    connect( this, &QDialog::accepted, this, &KoPAConfigureDialog::slotApply );
+    connect( button(QDialogButtonBox::RestoreDefaults), &QAbstractButton::clicked, this, &KoPAConfigureDialog::slotDefault);
+    connect( button(QDialogButtonBox::Apply), &QAbstractButton::clicked, this, &KoPAConfigureDialog::slotApply );
+    connect(this, &KoPAConfigureDialog::changed, parent, &KoView::slotUpdateAuthorProfileActions);
 }
 
 void KoPAConfigureDialog::slotApply()

@@ -63,7 +63,7 @@ KUndo2Model::KUndo2Model(QObject *parent)
 {
     m_stack = 0;
     m_sel_model = new QItemSelectionModel(this, this);
-    connect(m_sel_model, SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(setStackCurrentIndex(QModelIndex)));
+    connect(m_sel_model, &QItemSelectionModel::currentChanged, this, &KUndo2Model::setStackCurrentIndex);
     m_emty_label = i18n("<empty>");
 }
 
@@ -83,16 +83,16 @@ void KUndo2Model::setStack(KUndo2QStack *stack)
         return;
 
     if (m_stack != 0) {
-        disconnect(m_stack, SIGNAL(cleanChanged(bool)), this, SLOT(stackChanged()));
-        disconnect(m_stack, SIGNAL(indexChanged(int)), this, SLOT(stackChanged()));
-        disconnect(m_stack, SIGNAL(destroyed(QObject*)), this, SLOT(stackDestroyed(QObject*)));
+        disconnect(m_stack, &KUndo2QStack::cleanChanged, this, &KUndo2Model::stackChanged);
+        disconnect(m_stack, &KUndo2QStack::indexChanged, this, &KUndo2Model::stackChanged);
+        disconnect(m_stack, &QObject::destroyed, this, &KUndo2Model::stackDestroyed);
         disconnect(m_stack, SIGNAL(indexChanged(int)), this, SLOT(addImage(int)));
     }
     m_stack = stack;
     if (m_stack != 0) {
-        connect(m_stack, SIGNAL(cleanChanged(bool)), this, SLOT(stackChanged()));
-        connect(m_stack, SIGNAL(indexChanged(int)), this, SLOT(stackChanged()));
-        connect(m_stack, SIGNAL(destroyed(QObject*)), this, SLOT(stackDestroyed(QObject*)));
+        connect(m_stack, &KUndo2QStack::cleanChanged, this, &KUndo2Model::stackChanged);
+        connect(m_stack, &KUndo2QStack::indexChanged, this, &KUndo2Model::stackChanged);
+        connect(m_stack, &QObject::destroyed, this, &KUndo2Model::stackDestroyed);
         connect(m_stack, SIGNAL(indexChanged(int)), this, SLOT(addImage(int)));
     }
 

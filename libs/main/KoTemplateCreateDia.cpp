@@ -129,8 +129,8 @@ KoTemplateCreateDia::KoTemplateCreateDia(const QString &templatesResourcePath,
     namefield->addWidget(label);
     d->m_name=new QLineEdit(mainwidget);
     d->m_name->setFocus();
-    connect(d->m_name, SIGNAL(textChanged(QString)),
-            this, SLOT(slotNameChanged(QString)));
+    connect(d->m_name, &QLineEdit::textChanged,
+            this, &KoTemplateCreateDia::slotNameChanged);
     namefield->addWidget(d->m_name);
 
     label=new QLabel(i18n("Group:"), mainwidget);
@@ -149,10 +149,10 @@ KoTemplateCreateDia::KoTemplateCreateDia(const QString &templatesResourcePath,
     QHBoxLayout *bbox=new QHBoxLayout();
     leftbox->addLayout( bbox );
     d->m_add=new QPushButton(i18n("&Add Group..."), mainwidget);
-    connect(d->m_add, SIGNAL(clicked()), this, SLOT(slotAddGroup()));
+    connect(d->m_add, &QAbstractButton::clicked, this, &KoTemplateCreateDia::slotAddGroup);
     bbox->addWidget(d->m_add);
     d->m_remove=new QPushButton(i18n("&Remove"), mainwidget);
-    connect(d->m_remove, SIGNAL(clicked()), this, SLOT(slotRemove()));
+    connect(d->m_remove, &QAbstractButton::clicked, this, &KoTemplateCreateDia::slotRemove);
     bbox->addWidget(d->m_remove);
 
     QVBoxLayout *rightbox=new QVBoxLayout();
@@ -162,15 +162,15 @@ KoTemplateCreateDia::KoTemplateCreateDia(const QString &templatesResourcePath,
     QVBoxLayout *pixlayout=new QVBoxLayout(pixbox );
     d->m_default=new QRadioButton(i18n("&Preview"), pixbox);
     d->m_default->setChecked(true);
-    connect(d->m_default, SIGNAL(clicked()), this, SLOT(slotDefault()));
+    connect(d->m_default, &QAbstractButton::clicked, this, &KoTemplateCreateDia::slotDefault);
     pixlayout->addWidget(d->m_default);
     QHBoxLayout *custombox=new QHBoxLayout();
     d->m_custom=new QRadioButton(i18n("Custom:"), pixbox);
     d->m_custom->setChecked(false);
-    connect(d->m_custom, SIGNAL(clicked()), this, SLOT(slotCustom()));
+    connect(d->m_custom, &QAbstractButton::clicked, this, &KoTemplateCreateDia::slotCustom);
     custombox->addWidget(d->m_custom);
     d->m_select=new QPushButton(i18n("&Select..."), pixbox);
-    connect(d->m_select, SIGNAL(clicked()), this, SLOT(slotSelect()));
+    connect(d->m_select, &QAbstractButton::clicked, this, &KoTemplateCreateDia::slotSelect);
     custombox->addWidget(d->m_select);
     custombox->addStretch(1);
     pixlayout->addLayout(custombox);
@@ -188,10 +188,10 @@ KoTemplateCreateDia::KoTemplateCreateDia(const QString &templatesResourcePath,
     d->m_changed=false;
     updatePixmap();
 
-    connect(d->m_groups, SIGNAL(itemSelectionChanged()), this, SLOT(slotSelectionChanged()));
+    connect(d->m_groups, &QTreeWidget::itemSelectionChanged, this, &KoTemplateCreateDia::slotSelectionChanged);
 
     d->m_remove->setEnabled(d->m_groups->currentItem());
-    connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
+    connect(this,&KoDialog::okClicked,this,&KoTemplateCreateDia::slotOk);
 }
 
 KoTemplateCreateDia::~KoTemplateCreateDia() {

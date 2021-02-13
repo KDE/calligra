@@ -263,8 +263,8 @@ KoFillConfigWidget::KoFillConfigWidget(QWidget *parent)
     d->colorAction->setCurrentColor(Qt::white);
     d->colorButton->setDefaultAction(d->colorAction);
     d->colorButton->setPopupMode(QToolButton::InstantPopup);
-    connect(d->colorAction, SIGNAL(colorChanged(KoColor)), this, SLOT(colorChanged()));
-    connect(d->colorButton, SIGNAL(iconSizeChanged()), d->colorAction, SLOT(updateIcon()));
+    connect(d->colorAction, &KoColorPopupAction::colorChanged, this, &KoFillConfigWidget::colorChanged);
+    connect(d->colorButton, &KoColorPopupButton::iconSizeChanged, d->colorAction, &KoColorPopupAction::updateIcon);
 
     // Gradient selector
     KoResourceServerProvider *serverProvider = KoResourceServerProvider::instance();
@@ -272,14 +272,14 @@ KoFillConfigWidget::KoFillConfigWidget(QWidget *parent)
     d->gradientAction = new KoResourcePopupAction(gradientResourceAdapter, d->colorButton);
     d->gradientAction->setToolTip(i18n("Change the filling gradient"));
     connect(d->gradientAction, SIGNAL(resourceSelected(QSharedPointer<KoShapeBackground>)), this, SLOT(gradientChanged(QSharedPointer<KoShapeBackground>)));
-    connect(d->colorButton, SIGNAL(iconSizeChanged()), d->gradientAction, SLOT(updateIcon()));
+    connect(d->colorButton, &KoColorPopupButton::iconSizeChanged, d->gradientAction, &KoResourcePopupAction::updateIcon);
 
     // Pattern selector
     QSharedPointer<KoAbstractResourceServerAdapter>patternResourceAdapter(new KoResourceServerAdapter<KoPattern>(serverProvider->patternServer()));
     d->patternAction = new KoResourcePopupAction(patternResourceAdapter, d->colorButton);
     d->patternAction->setToolTip(i18n("Change the filling pattern"));
     connect(d->patternAction, SIGNAL(resourceSelected(QSharedPointer<KoShapeBackground>)), this, SLOT(patternChanged(QSharedPointer<KoShapeBackground>)));
-    connect(d->colorButton, SIGNAL(iconSizeChanged()), d->patternAction, SLOT(updateIcon()));
+    connect(d->colorButton, &KoColorPopupButton::iconSizeChanged, d->patternAction, &KoResourcePopupAction::updateIcon);
 
     // Spacer
     d->spacer = new QWidget();
@@ -290,7 +290,7 @@ KoFillConfigWidget::KoFillConfigWidget(QWidget *parent)
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
     if (selection) {
         d->canvas = canvasController->canvas();
-        connect(selection, SIGNAL(selectionChanged()), this, SLOT(shapeChanged()));
+        connect(selection, &KoSelection::selectionChanged, this, &KoFillConfigWidget::shapeChanged);
     }
 }
 
@@ -305,7 +305,7 @@ void KoFillConfigWidget::setCanvas( KoCanvasBase *canvas )
     KoCanvasController *canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
 
-    connect(selection, SIGNAL(selectionChanged()), this, SLOT(shapeChanged()));
+    connect(selection, &KoSelection::selectionChanged, this, &KoFillConfigWidget::shapeChanged);
 
     d->canvas = canvas;
 }

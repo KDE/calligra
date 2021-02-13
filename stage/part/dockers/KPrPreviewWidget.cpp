@@ -34,7 +34,7 @@
 KPrPreviewWidget::KPrPreviewWidget( QWidget* parent )
 : QWidget( parent ), m_pageEffect(0), m_pageEffectRunner(0), m_page(0)
 {
-    connect( &m_timeLine, SIGNAL(valueChanged(qreal)), this, SLOT(animate()) );
+    connect( &m_timeLine, &QTimeLine::valueChanged, this, &KPrPreviewWidget::animate );
 }
 
 KPrPreviewWidget::~KPrPreviewWidget()

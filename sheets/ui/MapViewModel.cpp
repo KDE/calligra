@@ -29,6 +29,7 @@
 
 #include <KoCanvasBase.h>
 #include <KoShapeManager.h>
+#include <KoShape.h>
 #include <KoIcon.h>
 
 #include <kxmlguiclient.h>
@@ -54,8 +55,8 @@ MapViewModel::MapViewModel(Map *map, KoCanvasBase *canvas, KXMLGUIClient *xmlGui
     d->xmlGuiClient = xmlGuiClient;
     d->gotoSheetActionGroup = new QActionGroup(this);
 
-    connect(d->gotoSheetActionGroup, SIGNAL(triggered(QAction*)),
-            this, SLOT(gotoSheetActionTriggered(QAction*)));
+    connect(d->gotoSheetActionGroup, &QActionGroup::triggered,
+            this, &MapViewModel::gotoSheetActionTriggered);
 
     // Add the initial controlled sheets.
     const QList<Sheet *> sheets = map->sheetList();
@@ -174,10 +175,10 @@ void MapViewModel::addSheet(Sheet *sheet)
 {
     MapModel::addSheet(sheet);
 
-    connect(sheet, SIGNAL(shapeAdded(Sheet*,KoShape*)),
-            this, SLOT(addShape(Sheet*,KoShape*)));
-    connect(sheet, SIGNAL(shapeRemoved(Sheet*,KoShape*)),
-            this, SLOT(removeShape(Sheet*,KoShape*)));
+    connect(sheet, &Sheet::shapeAdded,
+            this, &MapViewModel::addShape);
+    connect(sheet, &Sheet::shapeRemoved,
+            this, &MapViewModel::removeShape);
 
     if (!d->xmlGuiClient) {
         return;
@@ -200,10 +201,10 @@ void MapViewModel::removeSheet(Sheet *sheet)
 {
     MapModel::removeSheet(sheet);
 
-    disconnect(sheet, SIGNAL(shapeAdded(Sheet*,KoShape*)),
-               this, SLOT(addShape(Sheet*,KoShape*)));
-    disconnect(sheet, SIGNAL(shapeRemoved(Sheet*,KoShape*)),
-               this, SLOT(removeShape(Sheet*,KoShape*)));
+    disconnect(sheet, &Sheet::shapeAdded,
+               this, &MapViewModel::addShape);
+    disconnect(sheet, &Sheet::shapeRemoved,
+               this, &MapViewModel::removeShape);
 
     if (!d->xmlGuiClient) {
         return;

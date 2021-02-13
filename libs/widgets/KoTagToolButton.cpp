@@ -85,8 +85,8 @@ KoTagToolButton::KoTagToolButton(QWidget* parent)
     d->action_deleteTag->setIcon(koIcon("edit-delete"));
     popup->addAction(d->action_deleteTag);
 
-    connect(d->action_deleteTag, SIGNAL(triggered()),
-            this, SIGNAL(deletionOfCurrentTagRequested()));
+    connect(d->action_deleteTag, &QAction::triggered,
+            this, &KoTagToolButton::deletionOfCurrentTagRequested);
 
     popup->addSeparator();
 
@@ -95,8 +95,8 @@ KoTagToolButton::KoTagToolButton(QWidget* parent)
     d->action_undeleteTag->setVisible(false);
     popup->addAction(d->action_undeleteTag);
 
-    connect(d->action_undeleteTag, SIGNAL(triggered()),
-            this, SLOT(onTagUndeleteClicked()));
+    connect(d->action_undeleteTag, &QAction::triggered,
+            this, &KoTagToolButton::onTagUndeleteClicked);
 
     d->action_purgeTagUndeleteList = new QAction(popup);
     d->action_purgeTagUndeleteList->setText(i18n("Clear undelete list"));
@@ -104,11 +104,11 @@ KoTagToolButton::KoTagToolButton(QWidget* parent)
     d->action_purgeTagUndeleteList->setVisible(false);
     popup->addAction(d->action_purgeTagUndeleteList);
 
-    connect(d->action_purgeTagUndeleteList, SIGNAL(triggered()),
-            this, SIGNAL(purgingOfTagUndeleteListRequested()));
+    connect(d->action_purgeTagUndeleteList, &QAction::triggered,
+            this, &KoTagToolButton::purgingOfTagUndeleteListRequested);
 
-    connect(popup, SIGNAL(aboutToShow()),
-            this, SIGNAL(popupMenuAboutToShow()));
+    connect(popup, &QMenu::aboutToShow,
+            this, &KoTagToolButton::popupMenuAboutToShow);
 
     d->tagToolButton->setMenu(popup);
     buttonLayout->addWidget(d->tagToolButton);

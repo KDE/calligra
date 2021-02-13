@@ -92,7 +92,7 @@ CellTool::CellTool(KoCanvasBase* canvas)
 
     action = new QAction(i18n("Define Print Range"), this);
     addAction("definePrintRange", action);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(definePrintRange()));
+    connect(action, &QAction::triggered, this, &CellTool::definePrintRange);
     action->setToolTip(i18n("Define the print range in the current sheet"));
 }
 

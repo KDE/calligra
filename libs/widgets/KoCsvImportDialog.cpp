@@ -132,18 +132,18 @@ KoCsvImportDialog::KoCsvImportDialog(QWidget* parent)
             this, SLOT(formatChanged(QString)));
     connect(buttonGroup, SIGNAL(buttonClicked(int)),
             this, SLOT(delimiterClicked(int)));
-    connect(d->dialog->m_delimiterEdit, SIGNAL(returnPressed()),
-            this, SLOT(returnPressed()));
-    connect(d->dialog->m_delimiterEdit, SIGNAL(textChanged(QString)),
-            this, SLOT(genericDelimiterChanged(QString)));
+    connect(d->dialog->m_delimiterEdit, &QLineEdit::returnPressed,
+            this, &KoCsvImportDialog::returnPressed);
+    connect(d->dialog->m_delimiterEdit, &QLineEdit::textChanged,
+            this, &KoCsvImportDialog::genericDelimiterChanged);
     connect(d->dialog->m_comboQuote, SIGNAL(activated(QString)),
             this, SLOT(textquoteSelected(QString)));
-    connect(d->dialog->m_sheet, SIGNAL(currentCellChanged(int,int,int,int)),
-            this, SLOT(currentCellChanged(int,int)));
-    connect(d->dialog->m_ignoreDuplicates, SIGNAL(stateChanged(int)),
-            this, SLOT(ignoreDuplicatesChanged(int)));
-    connect(d->dialog->m_updateButton, SIGNAL(clicked()),
-            this, SLOT(updateClicked()));
+    connect(d->dialog->m_sheet, &QTableWidget::currentCellChanged,
+            this, &KoCsvImportDialog::currentCellChanged);
+    connect(d->dialog->m_ignoreDuplicates, &QCheckBox::stateChanged,
+            this, &KoCsvImportDialog::ignoreDuplicatesChanged);
+    connect(d->dialog->m_updateButton, &QAbstractButton::clicked,
+            this, &KoCsvImportDialog::updateClicked);
     connect(d->dialog->comboBoxEncoding, SIGNAL(textChanged(QString)),
             this, SLOT(encodingChanged(QString)));
 }

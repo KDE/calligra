@@ -49,7 +49,7 @@ KWCanvas::KWCanvas(const QString &viewMode, KWDocument *document, KWView *view, 
     setAttribute(Qt::WA_OpaquePaintEvent, true);
     setAttribute(Qt::WA_InputMethodEnabled, true);
     setFocusPolicy(Qt::StrongFocus);
-    connect(document, SIGNAL(pageSetupChanged()), this, SLOT(pageSetupChanged()));
+    connect(document, &KWDocument::pageSetupChanged, this, &KWCanvas::pageSetupChanged);
     m_viewConverter = m_view->viewConverter();
     m_viewMode = KWViewMode::create(viewMode, document);
 }

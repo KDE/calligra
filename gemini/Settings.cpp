@@ -51,7 +51,7 @@ Settings::Settings( QObject* parent )
 {
     QString theme = KSharedConfig::openConfig()->group("General").readEntry<QString>("theme", "default");
     d->theme = Theme::load(theme, this);
-    connect(d->theme, SIGNAL(fontCacheRebuilt()), SIGNAL(themeChanged()));
+    connect(d->theme, &Theme::fontCacheRebuilt, this, &Settings::themeChanged);
 }
 
 Settings::~Settings()

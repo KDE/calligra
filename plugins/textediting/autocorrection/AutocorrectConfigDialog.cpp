@@ -52,14 +52,14 @@ AutocorrectConfig::AutocorrectConfig(Autocorrect *autocorrect, QWidget *parent)
     m_doubleQuotes = m_autocorrect->getTypographicDoubleQuotes();
     widget.doubleQuote1->setText(m_doubleQuotes.begin);
     widget.doubleQuote2->setText(m_doubleQuotes.end);
-    connect(widget.typographicSingleQuotes, SIGNAL(stateChanged(int)), this, SLOT(enableSingleQuotes(int)));
-    connect(widget.typographicDoubleQuotes, SIGNAL(stateChanged(int)), this, SLOT(enableDoubleQuotes(int)));
-    connect(widget.singleQuote1, SIGNAL(clicked()), this, SLOT(selectSingleQuoteCharOpen()));
-    connect(widget.singleQuote2, SIGNAL(clicked()), this, SLOT(selectSingleQuoteCharClose()));
-    connect(widget.singleDefault, SIGNAL(clicked()), this, SLOT(setDefaultSingleQuotes()));
-    connect(widget.doubleQuote1, SIGNAL(clicked()), this, SLOT(selectDoubleQuoteCharOpen()));
-    connect(widget.doubleQuote2, SIGNAL(clicked()), this, SLOT(selectDoubleQuoteCharClose()));
-    connect(widget.doubleDefault, SIGNAL(clicked()), this, SLOT(setDefaultDoubleQuotes()));
+    connect(widget.typographicSingleQuotes, &QCheckBox::stateChanged, this, &AutocorrectConfig::enableSingleQuotes);
+    connect(widget.typographicDoubleQuotes, &QCheckBox::stateChanged, this, &AutocorrectConfig::enableDoubleQuotes);
+    connect(widget.singleQuote1, &QAbstractButton::clicked, this, &AutocorrectConfig::selectSingleQuoteCharOpen);
+    connect(widget.singleQuote2, &QAbstractButton::clicked, this, &AutocorrectConfig::selectSingleQuoteCharClose);
+    connect(widget.singleDefault, &QAbstractButton::clicked, this, &AutocorrectConfig::setDefaultSingleQuotes);
+    connect(widget.doubleQuote1, &QAbstractButton::clicked, this, &AutocorrectConfig::selectDoubleQuoteCharOpen);
+    connect(widget.doubleQuote2, &QAbstractButton::clicked, this, &AutocorrectConfig::selectDoubleQuoteCharClose);
+    connect(widget.doubleDefault, &QAbstractButton::clicked, this, &AutocorrectConfig::setDefaultDoubleQuotes);
     enableSingleQuotes(widget.typographicSingleQuotes->checkState());
     enableDoubleQuotes(widget.typographicDoubleQuotes->checkState());
 
@@ -78,14 +78,14 @@ AutocorrectConfig::AutocorrectConfig(Autocorrect *autocorrect, QWidget *parent)
     widget.tableWidget->sortByColumn(0, Qt::AscendingOrder);
 
     enableAdvAutocorrection(widget.advancedAutocorrection->checkState());
-    connect(widget.advancedAutocorrection, SIGNAL(stateChanged(int)), this, SLOT(enableAdvAutocorrection(int)));
-    connect(widget.autoCorrectionWithFormat, SIGNAL(stateChanged(int)), this, SLOT(enableAutocorrectFormat(int)));
-    connect(widget.addButton, SIGNAL(clicked()), this, SLOT(addAutocorrectEntry()));
-    connect(widget.removeButton, SIGNAL(clicked()), this, SLOT(removeAutocorrectEntry()));
-    connect(widget.tableWidget, SIGNAL(cellClicked(int,int)), this, SLOT(setFindReplaceText(int,int)));
-    connect(widget.find, SIGNAL(textChanged(QString)), this, SLOT(enableAddRemoveButton()));
-    connect(widget.replace, SIGNAL(textChanged(QString)), this, SLOT(enableAddRemoveButton()));
-    connect(widget.changeFormat, SIGNAL(clicked()), this, SLOT(changeCharFormat()));
+    connect(widget.advancedAutocorrection, &QCheckBox::stateChanged, this, &AutocorrectConfig::enableAdvAutocorrection);
+    connect(widget.autoCorrectionWithFormat, &QCheckBox::stateChanged, this, &AutocorrectConfig::enableAutocorrectFormat);
+    connect(widget.addButton, &QAbstractButton::clicked, this, &AutocorrectConfig::addAutocorrectEntry);
+    connect(widget.removeButton, &QAbstractButton::clicked, this, &AutocorrectConfig::removeAutocorrectEntry);
+    connect(widget.tableWidget, &QTableWidget::cellClicked, this, &AutocorrectConfig::setFindReplaceText);
+    connect(widget.find, &QLineEdit::textChanged, this, &AutocorrectConfig::enableAddRemoveButton);
+    connect(widget.replace, &QLineEdit::textChanged, this, &AutocorrectConfig::enableAddRemoveButton);
+    connect(widget.changeFormat, &QAbstractButton::clicked, this, &AutocorrectConfig::changeCharFormat);
 
     /* tab 4 - Exceptions */
     m_upperCaseExceptions = m_autocorrect->getUpperCaseExceptions();
@@ -95,12 +95,12 @@ AutocorrectConfig::AutocorrectConfig(Autocorrect *autocorrect, QWidget *parent)
     widget.add1->setEnabled(false);
     widget.add2->setEnabled(false);
 
-    connect(widget.abbreviation, SIGNAL(textChanged(QString)), this, SLOT(abbreviationChanged(QString)));
-    connect(widget.twoUpperLetter, SIGNAL(textChanged(QString)), this, SLOT(twoUpperLetterChanged(QString)));
-    connect(widget.add1, SIGNAL(clicked()), this, SLOT(addAbbreviationEntry()));
-    connect(widget.remove1, SIGNAL(clicked()), this, SLOT(removeAbbreviationEntry()));
-    connect(widget.add2, SIGNAL(clicked()), this, SLOT(addTwoUpperLetterEntry()));
-    connect(widget.remove2, SIGNAL(clicked()), this, SLOT(removeTwoUpperLetterEntry()));
+    connect(widget.abbreviation, &QLineEdit::textChanged, this, &AutocorrectConfig::abbreviationChanged);
+    connect(widget.twoUpperLetter, &QLineEdit::textChanged, this, &AutocorrectConfig::twoUpperLetterChanged);
+    connect(widget.add1, &QAbstractButton::clicked, this, &AutocorrectConfig::addAbbreviationEntry);
+    connect(widget.remove1, &QAbstractButton::clicked, this, &AutocorrectConfig::removeAbbreviationEntry);
+    connect(widget.add2, &QAbstractButton::clicked, this, &AutocorrectConfig::addTwoUpperLetterEntry);
+    connect(widget.remove2, &QAbstractButton::clicked, this, &AutocorrectConfig::removeTwoUpperLetterEntry);
 }
 
 AutocorrectConfig::~AutocorrectConfig()
@@ -372,7 +372,7 @@ AutocorrectConfigDialog::AutocorrectConfigDialog(Autocorrect *autocorrect, QWidg
     : KoDialog(parent)
 {
     ui = new AutocorrectConfig(autocorrect, this);
-    connect(this, SIGNAL(okClicked()), ui, SLOT(applyConfig()));
+    connect(this, &KoDialog::okClicked, ui, &AutocorrectConfig::applyConfig);
     setMainWidget(ui);
     setCaption(i18n("Autocorrection"));
 }

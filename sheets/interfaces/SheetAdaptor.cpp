@@ -53,8 +53,8 @@ SheetAdaptor::SheetAdaptor(Sheet* t)
 {
     setAutoRelaySignals(false);
     m_sheet = t;
-    connect(m_sheet->map(), SIGNAL(damagesFlushed(QList<Damage*>)),
-            this, SLOT(handleDamages(QList<Damage*>)));
+    connect(m_sheet->map(), &Map::damagesFlushed,
+            this, &SheetAdaptor::handleDamages);
 }
 
 SheetAdaptor::~SheetAdaptor()

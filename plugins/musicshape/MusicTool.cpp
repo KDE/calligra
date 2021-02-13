@@ -97,7 +97,7 @@ QWidget * MusicTool::createOptionWidget()
     PartsWidget *pw = new PartsWidget(this, widget);
     widget->addTab(pw, i18n("Parts"));
 
-    connect(this, SIGNAL(shapeChanged(MusicShape*)), pw, SLOT(setShape(MusicShape*)));
+    connect(this, &MusicTool::shapeChanged, pw, &PartsWidget::setShape);
 
     if (m_musicshape) pw->setShape(m_musicshape);
 

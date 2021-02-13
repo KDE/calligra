@@ -70,9 +70,9 @@ GotoDialog::GotoDialog(QWidget* parent, Selection* selection)
     m_nameCell->addItems(manager->areaNames());
     m_nameCell->setFocus();
 
-    connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
-    connect(m_nameCell, SIGNAL(editTextChanged(QString)),
-            this, SLOT(textChanged(QString)));
+    connect(this, &KoDialog::okClicked, this, &GotoDialog::slotOk);
+    connect(m_nameCell, &QComboBox::editTextChanged,
+            this, &GotoDialog::textChanged);
 
     resize(QSize(320, 50).expandedTo(minimumSizeHint()));
 }

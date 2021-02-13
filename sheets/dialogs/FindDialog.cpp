@@ -36,7 +36,7 @@ FindOption::FindOption(QWidget *parent)
     m_moreOptions = new QPushButton(i18n("More Options"), parent);
     layout->addWidget(m_moreOptions);
 
-    connect(m_moreOptions, SIGNAL(clicked()), this, SLOT(slotMoreOptions()));
+    connect(m_moreOptions, &QAbstractButton::clicked, this, &FindOption::slotMoreOptions);
 
     m_findExtension = new QWidget(parent);
     layout->addWidget(m_findExtension);
@@ -119,7 +119,7 @@ FindDlg::FindDlg(QWidget *parent, const QString &name, long options, const QStri
 {
     setObjectName(name);
     m_findOptions = new FindOption(findExtension());
-    connect(m_findOptions, SIGNAL(adjustSize()), SLOT(slotAjustSize()));
+    connect(m_findOptions, &FindOption::adjustSize, this, &FindDlg::slotAjustSize);
     setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
 }
 
@@ -144,7 +144,7 @@ SearchDlg::SearchDlg(QWidget *parent, const QString &name, long options, const Q
 {
     setObjectName(name);
     m_findOptions = new FindOption(findExtension());
-    connect(m_findOptions, SIGNAL(adjustSize()), SLOT(slotAjustSize()));
+    connect(m_findOptions, &FindOption::adjustSize, this, &SearchDlg::slotAjustSize);
     setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
 }
 

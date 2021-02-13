@@ -27,13 +27,13 @@ ParagraphLayout::ParagraphLayout(QWidget *parent)
 {
     widget.setupUi(this);
 
-    connect(widget.right, SIGNAL(toggled(bool)), this, SLOT(slotAlignChanged()));
-    connect(widget.center, SIGNAL(toggled(bool)), this, SLOT(slotAlignChanged()));
-    connect(widget.justify, SIGNAL(toggled(bool)), this, SLOT(slotAlignChanged()));
-    connect(widget.left, SIGNAL(toggled(bool)), this, SLOT(slotAlignChanged()));
-    connect(widget.keepTogether, SIGNAL(stateChanged(int)), this, SLOT(keepTogetherChanged()));
-    connect(widget.breakAfter, SIGNAL(stateChanged(int)), this, SLOT(breakAfterChanged()));
-    connect(widget.breakBefore, SIGNAL(stateChanged(int)), this, SLOT(breakBeforeChanged()));
+    connect(widget.right, &QAbstractButton::toggled, this, &ParagraphLayout::slotAlignChanged);
+    connect(widget.center, &QAbstractButton::toggled, this, &ParagraphLayout::slotAlignChanged);
+    connect(widget.justify, &QAbstractButton::toggled, this, &ParagraphLayout::slotAlignChanged);
+    connect(widget.left, &QAbstractButton::toggled, this, &ParagraphLayout::slotAlignChanged);
+    connect(widget.keepTogether, &QCheckBox::stateChanged, this, &ParagraphLayout::keepTogetherChanged);
+    connect(widget.breakAfter, &QCheckBox::stateChanged, this, &ParagraphLayout::breakAfterChanged);
+    connect(widget.breakBefore, &QCheckBox::stateChanged, this, &ParagraphLayout::breakBeforeChanged);
     connect(widget.threshold, SIGNAL(valueChanged(int)), this, SLOT(thresholdValueChanged()));
 }
 

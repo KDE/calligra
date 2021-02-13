@@ -136,10 +136,10 @@ Legend::Legend(ChartShape *parent)
     setAllowedInteraction(KoShape::ResizeAllowed, false);
     setAllowedInteraction(KoShape::RotationAllowed, false);
 
-    connect (d->kdLegend, SIGNAL(propertiesChanged()),
-             this,        SLOT(slotKdLegendChanged()));
-    connect (parent, SIGNAL(chartTypeChanged(ChartType, ChartType)),
-             this,   SLOT(slotChartTypeChanged(ChartType)));
+    connect (d->kdLegend, &KChart::Legend::propertiesChanged,
+             this,        &Legend::slotKdLegendChanged);
+    connect (parent, &ChartShape::chartTypeChanged,
+             this,   &Legend::slotChartTypeChanged);
 }
 
 Legend::~Legend()
@@ -352,7 +352,7 @@ void Legend::paint(QPainter &painter, const KoViewConverter &converter, KoShapeP
         background()->paint(painter, converter, paintContext, p);
     }
 
-    disconnect (d->kdLegend, SIGNAL(propertiesChanged()), this, SLOT(slotKdLegendChanged()));
+    disconnect (d->kdLegend, &KChart::Legend::propertiesChanged, this, &Legend::slotKdLegendChanged);
 
     // KChart thinks in pixels, Calligra in pt
     ScreenConversions::scaleFromPtToPx(painter);
@@ -361,7 +361,7 @@ void Legend::paint(QPainter &painter, const KoViewConverter &converter, KoShapeP
     ScreenConversions::scaleToWidgetDpi(d->kdLegend, painter);
     d->kdLegend->paint(&painter, rect);
 
-    connect (d->kdLegend, SIGNAL(propertiesChanged()), this, SLOT(slotKdLegendChanged()));
+    connect (d->kdLegend, &KChart::Legend::propertiesChanged, this, &Legend::slotKdLegendChanged);
 }
 
 

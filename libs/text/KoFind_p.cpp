@@ -140,7 +140,7 @@ void KoFindPrivate::startFind()
 {
     parseSettingsAndFind();
 
-    QTimer::singleShot(0, findStrategy.dialog(), SLOT(show())); // show the findDialog again.
+    QTimer::singleShot(0, findStrategy.dialog(), &QWidget::show); // show the findDialog again.
 }
 
 void KoFindPrivate::startReplace()

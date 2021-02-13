@@ -109,7 +109,7 @@ KoShapeManager::KoShapeManager(KoCanvasBase *canvas, const QList<KoShape *> &sha
         : d(new Private(this, canvas))
 {
     Q_ASSERT(d->canvas); // not optional.
-    connect(d->selection, SIGNAL(selectionChanged()), this, SIGNAL(selectionChanged()));
+    connect(d->selection, &KoSelection::selectionChanged, this, &KoShapeManager::selectionChanged);
     setShapes(shapes);
 }
 
@@ -117,7 +117,7 @@ KoShapeManager::KoShapeManager(KoCanvasBase *canvas)
         : d(new Private(this, canvas))
 {
     Q_ASSERT(d->canvas); // not optional.
-    connect(d->selection, SIGNAL(selectionChanged()), this, SIGNAL(selectionChanged()));
+    connect(d->selection, &KoSelection::selectionChanged, this, &KoShapeManager::selectionChanged);
 }
 
 KoShapeManager::~KoShapeManager()

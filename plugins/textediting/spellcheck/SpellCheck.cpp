@@ -56,7 +56,7 @@ SpellCheck::SpellCheck()
 {
     /* setup actions for this plugin */
     QAction *configureAction = new QAction(i18n("Configure &Spell Checking..."), this);
-    connect(configureAction, SIGNAL(triggered()), this, SLOT(configureSpellCheck()));
+    connect(configureAction, &QAction::triggered, this, &SpellCheck::configureSpellCheck);
     addAction("tool_configure_spellcheck", configureAction);
 
     KToggleAction *spellCheck = new KToggleAction(i18n("Auto Spell Check"), this);
@@ -72,10 +72,10 @@ SpellCheck::SpellCheck()
     QPair<QString, QAction*> pair = m_spellCheckMenu->menuAction();
     addAction(pair.first, pair.second);
 
-    connect(m_bgSpellCheck, SIGNAL(misspelledWord(QString,int,bool)),
-            this, SLOT(highlightMisspelled(QString,int,bool)));
-    connect(m_bgSpellCheck, SIGNAL(done()), this, SLOT(finishedRun()));
-    connect(spellCheck, SIGNAL(toggled(bool)), this, SLOT(setBackgroundSpellChecking(bool)));
+    connect(m_bgSpellCheck, &BgSpellCheck::misspelledWord,
+            this, &SpellCheck::highlightMisspelled);
+    connect(m_bgSpellCheck, &Sonnet::BackgroundChecker::done, this, &SpellCheck::finishedRun);
+    connect(spellCheck, &QAction::toggled, this, &SpellCheck::setBackgroundSpellChecking);
 }
 
 void SpellCheck::finishedWord(QTextDocument *document, int cursorPosition)
@@ -132,10 +132,10 @@ void SpellCheck::setDocument(QTextDocument *document)
     if (m_document == document)
         return;
     if (m_document)
-        disconnect (document, SIGNAL(contentsChange(int,int,int)), this, SLOT(documentChanged(int,int,int)));
+        disconnect (document, &QTextDocument::contentsChange, this, &SpellCheck::documentChanged);
 
     m_document = document;
-    connect (document, SIGNAL(contentsChange(int,int,int)), this, SLOT(documentChanged(int,int,int)));
+    connect (document, &QTextDocument::contentsChange, this, &SpellCheck::documentChanged);
 }
 
 QStringList SpellCheck::availableBackends() const
@@ -316,7 +316,7 @@ void SpellCheck::runQueue()
 void SpellCheck::configureSpellCheck()
 {
     Sonnet::ConfigDialog *dialog = new Sonnet::ConfigDialog(0);
-    connect (dialog, SIGNAL(languageChanged(QString)), this, SLOT(setDefaultLanguage(QString)));
+    connect (dialog, &Sonnet::ConfigDialog::languageChanged, this, &SpellCheck::setDefaultLanguage);
     dialog->exec();
     delete dialog;
 }
@@ -329,7 +329,7 @@ void SpellCheck::finishedRun()
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(m_activeSection.document->documentLayout());
     lay->provider()->updateAll();
 
-    QTimer::singleShot(0, this, SLOT(runQueue()));
+    QTimer::singleShot(0, this, &SpellCheck::runQueue);
 }
 
 void SpellCheck::setCurrentCursorPosition(QTextDocument *document, int cursorPosition)

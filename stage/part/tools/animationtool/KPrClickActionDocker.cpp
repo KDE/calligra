@@ -120,8 +120,8 @@ void KPrClickActionDocker::setCanvas( KoCanvasBase *canvas )
     m_canvas = canvas;
 
     if (m_canvas) {
-        connect(m_canvas->shapeManager(), SIGNAL(selectionChanged()),
-                this, SLOT(selectionChanged()));
+        connect(m_canvas->shapeManager(), &KoShapeManager::selectionChanged,
+                this, &KPrClickActionDocker::selectionChanged);
     }
 
     selectionChanged();

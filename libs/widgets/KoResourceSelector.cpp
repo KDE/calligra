@@ -81,10 +81,10 @@ KoResourceSelector::KoResourceSelector( QSharedPointer<KoAbstractResourceServerA
     connect( this, SIGNAL(currentIndexChanged(int)),
              this, SLOT(indexChanged(int)) );
 
-    connect(resourceAdapter.data(), SIGNAL(resourceAdded(KoResource*)),
-            this, SLOT(resourceAdded(KoResource*)));
-    connect(resourceAdapter.data(), SIGNAL(removingResource(KoResource*)),
-            this, SLOT(resourceRemoved(KoResource*)));
+    connect(resourceAdapter.data(), &KoAbstractResourceServerAdapter::resourceAdded,
+            this, &KoResourceSelector::resourceAdded);
+    connect(resourceAdapter.data(), &KoAbstractResourceServerAdapter::removingResource,
+            this, &KoResourceSelector::resourceRemoved);
 }
 
 KoResourceSelector::~KoResourceSelector()
@@ -151,10 +151,10 @@ void KoResourceSelector::setResourceAdapter(QSharedPointer<KoAbstractResourceSer
     setModel(new KoResourceModel(resourceAdapter, this));
     d->updateIndex(this);
 
-    connect(resourceAdapter.data(), SIGNAL(resourceAdded(KoResource*)),
-            this, SLOT(resourceAdded(KoResource*)));
-    connect(resourceAdapter.data(), SIGNAL(removingResource(KoResource*)),
-            this, SLOT(resourceRemoved(KoResource*)));
+    connect(resourceAdapter.data(), &KoAbstractResourceServerAdapter::resourceAdded,
+            this, &KoResourceSelector::resourceAdded);
+    connect(resourceAdapter.data(), &KoAbstractResourceServerAdapter::removingResource,
+            this, &KoResourceSelector::resourceRemoved);
 }
 
 void KoResourceSelector::setDisplayMode(DisplayMode mode)

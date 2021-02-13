@@ -44,9 +44,9 @@ SimpleTableOfContentsWidget::SimpleTableOfContentsWidget(ReferencesTool *tool, Q
     m_templateGenerator = new TableOfContentsTemplate(KoTextDocument(m_referenceTool->editor()->document()).styleManager());
 
     widget.addToC->setIcon(koIcon("insert-table-of-contents"));
-    connect(widget.addToC, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
-    connect(widget.addToC, SIGNAL(aboutToShowMenu()), this, SLOT(prepareTemplateMenu()));
-    connect(widget.addToC, SIGNAL(itemTriggered(int)), this, SLOT(applyTemplate(int)));
+    connect(widget.addToC, &QAbstractButton::clicked, this, &SimpleTableOfContentsWidget::doneWithFocus);
+    connect(widget.addToC, &FormattingButton::aboutToShowMenu, this, &SimpleTableOfContentsWidget::prepareTemplateMenu);
+    connect(widget.addToC, &FormattingButton::itemTriggered, this, &SimpleTableOfContentsWidget::applyTemplate);
 }
 
 SimpleTableOfContentsWidget::~SimpleTableOfContentsWidget()
@@ -89,7 +89,7 @@ void SimpleTableOfContentsWidget::prepareTemplateMenu()
     if (widget.addToC->isFirstTimeMenuShown()) {
         widget.addToC->addSeparator();
         widget.addToC->addAction(m_referenceTool->action("insert_configure_tableofcontents"));
-        connect(m_referenceTool->action("insert_configure_tableofcontents"), SIGNAL(triggered()), this, SLOT(insertCustomToC()), Qt::UniqueConnection);
+        connect(m_referenceTool->action("insert_configure_tableofcontents"), &QAction::triggered, this, &SimpleTableOfContentsWidget::insertCustomToC, Qt::UniqueConnection);
         widget.addToC->addAction(m_referenceTool->action("format_tableofcontents"));
     }
 }

@@ -117,8 +117,8 @@ void KoContextBarButton::startFading()
     const int duration = 300;
 
     m_fadingTimeLine = new QTimeLine(duration, this);
-    connect(m_fadingTimeLine, SIGNAL(frameChanged(int)),
-            this, SLOT(setFadingValue(int)));
+    connect(m_fadingTimeLine, &QTimeLine::frameChanged,
+            this, &KoContextBarButton::setFadingValue);
     m_fadingTimeLine->setFrameRange(0, 255);
     m_fadingTimeLine->start();
     m_fadingValue = 0;

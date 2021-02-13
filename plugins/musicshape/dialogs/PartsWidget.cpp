@@ -43,11 +43,11 @@ PartsWidget::PartsWidget(MusicTool *tool, QWidget *parent)
     widget.removePart->setIcon(koIcon("list-remove"));
     widget.editPart->setIcon(koIcon("document-properties"));
 
-    connect(widget.partsList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(partDoubleClicked(QModelIndex)));
+    connect(widget.partsList, &QAbstractItemView::doubleClicked, this, &PartsWidget::partDoubleClicked);
     //connect(widget.partsList, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)), this, SLOT(selectionChanged(QListWidgetItem*,QListWidgetItem*)));
-    connect(widget.addPart, SIGNAL(clicked()), this, SLOT(addPart()));
-    connect(widget.removePart, SIGNAL(clicked()), this, SLOT(removePart()));
-    connect(widget.editPart, SIGNAL(clicked()), this, SLOT(editPart()));
+    connect(widget.addPart, &QAbstractButton::clicked, this, &PartsWidget::addPart);
+    connect(widget.removePart, &QAbstractButton::clicked, this, &PartsWidget::removePart);
+    connect(widget.editPart, &QAbstractButton::clicked, this, &PartsWidget::editPart);
 }
 
 void PartsWidget::setShape(MusicShape* shape)
@@ -59,7 +59,7 @@ void PartsWidget::setShape(MusicShape* shape)
 //        widget.partsList->addItem(sheet->part(i)->name());
 //    }
     widget.partsList->setModel(new PartsListModel(sheet));
-    connect(widget.partsList->selectionModel(), SIGNAL(currentRowChanged(QModelIndex,QModelIndex)), this, SLOT(selectionChanged(QModelIndex,QModelIndex)));
+    connect(widget.partsList->selectionModel(), &QItemSelectionModel::currentRowChanged, this, &PartsWidget::selectionChanged);
     m_sheet = sheet;
 }
 

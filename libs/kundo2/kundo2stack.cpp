@@ -1086,11 +1086,11 @@ QAction *KUndo2QStack::createUndoAction(QObject *parent) const
     KUndo2Action *result = new KUndo2Action(i18n("Undo %1"), i18nc("Default text for undo action", "Undo"), parent);
     result->setEnabled(canUndo());
     result->setPrefixedText(undoText());
-    connect(this, SIGNAL(canUndoChanged(bool)),
-            result, SLOT(setEnabled(bool)));
-    connect(this, SIGNAL(undoTextChanged(QString)),
-            result, SLOT(setPrefixedText(QString)));
-    connect(result, SIGNAL(triggered()), this, SLOT(undo()));
+    connect(this, &KUndo2QStack::canUndoChanged,
+            result, &QAction::setEnabled);
+    connect(this, &KUndo2QStack::undoTextChanged,
+            result, &KUndo2Action::setPrefixedText);
+    connect(result, &QAction::triggered, this, &KUndo2QStack::undo);
     return result;
 }
 
@@ -1112,11 +1112,11 @@ QAction *KUndo2QStack::createRedoAction(QObject *parent) const
     KUndo2Action *result = new KUndo2Action(i18n("Redo %1"), i18nc("Default text for redo action", "Redo"), parent);
     result->setEnabled(canRedo());
     result->setPrefixedText(redoText());
-    connect(this, SIGNAL(canRedoChanged(bool)),
-            result, SLOT(setEnabled(bool)));
-    connect(this, SIGNAL(redoTextChanged(QString)),
-            result, SLOT(setPrefixedText(QString)));
-    connect(result, SIGNAL(triggered()), this, SLOT(redo()));
+    connect(this, &KUndo2QStack::canRedoChanged,
+            result, &QAction::setEnabled);
+    connect(this, &KUndo2QStack::redoTextChanged,
+            result, &KUndo2Action::setPrefixedText);
+    connect(result, &QAction::triggered, this, &KUndo2QStack::redo);
     return result;
 }
 

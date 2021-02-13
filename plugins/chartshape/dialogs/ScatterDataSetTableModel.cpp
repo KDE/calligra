@@ -181,7 +181,7 @@ bool DataSetTableModel::setData(const QModelIndex &index, const QVariant &value,
     if (role == Qt::EditRole) {
         if (submitData(index, value, role)) {
             // HACK to avoid crash in accessible
-            QTimer::singleShot(0, this, SLOT(emitDataChanged()));
+            QTimer::singleShot(0, this, &DataSetTableModel::emitDataChanged);
             return true;
         }
     }
@@ -208,7 +208,7 @@ void DataSetTableModel::setModel(QAbstractItemModel *m)
     chartModel = qobject_cast<ChartProxyModel*>(m);
     Q_ASSERT(chartModel);
     connect(chartModel, SIGNAL(dataChanged()), this, SLOT(chartModelChanged()));
-    connect(chartModel, SIGNAL(modelReset()), this, SLOT(chartModelChanged()));
+    connect(chartModel, &QAbstractItemModel::modelReset, this, &DataSetTableModel::chartModelChanged);
 }
 
 void DataSetTableModel::chartModelChanged()

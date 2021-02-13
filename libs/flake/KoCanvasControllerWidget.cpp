@@ -197,10 +197,10 @@ KoCanvasControllerWidget::KoCanvasControllerWidget(KActionCollection * actionCol
     setMinimumSize(QSize(50, 50));
     setMouseTracking(true);
 
-    connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(updateCanvasOffsetX()));
-    connect(verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(updateCanvasOffsetY()));
-    connect(d->viewportWidget, SIGNAL(sizeChanged()), this, SLOT(updateCanvasOffsetX()));
-    connect(proxyObject, SIGNAL(moveDocumentOffset(QPoint)), d->viewportWidget, SLOT(documentOffsetMoved(QPoint)));
+    connect(horizontalScrollBar(), &QAbstractSlider::valueChanged, this, &KoCanvasControllerWidget::updateCanvasOffsetX);
+    connect(verticalScrollBar(), &QAbstractSlider::valueChanged, this, &KoCanvasControllerWidget::updateCanvasOffsetY);
+    connect(d->viewportWidget, &Viewport::sizeChanged, this, &KoCanvasControllerWidget::updateCanvasOffsetX);
+    connect(proxyObject, &KoCanvasControllerProxyObject::moveDocumentOffset, d->viewportWidget, &Viewport::documentOffsetMoved);
 }
 
 KoCanvasControllerWidget::~KoCanvasControllerWidget()
@@ -257,7 +257,7 @@ void KoCanvasControllerWidget::setCanvas(KoCanvasBase *canvas)
     changeCanvasWidget(canvas->canvasWidget());
 
     proxyObject->emitCanvasSet(this);
-    QTimer::singleShot(0, this, SLOT(activate()));
+    QTimer::singleShot(0, this, &KoCanvasControllerWidget::activate);
 
     setPreferredCenterFractionX(0);
     setPreferredCenterFractionY(0);

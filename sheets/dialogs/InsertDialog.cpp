@@ -80,7 +80,7 @@ InsertDialog::InsertDialog(QWidget* parent, Selection* selection, Mode _mode)
     rb1->setChecked(true);
 
 
-    connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
+    connect(this, &KoDialog::okClicked, this, &InsertDialog::slotOk);
 }
 
 void InsertDialog::slotOk()

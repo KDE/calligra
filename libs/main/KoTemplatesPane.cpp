@@ -51,7 +51,7 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, const QString& header,
     KConfigGroup cfgGrp(KSharedConfig::openConfig(), "TemplateChooserDialog");
     QString fullTemplateName = cfgGrp.readPathEntry("FullTemplateName", QString());
     d->m_alwaysUseTemplate = cfgGrp.readPathEntry("AlwaysUseTemplate", QString());
-    connect(m_alwaysUseCheckBox, SIGNAL(clicked()), this, SLOT(alwaysUseClicked()));
+    connect(m_alwaysUseCheckBox, &QAbstractButton::clicked, this, &KoTemplatesPane::alwaysUseClicked);
 
     QStandardItem* selectItem = 0;
     QStandardItem* rootItem = model()->invisibleRootItem();

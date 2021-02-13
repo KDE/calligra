@@ -137,8 +137,8 @@ CollectionTreeWidget::CollectionTreeWidget(QWidget* parent): QTreeWidget(parent)
     setAcceptDrops(true);
     setItemDelegate(new SheetDelegate(this, this));
 
-    connect(this, SIGNAL(itemPressed(QTreeWidgetItem*,int)),
-            this, SLOT(handleMousePress(QTreeWidgetItem*)));
+    connect(this, &QTreeWidget::itemPressed,
+            this, &CollectionTreeWidget::handleMousePress);
 
     loadOptions();
 }
@@ -302,8 +302,8 @@ void CollectionTreeWidget::resizeEvent(QResizeEvent* e)
 void CollectionTreeWidget::contextMenuEvent(QContextMenuEvent* e)
 {
     QMenu menu;
-    menu.addAction(i18n("Expand all"), this, SLOT(expandAll()));
-    menu.addAction(i18n("Collapse all"), this, SLOT(collapseAll()));
+    menu.addAction(i18n("Expand all"), this, &QTreeView::expandAll);
+    menu.addAction(i18n("Collapse all"), this, &QTreeView::collapseAll);
     menu.addSeparator();
 
     QAction* listModeAction = menu.addAction(i18n("List View"));
@@ -318,8 +318,8 @@ void CollectionTreeWidget::contextMenuEvent(QContextMenuEvent* e)
     } else {
         listModeAction->setChecked(true);
     }
-    connect(listModeAction, SIGNAL(triggered()), SLOT(slotListMode()));
-    connect(iconModeAction, SIGNAL(triggered()), SLOT(slotIconMode()));
+    connect(listModeAction, &QAction::triggered, this, &CollectionTreeWidget::slotListMode);
+    connect(iconModeAction, &QAction::triggered, this, &CollectionTreeWidget::slotIconMode);
 
     e->accept();
     menu.exec(mapToGlobal(e->pos()));

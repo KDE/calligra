@@ -368,7 +368,7 @@ void TableShape::setMap()
     d->isMaster = true;
     updateVisibleCellRange();
 
-    connect(map, SIGNAL(damagesFlushed(QList<Damage*>)), this, SLOT(handleDamages(QList<Damage*>)));
+    connect(map, &Map::damagesFlushed, this, &TableShape::handleDamages);
 }
 
 void TableShape::setSize(const QSizeF& newSize)

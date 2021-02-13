@@ -194,7 +194,7 @@ KoFilter::ConversionStatus AsciiImport::convert(const QByteArray& from, const QB
     KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(doc->documentLayout());
     Q_ASSERT(lay);
     lay->setBlockLayout(true);
-    connect(lay, SIGNAL(layoutProgressChanged(int)), layoutUpdater, SLOT(setProgress(int)));
+    connect(lay, &KoTextDocumentLayout::layoutProgressChanged, layoutUpdater.data(), &KoUpdater::setProgress);
 
     QTextCursor cursor(doc);
     cursor.beginEditBlock();

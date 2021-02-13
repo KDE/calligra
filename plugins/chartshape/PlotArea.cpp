@@ -280,20 +280,20 @@ PlotArea::PlotArea(ChartShape *parent)
     setAdditionalStyleAttribute("chart:auto-position", "true");
     setAdditionalStyleAttribute("chart:auto-size", "true");
 
-    connect(d->shape->proxyModel(), SIGNAL(modelReset()),
-            this,                   SLOT(proxyModelStructureChanged()));
-    connect(d->shape->proxyModel(), SIGNAL(rowsInserted(QModelIndex,int,int)),
-            this,                   SLOT(proxyModelStructureChanged()));
-    connect(d->shape->proxyModel(), SIGNAL(rowsRemoved(QModelIndex,int,int)),
-            this,                   SLOT(proxyModelStructureChanged()));
-    connect(d->shape->proxyModel(), SIGNAL(columnsInserted(QModelIndex,int,int)),
-            this,                   SLOT(proxyModelStructureChanged()));
-    connect(d->shape->proxyModel(), SIGNAL(columnsRemoved(QModelIndex,int,int)),
-            this,                   SLOT(proxyModelStructureChanged()));
-    connect(d->shape->proxyModel(), SIGNAL(columnsInserted(QModelIndex,int,int)),
-            this,                   SLOT(plotAreaUpdate()));
-    connect(d->shape->proxyModel(), SIGNAL(columnsRemoved(QModelIndex,int,int)),
-            this,                   SLOT(plotAreaUpdate()));
+    connect(d->shape->proxyModel(), &QAbstractItemModel::modelReset,
+            this,                   &PlotArea::proxyModelStructureChanged);
+    connect(d->shape->proxyModel(), &QAbstractItemModel::rowsInserted,
+            this,                   &PlotArea::proxyModelStructureChanged);
+    connect(d->shape->proxyModel(), &QAbstractItemModel::rowsRemoved,
+            this,                   &PlotArea::proxyModelStructureChanged);
+    connect(d->shape->proxyModel(), &QAbstractItemModel::columnsInserted,
+            this,                   &PlotArea::proxyModelStructureChanged);
+    connect(d->shape->proxyModel(), &QAbstractItemModel::columnsRemoved,
+            this,                   &PlotArea::proxyModelStructureChanged);
+    connect(d->shape->proxyModel(), &QAbstractItemModel::columnsInserted,
+            this,                   &PlotArea::plotAreaUpdate);
+    connect(d->shape->proxyModel(), &QAbstractItemModel::columnsRemoved,
+            this,                   &PlotArea::plotAreaUpdate);
     connect(d->shape->proxyModel(), SIGNAL(dataChanged()),
             this,                   SLOT(plotAreaUpdate()));
 }

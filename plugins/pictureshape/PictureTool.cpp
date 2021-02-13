@@ -113,16 +113,16 @@ QWidget *PictureTool::createOptionWidget()
 
     updateControlElements();
 
-    connect(m_pictureToolUI->bnImageFile, SIGNAL(clicked(bool)), this, SLOT(changeUrlPressed()));
+    connect(m_pictureToolUI->bnImageFile, &QAbstractButton::clicked, this, &PictureTool::changeUrlPressed);
     connect(m_pictureToolUI->cmbColorMode, SIGNAL(currentIndexChanged(int)), this, SLOT(colorModeChanged(int)));
     connect(m_pictureToolUI->leftDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(cropEditFieldsChanged()));
     connect(m_pictureToolUI->rightDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(cropEditFieldsChanged()));
     connect(m_pictureToolUI->topDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(cropEditFieldsChanged()));
     connect(m_pictureToolUI->bottomDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(cropEditFieldsChanged()));
-    connect(m_pictureToolUI->cbAspect, SIGNAL(toggled(bool)), this, SLOT(aspectCheckBoxChanged(bool)));
-    connect(m_pictureToolUI->bnFill, SIGNAL(pressed()), this, SLOT(fillButtonPressed()));
-    connect(m_pictureToolUI->cbContour, SIGNAL(toggled(bool)), this, SLOT(contourCheckBoxChanged(bool)));
-    connect(m_pictureToolUI->cropWidget, SIGNAL(sigCropRegionChanged(QRectF,bool)), this, SLOT(cropRegionChanged(QRectF,bool)));
+    connect(m_pictureToolUI->cbAspect, &QAbstractButton::toggled, this, &PictureTool::aspectCheckBoxChanged);
+    connect(m_pictureToolUI->bnFill, &QAbstractButton::pressed, this, &PictureTool::fillButtonPressed);
+    connect(m_pictureToolUI->cbContour, &QAbstractButton::toggled, this, &PictureTool::contourCheckBoxChanged);
+    connect(m_pictureToolUI->cropWidget, &CropWidget::sigCropRegionChanged, this, &PictureTool::cropRegionChanged);
 
     return m_pictureToolUI;
 }
@@ -176,7 +176,7 @@ void PictureTool::changeUrlPressed()
     if (!url.isEmpty()) {
         // TODO move this to an action in the libs, with a nice dialog or something.
         KIO::StoredTransferJob *job = KIO::storedGet(url, KIO::NoReload, 0);
-        connect(job, SIGNAL(result(KJob*)), this, SLOT(setImageData(KJob*)));
+        connect(job, &KJob::result, this, &PictureTool::setImageData);
     }
 }
 
@@ -203,7 +203,7 @@ void PictureTool::cropRegionChanged(const QRectF& rect, bool undoPrev)
     ChangeImageCommand *cmd = new ChangeImageCommand(m_pictureshape, rect);
     // connect before adding the command, so that "updateControlElements()" is executed
     // when the command is added to the undo stack.
-    connect(cmd, SIGNAL(sigExecuted()), this, SLOT(updateControlElements()));
+    connect(cmd, &ChangeImageCommand::sigExecuted, this, &PictureTool::updateControlElements);
     canvas()->addCommand(cmd);
 }
 
@@ -214,7 +214,7 @@ void PictureTool::colorModeChanged(int cmbIndex)
     canvas()->addCommand(cmd);
     // connect after adding the command to the undo stack to prevent a
     // call to "updateControlElements()" at this point
-    connect(cmd, SIGNAL(sigExecuted()), this, SLOT(updateControlElements()));
+    connect(cmd, &ChangeImageCommand::sigExecuted, this, &PictureTool::updateControlElements);
 }
 
 void PictureTool::aspectCheckBoxChanged(bool checked)
@@ -244,7 +244,7 @@ void PictureTool::setImageData(KJob *job)
         ChangeImageCommand *cmd  = new ChangeImageCommand(m_pictureshape, data);
         // connect before adding the command, so that "updateControlElements()" is executed
         // when the command is added to the undo stack.
-        connect(cmd, SIGNAL(sigExecuted()), this, SLOT(updateControlElements()));
+        connect(cmd, &ChangeImageCommand::sigExecuted, this, &PictureTool::updateControlElements);
         canvas()->addCommand(cmd);
     }
 }

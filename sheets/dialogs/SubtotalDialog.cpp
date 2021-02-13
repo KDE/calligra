@@ -72,7 +72,7 @@ SubtotalDialog::SubtotalDialog(QWidget* parent, Selection* selection)
 
     fillColumnBoxes();
     fillFunctionBox();
-    connect(this, SIGNAL(user1Clicked()), this, SLOT(slotUser1()));
+    connect(this, &KoDialog::user1Clicked, this, &SubtotalDialog::slotUser1);
 }
 
 SubtotalDialog::~SubtotalDialog()

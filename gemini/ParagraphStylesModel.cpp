@@ -157,7 +157,7 @@ void ParagraphStylesModel::setTextEditor(QObject* newEditor)
         d->textEditor->disconnect(this);
     d->textEditor = qobject_cast<KoTextEditor*>(newEditor);
     if(d->textEditor)
-        connect(d->textEditor, SIGNAL(cursorPositionChanged()), SLOT(cursorPositionChanged()));
+        connect(d->textEditor.data(), &KoTextEditor::cursorPositionChanged, this, &ParagraphStylesModel::cursorPositionChanged);
     emit textEditorChanged();
 }
 

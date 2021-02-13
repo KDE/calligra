@@ -64,7 +64,7 @@ KWRunAroundProperties::KWRunAroundProperties(FrameConfigSharedState *state)
     widget.distanceRight->setUnit(state->document()->unit());
     widget.distanceBottom->setUnit(state->document()->unit());
 
-    connect(widget.enough, SIGNAL(toggled(bool)), this, SLOT(enoughRunAroundToggled(bool)));
+    connect(widget.enough, &QAbstractButton::toggled, this, &KWRunAroundProperties::enoughRunAroundToggled);
 }
 
 bool KWRunAroundProperties::open(const QList<KoShape *> &shapes)

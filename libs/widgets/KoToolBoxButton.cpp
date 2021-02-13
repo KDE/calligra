@@ -41,8 +41,8 @@ KoToolBoxButton::KoToolBoxButton(KoToolAction *toolAction, QWidget *parent)
 
     setDataFromToolAction();
 
-    connect(this, SIGNAL(clicked(bool)), m_toolAction, SLOT(trigger()));
-    connect(m_toolAction, SIGNAL(changed()), SLOT(setDataFromToolAction()));
+    connect(this, &QAbstractButton::clicked, m_toolAction, &KoToolAction::trigger);
+    connect(m_toolAction, &KoToolAction::changed, this, &KoToolBoxButton::setDataFromToolAction);
 }
 
 void KoToolBoxButton::setHighlightColor()

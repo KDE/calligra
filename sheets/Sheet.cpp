@@ -165,10 +165,10 @@ Sheet::Sheet(Map* map, const QString &sheetName)
     d->print = new SheetPrint(this);
 
     // document size changes always trigger a visible size change
-    connect(this, SIGNAL(documentSizeChanged(QSizeF)), SIGNAL(visibleSizeChanged()));
+    connect(this, &Sheet::documentSizeChanged, this, &Sheet::visibleSizeChanged);
     // CellStorage connections
-    connect(d->cellStorage, SIGNAL(insertNamedArea(Region,QString)),
-            d->workbook->namedAreaManager(), SLOT(insert(Region,QString)));
+    connect(d->cellStorage, &CellStorage::insertNamedArea,
+            d->workbook->namedAreaManager(), &NamedAreaManager::insert);
     connect(d->cellStorage, SIGNAL(namedAreaRemoved(QString)),
             d->workbook->namedAreaManager(), SLOT(remove(QString)));
 }

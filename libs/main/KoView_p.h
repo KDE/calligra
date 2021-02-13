@@ -39,8 +39,8 @@ public:
             , m_listOptions(addPixelUnit ? KoUnit::ListAll : KoUnit::HidePixel)
     {
         setExclusive(true);
-        connect(this, SIGNAL(triggered(QAction*)), SLOT(onTriggered(QAction*)));
-        connect(document, SIGNAL(unitChanged(KoUnit)), SLOT(onUnitChanged(KoUnit)));
+        connect(this, &QActionGroup::triggered, this, &UnitActionGroup::onTriggered);
+        connect(document, &KoDocument::unitChanged, this, &UnitActionGroup::onUnitChanged);
 
         const QStringList unitNames = KoUnit::listOfUnitNameForUi(m_listOptions);
         const int currentUnitIndex = m_document->unit().indexInListForUi(m_listOptions);

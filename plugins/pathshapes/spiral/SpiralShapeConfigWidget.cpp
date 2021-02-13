@@ -38,7 +38,7 @@ SpiralShapeConfigWidget::SpiralShapeConfigWidget()
 
     connect(widget.spiralType, SIGNAL(currentIndexChanged(int)), this, SIGNAL(propertyChanged()));
     connect(widget.clockWise, SIGNAL(currentIndexChanged(int)), this, SIGNAL(propertyChanged()));
-    connect(widget.fade, SIGNAL(editingFinished()), this, SIGNAL(propertyChanged()));
+    connect(widget.fade, &QAbstractSpinBox::editingFinished, this, &KoShapeConfigWidgetBase::propertyChanged);
 }
 
 void SpiralShapeConfigWidget::open(KoShape *shape)

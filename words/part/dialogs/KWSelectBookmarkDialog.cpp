@@ -44,11 +44,11 @@ KWSelectBookmark::KWSelectBookmark(const QStringList &nameList, QWidget *parent)
         widget.bookmarkList->setCurrentRow(row);
     }
 
-    connect(widget.bookmarkList, SIGNAL(currentRowChanged(int)), this, SLOT(selectionChanged(int)));
-    connect(widget.buttonRename, SIGNAL(clicked()), this, SLOT(slotBookmarkRename()));
-    connect(widget.buttonDelete, SIGNAL(clicked()), this, SLOT(slotBookmarkDelete()));
-    connect(widget.bookmarkList, SIGNAL(itemActivated(QListWidgetItem*)),
-            this, SLOT(slotBookmarkItemActivated(QListWidgetItem*)));
+    connect(widget.bookmarkList, &QListWidget::currentRowChanged, this, &KWSelectBookmark::selectionChanged);
+    connect(widget.buttonRename, &QAbstractButton::clicked, this, &KWSelectBookmark::slotBookmarkRename);
+    connect(widget.buttonDelete, &QAbstractButton::clicked, this, &KWSelectBookmark::slotBookmarkDelete);
+    connect(widget.bookmarkList, &QListWidget::itemActivated,
+            this, &KWSelectBookmark::slotBookmarkItemActivated);
     selectionChanged(bookmarkRow());
 }
 
@@ -124,13 +124,13 @@ KWSelectBookmarkDialog::KWSelectBookmarkDialog(const QStringList &nameList, QWid
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
     showButtonSeparator(true);
-    connect(ui, SIGNAL(bookmarkSelectionChanged(int)), this, SLOT(selectionChanged(int)));
-    connect(ui, SIGNAL(bookmarkNameChanged(QString,QString)),
-            this, SIGNAL(nameChanged(QString,QString)));
-    connect(ui, SIGNAL(bookmarkItemDeleted(QString)),
-            this, SIGNAL(bookmarkDeleted(QString)));
-    connect(ui, SIGNAL(bookmarkItemDoubleClicked(QListWidgetItem*)),
-            this, SLOT(bookmarkDoubleClicked(QListWidgetItem*)));
+    connect(ui, &KWSelectBookmark::bookmarkSelectionChanged, this, &KWSelectBookmarkDialog::selectionChanged);
+    connect(ui, &KWSelectBookmark::bookmarkNameChanged,
+            this, &KWSelectBookmarkDialog::nameChanged);
+    connect(ui, &KWSelectBookmark::bookmarkItemDeleted,
+            this, &KWSelectBookmarkDialog::bookmarkDeleted);
+    connect(ui, &KWSelectBookmark::bookmarkItemDoubleClicked,
+            this, &KWSelectBookmarkDialog::bookmarkDoubleClicked);
     selectionChanged(ui->bookmarkRow());
 }
 

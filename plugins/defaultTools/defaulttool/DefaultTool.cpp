@@ -199,7 +199,7 @@ DefaultTool::DefaultTool(KoCanvasBase *canvas)
     m_sizeCursors[7] = Qt::SizeFDiagCursor;
 
     KoShapeManager * manager = canvas->shapeManager();
-    connect(manager, SIGNAL(selectionChanged()), this, SLOT(updateActions()));
+    connect(manager, &KoShapeManager::selectionChanged, this, &DefaultTool::updateActions);
 }
 
 DefaultTool::~DefaultTool()
@@ -218,62 +218,62 @@ void DefaultTool::setupActions()
                                                i18n("Bring to &Front"), this);
     addAction("object_order_front", actionBringToFront);
     actionBringToFront->setShortcut(QKeySequence("Ctrl+Shift+]"));
-    connect(actionBringToFront, SIGNAL(triggered()), this, SLOT(selectionBringToFront()));
+    connect(actionBringToFront, &QAction::triggered, this, &DefaultTool::selectionBringToFront);
 
     QAction * actionRaise = new QAction(koIcon("object-order-raise"), i18n("&Raise"), this);
     addAction("object_order_raise", actionRaise);
     actionRaise->setShortcut(QKeySequence("Ctrl+]"));
-    connect(actionRaise, SIGNAL(triggered()), this, SLOT(selectionMoveUp()));
+    connect(actionRaise, &QAction::triggered, this, &DefaultTool::selectionMoveUp);
 
     QAction * actionLower = new QAction(koIcon("object-order-lower"), i18n("&Lower"), this);
     addAction("object_order_lower", actionLower);
     actionLower->setShortcut(QKeySequence("Ctrl+["));
-    connect(actionLower, SIGNAL(triggered()), this, SLOT(selectionMoveDown()));
+    connect(actionLower, &QAction::triggered, this, &DefaultTool::selectionMoveDown);
 
     QAction * actionSendToBack = new QAction(koIcon("object-order-back"),
                                              i18n("Send to &Back"), this);
     addAction("object_order_back", actionSendToBack);
     actionSendToBack->setShortcut(QKeySequence("Ctrl+Shift+["));
-    connect(actionSendToBack, SIGNAL(triggered()), this, SLOT(selectionSendToBack()));
+    connect(actionSendToBack, &QAction::triggered, this, &DefaultTool::selectionSendToBack);
 
     QAction * actionAlignLeft = new QAction(koIcon("align-horizontal-left"),
                                             i18n("Align Left"), this);
     addAction("object_align_horizontal_left", actionAlignLeft);
-    connect(actionAlignLeft, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalLeft()));
+    connect(actionAlignLeft, &QAction::triggered, this, &DefaultTool::selectionAlignHorizontalLeft);
 
     QAction * actionAlignCenter = new QAction(koIcon("align-horizontal-center"),
                                               i18n("Horizontally Center"), this);
     addAction("object_align_horizontal_center", actionAlignCenter);
-    connect(actionAlignCenter, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalCenter()));
+    connect(actionAlignCenter, &QAction::triggered, this, &DefaultTool::selectionAlignHorizontalCenter);
 
     QAction * actionAlignRight = new QAction(koIcon("align-horizontal-right"),
                                              i18n("Align Right"), this);
     addAction("object_align_horizontal_right", actionAlignRight);
-    connect(actionAlignRight, SIGNAL(triggered()), this, SLOT(selectionAlignHorizontalRight()));
+    connect(actionAlignRight, &QAction::triggered, this, &DefaultTool::selectionAlignHorizontalRight);
 
     QAction * actionAlignTop = new QAction(koIcon("align-vertical-top"), i18n("Align Top"), this);
     addAction("object_align_vertical_top", actionAlignTop);
-    connect(actionAlignTop, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalTop()));
+    connect(actionAlignTop, &QAction::triggered, this, &DefaultTool::selectionAlignVerticalTop);
 
     QAction * actionAlignMiddle = new QAction(koIcon("align-vertical-center"),
                                               i18n("Vertically Center"), this);
     addAction("object_align_vertical_center", actionAlignMiddle);
-    connect(actionAlignMiddle, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalCenter()));
+    connect(actionAlignMiddle, &QAction::triggered, this, &DefaultTool::selectionAlignVerticalCenter);
 
     QAction * actionAlignBottom = new QAction(koIcon("align-vertical-bottom"),
                                               i18n("Align Bottom"), this);
     addAction("object_align_vertical_bottom", actionAlignBottom);
-    connect(actionAlignBottom, SIGNAL(triggered()), this, SLOT(selectionAlignVerticalBottom()));
+    connect(actionAlignBottom, &QAction::triggered, this, &DefaultTool::selectionAlignVerticalBottom);
 
     QAction * actionGroupBottom = new QAction(koIcon("object-group"),
                                               i18n("Group"), this);
     addAction("object_group", actionGroupBottom);
-    connect(actionGroupBottom, SIGNAL(triggered()), this, SLOT(selectionGroup()));
+    connect(actionGroupBottom, &QAction::triggered, this, &DefaultTool::selectionGroup);
 
     QAction * actionUngroupBottom = new QAction(koIcon("object-ungroup"),
                                                 i18n("Ungroup"), this);
     addAction("object_ungroup", actionUngroupBottom);
-    connect(actionUngroupBottom, SIGNAL(triggered()), this, SLOT(selectionUngroup()));
+    connect(actionUngroupBottom, &QAction::triggered, this, &DefaultTool::selectionUngroup);
 }
 
 qreal DefaultTool::rotationOfHandle(KoFlake::SelectionHandle handle, bool useEdgeRotation)

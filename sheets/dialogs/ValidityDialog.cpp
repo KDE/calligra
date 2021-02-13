@@ -213,8 +213,8 @@ ValidityDialog::ValidityDialog(QWidget* parent, Selection* selection)
 
     connect(choose, SIGNAL(activated(int)), this, SLOT(changeIndexCond(int)));
     connect(chooseType, SIGNAL(activated(int)), this, SLOT(changeIndexType(int)));
-    connect(this, SIGNAL(accepted()), SLOT(OkPressed()));
-    connect(clearAllButton, SIGNAL(clicked(bool)), SLOT(clearAllPressed()));
+    connect(this, &QDialog::accepted, this, &ValidityDialog::OkPressed);
+    connect(clearAllButton, &QAbstractButton::clicked, this, &ValidityDialog::clearAllPressed);
 
     init();
 }

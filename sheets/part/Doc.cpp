@@ -142,7 +142,7 @@ Doc::Doc(KoPart *part)
         , dd(new Private)
 {
     Q_ASSERT(part);
-    connect(d->map, SIGNAL(sheetAdded(Sheet*)), this, SLOT(sheetAdded(Sheet*)));
+    connect(d->map, &Map::sheetAdded, this, &Doc::sheetAdded);
 
 #ifndef QT_NO_DBUS
     new MapAdaptor(d->map);
@@ -158,8 +158,8 @@ Doc::Doc(KoPart *part)
         warnSheets << "chart shape factory not found";
     }
 
-    connect(d->map, SIGNAL(commandAdded(KUndo2Command*)),
-            this, SLOT(addCommand(KUndo2Command*)));
+    connect(d->map, &Map::commandAdded,
+            this, &KoDocument::addCommand);
 
     // Load the function modules.
     FunctionModuleRegistry::instance()->loadFunctionModules();

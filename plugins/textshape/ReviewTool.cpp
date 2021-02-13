@@ -66,7 +66,7 @@ void ReviewTool::createActions()
     m_removeAnnotationAction = new QAction(i18n("Remove Comment"), this);
     m_removeAnnotationAction->setToolTip(i18n("Remove Comment"));
     addAction("remove_annotation", m_removeAnnotationAction);
-    connect(m_removeAnnotationAction, SIGNAL(triggered()), this, SLOT(removeAnnotation()));
+    connect(m_removeAnnotationAction, &QAction::triggered, this, &ReviewTool::removeAnnotation);
 }
 
 void ReviewTool::mouseReleaseEvent(KoPointerEvent* event)

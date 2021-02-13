@@ -217,7 +217,7 @@ public:
         //toDesktop->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_D);
         //q->addAction(toDesktop);
         //connect(toDesktop, SIGNAL(triggered(bool)), q, SLOT(switchDesktopForced()));
-        connect(toDesktop, SIGNAL(triggered(bool)), q, SLOT(switchToDesktop()));
+        connect(toDesktop, &QAction::triggered, q, &MainWindow::switchToDesktop);
         touchView->engine()->rootContext()->setContextProperty("switchToDesktopAction", toDesktop);
     }
 
@@ -261,15 +261,15 @@ public:
         switcher->setIcon(koIcon("system-reboot"));
         switcher->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
         //connect(switcher, SIGNAL(clicked(bool)), q, SLOT(switchDesktopForced()));
-        connect(switcher, SIGNAL(clicked(bool)), q, SLOT(switchToTouch()));
+        connect(switcher, &QAbstractButton::clicked, q, &MainWindow::switchToTouch);
         desktopView->menuBar()->setCornerWidget(switcher);
 
         // DesktopViewProxy connects itself up to everything appropriate on construction,
         // and destroys itself again when the view is removed
         desktopViewProxy = new DesktopViewProxy(q, desktopView);
-        connect(desktopViewProxy, SIGNAL(documentSaved()), q, SIGNAL(documentSaved()));
-        connect(desktopViewProxy, SIGNAL(documentSaved()), q, SLOT(resetWindowTitle()));
-        connect(desktopViewProxy, SIGNAL(documentSaved()), q, SLOT(enableAltSaveAction()));
+        connect(desktopViewProxy, &DesktopViewProxy::documentSaved, q, &MainWindow::documentSaved);
+        connect(desktopViewProxy, &DesktopViewProxy::documentSaved, q, &MainWindow::resetWindowTitle);
+        connect(desktopViewProxy, &DesktopViewProxy::documentSaved, q, &MainWindow::enableAltSaveAction);
     }
 
     void notifySlateModeChange();
@@ -305,11 +305,11 @@ MainWindow::MainWindow(QStringList fileNames, QWidget* parent, Qt::WindowFlags f
         DocumentManager::instance()->recentFileManager()->addRecent( QDir::current().absoluteFilePath( fileName ) );
     }
 
-    connect(DocumentManager::instance(), SIGNAL(documentChanged()), SLOT(documentChanged()));
-    connect(DocumentManager::instance(), SIGNAL(documentChanged()), SLOT(resetWindowTitle()));
-    connect(DocumentManager::instance(), SIGNAL(documentSaved()), SLOT(resetWindowTitle()));
-    connect(DocumentManager::instance(), SIGNAL(documentSaved()), SLOT(enableAltSaveAction()));
-    connect(DocumentManager::instance(), SIGNAL(aboutToDeleteDocument()), SLOT(closeWindow()));
+    connect(DocumentManager::instance(), &DocumentManager::documentChanged, this, &MainWindow::documentChanged);
+    connect(DocumentManager::instance(), &DocumentManager::documentChanged, this, &MainWindow::resetWindowTitle);
+    connect(DocumentManager::instance(), &DocumentManager::documentSaved, this, &MainWindow::resetWindowTitle);
+    connect(DocumentManager::instance(), &DocumentManager::documentSaved, this, &MainWindow::enableAltSaveAction);
+    connect(DocumentManager::instance(), &DocumentManager::aboutToDeleteDocument, this, &MainWindow::closeWindow);
 
     d->initTouchView(this);
 
@@ -388,10 +388,10 @@ void MainWindow::switchToTouch()
 
     if (d->slateMode) {
         if (d->syncObject->initialized)
-            QTimer::singleShot(50, this, SLOT(touchChange()));
+            QTimer::singleShot(50, this, &MainWindow::touchChange);
     }
     else
-        QTimer::singleShot(50, this, SLOT(touchChange()));
+        QTimer::singleShot(50, this, &MainWindow::touchChange);
 
     //qDebug() << "milliseconds to switch to touch:" << timer.elapsed();
 }
@@ -472,13 +472,13 @@ void MainWindow::switchToDesktop()
 void MainWindow::setDocAndPart(QObject* document, QObject* part)
 {
     if(DocumentManager::instance()->document()) {
-        disconnect(DocumentManager::instance()->document(), SIGNAL(modified(bool)), this, SLOT(resetWindowTitle()));
+        disconnect(DocumentManager::instance()->document(), &KoDocument::modified, this, &MainWindow::resetWindowTitle);
     }
     qDebug() << "Attempting to set doc and part to" << document << "and" << part;
     d->touchEventReceiver = d->touchView->rootObject()->findChild<QQuickItem*>("controllerItem");
     DocumentManager::instance()->setDocAndPart(qobject_cast<KoDocument*>(document), qobject_cast<KoPart*>(part));
     if(DocumentManager::instance()->document()) {
-        connect(DocumentManager::instance()->document(), SIGNAL(modified(bool)), this, SLOT(resetWindowTitle()));
+        connect(DocumentManager::instance()->document(), &KoDocument::modified, this, &MainWindow::resetWindowTitle);
     }
     if(document && part && !d->settings->currentFile().isEmpty()) {
         QAction* undo = qobject_cast<KoPart*>(part)->views().at(0)->action("edit_undo");

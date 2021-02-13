@@ -139,7 +139,7 @@ void Theme::setInherits(const QString& newValue)
 
         if(!d->inherits.isEmpty()) {
             d->inheritedTheme = Theme::load(d->inherits, this);
-            connect(d->inheritedTheme, SIGNAL(fontCacheRebuilt()), SIGNAL(fontCacheRebuilt()));
+            connect(d->inheritedTheme, &Theme::fontCacheRebuilt, this, &Theme::fontCacheRebuilt);
         }
 
         emit inheritsChanged();

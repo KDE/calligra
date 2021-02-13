@@ -127,8 +127,8 @@ void DocumentListModel::startSearch()
         return;
     }
     m_searchThread = new SearchThread(m_docTypes);
-    connect(m_searchThread, SIGNAL(documentFound(DocumentListModel::DocumentInfo)), this, SLOT(addDocument(DocumentListModel::DocumentInfo)));
-    connect(m_searchThread, SIGNAL(finished()), this, SLOT(searchFinished()));
+    connect(m_searchThread, &SearchThread::documentFound, this, &DocumentListModel::addDocument);
+    connect(m_searchThread, &SearchThread::finished, this, &DocumentListModel::searchFinished);
     m_searchThread->setAutoDelete(false);
     QThreadPool::globalInstance()->start(m_searchThread);
 }

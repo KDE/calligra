@@ -41,8 +41,8 @@ KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document
 {
     Q_ASSERT(document);
     setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Apply | QDialogButtonBox::Cancel);
-    connect(buttonBox(), SIGNAL(clicked(QAbstractButton*)),
-            this, SLOT(slotButtonClicked(QAbstractButton*)));
+    connect(buttonBox(), &QDialogButtonBox::clicked,
+            this, &KWPageSettingsDialog::slotButtonClicked);
     showUnitchooser(true);
     Q_ASSERT(page.isValid());
 
@@ -55,14 +55,14 @@ KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document
     KPageWidgetItem *stylePage = addPage(pageStyleWidget, i18n("Style"));
     m_pageStylesView = new QListWidget(this);
     pageStyleLayout->addWidget(m_pageStylesView, 1);
-    connect(m_pageStylesView, SIGNAL(currentRowChanged(int)), this, SLOT(pageStyleCurrentRowChanged(int)));
+    connect(m_pageStylesView, &QListWidget::currentRowChanged, this, &KWPageSettingsDialog::pageStyleCurrentRowChanged);
     QVBoxLayout *pageStyleLayout2 = new QVBoxLayout();
     pageStyleLayout->addLayout(pageStyleLayout2);
     m_clonePageStyleButton = new QPushButton(i18n("Clone"), pageStyleWidget);
-    connect(m_clonePageStyleButton, SIGNAL(clicked()), this, SLOT(pageStyleCloneClicked()));
+    connect(m_clonePageStyleButton, &QAbstractButton::clicked, this, &KWPageSettingsDialog::pageStyleCloneClicked);
     pageStyleLayout2->addWidget(m_clonePageStyleButton);
     m_deletePageStyleButton = new QPushButton(i18n("Delete"), pageStyleWidget);
-    connect(m_deletePageStyleButton, SIGNAL(clicked()), this, SLOT(pageStyleDeleteClicked()));
+    connect(m_deletePageStyleButton, &QAbstractButton::clicked, this, &KWPageSettingsDialog::pageStyleDeleteClicked);
     pageStyleLayout2->addWidget(m_deletePageStyleButton);
     pageStyleLayout2->addStretch();
     foreach(KPageWidgetItem *item, QList<KPageWidgetItem*>() << columnsPage << stylePage)
@@ -125,8 +125,8 @@ KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document
 #endif
 
     onDocumentUnitChange(m_document->unit());
-    connect(m_document, SIGNAL(unitChanged(KoUnit)), SLOT(onDocumentUnitChange(KoUnit)));
-    connect(this, SIGNAL(unitChanged(KoUnit)), SLOT(setDocumentUnit(KoUnit)));
+    connect(m_document, &KoDocument::unitChanged, this, &KWPageSettingsDialog::onDocumentUnitChange);
+    connect(this, &KoPageLayoutDialog::unitChanged, this, &KWPageSettingsDialog::setDocumentUnit);
 }
 
 KPageWidgetItem* KWPageSettingsDialog::pageItem(const QString &name) const

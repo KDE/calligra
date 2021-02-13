@@ -86,19 +86,19 @@ SimpleEntryTool::SimpleEntryTool( KoCanvasBase* canvas )
     m_cursor(0)
 {
     QActionGroup* actionGroup = new QActionGroup(this);
-    connect(actionGroup, SIGNAL(triggered(QAction*)), this, SLOT(activeActionChanged(QAction*)));
+    connect(actionGroup, &QActionGroup::triggered, this, &SimpleEntryTool::activeActionChanged);
 
     QAction * importAction = new QAction(koIcon("document-import"), i18n("Import"), this);
     addAction("import", importAction);
-    connect(importAction, SIGNAL(triggered()), this, SLOT(importSheet()));
+    connect(importAction, &QAction::triggered, this, &SimpleEntryTool::importSheet);
 
     QAction * exportAction = new QAction(koIcon("document-export"), i18n("Export"), this);
     addAction("export", exportAction);
-    connect(exportAction, SIGNAL(triggered()), this, SLOT(exportSheet()));
+    connect(exportAction, &QAction::triggered, this, &SimpleEntryTool::exportSheet);
 
     QAction * addBars = new QAction(koIcon("list-add"), i18n("Add measures"), this);
     addAction("add_bars", addBars);
-    connect(addBars, SIGNAL(triggered()), this, SLOT(addBars()));
+    connect(addBars, &QAction::triggered, this, &SimpleEntryTool::addBars);
 
     AbstractMusicAction* actionBreveNote = new NoteEntryAction(BreveNote, false, this);
     actionBreveNote->setShortcut(Qt::Key_9);
@@ -223,15 +223,15 @@ SimpleEntryTool::SimpleEntryTool( KoCanvasBase* canvas )
 
     QMenu* clefMenu = new QMenu();
     clefMenu->addAction(action = new SetClefAction(Clef::Trebble, 2, 0, this));
-    connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+    connect(action, &QAction::triggered, this, &SimpleEntryTool::actionTriggered);
     clefMenu->addAction(action = new SetClefAction(Clef::Bass, 4, 0, this));
-    connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+    connect(action, &QAction::triggered, this, &SimpleEntryTool::actionTriggered);
     clefMenu->addAction(action = new SetClefAction(Clef::Alto, 3, 0, this));
-    connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+    connect(action, &QAction::triggered, this, &SimpleEntryTool::actionTriggered);
     clefMenu->addAction(action = new SetClefAction(Clef::Tenor, 4, 0, this));
-    connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+    connect(action, &QAction::triggered, this, &SimpleEntryTool::actionTriggered);
     clefMenu->addAction(action = new SetClefAction(Clef::Soprano, 1, 0, this));
-    connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+    connect(action, &QAction::triggered, this, &SimpleEntryTool::actionTriggered);
     m_menus.append(clefMenu);
     
     QList<QAction*> contextMenu;
@@ -242,27 +242,27 @@ SimpleEntryTool::SimpleEntryTool( KoCanvasBase* canvas )
 
     QMenu* tsMenu = new QMenu();
     tsMenu->addAction(action = new TimeSignatureAction(this, 2, 2));
-    connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+    connect(action, &QAction::triggered, this, &SimpleEntryTool::actionTriggered);
     tsMenu->addAction(action = new TimeSignatureAction(this, 2, 4));
-    connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+    connect(action, &QAction::triggered, this, &SimpleEntryTool::actionTriggered);
     tsMenu->addAction(action = new TimeSignatureAction(this, 3, 4));
-    connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+    connect(action, &QAction::triggered, this, &SimpleEntryTool::actionTriggered);
     tsMenu->addAction(action = new TimeSignatureAction(this, 4, 4));
-    connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+    connect(action, &QAction::triggered, this, &SimpleEntryTool::actionTriggered);
     tsMenu->addAction(action = new TimeSignatureAction(this, 5, 4));
-    connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+    connect(action, &QAction::triggered, this, &SimpleEntryTool::actionTriggered);
     tsMenu->addAction(action = new TimeSignatureAction(this, 3, 8));
-    connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+    connect(action, &QAction::triggered, this, &SimpleEntryTool::actionTriggered);
     tsMenu->addAction(action = new TimeSignatureAction(this, 5, 8));
-    connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+    connect(action, &QAction::triggered, this, &SimpleEntryTool::actionTriggered);
     tsMenu->addAction(action = new TimeSignatureAction(this, 6, 8));
-    connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+    connect(action, &QAction::triggered, this, &SimpleEntryTool::actionTriggered);
     tsMenu->addAction(action = new TimeSignatureAction(this, 7, 8));
-    connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+    connect(action, &QAction::triggered, this, &SimpleEntryTool::actionTriggered);
     tsMenu->addAction(action = new TimeSignatureAction(this, 9, 8));
-    connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+    connect(action, &QAction::triggered, this, &SimpleEntryTool::actionTriggered);
     tsMenu->addAction(action = new TimeSignatureAction(this, 12, 8));
-    connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+    connect(action, &QAction::triggered, this, &SimpleEntryTool::actionTriggered);
     m_menus.append(tsMenu);
     
     QAction * timeSigAction = new QAction(i18n("Time signature"), this);
@@ -271,28 +271,28 @@ SimpleEntryTool::SimpleEntryTool( KoCanvasBase* canvas )
 
     QMenu* ksMenu = new QMenu();
     ksMenu->addAction(action = new KeySignatureAction(this, 0));
-    connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+    connect(action, &QAction::triggered, this, &SimpleEntryTool::actionTriggered);
     ksMenu->addSeparator();
     ksMenu->addAction(action = new KeySignatureAction(this, 1));
-    connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+    connect(action, &QAction::triggered, this, &SimpleEntryTool::actionTriggered);
     ksMenu->addAction(action = new KeySignatureAction(this, 2));
-    connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+    connect(action, &QAction::triggered, this, &SimpleEntryTool::actionTriggered);
     ksMenu->addAction(action = new KeySignatureAction(this, 3));
-    connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+    connect(action, &QAction::triggered, this, &SimpleEntryTool::actionTriggered);
     ksMenu->addAction(action = new KeySignatureAction(this, 4));
-    connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+    connect(action, &QAction::triggered, this, &SimpleEntryTool::actionTriggered);
     ksMenu->addSeparator();
     ksMenu->addAction(action = new KeySignatureAction(this, -1));
-    connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+    connect(action, &QAction::triggered, this, &SimpleEntryTool::actionTriggered);
     ksMenu->addAction(action = new KeySignatureAction(this, -2));
-    connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+    connect(action, &QAction::triggered, this, &SimpleEntryTool::actionTriggered);
     ksMenu->addAction(action = new KeySignatureAction(this, -3));
-    connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+    connect(action, &QAction::triggered, this, &SimpleEntryTool::actionTriggered);
     ksMenu->addAction(action = new KeySignatureAction(this, -4));
-    connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+    connect(action, &QAction::triggered, this, &SimpleEntryTool::actionTriggered);
     ksMenu->addSeparator();
     ksMenu->addAction(action = new KeySignatureAction(this));
-    connect(action, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+    connect(action, &QAction::triggered, this, &SimpleEntryTool::actionTriggered);
     m_menus.append(ksMenu);
     
     QAction * keySigAction = new QAction(i18n("Key signature"), this);
@@ -300,7 +300,7 @@ SimpleEntryTool::SimpleEntryTool( KoCanvasBase* canvas )
     contextMenu.append(keySigAction);
 
     QAction * removeBarAction = new RemoveBarAction(this);
-    connect(removeBarAction, SIGNAL(triggered()), this, SLOT(actionTriggered()));
+    connect(removeBarAction, &QAction::triggered, this, &SimpleEntryTool::actionTriggered);
     contextMenu.append(removeBarAction);
 
     setPopupActionList(contextMenu);
@@ -662,7 +662,7 @@ QWidget * SimpleEntryTool::createOptionWidget()
 {
     SimpleEntryWidget* widget = new SimpleEntryWidget(this);
 
-    connect(widget, SIGNAL(voiceChanged(int)), this, SLOT(voiceChanged(int)));
+    connect(widget, &SimpleEntryWidget::voiceChanged, this, &SimpleEntryTool::voiceChanged);
 
     return widget;
 }

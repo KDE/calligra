@@ -206,9 +206,9 @@ void KoGradientEditWidget::setupConnections()
     connect(m_gradientType, SIGNAL(activated(int)), this, SLOT(combosChange(int)));
     connect(m_gradientRepeat, SIGNAL(activated(int)), this, SLOT(combosChange(int)));
     connect(m_gradientTarget, SIGNAL(activated(int)), this, SLOT(combosChange(int)));
-    connect(m_addToPredefs, SIGNAL(clicked()), this, SLOT(addGradientToPredefs()));
-    connect(m_opacity, SIGNAL(valueChanged(qreal,bool)), this, SLOT(opacityChanged(qreal,bool)));
-    connect(m_actionStopColor, SIGNAL(colorChanged(KoColor)), this, SLOT(stopChanged()));
+    connect(m_addToPredefs, &QAbstractButton::clicked, this, &KoGradientEditWidget::addGradientToPredefs);
+    connect(m_opacity, &KoSliderCombo::valueChanged, this, &KoGradientEditWidget::opacityChanged);
+    connect(m_actionStopColor, &KoColorPopupAction::colorChanged, this, &KoGradientEditWidget::stopChanged);
     connect(m_stopPosition, SIGNAL(valueChanged(double)), this, SLOT(stopChanged()));
 }
 

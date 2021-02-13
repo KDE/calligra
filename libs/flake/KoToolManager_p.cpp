@@ -130,7 +130,7 @@ ShortcutToolAction* ToolHelper::createShortcutToolAction(QObject *parent)
     ShortcutToolAction* action = new ShortcutToolAction(id(), text(), parent);
     action->setShortcut(shortcut());
 
-    connect(action, SIGNAL(changed()), SLOT(shortcutToolActionUpdated()));
+    connect(action, &QAction::changed, this, &ToolHelper::shortcutToolActionUpdated);
 
     return action;
 }
@@ -172,7 +172,7 @@ ShortcutToolAction::ShortcutToolAction(const QString &id, const QString &name, Q
     : QAction(name, parent)
     , m_toolID(id)
 {
-    connect(this, SIGNAL(triggered(bool)), this, SLOT(actionTriggered()));
+    connect(this, &QAction::triggered, this, &ShortcutToolAction::actionTriggered);
 }
 
 ShortcutToolAction::~ShortcutToolAction()

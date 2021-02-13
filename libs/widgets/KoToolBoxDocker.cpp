@@ -43,10 +43,10 @@ KoToolBoxDocker::KoToolBoxDocker(KoToolBox *toolBox)
     titleBar->setToolTip(i18n("Tools"));
     setTitleBarWidget(titleBar);
 
-    connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
-            this, SLOT(updateToolBoxOrientation(Qt::DockWidgetArea)));
-    connect(this, SIGNAL(topLevelChanged(bool)),
-            this, SLOT(updateFloating(bool)));
+    connect(this, &QDockWidget::dockLocationChanged,
+            this, &KoToolBoxDocker::updateToolBoxOrientation);
+    connect(this, &QDockWidget::topLevelChanged,
+            this, &KoToolBoxDocker::updateFloating);
 }
 
 void KoToolBoxDocker::setCanvas(KoCanvasBase *canvas)

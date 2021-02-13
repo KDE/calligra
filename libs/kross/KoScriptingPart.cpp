@@ -77,17 +77,17 @@ KoScriptingPart::KoScriptingPart(KoScriptingModule *const module)
 
     QAction *execAction  = new QAction(i18n("Execute Script File..."), this);
     actionCollection()->addAction("executescriptfile", execAction);
-    connect(execAction, SIGNAL(triggered(bool)), this, SLOT(slotShowExecuteScriptFile()));
+    connect(execAction, &QAction::triggered, this, &KoScriptingPart::slotShowExecuteScriptFile);
 
     d->scriptsmenu = new KActionMenu(i18n("Scripts"), this);
     actionCollection()->addAction("scripts", d->scriptsmenu);
-    connect(d->scriptsmenu->menu(), SIGNAL(aboutToShow()), this, SLOT(slotMenuAboutToShow()));
+    connect(d->scriptsmenu->menu(), &QMenu::aboutToShow, this, &KoScriptingPart::slotMenuAboutToShow);
 
     QAction *manageraction  = new QAction(i18n("Script Manager..."), this);
     actionCollection()->addAction("scriptmanager", manageraction);
-    connect(manageraction, SIGNAL(triggered(bool)), this, SLOT(slotShowScriptManager()));
+    connect(manageraction, &QAction::triggered, this, &KoScriptingPart::slotShowScriptManager);
 
-    connect(&Kross::Manager::self(), SIGNAL(started(Kross::Action*)), this, SLOT(slotStarted(Kross::Action*)));
+    connect(&Kross::Manager::self(), &Kross::Manager::started, this, &KoScriptingPart::slotStarted);
     //connect(&Kross::Manager::self(), SIGNAL(finished(Kross::Action*)), this, SLOT(slotFinished(Kross::Action*)));
 
     if (Kross::Manager::self().property("configfile") == QVariant::Invalid) {
@@ -212,8 +212,8 @@ void KoScriptingPart::slotStarted(Kross::Action *action)
     if (view && mainwin && view->mainWindow() == mainwin && view == mainwin->rootView()) {
         action->addObject(d->module);
         d->actions.append(action);
-        connect(action, SIGNAL(finished(Kross::Action*)), this, SLOT(slotFinished(Kross::Action*)));
-        connect(action, SIGNAL(finalized(Kross::Action*)), this, SLOT(slotFinalized(Kross::Action*)));
+        connect(action, &Kross::Action::finished, this, &KoScriptingPart::slotFinished);
+        connect(action, &Kross::Action::finalized, this, &KoScriptingPart::slotFinalized);
         myStarted(action);
     }
 }
@@ -221,7 +221,7 @@ void KoScriptingPart::slotStarted(Kross::Action *action)
 void KoScriptingPart::slotFinished(Kross::Action *action)
 {
     debugKoKross <<"KoScriptingPart::slotFinished action=" << action->objectName();
-    disconnect(action, SIGNAL(finished(Kross::Action*)), this, SLOT(slotFinished(Kross::Action*)));
+    disconnect(action, &Kross::Action::finished, this, &KoScriptingPart::slotFinished);
     if (d->module && d->module == action->object(d->module->objectName())) {
         //d->view->document()->setModified(true);
         //QApplication::restoreOverrideCursor();
@@ -241,7 +241,7 @@ void KoScriptingPart::slotFinished(Kross::Action *action)
 void KoScriptingPart::slotFinalized(Kross::Action *action)
 {
     debugKoKross << "action=" << action->objectName();
-    disconnect(action, SIGNAL(finalized(Kross::Action*)), this, SLOT(slotFinalized(Kross::Action*)));
+    disconnect(action, &Kross::Action::finalized, this, &KoScriptingPart::slotFinalized);
     d->actions.removeAll(action);
     if (d->module && d->module == action->object(d->module->objectName())) {
         myFinalized(action);

@@ -46,8 +46,8 @@ OdfCollectionLoader::OdfCollectionLoader(const QString& path, QObject* parent)
 
     m_loadingTimer = new QTimer(this);
     m_loadingTimer->setInterval(0);
-    connect(m_loadingTimer, SIGNAL(timeout()),
-            this, SLOT(loadShape()));
+    connect(m_loadingTimer, &QTimer::timeout,
+            this, &OdfCollectionLoader::loadShape);
 }
 
 OdfCollectionLoader::~OdfCollectionLoader()

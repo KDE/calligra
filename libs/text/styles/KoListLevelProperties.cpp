@@ -69,7 +69,7 @@ KoListLevelProperties::KoListLevelProperties()
     setRelativeBulletSize(100);
     setAlignmentMode(true);
     setDisplayLevel(1);
-    connect(this,SIGNAL(styleChanged(int)),SLOT(onStyleChanged(int)));
+    connect(this,&KoListLevelProperties::styleChanged,this, &KoListLevelProperties::onStyleChanged);
 }
 
 KoListLevelProperties::KoListLevelProperties(const KoListLevelProperties &other)
@@ -77,7 +77,7 @@ KoListLevelProperties::KoListLevelProperties(const KoListLevelProperties &other)
         , d(new Private())
 {
     d->copy(other.d);
-    connect(this,SIGNAL(styleChanged(int)),SLOT(onStyleChanged(int)));
+    connect(this,&KoListLevelProperties::styleChanged,this, &KoListLevelProperties::onStyleChanged);
 }
 
 KoListLevelProperties::~KoListLevelProperties()

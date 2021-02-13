@@ -207,15 +207,15 @@ KarbonView::KarbonView(KarbonPart *karbonPart, KarbonDocument* doc, QWidget* par
     d->cursorCoords->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     d->cursorCoords->setMinimumWidth(50);
     addStatusBarItem(d->cursorCoords, 0);
-    connect(canvasController()->proxyObject, SIGNAL(canvasMousePositionChanged(QPoint)), this, SLOT(mousePositionChanged(QPoint)));
+    connect(canvasController()->proxyObject, &KoCanvasControllerProxyObject::canvasMousePositionChanged, this, &KarbonView::mousePositionChanged);
 
     d->smallPreview = new KarbonSmallStylePreview(this);
-    connect(d->smallPreview, SIGNAL(fillApplied()), this, SLOT(applyFillToSelection()));
-    connect(d->smallPreview, SIGNAL(strokeApplied()), this, SLOT(applyStrokeToSelection()));
+    connect(d->smallPreview, &KarbonSmallStylePreview::fillApplied, this, &KarbonView::applyFillToSelection);
+    connect(d->smallPreview, &KarbonSmallStylePreview::strokeApplied, this, &KarbonView::applyStrokeToSelection);
     addStatusBarItem(d->smallPreview, 0);
     // FIXME: This was not neccessary before refactoring to pageapp, why now?
     // Also, changing colors of a shape does not update preview
-    connect(shapeManager(), SIGNAL(selectionChanged()), d->smallPreview, SLOT(selectionChanged()));
+    connect(shapeManager(), &KoShapeManager::selectionChanged, d->smallPreview, &KarbonSmallStylePreview::selectionChanged);
 
     initActions();
 
@@ -237,10 +237,10 @@ KarbonView::KarbonView(KarbonPart *karbonPart, KarbonDocument* doc, QWidget* par
     setNumberOfRecentFiles(max);
 
     d->colorBar = new KarbonPaletteBarWidget(Qt::Horizontal, this);
-    connect(d->colorBar, SIGNAL(colorSelected(KoColor)), this, SLOT(applyPaletteColor(KoColor)));
-    connect(shapeManager(), SIGNAL(selectionContentChanged()), d->colorBar, SLOT(updateDocumentColors()));
-    connect(kopaDocument(), SIGNAL(shapeAdded(KoShape*)), d->colorBar, SLOT(updateDocumentColors()));
-    connect(kopaDocument(), SIGNAL(shapeRemoved(KoShape*)), d->colorBar, SLOT(updateDocumentColors()));
+    connect(d->colorBar, &KarbonPaletteBarWidget::colorSelected, this, &KarbonView::applyPaletteColor);
+    connect(shapeManager(), &KoShapeManager::selectionContentChanged, d->colorBar, &KarbonPaletteBarWidget::updateDocumentColors);
+    connect(kopaDocument(), &KoPADocument::shapeAdded, d->colorBar, &KarbonPaletteBarWidget::updateDocumentColors);
+    connect(kopaDocument(), &KoPADocument::shapeRemoved, d->colorBar, &KarbonPaletteBarWidget::updateDocumentColors);
 
     if (mainWindow()) {
         KSharedConfigPtr config = KSharedConfig::openConfig();
@@ -864,7 +864,7 @@ void KarbonView::initActions()
     // view ----->
     d->viewAction  = new KToggleAction(i18n("Outline &Mode"), this);
     actionCollection()->addAction("view_mode", d->viewAction);
-    connect(d->viewAction, SIGNAL(toggled(bool)), this, SLOT(viewModeChanged(bool)));
+    connect(d->viewAction, &QAction::toggled, this, &KarbonView::viewModeChanged);
 
     // No need for the other actions in read-only (embedded) mode
     if (!mainWindow())
@@ -872,72 +872,72 @@ void KarbonView::initActions()
 
     QAction *actionImportGraphic  = new QAction(i18n("&Import Graphic..."), this);
     actionCollection()->addAction("file_import", actionImportGraphic);
-    connect(actionImportGraphic, SIGNAL(triggered()), this, SLOT(fileImportGraphic()));
+    connect(actionImportGraphic, &QAction::triggered, this, &KarbonView::fileImportGraphic);
 
     QAction *actionEditGuides = new QAction(koIcon("edit-guides"), i18n("Edit Guides"), this);
     actionCollection()->addAction("edit_guides", actionEditGuides);
-    connect(actionEditGuides, SIGNAL(triggered()), this, SLOT(editGuides()));
+    connect(actionEditGuides, &QAction::triggered, this, &KarbonView::editGuides);
     // edit <-----
 
     // object ----->
     QAction *actionDuplicate  = new QAction(i18nc("Duplicate selection", "&Duplicate"), this);
     actionCollection()->addAction("object_duplicate", actionDuplicate);
     actionDuplicate->setShortcut(QKeySequence("Ctrl+D"));
-    connect(actionDuplicate, SIGNAL(triggered()), this, SLOT(selectionDuplicate()));
+    connect(actionDuplicate, &QAction::triggered, this, &KarbonView::selectionDuplicate);
 
     QAction *actionDistributeHorizontalCenter  = new QAction(koIcon("distribute-horizontal-center"), i18n("Distribute Center (Horizontal)"), this);
     actionCollection()->addAction("object_distribute_horizontal_center", actionDistributeHorizontalCenter);
-    connect(actionDistributeHorizontalCenter, SIGNAL(triggered()), this, SLOT(selectionDistributeHorizontalCenter()));
+    connect(actionDistributeHorizontalCenter, &QAction::triggered, this, &KarbonView::selectionDistributeHorizontalCenter);
 
     QAction *actionDistributeHorizontalGap  = new QAction(koIcon("distribute-horizontal-equal"), i18n("Distribute Gaps (Horizontal)"), this);
     actionCollection()->addAction("object_distribute_horizontal_gap", actionDistributeHorizontalGap);
-    connect(actionDistributeHorizontalGap, SIGNAL(triggered()), this, SLOT(selectionDistributeHorizontalGap()));
+    connect(actionDistributeHorizontalGap, &QAction::triggered, this, &KarbonView::selectionDistributeHorizontalGap);
 
     QAction *actionDistributeLeft  = new QAction(koIcon("distribute-horizontal-left"), i18n("Distribute Left Borders"), this);
     actionCollection()->addAction("object_distribute_horizontal_left", actionDistributeLeft);
-    connect(actionDistributeLeft, SIGNAL(triggered()), this, SLOT(selectionDistributeHorizontalLeft()));
+    connect(actionDistributeLeft, &QAction::triggered, this, &KarbonView::selectionDistributeHorizontalLeft);
 
     QAction *actionDistributeRight  = new QAction(koIcon("distribute-horizontal-right"), i18n("Distribute Right Borders"), this);
     actionCollection()->addAction("object_distribute_horizontal_right", actionDistributeRight);
-    connect(actionDistributeRight, SIGNAL(triggered()), this, SLOT(selectionDistributeHorizontalRight()));
+    connect(actionDistributeRight, &QAction::triggered, this, &KarbonView::selectionDistributeHorizontalRight);
 
     QAction *actionDistributeVerticalCenter  = new QAction(koIcon("distribute-vertical-center"), i18n("Distribute Center (Vertical)"), this);
     actionCollection()->addAction("object_distribute_vertical_center", actionDistributeVerticalCenter);
-    connect(actionDistributeVerticalCenter, SIGNAL(triggered()), this, SLOT(selectionDistributeVerticalCenter()));
+    connect(actionDistributeVerticalCenter, &QAction::triggered, this, &KarbonView::selectionDistributeVerticalCenter);
 
     QAction *actionDistributeVerticalGap  = new QAction(koIcon("distribute-vertical-equal"), i18n("Distribute Gaps (Vertical)"), this);
     actionCollection()->addAction("object_distribute_vertical_gap", actionDistributeVerticalGap);
-    connect(actionDistributeVerticalGap, SIGNAL(triggered()), this, SLOT(selectionDistributeVerticalGap()));
+    connect(actionDistributeVerticalGap, &QAction::triggered, this, &KarbonView::selectionDistributeVerticalGap);
 
     QAction *actionDistributeBottom  = new QAction(koIcon("distribute-vertical-bottom"), i18n("Distribute Bottom Borders"), this);
     actionCollection()->addAction("object_distribute_vertical_bottom", actionDistributeBottom);
-    connect(actionDistributeBottom, SIGNAL(triggered()), this, SLOT(selectionDistributeVerticalBottom()));
+    connect(actionDistributeBottom, &QAction::triggered, this, &KarbonView::selectionDistributeVerticalBottom);
 
     QAction *actionDistributeTop  = new QAction(koIcon("distribute-vertical-top"), i18n("Distribute Top Borders"), this);
     actionCollection()->addAction("object_distribute_vertical_top", actionDistributeTop);
-    connect(actionDistributeTop, SIGNAL(triggered()), this, SLOT(selectionDistributeVerticalTop()));
+    connect(actionDistributeTop, &QAction::triggered, this, &KarbonView::selectionDistributeVerticalTop);
 
     d->showPaletteAction = new KToggleAction(i18n("Show Color Palette"), this);
     actionCollection()->addAction("view_show_palette", d->showPaletteAction);
     d->showPaletteAction->setToolTip(i18n("Show or hide color palette"));
     d->showPaletteAction->setChecked(true);
-    connect(d->showPaletteAction, SIGNAL(triggered()), this, SLOT(showPalette()));
+    connect(d->showPaletteAction, &QAction::triggered, this, &KarbonView::showPalette);
 
     d->clipObjects  = new QAction(i18n("&Clip Object"), this);
     actionCollection()->addAction("object_clip", d->clipObjects );
-    connect(d->clipObjects, SIGNAL(triggered()), this, SLOT(clipObjects()));
+    connect(d->clipObjects, &QAction::triggered, this, &KarbonView::clipObjects);
 
     d->unclipObjects  = new QAction(i18n("&Unclip Objects"), this);
     actionCollection()->addAction("object_unclip", d->unclipObjects );
-    connect(d->unclipObjects, SIGNAL(triggered()), this, SLOT(unclipObjects()));
+    connect(d->unclipObjects, &QAction::triggered, this, &KarbonView::unclipObjects);
 
     d->flipVertical = new QAction(koIcon("object-flip-vertical"), i18n("Mirror Vertically"), this);
     actionCollection()->addAction("object_flip_vertical", d->flipVertical);
-    connect(d->flipVertical, SIGNAL(triggered()), this, SLOT(flipVertical()));
+    connect(d->flipVertical, &QAction::triggered, this, &KarbonView::flipVertical);
 
     d->flipHorizontal = new QAction(koIcon("object-flip-horizontal"), i18n("Mirror Horizontally"), this);
     actionCollection()->addAction("object_flip_horizontal", d->flipHorizontal);
-    connect(d->flipHorizontal, SIGNAL(triggered()), this, SLOT(flipHorizontal()));
+    connect(d->flipHorizontal, &QAction::triggered, this, &KarbonView::flipHorizontal);
 
     // object <-----
 
@@ -946,65 +946,65 @@ void KarbonView::initActions()
     actionCollection()->addAction("close_path", d->closePath);
     d->closePath->setShortcut(QKeySequence("Ctrl+U"));
     d->closePath->setEnabled(false);
-    connect(d->closePath, SIGNAL(triggered()), this, SLOT(closePath()));
+    connect(d->closePath, &QAction::triggered, this, &KarbonView::closePath);
 
     d->combinePath  = new QAction(i18n("Com&bine Path"), this);
     actionCollection()->addAction("combine_path", d->combinePath);
     d->combinePath->setShortcut(QKeySequence("Ctrl+K"));
     d->combinePath->setEnabled(false);
-    connect(d->combinePath, SIGNAL(triggered()), this, SLOT(combinePath()));
+    connect(d->combinePath, &QAction::triggered, this, &KarbonView::combinePath);
 
     d->separatePath  = new QAction(i18n("Se&parate Path"), this);
     actionCollection()->addAction("separate_path", d->separatePath);
     d->separatePath->setShortcut(QKeySequence("Shift+Ctrl+K"));
     d->separatePath->setEnabled(false);
-    connect(d->separatePath, SIGNAL(triggered()), this, SLOT(separatePath()));
+    connect(d->separatePath, &QAction::triggered, this, &KarbonView::separatePath);
 
     d->reversePath  = new QAction(i18n("Re&verse Path"), this);
     actionCollection()->addAction("reverse_path", d->reversePath);
     d->reversePath->setShortcut(QKeySequence("Ctrl+R"));
     d->reversePath->setEnabled(false);
-    connect(d->reversePath, SIGNAL(triggered()), this, SLOT(reversePath()));
+    connect(d->reversePath, &QAction::triggered, this, &KarbonView::reversePath);
 
     d->intersectPath = new QAction(i18n("Intersect Paths"), this);
     actionCollection()->addAction("intersect_path", d->intersectPath);
     //d->intersectPath->setShortcut(QKeySequence("Shift+Ctrl+K"));
     d->intersectPath->setEnabled(false);
-    connect(d->intersectPath, SIGNAL(triggered()), this, SLOT(intersectPaths()));
+    connect(d->intersectPath, &QAction::triggered, this, &KarbonView::intersectPaths);
 
     d->subtractPath = new QAction(i18n("Subtract Paths"), this);
     actionCollection()->addAction("subtract_path", d->subtractPath);
     //d->subtractPath->setShortcut(QKeySequence("Shift+Ctrl+K"));
     d->subtractPath->setEnabled(false);
-    connect(d->subtractPath, SIGNAL(triggered()), this, SLOT(subtractPaths()));
+    connect(d->subtractPath, &QAction::triggered, this, &KarbonView::subtractPaths);
 
     d->unitePath = new QAction(i18n("Unite Paths"), this);
     actionCollection()->addAction("unite_path", d->unitePath);
     //d->unitePath->setShortcut(QKeySequence("Shift+Ctrl+K"));
     d->unitePath->setEnabled(false);
-    connect(d->unitePath, SIGNAL(triggered()), this, SLOT(unitePaths()));
+    connect(d->unitePath, &QAction::triggered, this, &KarbonView::unitePaths);
 
     d->excludePath = new QAction(i18n("Exclude Paths"), this);
     actionCollection()->addAction("exclude_path", d->excludePath);
     //d->excludePath->setShortcut(QKeySequence("Shift+Ctrl+K"));
     d->excludePath->setEnabled(false);
-    connect(d->excludePath, SIGNAL(triggered()), this, SLOT(excludePaths()));
+    connect(d->excludePath, &QAction::triggered, this, &KarbonView::excludePaths);
 
     d->pathSnapToGrid = new QAction(i18n("Snap Path to Grid"), this);
     actionCollection()->addAction("path_snap_to_grid", d->pathSnapToGrid);
     d->pathSnapToGrid->setEnabled(false);
-    connect(d->pathSnapToGrid, SIGNAL(triggered()), this, SLOT(pathSnapToGrid()));
+    connect(d->pathSnapToGrid, &QAction::triggered, this, &KarbonView::pathSnapToGrid);
 
     // path <-----
 
     // view ---->
     QAction * zoomSelection = new QAction(koIcon("zoom-select"), i18n("Zoom to Selection"), this);
     actionCollection()->addAction("view_zoom_selection", zoomSelection);
-    connect(zoomSelection, SIGNAL(triggered()), this, SLOT(zoomSelection()));
+    connect(zoomSelection, &QAction::triggered, this, &KarbonView::zoomSelection);
 
     QAction * zoomDrawing = new QAction(koIcon("zoom-draw"), i18n("Zoom to Drawing"), this);
     actionCollection()->addAction("view_zoom_drawing", zoomDrawing);
-    connect(zoomDrawing, SIGNAL(triggered()), this, SLOT(zoomDrawing()));
+    connect(zoomDrawing, &QAction::triggered, this, &KarbonView::zoomDrawing);
     // view <-----
 }
 

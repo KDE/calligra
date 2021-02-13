@@ -70,8 +70,8 @@ void TextDocumentInspectionDocker::setCanvas(KoCanvasBase *canvas)
         return;
     }
 
-    connect(m_canvas->shapeManager(), SIGNAL(selectionChanged()),
-            this, SLOT(onShapeSelectionChanged()));
+    connect(m_canvas->shapeManager(), &KoShapeManager::selectionChanged,
+            this, &TextDocumentInspectionDocker::onShapeSelectionChanged);
 
     onShapeSelectionChanged();
 }

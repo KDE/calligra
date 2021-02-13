@@ -51,7 +51,7 @@ void KoFilter::setUpdater(const QPointer<KoUpdater>& updater)
     if (d->updater && !updater) {
         disconnect(this, SLOT(slotProgress(int)));
     } else if (!d->updater && updater) {
-        connect(this, SIGNAL(sigProgress(int)), SLOT(slotProgress(int)));
+        connect(this, &KoFilter::sigProgress, this, &KoFilter::slotProgress);
     }
     d->updater = updater;
 }

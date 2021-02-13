@@ -37,9 +37,9 @@ EllipseShapeConfigWidget::EllipseShapeConfigWidget()
     widget.endAngle->setMaximum(360.0);
 
     connect(widget.ellipseType, SIGNAL(currentIndexChanged(int)), this, SIGNAL(propertyChanged()));
-    connect(widget.startAngle, SIGNAL(editingFinished()), this, SIGNAL(propertyChanged()));
-    connect(widget.endAngle, SIGNAL(editingFinished()), this, SIGNAL(propertyChanged()));
-    connect(widget.closeEllipse, SIGNAL(clicked(bool)), this, SLOT(closeEllipse()));
+    connect(widget.startAngle, &QAbstractSpinBox::editingFinished, this, &KoShapeConfigWidgetBase::propertyChanged);
+    connect(widget.endAngle, &QAbstractSpinBox::editingFinished, this, &KoShapeConfigWidgetBase::propertyChanged);
+    connect(widget.closeEllipse, &QAbstractButton::clicked, this, &EllipseShapeConfigWidget::closeEllipse);
 }
 
 void EllipseShapeConfigWidget::open(KoShape *shape)

@@ -56,7 +56,7 @@ PivotOptions::PivotOptions(QWidget* parent,Selection* selection):
    d->mainWidget.SelectFunction->addItem("prod");
    d->mainWidget.SelectFunction->addItem("devsq");
    
-   connect(this, SIGNAL(okClicked()), this, SLOT(on_Ok_clicked()));   
+   connect(this, &KoDialog::okClicked, this, &PivotOptions::on_Ok_clicked);   
      
 }//PivotOptions
 

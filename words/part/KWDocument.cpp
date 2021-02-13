@@ -107,8 +107,8 @@ KWDocument::KWDocument(KoPart *part)
     m_frameLayout.setDocument(this);
     resourceManager()->setOdfDocument(this);
 
-    connect(&m_frameLayout, SIGNAL(newFrameSet(KWFrameSet*)), this, SLOT(addFrameSet(KWFrameSet*)));
-    connect(&m_frameLayout, SIGNAL(removedFrameSet(KWFrameSet*)), this, SLOT(removeFrameSet(KWFrameSet*)));
+    connect(&m_frameLayout, &KWFrameLayout::newFrameSet, this, &KWDocument::addFrameSet);
+    connect(&m_frameLayout, &KWFrameLayout::removedFrameSet, this, &KWDocument::removeFrameSet);
 
     // Init shape Factories with our frame based configuration panels.
     m_panelFactories = KWFrameDialog::panels(this);
@@ -142,8 +142,8 @@ KWDocument::KWDocument(KoPart *part)
     m_shapeController = new KoShapeController(0, this);
 
     if (inlineTextObjectManager()) {
-        connect(documentInfo(), SIGNAL(infoUpdated(QString,QString)),
-                inlineTextObjectManager(), SLOT(documentInformationUpdated(QString,QString)));
+        connect(documentInfo(), &KoDocumentInfo::infoUpdated,
+                inlineTextObjectManager(), &KoInlineTextObjectManager::documentInformationUpdated);
     }
 
     m_annotationManager = new KoAnnotationLayoutManager(this);
@@ -332,8 +332,8 @@ void KWDocument::removeFrameSet(KWFrameSet *fs)
     foreach (KoShape *shape, fs->shapes())
         removeSequencedShape(shape);
 
-    disconnect(fs, SIGNAL(shapeAdded(KoShape*)), this, SLOT(addSequencedShape(KoShape*)));
-    disconnect(fs, SIGNAL(shapeRemoved(KoShape*)), this, SLOT(removeSequencedShape(KoShape*)));
+    disconnect(fs, &KWFrameSet::shapeAdded, this, &KWDocument::addSequencedShape);
+    disconnect(fs, &KWFrameSet::shapeRemoved, this, &KWDocument::removeSequencedShape);
 }
 
 void KWDocument::relayout(QList<KWFrameSet*> framesets)
@@ -364,8 +364,8 @@ void KWDocument::relayout(QList<KWFrameSet*> framesets)
         Q_ASSERT(lay);
 
         if (tfs->textFrameSetType() == Words::MainTextFrameSet && m_layoutProgressUpdater) {
-            connect(lay, SIGNAL(layoutProgressChanged(int)), this, SLOT(layoutProgressChanged(int)));
-            connect(lay, SIGNAL(finishedLayout()), this, SLOT(layoutFinished()));
+            connect(lay, &KoTextDocumentLayout::layoutProgressChanged, this, &KWDocument::layoutProgressChanged);
+            connect(lay, &KoTextDocumentLayout::finishedLayout, this, &KWDocument::layoutFinished);
         }
 
         // schedule all calls so multiple layout calls are compressed
@@ -421,12 +421,12 @@ void KWDocument::addFrameSet(KWFrameSet *fs)
         if (tfs->textFrameSetType() == Words::MainTextFrameSet) {
             KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(tfs->document()->documentLayout());
             Q_ASSERT(lay);
-            connect(lay, SIGNAL(finishedLayout()), this, SLOT(mainTextFrameSetLayoutDone()));
+            connect(lay, &KoTextDocumentLayout::finishedLayout, this, &KWDocument::mainTextFrameSetLayoutDone);
         }
     }
 
-    connect(fs, SIGNAL(shapeAdded(KoShape*)), this, SLOT(addSequencedShape(KoShape*)));
-    connect(fs, SIGNAL(shapeRemoved(KoShape*)), this, SLOT(removeSequencedShape(KoShape*)));
+    connect(fs, &KWFrameSet::shapeAdded, this, &KWDocument::addSequencedShape);
+    connect(fs, &KWFrameSet::shapeRemoved, this, &KWDocument::removeSequencedShape);
 }
 
 void KWDocument::addSequencedShape(KoShape *shape)
@@ -773,7 +773,7 @@ KoDocumentInfoDlg *KWDocument::createDocumentInfoDialog(QWidget *parent, KoDocum
     KoDocumentInfoDlg *dlg = new KoDocumentInfoDlg(parent, docInfo);
     KoMainWindow *mainwin = dynamic_cast<KoMainWindow*>(parent);
     if (mainwin) {
-        connect(dlg, SIGNAL(saveRequested()), mainwin, SLOT(slotFileSave()));
+        connect(dlg, &KoDocumentInfoDlg::saveRequested, mainwin, &KoMainWindow::slotFileSave);
     }
 
 #ifdef SHOULD_BUILD_RDF

@@ -52,29 +52,29 @@ SheetsEditor::SheetsEditor(TableShape* tableShape, QWidget* parent)
     setLayout(layout);
 
     d->list = new QListWidget(this);
-    connect(d->list, SIGNAL(itemSelectionChanged()), this, SLOT(selectionChanged()));
-    connect(d->list, SIGNAL(itemChanged(QListWidgetItem*)), this, SLOT(itemChanged(QListWidgetItem*)));
+    connect(d->list, &QListWidget::itemSelectionChanged, this, &SheetsEditor::selectionChanged);
+    connect(d->list, &QListWidget::itemChanged, this, &SheetsEditor::itemChanged);
     layout->addWidget(d->list);
 
     Map *map = d->tableShape->map();
     foreach(Sheet* sheet, map->sheetList()) {
         sheetAdded(sheet);
     }
-    connect(map, SIGNAL(sheetAdded(Sheet*)), this, SLOT(sheetAdded(Sheet*)));
+    connect(map, &Map::sheetAdded, this, &SheetsEditor::sheetAdded);
 
     QVBoxLayout* btnlayout = new QVBoxLayout();
     layout->addLayout(btnlayout);
 
     d->renamebtn = new QPushButton(/*koIcon("edit-rename"),*/ i18n("Rename"), this);
-    connect(d->renamebtn, SIGNAL(clicked()), this, SLOT(renameClicked()));
+    connect(d->renamebtn, &QAbstractButton::clicked, this, &SheetsEditor::renameClicked);
     btnlayout->addWidget(d->renamebtn);
 
     d->addbtn = new QPushButton(/*koIcon("list-add"),*/ i18n("Add"), this);
-    connect(d->addbtn, SIGNAL(clicked()), this, SLOT(addClicked()));
+    connect(d->addbtn, &QAbstractButton::clicked, this, &SheetsEditor::addClicked);
     btnlayout->addWidget(d->addbtn);
 
     d->rembtn = new QPushButton(/*koIcon("edit-delete"),*/ i18n("Remove"), this);
-    connect(d->rembtn, SIGNAL(clicked()), this, SLOT(removeClicked()));
+    connect(d->rembtn, &QAbstractButton::clicked, this, &SheetsEditor::removeClicked);
     btnlayout->addWidget(d->rembtn);
 
     btnlayout->addStretch(1);

@@ -99,17 +99,17 @@ AxesConfigWidget::Private::Private(AxesConfigWidget *parent)
     ui.axislabelPosition->insertItem(3, i18n("Start"), "outside-start");
 
 
-    connect(ui.axisShowTitle, SIGNAL(toggled(bool)), parent, SLOT(ui_axisShowTitleChanged(bool)));
-    connect(ui.axisShow, SIGNAL(toggled(bool)), parent, SLOT(ui_axisShowChanged(bool)));
+    connect(ui.axisShowTitle, &QAbstractButton::toggled, parent, &AxesConfigWidget::ui_axisShowTitleChanged);
+    connect(ui.axisShow, &QAbstractButton::toggled, parent, &AxesConfigWidget::ui_axisShowChanged);
     connect(ui.axisPosition, SIGNAL(currentIndexChanged(int)), parent, SLOT(ui_axisPositionChanged(int)));
     connect(ui.axislabelPosition, SIGNAL(currentIndexChanged(int)), parent, SLOT(ui_axisLabelsPositionChanged(int)));
-    connect(ui.axisShowLabels, SIGNAL(toggled(bool)), parent, SLOT(ui_axisShowLabelsChanged(bool)));
-    connect(ui.axisShowMajorGridLines, SIGNAL(toggled(bool)), parent, SLOT(ui_axisShowMajorGridLinesChanged(bool)));
-    connect(ui.axisShowMinorGridLines, SIGNAL(toggled(bool)), parent, SLOT(ui_axisShowMinorGridLinesChanged(bool)));
+    connect(ui.axisShowLabels, &QAbstractButton::toggled, parent, &AxesConfigWidget::ui_axisShowLabelsChanged);
+    connect(ui.axisShowMajorGridLines, &QAbstractButton::toggled, parent, &AxesConfigWidget::ui_axisShowMajorGridLinesChanged);
+    connect(ui.axisShowMinorGridLines, &QAbstractButton::toggled, parent, &AxesConfigWidget::ui_axisShowMinorGridLinesChanged);
     connect(ui.axes, SIGNAL(currentIndexChanged(int)),parent, SLOT(ui_axisSelectionChanged(int)));
 
-    connect(ui.gapBetweenBars, SIGNAL(editingFinished()), parent, SLOT(slotGapBetweenBars()));
-    connect(ui.gapBetweenSets, SIGNAL(editingFinished()), parent, SLOT(slotGapBetweenSets()));
+    connect(ui.gapBetweenBars, &QAbstractSpinBox::editingFinished, parent, &AxesConfigWidget::slotGapBetweenBars);
+    connect(ui.gapBetweenSets, &QAbstractSpinBox::editingFinished, parent, &AxesConfigWidget::slotGapBetweenSets);
 }
 
 AxesConfigWidget::Private::~Private()
@@ -218,24 +218,24 @@ void AxesConfigWidget::updateData(ChartType type, ChartSubtype subtype)
 void AxesConfigWidget::setupDialogs()
 {
     // Axis scaling
-    connect(d->ui.axisScalingButton, SIGNAL(clicked()),
-             this, SLOT(ui_axisScalingButtonClicked()));
-    connect(d->axisScalingDialog.logarithmicScaling, SIGNAL(toggled(bool)),
-             this, SLOT(ui_axisUseLogarithmicScalingChanged(bool)));
+    connect(d->ui.axisScalingButton, &QAbstractButton::clicked,
+             this, &AxesConfigWidget::ui_axisScalingButtonClicked);
+    connect(d->axisScalingDialog.logarithmicScaling, &QAbstractButton::toggled,
+             this, &AxesConfigWidget::ui_axisUseLogarithmicScalingChanged);
     connect(d->axisScalingDialog.stepWidth, SIGNAL(valueChanged(double)),
              this, SLOT(ui_axisStepWidthChanged(double)));
-    connect (d->axisScalingDialog.automaticStepWidth, SIGNAL(toggled(bool)),
-              this, SLOT(ui_axisUseAutomaticStepWidthChanged(bool)));
+    connect (d->axisScalingDialog.automaticStepWidth, &QAbstractButton::toggled,
+              this, &AxesConfigWidget::ui_axisUseAutomaticStepWidthChanged);
     connect(d->axisScalingDialog.subStepWidth, SIGNAL(valueChanged(double)),
              this, SLOT(ui_axisSubStepWidthChanged(double)));
-    connect (d->axisScalingDialog.automaticSubStepWidth, SIGNAL(toggled(bool)),
-              this, SLOT(ui_axisUseAutomaticSubStepWidthChanged(bool)));
+    connect (d->axisScalingDialog.automaticSubStepWidth, &QAbstractButton::toggled,
+              this, &AxesConfigWidget::ui_axisUseAutomaticSubStepWidthChanged);
 
     // Edit Fonts
-    connect(d->ui.axisEditFontButton, SIGNAL(clicked()),
-             this, SLOT(ui_axisEditFontButtonClicked()));
-    connect(&d->axisFontEditorDialog, SIGNAL(accepted()),
-             this, SLOT(ui_axisLabelsFontChanged()));
+    connect(d->ui.axisEditFontButton, &QAbstractButton::clicked,
+             this, &AxesConfigWidget::ui_axisEditFontButtonClicked);
+    connect(&d->axisFontEditorDialog, &QDialog::accepted,
+             this, &AxesConfigWidget::ui_axisLabelsFontChanged);
 
 }
 

@@ -52,34 +52,34 @@ ParagraphGeneral::ParagraphGeneral(QWidget *parent)
     m_paragraphIndentSpacing = new ParagraphIndentSpacing(this);
     widget.tabs->addTab(m_paragraphIndentSpacing, i18n("Indent/Spacing"));
 
-    connect(m_paragraphIndentSpacing, SIGNAL(parStyleChanged()), this, SIGNAL(styleChanged()));
+    connect(m_paragraphIndentSpacing, &ParagraphIndentSpacing::parStyleChanged, this, &CharacterGeneral::styleChanged);
 
     m_paragraphLayout = new ParagraphLayout(this);
     widget.tabs->addTab(m_paragraphLayout, i18n("General Layout"));
 
-    connect(m_paragraphLayout, SIGNAL(parStyleChanged()), this, SIGNAL(styleChanged()));
+    connect(m_paragraphLayout, &ParagraphLayout::parStyleChanged, this, &CharacterGeneral::styleChanged);
 
     m_paragraphBulletsNumbers = new ParagraphBulletsNumbers(this);
     widget.tabs->addTab(m_paragraphBulletsNumbers, i18n("Bullets/Numbers"));
 
-    connect(m_paragraphBulletsNumbers, SIGNAL(parStyleChanged()), this, SIGNAL(styleChanged()));
+    connect(m_paragraphBulletsNumbers, &ParagraphBulletsNumbers::parStyleChanged, this, &CharacterGeneral::styleChanged);
 
     m_paragraphDecorations = new ParagraphDecorations(this);
     widget.tabs->addTab(m_paragraphDecorations, i18n("Decorations"));
 
-    connect(m_paragraphDecorations, SIGNAL(parStyleChanged()), this, SIGNAL(styleChanged()));
+    connect(m_paragraphDecorations, &ParagraphDecorations::parStyleChanged, this, &CharacterGeneral::styleChanged);
 
     m_paragraphDropCaps = new ParagraphDropCaps(this);
     widget.tabs->addTab(m_paragraphDropCaps, i18n("Drop Caps"));
 
-    connect(m_paragraphDropCaps, SIGNAL(parStyleChanged()), this, SIGNAL(styleChanged()));
+    connect(m_paragraphDropCaps, &ParagraphDropCaps::parStyleChanged, this, &CharacterGeneral::styleChanged);
 
     widget.preview->setText(QString("Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."));
 
     connect(widget.name, SIGNAL(textChanged(QString)), this, SIGNAL(nameChanged(QString)));
     connect(widget.nextStyle, SIGNAL(currentIndexChanged(int)), this, SIGNAL(styleChanged()));
 
-    connect(this, SIGNAL(styleChanged()), this, SLOT(setPreviewParagraphStyle()));
+    connect(this, &CharacterGeneral::styleChanged, this, &ParagraphGeneral::setPreviewParagraphStyle);
 }
 
 void ParagraphGeneral::hideStyleName(bool hide)

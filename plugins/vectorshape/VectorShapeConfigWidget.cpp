@@ -73,7 +73,7 @@ void VectorShapeConfigWidget::open(KoShape *shape)
     m_fileWidget->setMimeFilter(mimetypes);
     layout->addWidget(m_fileWidget);
     setLayout(layout);
-    connect(m_fileWidget, SIGNAL(accepted()), this, SIGNAL(accept()));
+    connect(m_fileWidget, &KFileWidget::accepted, this, &KoShapeConfigWidgetBase::accept);
 }
 
 void VectorShapeConfigWidget::save()
@@ -85,7 +85,7 @@ void VectorShapeConfigWidget::save()
     if (!url.isEmpty()) {
         KIO::StoredTransferJob *job = KIO::storedGet(url, KIO::NoReload, 0);
         LoadWaiter *waiter = new LoadWaiter(m_shape);
-        connect(job, SIGNAL(result(KJob*)), waiter, SLOT(setImageData(KJob*)));
+        connect(job, &KJob::result, waiter, &LoadWaiter::setImageData);
     }
 }
 

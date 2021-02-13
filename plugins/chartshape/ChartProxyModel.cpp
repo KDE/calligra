@@ -139,10 +139,10 @@ ChartProxyModel::ChartProxyModel(ChartShape *shape, TableSource *source)
     : QAbstractTableModel(),
       d(new Private(this, shape, source))
 {
-    connect(source, SIGNAL(tableAdded(Table*)),
-            this,   SLOT(addTable(Table*)));
-    connect(source, SIGNAL(tableRemoved(Table*)),
-            this,   SLOT(removeTable(Table*)));
+    connect(source, &TableSource::tableAdded,
+            this,   &ChartProxyModel::addTable);
+    connect(source, &TableSource::tableRemoved,
+            this,   &ChartProxyModel::removeTable);
 }
 
 ChartProxyModel::~ChartProxyModel()

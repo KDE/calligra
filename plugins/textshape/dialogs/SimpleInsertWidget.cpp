@@ -40,12 +40,12 @@ SimpleInsertWidget::SimpleInsertWidget(TextTool *tool, QWidget *parent)
     widget.insertPageBreak->setDefaultAction(tool->action("insert_framebreak"));
     widget.splitSections->setDefaultAction(tool->action("split_sections"));
 
-    connect(widget.insertVariable, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
-    connect(widget.insertSpecialChar, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
-    connect(widget.insertPageBreak, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
-    connect(widget.insertSection, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
-    connect(widget.configureSection, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
-    connect(widget.splitSections, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
+    connect(widget.insertVariable, &QAbstractButton::clicked, this, &SimpleInsertWidget::doneWithFocus);
+    connect(widget.insertSpecialChar, &QAbstractButton::clicked, this, &SimpleInsertWidget::doneWithFocus);
+    connect(widget.insertPageBreak, &QAbstractButton::clicked, this, &SimpleInsertWidget::doneWithFocus);
+    connect(widget.insertSection, &QAbstractButton::clicked, this, &SimpleInsertWidget::doneWithFocus);
+    connect(widget.configureSection, &QAbstractButton::clicked, this, &SimpleInsertWidget::doneWithFocus);
+    connect(widget.splitSections, &QAbstractButton::clicked, this, &SimpleInsertWidget::doneWithFocus);
 
     connect(widget.quickTable, SIGNAL(create(int,int)), this, SIGNAL(insertTableQuick(int,int)));
     connect(widget.quickTable, SIGNAL(create(int,int)), this, SIGNAL(doneWithFocus()));

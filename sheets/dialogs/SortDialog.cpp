@@ -344,24 +344,24 @@ SortDialog::SortDialog(QWidget* parent, Selection* selection)
     header->setSectionResizeMode(0, QHeaderView::Stretch);
     d->mainWidget.m_tableWidget->setItemDelegateForColumn(0, d);
 
-    connect(d->mainWidget.m_useHeader, SIGNAL(toggled(bool)),
-            this, SLOT(useHeaderChanged(bool)));
-    connect(d->mainWidget.m_sortHorizontal, SIGNAL(toggled(bool)),
-            this, SLOT(orientationChanged(bool)));
+    connect(d->mainWidget.m_useHeader, &QAbstractButton::toggled,
+            this, &SortDialog::useHeaderChanged);
+    connect(d->mainWidget.m_sortHorizontal, &QAbstractButton::toggled,
+            this, &SortDialog::orientationChanged);
 
-    connect(d->mainWidget.m_tableWidget, SIGNAL(itemActivated(QTableWidgetItem*)),
-            this, SLOT(itemActivated(QTableWidgetItem*)));
-    connect(d->mainWidget.m_tableWidget, SIGNAL(itemSelectionChanged()),
-            this, SLOT(itemSelectionChanged()));
+    connect(d->mainWidget.m_tableWidget, &QTableWidget::itemActivated,
+            this, &SortDialog::itemActivated);
+    connect(d->mainWidget.m_tableWidget, &QTableWidget::itemSelectionChanged,
+            this, &SortDialog::itemSelectionChanged);
 
-    connect(d->mainWidget.m_addButton, SIGNAL(clicked()),
-            this, SLOT(addCriterion()));
-    connect(d->mainWidget.m_removeButton, SIGNAL(clicked()),
-            this, SLOT(removeCriterion()));
-    connect(d->mainWidget.m_upButton, SIGNAL(clicked()),
-            this, SLOT(moveCriterionUp()));
-    connect(d->mainWidget.m_downButton, SIGNAL(clicked()),
-            this, SLOT(moveCriterionDown()));
+    connect(d->mainWidget.m_addButton, &QAbstractButton::clicked,
+            this, &SortDialog::addCriterion);
+    connect(d->mainWidget.m_removeButton, &QAbstractButton::clicked,
+            this, &SortDialog::removeCriterion);
+    connect(d->mainWidget.m_upButton, &QAbstractButton::clicked,
+            this, &SortDialog::moveCriterionUp);
+    connect(d->mainWidget.m_downButton, &QAbstractButton::clicked,
+            this, &SortDialog::moveCriterionDown);
 
     init();
 }

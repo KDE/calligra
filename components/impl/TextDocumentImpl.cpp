@@ -167,7 +167,7 @@ TextDocumentImpl::TextDocumentImpl(QObject* parent)
 {
     setDocumentType(DocumentType::TextDocument);
     d->indexChangedDelay.setInterval(0);
-    connect(&d->indexChangedDelay, SIGNAL(timeout()), this, SIGNAL(currentIndexChanged()));
+    connect(&d->indexChangedDelay, &QTimer::timeout, this, &DocumentImpl::currentIndexChanged);
 }
 
 TextDocumentImpl::~TextDocumentImpl()

@@ -148,22 +148,22 @@ Map::Map(DocBase* doc, int syntaxVersion)
     // default document properties
     d->syntaxVersion = syntaxVersion;
 
-    connect(this, SIGNAL(sheetAdded(Sheet*)),
-            d->dependencyManager, SLOT(addSheet(Sheet*)));
-    connect(this, SIGNAL(sheetAdded(Sheet*)),
-            d->recalcManager, SLOT(addSheet(Sheet*)));
-    connect(this, SIGNAL(sheetRemoved(Sheet*)),
-            d->dependencyManager, SLOT(removeSheet(Sheet*)));
-    connect(this, SIGNAL(sheetRemoved(Sheet*)),
-            d->recalcManager, SLOT(removeSheet(Sheet*)));
-    connect(this, SIGNAL(sheetRevived(Sheet*)),
-            d->dependencyManager, SLOT(addSheet(Sheet*)));
-    connect(this, SIGNAL(sheetRevived(Sheet*)),
-            d->recalcManager, SLOT(addSheet(Sheet*)));
-    connect(d->namedAreaManager, SIGNAL(namedAreaModified(QString)),
-            d->dependencyManager, SLOT(namedAreaModified(QString)));
-    connect(this, SIGNAL(damagesFlushed(QList<Damage*>)),
-            this, SLOT(handleDamages(QList<Damage*>)));
+    connect(this, &Map::sheetAdded,
+            d->dependencyManager, &DependencyManager::addSheet);
+    connect(this, &Map::sheetAdded,
+            d->recalcManager, &RecalcManager::addSheet);
+    connect(this, &Map::sheetRemoved,
+            d->dependencyManager, &DependencyManager::removeSheet);
+    connect(this, &Map::sheetRemoved,
+            d->recalcManager, &RecalcManager::removeSheet);
+    connect(this, &Map::sheetRevived,
+            d->dependencyManager, &DependencyManager::addSheet);
+    connect(this, &Map::sheetRevived,
+            d->recalcManager, &RecalcManager::addSheet);
+    connect(d->namedAreaManager, &NamedAreaManager::namedAreaModified,
+            d->dependencyManager, &DependencyManager::namedAreaModified);
+    connect(this, &Map::damagesFlushed,
+            this, &Map::handleDamages);
 }
 
 Map::~Map()
@@ -332,8 +332,8 @@ Sheet* Map::createSheet(const QString& name)
     if ( !name.isEmpty() )
         sheetName = name;
     Sheet* sheet = new Sheet(this, sheetName);
-    connect(sheet, SIGNAL(statusMessage(QString,int)),
-            this, SIGNAL(statusMessage(QString,int)));
+    connect(sheet, &Sheet::statusMessage,
+            this, &Map::statusMessage);
     return sheet;
 }
 
@@ -636,7 +636,7 @@ void Map::addDamage(Damage* damage)
     d->damages.append(damage);
 
     if (d->damages.count() == 1) {
-        QTimer::singleShot(0, this, SLOT(flushDamages()));
+        QTimer::singleShot(0, this, &Map::flushDamages);
     }
 }
 

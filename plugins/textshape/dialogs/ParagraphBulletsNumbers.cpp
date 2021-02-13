@@ -58,18 +58,18 @@ ParagraphBulletsNumbers::ParagraphBulletsNumbers(QWidget *parent)
     widget.doubleSpinBox_3->setSingleStep(0.05);
 
     connect(widget.labelFollowedBy,SIGNAL(currentIndexChanged(int)),this,SLOT(labelFollowedByIndexChanged(int)));
-    connect(widget.listTypes, SIGNAL(currentRowChanged(int)), this, SLOT(styleChanged(int)));
-    connect(widget.customCharacter, SIGNAL(clicked(bool)), this, SLOT(customCharButtonPressed()));
+    connect(widget.listTypes, &QListWidget::currentRowChanged, this, &ParagraphBulletsNumbers::styleChanged);
+    connect(widget.customCharacter, &QAbstractButton::clicked, this, &ParagraphBulletsNumbers::customCharButtonPressed);
     connect(widget.letterSynchronization, SIGNAL(toggled(bool)), widget.startValue, SLOT(setLetterSynchronization(bool)));
-    connect(widget.prefix, SIGNAL(textChanged(QString)), this, SLOT(recalcPreview()));
-    connect(widget.suffix, SIGNAL(textChanged(QString)), this, SLOT(recalcPreview()));
+    connect(widget.prefix, &QLineEdit::textChanged, this, &ParagraphBulletsNumbers::recalcPreview);
+    connect(widget.suffix, &QLineEdit::textChanged, this, &ParagraphBulletsNumbers::recalcPreview);
     connect(widget.depth, SIGNAL(valueChanged(int)), this, SLOT(recalcPreview()));
     connect(widget.levels, SIGNAL(valueChanged(int)), this, SLOT(recalcPreview()));
     connect(widget.startValue, SIGNAL(valueChanged(int)), this, SLOT(recalcPreview()));
-    connect(widget.insertImage, SIGNAL(clicked()), this, SLOT(selectListImage()));
+    connect(widget.insertImage, &QAbstractButton::clicked, this, &ParagraphBulletsNumbers::selectListImage);
     connect(widget.imageHeight, SIGNAL(valueChanged(double)), this, SLOT(recalcPreview()));
     connect(widget.imageWidth, SIGNAL(valueChanged(double)), this, SLOT(recalcPreview()));
-    connect(widget.restartNumbering, SIGNAL(clicked()), this, SLOT(recalcPreview()));
+    connect(widget.restartNumbering, &QAbstractButton::clicked, this, &ParagraphBulletsNumbers::recalcPreview);
 }
 
 int ParagraphBulletsNumbers::addStyle(const Lists::ListStyleItem &lsi)
@@ -348,7 +348,7 @@ void ParagraphBulletsNumbers::selectListImage()
     QUrl url = QUrl::fromLocalFile(dlg.filename());
     if (!url.isEmpty()) {
         KIO::StoredTransferJob *job = KIO::storedGet(url, KIO::NoReload, 0);
-        connect(job, SIGNAL(result(KJob*)), this, SLOT(setImageData(KJob*)));
+        connect(job, &KJob::result, this, &ParagraphBulletsNumbers::setImageData);
     }
 }
 

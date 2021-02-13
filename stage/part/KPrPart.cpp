@@ -87,7 +87,7 @@ void KPrPart::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)
     }
 
     if (error) {
-        QTimer::singleShot(0, this, SLOT(showErrorAndDie()));
+        QTimer::singleShot(0, this, &KPrPart::showErrorAndDie);
     } else {
         KoPart::showStartUpWidget(parent, alwaysShow);
     }

@@ -892,7 +892,7 @@ void KoTextDocumentLayout::scheduleLayout()
         return;
     }
     d->layoutScheduled = true;
-    QTimer::singleShot(0, this, SLOT(executeScheduledLayout()));
+    QTimer::singleShot(0, this, &KoTextDocumentLayout::executeScheduledLayout);
 }
 
 void KoTextDocumentLayout::executeScheduledLayout()

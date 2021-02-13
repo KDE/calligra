@@ -64,7 +64,7 @@ FlattenPathPlugin::FlattenPathPlugin(QObject *parent, const QVariantList &)
 
     QAction *actionFlattenPath  = new QAction(koIcon("effect_flatten"), i18n("&Flatten Path..."), this);
     actionCollection()->addAction("path_flatten", actionFlattenPath);
-    connect(actionFlattenPath, SIGNAL(triggered()), this, SLOT(slotFlattenPath()));
+    connect(actionFlattenPath, &QAction::triggered, this, &FlattenPathPlugin::slotFlattenPath);
 
     m_flattenPathDlg = new FlattenDlg(qobject_cast<QWidget *>(parent));
     m_flattenPathDlg->setFlatness(10.0);
@@ -124,13 +124,13 @@ FlattenDlg::FlattenDlg(QWidget* parent, const char* name)
     group->setMinimumWidth(300);
 
     // signals and Q_SLOTS:
-    connect(okButton, SIGNAL(clicked()), this, SLOT(accept()));
-    connect(buttonBox->button(QDialogButtonBox::Cancel), SIGNAL(clicked()), this, SLOT(reject()));
+    connect(okButton, &QAbstractButton::clicked, this, &QDialog::accept);
+    connect(buttonBox->button(QDialogButtonBox::Cancel), &QAbstractButton::clicked, this, &QDialog::reject);
 
     mainLayout->addWidget(group);
 
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
     mainLayout->addWidget(buttonBox);
 }

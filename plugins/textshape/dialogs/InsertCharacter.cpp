@@ -51,7 +51,7 @@ InsertCharacter::InsertCharacter(QWidget *parent)
         mw->addDockWidget(Qt::TopDockWidgetArea, this);
     setFloating(true);
 
-    connect(close, SIGNAL(released()), this, SLOT(hide()));
+    connect(close, &QAbstractButton::released, this, &QWidget::hide);
     connect(insert, SIGNAL(released()), this, SLOT(insertCharacter()));
     connect(m_charSelector, SIGNAL(charSelected(QChar)), this, SLOT(insertCharacter()));
 }

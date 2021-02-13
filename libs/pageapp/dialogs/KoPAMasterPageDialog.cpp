@@ -64,8 +64,8 @@ KoPAMasterPageDialog::KoPAMasterPageDialog(KoPADocument *document, KoPAMasterPag
     QModelIndex index = m_pageThumbnailModel->index(row, 0);
     m_listView->setCurrentIndex(index);
 
-    connect(m_listView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-                this, SLOT(selectionChanged()));
+    connect(m_listView->selectionModel(), &QItemSelectionModel::selectionChanged,
+                this, &KoPAMasterPageDialog::selectionChanged);
 
     mainWidget->setLayout(layout);
     setMainWidget(mainWidget);

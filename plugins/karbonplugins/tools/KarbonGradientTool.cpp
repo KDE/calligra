@@ -492,7 +492,7 @@ QList<QPointer<QWidget> > KarbonGradientTool::createOptionWidgets()
         m_gradientWidget->setGradient(*m_gradient);
     }
 
-    connect(m_gradientWidget, SIGNAL(changed()), this, SLOT(gradientChanged()));
+    connect(m_gradientWidget, &KoGradientEditWidget::changed, this, &KarbonGradientTool::gradientChanged);
 
     KoResourceServer<KoAbstractGradient> * rserver = KoResourceServerProvider::instance()->gradientServer();
     QSharedPointer<KoAbstractResourceServerAdapter> adapter(new KoResourceServerAdapter<KoAbstractGradient>(rserver));
@@ -500,8 +500,8 @@ QList<QPointer<QWidget> > KarbonGradientTool::createOptionWidgets()
     chooser->setObjectName("KarbonGradientChooser");
     chooser->setColumnCount(1);
 
-    connect(chooser, SIGNAL(resourceSelected(KoResource*)),
-            this, SLOT(gradientSelected(KoResource*)));
+    connect(chooser, &KoResourceItemChooser::resourceSelected,
+            this, &KarbonGradientTool::gradientSelected);
 
     QList<QPointer<QWidget> > widgets;
     m_gradientWidget->setWindowTitle(i18n("Edit Gradient"));

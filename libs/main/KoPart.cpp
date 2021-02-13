@@ -375,8 +375,8 @@ KoOpenPane *KoPart::createOpenPane(QWidget *parent, const QString& templatesReso
     }
     openPane->show();
 
-    connect(openPane, SIGNAL(openExistingFile(QUrl)), this, SLOT(openExistingFile(QUrl)));
-    connect(openPane, SIGNAL(openTemplate(QUrl)), this, SLOT(openTemplate(QUrl)));
+    connect(openPane, &KoOpenPane::openExistingFile, this, &KoPart::openExistingFile);
+    connect(openPane, &KoOpenPane::openTemplate, this, &KoPart::openTemplate);
 
     return openPane;
 }

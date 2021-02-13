@@ -111,7 +111,7 @@ KoPageNavigator::KoPageNavigator(KoPAView *view)
     d->pageNumberEditValidator->setBottom(1);
     d->pageNumberEdit->setValidator(d->pageNumberEditValidator);
     d->pageNumberEdit->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    connect(d->pageNumberEdit, SIGNAL(returnPressed()), SLOT(onPageNumberEntered()));
+    connect(d->pageNumberEdit, &QLineEdit::returnPressed, this, &KoPageNavigator::onPageNumberEntered);
 
     layout->addWidget(d->gotoFirstPageButton);
     layout->addWidget(d->gotoPreviousPageButton);
@@ -122,9 +122,9 @@ KoPageNavigator::KoPageNavigator(KoPAView *view)
     addWidget(controlWidget);
 
     KoPADocument *const kopaDocument = d->view->kopaDocument();
-    connect(kopaDocument, SIGNAL(pageAdded(KoPAPageBase*)), SLOT(updateDisplayLabel()));
+    connect(kopaDocument, &KoPADocument::pageAdded, this, &KoPageNavigator::updateDisplayLabel);
     connect(kopaDocument, SIGNAL(pageRemoved(KoPAPageBase*,int)), SLOT(slotPageRemoved(KoPAPageBase*,int)));
-    connect(d->view->proxyObject, SIGNAL(activePageChanged()), SLOT(updateDisplayLabel()));
+    connect(d->view->proxyObject, &KoPAViewProxyObject::activePageChanged, this, &KoPageNavigator::updateDisplayLabel);
 
     // Fix width by the largest needed
     QFontMetrics fontMetrics(font());

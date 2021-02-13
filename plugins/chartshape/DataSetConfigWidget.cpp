@@ -245,9 +245,9 @@ DataSetConfigWidget::Private::Private(DataSetConfigWidget *parent)
 
     ui.dataSetChartTypeMenu->setMenu(dataSetChartTypeMenu);
 
-    connect(dataSetChartTypeMenu, SIGNAL(triggered(QAction*)), parent, SLOT(dataSetChartTypeSelected(QAction*)));
+    connect(dataSetChartTypeMenu, &QMenu::triggered, parent, &DataSetConfigWidget::dataSetChartTypeSelected);
 
-    connect(ui.dataSetHasChartType, SIGNAL(toggled(bool)), parent, SLOT(ui_dataSetHasChartTypeChanged(bool)));
+    connect(ui.dataSetHasChartType, &QAbstractButton::toggled, parent, &DataSetConfigWidget::ui_dataSetHasChartTypeChanged);
 
     // Setup marker menu
     QMenu *datasetMarkerMenu = new QMenu(parent);
@@ -278,17 +278,17 @@ DataSetConfigWidget::Private::Private(DataSetConfigWidget *parent)
     dataSetMarkerFastCrossAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
 
     ui.datasetMarkerMenu->setMenu(datasetMarkerMenu);
-    connect(datasetMarkerMenu, SIGNAL(triggered(QAction*)), parent, SLOT(datasetMarkerSelected(QAction*)));
+    connect(datasetMarkerMenu, &QMenu::triggered, parent, &DataSetConfigWidget::datasetMarkerSelected);
 
     // Insert error bar button
     ui.formatErrorBar->setEnabled(false);
 
-    connect(ui.datasetBrush, SIGNAL(changed(QColor)),parent, SLOT(datasetBrushSelected(QColor)));
-    connect(ui.datasetPen, SIGNAL(changed(QColor)), parent, SLOT(datasetPenSelected(QColor)));
-    connect(ui.datasetShowCategory, SIGNAL(toggled(bool)), parent, SLOT(ui_datasetShowCategoryChanged(bool)));
-    connect(ui.datasetShowErrorBar, SIGNAL(toggled(bool)), parent, SLOT(ui_datasetShowErrorBarChanged(bool)));
-    connect(ui.dataSetShowNumber, SIGNAL(toggled(bool)), parent, SLOT(ui_dataSetShowNumberChanged(bool)));
-    connect(ui.datasetShowPercent, SIGNAL(toggled(bool)), parent, SLOT(ui_datasetShowPercentChanged(bool)));
+    connect(ui.datasetBrush, &KColorButton::changed,parent, &DataSetConfigWidget::datasetBrushSelected);
+    connect(ui.datasetPen, &KColorButton::changed, parent, &DataSetConfigWidget::datasetPenSelected);
+    connect(ui.datasetShowCategory, &QAbstractButton::toggled, parent, &DataSetConfigWidget::ui_datasetShowCategoryChanged);
+    connect(ui.datasetShowErrorBar, &QAbstractButton::toggled, parent, &DataSetConfigWidget::ui_datasetShowErrorBarChanged);
+    connect(ui.dataSetShowNumber, &QAbstractButton::toggled, parent, &DataSetConfigWidget::ui_dataSetShowNumberChanged);
+    connect(ui.datasetShowPercent, &QAbstractButton::toggled, parent, &DataSetConfigWidget::ui_datasetShowPercentChanged);
 
     // TODO
     // connect(ui.datasetShowSymbol, SIGNAL(toggled(bool)), parent, SLOT(ui_datasetShowSymbolChanged(bool)));
@@ -693,10 +693,10 @@ void DataSetConfigWidget::slotShowFormatErrorBarDialog()
 void DataSetConfigWidget::setupDialogs()
 {
     // Format Error Bars
-    connect(d->ui.formatErrorBar, SIGNAL(clicked()),
-             this, SLOT(slotShowFormatErrorBarDialog()));
-    connect(&d->formatErrorBarDialog, SIGNAL(accepted()),
-             this, SLOT(ui_dataSetErrorBarTypeChanged()));
+    connect(d->ui.formatErrorBar, &QAbstractButton::clicked,
+             this, &DataSetConfigWidget::slotShowFormatErrorBarDialog);
+    connect(&d->formatErrorBarDialog, &QDialog::accepted,
+             this, &DataSetConfigWidget::ui_dataSetErrorBarTypeChanged);
 }
 
 void DataSetConfigWidget::createActions()

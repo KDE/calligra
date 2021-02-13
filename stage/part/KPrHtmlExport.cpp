@@ -147,7 +147,7 @@ void KPrHtmlExport::copyFromTmpToDest()
     KIO::CopyJob *job = KIO::moveAs(QUrl::fromLocalFile(m_tmpDirPath), m_parameters.destination);
     job->setWriteIntoExistingDirectories(true);
     job->setUiDelegate(new KPrHtmlExportUiDelegate);
-    connect(job, SIGNAL(result(KJob*)), this, SLOT(moveResult(KJob*)));
+    connect(job, &KJob::result, this, &KPrHtmlExport::moveResult);
     job->exec();
 }
 

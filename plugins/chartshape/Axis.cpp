@@ -295,14 +295,14 @@ void Axis::Private::registerDiagram(KChart::AbstractDiagram *diagram)
     QObject::connect(plotArea->proxyModel(), SIGNAL(columnsInserted(QModelIndex,int,int)),
                      diagram->model(), SLOT(slotColumnsInserted(QModelIndex,int,int)));
 
-    QObject::connect(diagram, SIGNAL(propertiesChanged()),
-                     plotArea, SLOT(plotAreaUpdate()));
-    QObject::connect(diagram, SIGNAL(layoutChanged(AbstractDiagram*)),
-                     plotArea, SLOT(plotAreaUpdate()));
-    QObject::connect(diagram, SIGNAL(modelsChanged()),
-                     plotArea, SLOT(plotAreaUpdate()));
-    QObject::connect(diagram, SIGNAL(dataHidden()),
-                     plotArea, SLOT(plotAreaUpdate()));
+    QObject::connect(diagram, &KChart::AbstractDiagram::propertiesChanged,
+                     plotArea, &PlotArea::plotAreaUpdate);
+    QObject::connect(diagram, &KChart::AbstractDiagram::layoutChanged,
+                     plotArea, &PlotArea::plotAreaUpdate);
+    QObject::connect(diagram, &KChart::AbstractDiagram::modelsChanged,
+                     plotArea, &PlotArea::plotAreaUpdate);
+    QObject::connect(diagram, &KChart::AbstractDiagram::dataHidden,
+                     plotArea, &PlotArea::plotAreaUpdate);
 }
 
 KChart::AbstractDiagram *Axis::Private::getDiagramAndCreateIfNeeded(ChartType chartType)
@@ -882,8 +882,8 @@ Axis::Axis(PlotArea *parent, AxisDimension dimension)
     d->title->setAllowedInteraction(KoShape::ResizeAllowed, false);
     d->title->setVisible(false); // Needed to avoid problems when creating secondary axes (Axis creation needs review/refactoring)
 
-    connect(d->plotArea, SIGNAL(angleOffsetChanged(qreal)), this, SLOT(setAngleOffset(qreal)));
-    connect(d->plotArea, SIGNAL(holeSizeChanged(qreal)), this, SLOT(setHoleSize(qreal)));
+    connect(d->plotArea, &PlotArea::angleOffsetChanged, this, &Axis::setAngleOffset);
+    connect(d->plotArea, &PlotArea::holeSizeChanged, this, &Axis::setHoleSize);
 
     d->updatePosition();
 }

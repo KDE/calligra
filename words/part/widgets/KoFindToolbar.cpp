@@ -60,9 +60,9 @@ KoFindToolbar::KoFindToolbar(KoFindBase *finder, KActionCollection *ac, QWidget 
     d->closeButton->setAutoRaise(true);
     d->closeButton->setIcon(koIcon("dialog-close"));
     d->closeButton->setShortcut(QKeySequence(Qt::Key_Escape));
-    connect(d->closeButton, SIGNAL(clicked(bool)), this, SLOT(hide()));
-    connect(d->closeButton, SIGNAL(clicked(bool)), d->finder, SLOT(finished()));
-    connect(d->closeButton, SIGNAL(clicked()), d->textTimeout, SLOT(stop()));
+    connect(d->closeButton, &QAbstractButton::clicked, this, &QWidget::hide);
+    connect(d->closeButton, &QAbstractButton::clicked, d->finder, &KoFindBase::finished);
+    connect(d->closeButton, &QAbstractButton::clicked, d->textTimeout, &QTimer::stop);
     layout->addWidget(d->closeButton, 0, 0);
 
     layout->addWidget(new QLabel(i18nc("Label for the Find text input box", "Find:"), this), 0, 1, Qt::AlignRight);
@@ -73,7 +73,7 @@ KoFindToolbar::KoFindToolbar(KoFindBase *finder, KActionCollection *ac, QWidget 
     connect(d->searchLine, SIGNAL(editTextChanged(QString)), d->textTimeout, SLOT(start()));
     connect(d->searchLine, SIGNAL(returnPressed()), this, SLOT(returnPressed()));
     connect(d->searchLine, SIGNAL(returnPressed(QString)), d->searchLine, SLOT(addToHistory(QString)));
-    connect(d->searchLine, SIGNAL(cleared()), finder, SLOT(finished()));
+    connect(d->searchLine, &KHistoryComboBox::cleared, finder, &KoFindBase::finished);
     layout->addWidget(d->searchLine, 0, 2);
 
     d->nextButton = new QToolButton(this);
@@ -81,9 +81,9 @@ KoFindToolbar::KoFindToolbar(KoFindBase *finder, KActionCollection *ac, QWidget 
     d->nextButton->setText(i18nc("Next search result", "Next"));
     d->nextButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     d->nextButton->setEnabled(false);
-    connect(d->nextButton, SIGNAL(clicked(bool)), d->finder, SLOT(findNext()));
+    connect(d->nextButton, &QAbstractButton::clicked, d->finder, &KoFindBase::findNext);
     connect(d->nextButton, SIGNAL(clicked(bool)), this, SLOT(addToHistory()));
-    connect(d->finder, SIGNAL(hasMatchesChanged(bool)), d->nextButton, SLOT(setEnabled(bool)));
+    connect(d->finder, &KoFindBase::hasMatchesChanged, d->nextButton, &QWidget::setEnabled);
     layout->addWidget(d->nextButton, 0, 3);
 
     d->previousButton = new QToolButton(this);
@@ -91,9 +91,9 @@ KoFindToolbar::KoFindToolbar(KoFindBase *finder, KActionCollection *ac, QWidget 
     d->previousButton->setText(i18nc("Previous search result", "Previous"));
     d->previousButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     d->previousButton->setEnabled(false);
-    connect(d->previousButton, SIGNAL(clicked(bool)), d->finder, SLOT(findPrevious()));
+    connect(d->previousButton, &QAbstractButton::clicked, d->finder, &KoFindBase::findPrevious);
     connect(d->previousButton, SIGNAL(clicked(bool)), this, SLOT(addToHistory()));
-    connect(d->finder, SIGNAL(hasMatchesChanged(bool)), d->previousButton, SLOT(setEnabled(bool)));
+    connect(d->finder, &KoFindBase::hasMatchesChanged, d->previousButton, &QWidget::setEnabled);
     layout->addWidget(d->previousButton, 0, 4);
 
     d->optionsButton = new QToolButton(this);
@@ -152,15 +152,15 @@ KoFindToolbar::KoFindToolbar(KoFindBase *finder, KActionCollection *ac, QWidget 
     QAction *replaceAction = new QAction(i18n("Replace"), this);
     ac->addAction("edit_replace", replaceAction);
     replaceAction->setShortcut(Qt::CTRL + Qt::Key_H);
-    connect(replaceAction, SIGNAL(triggered()), this, SLOT(activateReplace()));
+    connect(replaceAction, &QAction::triggered, this, &KoFindToolbar::activateReplace);
 
     QAction *findNextAction = ac->addAction(KStandardAction::FindNext, "edit_findnext", d->nextButton, SIGNAL(clicked(bool)));
-    connect(finder, SIGNAL(hasMatchesChanged(bool)), findNextAction, SLOT(setEnabled(bool)));
-    connect(findNextAction, SIGNAL(triggered(bool)), this, SLOT(activateSearch()));
+    connect(finder, &KoFindBase::hasMatchesChanged, findNextAction, &QAction::setEnabled);
+    connect(findNextAction, &QAction::triggered, this, &KoFindToolbar::activateSearch);
     findNextAction->setEnabled(false);
     QAction *findPrevAction = ac->addAction(KStandardAction::FindPrev, "edit_findprevious", d->previousButton, SIGNAL(clicked(bool)));
-    connect(finder, SIGNAL(hasMatchesChanged(bool)), findPrevAction, SLOT(setEnabled(bool)));
-    connect(findPrevAction, SIGNAL(triggered(bool)), this, SLOT(activateSearch()));
+    connect(finder, &KoFindBase::hasMatchesChanged, findPrevAction, &QAction::setEnabled);
+    connect(findPrevAction, &QAction::triggered, this, &KoFindToolbar::activateSearch);
     findPrevAction->setEnabled(false);
 }
 

@@ -64,8 +64,8 @@ void StockConfigWidget::init()
     m_ui.setupUi(this);
     m_plotArea = 0;
 
-    connect(m_ui.gainMarker, SIGNAL(changed(QColor)), this, SLOT(gainClicked(QColor)));
-    connect(m_ui.lossMarker, SIGNAL(changed(QColor)), this, SLOT(lossClicked(QColor)));
+    connect(m_ui.gainMarker, &KColorButton::changed, this, &StockConfigWidget::gainClicked);
+    connect(m_ui.lossMarker, &KColorButton::changed, this, &StockConfigWidget::lossClicked);
 }
 
 void StockConfigWidget::open(ChartShape* shape)

@@ -65,7 +65,7 @@ RoundCornersPlugin::RoundCornersPlugin(QObject * parent, const QVariantList &)
 
     QAction *actionRoundCorners  = new QAction(koIcon("effect_roundcorners"), i18n("&Round Corners..."), this);
     actionCollection()->addAction("path_round_corners", actionRoundCorners);
-    connect(actionRoundCorners, SIGNAL(triggered()), this, SLOT(slotRoundCorners()));
+    connect(actionRoundCorners, &QAction::triggered, this, &RoundCornersPlugin::slotRoundCorners);
 
     m_roundCornersDlg = new RoundCornersDlg(qobject_cast<QWidget*>(parent));
     m_roundCornersDlg->setRadius(10.0);
@@ -134,13 +134,13 @@ RoundCornersDlg::RoundCornersDlg(QWidget* parent, const char* name)
     group->setMinimumWidth(300);
 
     // signals and Q_SLOTS:
-    connect(okButton, SIGNAL(clicked()), this, SLOT(accept()));
-    connect(buttonBox->button(QDialogButtonBox::Cancel), SIGNAL(clicked()), this, SLOT(reject()));
+    connect(okButton, &QAbstractButton::clicked, this, &QDialog::accept);
+    connect(buttonBox->button(QDialogButtonBox::Cancel), &QAbstractButton::clicked, this, &QDialog::reject);
 
     mainLayout->addWidget(group);
 
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
     //PORTING SCRIPT: WARNING mainLayout->addWidget(buttonBox) must be last item in layout. Please move it.
     mainLayout->addWidget(buttonBox);
 }

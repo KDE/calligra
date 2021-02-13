@@ -72,9 +72,9 @@ KPrAnimationsTimeLineView::KPrAnimationsTimeLineView(QWidget *parent)
     setLayout(layout);
 
     //Connect Signals
-    connect(m_view, SIGNAL(clicked(QModelIndex)), this, SIGNAL(clicked(QModelIndex)));
-    connect(m_view, SIGNAL(timeValuesChanged(QModelIndex)), this, SIGNAL(timeValuesChanged(QModelIndex)));
-    connect(m_view, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(requestContextMenu(QPoint)));
+    connect(m_view, &KPrTimeLineView::clicked, this, &KPrAnimationsTimeLineView::clicked);
+    connect(m_view, &KPrTimeLineView::timeValuesChanged, this, &KPrAnimationsTimeLineView::timeValuesChanged);
+    connect(m_view, &QWidget::customContextMenuRequested, this, &KPrAnimationsTimeLineView::requestContextMenu);
 }
 
 void KPrAnimationsTimeLineView::setModel(KPrAnimationGroupProxyModel *model)
@@ -83,13 +83,13 @@ void KPrAnimationsTimeLineView::setModel(KPrAnimationGroupProxyModel *model)
     m_shapeModel = dynamic_cast<KPrShapeAnimations *>(model->sourceModel());
     Q_ASSERT(m_shapeModel);
     updateColumnsWidth();
-    connect(m_shapeModel, SIGNAL(layoutChanged()), this, SLOT(updateColumnsWidth()));
-    connect(m_shapeModel, SIGNAL(layoutChanged()), this, SLOT(resetData()));
-    connect(m_shapeModel, SIGNAL(layoutChanged()), this, SIGNAL(layoutChanged()));
+    connect(m_shapeModel, &QAbstractItemModel::layoutChanged, this, &KPrAnimationsTimeLineView::updateColumnsWidth);
+    connect(m_shapeModel, &QAbstractItemModel::layoutChanged, this, &KPrAnimationsTimeLineView::resetData);
+    connect(m_shapeModel, &QAbstractItemModel::layoutChanged, this, &KPrAnimationsTimeLineView::layoutChanged);
     connect(m_shapeModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(update()));
     //It works only if one item could be selected each time
-    connect(m_shapeModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(notifyTimeValuesChanged(QModelIndex)));
-    connect(m_shapeModel, SIGNAL(timeScaleModified()), this, SLOT(adjustScale()));
+    connect(m_shapeModel, &QAbstractItemModel::dataChanged, this, &KPrAnimationsTimeLineView::notifyTimeValuesChanged);
+    connect(m_shapeModel, &KPrShapeAnimations::timeScaleModified, this, &KPrAnimationsTimeLineView::adjustScale);
     adjustScale();
     m_header->update();
     m_view->update();

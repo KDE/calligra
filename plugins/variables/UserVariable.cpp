@@ -54,7 +54,7 @@ KoVariableManager *UserVariable::variableManager()
     Q_ASSERT(textObjectManager);
     m_variableManager = textObjectManager->variableManager();
     Q_ASSERT(m_variableManager);
-    connect(m_variableManager, SIGNAL(valueChanged()), this, SLOT(valueChanged()));
+    connect(m_variableManager, &KoVariableManager::valueChanged, this, &UserVariable::valueChanged);
 
     valueChanged(); // initial update
 

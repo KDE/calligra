@@ -156,29 +156,29 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvasBase 
     m_slidesSorterView->setSpacing(10);
 
     //setup signals
-    connect(m_slidesSorterView, SIGNAL(requestContextMenu(QContextMenuEvent*)), this, SLOT(slidesSorterContextMenu(QContextMenuEvent*)));
-    connect(m_customSlideShowView, SIGNAL(requestContextMenu(QContextMenuEvent*)), this, SLOT(customSlideShowsContextMenu(QContextMenuEvent*)));
-    connect(m_slidesSorterView, SIGNAL(slideDblClick()), this, SLOT(activateNormalViewMode()));
-    connect(m_buttonAddCustomSlideShow, SIGNAL(clicked()), this, SLOT(addCustomSlideShow()));
-    connect(m_buttonDelCustomSlideShow, SIGNAL(clicked()), this, SLOT(removeCustomSlideShow()));
-    connect(m_buttonAddSlideToCurrentShow, SIGNAL(clicked()), this, SLOT(addSlideToCustomShow()));
-    connect(m_buttonDelSlideFromCurrentShow, SIGNAL(clicked()), this, SLOT(deleteSlidesFromCustomShow()));
-    connect(m_customSlideShowModel, SIGNAL(customSlideShowsChanged()), this, SLOT(updateCustomSlideShowsList()));
-    connect(m_customSlideShowModel, SIGNAL(selectPages(int,int)), this, SLOT(selectCustomShowPages(int,int)));
+    connect(m_slidesSorterView, &KPrSlidesManagerView::requestContextMenu, this, &KPrViewModeSlidesSorter::slidesSorterContextMenu);
+    connect(m_customSlideShowView, &KPrSlidesManagerView::requestContextMenu, this, &KPrViewModeSlidesSorter::customSlideShowsContextMenu);
+    connect(m_slidesSorterView, &KPrSlidesManagerView::slideDblClick, this, &KPrViewModeSlidesSorter::activateNormalViewMode);
+    connect(m_buttonAddCustomSlideShow, &QAbstractButton::clicked, this, &KPrViewModeSlidesSorter::addCustomSlideShow);
+    connect(m_buttonDelCustomSlideShow, &QAbstractButton::clicked, this, &KPrViewModeSlidesSorter::removeCustomSlideShow);
+    connect(m_buttonAddSlideToCurrentShow, &QAbstractButton::clicked, this, &KPrViewModeSlidesSorter::addSlideToCustomShow);
+    connect(m_buttonDelSlideFromCurrentShow, &QAbstractButton::clicked, this, &KPrViewModeSlidesSorter::deleteSlidesFromCustomShow);
+    connect(m_customSlideShowModel, &KPrCustomSlideShowsModel::customSlideShowsChanged, this, &KPrViewModeSlidesSorter::updateCustomSlideShowsList);
+    connect(m_customSlideShowModel, &KPrCustomSlideShowsModel::selectPages, this, &KPrViewModeSlidesSorter::selectCustomShowPages);
 
     //setup signals for manage edit actions
-    connect(view->copyController(), SIGNAL(copyRequested()), this, SLOT(editCopy()));
-    connect(view->cutController(), SIGNAL(copyRequested()), this, SLOT(editCut()));
-    connect(view, SIGNAL(selectAllRequested()), m_slidesSorterView, SLOT(selectAll()));
-    connect(view, SIGNAL(deselectAllRequested()), m_slidesSorterView, SLOT(clearSelection()));
-    connect(m_slidesSorterView, SIGNAL(selectionCleared()), this, SLOT(disableEditActions()));
-    connect(m_slidesSorterView, SIGNAL(itemSelected()), this, SLOT(enableEditActions()));
-    connect(m_slidesSorterView, SIGNAL(focusLost()), SLOT(disableEditActions()));
-    connect(m_slidesSorterView, SIGNAL(focusGot()), SLOT(manageAddRemoveSlidesButtons()));
-    connect(m_slidesSorterView, SIGNAL(zoomIn()), m_view->zoomController()->zoomAction(), SLOT(zoomIn()));
-    connect(m_slidesSorterView, SIGNAL(zoomOut()), m_view->zoomController()->zoomAction(), SLOT(zoomOut()));
-    connect(m_customSlideShowView, SIGNAL(focusGot()), SLOT(disableEditActions()));
-    connect(m_customSlideShowView, SIGNAL(focusGot()), SLOT(manageAddRemoveSlidesButtons()));
+    connect(view->copyController(), &KoCopyController::copyRequested, this, &KPrViewModeSlidesSorter::editCopy);
+    connect(view->cutController(), &KoCopyController::copyRequested, this, &KPrViewModeSlidesSorter::editCut);
+    connect(view, &KoPAView::selectAllRequested, m_slidesSorterView, &QAbstractItemView::selectAll);
+    connect(view, &KoPAView::deselectAllRequested, m_slidesSorterView, &QAbstractItemView::clearSelection);
+    connect(m_slidesSorterView, &KPrSlidesManagerView::selectionCleared, this, &KPrViewModeSlidesSorter::disableEditActions);
+    connect(m_slidesSorterView, &KPrSlidesManagerView::itemSelected, this, &KPrViewModeSlidesSorter::enableEditActions);
+    connect(m_slidesSorterView, &KPrSlidesManagerView::focusLost, this, &KPrViewModeSlidesSorter::disableEditActions);
+    connect(m_slidesSorterView, &KPrSlidesManagerView::focusGot, this, &KPrViewModeSlidesSorter::manageAddRemoveSlidesButtons);
+    connect(m_slidesSorterView, &KPrSlidesManagerView::zoomIn, m_view->zoomController()->zoomAction(), &KoZoomAction::zoomIn);
+    connect(m_slidesSorterView, &KPrSlidesManagerView::zoomOut, m_view->zoomController()->zoomAction(), &KoZoomAction::zoomOut);
+    connect(m_customSlideShowView, &KPrSlidesManagerView::focusGot, this, &KPrViewModeSlidesSorter::disableEditActions);
+    connect(m_customSlideShowView, &KPrSlidesManagerView::focusGot, this, &KPrViewModeSlidesSorter::manageAddRemoveSlidesButtons);
 
     //install selection manager for Slides Sorter View and Custom Shows View
     m_slidesSorterItemContextBar = new KoViewItemContextBar(m_slidesSorterView);
@@ -189,9 +189,9 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvasBase 
     connect(view->kopaDocument(), SIGNAL(pageRemoved(KoPAPageBase*)), m_slidesSorterItemContextBar, SLOT(update()));
 
     //setup signals for item context bar buttons
-    connect(duplicateButton, SIGNAL(clicked()), this, SLOT(contextBarDuplicateSlide()));
-    connect(deleteButton, SIGNAL(clicked()), this, SLOT(contextBarDeleteSlide()));
-    connect(startPresentation, SIGNAL(clicked()), this, SLOT(contextBarStartSlideshow()));
+    connect(duplicateButton, &QAbstractButton::clicked, this, &KPrViewModeSlidesSorter::contextBarDuplicateSlide);
+    connect(deleteButton, &QAbstractButton::clicked, this, &KPrViewModeSlidesSorter::contextBarDeleteSlide);
+    connect(startPresentation, &QAbstractButton::clicked, this, &KPrViewModeSlidesSorter::contextBarStartSlideshow);
 
     //install delegate for Slides Sorter View
     KPrSlidesSorterItemDelegate *slidesSorterDelegate = new KPrSlidesSorterItemDelegate(m_slidesSorterView);
@@ -278,12 +278,12 @@ void KPrViewModeSlidesSorter::activate(KoPAViewMode *previousViewMode)
     updateToActivePageIndex();
 
     //setup signals
-    connect(m_slidesSorterView,SIGNAL(indexChanged(QModelIndex)), this, SLOT(itemClicked(QModelIndex)));
-    connect(m_slidesSorterView, SIGNAL(pressed(QModelIndex)), this, SLOT(itemClicked(QModelIndex)));
-    connect(m_view->proxyObject, SIGNAL(activePageChanged()), this, SLOT(updateToActivePageIndex()));
+    connect(m_slidesSorterView,&KPrSlidesManagerView::indexChanged, this, &KPrViewModeSlidesSorter::itemClicked);
+    connect(m_slidesSorterView, &QAbstractItemView::pressed, this, &KPrViewModeSlidesSorter::itemClicked);
+    connect(m_view->proxyObject, &KoPAViewProxyObject::activePageChanged, this, &KPrViewModeSlidesSorter::updateToActivePageIndex);
 
     //change zoom saving slot
-    connect(m_view->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)), this, SLOT(updateZoom(KoZoomMode::Mode,qreal)));
+    connect(m_view->zoomController(), &KoZoomController::zoomChanged, this, &KPrViewModeSlidesSorter::updateZoom);
 
     KPrView *kPrview = dynamic_cast<KPrView *>(m_view);
     if (kPrview) {
@@ -291,7 +291,7 @@ void KPrViewModeSlidesSorter::activate(KoPAViewMode *previousViewMode)
         m_view->zoomController()->zoomAction()->setZoomModes(KoZoomMode::ZOOM_CONSTANT);
         loadZoomConfig();
         disconnect(kPrview->deleteSelectionAction(), SIGNAL(triggered()), kPrview, SLOT(editDeleteSelection()));
-        connect(kPrview->deleteSelectionAction(), SIGNAL(triggered()), this, SLOT(deleteSlide()));
+        connect(kPrview->deleteSelectionAction(), &QAction::triggered, this, &KPrViewModeSlidesSorter::deleteSlide);
     }
     m_view->setActionEnabled(KoPAView::AllActions, false);
 }
@@ -312,7 +312,7 @@ void KPrViewModeSlidesSorter::deactivate()
     saveZoomConfig(zoom());
 
     //change zoom saving slot and restore normal view zoom values
-    disconnect(m_view->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)), this, SLOT(updateZoom(KoZoomMode::Mode,qreal)));
+    disconnect(m_view->zoomController(), &KoZoomController::zoomChanged, this, &KPrViewModeSlidesSorter::updateZoom);
     m_view->zoomController()->zoomAction()->setZoomModes(KoZoomMode::ZOOM_PAGE | KoZoomMode::ZOOM_WIDTH);
     m_view->setActivePage(m_view->kopaDocument()->pageByIndex(m_slidesSorterView->currentIndex().row(), false));
 
@@ -321,7 +321,7 @@ void KPrViewModeSlidesSorter::deactivate()
         kPrview->restoreZoomConfig();
         connect(kPrview->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)), kPrview, SLOT(zoomChanged(KoZoomMode::Mode,qreal)));
         connect(kPrview->deleteSelectionAction(), SIGNAL(triggered()), kPrview, SLOT(editDeleteSelection()));
-        disconnect(kPrview->deleteSelectionAction(), SIGNAL(triggered()), this, SLOT(deleteSlide()));
+        disconnect(kPrview->deleteSelectionAction(), &QAction::triggered, this, &KPrViewModeSlidesSorter::deleteSlide);
     }
     disableEditActions();
 }
@@ -542,18 +542,18 @@ int KPrViewModeSlidesSorter::zoom()
 void KPrViewModeSlidesSorter::slidesSorterContextMenu(QContextMenuEvent *event)
 {
     QMenu menu(m_slidesSorterView);
-    menu.addAction(koIcon("document-new"), i18n("Add a new slide"), this, SLOT(addSlide()));
-    menu.addAction(koIcon("edit-delete"), i18n("Delete selected slides"), this, SLOT(deleteSlide()));
+    menu.addAction(koIcon("document-new"), i18n("Add a new slide"), this, &KPrViewModeSlidesSorter::addSlide);
+    menu.addAction(koIcon("edit-delete"), i18n("Delete selected slides"), this, &KPrViewModeSlidesSorter::deleteSlide);
 
     QModelIndexList selectedItems = m_slidesSorterView->selectionModel()->selectedIndexes();
     if (selectedItems.count() == 1 && selectedItems.first().isValid()) {
-        menu.addAction(koIcon("edit-rename"), i18n("Rename"), this, SLOT(renameCurrentSlide()));
+        menu.addAction(koIcon("edit-rename"), i18n("Rename"), this, &KPrViewModeSlidesSorter::renameCurrentSlide);
     }
 
     menu.addSeparator();
-    menu.addAction(koIcon("edit-cut"), i18n("Cut"), this,  SLOT(editCut()));
-    menu.addAction(koIcon("edit-copy"), i18n("Copy"), this,  SLOT(editCopy()));
-    menu.addAction(koIcon("edit-paste"), i18n("Paste"), this, SLOT(editPaste()));
+    menu.addAction(koIcon("edit-cut"), i18n("Cut"), this,  &KPrViewModeSlidesSorter::editCut);
+    menu.addAction(koIcon("edit-copy"), i18n("Copy"), this,  &KPrViewModeSlidesSorter::editCopy);
+    menu.addAction(koIcon("edit-paste"), i18n("Paste"), this, &KPrViewModeSlidesSorter::editPaste);
     menu.exec(event->globalPos());
     enableEditActions();
 }
@@ -561,7 +561,7 @@ void KPrViewModeSlidesSorter::slidesSorterContextMenu(QContextMenuEvent *event)
 void KPrViewModeSlidesSorter::customSlideShowsContextMenu(QContextMenuEvent *event)
 {
     QMenu menu(m_customSlideShowView);
-    menu.addAction(koIcon("edit-delete"), i18n("Delete selected slides"), this, SLOT(deleteSlidesFromCustomShow()));
+    menu.addAction(koIcon("edit-delete"), i18n("Delete selected slides"), this, &KPrViewModeSlidesSorter::deleteSlidesFromCustomShow);
     menu.exec(event->globalPos());
 }
 
@@ -705,7 +705,7 @@ void KPrViewModeSlidesSorter::renameCustomSlideShow()
 void KPrViewModeSlidesSorter::enableEditCustomShowButtons()
 {
     m_customSlideShowsList->setEditable(true);
-    connect(m_customSlideShowsList->lineEdit(), SIGNAL(editingFinished()), this, SLOT(renameCustomSlideShow()));
+    connect(m_customSlideShowsList->lineEdit(), &QLineEdit::editingFinished, this, &KPrViewModeSlidesSorter::renameCustomSlideShow);
     m_buttonDelCustomSlideShow->setEnabled(true);
 }
 

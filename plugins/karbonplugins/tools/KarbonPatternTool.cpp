@@ -226,13 +226,13 @@ void KarbonPatternTool::activate(ToolActivation toolActivation, const QSet<KoSha
 
     useCursor(Qt::ArrowCursor);
 
-    connect(canvas()->shapeManager(), SIGNAL(selectionContentChanged()), this, SLOT(initialize()));
+    connect(canvas()->shapeManager(), &KoShapeManager::selectionContentChanged, this, &KarbonPatternTool::initialize);
 }
 
 void KarbonPatternTool::deactivate()
 {
     // we are not interested in selection content changes when not active
-    disconnect(canvas()->shapeManager(), SIGNAL(selectionContentChanged()), this, SLOT(initialize()));
+    disconnect(canvas()->shapeManager(), &KoShapeManager::selectionContentChanged, this, &KarbonPatternTool::initialize);
 
     foreach(KarbonPatternEditStrategyBase * strategy, m_strategies) {
         strategy->repaint();
@@ -272,16 +272,16 @@ QList<QPointer<QWidget> > KarbonPatternTool::createOptionWidgets()
     QList<QPointer<QWidget> > widgets;
 
     m_optionsWidget = new KarbonPatternOptionsWidget();
-    connect(m_optionsWidget, SIGNAL(patternChanged()),
-            this, SLOT(patternChanged()));
+    connect(m_optionsWidget, &KarbonPatternOptionsWidget::patternChanged,
+            this, &KarbonPatternTool::patternChanged);
 
     KoResourceServer<KoPattern> * rserver = KoResourceServerProvider::instance()->patternServer();
     QSharedPointer<KoAbstractResourceServerAdapter> adapter(new KoResourceServerAdapter<KoPattern>(rserver));
     KoResourceItemChooser * chooser = new KoResourceItemChooser(adapter, m_optionsWidget);
     chooser->setObjectName("KarbonPatternChooser");
 
-    connect(chooser, SIGNAL(resourceSelected(KoResource*)),
-            this, SLOT(patternSelected(KoResource*)));
+    connect(chooser, &KoResourceItemChooser::resourceSelected,
+            this, &KarbonPatternTool::patternSelected);
 
     m_optionsWidget->setWindowTitle(i18n("Pattern Options"));
     widgets.append(m_optionsWidget);

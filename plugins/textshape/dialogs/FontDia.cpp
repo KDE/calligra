@@ -53,9 +53,9 @@ FontDia::FontDia(KoTextEditor *editor, QWidget* parent)
     m_characterGeneral->hideStyleName(true);
     setMainWidget(m_characterGeneral);
 
-    connect(this, SIGNAL(applyClicked()), this, SLOT(slotApply()));
-    connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
-    connect(this, SIGNAL(resetClicked()), this, SLOT(slotReset()));
+    connect(this, &KoDialog::applyClicked, this, &FontDia::slotApply);
+    connect(this, &KoDialog::okClicked, this, &FontDia::slotOk);
+    connect(this, &KoDialog::resetClicked, this, &FontDia::slotReset);
     initTabs();
 
     // Do this after initTabs so it doesn't cause signals prematurely

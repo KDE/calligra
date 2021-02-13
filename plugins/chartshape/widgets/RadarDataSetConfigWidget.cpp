@@ -117,13 +117,13 @@ RadarDataSetConfigWidget::Private::Private(RadarDataSetConfigWidget *parent)
     dataSetMarkerFastCrossAction = datasetSelectMarkerMenu->addAction(QIcon(), QString());
 
     ui.datasetMarkerMenu->setMenu(datasetMarkerMenu);
-    connect(datasetMarkerMenu, SIGNAL(triggered(QAction*)), parent, SLOT(datasetMarkerSelected(QAction*)));
+    connect(datasetMarkerMenu, &QMenu::triggered, parent, &RadarDataSetConfigWidget::datasetMarkerSelected);
 
-    connect(ui.datasetBrush, SIGNAL(changed(QColor)),parent, SLOT(datasetBrushSelected(QColor)));
-    connect(ui.datasetPen, SIGNAL(changed(QColor)), parent, SLOT(datasetPenSelected(QColor)));
-    connect(ui.datasetShowCategory, SIGNAL(toggled(bool)), parent, SLOT(ui_datasetShowCategoryChanged(bool)));
-    connect(ui.dataSetShowNumber, SIGNAL(toggled(bool)), parent, SLOT(ui_dataSetShowNumberChanged(bool)));
-    connect(ui.datasetShowPercent, SIGNAL(toggled(bool)), parent, SLOT(ui_datasetShowPercentChanged(bool)));
+    connect(ui.datasetBrush, &KColorButton::changed,parent, &RadarDataSetConfigWidget::datasetBrushSelected);
+    connect(ui.datasetPen, &KColorButton::changed, parent, &RadarDataSetConfigWidget::datasetPenSelected);
+    connect(ui.datasetShowCategory, &QAbstractButton::toggled, parent, &RadarDataSetConfigWidget::ui_datasetShowCategoryChanged);
+    connect(ui.dataSetShowNumber, &QAbstractButton::toggled, parent, &RadarDataSetConfigWidget::ui_dataSetShowNumberChanged);
+    connect(ui.datasetShowPercent, &QAbstractButton::toggled, parent, &RadarDataSetConfigWidget::ui_datasetShowPercentChanged);
     // TODO KChart does not support
     // connect(ui.datasetShowSymbol, SIGNAL(toggled(bool)), parent, SLOT(ui_datasetShowSymbolChanged(bool)));
 

@@ -84,10 +84,10 @@ void TableOfContentsConfigure::init()
 
     ui.tocPreview->setStyleManager(KoTextDocument(m_textEditor->document()).styleManager());
 
-    connect(this, SIGNAL(accepted()), this, SLOT(save()));
-    connect(this, SIGNAL(rejected()), this, SLOT(cleanUp()));
-    connect(ui.configureStyles, SIGNAL(clicked(bool)), this, SLOT(showStyleConfiguration()));
-    connect(ui.lineEditTitle, SIGNAL(returnPressed()), this, SLOT(updatePreview()));
+    connect(this, &QDialog::accepted, this, &TableOfContentsConfigure::save);
+    connect(this, &QDialog::rejected, this, &TableOfContentsConfigure::cleanUp);
+    connect(ui.configureStyles, &QAbstractButton::clicked, this, &TableOfContentsConfigure::showStyleConfiguration);
+    connect(ui.lineEditTitle, &QLineEdit::returnPressed, this, &TableOfContentsConfigure::updatePreview);
 }
 
 void TableOfContentsConfigure::setDisplay()
@@ -98,12 +98,12 @@ void TableOfContentsConfigure::setDisplay()
     ui.useOutline->setCheckState(m_tocInfo->m_useOutlineLevel ? Qt::Checked : Qt::Unchecked);
     ui.useStyles->setCheckState(m_tocInfo->m_useIndexSourceStyles ? Qt::Checked : Qt::Unchecked);
 
-    connect(ui.lineEditTitle, SIGNAL(textChanged(QString)), this, SLOT(titleTextChanged(QString)));
-    connect(ui.useOutline, SIGNAL(stateChanged(int)), this, SLOT(useOutline(int)));
-    connect(ui.useStyles, SIGNAL(stateChanged(int)), this, SLOT(useIndexSourceStyles(int)));
+    connect(ui.lineEditTitle, &QLineEdit::textChanged, this, &TableOfContentsConfigure::titleTextChanged);
+    connect(ui.useOutline, &QCheckBox::stateChanged, this, &TableOfContentsConfigure::useOutline);
+    connect(ui.useStyles, &QCheckBox::stateChanged, this, &TableOfContentsConfigure::useIndexSourceStyles);
 
     m_tocEntryStyleModel = new TableOfContentsEntryModel(KoTextDocument(m_textEditor->document()).styleManager(), m_tocInfo);
-    connect(m_tocEntryStyleModel, SIGNAL(tocEntryDataChanged()), this, SLOT(updatePreview()));
+    connect(m_tocEntryStyleModel, &TableOfContentsEntryModel::tocEntryDataChanged, this, &TableOfContentsConfigure::updatePreview);
 
     m_tocEntryConfigureDelegate = new TableOfContentsEntryDelegate(KoTextDocument(m_textEditor->document()).styleManager());
 
@@ -118,8 +118,8 @@ void TableOfContentsConfigure::setDisplay()
     ui.configureToCEntryStyle->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
     ui.configureToCEntryStyle->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
 
-    connect(this, SIGNAL(accepted()), this, SLOT(save()));
-    connect(this, SIGNAL(rejected()), this, SLOT(cleanUp()));
+    connect(this, &QDialog::accepted, this, &TableOfContentsConfigure::save);
+    connect(this, &QDialog::rejected, this, &TableOfContentsConfigure::cleanUp);
 
     updatePreview();
 }
@@ -175,12 +175,12 @@ void TableOfContentsConfigure::updatePreview()
 
 void TableOfContentsConfigure::cleanUp()
 {
-    disconnect(ui.lineEditTitle, SIGNAL(textChanged(QString)), this, SLOT(titleTextChanged(QString)));
-    disconnect(ui.useOutline, SIGNAL(stateChanged(int)), this, SLOT(useOutline(int)));
-    disconnect(ui.useStyles, SIGNAL(stateChanged(int)), this, SLOT(useIndexSourceStyles(int)));
+    disconnect(ui.lineEditTitle, &QLineEdit::textChanged, this, &TableOfContentsConfigure::titleTextChanged);
+    disconnect(ui.useOutline, &QCheckBox::stateChanged, this, &TableOfContentsConfigure::useOutline);
+    disconnect(ui.useStyles, &QCheckBox::stateChanged, this, &TableOfContentsConfigure::useIndexSourceStyles);
 
-    disconnect(this, SIGNAL(accepted()), this, SLOT(save()));
-    disconnect(this, SIGNAL(rejected()), this, SLOT(cleanUp()));
+    disconnect(this, &QDialog::accepted, this, &TableOfContentsConfigure::save);
+    disconnect(this, &QDialog::rejected, this, &TableOfContentsConfigure::cleanUp);
 
     if(m_tocEntryStyleModel) {
         delete m_tocEntryStyleModel;

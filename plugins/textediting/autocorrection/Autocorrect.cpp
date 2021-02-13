@@ -36,7 +36,7 @@ Autocorrect::Autocorrect()
 {
     /* setup actions for this plugin */
     QAction *configureAction = new QAction(i18n("Configure &Autocorrection..."), this);
-    connect(configureAction, SIGNAL(triggered(bool)), this, SLOT(configureAutocorrect()));
+    connect(configureAction, &QAction::triggered, this, &Autocorrect::configureAutocorrect);
     addAction("configure_autocorrection", configureAction);
 
     m_enabled = new QAction(i18n("Autocorrection"), this);

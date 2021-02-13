@@ -63,7 +63,7 @@ RefinePathPlugin::RefinePathPlugin(QObject *parent, const QVariantList &)
     setXMLFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "karbon/plugins/RefinePathPlugin.rc"), true);
     QAction *actionRefinePath  = new QAction(koIcon("effect_refine"), i18n("&Refine Path..."), this);
     actionCollection()->addAction("path_refine", actionRefinePath);
-    connect(actionRefinePath, SIGNAL(triggered()), this, SLOT(slotRefinePath()));
+    connect(actionRefinePath, &QAction::triggered, this, &RefinePathPlugin::slotRefinePath);
 
     m_RefinePathDlg = new RefinePathDlg(qobject_cast<QWidget*>(parent));
 }
@@ -119,8 +119,8 @@ RefinePathDlg::RefinePathDlg(QWidget* parent, const char* name)
     QPushButton *okButton = buttonBox->button(QDialogButtonBox::Ok);
     okButton->setDefault(true);
     okButton->setShortcut(Qt::CTRL | Qt::Key_Return);
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
     mainLayout->addWidget(buttonBox);
 }
 

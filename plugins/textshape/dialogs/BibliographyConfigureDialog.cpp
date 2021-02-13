@@ -43,9 +43,9 @@ BibliographyConfigureDialog::BibliographyConfigureDialog(const QTextDocument *do
 
     dialog.sortByPosition->setChecked(m_bibConfiguration->sortByPosition());
 
-    connect(dialog.buttonBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(save(QAbstractButton*)));
-    connect(dialog.addSortKeyButton, SIGNAL(clicked()), this, SLOT(addSortKey()));
-    connect(dialog.sortByPosition, SIGNAL(clicked(bool)), this, SLOT(sortMethodChanged(bool)));
+    connect(dialog.buttonBox, &QDialogButtonBox::clicked, this, &BibliographyConfigureDialog::save);
+    connect(dialog.addSortKeyButton, &QAbstractButton::clicked, this, &BibliographyConfigureDialog::addSortKey);
+    connect(dialog.sortByPosition, &QAbstractButton::clicked, this, &BibliographyConfigureDialog::sortMethodChanged);
 
     dialog.sortKeyGroupBox->setDisabled(m_bibConfiguration->sortByPosition());
 

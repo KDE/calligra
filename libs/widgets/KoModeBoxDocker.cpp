@@ -34,7 +34,7 @@ KoModeBoxDocker::KoModeBoxDocker(KoModeBox *modeBox)
     setWindowTitle("");
     setObjectName("ModeBox");
 
-    connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(locationChanged(Qt::DockWidgetArea)));
+    connect(this, &QDockWidget::dockLocationChanged, this, &KoModeBoxDocker::locationChanged);
 }
 
 void KoModeBoxDocker::setCanvas(KoCanvasBase *canvas)

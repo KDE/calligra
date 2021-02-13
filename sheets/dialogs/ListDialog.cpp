@@ -101,15 +101,15 @@ ListDialog::ListDialog(QWidget* parent)
     d->copyButton = new QPushButton(i18n("Copy"), page);
     grid1->addWidget(d->copyButton, 6, 2);
 
-    connect(d->addButton, SIGNAL(clicked()), this, SLOT(slotAdd()));
-    connect(d->cancelButton, SIGNAL(clicked()), this, SLOT(slotCancel()));
-    connect(d->newButton, SIGNAL(clicked()), this, SLOT(slotNew()));
-    connect(d->removeButton, SIGNAL(clicked()), this, SLOT(slotRemove()));
-    connect(d->modifyButton, SIGNAL(clicked()), this, SLOT(slotModify()));
-    connect(d->copyButton, SIGNAL(clicked()), this, SLOT(slotCopy()));
-    connect(d->list, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(slotDoubleClicked()));
-    connect(d->list, SIGNAL(currentRowChanged(int)), this, SLOT(slotCurrentRowChanged(int)));
-    connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
+    connect(d->addButton, &QAbstractButton::clicked, this, &ListDialog::slotAdd);
+    connect(d->cancelButton, &QAbstractButton::clicked, this, &ListDialog::slotCancel);
+    connect(d->newButton, &QAbstractButton::clicked, this, &ListDialog::slotNew);
+    connect(d->removeButton, &QAbstractButton::clicked, this, &ListDialog::slotRemove);
+    connect(d->modifyButton, &QAbstractButton::clicked, this, &ListDialog::slotModify);
+    connect(d->copyButton, &QAbstractButton::clicked, this, &ListDialog::slotCopy);
+    connect(d->list, &QListWidget::itemDoubleClicked, this, &ListDialog::slotDoubleClicked);
+    connect(d->list, &QListWidget::currentRowChanged, this, &ListDialog::slotCurrentRowChanged);
+    connect(this, &KoDialog::okClicked, this, &ListDialog::slotOk);
 
     init();
     d->textEdit->setEnabled(false);

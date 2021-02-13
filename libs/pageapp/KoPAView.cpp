@@ -245,8 +245,8 @@ void KoPAView::initGUI(KoPAFlags flags)
         // this needs to be done before KoCanvasControllerWidget::setCanvas is called
         KoPADocumentStructureDockerFactory structureDockerFactory(KoDocumentSectionView::ThumbnailMode, d->doc->pageType());
         d->documentStructureDocker = qobject_cast<KoPADocumentStructureDocker*>(mainWindow()->createDockWidget(&structureDockerFactory));
-        connect(d->documentStructureDocker, SIGNAL(pageChanged(KoPAPageBase*)), proxyObject, SLOT(updateActivePage(KoPAPageBase*)));
-        connect(d->documentStructureDocker, SIGNAL(dockerReset()), this, SLOT(reinitDocumentDocker()));
+        connect(d->documentStructureDocker, &KoPADocumentStructureDocker::pageChanged, proxyObject, &KoPAViewProxyObject::updateActivePage);
+        connect(d->documentStructureDocker, &KoPADocumentStructureDocker::dockerReset, this, &KoPAView::reinitDocumentDocker);
     }
 
     d->canvasController = canvasController;
@@ -255,8 +255,8 @@ void KoPAView::initGUI(KoPAFlags flags)
     KoToolManager::instance()->registerTools( actionCollection(), d->canvasController );
 
     d->zoomController = new KoZoomController( d->canvasController, zoomHandler(), actionCollection());
-    connect( d->zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)),
-             this, SLOT(slotZoomChanged(KoZoomMode::Mode,qreal)) );
+    connect( d->zoomController, &KoZoomController::zoomChanged,
+             this, &KoPAView::slotZoomChanged );
 
     d->zoomAction = d->zoomController->zoomAction();
 
@@ -269,8 +269,8 @@ void KoPAView::initGUI(KoPAFlags flags)
     d->status->setAlignment( Qt::AlignLeft | Qt::AlignVCenter );
     d->status->setMinimumWidth( 300 );
     addStatusBarItem( d->status, 1 );
-    connect( KoToolManager::instance(), SIGNAL(changedStatusText(QString)),
-             d->status, SLOT(setText(QString)) );
+    connect( KoToolManager::instance(), &KoToolManager::changedStatusText,
+             d->status, &QLabel::setText );
     d->zoomActionWidget = d->zoomAction->createWidget(  statusBar() );
     addStatusBarItem( d->zoomActionWidget, 0 );
 
@@ -289,7 +289,7 @@ void KoPAView::initGUI(KoPAFlags flags)
 
     new KoRulerController(d->horizontalRuler, d->canvas->resourceManager());
 
-    connect(d->doc, SIGNAL(unitChanged(KoUnit)), this, SLOT(updateUnit(KoUnit)));
+    connect(d->doc, &KoDocument::unitChanged, this, &KoPAView::updateUnit);
     //Layout a tab bar
     d->tabBar = new QTabBar();
     d->tabBarLayout->addWidget(d->insideWidget, 1, 1);
@@ -303,14 +303,14 @@ void KoPAView::initGUI(KoPAFlags flags)
     //tab bar is hidden by default a method is provided to access to the tab bar
     d->tabBar->hide();
 
-    connect(d->canvasController->proxyObject, SIGNAL(canvasOffsetXChanged(int)),
-            this, SLOT(pageOffsetChanged()));
-    connect(d->canvasController->proxyObject, SIGNAL(canvasOffsetYChanged(int)),
-            this, SLOT(pageOffsetChanged()));
-    connect(d->canvasController->proxyObject, SIGNAL(sizeChanged(QSize)),
-            this, SLOT(pageOffsetChanged()));
-    connect(d->canvasController->proxyObject, SIGNAL(canvasMousePositionChanged(QPoint)),
-            this, SLOT(updateMousePosition(QPoint)));
+    connect(d->canvasController->proxyObject, &KoCanvasControllerProxyObject::canvasOffsetXChanged,
+            this, &KoPAView::pageOffsetChanged);
+    connect(d->canvasController->proxyObject, &KoCanvasControllerProxyObject::canvasOffsetYChanged,
+            this, &KoPAView::pageOffsetChanged);
+    connect(d->canvasController->proxyObject, &KoCanvasControllerProxyObject::sizeChanged,
+            this, &KoPAView::pageOffsetChanged);
+    connect(d->canvasController->proxyObject, &KoCanvasControllerProxyObject::canvasMousePositionChanged,
+            this, &KoPAView::updateMousePosition);
     d->verticalRuler->createGuideToolConnection(d->canvas);
     d->horizontalRuler->createGuideToolConnection(d->canvas);
 
@@ -326,18 +326,18 @@ void KoPAView::initGUI(KoPAFlags flags)
         if (mw) {
             KoToolBoxFactory toolBoxFactory;
             mw->createDockWidget( &toolBoxFactory );
-            connect(canvasController, SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget>>)),
-            mw->dockerManager(), SLOT(newOptionWidgets(QList<QPointer<QWidget>>)));
+            connect(canvasController, &KoCanvasControllerWidget::toolOptionWidgetsChanged,
+            mw->dockerManager(), &KoDockerManager::newOptionWidgets);
         }
     }
 
-    connect(shapeManager(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
+    connect(shapeManager(), &KoShapeManager::selectionChanged, this, &KoPAView::selectionChanged);
     connect(shapeManager(), SIGNAL(contentChanged()), this, SLOT(updateCanvasSize()));
     connect(d->doc, SIGNAL(shapeAdded(KoShape*)), this, SLOT(updateCanvasSize()));
     connect(d->doc, SIGNAL(shapeRemoved(KoShape*)), this, SLOT(updateCanvasSize()));
-    connect(d->doc, SIGNAL(update(KoPAPageBase*)), this, SLOT(pageUpdated(KoPAPageBase*)));
+    connect(d->doc, &KoPADocument::update, this, &KoPAView::pageUpdated);
     connect(d->canvas, SIGNAL(documentSize(QSize)), d->canvasController->proxyObject, SLOT(updateDocumentSize(QSize)));
-    connect(d->canvasController->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), d->canvas, SLOT(slotSetDocumentOffset(QPoint)));
+    connect(d->canvasController->proxyObject, &KoCanvasControllerProxyObject::moveDocumentOffset, d->canvas, &KoPACanvas::slotSetDocumentOffset);
     connect(d->canvasController->proxyObject, SIGNAL(sizeChanged(QSize)), this, SLOT(updateCanvasSize()));
 
     if (mw) {
@@ -352,8 +352,8 @@ void KoPAView::initActions()
     action = actionCollection()->addAction( KStandardAction::Copy, "edit_copy", 0, 0 );
     d->copyController = new KoCopyController(kopaCanvas(), action);
     d->editPaste = actionCollection()->addAction( KStandardAction::Paste, "edit_paste", proxyObject, SLOT(editPaste()) );
-    connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(clipboardDataChanged()));
-    connect(d->canvas->toolProxy(), SIGNAL(toolChanged(QString)), this, SLOT(clipboardDataChanged()));
+    connect(QApplication::clipboard(), &QClipboard::dataChanged, this, &KoPAView::clipboardDataChanged);
+    connect(d->canvas->toolProxy(), &KoToolProxy::toolChanged, this, &KoPAView::clipboardDataChanged);
     clipboardDataChanged();
     actionCollection()->addAction(KStandardAction::SelectAll,  "edit_select_all", this, SLOT(editSelectAll()));
     actionCollection()->addAction(KStandardAction::Deselect,  "edit_deselect_all", this, SLOT(editDeselectAll()));
@@ -362,9 +362,9 @@ void KoPAView::initActions()
     actionCollection()->addAction("edit_delete", d->deleteSelectionAction );
     d->deleteSelectionAction->setShortcut(QKeySequence("Del"));
     d->deleteSelectionAction->setEnabled(false);
-    connect(d->deleteSelectionAction, SIGNAL(triggered()), this, SLOT(editDeleteSelection()));
-    connect(d->canvas->toolProxy(),    SIGNAL(selectionChanged(bool)),
-            d->deleteSelectionAction, SLOT(setEnabled(bool)));
+    connect(d->deleteSelectionAction, &QAction::triggered, this, &KoPAView::editDeleteSelection);
+    connect(d->canvas->toolProxy(),    &KoToolProxy::selectionChanged,
+            d->deleteSelectionAction, &QAction::setEnabled);
 
     KToggleAction *showGrid= d->doc->gridData().gridToggleAction(d->canvas);
     actionCollection()->addAction("view_grid", showGrid );
@@ -372,7 +372,7 @@ void KoPAView::initActions()
     d->actionViewSnapToGrid = new KToggleAction(i18n("Snap to Grid"), this);
     d->actionViewSnapToGrid->setChecked(d->doc->gridData().snapToGrid());
     actionCollection()->addAction("view_snaptogrid", d->actionViewSnapToGrid);
-    connect( d->actionViewSnapToGrid, SIGNAL(triggered(bool)), this, SLOT(viewSnapToGrid(bool)));
+    connect( d->actionViewSnapToGrid, &QAction::triggered, this, &KoPAView::viewSnapToGrid);
 
     KToggleAction *actionViewShowGuides = KoStandardAction::showGuides(this, SLOT(viewGuides(bool)), this);
     actionViewShowGuides->setChecked( d->doc->guidesData().showGuideLines() );
@@ -381,46 +381,46 @@ void KoPAView::initActions()
 
     d->actionViewShowMasterPages = new KToggleAction(i18n( "Show Master Pages" ), this );
     actionCollection()->addAction( "view_masterpages", d->actionViewShowMasterPages );
-    connect( d->actionViewShowMasterPages, SIGNAL(triggered(bool)), this, SLOT(setMasterMode(bool)) );
+    connect( d->actionViewShowMasterPages, &QAction::triggered, this, &KoPAView::setMasterMode );
 
     d->viewRulers  = new KToggleAction(i18n("Show Rulers"), this);
     actionCollection()->addAction("view_rulers", d->viewRulers );
     d->viewRulers->setToolTip(i18n("Show/hide the view's rulers"));
-    connect(d->viewRulers, SIGNAL(triggered(bool)), proxyObject, SLOT(setShowRulers(bool)));
+    connect(d->viewRulers, &QAction::triggered, proxyObject, &KoPAViewProxyObject::setShowRulers);
     setShowRulers(d->doc->rulersVisible());
 
     d->showPageMargins  = new KToggleAction(i18n("Show Page Margins"), this);
     actionCollection()->addAction("view_page_margins", d->showPageMargins);
     d->showPageMargins->setToolTip(i18n("Show/hide the page margins"));
-    connect(d->showPageMargins, SIGNAL(toggled(bool)), SLOT(setShowPageMargins(bool)));
+    connect(d->showPageMargins, &QAction::toggled, this, &KoPAView::setShowPageMargins);
     setShowPageMargins(d->doc->showPageMargins());
 
     d->actionInsertPage = new QAction(koIcon("document-new"), i18n("Insert Page"), this);
     actionCollection()->addAction( "page_insertpage", d->actionInsertPage );
     d->actionInsertPage->setToolTip( i18n( "Insert a new page after the current one" ) );
     d->actionInsertPage->setWhatsThis( i18n( "Insert a new page after the current one" ) );
-    connect( d->actionInsertPage, SIGNAL(triggered()), proxyObject, SLOT(insertPage()) );
+    connect( d->actionInsertPage, &QAction::triggered, proxyObject, &KoPAViewProxyObject::insertPage );
 
     d->actionCopyPage = new QAction( i18n( "Copy Page" ), this );
     actionCollection()->addAction( "page_copypage", d->actionCopyPage );
     d->actionCopyPage->setToolTip( i18n( "Copy the current page" ) );
     d->actionCopyPage->setWhatsThis( i18n( "Copy the current page" ) );
-    connect( d->actionCopyPage, SIGNAL(triggered()), this, SLOT(copyPage()) );
+    connect( d->actionCopyPage, &QAction::triggered, this, &KoPAView::copyPage );
 
     d->actionDeletePage = new QAction( i18n( "Delete Page" ), this );
     d->actionDeletePage->setEnabled( d->doc->pageCount() > 1 );
     actionCollection()->addAction( "page_deletepage", d->actionDeletePage );
     d->actionDeletePage->setToolTip( i18n( "Delete the current page" ) );
     d->actionDeletePage->setWhatsThis( i18n( "Delete the current page" ) );
-    connect( d->actionDeletePage, SIGNAL(triggered()), this, SLOT(deletePage()) );
+    connect( d->actionDeletePage, &QAction::triggered, this, &KoPAView::deletePage );
 
     d->actionMasterPage = new QAction(i18n("Master Page..."), this);
     actionCollection()->addAction("format_masterpage", d->actionMasterPage);
-    connect(d->actionMasterPage, SIGNAL(triggered()), this, SLOT(formatMasterPage()));
+    connect(d->actionMasterPage, &QAction::triggered, this, &KoPAView::formatMasterPage);
 
     d->actionPageLayout = new QAction( i18n( "Page Layout..." ), this );
     actionCollection()->addAction( "format_pagelayout", d->actionPageLayout );
-    connect( d->actionPageLayout, SIGNAL(triggered()), this, SLOT(formatPageLayout()) );
+    connect( d->actionPageLayout, &QAction::triggered, this, &KoPAView::formatPageLayout );
 
     actionCollection()->addAction(KStandardAction::Prior,  "page_previous", this, SLOT(goToPreviousPage()));
     actionCollection()->addAction(KStandardAction::Next,  "page_next", this, SLOT(goToNextPage()));
@@ -435,21 +435,21 @@ void KoPAView::initActions()
 
     QAction * am = new QAction(i18n("Import Document..."), this);
     actionCollection()->addAction("import_document", am);
-    connect(am, SIGNAL(triggered()), this, SLOT(importDocument()));
+    connect(am, &QAction::triggered, this, &KoPAView::importDocument);
 
     d->actionConfigure = new QAction(koIcon("configure"), i18n("Configure..."), this);
     actionCollection()->addAction("configure", d->actionConfigure);
-    connect(d->actionConfigure, SIGNAL(triggered()), this, SLOT(configure()));
+    connect(d->actionConfigure, &QAction::triggered, this, &KoPAView::configure);
     // not sure why this isn't done through KStandardAction, but since it isn't
     // we ought to set the MenuRole manually so the item ends up in the appropriate
     // menu on OS X:
     d->actionConfigure->setMenuRole(QAction::PreferencesRole);
 
     d->find = new KoFind( this, d->canvas->resourceManager(), actionCollection() );
-    connect( d->find, SIGNAL(findDocumentSetNext(QTextDocument*)),
-             this,    SLOT(findDocumentSetNext(QTextDocument*)) );
-    connect( d->find, SIGNAL(findDocumentSetPrevious(QTextDocument*)),
-             this,    SLOT(findDocumentSetPrevious(QTextDocument*)) );
+    connect( d->find, &KoFind::findDocumentSetNext,
+             this,    &KoPAView::findDocumentSetNext );
+    connect( d->find, &KoFind::findDocumentSetPrevious,
+             this,    &KoPAView::findDocumentSetPrevious );
 
     actionCollection()->action( "object_group" )->setShortcut( QKeySequence( "Ctrl+G" ) );
     actionCollection()->action( "object_ungroup" )->setShortcut( QKeySequence( "Ctrl+Shift+G" ) );
@@ -996,11 +996,11 @@ void KoPAView::setViewMode(KoPAViewMode* mode)
     KoPAViewBase::setViewMode(mode);
 
     if (previousViewMode && mode != previousViewMode) {
-        disconnect(d->doc, SIGNAL(shapeAdded(KoShape*)), previousViewMode, SLOT(addShape(KoShape*)));
-        disconnect(d->doc, SIGNAL(shapeRemoved(KoShape*)), previousViewMode, SLOT(removeShape(KoShape*)));
+        disconnect(d->doc, &KoPADocument::shapeAdded, previousViewMode, &KoPAViewMode::addShape);
+        disconnect(d->doc, &KoPADocument::shapeRemoved, previousViewMode, &KoPAViewMode::removeShape);
     }
-    connect(d->doc, SIGNAL(shapeAdded(KoShape*)), mode, SLOT(addShape(KoShape*)));
-    connect(d->doc, SIGNAL(shapeRemoved(KoShape*)), mode, SLOT(removeShape(KoShape*)));
+    connect(d->doc, &KoPADocument::shapeAdded, mode, &KoPAViewMode::addShape);
+    connect(d->doc, &KoPADocument::shapeRemoved, mode, &KoPAViewMode::removeShape);
 }
 
 QPixmap KoPAView::pageThumbnail(KoPAPageBase* page, const QSize& size)

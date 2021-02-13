@@ -79,7 +79,7 @@ void StylesComboPreview::init()
     m_addButton->setMinimumSize(16,16);
     m_addButton->setMaximumSize(16, 16);
     m_addButton->setToolTip(i18n("Create a new style with the current properties"));
-    connect(m_addButton, SIGNAL(clicked()), this, SLOT(addNewStyle()));
+    connect(m_addButton, &QAbstractButton::clicked, this, &StylesComboPreview::addNewStyle);
 
     updateAddButton();
 }

@@ -150,10 +150,10 @@ ShapeCollectionDocker::ShapeCollectionDocker(QWidget* parent)
     m_layout->setRowStretch(1, 1);
     m_layout->setColumnStretch(2, 1);
 
-    connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(locationChanged(Qt::DockWidgetArea)));
+    connect(this, &QDockWidget::dockLocationChanged, this, &ShapeCollectionDocker::locationChanged);
 
-    connect(m_quickView, SIGNAL(clicked(QModelIndex)),
-            this, SLOT(activateShapeCreationToolFromQuick(QModelIndex)));
+    connect(m_quickView, &QAbstractItemView::clicked,
+            this, &ShapeCollectionDocker::activateShapeCreationToolFromQuick);
 
     m_moreShapes = new QToolButton(mainWidget);
     m_moreShapes->setText(i18n("More"));
@@ -178,8 +178,8 @@ ShapeCollectionDocker::ShapeCollectionDocker(QWidget* parent)
     m_collectionChooser->setMovement(QListView::Static);
     m_collectionChooser->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_collectionChooser->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    connect(m_collectionChooser, SIGNAL(itemClicked(QListWidgetItem*)),
-            this, SLOT(activateShapeCollection(QListWidgetItem*)));
+    connect(m_collectionChooser, &QListWidget::itemClicked,
+            this, &ShapeCollectionDocker::activateShapeCollection);
 
 
     m_addCollectionButton = new QToolButton (m_moreShapesContainer);
@@ -197,8 +197,8 @@ ShapeCollectionDocker::ShapeCollectionDocker(QWidget* parent)
     m_closeCollectionButton->setToolTip(i18n("Remove Shape Collection"));
     m_closeCollectionButton->setVisible(false);
 
-    connect(m_closeCollectionButton, SIGNAL(clicked()),
-            this, SLOT(removeCurrentCollection()));
+    connect(m_closeCollectionButton, &QAbstractButton::clicked,
+            this, &ShapeCollectionDocker::removeCurrentCollection);
 
     // QT5TODO: app_shape_collections was only used with Flow in 2.x times
     // Now the StencilBoxDocker parses all the stencils and adds them to the KoShapeRegistry,
@@ -221,8 +221,8 @@ ShapeCollectionDocker::ShapeCollectionDocker(QWidget* parent)
     m_collectionView->setFixedSize(QSize(165,345));
     m_collectionView->setWordWrap(true);
 
-    connect(m_collectionView, SIGNAL(clicked(QModelIndex)),
-            this, SLOT(activateShapeCreationTool(QModelIndex)));
+    connect(m_collectionView, &QAbstractItemView::clicked,
+            this, &ShapeCollectionDocker::activateShapeCreationTool);
 
     // Load the default shapes and add them to the combobox
     loadDefaultShapes();
@@ -482,7 +482,7 @@ void ShapeCollectionDocker::scanCollectionDir(const QString& path, QMenu* menu)
             scanCollectionDir(dir.absoluteFilePath(collectionDirName), submenu);
         }
     } else {
-        QAction* action = menu->addAction(QIcon(dir.absoluteFilePath(icon)), name, this, SLOT(loadCollection()));
+        QAction* action = menu->addAction(QIcon(dir.absoluteFilePath(icon)), name, this, &ShapeCollectionDocker::loadCollection);
         action->setIconText(name);
         action->setData(QVariant(type + ':' + path + QDir::separator()));
         action->setEnabled(!m_modelMap.contains(action->data().toString()));
@@ -511,10 +511,10 @@ void ShapeCollectionDocker::loadCollection()
     if(type == "odg-collection")
     {
         OdfCollectionLoader* loader = new OdfCollectionLoader(path, this);
-        connect(loader, SIGNAL(loadingFailed(QString)),
-                this, SLOT(onLoadingFailed(QString)));
-        connect(loader, SIGNAL(loadingFinished()),
-                this, SLOT(onLoadingFinished()));
+        connect(loader, &OdfCollectionLoader::loadingFailed,
+                this, &ShapeCollectionDocker::onLoadingFailed);
+        connect(loader, &OdfCollectionLoader::loadingFinished,
+                this, &ShapeCollectionDocker::onLoadingFinished);
 
         loader->load();
     }

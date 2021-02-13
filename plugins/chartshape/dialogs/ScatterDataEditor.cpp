@@ -146,9 +146,9 @@ ScatterDataEditor::ScatterDataEditor(ChartShape *chart, QWidget *parent)
     m_deleteAction->setEnabled(false);
 
     m_dataSetModel.tableSource = m_chart->tableSource();
-    connect(m_ui.addDataSetBefore, SIGNAL(clicked()), this, SLOT(slotAddDataSetBefore()));
-    connect(m_ui.addDataSetAfter, SIGNAL(clicked()), this, SLOT(slotAddDataSetAfter()));
-    connect(m_ui.removeDataSet, SIGNAL(clicked()), this, SLOT(slotRemoveDataSet()));
+    connect(m_ui.addDataSetBefore, &QAbstractButton::clicked, this, &ScatterDataEditor::slotAddDataSetBefore);
+    connect(m_ui.addDataSetAfter, &QAbstractButton::clicked, this, &ScatterDataEditor::slotAddDataSetAfter);
+    connect(m_ui.removeDataSet, &QAbstractButton::clicked, this, &ScatterDataEditor::slotRemoveDataSet);
 
     m_dataSetModel.setModel(m_chart->proxyModel());
 //     connect(&m_dataSetModel, &Scatter::DataSetTableModel::dataChanged, this, &ScatterDataEditor::slotDataChanged);
@@ -157,19 +157,19 @@ ScatterDataEditor::ScatterDataEditor(ChartShape *chart, QWidget *parent)
     m_dataModel->setSourceModel(m_chart->internalModel());
     m_dataModel->dataSetModel = &m_dataSetModel;
 
-    connect(m_ui.insertColumnBefore, SIGNAL(clicked()), this, SLOT(slotInsertColumnBefore()));
-    connect(m_ui.insertColumnAfter, SIGNAL(clicked()), this, SLOT(slotInsertColumnAfter()));
-    connect(m_ui.insertRowAbove, SIGNAL(clicked()), this, SLOT(slotInsertRowAbove()));
-    connect(m_ui.insertRowBelow, SIGNAL(clicked()), this, SLOT(slotInsertRowBelow()));
-    connect(m_ui.deleteSelection,SIGNAL(clicked()), this, SLOT(slotDeleteSelection()));
+    connect(m_ui.insertColumnBefore, &QAbstractButton::clicked, this, &ScatterDataEditor::slotInsertColumnBefore);
+    connect(m_ui.insertColumnAfter, &QAbstractButton::clicked, this, &ScatterDataEditor::slotInsertColumnAfter);
+    connect(m_ui.insertRowAbove, &QAbstractButton::clicked, this, &ScatterDataEditor::slotInsertRowAbove);
+    connect(m_ui.insertRowBelow, &QAbstractButton::clicked, this, &ScatterDataEditor::slotInsertRowBelow);
+    connect(m_ui.deleteSelection,&QAbstractButton::clicked, this, &ScatterDataEditor::slotDeleteSelection);
 
-    connect(m_insertColumnBeforeAction, SIGNAL(triggered()), this, SLOT(slotInsertColumnBefore()));
-    connect(m_insertColumnAfterAction, SIGNAL(triggered()), this, SLOT(slotInsertColumnAfter()));
-    connect(m_insertRowAboveAction, SIGNAL(triggered()), this, SLOT(slotInsertRowAbove()));
-    connect(m_insertRowBelowAction, SIGNAL(triggered()), this, SLOT(slotInsertRowBelow()));
-    connect(m_deleteAction, SIGNAL(triggered()), this, SLOT(slotDeleteSelection()));
+    connect(m_insertColumnBeforeAction, &QAction::triggered, this, &ScatterDataEditor::slotInsertColumnBefore);
+    connect(m_insertColumnAfterAction, &QAction::triggered, this, &ScatterDataEditor::slotInsertColumnAfter);
+    connect(m_insertRowAboveAction, &QAction::triggered, this, &ScatterDataEditor::slotInsertRowAbove);
+    connect(m_insertRowBelowAction, &QAction::triggered, this, &ScatterDataEditor::slotInsertRowBelow);
+    connect(m_deleteAction, &QAction::triggered, this, &ScatterDataEditor::slotDeleteSelection);
 
-    connect(m_ui.tableView, SIGNAL(currentIndexChanged(QModelIndex)), this, SLOT(enableActions()));
+    connect(m_ui.tableView, &ChartTableView::currentIndexChanged, this, &ScatterDataEditor::enableActions);
 
     m_ui.tableView->setModel(m_dataModel);
     m_ui.dataSetView->setModel(&m_dataSetModel);
@@ -183,19 +183,19 @@ ScatterDataEditor::ScatterDataEditor(ChartShape *chart, QWidget *parent)
 
     m_ui.dataSetView->verticalHeader()->hide();
 
-    connect(m_ui.manualControl, SIGNAL(toggled(bool)), m_chart->proxyModel(), SLOT(setManualControl(bool)));
+    connect(m_ui.manualControl, &QAbstractButton::toggled, m_chart->proxyModel(), &ChartProxyModel::setManualControl);
 
-    connect(m_ui.tableView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&,const QItemSelection&)), this, SLOT(enableActions()));
-    connect(m_ui.dataSetView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&,const QItemSelection&)), this, SLOT(enableActions()));
-    connect(m_ui.manualControl, SIGNAL(clicked()), this, SLOT(enableActions()));
+    connect(m_ui.tableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ScatterDataEditor::enableActions);
+    connect(m_ui.dataSetView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ScatterDataEditor::enableActions);
+    connect(m_ui.manualControl, &QAbstractButton::clicked, this, &ScatterDataEditor::enableActions);
 
     chart->proxyModel()->setManualControl(m_ui.manualControl->isChecked());
     enableActions();
 
-    connect(m_dataModel, SIGNAL(columnsInserted(const QModelIndex &, int, int)), this, SLOT(dataColumnsInserted(QModelIndex,int,int)));
-    connect(m_dataModel, SIGNAL(columnsRemoved(const QModelIndex &, int, int)), this, SLOT(dataColumnsRemoved(QModelIndex,int,int)));
-    connect(m_dataModel->sourceModel(), SIGNAL(rowsInserted(const QModelIndex &, int, int)), this, SLOT(dataRowCountChanged()));
-    connect(m_dataModel->sourceModel(), SIGNAL(rowsRemoved(const QModelIndex &, int, int)), this, SLOT(dataRowCountChanged()));
+    connect(m_dataModel, &QAbstractItemModel::columnsInserted, this, &ScatterDataEditor::dataColumnsInserted);
+    connect(m_dataModel, &QAbstractItemModel::columnsRemoved, this, &ScatterDataEditor::dataColumnsRemoved);
+    connect(m_dataModel->sourceModel(), &QAbstractItemModel::rowsInserted, this, &ScatterDataEditor::dataRowCountChanged);
+    connect(m_dataModel->sourceModel(), &QAbstractItemModel::rowsRemoved, this, &ScatterDataEditor::dataRowCountChanged);
 
     resize(sizeHint().expandedTo(QSize(600, 300)));
 

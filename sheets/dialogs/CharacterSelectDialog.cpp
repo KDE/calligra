@@ -73,7 +73,7 @@ CharacterSelectDialog::CharacterSelectDialog(QWidget *parent, const QString &nam
 
     setButtonText(User1, i18n("&Insert"));
     setButtonToolTip(User1, i18n("Insert the selected character in the text"));
-    connect(this, SIGNAL(user1Clicked()), this, SLOT(slotUser1()));
+    connect(this, &KoDialog::user1Clicked, this, &CharacterSelectDialog::slotUser1);
 }
 
 void CharacterSelectDialog::initDialog(const QChar &_chr, const QString &_font)
@@ -86,7 +86,7 @@ void CharacterSelectDialog::initDialog(const QChar &_chr, const QString &_font)
     d->charSelect = new KCharSelect(page, 0);
     d->charSelect->setCurrentChar(_chr);
     d->charSelect->setCurrentFont(QFont(_font));
-    connect(d->charSelect, SIGNAL(charSelected(QChar)), this, SLOT(slotDoubleClicked()));
+    connect(d->charSelect, &KCharSelect::charSelected, this, &CharacterSelectDialog::slotDoubleClicked);
     d->charSelect->resize(d->charSelect->sizeHint());
 //     d->charSelect->enableFontCombo( true );
     grid->addWidget(d->charSelect, 0, 0);

@@ -120,8 +120,8 @@ KoConfigAuthorPage::KoConfigAuthorPage()
 
     // Connect slots
     connect(d->combo, SIGNAL(currentIndexChanged(int)), this, SLOT(profileChanged(int)));
-    connect(newUser, SIGNAL(clicked(bool)), this, SLOT(addUser()));
-    connect(d->deleteUser, SIGNAL(clicked(bool)), this, SLOT(deleteUser()));
+    connect(newUser, &QAbstractButton::clicked, this, &KoConfigAuthorPage::addUser);
+    connect(d->deleteUser, &QAbstractButton::clicked, this, &KoConfigAuthorPage::deleteUser);
     profileChanged(0);
 }
 

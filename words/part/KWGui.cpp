@@ -92,24 +92,24 @@ KWGui::KWGui(const QString &viewMode, KWView *parent)
 
     new KoRulerController(m_horizontalRuler, m_canvas->resourceManager());
 
-    connect(m_view->kwdocument(), SIGNAL(unitChanged(KoUnit)), m_horizontalRuler, SLOT(setUnit(KoUnit)));
-    connect(m_view->kwdocument(), SIGNAL(unitChanged(KoUnit)), m_verticalRuler, SLOT(setUnit(KoUnit)));
-    connect(m_view->kwdocument(), SIGNAL(pageSetupChanged()), this, SLOT(pageSetupChanged()));
+    connect(m_view->kwdocument(), &KoDocument::unitChanged, m_horizontalRuler, &KoRuler::setUnit);
+    connect(m_view->kwdocument(), &KoDocument::unitChanged, m_verticalRuler, &KoRuler::setUnit);
+    connect(m_view->kwdocument(), &KWDocument::pageSetupChanged, this, &KWGui::pageSetupChanged);
 
-    connect(m_canvasController->proxyObject, SIGNAL(canvasOffsetXChanged(int)), m_horizontalRuler, SLOT(setOffset(int)));
-    connect(m_canvasController->proxyObject, SIGNAL(canvasOffsetYChanged(int)), m_verticalRuler, SLOT(setOffset(int)));
-    connect(m_canvasController->proxyObject, SIGNAL(canvasOffsetYChanged(int)), parent, SLOT(offsetInDocumentMoved(int)));
-    connect(m_canvasController->proxyObject, SIGNAL(canvasMousePositionChanged(QPoint)), this, SLOT(updateMousePos(QPoint)));
-    connect(m_canvasController->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), m_canvas, SLOT(setDocumentOffset(QPoint)));
+    connect(m_canvasController->proxyObject, &KoCanvasControllerProxyObject::canvasOffsetXChanged, m_horizontalRuler, &KoRuler::setOffset);
+    connect(m_canvasController->proxyObject, &KoCanvasControllerProxyObject::canvasOffsetYChanged, m_verticalRuler, &KoRuler::setOffset);
+    connect(m_canvasController->proxyObject, &KoCanvasControllerProxyObject::canvasOffsetYChanged, parent, &KWView::offsetInDocumentMoved);
+    connect(m_canvasController->proxyObject, &KoCanvasControllerProxyObject::canvasMousePositionChanged, this, &KWGui::updateMousePos);
+    connect(m_canvasController->proxyObject, &KoCanvasControllerProxyObject::moveDocumentOffset, m_canvas, &KWCanvas::setDocumentOffset);
 
-    connect(m_canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
+    connect(m_canvas->shapeManager()->selection(), &KoSelection::selectionChanged, this, &KWGui::shapeSelectionChanged);
 
     m_verticalRuler->createGuideToolConnection(m_canvas);
     m_horizontalRuler->createGuideToolConnection(m_canvas);
 
     pageSetupChanged();
 
-    QTimer::singleShot(0, this, SLOT(setupUnitActions()));
+    QTimer::singleShot(0, this, &KWGui::setupUnitActions);
 }
 
 KWGui::~KWGui()

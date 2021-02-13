@@ -33,8 +33,8 @@ KWStatisticsDocker::KWStatisticsDocker()
     setWindowTitle(i18n("Statistics"));
 
     m_statisticsWidget = new KWStatisticsWidget(this);
-    connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
-            this, SLOT(ondockLocationChanged(Qt::DockWidgetArea)));
+    connect(this, &QDockWidget::dockLocationChanged,
+            this, &KWStatisticsDocker::ondockLocationChanged);
     setWidget(m_statisticsWidget);
 }
 

@@ -116,8 +116,8 @@ KPrPageEffectDocker::KPrPageEffectDocker( QWidget* parent, Qt::WindowFlags flags
 
     m_applyToAllSlidesButton = new QPushButton(i18n("Apply To All Slides"));
 
-    connect(m_applyToAllSlidesButton, SIGNAL(clicked()),
-             this, SLOT(slotApplyToAllSlides()));
+    connect(m_applyToAllSlidesButton, &QAbstractButton::clicked,
+             this, &KPrPageEffectDocker::slotApplyToAllSlides);
 
     // setup widget layout
     QVBoxLayout* layout = new QVBoxLayout;
@@ -315,10 +315,10 @@ void KPrPageEffectDocker::setView( KoPAViewBase* view )
 {
     Q_ASSERT( view );
     m_view = view;
-    connect( view->proxyObject, SIGNAL(activePageChanged()),
-             this, SLOT(slotActivePageChanged()) );
-    connect( view->proxyObject, SIGNAL(destroyed(QObject*)),
-             this, SLOT(cleanup(QObject*)) );
+    connect( view->proxyObject, &KoPAViewProxyObject::activePageChanged,
+             this, &KPrPageEffectDocker::slotActivePageChanged );
+    connect( view->proxyObject, &QObject::destroyed,
+             this, &KPrPageEffectDocker::cleanup );
 
 
     if( m_view->activePage() )

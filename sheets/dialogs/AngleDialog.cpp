@@ -71,8 +71,8 @@ AngleDialog::AngleDialog(QWidget* parent, Selection* selection)
 
     m_pAngle->setFocus();
 
-    connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
-    connect(this, SIGNAL(defaultClicked()), this, SLOT(slotDefault()));
+    connect(this, &KoDialog::okClicked, this, &AngleDialog::slotOk);
+    connect(this, &KoDialog::defaultClicked, this, &AngleDialog::slotDefault);
     int angle = - Cell(m_selection->activeSheet(), m_selection->marker()).style().angle();
     m_pAngle->setValue(angle);
 }

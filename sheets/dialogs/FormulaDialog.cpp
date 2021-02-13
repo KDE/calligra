@@ -124,7 +124,7 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
     // When items are activated on single click, also change the help page on mouse-over, otherwise there is no (easy) way to get
     // the help without inserting the function
     if (functions->style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick, 0, functions)) {
-        connect(functions, SIGNAL(entered(QModelIndex)), this, SLOT(slotIndexSelected(QModelIndex)));
+        connect(functions, &QAbstractItemView::entered, this, &FormulaDialog::slotIndexSelected);
         functions->setMouseTracking(true);
     }
     //connect(proxyModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(slotDataChanged(QModelIndex,QModelIndex)));
@@ -192,8 +192,8 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
 
     refresh_result = true;
 
-    connect(this, SIGNAL(cancelClicked()), this, SLOT(slotClose()));
-    connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
+    connect(this, &KoDialog::cancelClicked, this, &FormulaDialog::slotClose);
+    connect(this, &KoDialog::okClicked, this, &FormulaDialog::slotOk);
     connect(typeFunction, SIGNAL(activated(QString)),
             this, SLOT(slotActivated(QString)));
     /*
@@ -202,30 +202,30 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
         connect( functions, SIGNAL(selected(QString)),
                  this, SLOT(slotSelected(QString)) );
     */
-    connect(functions, SIGNAL(activated(QModelIndex)),
-            this , SLOT(slotDoubleClicked(QModelIndex)));
+    connect(functions, &QAbstractItemView::activated,
+            this , &FormulaDialog::slotDoubleClicked);
 
     slotActivated(i18n("All"));
 
-    connect(selectFunction, SIGNAL(clicked()),
-            this, SLOT(slotSelectButton()));
+    connect(selectFunction, &QAbstractButton::clicked,
+            this, &FormulaDialog::slotSelectButton);
 
-    connect(firstElement, SIGNAL(textChanged(QString)),
-            this, SLOT(slotChangeText(QString)));
-    connect(secondElement, SIGNAL(textChanged(QString)),
-            this, SLOT(slotChangeText(QString)));
-    connect(thirdElement, SIGNAL(textChanged(QString)),
-            this, SLOT(slotChangeText(QString)));
-    connect(fourElement, SIGNAL(textChanged(QString)),
-            this, SLOT(slotChangeText(QString)));
-    connect(fiveElement, SIGNAL(textChanged(QString)),
-            this, SLOT(slotChangeText(QString)));
+    connect(firstElement, &QLineEdit::textChanged,
+            this, &FormulaDialog::slotChangeText);
+    connect(secondElement, &QLineEdit::textChanged,
+            this, &FormulaDialog::slotChangeText);
+    connect(thirdElement, &QLineEdit::textChanged,
+            this, &FormulaDialog::slotChangeText);
+    connect(fourElement, &QLineEdit::textChanged,
+            this, &FormulaDialog::slotChangeText);
+    connect(fiveElement, &QLineEdit::textChanged,
+            this, &FormulaDialog::slotChangeText);
 
-    connect(m_selection, SIGNAL(changed(Region)),
-            this, SLOT(slotSelectionChanged()));
+    connect(m_selection, &Selection::changed,
+            this, &FormulaDialog::slotSelectionChanged);
 
-    connect(m_browser, SIGNAL(anchorClicked(QUrl)),
-            this, SLOT(slotShowFunction(QUrl)));
+    connect(m_browser, &QTextBrowser::anchorClicked,
+            this, &FormulaDialog::slotShowFunction);
 
     // Save the name of the active sheet.
     m_sheetName = m_selection->activeSheet()->sheetName();
@@ -279,8 +279,8 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
     if (functions->currentIndex().isValid())
         selectFunction->setEnabled(false);
 
-    connect(searchFunct, SIGNAL(textChanged(QString)),
-            this, SLOT(slotSearchText(QString)));
+    connect(searchFunct, &QLineEdit::textChanged,
+            this, &FormulaDialog::slotSearchText);
     connect(searchFunct, SIGNAL(returnPressed()),
             this, SLOT(slotPressReturn()));
 

@@ -46,8 +46,8 @@ KPrViewModePreviewPageEffect::KPrViewModePreviewPageEffect( KoPAViewBase * view,
 , m_page(0)
 , m_prevpage(0)
 {
-    connect( &m_timeLine, SIGNAL(valueChanged(qreal)), this, SLOT(animate()) );
-    connect( &m_timeLine, SIGNAL(finished()), this, SLOT(activateSavedViewMode()) );
+    connect( &m_timeLine, &QTimeLine::valueChanged, this, &KPrViewModePreviewPageEffect::animate );
+    connect( &m_timeLine, &QTimeLine::finished, this, &KPrViewModePreviewPageEffect::activateSavedViewMode );
 }
 
 KPrViewModePreviewPageEffect::~KPrViewModePreviewPageEffect()

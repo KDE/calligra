@@ -81,10 +81,10 @@ KoVersionDialog::KoVersionDialog(QWidget* parent, KoDocument *doc)
     grid1->addWidget(m_pOpen, 4, 2);
 
 
-    connect(m_pRemove, SIGNAL(clicked()), this, SLOT(slotRemove()));
-    connect(m_pAdd, SIGNAL(clicked()), this, SLOT(slotAdd()));
-    connect(m_pOpen, SIGNAL(clicked()), this, SLOT(slotOpen()));
-    connect(m_pModify, SIGNAL(clicked()), this, SLOT(slotModify()));
+    connect(m_pRemove, &QAbstractButton::clicked, this, &KoVersionDialog::slotRemove);
+    connect(m_pAdd, &QAbstractButton::clicked, this, &KoVersionDialog::slotAdd);
+    connect(m_pOpen, &QAbstractButton::clicked, this, &KoVersionDialog::slotOpen);
+    connect(m_pModify, &QAbstractButton::clicked, this, &KoVersionDialog::slotModify);
 
     updateButton();
 

@@ -201,8 +201,8 @@ GeneralTab::GeneralTab(QWidget* parent, CellFormatDialog * dlg)
 
     connect(m_parentBox, SIGNAL(activated(QString)),
             this, SLOT(parentChanged(QString)));
-    connect(m_nameEdit, SIGNAL(textChanged(QString)),
-            this, SLOT(styleNameChanged(QString)));
+    connect(m_nameEdit, &QLineEdit::textChanged,
+            this, &GeneralTab::styleNameChanged);
 
     groupBoxLayout->addWidget(m_parentBox, 2, 1);
 
@@ -787,7 +787,7 @@ void CellFormatDialog::init()
     protectPage = new CellFormatPageProtection(this, this);
     addPage(protectPage, i18n("&Cell Protection"));
 
-    connect(this, SIGNAL(accepted()), this, SLOT(slotApply()));
+    connect(this, &QDialog::accepted, this, &CellFormatDialog::slotApply);
 }
 
 QPixmap * CellFormatDialog::paintFormatPixmap(const char * _string1, const QColor & _color1,
@@ -1084,22 +1084,22 @@ CellFormatPageFloat::CellFormatPageFloat(QWidget* parent, CellFormatDialog *_dlg
             customFormat->setChecked(true);
     }
 
-    connect(generic, SIGNAL(clicked()), this, SLOT(slotChangeState()));
-    connect(fraction, SIGNAL(clicked()), this, SLOT(slotChangeState()));
-    connect(money, SIGNAL(clicked()), this, SLOT(slotChangeState()));
-    connect(date, SIGNAL(clicked()), this, SLOT(slotChangeState()));
-    connect(datetime, SIGNAL(clicked()), this, SLOT(slotChangeState()));
-    connect(scientific, SIGNAL(clicked()), this, SLOT(slotChangeState()));
-    connect(number, SIGNAL(clicked()), this, SLOT(slotChangeState()));
-    connect(percent, SIGNAL(clicked()), this, SLOT(slotChangeState()));
-    connect(time, SIGNAL(clicked()), this, SLOT(slotChangeState()));
-    connect(textFormat, SIGNAL(clicked()), this, SLOT(slotChangeState()));
-    connect(customFormat, SIGNAL(clicked()), this, SLOT(slotChangeState()));
+    connect(generic, &QAbstractButton::clicked, this, &CellFormatPageFloat::slotChangeState);
+    connect(fraction, &QAbstractButton::clicked, this, &CellFormatPageFloat::slotChangeState);
+    connect(money, &QAbstractButton::clicked, this, &CellFormatPageFloat::slotChangeState);
+    connect(date, &QAbstractButton::clicked, this, &CellFormatPageFloat::slotChangeState);
+    connect(datetime, &QAbstractButton::clicked, this, &CellFormatPageFloat::slotChangeState);
+    connect(scientific, &QAbstractButton::clicked, this, &CellFormatPageFloat::slotChangeState);
+    connect(number, &QAbstractButton::clicked, this, &CellFormatPageFloat::slotChangeState);
+    connect(percent, &QAbstractButton::clicked, this, &CellFormatPageFloat::slotChangeState);
+    connect(time, &QAbstractButton::clicked, this, &CellFormatPageFloat::slotChangeState);
+    connect(textFormat, &QAbstractButton::clicked, this, &CellFormatPageFloat::slotChangeState);
+    connect(customFormat, &QAbstractButton::clicked, this, &CellFormatPageFloat::slotChangeState);
 
-    connect(listFormat, SIGNAL(itemSelectionChanged()), this, SLOT(makeformat()));
+    connect(listFormat, &QListWidget::itemSelectionChanged, this, &CellFormatPageFloat::makeformat);
     connect(precision, SIGNAL(valueChanged(int)), this, SLOT(slotChangeValue(int)));
-    connect(prefix, SIGNAL(textChanged(QString)), this, SLOT(makeformat()));
-    connect(postfix, SIGNAL(textChanged(QString)), this, SLOT(makeformat()));
+    connect(prefix, &QLineEdit::textChanged, this, &CellFormatPageFloat::makeformat);
+    connect(postfix, &QLineEdit::textChanged, this, &CellFormatPageFloat::makeformat);
     connect(currency, SIGNAL(activated(QString)), this, SLOT(currencyChanged(QString)));
     connect(format, SIGNAL(activated(int)), this, SLOT(formatChanged(int)));
     connect(format, SIGNAL(activated(int)), this, SLOT(makeformat()));
@@ -1689,8 +1689,8 @@ CellFormatPageProtection::CellFormatPageProtection(QWidget* parent, CellFormatDi
         m_dlg(_dlg)
 {
     setupUi(this);
-    connect(m_bHideAll, SIGNAL(toggled(bool)), m_bIsProtected, SLOT(setDisabled(bool)));
-    connect(m_bHideAll, SIGNAL(toggled(bool)), m_bHideFormula, SLOT(setDisabled(bool)));
+    connect(m_bHideAll, &QAbstractButton::toggled, m_bIsProtected, &QWidget::setDisabled);
+    connect(m_bHideAll, &QAbstractButton::toggled, m_bHideFormula, &QWidget::setDisabled);
 
     m_bDontPrint->setChecked(m_dlg->bDontPrintText);
     m_bHideAll->setChecked(m_dlg->bHideAll);
@@ -1753,8 +1753,8 @@ CellFormatPageFont::CellFormatPageFont(QWidget* parent, CellFormatDialog *_dlg)
 
     bTextColorUndefined = !dlg->bTextColor;
 
-    connect(textColorButton, SIGNAL(changed(QColor)),
-            this, SLOT(slotSetTextColor(QColor)));
+    connect(textColorButton, &KColorButton::changed,
+            this, &CellFormatPageFont::slotSetTextColor);
 
 
     QStringList tmpListFont;
@@ -1779,8 +1779,8 @@ CellFormatPageFont::CellFormatPageFont(QWidget* parent, CellFormatDialog *_dlg)
         family_combo->setCurrentRow(0);
     }
 
-    connect(family_combo, SIGNAL(currentTextChanged(QString)),
-            SLOT(family_chosen_slot(QString)));
+    connect(family_combo, &QListWidget::currentTextChanged,
+            this, &CellFormatPageFont::family_chosen_slot);
 
     QStringList lst;
     lst.append("");
@@ -1794,8 +1794,8 @@ CellFormatPageFont::CellFormatPageFont(QWidget* parent, CellFormatDialog *_dlg)
 
     connect(size_combo, SIGNAL(activated(QString)),
             SLOT(size_chosen_slot(QString)));
-    connect(size_combo , SIGNAL(editTextChanged(QString)),
-            this, SLOT(size_chosen_slot(QString)));
+    connect(size_combo , &QComboBox::editTextChanged,
+            this, &CellFormatPageFont::size_chosen_slot);
 
     connect(weight_combo, SIGNAL(activated(QString)),
             SLOT(weight_chosen_slot(QString)));
@@ -1804,17 +1804,17 @@ CellFormatPageFont::CellFormatPageFont(QWidget* parent, CellFormatDialog *_dlg)
             SLOT(style_chosen_slot(QString)));
 
     strike->setChecked(dlg->strike);
-    connect(strike, SIGNAL(clicked()),
-            SLOT(strike_chosen_slot()));
+    connect(strike, &QAbstractButton::clicked,
+            this, &CellFormatPageFont::strike_chosen_slot);
 
     underline->setChecked(dlg->underline);
-    connect(underline, SIGNAL(clicked()),
-            SLOT(underline_chosen_slot()));
+    connect(underline, &QAbstractButton::clicked,
+            this, &CellFormatPageFont::underline_chosen_slot);
 
     example_label->setText(i18n("Dolor Ipse"));
 
-    connect(this, SIGNAL(fontSelected(QFont)),
-            this, SLOT(display_example(QFont)));
+    connect(this, &CellFormatPageFont::fontSelected,
+            this, &CellFormatPageFont::display_example);
 
     setCombos();
     display_example(selFont);
@@ -1991,7 +1991,7 @@ CellFormatPagePosition::CellFormatPagePosition(QWidget* parent, CellFormatDialog
         dlg(_dlg)
 {
     setupUi(this);
-    connect(angleRotation, SIGNAL(valueChanged(int)), spinBox3, SLOT(setValue(int)));
+    connect(angleRotation, &QAbstractSlider::valueChanged, spinBox3, &QSpinBox::setValue);
     connect(spinBox3, SIGNAL(valueChanged(int)), angleRotation, SLOT(setValue(int)));
 
     if (dlg->alignX == Style::Left)
@@ -2086,12 +2086,12 @@ CellFormatPagePosition::CellFormatPagePosition(QWidget* parent, CellFormatDialog
         defaultWidth->setEnabled(false);
     }
 
-    connect(defaultWidth , SIGNAL(clicked()), this, SLOT(slotChangeWidthState()));
-    connect(defaultHeight , SIGNAL(clicked()), this, SLOT(slotChangeHeightState()));
-    connect(vertical , SIGNAL(clicked()), this, SLOT(slotChangeVerticalState()));
-    connect(shrinkToFit, SIGNAL(clicked()), this, SLOT(slotChangeShrinkToFitState()));
-    connect(multi , SIGNAL(clicked()), this, SLOT(slotChangeMultiState()));
-    connect(angleRotation, SIGNAL(valueChanged(int)), this, SLOT(slotChangeAngle(int)));
+    connect(defaultWidth , &QAbstractButton::clicked, this, &CellFormatPagePosition::slotChangeWidthState);
+    connect(defaultHeight , &QAbstractButton::clicked, this, &CellFormatPagePosition::slotChangeHeightState);
+    connect(vertical , &QAbstractButton::clicked, this, &CellFormatPagePosition::slotChangeVerticalState);
+    connect(shrinkToFit, &QAbstractButton::clicked, this, &CellFormatPagePosition::slotChangeShrinkToFitState);
+    connect(multi , &QAbstractButton::clicked, this, &CellFormatPagePosition::slotChangeMultiState);
+    connect(angleRotation, &QAbstractSlider::valueChanged, this, &CellFormatPagePosition::slotChangeAngle);
 
     slotStateChanged(0);
     m_bOptionText = false;
@@ -2554,7 +2554,7 @@ void CellFormatPageBorder::InitializeGrids()
     /* tack on the 'customize' border pattern selector */
     customize  = new QCheckBox(i18n("Customize"), tmpQGroupBox);
     grid2->addWidget(customize, 6, 0);
-    connect(customize, SIGNAL(clicked()), SLOT(cutomize_chosen_slot()));
+    connect(customize, &QAbstractButton::clicked, this, &CellFormatPageBorder::cutomize_chosen_slot);
 
     size = new KComboBox(tmpQGroupBox);
     size->setEditable(true);
@@ -2639,12 +2639,12 @@ void CellFormatPageBorder::InitializePatterns()
 
 void CellFormatPageBorder::SetConnections()
 {
-    connect(color, SIGNAL(changed(QColor)),
-            this, SLOT(slotSetColorButton(QColor)));
+    connect(color, &KColorButton::changed,
+            this, &CellFormatPageBorder::slotSetColorButton);
 
     for (int i = 0; i < NUM_BORDER_PATTERNS; i++) {
-        connect(pattern[i], SIGNAL(clicked(PatternSelect*)),
-                this, SLOT(slotUnselect2(PatternSelect*)));
+        connect(pattern[i], &PatternSelect::clicked,
+                this, &CellFormatPageBorder::slotUnselect2);
     }
 
     for (int i = BorderType_Top; i < BorderType_END; i++) {
@@ -2657,9 +2657,9 @@ void CellFormatPageBorder::SetConnections()
                 this, SLOT(preselect(BorderButton*)));
     }
 
-    connect(area , SIGNAL(redraw()), this, SLOT(draw()));
-    connect(area , SIGNAL(choosearea(QMouseEvent*)),
-            this, SLOT(slotPressEvent(QMouseEvent*)));
+    connect(area , &Border::redraw, this, &CellFormatPageBorder::draw);
+    connect(area , &Border::choosearea,
+            this, &CellFormatPageBorder::slotPressEvent);
 
     connect(style, SIGNAL(activated(int)), this, SLOT(slotChangeStyle(int)));
     connect(size, SIGNAL(editTextChanged(QString)),
@@ -3343,13 +3343,13 @@ CellFormatPagePattern::CellFormatPagePattern(QWidget* parent, CellFormatDialog *
         bgColor = palette().base().color();
 
     bgColorButton->setColor(bgColor);
-    connect(bgColorButton, SIGNAL(changed(QColor)),
-            this, SLOT(slotSetBackgroundColor(QColor)));
+    connect(bgColorButton, &KColorButton::changed,
+            this, &CellFormatPagePattern::slotSetBackgroundColor);
 
     notAnyColor = new QPushButton(i18n("No Color"), tmpQGroupBox);
     grid3->addWidget(notAnyColor, 0, 2);
-    connect(notAnyColor, SIGNAL(clicked()),
-            this, SLOT(slotNotAnyColor()));
+    connect(notAnyColor, &QAbstractButton::clicked,
+            this, &CellFormatPagePattern::slotNotAnyColor);
     b_notAnyColor = true;
 
     grid2->addItem(grid3, 7, 0, 1, 3);
@@ -3369,36 +3369,36 @@ CellFormatPagePattern::CellFormatPagePattern(QWidget* parent, CellFormatDialog *
     grid2->addWidget(current, 1, 0);
     grid->addWidget(tmpQGroupBox, 4, 0);
 
-    connect(brush1, SIGNAL(clicked(BrushSelect*)),
-            this, SLOT(slotUnselect2(BrushSelect*)));
-    connect(brush2, SIGNAL(clicked(BrushSelect*)),
-            this, SLOT(slotUnselect2(BrushSelect*)));
-    connect(brush3, SIGNAL(clicked(BrushSelect*)),
-            this, SLOT(slotUnselect2(BrushSelect*)));
-    connect(brush4, SIGNAL(clicked(BrushSelect*)),
-            this, SLOT(slotUnselect2(BrushSelect*)));
-    connect(brush5, SIGNAL(clicked(BrushSelect*)),
-            this, SLOT(slotUnselect2(BrushSelect*)));
-    connect(brush6, SIGNAL(clicked(BrushSelect*)),
-            this, SLOT(slotUnselect2(BrushSelect*)));
-    connect(brush7, SIGNAL(clicked(BrushSelect*)),
-            this, SLOT(slotUnselect2(BrushSelect*)));
-    connect(brush8, SIGNAL(clicked(BrushSelect*)),
-            this, SLOT(slotUnselect2(BrushSelect*)));
-    connect(brush9, SIGNAL(clicked(BrushSelect*)),
-            this, SLOT(slotUnselect2(BrushSelect*)));
-    connect(brush10, SIGNAL(clicked(BrushSelect*)),
-            this, SLOT(slotUnselect2(BrushSelect*)));
-    connect(brush11, SIGNAL(clicked(BrushSelect*)),
-            this, SLOT(slotUnselect2(BrushSelect*)));
-    connect(brush12, SIGNAL(clicked(BrushSelect*)),
-            this, SLOT(slotUnselect2(BrushSelect*)));
-    connect(brush13, SIGNAL(clicked(BrushSelect*)),
-            this, SLOT(slotUnselect2(BrushSelect*)));
-    connect(brush14, SIGNAL(clicked(BrushSelect*)),
-            this, SLOT(slotUnselect2(BrushSelect*)));
-    connect(brush15, SIGNAL(clicked(BrushSelect*)),
-            this, SLOT(slotUnselect2(BrushSelect*)));
+    connect(brush1, &BrushSelect::clicked,
+            this, &CellFormatPagePattern::slotUnselect2);
+    connect(brush2, &BrushSelect::clicked,
+            this, &CellFormatPagePattern::slotUnselect2);
+    connect(brush3, &BrushSelect::clicked,
+            this, &CellFormatPagePattern::slotUnselect2);
+    connect(brush4, &BrushSelect::clicked,
+            this, &CellFormatPagePattern::slotUnselect2);
+    connect(brush5, &BrushSelect::clicked,
+            this, &CellFormatPagePattern::slotUnselect2);
+    connect(brush6, &BrushSelect::clicked,
+            this, &CellFormatPagePattern::slotUnselect2);
+    connect(brush7, &BrushSelect::clicked,
+            this, &CellFormatPagePattern::slotUnselect2);
+    connect(brush8, &BrushSelect::clicked,
+            this, &CellFormatPagePattern::slotUnselect2);
+    connect(brush9, &BrushSelect::clicked,
+            this, &CellFormatPagePattern::slotUnselect2);
+    connect(brush10, &BrushSelect::clicked,
+            this, &CellFormatPagePattern::slotUnselect2);
+    connect(brush11, &BrushSelect::clicked,
+            this, &CellFormatPagePattern::slotUnselect2);
+    connect(brush12, &BrushSelect::clicked,
+            this, &CellFormatPagePattern::slotUnselect2);
+    connect(brush13, &BrushSelect::clicked,
+            this, &CellFormatPagePattern::slotUnselect2);
+    connect(brush14, &BrushSelect::clicked,
+            this, &CellFormatPagePattern::slotUnselect2);
+    connect(brush15, &BrushSelect::clicked,
+            this, &CellFormatPagePattern::slotUnselect2);
 
     brush1->setPattern(Qt::red, Qt::VerPattern);
     brush2->setPattern(Qt::red, Qt::HorPattern);
@@ -3424,8 +3424,8 @@ CellFormatPagePattern::CellFormatPagePattern(QWidget* parent, CellFormatDialog *
     palette.setColor(current->backgroundRole(), bgColor);
     current->setPalette(palette);
 
-    connect(color, SIGNAL(changed(QColor)),
-            this, SLOT(slotSetColorButton(QColor)));
+    connect(color, &KColorButton::changed,
+            this, &CellFormatPagePattern::slotSetColorButton);
 
     slotSetColorButton(dlg->brushColor);
     init();

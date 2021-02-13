@@ -30,7 +30,7 @@ InsertInlineObjectActionBase::InsertInlineObjectActionBase(KoCanvasBase *canvas,
         : QAction(name, canvas->canvasWidget()),
         m_canvas(canvas)
 {
-    connect(this, SIGNAL(triggered(bool)), this, SLOT(activated()));
+    connect(this, &QAction::triggered, this, &InsertInlineObjectActionBase::activated);
 }
 
 InsertInlineObjectActionBase::~InsertInlineObjectActionBase()

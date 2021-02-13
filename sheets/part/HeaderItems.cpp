@@ -96,8 +96,8 @@ RowHeaderItem::RowHeaderItem(QGraphicsItem *_parent, CanvasItem *_canvas)
 
     //connect(m_pView, SIGNAL(autoScroll(QPoint)),
             //this, SLOT(slotAutoScroll(QPoint)));
-    connect(m_pCanvas->toolProxy(), SIGNAL(toolChanged(QString)),
-            this, SLOT(toolChanged(QString)));
+    connect(m_pCanvas->toolProxy(), &KoToolProxy::toolChanged,
+            this, &RowHeaderItem::toolChanged);
 
     setFlag(ItemClipsToShape, true);
 }
@@ -161,7 +161,7 @@ void RowHeaderItem::wheelEvent(QGraphicsSceneWheelEvent* _ev)
 
 void RowHeaderItem::paintSizeIndicator(int mouseY)
 {
-    register Sheet * const sheet = m_pCanvas->activeSheet();
+     Sheet * const sheet = m_pCanvas->activeSheet();
     if (!sheet)
         return;
 
@@ -216,7 +216,7 @@ void RowHeaderItem::removeSizeIndicator()
 
 void RowHeaderItem::updateRows(int from, int to)
 {
-    register Sheet * const sheet = m_pCanvas->activeSheet();
+     Sheet * const sheet = m_pCanvas->activeSheet();
     if (!sheet)
         return;
 
@@ -256,8 +256,8 @@ ColumnHeaderItem::ColumnHeaderItem(QGraphicsItem *_parent, CanvasItem *_canvas)
 
     //connect(_view, SIGNAL(autoScroll(QPoint)),
             //this, SLOT(slotAutoScroll(QPoint)));
-    connect(_canvas->toolProxy(), SIGNAL(toolChanged(QString)),
-            this, SLOT(toolChanged(QString)));
+    connect(_canvas->toolProxy(), &KoToolProxy::toolChanged,
+            this, &ColumnHeaderItem::toolChanged);
 
     setFlag(ItemClipsToShape, true);
 }
@@ -324,7 +324,7 @@ void ColumnHeaderItem::resizeEvent(QGraphicsSceneResizeEvent* _ev)
 
 void ColumnHeaderItem::paintSizeIndicator(int mouseX)
 {
-    register Sheet * const sheet = m_pCanvas->activeSheet();
+     Sheet * const sheet = m_pCanvas->activeSheet();
     if (!sheet)
         return;
 
@@ -389,7 +389,7 @@ void ColumnHeaderItem::removeSizeIndicator()
 
 void ColumnHeaderItem::updateColumns(int from, int to)
 {
-    register Sheet * const sheet = m_pCanvas->activeSheet();
+     Sheet * const sheet = m_pCanvas->activeSheet();
     if (!sheet)
         return;
 
@@ -434,8 +434,8 @@ SelectAllButtonItem::SelectAllButtonItem(QGraphicsItem *_parent, CanvasBase* can
         : QGraphicsWidget(_parent)
         , SelectAllButton(canvasBase)
 {
-    connect(canvasBase->toolProxy(), SIGNAL(toolChanged(QString)),
-            this, SLOT(toolChanged(QString)));
+    connect(canvasBase->toolProxy(), &KoToolProxy::toolChanged,
+            this, &SelectAllButtonItem::toolChanged);
 }
 
 SelectAllButtonItem::~SelectAllButtonItem()

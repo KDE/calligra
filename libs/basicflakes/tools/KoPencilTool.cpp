@@ -334,8 +334,8 @@ QList<QPointer<QWidget> > KoPencilTool::createOptionWidgets()
 
     connect(modeBox, SIGNAL(activated(int)), stackedWidget, SLOT(setCurrentIndex(int)));
     connect(modeBox, SIGNAL(activated(int)), this, SLOT(selectMode(int)));
-    connect(optimizeRaw, SIGNAL(stateChanged(int)), this, SLOT(setOptimize(int)));
-    connect(optimizeCurve, SIGNAL(stateChanged(int)), this, SLOT(setOptimize(int)));
+    connect(optimizeRaw, &QCheckBox::stateChanged, this, &KoPencilTool::setOptimize);
+    connect(optimizeCurve, &QCheckBox::stateChanged, this, &KoPencilTool::setOptimize);
     connect(fittingError, SIGNAL(valueChanged(double)), this, SLOT(setDelta(double)));
     connect(combineAngle, SIGNAL(valueChanged(double)), this, SLOT(setDelta(double)));
 

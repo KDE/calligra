@@ -36,13 +36,13 @@ SnapGuideConfigWidget::SnapGuideConfigWidget(KoSnapGuide * snapGuide, QWidget * 
 
     updateControls();
 
-    connect(widget.useSnapGuides, SIGNAL(toggled(bool)), this, SLOT(snappingEnabled(bool)));
-    connect(widget.orthogonalSnapGuide, SIGNAL(toggled(bool)), this, SLOT(strategyChanged()));
-    connect(widget.nodeSnapGuide, SIGNAL(toggled(bool)), this, SLOT(strategyChanged()));
-    connect(widget.extensionSnapGuide, SIGNAL(toggled(bool)), this, SLOT(strategyChanged()));
-    connect(widget.intersectionSnapGuide, SIGNAL(toggled(bool)), this, SLOT(strategyChanged()));
-    connect(widget.boundingBoxSnapGuide, SIGNAL(toggled(bool)), this, SLOT(strategyChanged()));
-    connect(widget.lineGuideSnapGuide, SIGNAL(toggled(bool)), this, SLOT(strategyChanged()));
+    connect(widget.useSnapGuides, &QAbstractButton::toggled, this, &SnapGuideConfigWidget::snappingEnabled);
+    connect(widget.orthogonalSnapGuide, &QAbstractButton::toggled, this, &SnapGuideConfigWidget::strategyChanged);
+    connect(widget.nodeSnapGuide, &QAbstractButton::toggled, this, &SnapGuideConfigWidget::strategyChanged);
+    connect(widget.extensionSnapGuide, &QAbstractButton::toggled, this, &SnapGuideConfigWidget::strategyChanged);
+    connect(widget.intersectionSnapGuide, &QAbstractButton::toggled, this, &SnapGuideConfigWidget::strategyChanged);
+    connect(widget.boundingBoxSnapGuide, &QAbstractButton::toggled, this, &SnapGuideConfigWidget::strategyChanged);
+    connect(widget.lineGuideSnapGuide, &QAbstractButton::toggled, this, &SnapGuideConfigWidget::strategyChanged);
     connect(widget.snapDistance, SIGNAL(valueChanged(int)), this, SLOT(distanceChanged(int)));
 
     widget.useSnapGuides->setChecked(snapGuide->isSnapping());

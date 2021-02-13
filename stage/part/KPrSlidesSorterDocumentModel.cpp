@@ -63,9 +63,9 @@ void KPrSlidesSorterDocumentModel::setDocument(KoPADocument *document)
     m_document = document;
     endResetModel();
     if (m_document) {
-        connect(m_document, SIGNAL(pageAdded(KoPAPageBase*)), this, SLOT(update()));
+        connect(m_document, &KoPADocument::pageAdded, this, &KPrSlidesSorterDocumentModel::update);
         connect(m_document, SIGNAL(pageRemoved(KoPAPageBase*)), this, SLOT(update()));
-        connect(m_document, SIGNAL(update(KoPAPageBase*)), this, SLOT(update()));
+        connect(m_document, &KoPADocument::update, this, &KPrSlidesSorterDocumentModel::update);
     }
 }
 

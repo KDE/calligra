@@ -129,19 +129,19 @@ ConnectionTool::ConnectionTool(KoCanvasBase * canvas)
     m_alignHorizontal->addAction(m_alignLeft);
     m_alignHorizontal->addAction(m_alignCenterH);
     m_alignHorizontal->addAction(m_alignRight);
-    connect(m_alignHorizontal, SIGNAL(triggered(QAction*)), this, SLOT(horizontalAlignChanged()));
+    connect(m_alignHorizontal, &QActionGroup::triggered, this, &ConnectionTool::horizontalAlignChanged);
 
     m_alignVertical = new QActionGroup(this);
     m_alignVertical->setExclusive(true);
     m_alignVertical->addAction(m_alignTop);
     m_alignVertical->addAction(m_alignCenterV);
     m_alignVertical->addAction(m_alignBottom);
-    connect(m_alignVertical, SIGNAL(triggered(QAction*)), this, SLOT(verticalAlignChanged()));
+    connect(m_alignVertical, &QActionGroup::triggered, this, &ConnectionTool::verticalAlignChanged);
 
     m_alignRelative = new QActionGroup(this);
     m_alignRelative->setExclusive(true);
     m_alignRelative->addAction(m_alignPercent);
-    connect(m_alignRelative, SIGNAL(triggered(QAction*)), this, SLOT(relativeAlignChanged()));
+    connect(m_alignRelative, &QActionGroup::triggered, this, &ConnectionTool::relativeAlignChanged);
 
     m_escapeDirections = new QActionGroup(this);
     m_escapeDirections->setExclusive(true);
@@ -152,14 +152,14 @@ ConnectionTool::ConnectionTool(KoCanvasBase * canvas)
     m_escapeDirections->addAction(m_escapeRight);
     m_escapeDirections->addAction(m_escapeUp);
     m_escapeDirections->addAction(m_escapeDown);
-    connect(m_escapeDirections, SIGNAL(triggered(QAction*)), this, SLOT(escapeDirectionChanged()));
+    connect(m_escapeDirections, &QActionGroup::triggered, this, &ConnectionTool::escapeDirectionChanged);
 
-    connect(this, SIGNAL(connectionPointEnabled(bool)), m_alignHorizontal, SLOT(setEnabled(bool)));
-    connect(this, SIGNAL(connectionPointEnabled(bool)), m_alignVertical, SLOT(setEnabled(bool)));
-    connect(this, SIGNAL(connectionPointEnabled(bool)), m_alignRelative, SLOT(setEnabled(bool)));
-    connect(this, SIGNAL(connectionPointEnabled(bool)), m_escapeDirections, SLOT(setEnabled(bool)));
+    connect(this, &ConnectionTool::connectionPointEnabled, m_alignHorizontal, &QActionGroup::setEnabled);
+    connect(this, &ConnectionTool::connectionPointEnabled, m_alignVertical, &QActionGroup::setEnabled);
+    connect(this, &ConnectionTool::connectionPointEnabled, m_alignRelative, &QActionGroup::setEnabled);
+    connect(this, &ConnectionTool::connectionPointEnabled, m_escapeDirections, &QActionGroup::setEnabled);
 
-    connect(canvas->shapeManager(), SIGNAL(shapeRemoved(KoShape*)), this, SLOT(slotShapeRemoved(KoShape*)));
+    connect(canvas->shapeManager(), &KoShapeManager::shapeRemoved, this, &ConnectionTool::slotShapeRemoved);
 
     resetEditMode();
 }
@@ -830,7 +830,7 @@ QList<QPointer<QWidget> > ConnectionTool::createOptionWidgets()
                 delete cw;
                 continue;
             }
-            connect(cw, SIGNAL(propertyChanged()), this, SLOT(connectionChanged()));
+            connect(cw, &KoShapeConfigWidgetBase::propertyChanged, this, &ConnectionTool::connectionChanged);
             KoConnectionShapeConfigWidget* cw2 = (KoConnectionShapeConfigWidget*)cw;
             if (cw2) {
                 connect(cw2, SIGNAL(connectionTypeChanged(int)), this, SLOT(getConnectionType(int)));

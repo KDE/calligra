@@ -44,6 +44,6 @@ SimpleFootEndNotesWidget::SimpleFootEndNotesWidget(TextTool *tool ,QWidget *pare
     widget.addEndnote->setIcon(koIcon("insert-endnote"));
     widget.addEndnote->setToolTip(i18n("Inserts an endnote at the current cursor position"));
 
-    connect(widget.addFootnote, SIGNAL(doneWithFocus()), this, SIGNAL(doneWithFocus()));
-    connect(widget.addEndnote, SIGNAL(doneWithFocus()), this, SIGNAL(doneWithFocus()));
+    connect(widget.addFootnote, &FormattingButton::doneWithFocus, this, &SimpleFootEndNotesWidget::doneWithFocus);
+    connect(widget.addEndnote, &FormattingButton::doneWithFocus, this, &SimpleFootEndNotesWidget::doneWithFocus);
 }

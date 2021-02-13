@@ -199,10 +199,10 @@ KarbonSmallStylePreview::KarbonSmallStylePreview(QWidget* parent)
 
     setLayout(layout);
 
-    connect(KoToolManager::instance(), SIGNAL(changedCanvas(const KoCanvasBase *)),
-            this, SLOT(canvasChanged(const KoCanvasBase *)));
-    connect(m_strokeFrame, SIGNAL(clicked()), this, SIGNAL(strokeApplied()));
-    connect(m_fillFrame, SIGNAL(clicked()), this, SIGNAL(fillApplied()));
+    connect(KoToolManager::instance(), &KoToolManager::changedCanvas,
+            this, &KarbonSmallStylePreview::canvasChanged);
+    connect(m_strokeFrame, &QAbstractButton::clicked, this, &KarbonSmallStylePreview::strokeApplied);
+    connect(m_fillFrame, &QAbstractButton::clicked, this, &KarbonSmallStylePreview::fillApplied);
 }
 
 KarbonSmallStylePreview::~KarbonSmallStylePreview()
@@ -212,10 +212,10 @@ KarbonSmallStylePreview::~KarbonSmallStylePreview()
 void KarbonSmallStylePreview::canvasChanged(const KoCanvasBase *canvas)
 {
     if (canvas) {
-        connect(canvas->shapeManager(), SIGNAL(selectionChanged()),
-                this, SLOT(selectionChanged()));
-        connect(canvas->shapeManager(), SIGNAL(selectionContentChanged()),
-                this, SLOT(selectionChanged()));
+        connect(canvas->shapeManager(), &KoShapeManager::selectionChanged,
+                this, &KarbonSmallStylePreview::selectionChanged);
+        connect(canvas->shapeManager(), &KoShapeManager::selectionContentChanged,
+                this, &KarbonSmallStylePreview::selectionChanged);
     }
     selectionChanged();
 }

@@ -25,8 +25,8 @@ RectangleShapeConfigWidget::RectangleShapeConfigWidget()
 {
     widget.setupUi(this);
 
-    connect(widget.cornerRadiusX, SIGNAL(editingFinished()), this, SIGNAL(propertyChanged()));
-    connect(widget.cornerRadiusY, SIGNAL(editingFinished()), this, SIGNAL(propertyChanged()));
+    connect(widget.cornerRadiusX, &QAbstractSpinBox::editingFinished, this, &KoShapeConfigWidgetBase::propertyChanged);
+    connect(widget.cornerRadiusY, &QAbstractSpinBox::editingFinished, this, &KoShapeConfigWidgetBase::propertyChanged);
 }
 
 void RectangleShapeConfigWidget::setUnit(const KoUnit &unit)

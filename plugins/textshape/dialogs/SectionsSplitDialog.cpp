@@ -47,8 +47,8 @@ SectionsSplitDialog::SectionsSplitDialog(QWidget *parent, KoTextEditor *editor)
         m_widget.afterList->addItem(secEnd->name());
     }
 
-    connect(m_widget.beforeList, SIGNAL(itemSelectionChanged()), this, SLOT(beforeListSelection()));
-    connect(m_widget.afterList, SIGNAL(itemSelectionChanged()), this, SLOT(afterListSelection()));
+    connect(m_widget.beforeList, &QListWidget::itemSelectionChanged, this, &SectionsSplitDialog::beforeListSelection);
+    connect(m_widget.afterList, &QListWidget::itemSelectionChanged, this, &SectionsSplitDialog::afterListSelection);
 
     connect(this, SIGNAL(okClicked()), this, SLOT(okClicked()));
 }

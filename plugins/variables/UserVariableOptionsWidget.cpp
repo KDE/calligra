@@ -56,12 +56,12 @@ UserVariableOptionsWidget::UserVariableOptionsWidget(UserVariable* userVariable,
     nameLayout->addWidget(nameEdit);
 
     newButton = new QPushButton(i18n("New"), this);
-    connect(newButton, SIGNAL(clicked()), this, SLOT(newClicked()));
+    connect(newButton, &QAbstractButton::clicked, this, &UserVariableOptionsWidget::newClicked);
     nameLayout->addWidget(newButton);
 
     deleteButton = new QPushButton(i18n("Delete"), this);
     deleteButton->setObjectName("DeleteButton");
-    connect(deleteButton, SIGNAL(clicked()), this, SLOT(deleteClicked()));
+    connect(deleteButton, &QAbstractButton::clicked, this, &UserVariableOptionsWidget::deleteClicked);
     nameLayout->addWidget(deleteButton);
 
     layout->addLayout(nameLayout, 0, 1);
@@ -92,7 +92,7 @@ UserVariableOptionsWidget::UserVariableOptionsWidget(UserVariable* userVariable,
     valueEdit->setObjectName(QLatin1String("valueEdit"));
     valueLabel->setBuddy(valueEdit);
     valueEdit->setText(variableManager()->value(userVariable->name()));
-    connect(valueEdit, SIGNAL(textChanged(QString)), this, SLOT(valueChanged()));
+    connect(valueEdit, &QLineEdit::textChanged, this, &UserVariableOptionsWidget::valueChanged);
     layout->addWidget(valueEdit, 2, 1);
 
     updateNameEdit();

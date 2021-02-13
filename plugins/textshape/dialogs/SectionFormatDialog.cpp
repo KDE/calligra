@@ -126,9 +126,9 @@ SectionFormatDialog::SectionFormatDialog(QWidget *parent, KoTextEditor *editor)
 
     m_widget.sectionNameLineEdit->setEnabled(false);
 
-    connect(m_widget.sectionTree, SIGNAL(activated(QModelIndex)), this, SLOT(sectionSelected(QModelIndex)));
-    connect(m_widget.sectionNameLineEdit, SIGNAL(editingFinished()), this, SLOT(sectionNameChanged()));
-    connect(m_widget.sectionNameLineEdit, SIGNAL(textEdited(QString)), this, SLOT(updateTreeState()));
+    connect(m_widget.sectionTree, &QAbstractItemView::activated, this, &SectionFormatDialog::sectionSelected);
+    connect(m_widget.sectionNameLineEdit, &QLineEdit::editingFinished, this, &SectionFormatDialog::sectionNameChanged);
+    connect(m_widget.sectionNameLineEdit, &QLineEdit::textEdited, this, &SectionFormatDialog::updateTreeState);
 
     m_curIdx = m_widget.sectionTree->currentIndex();
 }

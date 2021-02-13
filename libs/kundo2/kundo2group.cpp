@@ -176,18 +176,18 @@ void KUndo2Group::setActiveStack(KUndo2QStack *stack)
         return;
 
     if (m_active != 0) {
-        disconnect(m_active, SIGNAL(canUndoChanged(bool)),
-                   this, SIGNAL(canUndoChanged(bool)));
-        disconnect(m_active, SIGNAL(undoTextChanged(QString)),
-                   this, SIGNAL(undoTextChanged(QString)));
-        disconnect(m_active, SIGNAL(canRedoChanged(bool)),
-                   this, SIGNAL(canRedoChanged(bool)));
-        disconnect(m_active, SIGNAL(redoTextChanged(QString)),
-                   this, SIGNAL(redoTextChanged(QString)));
-        disconnect(m_active, SIGNAL(indexChanged(int)),
-                   this, SIGNAL(indexChanged(int)));
-        disconnect(m_active, SIGNAL(cleanChanged(bool)),
-                   this, SIGNAL(cleanChanged(bool)));
+        disconnect(m_active, &KUndo2QStack::canUndoChanged,
+                   this, &KUndo2Group::canUndoChanged);
+        disconnect(m_active, &KUndo2QStack::undoTextChanged,
+                   this, &KUndo2Group::undoTextChanged);
+        disconnect(m_active, &KUndo2QStack::canRedoChanged,
+                   this, &KUndo2Group::canRedoChanged);
+        disconnect(m_active, &KUndo2QStack::redoTextChanged,
+                   this, &KUndo2Group::redoTextChanged);
+        disconnect(m_active, &KUndo2QStack::indexChanged,
+                   this, &KUndo2Group::indexChanged);
+        disconnect(m_active, &KUndo2QStack::cleanChanged,
+                   this, &KUndo2Group::cleanChanged);
     }
 
     m_active = stack;
@@ -200,18 +200,18 @@ void KUndo2Group::setActiveStack(KUndo2QStack *stack)
         emit cleanChanged(true);
         emit indexChanged(0);
     } else {
-        connect(m_active, SIGNAL(canUndoChanged(bool)),
-                this, SIGNAL(canUndoChanged(bool)));
-        connect(m_active, SIGNAL(undoTextChanged(QString)),
-                this, SIGNAL(undoTextChanged(QString)));
-        connect(m_active, SIGNAL(canRedoChanged(bool)),
-                this, SIGNAL(canRedoChanged(bool)));
-        connect(m_active, SIGNAL(redoTextChanged(QString)),
-                this, SIGNAL(redoTextChanged(QString)));
-        connect(m_active, SIGNAL(indexChanged(int)),
-                this, SIGNAL(indexChanged(int)));
-        connect(m_active, SIGNAL(cleanChanged(bool)),
-                this, SIGNAL(cleanChanged(bool)));
+        connect(m_active, &KUndo2QStack::canUndoChanged,
+                this, &KUndo2Group::canUndoChanged);
+        connect(m_active, &KUndo2QStack::undoTextChanged,
+                this, &KUndo2Group::undoTextChanged);
+        connect(m_active, &KUndo2QStack::canRedoChanged,
+                this, &KUndo2Group::canRedoChanged);
+        connect(m_active, &KUndo2QStack::redoTextChanged,
+                this, &KUndo2Group::redoTextChanged);
+        connect(m_active, &KUndo2QStack::indexChanged,
+                this, &KUndo2Group::indexChanged);
+        connect(m_active, &KUndo2QStack::cleanChanged,
+                this, &KUndo2Group::cleanChanged);
         emit canUndoChanged(m_active->canUndo());
         emit undoTextChanged(m_active->undoText());
         emit canRedoChanged(m_active->canRedo());
@@ -359,11 +359,11 @@ QAction *KUndo2Group::createUndoAction(QObject *parent) const
     KUndo2Action *result = new KUndo2Action(i18n("Undo %1"), i18nc("Default text for undo action", "Undo"), parent);
     result->setEnabled(canUndo());
     result->setPrefixedText(undoText());
-    connect(this, SIGNAL(canUndoChanged(bool)),
-            result, SLOT(setEnabled(bool)));
-    connect(this, SIGNAL(undoTextChanged(QString)),
-            result, SLOT(setPrefixedText(QString)));
-    connect(result, SIGNAL(triggered()), this, SLOT(undo()));
+    connect(this, &KUndo2Group::canUndoChanged,
+            result, &QAction::setEnabled);
+    connect(this, &KUndo2Group::undoTextChanged,
+            result, &KUndo2Action::setPrefixedText);
+    connect(result, &QAction::triggered, this, &KUndo2Group::undo);
     return result;
 }
 
@@ -386,11 +386,11 @@ QAction *KUndo2Group::createRedoAction(QObject *parent) const
     KUndo2Action *result = new KUndo2Action(i18n("Redo %1"), i18nc("Default text for redo action", "Redo"), parent);
     result->setEnabled(canRedo());
     result->setPrefixedText(redoText());
-    connect(this, SIGNAL(canRedoChanged(bool)),
-            result, SLOT(setEnabled(bool)));
-    connect(this, SIGNAL(redoTextChanged(QString)),
-            result, SLOT(setPrefixedText(QString)));
-    connect(result, SIGNAL(triggered()), this, SLOT(redo()));
+    connect(this, &KUndo2Group::canRedoChanged,
+            result, &QAction::setEnabled);
+    connect(this, &KUndo2Group::redoTextChanged,
+            result, &KUndo2Action::setPrefixedText);
+    connect(result, &QAction::triggered, this, &KUndo2Group::redo);
     return result;
 }
 

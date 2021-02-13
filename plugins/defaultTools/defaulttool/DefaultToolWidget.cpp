@@ -59,27 +59,27 @@ DefaultToolWidget::DefaultToolWidget( KoInteractionTool* tool,
     updatePosition();
     updateSize();
 
-    connect( positionSelector, SIGNAL(positionSelected(KoFlake::Position)),
-        this, SLOT(positionSelected(KoFlake::Position)) );
+    connect( positionSelector, &KoPositionSelector::positionSelected,
+        this, &DefaultToolWidget::positionSelected );
 
-    connect( positionXSpinBox, SIGNAL(editingFinished()), this, SLOT(positionHasChanged()) );
-    connect( positionYSpinBox, SIGNAL(editingFinished()), this, SLOT(positionHasChanged()) );
+    connect( positionXSpinBox, &QAbstractSpinBox::editingFinished, this, &DefaultToolWidget::positionHasChanged );
+    connect( positionYSpinBox, &QAbstractSpinBox::editingFinished, this, &DefaultToolWidget::positionHasChanged );
 
-    connect( widthSpinBox, SIGNAL(editingFinished()), this, SLOT(sizeHasChanged()) );
-    connect( heightSpinBox, SIGNAL(editingFinished()), this, SLOT(sizeHasChanged()) );
+    connect( widthSpinBox, &QAbstractSpinBox::editingFinished, this, &DefaultToolWidget::sizeHasChanged );
+    connect( heightSpinBox, &QAbstractSpinBox::editingFinished, this, &DefaultToolWidget::sizeHasChanged );
 
     KoSelection * selection = m_tool->canvas()->shapeManager()->selection();
-    connect( selection, SIGNAL(selectionChanged()), this, SLOT(updatePosition()) );
-    connect( selection, SIGNAL(selectionChanged()), this, SLOT(updateSize()) );
+    connect( selection, &KoSelection::selectionChanged, this, &DefaultToolWidget::updatePosition );
+    connect( selection, &KoSelection::selectionChanged, this, &DefaultToolWidget::updateSize );
     KoShapeManager * manager = m_tool->canvas()->shapeManager();
-    connect( manager, SIGNAL(selectionContentChanged()), this, SLOT(updatePosition()) );
-    connect( manager, SIGNAL(selectionContentChanged()), this, SLOT(updateSize()) );
+    connect( manager, &KoShapeManager::selectionContentChanged, this, &DefaultToolWidget::updatePosition );
+    connect( manager, &KoShapeManager::selectionContentChanged, this, &DefaultToolWidget::updateSize );
 
-    connect( m_tool->canvas()->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
-        this, SLOT(resourceChanged(int,QVariant)) );
+    connect( m_tool->canvas()->resourceManager(), &KoCanvasResourceManager::canvasResourceChanged,
+        this, &DefaultToolWidget::resourceChanged );
 
-    connect (aspectButton, SIGNAL(keepAspectRatioChanged(bool)),
-        this, SLOT(aspectButtonToggled(bool)));
+    connect (aspectButton, &KoAspectButton::keepAspectRatioChanged,
+        this, &DefaultToolWidget::aspectButtonToggled);
 }
 
 void DefaultToolWidget::positionSelected( KoFlake::Position position )

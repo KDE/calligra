@@ -59,12 +59,12 @@ KWStartupWidget::KWStartupWidget(QWidget *parent, KWDocument *doc, const KoColum
     prev->setColumns(columns);
     prev->setPageLayout(m_layout);
 
-    connect(m_sizeWidget, SIGNAL(layoutChanged(KoPageLayout)), this, SLOT(sizeUpdated(KoPageLayout)));
-    connect(widget.createButton, SIGNAL(clicked()), this, SLOT(buttonClicked()));
+    connect(m_sizeWidget, &KoPageLayoutWidget::layoutChanged, this, &KWStartupWidget::sizeUpdated);
+    connect(widget.createButton, &QAbstractButton::clicked, this, &KWStartupWidget::buttonClicked);
     connect(m_sizeWidget, SIGNAL(unitChanged(KoUnit)), this, SLOT(unitChanged(KoUnit)));
-    connect(m_columnsWidget, SIGNAL(columnsChanged(KoColumns)), prev, SLOT(setColumns(KoColumns)));
-    connect(m_columnsWidget, SIGNAL(columnsChanged(KoColumns)), this, SLOT(columnsUpdated(KoColumns)));
-    connect(m_sizeWidget, SIGNAL(layoutChanged(KoPageLayout)), prev, SLOT(setPageLayout(KoPageLayout)));
+    connect(m_columnsWidget, &KWDocumentColumns::columnsChanged, prev, &KoPagePreviewWidget::setColumns);
+    connect(m_columnsWidget, &KWDocumentColumns::columnsChanged, this, &KWStartupWidget::columnsUpdated);
+    connect(m_sizeWidget, &KoPageLayoutWidget::layoutChanged, prev, &KoPagePreviewWidget::setPageLayout);
 }
 
 void KWStartupWidget::unitChanged(const KoUnit &unit)

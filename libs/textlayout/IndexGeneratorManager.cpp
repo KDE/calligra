@@ -37,16 +37,16 @@ IndexGeneratorManager::IndexGeneratorManager(QTextDocument *document)
     m_documentLayout = static_cast<KoTextDocumentLayout *>(document->documentLayout());
 
     // connect to layoutIsDirty
-    connect(m_documentLayout, SIGNAL(layoutIsDirty()), this, SLOT(requestGeneration()));
+    connect(m_documentLayout, &KoTextDocumentLayout::layoutIsDirty, this, &IndexGeneratorManager::requestGeneration);
 
     // connect to FinishedLayout
-    connect(m_documentLayout, SIGNAL(finishedLayout()), this, SLOT(startDoneTimer()));
+    connect(m_documentLayout, &KoTextDocumentLayout::finishedLayout, this, &IndexGeneratorManager::startDoneTimer);
 
-    connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(timeout()));
+    connect(&m_updateTimer, &QTimer::timeout, this, &IndexGeneratorManager::timeout);
     m_updateTimer.setInterval(5000); // after 5 seconds of pause we update
     m_updateTimer.setSingleShot(true);
 
-    connect(&m_doneTimer, SIGNAL(timeout()), this, SLOT(layoutDone()));
+    connect(&m_doneTimer, &QTimer::timeout, this, &IndexGeneratorManager::layoutDone);
     m_doneTimer.setInterval(1000); // after 1 seconds of silence we assume layout is done
     m_doneTimer.setSingleShot(true);
 }

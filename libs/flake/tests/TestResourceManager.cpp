@@ -38,7 +38,7 @@ void TestResourceManager::koShapeResource()
 void TestResourceManager::testUnitChanged()
 {
     KoCanvasResourceManager rm(0);
-    QSignalSpy spy(&rm, SIGNAL(canvasResourceChanged(int,QVariant)));
+    QSignalSpy spy(&rm, &KoCanvasResourceManager::canvasResourceChanged);
 
     KoUnit a;
     rm.setResource(KoCanvasResourceManager::Unit, a);

@@ -26,10 +26,10 @@ StarShapeConfigWidget::StarShapeConfigWidget()
     widget.setupUi(this);
 
     connect(widget.corners, SIGNAL(valueChanged(int)), this, SIGNAL(propertyChanged()));
-    connect(widget.innerRadius, SIGNAL(editingFinished()), this, SIGNAL(propertyChanged()));
-    connect(widget.outerRadius, SIGNAL(editingFinished()), this, SIGNAL(propertyChanged()));
-    connect(widget.convex, SIGNAL(stateChanged(int)), this, SIGNAL(propertyChanged()));
-    connect(widget.convex, SIGNAL(clicked()), this, SLOT(typeChanged()));
+    connect(widget.innerRadius, &QAbstractSpinBox::editingFinished, this, &KoShapeConfigWidgetBase::propertyChanged);
+    connect(widget.outerRadius, &QAbstractSpinBox::editingFinished, this, &KoShapeConfigWidgetBase::propertyChanged);
+    connect(widget.convex, &QCheckBox::stateChanged, this, &KoShapeConfigWidgetBase::propertyChanged);
+    connect(widget.convex, &QAbstractButton::clicked, this, &StarShapeConfigWidget::typeChanged);
 }
 
 void StarShapeConfigWidget::setUnit(const KoUnit &unit)

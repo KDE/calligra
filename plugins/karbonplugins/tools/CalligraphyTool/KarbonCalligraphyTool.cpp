@@ -53,8 +53,8 @@ KarbonCalligraphyTool::KarbonCalligraphyTool(KoCanvasBase *canvas)
         : KoToolBase(canvas), m_shape(0), m_angle(0),
         m_selectedPath(0), m_isDrawing(false), m_speed(0, 0), m_lastShape(0)
 {
-    connect(canvas->shapeManager(), SIGNAL(selectionChanged()),
-            SLOT(updateSelectedPath()));
+    connect(canvas->shapeManager(), &KoShapeManager::selectionChanged,
+            this, &KarbonCalligraphyTool::updateSelectedPath);
 
     updateSelectedPath();
 }
@@ -353,35 +353,35 @@ QList<QPointer<QWidget> > KarbonCalligraphyTool::createOptionWidgets()
     widgets.append(fillWidget);
 
     KarbonCalligraphyOptionWidget *widget = new KarbonCalligraphyOptionWidget;
-    connect(widget, SIGNAL(usePathChanged(bool)),
-            this, SLOT(setUsePath(bool)));
+    connect(widget, &KarbonCalligraphyOptionWidget::usePathChanged,
+            this, &KarbonCalligraphyTool::setUsePath);
 
-    connect(widget, SIGNAL(usePressureChanged(bool)),
-            this, SLOT(setUsePressure(bool)));
+    connect(widget, &KarbonCalligraphyOptionWidget::usePressureChanged,
+            this, &KarbonCalligraphyTool::setUsePressure);
 
-    connect(widget, SIGNAL(useAngleChanged(bool)),
-            this, SLOT(setUseAngle(bool)));
+    connect(widget, &KarbonCalligraphyOptionWidget::useAngleChanged,
+            this, &KarbonCalligraphyTool::setUseAngle);
 
-    connect(widget, SIGNAL(widthChanged(double)),
-            this, SLOT(setStrokeWidth(double)));
+    connect(widget, &KarbonCalligraphyOptionWidget::widthChanged,
+            this, &KarbonCalligraphyTool::setStrokeWidth);
 
-    connect(widget, SIGNAL(thinningChanged(double)),
-            this, SLOT(setThinning(double)));
+    connect(widget, &KarbonCalligraphyOptionWidget::thinningChanged,
+            this, &KarbonCalligraphyTool::setThinning);
 
     connect(widget, SIGNAL(angleChanged(int)),
             this, SLOT(setAngle(int)));
 
-    connect(widget, SIGNAL(fixationChanged(double)),
-            this, SLOT(setFixation(double)));
+    connect(widget, &KarbonCalligraphyOptionWidget::fixationChanged,
+            this, &KarbonCalligraphyTool::setFixation);
 
-    connect(widget, SIGNAL(capsChanged(double)),
-            this, SLOT(setCaps(double)));
+    connect(widget, &KarbonCalligraphyOptionWidget::capsChanged,
+            this, &KarbonCalligraphyTool::setCaps);
 
-    connect(widget, SIGNAL(massChanged(double)),
-            this, SLOT(setMass(double)));
+    connect(widget, &KarbonCalligraphyOptionWidget::massChanged,
+            this, &KarbonCalligraphyTool::setMass);
 
-    connect(widget, SIGNAL(dragChanged(double)),
-            this, SLOT(setDrag(double)));
+    connect(widget, &KarbonCalligraphyOptionWidget::dragChanged,
+            this, &KarbonCalligraphyTool::setDrag);
 
     connect(this, SIGNAL(pathSelectedChanged(bool)),
             widget, SLOT(setUsePathEnabled(bool)));
@@ -389,22 +389,22 @@ QList<QPointer<QWidget> > KarbonCalligraphyTool::createOptionWidgets()
     // add shortcuts
     QAction *action = new QAction(i18n("Calligraphy: increase width"), this);
     action->setShortcut(Qt::Key_Right);
-    connect(action, SIGNAL(triggered()), widget, SLOT(increaseWidth()));
+    connect(action, &QAction::triggered, widget, &KarbonCalligraphyOptionWidget::increaseWidth);
     addAction("calligraphy_increase_width", action);
 
     action = new QAction(i18n("Calligraphy: decrease width"), this);
     action->setShortcut(Qt::Key_Left);
-    connect(action, SIGNAL(triggered()), widget, SLOT(decreaseWidth()));
+    connect(action, &QAction::triggered, widget, &KarbonCalligraphyOptionWidget::decreaseWidth);
     addAction("calligraphy_decrease_width", action);
 
     action = new QAction(i18n("Calligraphy: increase angle"), this);
     action->setShortcut(Qt::Key_Up);
-    connect(action, SIGNAL(triggered()), widget, SLOT(increaseAngle()));
+    connect(action, &QAction::triggered, widget, &KarbonCalligraphyOptionWidget::increaseAngle);
     addAction("calligraphy_increase_angle", action);
 
     action = new QAction(i18n("Calligraphy: decrease angle"), this);
     action->setShortcut(Qt::Key_Down);
-    connect(action, SIGNAL(triggered()), widget, SLOT(decreaseAngle()));
+    connect(action, &QAction::triggered, widget, &KarbonCalligraphyOptionWidget::decreaseAngle);
     addAction("calligraphy_decrease_angle", action);
 
     // sync all parameters with the loaded profile

@@ -132,7 +132,7 @@ void TableOfContentsPreview::updatePreview(KoTableOfContentsGeneratorInfo *newTo
     KoTextDocument(m_textShape->textShapeData()->document()).setStyleManager(m_styleManager);
 
     KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(m_textShape->textShapeData()->document()->documentLayout());
-    connect(lay, SIGNAL(finishedLayout()), this, SLOT(finishedPreviewLayout()));
+    connect(lay, &KoTextDocumentLayout::finishedLayout, this, &TableOfContentsPreview::finishedPreviewLayout);
     if (lay) {
         lay->layout();
     }

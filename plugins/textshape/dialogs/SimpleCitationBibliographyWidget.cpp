@@ -40,15 +40,15 @@ SimpleCitationBibliographyWidget::SimpleCitationBibliographyWidget(ReferencesToo
     m_templateGenerator = new BibliographyTemplate(KoTextDocument(m_referenceTool->editor()->document()).styleManager());
 
     widget.addCitation->setDefaultAction(tool->action("insert_citation"));
-    connect(widget.addCitation,SIGNAL(clicked(bool)),this,SIGNAL(doneWithFocus()));
+    connect(widget.addCitation,&QAbstractButton::clicked,this,&SimpleCitationBibliographyWidget::doneWithFocus);
 
     widget.addBibliography->setDefaultAction(tool->action("insert_bibliography"));
-    connect(widget.addBibliography,SIGNAL(clicked(bool)),this,SIGNAL(doneWithFocus()));
-    connect(widget.addBibliography, SIGNAL(aboutToShowMenu()), this, SLOT(prepareTemplateMenu()));
-    connect(widget.addBibliography, SIGNAL(itemTriggered(int)), this, SLOT(applyTemplate(int)));
+    connect(widget.addBibliography,&QAbstractButton::clicked,this,&SimpleCitationBibliographyWidget::doneWithFocus);
+    connect(widget.addBibliography, &FormattingButton::aboutToShowMenu, this, &SimpleCitationBibliographyWidget::prepareTemplateMenu);
+    connect(widget.addBibliography, &FormattingButton::itemTriggered, this, &SimpleCitationBibliographyWidget::applyTemplate);
 
     widget.configureBibliography->setDefaultAction(tool->action("configure_bibliography"));
-    connect(widget.configureBibliography,SIGNAL(clicked(bool)),this,SIGNAL(doneWithFocus()));
+    connect(widget.configureBibliography,&QAbstractButton::clicked,this,&SimpleCitationBibliographyWidget::doneWithFocus);
 }
 
 SimpleCitationBibliographyWidget::~SimpleCitationBibliographyWidget()
@@ -92,7 +92,7 @@ void SimpleCitationBibliographyWidget::prepareTemplateMenu()
         widget.addBibliography->addSeparator();
         widget.addBibliography->addAction(m_referenceTool->action("insert_custom_bibliography"));
         connect(m_referenceTool->action("insert_custom_bibliography"),
-                SIGNAL(triggered()), this, SLOT(insertCustomBibliography()), Qt::UniqueConnection);
+                &QAction::triggered, this, &SimpleCitationBibliographyWidget::insertCustomBibliography, Qt::UniqueConnection);
     }
 }
 

@@ -26,6 +26,7 @@
 
 #include <QWidget>
 #include <QDebug>
+#include <QAbstractButton>
 
 NotesConfigurationDialog::NotesConfigurationDialog(QTextDocument *doc, bool footnoteMode, QWidget *parent)
     : QDialog(parent)
@@ -39,7 +40,7 @@ NotesConfigurationDialog::NotesConfigurationDialog(QTextDocument *doc, bool foot
         setWindowTitle(i18n("Endnote Settings"));
         endnoteSetup();
     }
-    connect(widget.buttonBox,SIGNAL(clicked(QAbstractButton*)),this,SLOT(apply(QAbstractButton*)));
+    connect(widget.buttonBox,&QDialogButtonBox::clicked,this,&NotesConfigurationDialog::apply);
 }
 
 

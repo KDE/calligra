@@ -63,18 +63,18 @@ ExternalEditor::ExternalEditor(QWidget *parent)
     setMinimumHeight(fontMetrics().height() + 2 * frameWidth() + 1);
 
     connect(this, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
-    connect(this, SIGNAL(cursorPositionChanged()),
-            this, SLOT(slotCursorPositionChanged()));
+    connect(this, &QTextEdit::cursorPositionChanged,
+            this, &ExternalEditor::slotCursorPositionChanged);
 
     d->applyAction = new QAction(koIcon("dialog-ok"), i18n("Apply"), this);
     d->applyAction->setToolTip(i18n("Apply changes"));
     d->applyAction->setEnabled(false);
-    connect(d->applyAction, SIGNAL(triggered()), SLOT(applyChanges()));
+    connect(d->applyAction, &QAction::triggered, this, &ExternalEditor::applyChanges);
 
     d->cancelAction = new QAction(koIcon("dialog-cancel"), i18n("Cancel"), this);
     d->cancelAction->setToolTip(i18n("Discard changes"));
     d->cancelAction->setEnabled(false);
-    connect(d->cancelAction, SIGNAL(triggered()), SLOT(discardChanges()));
+    connect(d->cancelAction, &QAction::triggered, this, &ExternalEditor::discardChanges);
 }
 
 ExternalEditor::~ExternalEditor()

@@ -34,8 +34,8 @@ ParagraphDropCaps::ParagraphDropCaps(QWidget *parent) :
     widget.characters->setValue(0);
     widget.lines->setValue(2);
 
-    connect(widget.capsState, SIGNAL(stateChanged(int)), this, SLOT(dropCapsStateChanged()));
-    connect(widget.distance, SIGNAL(valueChangedPt(qreal)), this, SLOT(paragraphDistanceChanged(qreal)));
+    connect(widget.capsState, &QCheckBox::stateChanged, this, &ParagraphDropCaps::dropCapsStateChanged);
+    connect(widget.distance, &KoUnitDoubleSpinBox::valueChangedPt, this, &ParagraphDropCaps::paragraphDistanceChanged);
     connect(widget.characters, SIGNAL(valueChanged(int)), this, SLOT(dropedCharacterCountChanged(int)));
     connect(widget.lines, SIGNAL(valueChanged(int)), this, SLOT(dropsLineSpanChanged(int)));
 }

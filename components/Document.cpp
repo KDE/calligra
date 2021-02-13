@@ -88,7 +88,7 @@ void Document::setSource(const QUrl& value)
             d->impl->setReadOnly(d->readOnly);
             if(d->impl->load(d->source)) {
                 d->status = DocumentStatus::Loaded;
-                connect(d->impl->canvasController()->canvas()->shapeManager(), SIGNAL(selectionChanged()), SIGNAL(textEditorChanged()));
+                connect(d->impl->canvasController()->canvas()->shapeManager(), &KoShapeManager::selectionChanged, this, &Document::textEditorChanged);
             } else {
                 d->status = DocumentStatus::Failed;
             }

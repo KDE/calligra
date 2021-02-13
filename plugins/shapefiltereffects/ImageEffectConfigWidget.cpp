@@ -44,7 +44,7 @@ ImageEffectConfigWidget::ImageEffectConfigWidget(QWidget *parent)
 
     setLayout(g);
 
-    connect(button, SIGNAL(clicked()), this, SLOT(selectImage()));
+    connect(button, &QAbstractButton::clicked, this, &ImageEffectConfigWidget::selectImage);
 }
 
 bool ImageEffectConfigWidget::editFilterEffect(KoFilterEffect * filterEffect)

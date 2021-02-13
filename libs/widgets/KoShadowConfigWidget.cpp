@@ -68,12 +68,12 @@ KoShadowConfigWidget::KoShadowConfigWidget(QWidget *parent)
     d->actionShadowColor->setToolTip(i18n("Change the color of the shadow"));
     d->widget.shadowColor->setDefaultAction(d->actionShadowColor);
 
-    connect(d->widget.shadowVisible, SIGNAL(toggled(bool)), this, SLOT(applyChanges()));
-    connect(d->widget.shadowVisible, SIGNAL(toggled(bool)), this, SLOT(visibilityChanged()));
-    connect(d->actionShadowColor, SIGNAL(colorChanged(KoColor)), this, SLOT(applyChanges()));
-    connect(d->widget.shadowAngle, SIGNAL(valueChanged(int)), this, SLOT(applyChanges()));
-    connect(d->widget.shadowOffset, SIGNAL(valueChangedPt(qreal)), this, SLOT(applyChanges()));
-    connect(d->widget.shadowBlur, SIGNAL(valueChangedPt(qreal)), this, SLOT(applyChanges()));
+    connect(d->widget.shadowVisible, &QAbstractButton::toggled, this, &KoShadowConfigWidget::applyChanges);
+    connect(d->widget.shadowVisible, &QAbstractButton::toggled, this, &KoShadowConfigWidget::visibilityChanged);
+    connect(d->actionShadowColor, &KoColorPopupAction::colorChanged, this, &KoShadowConfigWidget::applyChanges);
+    connect(d->widget.shadowAngle, &QAbstractSlider::valueChanged, this, &KoShadowConfigWidget::applyChanges);
+    connect(d->widget.shadowOffset, &KoUnitDoubleSpinBox::valueChangedPt, this, &KoShadowConfigWidget::applyChanges);
+    connect(d->widget.shadowBlur, &KoUnitDoubleSpinBox::valueChangedPt, this, &KoShadowConfigWidget::applyChanges);
 }
 
 KoShadowConfigWidget::~KoShadowConfigWidget()
@@ -204,13 +204,13 @@ void KoShadowConfigWidget::selectionChanged()
 void KoShadowConfigWidget::setCanvas(KoCanvasBase *canvas)
 {
     d->canvas = canvas;
-    connect(canvas->shapeManager(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
-    connect(canvas->shapeManager(), SIGNAL(selectionContentChanged()), this, SLOT(selectionChanged()));
+    connect(canvas->shapeManager(), &KoShapeManager::selectionChanged, this, &KoShadowConfigWidget::selectionChanged);
+    connect(canvas->shapeManager(), &KoShapeManager::selectionContentChanged, this, &KoShadowConfigWidget::selectionChanged);
 
     setUnit(canvas->unit());
 
-    connect( d->canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
-             this, SLOT(resourceChanged(int,QVariant)) );
+    connect( d->canvas->resourceManager(), &KoCanvasResourceManager::canvasResourceChanged,
+             this, &KoShadowConfigWidget::resourceChanged );
 }
 
 void KoShadowConfigWidget::setUnit(const KoUnit &unit)

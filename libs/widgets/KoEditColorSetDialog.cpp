@@ -87,10 +87,10 @@ KoEditColorSetWidget::KoEditColorSetWidget(const QList<KoColorSet *> &palettes, 
     setActiveColorSet(index);
     widget.remove->setEnabled(false); // initially no color selected
 
-    connect(widget.add, SIGNAL(clicked()), this, SLOT(addColor()));
-    connect(widget.remove, SIGNAL(clicked()), this, SLOT(removeColor()));
-    connect(widget.open, SIGNAL(clicked()), this, SLOT(open()));
-    connect(widget.save, SIGNAL(clicked()), this, SLOT(save()));
+    connect(widget.add, &QAbstractButton::clicked, this, &KoEditColorSetWidget::addColor);
+    connect(widget.remove, &QAbstractButton::clicked, this, &KoEditColorSetWidget::removeColor);
+    connect(widget.open, &QAbstractButton::clicked, this, &KoEditColorSetWidget::open);
+    connect(widget.save, &QAbstractButton::clicked, this, &KoEditColorSetWidget::save);
 }
 
 KoEditColorSetWidget::~KoEditColorSetWidget()
@@ -126,7 +126,7 @@ void KoEditColorSetWidget::setActiveColorSet(int index)
         for (int i = 0; i < m_activeColorSet->nColors(); i++) {
             KoColorPatch *patch = new KoColorPatch(widget.patchesFrame);
             patch->setColor(m_activeColorSet->getColor(i).color);
-            connect(patch, SIGNAL(triggered(KoColorPatch*)), this, SLOT(setTextLabel(KoColorPatch*)));
+            connect(patch, &KoColorPatch::triggered, this, &KoEditColorSetWidget::setTextLabel);
             m_gridLayout->addWidget(patch, i/16, i%16);
         }
     }
@@ -159,7 +159,7 @@ void KoEditColorSetWidget::addColor()
         newEntry.name = QInputDialog::getText(this, i18n("Add Color To Palette"), i18n("Color name:"));
         KoColorPatch *patch = new KoColorPatch(widget.patchesFrame);
         patch->setColor(newEntry.color);
-        connect(patch, SIGNAL(triggered(KoColorPatch*)), this, SLOT(setTextLabel(KoColorPatch*)));
+        connect(patch, &KoColorPatch::triggered, this, &KoEditColorSetWidget::setTextLabel);
         Q_ASSERT(m_gridLayout);
         Q_ASSERT(m_activeColorSet);
         m_gridLayout->addWidget(patch, m_activeColorSet->nColors()/16, m_activeColorSet->nColors()%16);

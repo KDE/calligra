@@ -490,7 +490,7 @@ QPalette Tool::RowHeader::palette() const
 
 void Tool::RowHeader::paint(QPainter* painter, const QRectF& painterRect)
 {
-    register Sheet * const sheet = m_sheet;
+     Sheet * const sheet = m_sheet;
     if (!sheet) {
         return;
     }

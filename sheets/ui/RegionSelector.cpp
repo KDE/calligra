@@ -86,8 +86,8 @@ RegionSelector::RegionSelector(QWidget* parent)
 
     d->button->installEventFilter(this);
     d->textEdit->installEventFilter(this);
-    connect(d->button, SIGNAL(toggled(bool)),
-            this, SLOT(switchDisplayMode(bool)));
+    connect(d->button, &QAbstractButton::toggled,
+            this, &RegionSelector::switchDisplayMode);
 }
 
 RegionSelector::~RegionSelector()
@@ -107,7 +107,7 @@ void RegionSelector::setSelection(Selection* selection)
 {
     d->selection = selection;
     d->highlighter = new FormulaEditorHighlighter(d->textEdit, d->selection);
-    connect(d->selection, SIGNAL(changed(Region)), this, SLOT(choiceChanged()));
+    connect(d->selection, &Selection::changed, this, &RegionSelector::choiceChanged);
 }
 
 void RegionSelector::setDialog(QDialog* dialog)

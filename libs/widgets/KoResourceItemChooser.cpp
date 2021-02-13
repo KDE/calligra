@@ -102,8 +102,8 @@ KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceSe
     d->splitter = new QSplitter(this);
 
     d->model = new KoResourceModel(resourceAdapter, this);
-    connect(d->model, SIGNAL(beforeResourcesLayoutReset(KoResource*)), SLOT(slotBeforeResourcesLayoutReset(KoResource*)));
-    connect(d->model, SIGNAL(afterResourcesLayoutReset()), SLOT(slotAfterResourcesLayoutReset()));
+    connect(d->model, &KoResourceModel::beforeResourcesLayoutReset, this, &KoResourceItemChooser::slotBeforeResourcesLayoutReset);
+    connect(d->model, &KoResourceModel::afterResourcesLayoutReset, this, &KoResourceItemChooser::slotAfterResourcesLayoutReset);
 
     d->view = new KoResourceItemView(this);
     d->view->setModel(d->model);
@@ -111,10 +111,10 @@ KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceSe
     d->view->setSelectionMode(QAbstractItemView::SingleSelection);
     d->view->viewport()->installEventFilter(this);
 
-    connect(d->view, SIGNAL(currentResourceChanged(QModelIndex)), this, SLOT(activated(QModelIndex)));
-    connect(d->view, SIGNAL(contextMenuRequested(QPoint)), this, SLOT(contextMenuRequested(QPoint)));
+    connect(d->view, &KoResourceItemView::currentResourceChanged, this, &KoResourceItemChooser::activated);
+    connect(d->view, &KoResourceItemView::contextMenuRequested, this, &KoResourceItemChooser::contextMenuRequested);
 
-    connect(d->view, SIGNAL(sigSizeChanged()), this, SLOT(updateView()));
+    connect(d->view, &KoTableView::sigSizeChanged, this, &KoResourceItemChooser::updateView);
 
     d->splitter->addWidget(d->view);
     d->splitter->setStretchFactor(0, 2);
@@ -136,7 +136,7 @@ KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceSe
     }
 
     d->splitter->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-    connect(d->splitter, SIGNAL(splitterMoved(int,int)), SIGNAL(splitterMoved()));
+    connect(d->splitter, &QSplitter::splitterMoved, this, &KoResourceItemChooser::splitterMoved);
 
     d->buttonGroup = new QButtonGroup(this);
     d->buttonGroup->setExclusive(false);
@@ -475,7 +475,7 @@ void KoResourceItemChooser::setSynced(bool sync)
     d->synced = sync;
     KoResourceItemChooserSync *chooserSync = KoResourceItemChooserSync::instance();
     if (sync) {
-        connect(chooserSync, SIGNAL(baseLenghtChanged(int)), SLOT(baseLengthChanged(int)));
+        connect(chooserSync, &KoResourceItemChooserSync::baseLenghtChanged, this, &KoResourceItemChooser::baseLengthChanged);
         baseLengthChanged(chooserSync->baseLength());
     } else {
         chooserSync->disconnect(this);

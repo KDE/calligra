@@ -119,11 +119,11 @@ Thesaurus::Thesaurus()
     row1->addWidget(m_forward, 0);
 
     QPushButton *lang = new QPushButton(i18n("Change Language..."), page);
-    connect(lang, SIGNAL(clicked()), this, SLOT(slotChangeLanguage()));
+    connect(lang, &QAbstractButton::clicked, this, &Thesaurus::slotChangeLanguage);
     row1->addWidget(lang, 0);
 
-    connect(m_back, SIGNAL(clicked()), this, SLOT(slotBack()));
-    connect(m_forward, SIGNAL(clicked()), this, SLOT(slotForward()));
+    connect(m_back, &QAbstractButton::clicked, this, &Thesaurus::slotBack);
+    connect(m_forward, &QAbstractButton::clicked, this, &Thesaurus::slotForward);
 
     m_tabWidget = new QTabWidget(page);
     topLayout->addWidget(m_tabWidget);
@@ -159,21 +159,21 @@ Thesaurus::Thesaurus()
 
     // single click -- keep display unambiguous by removing other selections:
 
-    connect(m_synListWidget, SIGNAL(itemClicked(QListWidgetItem*)),
-            this, SLOT(slotSetReplaceTermSyn(QListWidgetItem*)));
-    connect(m_hyperListWidget, SIGNAL(itemClicked(QListWidgetItem*)),
-            this, SLOT(slotSetReplaceTermHyper(QListWidgetItem*)));
-    connect(m_hypoListWidget, SIGNAL(itemClicked(QListWidgetItem*)),
-            this, SLOT(slotSetReplaceTermHypo(QListWidgetItem*)));
+    connect(m_synListWidget, &QListWidget::itemClicked,
+            this, &Thesaurus::slotSetReplaceTermSyn);
+    connect(m_hyperListWidget, &QListWidget::itemClicked,
+            this, &Thesaurus::slotSetReplaceTermHyper);
+    connect(m_hypoListWidget, &QListWidget::itemClicked,
+            this, &Thesaurus::slotSetReplaceTermHypo);
 
     // double click -- set the double clicked item as the new search term
 
-    connect(m_synListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)),
-            this, SLOT(slotFindTermFromList(QListWidgetItem*)));
-    connect(m_hyperListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)),
-            this, SLOT(slotFindTermFromList(QListWidgetItem*)));
-    connect(m_hypoListWidget, SIGNAL(itemDoubleClicked(QListWidgetItem*)),
-            this, SLOT(slotFindTermFromList(QListWidgetItem*)));
+    connect(m_synListWidget, &QListWidget::itemDoubleClicked,
+            this, &Thesaurus::slotFindTermFromList);
+    connect(m_hyperListWidget, &QListWidget::itemDoubleClicked,
+            this, &Thesaurus::slotFindTermFromList);
+    connect(m_hypoListWidget, &QListWidget::itemDoubleClicked,
+            this, &Thesaurus::slotFindTermFromList);
 
     //
     // WordNet Tab
@@ -191,7 +191,7 @@ Thesaurus::Thesaurus()
 
     m_resultTextBrowser = new QTextBrowser(wnWidget);
     m_resultTextBrowser->setReadOnly(true);
-    connect(m_resultTextBrowser, SIGNAL(anchorClicked(QUrl)), this, SLOT(slotFindTermFromUrl(QUrl)));
+    connect(m_resultTextBrowser, &QTextBrowser::anchorClicked, this, &Thesaurus::slotFindTermFromUrl);
     wnLayout->addWidget(m_resultTextBrowser);
 
     // Connect for the history box
@@ -211,8 +211,8 @@ Thesaurus::Thesaurus()
     m_edit->setFocus();
     updateNavButtons();
 
-    connect(m_dialog, SIGNAL(accepted()), this, SLOT(process()));
-    connect(m_dialog, SIGNAL(rejected()), this, SLOT(dialogClosed()));
+    connect(m_dialog, &QDialog::accepted, this, &Thesaurus::process);
+    connect(m_dialog, &QDialog::rejected, this, &Thesaurus::dialogClosed);
 }
 
 Thesaurus::~Thesaurus()

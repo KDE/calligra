@@ -307,9 +307,9 @@ PreferenceDialog::PreferenceDialog(View* view)
 
     d->view = view;
 
-    connect(this, SIGNAL(accepted()), this, SLOT(slotApply()));
-    connect(button(QDialogButtonBox::RestoreDefaults), SIGNAL(clicked(bool)), this, SLOT(slotDefault()));
-    connect(button(QDialogButtonBox::Reset), SIGNAL(clicked(bool)), this, SLOT(slotReset()));
+    connect(this, &QDialog::accepted, this, &PreferenceDialog::slotApply);
+    connect(button(QDialogButtonBox::RestoreDefaults), &QAbstractButton::clicked, this, &PreferenceDialog::slotDefault);
+    connect(button(QDialogButtonBox::Reset), &QAbstractButton::clicked, this, &PreferenceDialog::slotReset);
 
     QWidget* widget = 0;
     KPageWidgetItem* page = 0;

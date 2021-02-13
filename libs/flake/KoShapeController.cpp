@@ -86,7 +86,7 @@ public:
                         delete widget;
                         continue;
                     }
-                    widget->connect(widget, SIGNAL(accept()), dialog, SLOT(accept()));
+                    widget->connect(widget, &KoShapeConfigWidgetBase::accept, dialog, &QDialog::accept);
                     widgets.append(widget);
                     widget->setResourceManager(canvas->resourceManager());
                     widget->setUnit(canvas->unit());
@@ -97,7 +97,7 @@ public:
                     if (! panel->showOnShapeCreate())
                         continue;
                     panel->open(shape);
-                    panel->connect(panel, SIGNAL(accept()), dialog, SLOT(accept()));
+                    panel->connect(panel, &KoShapeConfigWidgetBase::accept, dialog, &QDialog::accept);
                     widgets.append(panel);
                     panel->setResourceManager(canvas->resourceManager());
                     panel->setUnit(canvas->unit());

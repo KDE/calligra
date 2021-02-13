@@ -341,16 +341,16 @@ DatabaseDialog::DatabaseDialog(QWidget* parent, Selection* selection)
     addPage(m_result);
 
     // signals and slots connections
-    connect(m_orBox, SIGNAL(clicked()), this, SLOT(orBox_clicked()));
-    connect(m_andBox, SIGNAL(clicked()), this, SLOT(andBox_clicked()));
-    connect(m_startingCell, SIGNAL(clicked()), this, SLOT(startingCell_clicked()));
-    connect(m_startingRegion, SIGNAL(clicked()), this, SLOT(startingRegion_clicked()));
+    connect(m_orBox, &QAbstractButton::clicked, this, &DatabaseDialog::orBox_clicked);
+    connect(m_andBox, &QAbstractButton::clicked, this, &DatabaseDialog::andBox_clicked);
+    connect(m_startingCell, &QAbstractButton::clicked, this, &DatabaseDialog::startingCell_clicked);
+    connect(m_startingRegion, &QAbstractButton::clicked, this, &DatabaseDialog::startingRegion_clicked);
     connect(m_driver, SIGNAL(activated(int)), this, SLOT(databaseDriverChanged(int)));
-    connect(m_host, SIGNAL(textChanged(QString)), this, SLOT(databaseHostChanged(QString)));
-    connect(m_databaseName, SIGNAL(textChanged(QString)), this, SLOT(databaseNameChanged(QString)));
+    connect(m_host, &QLineEdit::textChanged, this, &DatabaseDialog::databaseHostChanged);
+    connect(m_databaseName, &QLineEdit::textChanged, this, &DatabaseDialog::databaseNameChanged);
     /*connect( m_tableView, SIGNAL(contextMenuRequested(Q3ListViewItem*,QPoint,int)),
              this, SLOT(popupTableViewMenu(Q3ListViewItem*,QPoint,int)) );*/
-    connect(m_tableView, SIGNAL(itemClicked(QListWidgetItem*)), this, SLOT(tableViewClicked(QListWidgetItem*)));
+    connect(m_tableView, &QListWidget::itemClicked, this, &DatabaseDialog::tableViewClicked);
 
     QStringList str = QSqlDatabase::drivers();
     m_driver->insertItems(0, QSqlDatabase::drivers());

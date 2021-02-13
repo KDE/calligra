@@ -119,7 +119,7 @@ void PictureShapeConfigWidget::slotAccept()
     if (!url.isEmpty()) {
         KIO::StoredTransferJob *job = KIO::storedGet(url, KIO::NoReload, 0);
         PictureShapeLoadWaiter *waiter = new PictureShapeLoadWaiter(m_shape);
-        connect(job, SIGNAL(result(KJob*)), waiter, SLOT(setImageData(KJob*)));
+        connect(job, &KJob::result, waiter, &PictureShapeLoadWaiter::setImageData);
     }
     Q_EMIT accept();
 }

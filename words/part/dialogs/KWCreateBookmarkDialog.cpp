@@ -28,7 +28,7 @@ KWCreateBookmark::KWCreateBookmark(const QStringList &nameList, const QString &s
     widget.bookmarkName->setCompleter(0);
     widget.bookmarkName->insertItems(0, nameList);
     widget.bookmarkName->setEditText(suggestedName);
-    connect(widget.bookmarkName, SIGNAL(editTextChanged(QString)), this, SIGNAL(bookmarkNameChanged(QString)));
+    connect(widget.bookmarkName, &QComboBox::editTextChanged, this, &KWCreateBookmark::bookmarkNameChanged);
 }
 
 QString KWCreateBookmark::bookmarkName()
@@ -52,7 +52,7 @@ KWCreateBookmarkDialog::KWCreateBookmarkDialog(const QStringList &nameList, cons
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
     showButtonSeparator(true);
-    connect(ui, SIGNAL(bookmarkNameChanged(QString)), this, SLOT(nameChanged(QString)));
+    connect(ui, &KWCreateBookmark::bookmarkNameChanged, this, &KWCreateBookmarkDialog::nameChanged);
 }
 
 QString KWCreateBookmarkDialog::newBookmarkName()

@@ -75,19 +75,19 @@ StyleManager::StyleManager(QWidget *parent)
     widget.paragraphStylesListView->setModel(m_paragraphProxyModel);
     widget.characterStylesListView->setModel(m_characterProxyModel);
 
-    connect(widget.paragraphStylesListView, SIGNAL(clicked(QModelIndex)), this, SLOT(slotParagraphStyleSelected(QModelIndex)));
-    connect(widget.characterStylesListView, SIGNAL(clicked(QModelIndex)), this, SLOT(slotCharacterStyleSelected(QModelIndex)));
+    connect(widget.paragraphStylesListView, &QAbstractItemView::clicked, this, &StyleManager::slotParagraphStyleSelected);
+    connect(widget.characterStylesListView, &QAbstractItemView::clicked, this, &StyleManager::slotCharacterStyleSelected);
 
-    connect(widget.bNew, SIGNAL(pressed()), this, SLOT(buttonNewPressed()));
+    connect(widget.bNew, &QAbstractButton::pressed, this, &StyleManager::buttonNewPressed);
     //connect(widget.bDelete, SIGNAL(pressed()), this, SLOT(buttonDeletePressed()));
     widget.bDelete->setVisible(false); // TODO make it visible when we can safely delete styles
 
-    connect(widget.tabs, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
+    connect(widget.tabs, &QTabWidget::currentChanged, this, &StyleManager::tabChanged);
 
-    connect(widget.paragraphStylePage, SIGNAL(styleChanged()), this, SLOT(currentParagraphStyleChanged()));
-    connect(widget.characterStylePage, SIGNAL(styleChanged()), this, SLOT(currentCharacterStyleChanged()));
+    connect(widget.paragraphStylePage, &CharacterGeneral::styleChanged, this, &StyleManager::currentParagraphStyleChanged);
+    connect(widget.characterStylePage, &CharacterGeneral::styleChanged, this, &StyleManager::currentCharacterStyleChanged);
     connect(widget.paragraphStylePage, SIGNAL(nameChanged(QString)), this, SLOT(currentParagraphNameChanged(QString)));
-    connect(widget.characterStylePage, SIGNAL(nameChanged(QString)), this, SLOT(currentCharacterNameChanged(QString)));
+    connect(widget.characterStylePage, &CharacterGeneral::nameChanged, this, &StyleManager::currentCharacterNameChanged);
 }
 
 StyleManager::~StyleManager()
@@ -379,13 +379,13 @@ void StyleManager::tabChanged(int index)
     int paragraphIndex = widget.tabs->indexOf(widget.paragraphStylesListView);
     if (!checkUniqueStyleName(paragraphIndex == index ? widget.tabs->indexOf(widget.characterStylesListView) : paragraphIndex)) {
         // this is needed to not call tab changed during the resetting of the tab as this leads to en endless recursion.
-        disconnect(widget.tabs, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
+        disconnect(widget.tabs, &QTabWidget::currentChanged, this, &StyleManager::tabChanged);
         if (widget.tabs->indexOf(widget.paragraphStylesListView) == widget.tabs->currentIndex()){
             widget.tabs->setCurrentIndex(widget.tabs->indexOf(widget.characterStylesListView));
         } else {
             widget.tabs->setCurrentIndex(widget.tabs->indexOf(widget.paragraphStylesListView));
         }
-        connect(widget.tabs, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
+        connect(widget.tabs, &QTabWidget::currentChanged, this, &StyleManager::tabChanged);
     }
     else {
         if (paragraphIndex == index) {

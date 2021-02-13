@@ -31,17 +31,17 @@ KoUndoStackAction::KoUndoStackAction(KUndo2Stack* stack, Type type)
     , m_type(type)
 {
     if (m_type == UNDO) {
-        connect(this, SIGNAL(triggered()), stack, SLOT(undo()));
-        connect(stack, SIGNAL(canUndoChanged(bool)), this, SLOT(setEnabled(bool)));
-        connect(stack, SIGNAL(undoTextChanged(QString)), this, SLOT(slotUndoTextChanged(QString)));
+        connect(this, &QAction::triggered, stack, &KUndo2QStack::undo);
+        connect(stack, &KUndo2QStack::canUndoChanged, this, &QAction::setEnabled);
+        connect(stack, &KUndo2QStack::undoTextChanged, this, &KoUndoStackAction::slotUndoTextChanged);
         setIcon(koIcon("edit-undo"));
         setText(i18n("Undo"));
         setShortcuts(KStandardShortcut::undo());
         setEnabled(stack->canUndo());
     } else {
-        connect(this, SIGNAL(triggered()), stack, SLOT(redo()));
-        connect(stack, SIGNAL(canRedoChanged(bool)), this, SLOT(setEnabled(bool)));
-        connect(stack, SIGNAL(redoTextChanged(QString)), this, SLOT(slotUndoTextChanged(QString)));
+        connect(this, &QAction::triggered, stack, &KUndo2QStack::redo);
+        connect(stack, &KUndo2QStack::canRedoChanged, this, &QAction::setEnabled);
+        connect(stack, &KUndo2QStack::redoTextChanged, this, &KoUndoStackAction::slotUndoTextChanged);
         setIcon(koIcon("edit-redo"));
         setText(i18n("Redo"));
         setShortcuts(KStandardShortcut::redo());

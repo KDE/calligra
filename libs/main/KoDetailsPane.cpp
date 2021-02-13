@@ -56,8 +56,8 @@ KoDetailsPane::KoDetailsPane(QWidget* parent, const QString& header)
 
     changePalette();
 
-    connect(m_documentList->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-            this, SLOT(selectionChanged(QModelIndex)));
+    connect(m_documentList->selectionModel(), &QItemSelectionModel::currentChanged,
+            this, &KoDetailsPane::selectionChanged);
     connect(m_documentList, SIGNAL(doubleClicked(QModelIndex)),
             this, SLOT(openFile(QModelIndex)));
     connect(m_openButton, SIGNAL(clicked()), this, SLOT(openFile()));

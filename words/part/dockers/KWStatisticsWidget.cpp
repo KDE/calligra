@@ -77,20 +77,20 @@ KWStatisticsWidget::KWStatisticsWidget(QWidget *parent, bool shortVersion)
         m_preferencesButton->setPopupMode(QToolButton::InstantPopup);
         m_preferencesButton->setIcon(koIcon("configure"));
 
-        connect(m_menu, SIGNAL(wordsDisplayChange(int)), this, SLOT(wordsDisplayChanged(int)));
-        connect(m_menu, SIGNAL(sentencesDisplayChange(int)), this, SLOT(sentencesDisplayChanged(int)));
-        connect(m_menu, SIGNAL(linesDisplayChange(int)), this, SLOT(linesDisplayChanged(int)));
-        connect(m_menu, SIGNAL(syllablesDisplayChange(int)), this, SLOT(syllablesDisplayChanged(int)));
-        connect(m_menu, SIGNAL(charspaceDisplayChange(int)), this, SLOT(charspaceDisplayChanged(int)));
-        connect(m_menu, SIGNAL(charnospaceDisplayChange(int)), this, SLOT(charnospaceDisplayChanged(int)));
-        connect(m_menu, SIGNAL(eastDisplayChange(int)), this, SLOT(eastDisplayChanged(int)));
-        connect(m_menu, SIGNAL(fleschDisplayChange(int)), this, SLOT(fleschDisplayChanged(int)));
+        connect(m_menu, &StatisticsPreferencesPopup::wordsDisplayChange, this, &KWStatisticsWidget::wordsDisplayChanged);
+        connect(m_menu, &StatisticsPreferencesPopup::sentencesDisplayChange, this, &KWStatisticsWidget::sentencesDisplayChanged);
+        connect(m_menu, &StatisticsPreferencesPopup::linesDisplayChange, this, &KWStatisticsWidget::linesDisplayChanged);
+        connect(m_menu, &StatisticsPreferencesPopup::syllablesDisplayChange, this, &KWStatisticsWidget::syllablesDisplayChanged);
+        connect(m_menu, &StatisticsPreferencesPopup::charspaceDisplayChange, this, &KWStatisticsWidget::charspaceDisplayChanged);
+        connect(m_menu, &StatisticsPreferencesPopup::charnospaceDisplayChange, this, &KWStatisticsWidget::charnospaceDisplayChanged);
+        connect(m_menu, &StatisticsPreferencesPopup::eastDisplayChange, this, &KWStatisticsWidget::eastDisplayChanged);
+        connect(m_menu, &StatisticsPreferencesPopup::fleschDisplayChange, this, &KWStatisticsWidget::fleschDisplayChanged);
 
-        connect(m_preferencesButton, SIGNAL(clicked()), m_preferencesButton, SLOT(showMenu()));
+        connect(m_preferencesButton, &QAbstractButton::clicked, m_preferencesButton, &QToolButton::showMenu);
     }
 
     //use to refresh statistics
-    connect(m_timer, SIGNAL(timeout()), this, SLOT(updateData())); // FIXME: better idea ?
+    connect(m_timer, &QTimer::timeout, this, &KWStatisticsWidget::updateData); // FIXME: better idea ?
 
     KConfigGroup cfgGroup = KSharedConfig::openConfig()->group("Statistics");
     bool visible = false;

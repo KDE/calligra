@@ -60,7 +60,7 @@ PasteInsertDialog::PasteInsertDialog(QWidget* parent, Selection* selection)
     grp->setLayout(vbox);
     lay1->addWidget(grp);
 
-    connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
+    connect(this, &KoDialog::okClicked, this, &PasteInsertDialog::slotOk);
 }
 
 void PasteInsertDialog::slotOk()

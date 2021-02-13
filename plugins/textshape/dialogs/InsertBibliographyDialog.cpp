@@ -35,12 +35,12 @@ InsertBibliographyDialog::InsertBibliographyDialog(KoTextEditor *editor, QWidget
 {
     dialog.setupUi(this);
 
-    connect(dialog.bibTypes, SIGNAL(currentTextChanged(QString)), this, SLOT(updateFields()));
-    connect(dialog.buttonBox, SIGNAL(accepted()), this, SLOT(insert()));
-    connect(dialog.add, SIGNAL(clicked()), this, SLOT(addField()));
-    connect(dialog.remove, SIGNAL(clicked()), this, SLOT(removeField()));
-    connect(dialog.span, SIGNAL(clicked()), this, SLOT(addSpan()));
-    connect(dialog.addedFields, SIGNAL(itemChanged(QListWidgetItem*)), this, SLOT(spanChanged(QListWidgetItem*)));
+    connect(dialog.bibTypes, &QListWidget::currentTextChanged, this, &InsertBibliographyDialog::updateFields);
+    connect(dialog.buttonBox, &QDialogButtonBox::accepted, this, &InsertBibliographyDialog::insert);
+    connect(dialog.add, &QAbstractButton::clicked, this, &InsertBibliographyDialog::addField);
+    connect(dialog.remove, &QAbstractButton::clicked, this, &InsertBibliographyDialog::removeField);
+    connect(dialog.span, &QAbstractButton::clicked, this, &InsertBibliographyDialog::addSpan);
+    connect(dialog.addedFields, &QListWidget::itemChanged, this, &InsertBibliographyDialog::spanChanged);
 
     /*  To do : handle tab stops
     */
@@ -99,7 +99,7 @@ void InsertBibliographyDialog::addField()
 
     if (row != -1) {
 
-        disconnect(dialog.addedFields, SIGNAL(itemChanged(QListWidgetItem*)), this, SLOT(spanChanged(QListWidgetItem*)));
+        disconnect(dialog.addedFields, &QListWidget::itemChanged, this, &InsertBibliographyDialog::spanChanged);
 
         QString newDataField = dialog.availableFields->takeItem(row)->text();
         QListWidgetItem *bibField = new QListWidgetItem(newDataField,dialog.addedFields);
@@ -109,7 +109,7 @@ void InsertBibliographyDialog::addField()
         newEntry->dataField = newDataField;
 
         m_bibInfo->m_entryTemplate[bibliographyType()].indexEntries.append(static_cast<IndexEntry *>(newEntry));
-        connect(dialog.addedFields, SIGNAL(itemChanged(QListWidgetItem*)), this, SLOT(spanChanged(QListWidgetItem*)));
+        connect(dialog.addedFields, &QListWidget::itemChanged, this, &InsertBibliographyDialog::spanChanged);
     }
 }
 

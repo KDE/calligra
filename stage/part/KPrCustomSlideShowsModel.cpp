@@ -46,7 +46,7 @@ KPrCustomSlideShowsModel::KPrCustomSlideShowsModel(KPrDocument *document, QObjec
     , m_iconSize(QSize(200,200))
     , m_document(document)
 {
-    connect(m_customSlideShows, SIGNAL(updated()), this, SLOT(updateModel()));
+    connect(m_customSlideShows, &KPrCustomSlideShows::updated, this, &KPrCustomSlideShowsModel::updateModel);
 }
 
 KPrCustomSlideShowsModel::~KPrCustomSlideShowsModel(){

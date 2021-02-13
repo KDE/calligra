@@ -45,10 +45,10 @@ KoViewItemContextBar::KoViewItemContextBar(QAbstractItemView *parent)
     , m_enabled(true)
     , m_showToggleButton(true)
 {
-    connect(parent, SIGNAL(entered(QModelIndex)),
-            this, SLOT(slotEntered(QModelIndex)));
-    connect(parent, SIGNAL(viewportEntered()),
-            this, SLOT(slotViewportEntered()));
+    connect(parent, &QAbstractItemView::entered,
+            this, &KoViewItemContextBar::slotEntered);
+    connect(parent, &QAbstractItemView::viewportEntered,
+            this, &KoViewItemContextBar::slotViewportEntered);
 
     m_ContextBar = new QWidget(m_view->viewport());
     m_ContextBar->hide();
@@ -59,13 +59,13 @@ KoViewItemContextBar::KoViewItemContextBar(QAbstractItemView *parent)
     m_Layout->setSpacing(2);
     m_Layout->addWidget(m_ToggleSelectionButton);
 
-    connect(m_ToggleSelectionButton, SIGNAL(clicked()),
-            this, SLOT(setItemSelected()));
+    connect(m_ToggleSelectionButton, &QAbstractButton::clicked,
+            this, &KoViewItemContextBar::setItemSelected);
     // Hides context bar if item removed
-    connect(m_view->model(), SIGNAL(rowsRemoved(QModelIndex,int,int)),
-            this, SLOT(slotRowsRemoved(QModelIndex,int,int)));
+    connect(m_view->model(), &QAbstractItemModel::rowsRemoved,
+            this, &KoViewItemContextBar::slotRowsRemoved);
 
-    connect(m_view->model(), SIGNAL(modelReset()), this, SLOT(slotModelReset()));
+    connect(m_view->model(), &QAbstractItemModel::modelReset, this, &KoViewItemContextBar::slotModelReset);
 
     m_ContextBar->installEventFilter(this);
     m_view->viewport()->installEventFilter(this);

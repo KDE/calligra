@@ -238,10 +238,10 @@ StrokeConfigWidget::StrokeConfigWidget(QWidget * parent)
 
     // Make the signals visible on the outside of this widget.
     connect(d->lineStyle, SIGNAL(currentIndexChanged(int)), this, SLOT(applyChanges()));
-    connect(d->lineWidth, SIGNAL(valueChangedPt(qreal)), this, SLOT(applyChanges()));
+    connect(d->lineWidth, &KoUnitDoubleSpinBox::valueChangedPt, this, &StrokeConfigWidget::applyChanges);
     connect(d->capNJoinMenu->capGroup, SIGNAL(buttonClicked(int)), this, SLOT(applyChanges()));
     connect(d->capNJoinMenu->joinGroup, SIGNAL(buttonClicked(int)), this, SLOT(applyChanges()));
-    connect(d->capNJoinMenu->miterLimit, SIGNAL(valueChangedPt(qreal)), this, SLOT(applyChanges()));
+    connect(d->capNJoinMenu->miterLimit, &KoUnitDoubleSpinBox::valueChangedPt, this, &StrokeConfigWidget::applyChanges);
     connect(d->colorButton, &KColorButton::changed, this, &StrokeConfigWidget::colorButtonClicked);
 }
 

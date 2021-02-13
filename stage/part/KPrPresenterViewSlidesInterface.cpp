@@ -42,10 +42,10 @@ KPrPresenterViewSlidesInterface::KPrPresenterViewSlidesInterface( const QList<Ko
     m_listView->setSelectionMode( QAbstractItemView::SingleSelection );
     m_listView->setMovement( QListView::Static );
 
-    connect( m_listView, SIGNAL(clicked(QModelIndex)), this,
-            SLOT(itemClicked(QModelIndex)) );
-    connect( m_listView, SIGNAL(doubleClicked(QModelIndex)), this,
-            SLOT(itemDoubleClicked(QModelIndex)) );
+    connect( m_listView, &QAbstractItemView::clicked, this,
+            &KPrPresenterViewSlidesInterface::itemClicked );
+    connect( m_listView, &QAbstractItemView::doubleClicked, this,
+            &KPrPresenterViewSlidesInterface::itemDoubleClicked );
 
     vLayout->addWidget( m_listView );
 

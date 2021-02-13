@@ -104,8 +104,8 @@ KoConfigGridPage::KoConfigGridPage(KoDocument* doc, char* name)
 
     setValuesFromGrid(d->doc->gridData());
 
-    connect(d->spaceHorizUSpin, SIGNAL(valueChangedPt(qreal)),this,SLOT(spinBoxHSpacingChanged(qreal)));
-    connect(d->spaceVertUSpin, SIGNAL(valueChangedPt(qreal)),this,SLOT(spinBoxVSpacingChanged(qreal)));
+    connect(d->spaceHorizUSpin, &KoUnitDoubleSpinBox::valueChangedPt,this,&KoConfigGridPage::spinBoxHSpacingChanged);
+    connect(d->spaceVertUSpin, &KoUnitDoubleSpinBox::valueChangedPt,this,&KoConfigGridPage::spinBoxVSpacingChanged);
 }
 
 KoConfigGridPage::~KoConfigGridPage()

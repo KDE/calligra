@@ -141,9 +141,9 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, const QString& hea
     KIO::PreviewJob *previewJob = KIO::filePreview(fileList, QSize(IconExtent, IconExtent), &availablePlugins);
 
     d->m_previewJobs.append(previewJob);
-    connect(previewJob, SIGNAL(result(KJob*)), SLOT(previewResult(KJob*)));
-    connect(previewJob, SIGNAL(gotPreview(KFileItem,QPixmap)),
-            SLOT(updateIcon(KFileItem,QPixmap)));
+    connect(previewJob, &KJob::result, this, &KoRecentDocumentsPane::previewResult);
+    connect(previewJob, &KIO::PreviewJob::gotPreview,
+            this, &KoRecentDocumentsPane::updateIcon);
 }
 
 KoRecentDocumentsPane::~KoRecentDocumentsPane()
@@ -168,9 +168,9 @@ void KoRecentDocumentsPane::selectionChanged(const QModelIndex& index)
             KIO::PreviewJob *previewJob = KIO::filePreview(fileList, QSize(PreviewExtent, PreviewExtent), &availablePlugins);
 
             d->m_previewJobs.append(previewJob);
-            connect(previewJob, SIGNAL(result(KJob*)), SLOT(previewResult(KJob*)));
-            connect(previewJob, SIGNAL(gotPreview(KFileItem,QPixmap)),
-                    SLOT(updatePreview(KFileItem,QPixmap)));
+            connect(previewJob, &KJob::result, this, &KoRecentDocumentsPane::previewResult);
+            connect(previewJob, &KIO::PreviewJob::gotPreview,
+                    this, &KoRecentDocumentsPane::updatePreview);
 
             // for now set preview to icon
             preview = item->icon().pixmap(PreviewExtent);

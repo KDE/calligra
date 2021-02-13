@@ -84,7 +84,7 @@ void Changecase::checkSection(QTextDocument *document, int startPosition, int en
 
     dialog->show();
 
-    connect(dialog, SIGNAL(accepted()), this, SLOT(process()));
+    connect(dialog, &QDialog::accepted, this, &Changecase::process);
 }
 
 void Changecase::process()

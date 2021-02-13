@@ -31,7 +31,7 @@ ArtisticTextShapeOnPathWidget::ArtisticTextShapeOnPathWidget(ArtisticTextTool *t
     ui->detachFromPath->setDefaultAction(tool->action("artistictext_detach_from_path"));
     ui->convertToPath->setDefaultAction(tool->action("artistictext_convert_to_path"));
 
-    connect(ui->startOffset, SIGNAL(valueChanged(int)), this, SIGNAL(offsetChanged(int)));
+    connect(ui->startOffset, &QAbstractSlider::valueChanged, this, &ArtisticTextShapeOnPathWidget::offsetChanged);
 }
 
 ArtisticTextShapeOnPathWidget::~ArtisticTextShapeOnPathWidget()

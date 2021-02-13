@@ -124,7 +124,7 @@ ChartTool::ChartTool(KoCanvasBase *canvas)
     connect(m_foo, SIGNAL(toggled(bool)), this, SLOT(catchBar(bool)));
 
 #endif
-    connect(canvas->shapeManager(), SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
+    connect(canvas->shapeManager(), &KoShapeManager::selectionChanged, this, &ChartTool::shapeSelectionChanged);
 }
 
 ChartTool::~ChartTool()
@@ -289,13 +289,13 @@ QList<QPointer<QWidget> > ChartTool::createOptionWidgets()
     TitlesConfigWidget *titles = new TitlesConfigWidget();
     titles->setWindowTitle(i18n("Titles"));
     widgets.append(titles);
-    connect(titles->ui.showTitle, SIGNAL(toggled(bool)), this, SLOT(setShowTitle(bool)));
+    connect(titles->ui.showTitle, &QAbstractButton::toggled, this, &ChartTool::setShowTitle);
     connect(titles->ui.titlePositioning, SIGNAL(currentIndexChanged(int)), this, SLOT(setTitlePositioning(int)));
     connect(titles->ui.titleResize, SIGNAL(currentIndexChanged(int)), this, SLOT(setTitleResize(int)));
-    connect(titles->ui.showSubTitle, SIGNAL(toggled(bool)), this, SLOT(setShowSubTitle(bool)));
+    connect(titles->ui.showSubTitle, &QAbstractButton::toggled, this, &ChartTool::setShowSubTitle);
     connect(titles->ui.subtitlePositioning, SIGNAL(currentIndexChanged(int)), this, SLOT(setSubTitlePositioning(int)));
     connect(titles->ui.subtitleResize, SIGNAL(currentIndexChanged(int)), this, SLOT(setSubTitleResize(int)));
-    connect(titles->ui.showFooter, SIGNAL(toggled(bool)), this, SLOT(setShowFooter(bool)));
+    connect(titles->ui.showFooter, &QAbstractButton::toggled, this, &ChartTool::setShowFooter);
     connect(titles->ui.footerPositioning, SIGNAL(currentIndexChanged(int)), this, SLOT(setFooterPositioning(int)));
     connect(titles->ui.footerResize, SIGNAL(currentIndexChanged(int)), this, SLOT(setFooterResize(int)));
 
@@ -304,20 +304,20 @@ QList<QPointer<QWidget> > ChartTool::createOptionWidgets()
     LegendConfigWidget *legend = new LegendConfigWidget();
     legend->setWindowTitle(i18n("Legend"));
     widgets.append(legend);
-    connect(legend, SIGNAL(showLegendChanged(bool)),
-            this,   SLOT(setShowLegend(bool)));
-    connect(legend, SIGNAL(legendTitleChanged(QString)),
-            this,   SLOT(setLegendTitle(QString)));
-    connect(legend, SIGNAL(legendFontChanged(QFont)),
-            this,   SLOT(setLegendFont(QFont)));
-    connect(legend, SIGNAL(legendFontSizeChanged(int)),
-            this,   SLOT(setLegendFontSize(int)));
-    connect(legend, SIGNAL(legendOrientationChanged(Qt::Orientation)),
-            this,   SLOT(setLegendOrientation(Qt::Orientation)));
-    connect(legend, SIGNAL(legendPositionChanged(Position)),
-            this,   SLOT(setLegendPosition(Position)));
-    connect(legend, SIGNAL(legendAlignmentChanged(Qt::Alignment)),
-            this,   SLOT(setLegendAlignment(Qt::Alignment)));
+    connect(legend, &LegendConfigWidget::showLegendChanged,
+            this,   &ChartTool::setShowLegend);
+    connect(legend, &LegendConfigWidget::legendTitleChanged,
+            this,   &ChartTool::setLegendTitle);
+    connect(legend, &LegendConfigWidget::legendFontChanged,
+            this,   &ChartTool::setLegendFont);
+    connect(legend, &LegendConfigWidget::legendFontSizeChanged,
+            this,   &ChartTool::setLegendFontSize);
+    connect(legend, &LegendConfigWidget::legendOrientationChanged,
+            this,   &ChartTool::setLegendOrientation);
+    connect(legend, &LegendConfigWidget::legendPositionChanged,
+            this,   &ChartTool::setLegendPosition);
+    connect(legend, &LegendConfigWidget::legendAlignmentChanged,
+            this,   &ChartTool::setLegendAlignment);
 
     connect(d->shape->legend(), SIGNAL(updateConfigWidget()), legend, SLOT(updateData()));
 
@@ -325,89 +325,89 @@ QList<QPointer<QWidget> > ChartTool::createOptionWidgets()
     plotarea->setWindowTitle(i18n("Plot Area"));
     widgets.append(plotarea);
 
-    connect(plotarea, SIGNAL(chartTypeChanged(ChartType,ChartSubtype)),
-            this,   SLOT(setChartType(ChartType,ChartSubtype)));
-    connect(plotarea, SIGNAL(chartSubTypeChanged(ChartSubtype)),
-            this,   SLOT(setChartSubType(ChartSubtype)));
-    connect(plotarea, SIGNAL(threeDModeToggled(bool)),
-            this,   SLOT(setThreeDMode(bool)));
-    connect(plotarea, SIGNAL(chartOrientationChanged(Qt::Orientation)),
-            this,   SLOT(setChartOrientation(Qt::Orientation)));
+    connect(plotarea, &PlotAreaConfigWidget::chartTypeChanged,
+            this,   &ChartTool::setChartType);
+    connect(plotarea, &PlotAreaConfigWidget::chartSubTypeChanged,
+            this,   &ChartTool::setChartSubType);
+    connect(plotarea, &PlotAreaConfigWidget::threeDModeToggled,
+            this,   &ChartTool::setThreeDMode);
+    connect(plotarea, &PlotAreaConfigWidget::chartOrientationChanged,
+            this,   &ChartTool::setChartOrientation);
 
     // data set edit dialog
-    connect(plotarea, SIGNAL(dataSetXDataRegionChanged(DataSet*,CellRegion)),
-            this,   SLOT(setDataSetXDataRegion(DataSet*,CellRegion)));
-    connect(plotarea, SIGNAL(dataSetYDataRegionChanged(DataSet*,CellRegion)),
-            this,   SLOT(setDataSetYDataRegion(DataSet*,CellRegion)));
-    connect(plotarea, SIGNAL(dataSetCustomDataRegionChanged(DataSet*,CellRegion)),
-            this,   SLOT(setDataSetCustomDataRegion(DataSet*,CellRegion)));
-    connect(plotarea, SIGNAL(dataSetLabelDataRegionChanged(DataSet*,CellRegion)),
-            this,   SLOT(setDataSetLabelDataRegion(DataSet*,CellRegion)));
-    connect(plotarea, SIGNAL(dataSetCategoryDataRegionChanged(DataSet*,CellRegion)),
-            this,   SLOT(setDataSetCategoryDataRegion(DataSet*,CellRegion)));
+    connect(plotarea, &PlotAreaConfigWidget::dataSetXDataRegionChanged,
+            this,   &ChartTool::setDataSetXDataRegion);
+    connect(plotarea, &PlotAreaConfigWidget::dataSetYDataRegionChanged,
+            this,   &ChartTool::setDataSetYDataRegion);
+    connect(plotarea, &PlotAreaConfigWidget::dataSetCustomDataRegionChanged,
+            this,   &ChartTool::setDataSetCustomDataRegion);
+    connect(plotarea, &PlotAreaConfigWidget::dataSetLabelDataRegionChanged,
+            this,   &ChartTool::setDataSetLabelDataRegion);
+    connect(plotarea, &PlotAreaConfigWidget::dataSetCategoryDataRegionChanged,
+            this,   &ChartTool::setDataSetCategoryDataRegion);
 
     AxesConfigWidget *axes = plotarea->cartesianAxesConfigWidget();
-    connect(axes, SIGNAL(axisAdded(AxisDimension,QString)),
-            this,   SLOT(addAxis(AxisDimension,QString)));
-    connect(axes, SIGNAL(axisRemoved(Axis*)),
-            this,   SLOT(removeAxis(Axis*)));
-    connect(axes, SIGNAL(axisShowTitleChanged(Axis*,bool)),
-            this,   SLOT(setAxisShowTitle(Axis*,bool)));
-    connect(axes, SIGNAL(axisShowChanged(Axis*,bool)),
-            this,   SLOT(setShowAxis(Axis*,bool)));
-    connect(axes, SIGNAL(axisPositionChanged(Axis*,QString)),
-            this,   SLOT(setAxisPosition(Axis*,QString)));
-    connect(axes, SIGNAL(axisLabelsPositionChanged(Axis*,QString)),
-            this,   SLOT(setAxisLabelsPosition(Axis*,QString)));
-    connect(axes, SIGNAL(axisShowLabelsChanged(Axis*,bool)),
-            this,   SLOT(setAxisShowLabels(Axis*,bool)));
+    connect(axes, &AxesConfigWidget::axisAdded,
+            this,   &ChartTool::addAxis);
+    connect(axes, &AxesConfigWidget::axisRemoved,
+            this,   &ChartTool::removeAxis);
+    connect(axes, &AxesConfigWidget::axisShowTitleChanged,
+            this,   &ChartTool::setAxisShowTitle);
+    connect(axes, &AxesConfigWidget::axisShowChanged,
+            this,   &ChartTool::setShowAxis);
+    connect(axes, &AxesConfigWidget::axisPositionChanged,
+            this,   &ChartTool::setAxisPosition);
+    connect(axes, &AxesConfigWidget::axisLabelsPositionChanged,
+            this,   &ChartTool::setAxisLabelsPosition);
+    connect(axes, &AxesConfigWidget::axisShowLabelsChanged,
+            this,   &ChartTool::setAxisShowLabels);
 
-    connect(axes, SIGNAL(axisShowMajorGridLinesChanged(Axis*,bool)),
-            this,   SLOT(setAxisShowMajorGridLines(Axis*,bool)));
-    connect(axes, SIGNAL(axisShowMinorGridLinesChanged(Axis*,bool)),
-            this,   SLOT(setAxisShowMinorGridLines(Axis*,bool)));
+    connect(axes, &AxesConfigWidget::axisShowMajorGridLinesChanged,
+            this,   &ChartTool::setAxisShowMajorGridLines);
+    connect(axes, &AxesConfigWidget::axisShowMinorGridLinesChanged,
+            this,   &ChartTool::setAxisShowMinorGridLines);
     // scaling dialog
-    connect(axes, SIGNAL(axisUseLogarithmicScalingChanged(Axis*,bool)),
-            this,   SLOT(setAxisUseLogarithmicScaling(Axis*,bool)));
-    connect(axes, SIGNAL(axisStepWidthChanged(Axis*,qreal)),
-            this,   SLOT(setAxisStepWidth(Axis*,qreal)));
-    connect(axes, SIGNAL(axisSubStepWidthChanged(Axis*,qreal)),
-            this,   SLOT(setAxisSubStepWidth(Axis*,qreal)));
-    connect(axes, SIGNAL(axisUseAutomaticStepWidthChanged(Axis*,bool)),
-            this,   SLOT(setAxisUseAutomaticStepWidth(Axis*,bool)));
-    connect(axes, SIGNAL(axisUseAutomaticSubStepWidthChanged(Axis*,bool)),
-            this,   SLOT(setAxisUseAutomaticSubStepWidth(Axis*,bool)));
+    connect(axes, &AxesConfigWidget::axisUseLogarithmicScalingChanged,
+            this,   &ChartTool::setAxisUseLogarithmicScaling);
+    connect(axes, &AxesConfigWidget::axisStepWidthChanged,
+            this,   &ChartTool::setAxisStepWidth);
+    connect(axes, &AxesConfigWidget::axisSubStepWidthChanged,
+            this,   &ChartTool::setAxisSubStepWidth);
+    connect(axes, &AxesConfigWidget::axisUseAutomaticStepWidthChanged,
+            this,   &ChartTool::setAxisUseAutomaticStepWidth);
+    connect(axes, &AxesConfigWidget::axisUseAutomaticSubStepWidthChanged,
+            this,   &ChartTool::setAxisUseAutomaticSubStepWidth);
     // font dialog
-    connect(axes, SIGNAL(axisLabelsFontChanged(Axis*,QFont)),
-            this,   SLOT(setAxisLabelsFont(Axis*,QFont)));
+    connect(axes, &AxesConfigWidget::axisLabelsFontChanged,
+            this,   &ChartTool::setAxisLabelsFont);
 
-    connect(axes, SIGNAL(gapBetweenBarsChanged(Axis*,int)),
-            this,   SLOT(setGapBetweenBars(Axis*,int)));
-    connect(axes, SIGNAL(gapBetweenSetsChanged(Axis*,int)),
-            this,   SLOT(setGapBetweenSets(Axis*,int)));
+    connect(axes, &AxesConfigWidget::gapBetweenBarsChanged,
+            this,   &ChartTool::setGapBetweenBars);
+    connect(axes, &AxesConfigWidget::gapBetweenSetsChanged,
+            this,   &ChartTool::setGapBetweenSets);
 
 
     DataSetConfigWidget *dataset = plotarea->cartesianDataSetConfigWidget();
-    connect(dataset, SIGNAL(dataSetChartTypeChanged(DataSet*,ChartType,ChartSubtype)),
-            this,   SLOT(setDataSetChartType(DataSet*,ChartType,ChartSubtype)));
-    connect(dataset, SIGNAL(datasetBrushChanged(DataSet*,QColor,int)),
-            this, SLOT(setDataSetBrush(DataSet*,QColor,int)));
-    connect(dataset, SIGNAL(dataSetMarkerChanged(DataSet*,OdfSymbolType,OdfMarkerStyle)),
-            this, SLOT(setDataSetMarker(DataSet*,OdfSymbolType,OdfMarkerStyle)));
-    connect(dataset, SIGNAL(datasetPenChanged(DataSet*,QColor,int)),
-            this, SLOT(setDataSetPen(DataSet*,QColor,int)));
-    connect(dataset, SIGNAL(datasetShowCategoryChanged(DataSet*,bool,int)),
-            this, SLOT(setDataSetShowCategory(DataSet*,bool,int)));
-    connect(dataset, SIGNAL(dataSetShowNumberChanged(DataSet*,bool,int)),
-            this, SLOT(setDataSetShowNumber(DataSet*,bool,int)));
-    connect(dataset, SIGNAL(datasetShowPercentChanged(DataSet*,bool,int)),
-            this, SLOT(setDataSetShowPercent(DataSet*,bool,int)));
-    connect(dataset, SIGNAL(datasetShowSymbolChanged(DataSet*,bool,int)),
-            this, SLOT(setDataSetShowSymbol(DataSet*,bool,int)));
-    connect(dataset, SIGNAL(dataSetAxisChanged(DataSet*,Axis*)),
-            this, SLOT(setDataSetAxis(DataSet*,Axis*)));
-    connect(dataset, SIGNAL(axisAdded(AxisDimension,QString)),
-            this,   SLOT(addAxis(AxisDimension,QString)));
+    connect(dataset, &DataSetConfigWidget::dataSetChartTypeChanged,
+            this,   &ChartTool::setDataSetChartType);
+    connect(dataset, &DataSetConfigWidget::datasetBrushChanged,
+            this, &ChartTool::setDataSetBrush);
+    connect(dataset, &DataSetConfigWidget::dataSetMarkerChanged,
+            this, &ChartTool::setDataSetMarker);
+    connect(dataset, &DataSetConfigWidget::datasetPenChanged,
+            this, &ChartTool::setDataSetPen);
+    connect(dataset, &DataSetConfigWidget::datasetShowCategoryChanged,
+            this, &ChartTool::setDataSetShowCategory);
+    connect(dataset, &DataSetConfigWidget::dataSetShowNumberChanged,
+            this, &ChartTool::setDataSetShowNumber);
+    connect(dataset, &DataSetConfigWidget::datasetShowPercentChanged,
+            this, &ChartTool::setDataSetShowPercent);
+    connect(dataset, &DataSetConfigWidget::datasetShowSymbolChanged,
+            this, &ChartTool::setDataSetShowSymbol);
+    connect(dataset, &DataSetConfigWidget::dataSetAxisChanged,
+            this, &ChartTool::setDataSetAxis);
+    connect(dataset, &DataSetConfigWidget::axisAdded,
+            this,   &ChartTool::addAxis);
 
 
     PieConfigWidget *pie = plotarea->pieConfigWidget();
@@ -427,56 +427,56 @@ QList<QPointer<QWidget> > ChartTool::createOptionWidgets()
     connect(ring, SIGNAL(showPercentChanged(DataSet*,bool,int)), this, SLOT(setDataSetShowPercent(DataSet*,bool,int)));
 
     axes = plotarea->stockAxesConfigWidget();
-    connect(axes, SIGNAL(axisAdded(AxisDimension,QString)),
-            this,   SLOT(addAxis(AxisDimension,QString)));
-    connect(axes, SIGNAL(axisRemoved(Axis*)),
-            this,   SLOT(removeAxis(Axis*)));
-    connect(axes, SIGNAL(axisShowTitleChanged(Axis*,bool)),
-            this,   SLOT(setAxisShowTitle(Axis*,bool)));
-    connect(axes, SIGNAL(axisShowChanged(Axis*,bool)),
-            this,   SLOT(setShowAxis(Axis*,bool)));
-    connect(axes, SIGNAL(axisPositionChanged(Axis*,QString)),
-            this,   SLOT(setAxisPosition(Axis*,QString)));
-    connect(axes, SIGNAL(axisLabelsPositionChanged(Axis*,QString)),
-            this,   SLOT(setAxisLabelsPosition(Axis*,QString)));
-    connect(axes, SIGNAL(axisShowLabelsChanged(Axis*,bool)),
-            this,   SLOT(setAxisShowLabels(Axis*,bool)));
+    connect(axes, &AxesConfigWidget::axisAdded,
+            this,   &ChartTool::addAxis);
+    connect(axes, &AxesConfigWidget::axisRemoved,
+            this,   &ChartTool::removeAxis);
+    connect(axes, &AxesConfigWidget::axisShowTitleChanged,
+            this,   &ChartTool::setAxisShowTitle);
+    connect(axes, &AxesConfigWidget::axisShowChanged,
+            this,   &ChartTool::setShowAxis);
+    connect(axes, &AxesConfigWidget::axisPositionChanged,
+            this,   &ChartTool::setAxisPosition);
+    connect(axes, &AxesConfigWidget::axisLabelsPositionChanged,
+            this,   &ChartTool::setAxisLabelsPosition);
+    connect(axes, &AxesConfigWidget::axisShowLabelsChanged,
+            this,   &ChartTool::setAxisShowLabels);
 
-    connect(axes, SIGNAL(axisShowMajorGridLinesChanged(Axis*,bool)),
-            this,   SLOT(setAxisShowMajorGridLines(Axis*,bool)));
-    connect(axes, SIGNAL(axisShowMinorGridLinesChanged(Axis*,bool)),
-            this,   SLOT(setAxisShowMinorGridLines(Axis*,bool)));
+    connect(axes, &AxesConfigWidget::axisShowMajorGridLinesChanged,
+            this,   &ChartTool::setAxisShowMajorGridLines);
+    connect(axes, &AxesConfigWidget::axisShowMinorGridLinesChanged,
+            this,   &ChartTool::setAxisShowMinorGridLines);
     // scaling dialog
-    connect(axes, SIGNAL(axisUseLogarithmicScalingChanged(Axis*,bool)),
-            this,   SLOT(setAxisUseLogarithmicScaling(Axis*,bool)));
-    connect(axes, SIGNAL(axisStepWidthChanged(Axis*,qreal)),
-            this,   SLOT(setAxisStepWidth(Axis*,qreal)));
-    connect(axes, SIGNAL(axisSubStepWidthChanged(Axis*,qreal)),
-            this,   SLOT(setAxisSubStepWidth(Axis*,qreal)));
-    connect(axes, SIGNAL(axisUseAutomaticStepWidthChanged(Axis*,bool)),
-            this,   SLOT(setAxisUseAutomaticStepWidth(Axis*,bool)));
-    connect(axes, SIGNAL(axisUseAutomaticSubStepWidthChanged(Axis*,bool)),
-            this,   SLOT(setAxisUseAutomaticSubStepWidth(Axis*,bool)));
+    connect(axes, &AxesConfigWidget::axisUseLogarithmicScalingChanged,
+            this,   &ChartTool::setAxisUseLogarithmicScaling);
+    connect(axes, &AxesConfigWidget::axisStepWidthChanged,
+            this,   &ChartTool::setAxisStepWidth);
+    connect(axes, &AxesConfigWidget::axisSubStepWidthChanged,
+            this,   &ChartTool::setAxisSubStepWidth);
+    connect(axes, &AxesConfigWidget::axisUseAutomaticStepWidthChanged,
+            this,   &ChartTool::setAxisUseAutomaticStepWidth);
+    connect(axes, &AxesConfigWidget::axisUseAutomaticSubStepWidthChanged,
+            this,   &ChartTool::setAxisUseAutomaticSubStepWidth);
     // font dialog
-    connect(axes, SIGNAL(axisLabelsFontChanged(Axis*,QFont)),
-            this,   SLOT(setAxisLabelsFont(Axis*,QFont)));
+    connect(axes, &AxesConfigWidget::axisLabelsFontChanged,
+            this,   &ChartTool::setAxisLabelsFont);
 
     // Radar
     RadarDataSetConfigWidget *rdataset = plotarea->radarDataSetConfigWidget();
-    connect(rdataset, SIGNAL(datasetBrushChanged(DataSet*,QColor,int)),
-            this, SLOT(setDataSetBrush(DataSet*,QColor,int)));
-    connect(rdataset, SIGNAL(dataSetMarkerChanged(DataSet*,OdfSymbolType,OdfMarkerStyle)),
-            this, SLOT(setDataSetMarker(DataSet*,OdfSymbolType,OdfMarkerStyle)));
-    connect(rdataset, SIGNAL(datasetPenChanged(DataSet*,QColor,int)),
-            this, SLOT(setDataSetPen(DataSet*,QColor,int)));
-    connect(rdataset, SIGNAL(datasetShowCategoryChanged(DataSet*,bool,int)),
-            this, SLOT(setDataSetShowCategory(DataSet*,bool,int)));
-    connect(rdataset, SIGNAL(dataSetShowNumberChanged(DataSet*,bool,int)),
-            this, SLOT(setDataSetShowNumber(DataSet*,bool,int)));
-    connect(rdataset, SIGNAL(datasetShowPercentChanged(DataSet*,bool,int)),
-            this, SLOT(setDataSetShowPercent(DataSet*,bool,int)));
-    connect(rdataset, SIGNAL(datasetShowSymbolChanged(DataSet*,bool,int)),
-            this, SLOT(setDataSetShowSymbol(DataSet*,bool,int)));
+    connect(rdataset, &RadarDataSetConfigWidget::datasetBrushChanged,
+            this, &ChartTool::setDataSetBrush);
+    connect(rdataset, &RadarDataSetConfigWidget::dataSetMarkerChanged,
+            this, &ChartTool::setDataSetMarker);
+    connect(rdataset, &RadarDataSetConfigWidget::datasetPenChanged,
+            this, &ChartTool::setDataSetPen);
+    connect(rdataset, &RadarDataSetConfigWidget::datasetShowCategoryChanged,
+            this, &ChartTool::setDataSetShowCategory);
+    connect(rdataset, &RadarDataSetConfigWidget::dataSetShowNumberChanged,
+            this, &ChartTool::setDataSetShowNumber);
+    connect(rdataset, &RadarDataSetConfigWidget::datasetShowPercentChanged,
+            this, &ChartTool::setDataSetShowPercent);
+    connect(rdataset, &RadarDataSetConfigWidget::datasetShowSymbolChanged,
+            this, &ChartTool::setDataSetShowSymbol);
 
     connect(d->shape, SIGNAL(updateConfigWidget()), plotarea, SLOT(updateData()));
 

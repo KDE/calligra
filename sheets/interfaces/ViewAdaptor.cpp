@@ -58,7 +58,7 @@ ViewAdaptor::ViewAdaptor(View* t)
     m_view = t;
 
     Q_ASSERT(t->selection());
-    connect(t->selection(), SIGNAL(changed(Region)), this, SIGNAL(selectionChanged()));
+    connect(t->selection(), &Selection::changed, this, &ViewAdaptor::selectionChanged);
 }
 
 ViewAdaptor::~ViewAdaptor()

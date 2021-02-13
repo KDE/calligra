@@ -71,31 +71,31 @@ DesktopViewProxy::DesktopViewProxy(MainWindow* mainWindow, KoMainWindow* parent)
     // Concept is simple - simply steal all the actions we require to work differently, and reconnect them to local functions
     QAction* newAction = d->desktopView->actionCollection()->action("file_new");
     newAction->disconnect(d->desktopView);
-    connect(newAction, SIGNAL(triggered(bool)), this, SLOT(fileNew()));
+    connect(newAction, &QAction::triggered, this, &DesktopViewProxy::fileNew);
     QAction* openAction = d->desktopView->actionCollection()->action("file_open");
     openAction->disconnect(d->desktopView);
-    connect(openAction, SIGNAL(triggered(bool)), this, SLOT(fileOpen()));
+    connect(openAction, &QAction::triggered, this, &DesktopViewProxy::fileOpen);
     QAction* saveAction = d->desktopView->actionCollection()->action("file_save");
     saveAction->disconnect(d->desktopView);
-    connect(saveAction, SIGNAL(triggered(bool)), this, SLOT(fileSave()));
+    connect(saveAction, &QAction::triggered, this, &DesktopViewProxy::fileSave);
     QAction* saveasAction = d->desktopView->actionCollection()->action("file_save_as");
     saveasAction->disconnect(d->desktopView);
-    connect(saveasAction, SIGNAL(triggered(bool)), this, SLOT(fileSaveAs()));
+    connect(saveasAction, &QAction::triggered, this, &DesktopViewProxy::fileSaveAs);
     QAction* reloadAction = d->desktopView->actionCollection()->action("file_reload_file");
     reloadAction->disconnect(d->desktopView);
-    connect(reloadAction, SIGNAL(triggered(bool)), this, SLOT(reload()));
+    connect(reloadAction, &QAction::triggered, this, &DesktopViewProxy::reload);
     QAction* loadExistingAsNewAction = d->desktopView->actionCollection()->action("file_import_file");
     loadExistingAsNewAction->disconnect(d->desktopView);
-    connect(loadExistingAsNewAction, SIGNAL(triggered(bool)), this, SLOT(loadExistingAsNew()));
+    connect(loadExistingAsNewAction, &QAction::triggered, this, &DesktopViewProxy::loadExistingAsNew);
 
     // Recent files need a touch more work, as they aren't simply an action.
     KRecentFilesAction* recent = qobject_cast<KRecentFilesAction*>(d->desktopView->actionCollection()->action("file_open_recent"));
     recent->disconnect(d->desktopView);
-    connect(recent, SIGNAL(urlSelected(QUrl)), this, SLOT(slotFileOpenRecent(QUrl)));
+    connect(recent, &KRecentFilesAction::urlSelected, this, &DesktopViewProxy::slotFileOpenRecent);
     recent->clear();
     recent->loadEntries(KSharedConfig::openConfig()->group("RecentFiles"));
 
-    connect(d->desktopView, SIGNAL(documentSaved()), this, SIGNAL(documentSaved()));
+    connect(d->desktopView, &KoMainWindow::documentSaved, this, &DesktopViewProxy::documentSaved);
 }
 
 DesktopViewProxy::~DesktopViewProxy()

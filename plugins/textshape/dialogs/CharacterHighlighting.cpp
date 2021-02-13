@@ -61,28 +61,28 @@ CharacterHighlighting::CharacterHighlighting(QWidget* parent)
 
     connect(widget.underlineStyle, SIGNAL(activated(int)), this, SLOT(underlineTypeChanged(int)));
     connect(widget.underlineLineStyle, SIGNAL(activated(int)), this, SLOT(underlineStyleChanged(int)));
-    connect(widget.underlineColor, SIGNAL(changed(QColor)), this, SLOT(underlineColorChanged(QColor)));
+    connect(widget.underlineColor, &KColorButton::changed, this, &CharacterHighlighting::underlineColorChanged);
 
     connect(widget.strikethroughType, SIGNAL(activated(int)), this, SLOT(strikethroughTypeChanged(int)));
     connect(widget.strikethroughLineStyle, SIGNAL(activated(int)), this, SLOT(strikethroughStyleChanged(int)));
-    connect(widget.strikethroughColor, SIGNAL(changed(QColor)), this, SLOT(strikethroughColorChanged(QColor)));
+    connect(widget.strikethroughColor, &KColorButton::changed, this, &CharacterHighlighting::strikethroughColorChanged);
 
     connect(widget.capitalizationList, SIGNAL(activated(int)), this, SLOT(capitalisationChanged(int)));
 
     connect(widget.positionList, SIGNAL(activated(int)), this, SLOT(positionChanged(int)));
 
-    connect(m_fontChooser, SIGNAL(fontSelected(QFont)), this, SIGNAL(fontChanged(QFont)));
-    connect(m_fontChooser, SIGNAL(fontSelected(QFont)), this, SIGNAL(charStyleChanged()));
+    connect(m_fontChooser, &KFontChooser::fontSelected, this, &CharacterHighlighting::fontChanged);
+    connect(m_fontChooser, &KFontChooser::fontSelected, this, &CharacterHighlighting::charStyleChanged);
 
     const QIcon clearIcon = koIcon("edit-clear");
     widget.resetTextColor->setIcon(clearIcon);
     widget.resetBackground->setIcon(clearIcon);
     connect(widget.textColor, SIGNAL(changed(QColor)), this, SLOT(textColorChanged()));
     connect(widget.backgroundColor, SIGNAL(changed(QColor)), this, SLOT(backgroundColorChanged()));
-    connect(widget.resetTextColor, SIGNAL(clicked()), this, SLOT(clearTextColor()));
-    connect(widget.resetBackground, SIGNAL(clicked()), this, SLOT(clearBackgroundColor()));
-    connect(widget.enableText, SIGNAL(toggled(bool)), this, SLOT(textToggled(bool)));
-    connect(widget.enableBackground, SIGNAL(toggled(bool)), this, SLOT(backgroundToggled(bool)));
+    connect(widget.resetTextColor, &QAbstractButton::clicked, this, &CharacterHighlighting::clearTextColor);
+    connect(widget.resetBackground, &QAbstractButton::clicked, this, &CharacterHighlighting::clearBackgroundColor);
+    connect(widget.enableText, &QAbstractButton::toggled, this, &CharacterHighlighting::textToggled);
+    connect(widget.enableBackground, &QAbstractButton::toggled, this, &CharacterHighlighting::backgroundToggled);
 }
 
 KoCharacterStyle::LineType CharacterHighlighting::indexToLineType(int index)

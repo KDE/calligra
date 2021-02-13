@@ -265,7 +265,7 @@ ConditionalDialog::ConditionalDialog(QWidget* parent, Selection* selection)
 
     setMainWidget(m_dlg);
 
-    connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
+    connect(this, &KoDialog::okClicked, this, &ConditionalDialog::slotOk);
 
     init();
 }

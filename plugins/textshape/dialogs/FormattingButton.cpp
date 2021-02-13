@@ -135,10 +135,10 @@ FormattingButton::FormattingButton(QWidget *parent)
     m_menu = new QMenu();
     setPopupMode(MenuButtonPopup);
     setMenu(m_menu);
-    connect(this, SIGNAL(released()), this, SLOT(itemSelected()));
-    connect(m_menu, SIGNAL(aboutToHide()), this, SIGNAL(doneWithFocus()));
-    connect(m_menu, SIGNAL(aboutToShow()), this, SIGNAL(aboutToShowMenu()));
-    connect(m_menu, SIGNAL(aboutToHide()), this, SLOT(menuShown()));
+    connect(this, &QAbstractButton::released, this, &FormattingButton::itemSelected);
+    connect(m_menu, &QMenu::aboutToHide, this, &FormattingButton::doneWithFocus);
+    connect(m_menu, &QMenu::aboutToShow, this, &FormattingButton::aboutToShowMenu);
+    connect(m_menu, &QMenu::aboutToHide, this, &FormattingButton::menuShown);
 }
 
 void FormattingButton::setItemsBackground(ItemChooserAction *chooser, const QColor &color)
@@ -165,7 +165,7 @@ ItemChooserAction *FormattingButton::addItemChooser(int columns, const QString &
     ItemChooserAction *styleAction = new ItemChooserAction(columns);
 
     m_menu->addAction(styleAction);
-    connect(m_menu, SIGNAL(aboutToShow()), this, SLOT(recalcMenuSize()));
+    connect(m_menu, &QMenu::aboutToShow, this, &FormattingButton::recalcMenuSize);
     connect(styleAction->defaultWidget(), SIGNAL(readyAfterResize()), this, SLOT(recalcMenuSize()));
     return styleAction;
 }
@@ -185,7 +185,7 @@ void FormattingButton::addItem(ItemChooserAction *chooser, const QPixmap &pm, in
         QToolButton *b = chooser->addItem(pm);
         b->setToolTip(toolTip);
         m_styleMap.insert(id, b);
-        connect(b, SIGNAL(released()), this, SLOT(itemSelected()));
+        connect(b, &QAbstractButton::released, this, &FormattingButton::itemSelected);
     }
     if (!m_lastId) {
         m_lastId = id;

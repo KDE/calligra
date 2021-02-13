@@ -34,14 +34,14 @@ KPrViewAdaptor::KPrViewAdaptor( KPrView* view )
 , m_view( view )
 {
     KPrDocument *doc = m_view->kprDocument();
-    connect( doc, SIGNAL(activeCustomSlideShowChanged(QString)), this, SIGNAL(activeCustomSlideShowChanged(QString)) );
-    connect( doc, SIGNAL(customSlideShowsModified()), this, SIGNAL(customSlideShowsModified()) );
+    connect( doc, &KPrDocument::activeCustomSlideShowChanged, this, &KPrViewAdaptor::activeCustomSlideShowChanged );
+    connect( doc, &KPrDocument::customSlideShowsModified, this, &KPrViewAdaptor::customSlideShowsModified );
 
     // We need to know when the presentation is started and stopped, and when it is navigated
-    connect( m_view->presentationMode(), SIGNAL(activated()), this, SLOT(presentationActivated()) );
-    connect( m_view->presentationMode(), SIGNAL(deactivated()), this, SIGNAL(presentationStopped()) );
-    connect( m_view->presentationMode(), SIGNAL(pageChanged(int,int)), this, SIGNAL(presentationPageChanged(int,int)) );
-    connect( m_view->presentationMode(), SIGNAL(stepChanged(int)), this, SIGNAL(presentationStepChanged(int)) );
+    connect( m_view->presentationMode(), &KPrViewModePresentation::activated, this, &KPrViewAdaptor::presentationActivated );
+    connect( m_view->presentationMode(), &KPrViewModePresentation::deactivated, this, &KPrViewAdaptor::presentationStopped );
+    connect( m_view->presentationMode(), &KPrViewModePresentation::pageChanged, this, &KPrViewAdaptor::presentationPageChanged );
+    connect( m_view->presentationMode(), &KPrViewModePresentation::stepChanged, this, &KPrViewAdaptor::presentationStepChanged );
 }
 
 KPrViewAdaptor::~KPrViewAdaptor()

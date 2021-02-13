@@ -34,8 +34,8 @@ KoZoomToolWidget::KoZoomToolWidget(KoZoomTool* tool, QWidget* parent)
     zoomInButton->setIcon(koIcon("zoom-in"));
     zoomOutButton->setIcon(koIcon("zoom-out"));
 
-    connect(zoomInButton, SIGNAL(toggled(bool)), this, SLOT(changeZoomMode()));
-    connect(zoomOutButton, SIGNAL(toggled(bool)), this, SLOT(changeZoomMode()));
+    connect(zoomInButton, &QAbstractButton::toggled, this, &KoZoomToolWidget::changeZoomMode);
+    connect(zoomOutButton, &QAbstractButton::toggled, this, &KoZoomToolWidget::changeZoomMode);
 
     zoomInButton->click();
 }

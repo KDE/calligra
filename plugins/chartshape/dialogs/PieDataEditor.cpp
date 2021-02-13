@@ -74,13 +74,13 @@ PieDataEditor::PieDataEditor(QWidget *parent)
     m_insertAction = new QAction(m_ui.insertRow->icon(), i18n("Insert"), m_ui.tableView);
     m_deleteAction = new QAction(m_ui.deleteSelection->icon(), i18n("Delete"), m_ui.tableView);
 
-    connect(m_ui.insertRow, SIGNAL(pressed()), this, SLOT(slotInsertRow()));
-    connect(m_ui.deleteSelection,SIGNAL(pressed()), this, SLOT(slotDeleteSelection()));
+    connect(m_ui.insertRow, &QAbstractButton::pressed, this, &PieDataEditor::slotInsertRow);
+    connect(m_ui.deleteSelection,&QAbstractButton::pressed, this, &PieDataEditor::slotDeleteSelection);
 
-    connect(m_insertAction, SIGNAL(triggered()), this, SLOT(slotInsertRow()));
-    connect(m_deleteAction, SIGNAL(triggered()), this, SLOT(slotDeleteSelection()));
+    connect(m_insertAction, &QAction::triggered, this, &PieDataEditor::slotInsertRow);
+    connect(m_deleteAction, &QAction::triggered, this, &PieDataEditor::slotDeleteSelection);
 
-    connect(m_ui.tableView, SIGNAL(currentIndexChanged(QModelIndex)), this, SLOT(slotCurrentIndexChanged(QModelIndex)));
+    connect(m_ui.tableView, &ChartTableView::currentIndexChanged, this, &PieDataEditor::slotCurrentIndexChanged);
 
     m_ui.tableView->addAction(m_insertAction);
     m_ui.tableView->addAction(m_deleteAction);

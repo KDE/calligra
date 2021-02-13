@@ -58,7 +58,7 @@ KoScriptManagerAddTypeWidget::KoScriptManagerAddTypeWidget(KoScriptManagerAddWiz
 
     m_scriptCheckbox = new QRadioButton(i18n("Add script file"), this);
     m_scriptCheckbox->setChecked(true);
-    connect(m_scriptCheckbox, SIGNAL(toggled(bool)), this, SLOT(slotUpdate()));
+    connect(m_scriptCheckbox, &QAbstractButton::toggled, this, &KoScriptManagerAddTypeWidget::slotUpdate);
     layout->addWidget(m_scriptCheckbox);
 
     m_collectionCheckbox = new QRadioButton(i18n("Add collection folder"), this);
@@ -112,7 +112,7 @@ KoScriptManagerAddFileWidget::KoScriptManagerAddFileWidget(KoScriptManagerAddWiz
 
     layout->addWidget(m_filewidget);
     connect(m_filewidget, SIGNAL(fileHighlighted(QString)), this, SLOT(slotFileHighlighted(QString)));
-    connect(m_filewidget, SIGNAL(fileSelected(QString)), this, SLOT(slotUpdate()));
+    connect(m_filewidget, &KFileWidget::fileSelected, this, &KoScriptManagerAddFileWidget::slotUpdate);
 }
 
 KoScriptManagerAddFileWidget::~KoScriptManagerAddFileWidget()
@@ -194,9 +194,9 @@ void KoScriptManagerAddScriptWidget::showEvent(QShowEvent *event)
     layout()->addWidget(m_editor);
     m_editor->interpreterEdit()->setEnabled(false);
     m_editor->fileEdit()->setEnabled(false);
-    connect(m_editor->textEdit(), SIGNAL(textChanged(QString)), this, SLOT(slotUpdate()));
-    connect(m_editor->interpreterEdit(), SIGNAL(editTextChanged(QString)), this, SLOT(slotUpdate()));
-    connect(m_editor->fileEdit(), SIGNAL(textChanged(QString)), this, SLOT(slotUpdate()));
+    connect(m_editor->textEdit(), &QLineEdit::textChanged, this, &KoScriptManagerAddScriptWidget::slotUpdate);
+    connect(m_editor->interpreterEdit(), &QComboBox::editTextChanged, this, &KoScriptManagerAddScriptWidget::slotUpdate);
+    connect(m_editor->fileEdit(), &KUrlRequester::textChanged, this, &KoScriptManagerAddScriptWidget::slotUpdate);
 
     QWidget::showEvent(event);
     slotUpdate();

@@ -139,7 +139,7 @@ void KWPart::showStartUpWidget(KoMainWindow *parent, bool alwaysShow)
     // print error if kotext not available
     if (KoShapeRegistry::instance()->value(TextShape_SHAPEID) == 0)
         // need to wait 1 event since exiting here would not work.
-        QTimer::singleShot(0, this, SLOT(showErrorAndDie()));
+        QTimer::singleShot(0, this, &KWPart::showErrorAndDie);
     else
         KoPart::showStartUpWidget(parent, alwaysShow);
 }

@@ -58,8 +58,8 @@ KWFrameDialog::KWFrameDialog(const QList<KoShape *> &shapes, KWDocument *documen
         }
     }
 
-    connect(this, SIGNAL(accepted()), this, SLOT(okClicked()));
-    connect(this, SIGNAL(rejected()), this, SLOT(cancelClicked()));
+    connect(this, &QDialog::accepted, this, &KWFrameDialog::okClicked);
+    connect(this, &QDialog::rejected, this, &KWFrameDialog::cancelClicked);
 }
 
 KWFrameDialog::~KWFrameDialog()

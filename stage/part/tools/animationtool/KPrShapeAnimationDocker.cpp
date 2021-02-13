@@ -157,20 +157,20 @@ KPrShapeAnimationDocker::KPrShapeAnimationDocker(QWidget *parent)
     setLayout(layout);
 
     //Connect Signals.
-    connect(m_buttonPreviewAnimation, SIGNAL(clicked()), this, SLOT(slotAnimationPreview()));
-    connect(m_buttonRemoveAnimation, SIGNAL(clicked()), this, SLOT(slotRemoveAnimations()));
-    connect(m_buttonAnimationOrderUp, SIGNAL(clicked()), this, SLOT(moveAnimationUp()));
-    connect(m_buttonAnimationOrderDown, SIGNAL(clicked()), this, SLOT(moveAnimationDown()));
-    connect(m_animationsView, SIGNAL(doubleClicked(QModelIndex)), m_editAnimation, SLOT(showMenu()));
-    connect(m_animationsView, SIGNAL(customContextMenuRequested(QPoint)), this,
-            SLOT(showAnimationsCustomContextMenu(QPoint)));
-    connect(m_addDialog, SIGNAL(requestPreviewAnimation(KPrShapeAnimation*)),
-            this, SLOT(previewAnimation(KPrShapeAnimation*)));
-    connect(m_addDialog, SIGNAL(requestAcceptAnimation(KPrShapeAnimation*)),
-            this, SLOT(addNewAnimation(KPrShapeAnimation*)));
-    connect(m_addDialog, SIGNAL(previousStateChanged(bool)), this, SIGNAL(previousStateChanged(bool)));
-    connect(m_editAnimationsPanel, SIGNAL(previousStateChanged(bool)), this, SIGNAL(previousStateChanged(bool)));
-    QTimer::singleShot(500, this, SLOT(initializeView()));
+    connect(m_buttonPreviewAnimation, &QAbstractButton::clicked, this, &KPrShapeAnimationDocker::slotAnimationPreview);
+    connect(m_buttonRemoveAnimation, &QAbstractButton::clicked, this, &KPrShapeAnimationDocker::slotRemoveAnimations);
+    connect(m_buttonAnimationOrderUp, &QAbstractButton::clicked, this, &KPrShapeAnimationDocker::moveAnimationUp);
+    connect(m_buttonAnimationOrderDown, &QAbstractButton::clicked, this, &KPrShapeAnimationDocker::moveAnimationDown);
+    connect(m_animationsView, &QAbstractItemView::doubleClicked, m_editAnimation, &QToolButton::showMenu);
+    connect(m_animationsView, &QWidget::customContextMenuRequested, this,
+            &KPrShapeAnimationDocker::showAnimationsCustomContextMenu);
+    connect(m_addDialog, &KPrAnimationSelectorWidget::requestPreviewAnimation,
+            this, &KPrShapeAnimationDocker::previewAnimation);
+    connect(m_addDialog, &KPrAnimationSelectorWidget::requestAcceptAnimation,
+            this, &KPrShapeAnimationDocker::addNewAnimation);
+    connect(m_addDialog, &KPrAnimationSelectorWidget::previousStateChanged, this, &KPrShapeAnimationDocker::previousStateChanged);
+    connect(m_editAnimationsPanel, &KPrEditAnimationsWidget::previousStateChanged, this, &KPrShapeAnimationDocker::previousStateChanged);
+    QTimer::singleShot(500, this, &KPrShapeAnimationDocker::initializeView);
 
 }
 
@@ -187,10 +187,10 @@ void KPrShapeAnimationDocker::setView(KoPAViewBase *view)
         //load model
         slotActivePageChanged();
         m_editAnimationsPanel->setView(m_view);
-        connect(m_animationsView, SIGNAL(clicked(QModelIndex)), this, SLOT(SyncWithAnimationsViewIndex(QModelIndex)));
-        connect(m_animationsView, SIGNAL(clicked(QModelIndex)), this, SLOT(updateEditDialogIndex(QModelIndex)));
-        connect(m_editAnimationsPanel, SIGNAL(itemClicked(QModelIndex)), this, SLOT(syncWithEditDialogIndex(QModelIndex)));
-        connect(m_editAnimationsPanel, SIGNAL(requestAnimationPreview()), this, SLOT(slotAnimationPreview()));
+        connect(m_animationsView, &QAbstractItemView::clicked, this, &KPrShapeAnimationDocker::SyncWithAnimationsViewIndex);
+        connect(m_animationsView, &QAbstractItemView::clicked, this, &KPrShapeAnimationDocker::updateEditDialogIndex);
+        connect(m_editAnimationsPanel, &KPrEditAnimationsWidget::itemClicked, this, &KPrShapeAnimationDocker::syncWithEditDialogIndex);
+        connect(m_editAnimationsPanel, &KPrEditAnimationsWidget::requestAnimationPreview, this, &KPrShapeAnimationDocker::slotAnimationPreview);
     }
 }
 
@@ -298,11 +298,11 @@ void KPrShapeAnimationDocker::slotActivePageChanged()
     }
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
-    connect(selection, SIGNAL(selectionChanged()), this, SLOT(syncWithCanvasSelectedShape()));
-    connect(m_animationsModel, SIGNAL(onClickEventChanged()), this, SLOT(testEditPanelRoot()));
-    connect(m_animationsModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(verifyMotionPathChanged(QModelIndex,QModelIndex)));
-    connect(m_animationsModel, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SIGNAL(motionPathAddedRemoved()));
-    connect(m_animationsModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), this, SIGNAL(motionPathAddedRemoved()));
+    connect(selection, &KoSelection::selectionChanged, this, &KPrShapeAnimationDocker::syncWithCanvasSelectedShape);
+    connect(m_animationsModel, &KPrShapeAnimations::onClickEventChanged, this, &KPrShapeAnimationDocker::testEditPanelRoot);
+    connect(m_animationsModel, &QAbstractItemModel::dataChanged, this, &KPrShapeAnimationDocker::verifyMotionPathChanged);
+    connect(m_animationsModel, &QAbstractItemModel::rowsInserted, this, &KPrShapeAnimationDocker::motionPathAddedRemoved);
+    connect(m_animationsModel, &QAbstractItemModel::rowsRemoved, this, &KPrShapeAnimationDocker::motionPathAddedRemoved);
     getSelectedShape();
     checkAnimationSelected();
 }
@@ -521,9 +521,9 @@ void KPrShapeAnimationDocker::testEditPanelRoot()
 void KPrShapeAnimationDocker::showAnimationsCustomContextMenu(const QPoint &pos)
 {
     QMenu menu(m_animationsView);
-    menu.addAction(koIcon("document-new"), i18n("Add a new animation"), m_buttonAddAnimation, SLOT(showMenu()));
-    menu.addAction(koIcon("edit-delete"), i18n("Delete current animation"), this, SLOT(slotRemoveAnimations()));
-    menu.addAction(koIcon("edit_animation"), i18n("Edit animation"), m_editAnimation, SLOT(showMenu()));
+    menu.addAction(koIcon("document-new"), i18n("Add a new animation"), m_buttonAddAnimation, &QToolButton::showMenu);
+    menu.addAction(koIcon("edit-delete"), i18n("Delete current animation"), this, &KPrShapeAnimationDocker::slotRemoveAnimations);
+    menu.addAction(koIcon("edit_animation"), i18n("Edit animation"), m_editAnimation, &QToolButton::showMenu);
     menu.addSeparator();
     if ((m_animationsView->selectionModel()->selectedRows().count() == 1) &&
             (m_animationsView->currentIndex().isValid())) {
@@ -558,7 +558,7 @@ void KPrShapeAnimationDocker::showAnimationsCustomContextMenu(const QPoint &pos)
         menu.addAction(onClickAction);
         menu.addAction(afterAction);
         menu.addAction(withAction);
-        connect(actionGroup, SIGNAL(triggered(QAction*)), this, SLOT(setTriggerEvent(QAction*)));
+        connect(actionGroup, &QActionGroup::triggered, this, &KPrShapeAnimationDocker::setTriggerEvent);
     }
     menu.exec(m_animationsView->mapToGlobal(pos));
 }

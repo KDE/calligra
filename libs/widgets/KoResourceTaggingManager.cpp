@@ -86,30 +86,30 @@ KoResourceTaggingManager::KoResourceTaggingManager(KoResourceModel *model, QWidg
 
     d->tagFilter = new KoTagFilterWidget(parent);
 
-    connect(d->tagChooser, SIGNAL(tagChosen(QString)),
-            this, SLOT(tagChooserIndexChanged(QString)));
+    connect(d->tagChooser, &KoTagChooserWidget::tagChosen,
+            this, &KoResourceTaggingManager::tagChooserIndexChanged);
     connect(d->tagChooser, SIGNAL(newTagRequested(QString)),
             this, SLOT(contextCreateNewTag(QString)));
-    connect(d->tagChooser, SIGNAL(tagDeletionRequested(QString)),
-            this, SLOT(removeTagFromComboBox(QString)));
+    connect(d->tagChooser, &KoTagChooserWidget::tagDeletionRequested,
+            this, &KoResourceTaggingManager::removeTagFromComboBox);
     connect(d->tagChooser, SIGNAL(tagRenamingRequested(QString,QString)),
             this, SLOT(renameTag(QString,QString)));
-    connect(d->tagChooser, SIGNAL(tagUndeletionRequested(QString)),
-            this, SLOT(undeleteTag(QString)));
-    connect(d->tagChooser, SIGNAL(tagUndeletionListPurgeRequested()),
-            this, SLOT(purgeTagUndeleteList()));
+    connect(d->tagChooser, &KoTagChooserWidget::tagUndeletionRequested,
+            this, &KoResourceTaggingManager::undeleteTag);
+    connect(d->tagChooser, &KoTagChooserWidget::tagUndeletionListPurgeRequested,
+            this, &KoResourceTaggingManager::purgeTagUndeleteList);
 
-    connect(d->tagFilter, SIGNAL(saveButtonClicked()),
-            this, SLOT(tagSaveButtonPressed()));
-    connect(d->tagFilter, SIGNAL(filterTextChanged(QString)),
-            this, SLOT(tagSearchLineEditTextChanged(QString)));
+    connect(d->tagFilter, &KoTagFilterWidget::saveButtonClicked,
+            this, &KoResourceTaggingManager::tagSaveButtonPressed);
+    connect(d->tagFilter, &KoTagFilterWidget::filterTextChanged,
+            this, &KoResourceTaggingManager::tagSearchLineEditTextChanged);
 
-    connect(d->model, SIGNAL(tagBoxEntryAdded(QString)),
-            this, SLOT(syncTagBoxEntryAddition(QString)));
-    connect(d->model, SIGNAL(tagBoxEntryRemoved(QString)),
-            this, SLOT(syncTagBoxEntryRemoval(QString)));
-    connect(d->model, SIGNAL(tagBoxEntryModified()),
-            this, SLOT(syncTagBoxEntries()));
+    connect(d->model.data(), &KoResourceModel::tagBoxEntryAdded,
+            this, &KoResourceTaggingManager::syncTagBoxEntryAddition);
+    connect(d->model.data(), &KoResourceModel::tagBoxEntryRemoved,
+            this, &KoResourceTaggingManager::syncTagBoxEntryRemoval);
+    connect(d->model.data(), &KoResourceModel::tagBoxEntryModified,
+            this, &KoResourceTaggingManager::syncTagBoxEntries);
 
     // FIXME: fix tag completer
     // d->tagCompleter = new QCompleter(this);
@@ -362,11 +362,11 @@ void KoResourceTaggingManager::contextMenuRequested(KoResource* resource, const 
                                           d->tagChooser->currentlySelectedTag(),
                                           d->tagChooser->allTags());
 
-    connect(&menu, SIGNAL(resourceTagAdditionRequested(KoResource*,QString)),
-            this, SLOT(contextAddTagToResource(KoResource*,QString)));
+    connect(&menu, &KoResourceItemChooserContextMenu::resourceTagAdditionRequested,
+            this, &KoResourceTaggingManager::contextAddTagToResource);
 
-    connect(&menu, SIGNAL(resourceTagRemovalRequested(KoResource*,QString)),
-            this, SLOT(contextRemoveTagFromResource(KoResource*,QString)));
+    connect(&menu, &KoResourceItemChooserContextMenu::resourceTagRemovalRequested,
+            this, &KoResourceTaggingManager::contextRemoveTagFromResource);
 
     connect(&menu, SIGNAL(resourceAssignmentToNewTagRequested(KoResource*,QString)),
             this, SLOT(contextCreateNewTag(KoResource*,QString)));

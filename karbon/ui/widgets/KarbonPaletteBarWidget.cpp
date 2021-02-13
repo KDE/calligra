@@ -63,11 +63,11 @@ KarbonPaletteBarWidget::KarbonPaletteBarWidget(Qt::Orientation orientation, QWid
 
     m_colorBar = new KarbonPaletteWidget(this);
     m_colorBar->setOrientation(orientation);
-    connect(m_prevButton, SIGNAL(clicked()), m_colorBar, SLOT(scrollBackward()));
-    connect(m_nextButton, SIGNAL(clicked()), m_colorBar, SLOT(scrollForward()));
-    connect(m_colorBar, SIGNAL(colorSelected(KoColor)), this, SIGNAL(colorSelected(KoColor)));
-    connect(m_colorBar, SIGNAL(scrollOffsetChanged()), this, SLOT(updateButtons()));
-    connect(m_choosePalette, SIGNAL(clicked()), this, SLOT(selectPalette()));
+    connect(m_prevButton, &QAbstractButton::clicked, m_colorBar, &KarbonPaletteWidget::scrollBackward);
+    connect(m_nextButton, &QAbstractButton::clicked, m_colorBar, &KarbonPaletteWidget::scrollForward);
+    connect(m_colorBar, &KarbonPaletteWidget::colorSelected, this, &KarbonPaletteBarWidget::colorSelected);
+    connect(m_colorBar, &KarbonPaletteWidget::scrollOffsetChanged, this, &KarbonPaletteBarWidget::updateButtons);
+    connect(m_choosePalette, &QAbstractButton::clicked, this, &KarbonPaletteBarWidget::selectPalette);
 
     setMinimumSize(FixedWidgetSize, FixedWidgetSize);
     m_colorBar->setMinimumSize(FixedWidgetSize, FixedWidgetSize);

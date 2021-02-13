@@ -92,7 +92,7 @@ void KPrPicturesImport::import()
         QUrl url(m_urls.takeAt(0));
         // todo calculate the correct size so that the image is centered to
         KIO::StoredTransferJob *job(KIO::storedGet(url, KIO::NoReload, 0));
-        connect(job, SIGNAL(result(KJob*)), this, SLOT(pictureImported(KJob*)));
+        connect(job, &KJob::result, this, &KPrPicturesImport::pictureImported);
         job->exec();
     }
 }

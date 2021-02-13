@@ -258,11 +258,11 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
 
     // Make the signals visible on the outside of this widget.
     connect(d->lineStyle,  SIGNAL(currentIndexChanged(int)), this, SLOT(applyChanges()));
-    connect(d->lineWidth,  SIGNAL(valueChangedPt(qreal)),    this, SLOT(applyChanges()));
-    connect(d->colorAction, SIGNAL(colorChanged(KoColor)), this, SLOT(applyChanges()));
+    connect(d->lineWidth,  &KoUnitDoubleSpinBox::valueChangedPt,    this, &KoStrokeConfigWidget::applyChanges);
+    connect(d->colorAction, &KoColorPopupAction::colorChanged, this, &KoStrokeConfigWidget::applyChanges);
     connect(d->capNJoinMenu->capGroup,   SIGNAL(buttonClicked(int)),       this, SLOT(applyChanges()));
     connect(d->capNJoinMenu->joinGroup,  SIGNAL(buttonClicked(int)),       this, SLOT(applyChanges()));
-    connect(d->capNJoinMenu->miterLimit, SIGNAL(valueChangedPt(qreal)),    this, SLOT(applyChanges()));
+    connect(d->capNJoinMenu->miterLimit, &KoUnitDoubleSpinBox::valueChangedPt,    this, &KoStrokeConfigWidget::applyChanges);
     connect(d->startMarkerSelector,  SIGNAL(currentIndexChanged(int)), this, SLOT(startMarkerChanged()));
     connect(d->endMarkerSelector,  SIGNAL(currentIndexChanged(int)), this, SLOT(endMarkerChanged()));
 }
@@ -520,12 +520,12 @@ void KoStrokeConfigWidget::selectionChanged()
 void KoStrokeConfigWidget::setCanvas( KoCanvasBase *canvas )
 {
     if (canvas) {
-        connect(canvas->shapeManager()->selection(), SIGNAL(selectionChanged()),
-                this, SLOT(selectionChanged()));
-        connect(canvas->shapeManager(), SIGNAL(selectionContentChanged()),
-                this, SLOT(selectionChanged()));
-        connect(canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
-                this, SLOT(canvasResourceChanged(int,QVariant)));
+        connect(canvas->shapeManager()->selection(), &KoSelection::selectionChanged,
+                this, &KoStrokeConfigWidget::selectionChanged);
+        connect(canvas->shapeManager(), &KoShapeManager::selectionContentChanged,
+                this, &KoStrokeConfigWidget::selectionChanged);
+        connect(canvas->resourceManager(), &KoCanvasResourceManager::canvasResourceChanged,
+                this, &KoStrokeConfigWidget::canvasResourceChanged);
         setUnit(canvas->unit());
 
         KoDocumentResourceManager *resourceManager = canvas->shapeController()->resourceManager();

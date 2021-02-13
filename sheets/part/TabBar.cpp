@@ -372,17 +372,17 @@ TabBar::TabBar(QWidget* parent, const char* /*name*/)
 
     // initialize the scroll buttons
     d->scrollFirstButton = new QToolButton(this);
-    connect(d->scrollFirstButton, SIGNAL(clicked()),
-            this, SLOT(scrollFirst()));
+    connect(d->scrollFirstButton, &QAbstractButton::clicked,
+            this, &TabBar::scrollFirst);
     d->scrollLastButton = new QToolButton(this);
-    connect(d->scrollLastButton, SIGNAL(clicked()),
-            this, SLOT(scrollLast()));
+    connect(d->scrollLastButton, &QAbstractButton::clicked,
+            this, &TabBar::scrollLast);
     d->scrollBackButton = new QToolButton(this);
-    connect(d->scrollBackButton, SIGNAL(clicked()),
-            this, SLOT(scrollBack()));
+    connect(d->scrollBackButton, &QAbstractButton::clicked,
+            this, &TabBar::scrollBack);
     d->scrollForwardButton = new QToolButton(this);
-    connect(d->scrollForwardButton, SIGNAL(clicked()),
-            this, SLOT(scrollForward()));
+    connect(d->scrollForwardButton, &QAbstractButton::clicked,
+            this, &TabBar::scrollForward);
     d->layoutButtons();
     d->updateButtons();
 }
@@ -618,7 +618,7 @@ void TabBar::autoScrollBack()
     if (!canScrollBack())
         d->autoScroll = false;
     else
-        QTimer::singleShot(400, this, SLOT(autoScrollBack()));
+        QTimer::singleShot(400, this, &TabBar::autoScrollBack);
 }
 
 void TabBar::autoScrollForward()
@@ -630,7 +630,7 @@ void TabBar::autoScrollForward()
     if (!canScrollForward())
         d->autoScroll = false;
     else
-        QTimer::singleShot(400, this, SLOT(autoScrollForward()));
+        QTimer::singleShot(400, this, &TabBar::autoScrollForward);
 }
 
 void TabBar::paintEvent(QPaintEvent*)

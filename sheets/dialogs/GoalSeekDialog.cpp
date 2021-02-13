@@ -98,12 +98,12 @@ GoalSeekDialog::GoalSeekDialog(QWidget* parent, Selection* selection)
     setMainWidget(mainWidget);
 
     // connections
-    connect(d->widget.selector1->textEdit(), SIGNAL(textChanged()),
-            this, SLOT(textChanged()));
-    connect(d->widget.selector2->textEdit(), SIGNAL(textChanged()),
-            this, SLOT(textChanged()));
-    connect(d->widget.selector3->textEdit(), SIGNAL(textChanged()),
-            this, SLOT(textChanged()));
+    connect(d->widget.selector1->textEdit(), &QTextEdit::textChanged,
+            this, &GoalSeekDialog::textChanged);
+    connect(d->widget.selector2->textEdit(), &QTextEdit::textChanged,
+            this, &GoalSeekDialog::textChanged);
+    connect(d->widget.selector3->textEdit(), &QTextEdit::textChanged,
+            this, &GoalSeekDialog::textChanged);
 
     // Allow the user to select cells on the spreadsheet.
 //   d->selection->canvasWidget()->startChoose();

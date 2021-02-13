@@ -41,9 +41,9 @@ SimpleLinksWidget::SimpleLinksWidget(ReferencesTool *tool, QWidget *parent)
     Q_ASSERT(tool);
     widget.insertLink->setDefaultAction(tool->action("insert_link"));
     widget.invokeBookmarkHandler->setDefaultAction(tool->action("invoke_bookmark_handler"));
-    connect(widget.insertLink, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
-    connect(widget.invokeBookmarkHandler, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
-    connect(widget.invokeBookmarkHandler, SIGNAL(aboutToShowMenu()), this, SLOT(preparePopUpMenu()));
+    connect(widget.insertLink, &QAbstractButton::clicked, this, &SimpleLinksWidget::doneWithFocus);
+    connect(widget.invokeBookmarkHandler, &QAbstractButton::clicked, this, &SimpleLinksWidget::doneWithFocus);
+    connect(widget.invokeBookmarkHandler, &FormattingButton::aboutToShowMenu, this, &SimpleLinksWidget::preparePopUpMenu);
 }
 
 void SimpleLinksWidget::preparePopUpMenu()
@@ -53,7 +53,7 @@ void SimpleLinksWidget::preparePopUpMenu()
         widget.invokeBookmarkHandler->addSeparator();
         widget.invokeBookmarkHandler->addAction(m_referenceTool->action("manage_bookmarks"));
         connect(m_referenceTool->action("manage_bookmarks"),
-                SIGNAL(triggered()), this, SLOT(manageBookmarks()), Qt::UniqueConnection);
+                &QAction::triggered, this, &SimpleLinksWidget::manageBookmarks, Qt::UniqueConnection);
     }
 }
 
@@ -62,8 +62,8 @@ void SimpleLinksWidget::manageBookmarks()
     QString name;
     const KoBookmarkManager *manager =  KoTextDocument(m_referenceTool->editor()->document()).textRangeManager()->bookmarkManager();
     QPointer<ManageBookmarkDialog> dia = new ManageBookmarkDialog(manager->bookmarkNameList(), m_referenceTool->editor(), m_referenceTool->canvas()->canvasWidget());
-    connect(dia, SIGNAL(nameChanged(QString,QString)), manager, SLOT(rename(QString,QString)));
-    connect(dia, SIGNAL(bookmarkDeleted(QString)), manager, SLOT(remove(QString)));
+    connect(dia.data(), &ManageBookmarkDialog::nameChanged, manager, &KoBookmarkManager::rename);
+    connect(dia.data(), &ManageBookmarkDialog::bookmarkDeleted, manager, &KoBookmarkManager::remove);
     if (dia->exec() == QDialog::Accepted) {
         name = dia->selectedBookmarkName();
     } else {

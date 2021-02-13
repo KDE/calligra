@@ -55,11 +55,11 @@ void LocationComboBox::setSelection(Selection *selection)
     if (m_selection) {
         if (m_selection->activeSheet()) {
             Map *const oldMap = m_selection->activeSheet()->map();
-            disconnect(oldMap->namedAreaManager(), SIGNAL(namedAreaAdded(QString)), this, SLOT(slotAddAreaName(QString)));
-            disconnect(oldMap->namedAreaManager(), SIGNAL(namedAreaRemoved(QString)), this, SLOT(slotRemoveAreaName(QString)));
+            disconnect(oldMap->namedAreaManager(), &NamedAreaManager::namedAreaAdded, this, &LocationComboBox::slotAddAreaName);
+            disconnect(oldMap->namedAreaManager(), &NamedAreaManager::namedAreaRemoved, this, &LocationComboBox::slotRemoveAreaName);
         }
-        disconnect(m_selection, SIGNAL(activeSheetChanged(Sheet*)), this, SLOT(slotActiveSheetChanged(Sheet*)));
-        disconnect(m_selection, SIGNAL(changed(Region)), this, SLOT(slotSelectionChanged()));
+        disconnect(m_selection.data(), &Selection::activeSheetChanged, this, &LocationComboBox::slotActiveSheetChanged);
+        disconnect(m_selection.data(), &Selection::changed, this, &LocationComboBox::slotSelectionChanged);
     }
 
     m_selection = selection;
@@ -71,9 +71,9 @@ void LocationComboBox::setSelection(Selection *selection)
         if (sheet) {
             slotActiveSheetChanged(sheet);
         } else {
-            connect(m_selection, SIGNAL(activeSheetChanged(Sheet*)), this, SLOT(slotActiveSheetChanged(Sheet*)));
+            connect(m_selection.data(), &Selection::activeSheetChanged, this, &LocationComboBox::slotActiveSheetChanged);
         }
-        connect(m_selection, SIGNAL(changed(Region)), this, SLOT(slotSelectionChanged()));
+        connect(m_selection.data(), &Selection::changed, this, &LocationComboBox::slotSelectionChanged);
     }
 }
 
@@ -87,8 +87,8 @@ void LocationComboBox::slotActiveSheetChanged(Sheet *sheet)
     for (int i = 0; i < areaNames.count(); ++i)
         slotAddAreaName(areaNames[i]);
 
-    connect(map->namedAreaManager(), SIGNAL(namedAreaAdded(QString)), this, SLOT(slotAddAreaName(QString)));
-    connect(map->namedAreaManager(), SIGNAL(namedAreaRemoved(QString)), this, SLOT(slotRemoveAreaName(QString)));
+    connect(map->namedAreaManager(), &NamedAreaManager::namedAreaAdded, this, &LocationComboBox::slotAddAreaName);
+    connect(map->namedAreaManager(), &NamedAreaManager::namedAreaRemoved, this, &LocationComboBox::slotRemoveAreaName);
 }
 
 void LocationComboBox::updateAddress()

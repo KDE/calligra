@@ -48,7 +48,7 @@ Find::Find(QObject *parent)
     options->addOption("caseSensitive", i18n("Case Sensitive"), i18n("Match cases when searching"), QVariant::fromValue<bool>(false));
     setOptions(options);
     
-    connect(this, SIGNAL(matchFound(KoFindMatch)), SLOT(setActiveMatch(KoFindMatch)));
+    connect(this, &KoFindBase::matchFound, this, &Find::setActiveMatch);
 }
 
 void Find::setCurrentSheet( Sheet* sheet, SheetView* view)

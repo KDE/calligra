@@ -74,12 +74,12 @@ void ShapePropertiesDocker::setCanvas( KoCanvasBase *canvas )
     d->canvas = canvas;
 
     if( d->canvas )  {
-        connect( d->canvas->shapeManager(), SIGNAL(selectionChanged()),
-            this, SLOT(selectionChanged()) );
-        connect( d->canvas->shapeManager(), SIGNAL(selectionContentChanged()),
-            this, SLOT(selectionChanged()) );
-        connect( d->canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
-            this, SLOT(canvasResourceChanged(int,QVariant)) );
+        connect( d->canvas->shapeManager(), &KoShapeManager::selectionChanged,
+            this, &ShapePropertiesDocker::selectionChanged );
+        connect( d->canvas->shapeManager(), &KoShapeManager::selectionContentChanged,
+            this, &ShapePropertiesDocker::selectionChanged );
+        connect( d->canvas->resourceManager(), &KoCanvasResourceManager::canvasResourceChanged,
+            this, &ShapePropertiesDocker::canvasResourceChanged );
     }
 }
 
@@ -149,8 +149,8 @@ void ShapePropertiesDocker::addWidgetForShape( KoShape * shape )
             if( d->canvas )
                 d->currentPanel->setUnit( d->canvas->unit() );
             d->widgetStack->insertWidget( 0, d->currentPanel );
-            connect( d->currentPanel, SIGNAL(propertyChanged()),
-                     this, SLOT(shapePropertyChanged()));
+            connect( d->currentPanel, &KoShapeConfigWidgetBase::propertyChanged,
+                     this, &ShapePropertiesDocker::shapePropertyChanged);
         }
     }
 

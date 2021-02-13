@@ -155,20 +155,20 @@ KoModeBox::KoModeBox(KoCanvasControllerWidget *canvas, const QString &appName)
     updateShownTools(QList<QString>());
 
     d->tabBar->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(d->tabBar, SIGNAL(currentChanged(int)), this, SLOT(toolSelected(int)));
-    connect(d->tabBar, SIGNAL(customContextMenuRequested(QPoint)), SLOT(slotContextMenuRequested(QPoint)));
+    connect(d->tabBar, &QTabBar::currentChanged, this, &KoModeBox::toolSelected);
+    connect(d->tabBar, &QWidget::customContextMenuRequested, this, &KoModeBox::slotContextMenuRequested);
 
-    connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)),
-            this, SLOT(setActiveTool(KoCanvasController*,int)));
-    connect(KoToolManager::instance(), SIGNAL(currentLayerChanged(const KoCanvasController*,const KoShapeLayer*)),
-            this, SLOT(setCurrentLayer(const KoCanvasController*,const KoShapeLayer*)));
-    connect(KoToolManager::instance(), SIGNAL(toolCodesSelected(QList<QString>)), this, SLOT(updateShownTools(QList<QString>)));
+    connect(KoToolManager::instance(), &KoToolManager::changedTool,
+            this, &KoModeBox::setActiveTool);
+    connect(KoToolManager::instance(), &KoToolManager::currentLayerChanged,
+            this, &KoModeBox::setCurrentLayer);
+    connect(KoToolManager::instance(), &KoToolManager::toolCodesSelected, this, &KoModeBox::updateShownTools);
     connect(KoToolManager::instance(),
-            SIGNAL(addedTool(KoToolAction*,KoCanvasController*)),
-            this, SLOT(toolAdded(KoToolAction*,KoCanvasController*)));
+            &KoToolManager::addedTool,
+            this, &KoModeBox::toolAdded);
 
-    connect(canvas, SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget>>)),
-         this, SLOT(setOptionWidgets(QList<QPointer<QWidget>>)));
+    connect(canvas, &KoCanvasControllerWidget::toolOptionWidgetsChanged,
+         this, &KoModeBox::setOptionWidgets);
 }
 
 KoModeBox::~KoModeBox()
@@ -544,16 +544,16 @@ void KoModeBox::setCanvas(KoCanvasBase *canvas)
 
     if (d->canvas) {
         ccwidget = dynamic_cast<KoCanvasControllerWidget *>(d->canvas->canvasController());
-        disconnect(ccwidget, SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget>>)),
-                    this, SLOT(setOptionWidgets(QList<QPointer<QWidget>>)));
+        disconnect(ccwidget, &KoCanvasControllerWidget::toolOptionWidgetsChanged,
+                    this, &KoModeBox::setOptionWidgets);
     }
 
     d->canvas = canvas;
 
     ccwidget = dynamic_cast<KoCanvasControllerWidget *>(d->canvas->canvasController());
     connect(
-        ccwidget, SIGNAL(toolOptionWidgetsChanged(QList<QPointer<QWidget>>)),
-         this, SLOT(setOptionWidgets(QList<QPointer<QWidget>>)));
+        ccwidget, &KoCanvasControllerWidget::toolOptionWidgetsChanged,
+         this, &KoModeBox::setOptionWidgets);
 }
 
 void KoModeBox::unsetCanvas()

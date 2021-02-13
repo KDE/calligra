@@ -123,7 +123,7 @@ public:
             currentPanel->layout()->setContentsMargins(0, 0, 0, 0);
             configStack->insertWidget(0, currentPanel);
             configStack->layout()->setContentsMargins(0, 0, 0, 0);
-            connect(currentPanel, SIGNAL(filterChanged()), tool, SLOT(filterChanged()));
+            connect(currentPanel, &KoFilterEffectConfigWidgetBase::filterChanged, tool, &KarbonFilterEffectsTool::filterChanged);
         }
 
         if (currentPanel)
@@ -445,23 +445,23 @@ QList<QPointer<QWidget> > KarbonFilterEffectsTool::createOptionWidgets()
     d->filterSelector->setColumnCount(1);
     addFilterLayout->addWidget(new QLabel(i18n("Effects"), addFilterWidget), 0, 0);
     addFilterLayout->addWidget(d->filterSelector, 0, 1);
-    connect(d->filterSelector, SIGNAL(resourceSelected(KoResource*)),
-            this, SLOT(presetSelected(KoResource*)));
+    connect(d->filterSelector, &KoResourceSelector::resourceSelected,
+            this, &KarbonFilterEffectsTool::presetSelected);
 
-    connect(d->filterSelector, SIGNAL(resourceApplied(KoResource*)),
-            this, SLOT(presetSelected(KoResource*)));
+    connect(d->filterSelector, &KoResourceSelector::resourceApplied,
+            this, &KarbonFilterEffectsTool::presetSelected);
 
     QToolButton * editButton = new QToolButton(addFilterWidget);
     editButton->setIcon(koIcon("view-filter"));
     editButton->setToolTip(i18n("View and edit filter"));
     addFilterLayout->addWidget(editButton, 0, 2);
-    connect(editButton, SIGNAL(clicked()), this, SLOT(editFilter()));
+    connect(editButton, &QAbstractButton::clicked, this, &KarbonFilterEffectsTool::editFilter);
 
     d->clearButton = new QToolButton(addFilterWidget);
     d->clearButton->setIcon(koIcon("edit-delete"));
     d->clearButton->setToolTip(i18n("Remove filter from object"));
     addFilterLayout->addWidget(d->clearButton, 0, 3);
-    connect(d->clearButton, SIGNAL(clicked()), this, SLOT(clearFilter()));
+    connect(d->clearButton, &QAbstractButton::clicked, this, &KarbonFilterEffectsTool::clearFilter);
 
     addFilterWidget->setWindowTitle(i18n("Add Filter"));
     widgets.append(addFilterWidget);

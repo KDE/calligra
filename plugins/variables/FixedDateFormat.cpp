@@ -78,11 +78,11 @@ FixedDateFormat::FixedDateFormat(DateVariable *variable)
 
     widget.formatButton->setIcon(koIcon("list-add"));
 
-    connect(widget.custom, SIGNAL(stateChanged(int)), this, SLOT(customClicked(int)));
-    connect(widget.formatList, SIGNAL(itemPressed(QListWidgetItem*)), this, SLOT(listClicked(QListWidgetItem*)));
+    connect(widget.custom, &QCheckBox::stateChanged, this, &FixedDateFormat::customClicked);
+    connect(widget.formatList, &QListWidget::itemPressed, this, &FixedDateFormat::listClicked);
     connect(widget.correction, SIGNAL(valueChanged(int)), this, SLOT(offsetChanged(int)));
-    connect(widget.formatButton, SIGNAL(clicked()), this, SLOT(insertCustomButtonPressed()));
-    connect(widget.customString, SIGNAL(textChanged(QString)), this, SLOT(customTextChanged(QString)));
+    connect(widget.formatButton, &QAbstractButton::clicked, this, &FixedDateFormat::insertCustomButtonPressed);
+    connect(widget.customString, &QLineEdit::textChanged, this, &FixedDateFormat::customTextChanged);
 }
 
 void FixedDateFormat::customClicked(int state)

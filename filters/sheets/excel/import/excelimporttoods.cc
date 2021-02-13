@@ -223,7 +223,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
 
     // open inputFile
     d->workbook = new Swinder::Workbook(d->storeout);
-    connect(d->workbook, SIGNAL(sigProgress(int)), this, SIGNAL(sigProgress(int)));
+    connect(d->workbook, &Workbook::sigProgress, this, &KoFilter::sigProgress);
     if (!d->workbook->load(d->inputFile.toLocal8Bit())) {
         delete d->workbook;
         d->workbook = 0;

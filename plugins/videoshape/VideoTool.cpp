@@ -104,8 +104,8 @@ QWidget *VideoTool::createOptionWidget()
 {
     m_videoToolUI = new VideoToolUI();
 
-    connect(m_videoToolUI->btnVideoFile, SIGNAL(clicked(bool)), this, SLOT(changeUrlPressed()));
-    connect(m_videoToolUI->btnPlay, SIGNAL(clicked(bool)), this, SLOT(play()));
+    connect(m_videoToolUI->btnVideoFile, &QAbstractButton::clicked, this, &VideoTool::changeUrlPressed);
+    connect(m_videoToolUI->btnPlay, &QAbstractButton::clicked, this, &VideoTool::play);
 
     return m_videoToolUI;
 }

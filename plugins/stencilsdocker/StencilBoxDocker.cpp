@@ -72,7 +72,7 @@ StencilBoxDocker::StencilBoxDocker(QWidget* parent)
 
     m_menu = new QMenu();
     QAction *installAction = m_menu->addAction(koIcon("document-open-folder"), i18n("Add/Remove Stencil"));
-    connect(installAction, SIGNAL(triggered()), this, SLOT(manageStencilsFolder()));
+    connect(installAction, &QAction::triggered, this, &StencilBoxDocker::manageStencilsFolder);
 
     m_button = new QToolButton;
     /*
@@ -111,10 +111,10 @@ StencilBoxDocker::StencilBoxDocker(QWidget* parent)
     // Load the stencils
     m_loader = new StencilBoxDockerLoader(this);
     m_loader->moveToThread(&loaderThread);
-    connect(&loaderThread, SIGNAL(started()), this, SLOT(threadStarted()));
-    connect(this , SIGNAL(startLoading()), m_loader, SLOT(loadShapeCollections()));
-    connect(&loaderThread, SIGNAL(finished()), m_loader, SLOT(deleteLater()));
-    connect(m_loader, SIGNAL(resultReady()), this, SLOT(collectionsLoaded()));
+    connect(&loaderThread, &QThread::started, this, &StencilBoxDocker::threadStarted);
+    connect(this , &StencilBoxDocker::startLoading, m_loader, &StencilBoxDockerLoader::loadShapeCollections);
+    connect(&loaderThread, &QThread::finished, m_loader, &QObject::deleteLater);
+    connect(m_loader, &StencilBoxDockerLoader::resultReady, this, &StencilBoxDocker::collectionsLoaded);
     loaderThread.start();
 }
 
@@ -136,9 +136,9 @@ void StencilBoxDocker::collectionsLoaded()
     m_modelMap = m_loader->m_modelMap;
     m_treeWidget->setFamilyMap(m_modelMap);
     m_treeWidget->regenerateFilteredMap();
-    connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
-            this, SLOT(locationChanged(Qt::DockWidgetArea)));
-    connect(m_filterLineEdit, SIGNAL(textEdited(QString)), this, SLOT(reapplyFilter()));
+    connect(this, &QDockWidget::dockLocationChanged,
+            this, &StencilBoxDocker::locationChanged);
+    connect(m_filterLineEdit, &QLineEdit::textEdited, this, &StencilBoxDocker::reapplyFilter);
 
     loaderThread.quit();
 }

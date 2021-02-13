@@ -69,8 +69,8 @@ SpellCheckCommand::SpellCheckCommand(const Region &region, KoCanvasBase* canvasB
     d->dialog = new Sonnet::Dialog(this, canvasBase->canvasWidget());
     d->command = 0;
 
-    connect(this, SIGNAL(done()),
-            this, SLOT(finishCommand()));
+    connect(this, &Sonnet::BackgroundChecker::done,
+            this, &SpellCheckCommand::finishCommand);
     connect(d->dialog, SIGNAL(replace(QString,int,QString)),
             this, SLOT(replace(QString,int,QString)));
 }

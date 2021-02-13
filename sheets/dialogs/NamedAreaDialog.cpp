@@ -108,14 +108,14 @@ NamedAreaDialog::NamedAreaDialog(QWidget* parent, Selection* selection)
         m_list->setCurrentRow(0);
     }
 
-    connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
-    connect(this, SIGNAL(cancelClicked()), this, SLOT(slotClose()));
-    connect(m_newButton, SIGNAL(clicked(bool)), this, SLOT(slotNew()));
-    connect(m_editButton, SIGNAL(clicked(bool)), this, SLOT(slotEdit()));
-    connect(m_removeButton, SIGNAL(clicked(bool)), this, SLOT(slotRemove()));
-    connect(m_list, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(slotOk()));
-    connect(m_list, SIGNAL(currentTextChanged(QString)),
-            this, SLOT(displayAreaValues(QString)));
+    connect(this, &KoDialog::okClicked, this, &NamedAreaDialog::slotOk);
+    connect(this, &KoDialog::cancelClicked, this, &NamedAreaDialog::slotClose);
+    connect(m_newButton, &QAbstractButton::clicked, this, &NamedAreaDialog::slotNew);
+    connect(m_editButton, &QAbstractButton::clicked, this, &NamedAreaDialog::slotEdit);
+    connect(m_removeButton, &QAbstractButton::clicked, this, &NamedAreaDialog::slotRemove);
+    connect(m_list, &QListWidget::itemActivated, this, &NamedAreaDialog::slotOk);
+    connect(m_list, &QListWidget::currentTextChanged,
+            this, &NamedAreaDialog::displayAreaValues);
 
     if (m_list->count() > 0)
         m_list->setCurrentItem(m_list->item(0));
@@ -268,9 +268,9 @@ EditNamedAreaDialog::EditNamedAreaDialog(QWidget* parent, Selection* selection)
         m_sheets->insertItem(i, sheet->sheetName());
     }
 
-    connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
-    connect(m_areaNameEdit, SIGNAL(textChanged(QString)),
-            this, SLOT(slotAreaNameModified(QString)));
+    connect(this, &KoDialog::okClicked, this, &EditNamedAreaDialog::slotOk);
+    connect(m_areaNameEdit, &QLineEdit::textChanged,
+            this, &EditNamedAreaDialog::slotAreaNameModified);
 }
 
 EditNamedAreaDialog::~EditNamedAreaDialog()

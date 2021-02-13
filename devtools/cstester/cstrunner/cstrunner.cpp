@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
         noPickup = argv[4];
     }
     CSTProcessRunner runner(docDir, resultDir, number.toInt(), noPickup != "nopickup");
-    QTimer::singleShot(0, &runner, SLOT(start()));
+    QTimer::singleShot(0, &runner, &CSTProcessRunner::start);
 
     return app.exec();
 }

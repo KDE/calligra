@@ -39,11 +39,11 @@ ExportDialog::ExportDialog(QWidget *parent)
     setDefaultButton(Cancel);
     QApplication::restoreOverrideCursor();
 
-    connect(m_mainwidget->mCustomButton, SIGNAL(toggled(bool)),
-            m_mainwidget->mCustomURL, SLOT(setEnabled(bool)));
-    connect(m_mainwidget->mSelectAllButton, SIGNAL(clicked()), SLOT(selectAll()));
-    connect(m_mainwidget->mDeselectAllButton, SIGNAL(clicked()),
-            m_mainwidget->mSheets, SLOT(clearSelection()));
+    connect(m_mainwidget->mCustomButton, &QAbstractButton::toggled,
+            m_mainwidget->mCustomURL, &QWidget::setEnabled);
+    connect(m_mainwidget->mSelectAllButton, &QAbstractButton::clicked, this, &ExportDialog::selectAll);
+    connect(m_mainwidget->mDeselectAllButton, &QAbstractButton::clicked,
+            m_mainwidget->mSheets, &QAbstractItemView::clearSelection);
 
     m_mainwidget->mEncodingBox->addItem(i18n("Recommended: UTF-8"));
     m_mainwidget->mEncodingBox->addItem(i18n("Locale (%1)", QString::fromLatin1(KGlobal::locale()->codecForEncoding()->name())));

@@ -110,22 +110,22 @@ Document::Document(const std::string& fileName,
         m_graphicsHandler = new WordsGraphicsHandler(this, bodyWriter, manifestWriter, store, mainStyles,
                                                      m_parser->getDrawings(), m_parser->fib());
 
-        connect(m_textHandler, SIGNAL(subDocFound(const wvWare::FunctorBase*, int)),
-                this, SLOT(slotSubDocFound(const wvWare::FunctorBase*, int)));
+        connect(m_textHandler, &WordsTextHandler::subDocFound,
+                this, &Document::slotSubDocFound);
         connect(m_textHandler, SIGNAL(footnoteFound(const wvWare::FunctorBase*, int)),
                 this, SLOT(slotFootnoteFound(const wvWare::FunctorBase*, int)));
         connect(m_textHandler, SIGNAL(annotationFound(const wvWare::FunctorBase*,int)),
                 this, SLOT(slotAnnotationFound(const wvWare::FunctorBase*, int)));
         connect(m_textHandler, SIGNAL(headersFound(const wvWare::FunctorBase*, int)),
                 this, SLOT(slotHeadersFound(const wvWare::FunctorBase*, int)));
-        connect(m_textHandler, SIGNAL(tableFound(Words::Table*)),
-                this, SLOT(slotTableFound(Words::Table*)));
-        connect(m_textHandler, SIGNAL(inlineObjectFound(const wvWare::PictureData&, KoXmlWriter*)),
-                this, SLOT(slotInlineObjectFound(const wvWare::PictureData&, KoXmlWriter*)));
-        connect(m_textHandler, SIGNAL(floatingObjectFound(unsigned int, KoXmlWriter*)),
-                this, SLOT(slotFloatingObjectFound(unsigned int, KoXmlWriter*)));
-        connect(m_graphicsHandler, SIGNAL(textBoxFound(unsigned int, bool)),
-                this, SLOT(slotTextBoxFound(unsigned int, bool)));
+        connect(m_textHandler, &WordsTextHandler::tableFound,
+                this, &Document::slotTableFound);
+        connect(m_textHandler, &WordsTextHandler::inlineObjectFound,
+                this, &Document::slotInlineObjectFound);
+        connect(m_textHandler, &WordsTextHandler::floatingObjectFound,
+                this, &Document::slotFloatingObjectFound);
+        connect(m_graphicsHandler, &WordsGraphicsHandler::textBoxFound,
+                this, &Document::slotTextBoxFound);
 
         m_parser->setSubDocumentHandler(this);
         m_parser->setTextHandler(m_textHandler);

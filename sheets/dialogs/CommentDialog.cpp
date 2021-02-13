@@ -61,8 +61,8 @@ CommentDialog::CommentDialog(QWidget* parent, Selection* selection)
     if (!comment.isEmpty())
         multiLine->setText(comment);
 
-    connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
-    connect(multiLine, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
+    connect(this, &KoDialog::okClicked, this, &CommentDialog::slotOk);
+    connect(multiLine, &QTextEdit::textChanged, this, &CommentDialog::slotTextChanged);
 
     slotTextChanged();
     resize(400, height());

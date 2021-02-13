@@ -83,8 +83,8 @@ KoPADocument::KoPADocument(KoPart *part)
     // This is used by unit tests, so these will fail
     // Q_ASSERT(d->inlineTextObjectManager);
     if (d->inlineTextObjectManager) {
-        connect(documentInfo(), SIGNAL(infoUpdated(QString,QString)),
-                d->inlineTextObjectManager, SLOT(documentInformationUpdated(QString,QString)));
+        connect(documentInfo(), &KoDocumentInfo::infoUpdated,
+                d->inlineTextObjectManager, &KoInlineTextObjectManager::documentInformationUpdated);
     } else {
         warnPageApp<<"Could not find resource 'KoText::InlineTextObjectManager'";
     }

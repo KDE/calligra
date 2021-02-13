@@ -53,17 +53,17 @@ KPrPresenterViewWidget::KPrPresenterViewWidget( KPrViewModePresentation *viewMod
 
     m_slidesWidget = new KPrPresenterViewSlidesInterface( pages );
     m_stackedLayout->addWidget( m_slidesWidget );
-    connect( m_slidesWidget, SIGNAL(selectedPageChanged(int,bool)), this,
-            SLOT(requestChangePage(int,bool)) );
+    connect( m_slidesWidget, &KPrPresenterViewSlidesInterface::selectedPageChanged, this,
+            &KPrPresenterViewWidget::requestChangePage );
     
     vLayout->addLayout( m_stackedLayout );
 
     QHBoxLayout *hLayout = new QHBoxLayout;
     hLayout->addStretch();
     m_toolWidget = new KPrPresenterViewToolWidget;
-    connect( m_toolWidget, SIGNAL(slideThumbnailsToggled(bool)), this, SLOT(showSlideThumbnails(bool)) );
-    connect( m_toolWidget, SIGNAL(previousSlideClicked()), this, SLOT(requestPreviousSlide()) );
-    connect( m_toolWidget, SIGNAL(nextSlideClicked()), this, SLOT(requestNextSlide()) );
+    connect( m_toolWidget, &KPrPresenterViewToolWidget::slideThumbnailsToggled, this, &KPrPresenterViewWidget::showSlideThumbnails );
+    connect( m_toolWidget, &KPrPresenterViewToolWidget::previousSlideClicked, this, &KPrPresenterViewWidget::requestPreviousSlide );
+    connect( m_toolWidget, &KPrPresenterViewToolWidget::nextSlideClicked, this, &KPrPresenterViewWidget::requestNextSlide );
     hLayout->addWidget( m_toolWidget );
     hLayout->addStretch();
 

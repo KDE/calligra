@@ -441,7 +441,7 @@ KoDocument::KoDocument(KoPart *parent, KUndo2Stack *undoStack)
     d->isEmpty = true;
     d->filterManager = new KoFilterManager(this, d->progressUpdater);
 
-    connect(&d->autoSaveTimer, SIGNAL(timeout()), this, SLOT(slotAutoSave()));
+    connect(&d->autoSaveTimer, &QTimer::timeout, this, &KoDocument::slotAutoSave);
     setAutoSave(defaultAutoSave());
 
     setObjectName(newObjectName());
@@ -460,7 +460,7 @@ KoDocument::KoDocument(KoPart *parent, KUndo2Stack *undoStack)
     KConfigGroup cfgGrp(d->parentPart->componentData().config(), "Undo");
     d->undoStack->setUndoLimit(cfgGrp.readEntry("UndoLimit", 1000));
 
-    connect(d->undoStack, SIGNAL(indexChanged(int)), this, SLOT(slotUndoStackIndexChanged(int)));
+    connect(d->undoStack, &KUndo2QStack::indexChanged, this, &KoDocument::slotUndoStackIndexChanged);
 
 }
 
@@ -628,7 +628,7 @@ bool KoDocument::saveFile()
         KNotification *notify = new KNotification("DocumentSaved");
         notify->setText(i18n("Document <i>%1</i> saved", url().url()));
         notify->addContext("url", url().url());
-        QTimer::singleShot(0, notify, SLOT(sendEvent()));
+        QTimer::singleShot(0, notify, &KNotification::sendEvent);
     }
 
     return ret;
@@ -716,7 +716,7 @@ void KoDocument::slotAutoSave()
             // That advice should also fix this error from occurring again
             emit statusBarMessage(i18n("The password of this encrypted document is not known. Autosave aborted! Please save your work manually."));
         } else {
-            connect(this, SIGNAL(sigProgress(int)), d->parentPart->currentMainwindow(), SLOT(slotProgress(int)));
+            connect(this, &KoDocument::sigProgress, d->parentPart->currentMainwindow(), &KoMainWindow::slotProgress);
             emit statusBarMessage(i18n("Autosaving..."));
             d->autosaving = true;
             bool ret = saveNativeFormat(autoSaveFile(localFilePath()));
@@ -727,7 +727,7 @@ void KoDocument::slotAutoSave()
             }
             d->autosaving = false;
             emit clearStatusBarMessage();
-            disconnect(this, SIGNAL(sigProgress(int)), d->parentPart->currentMainwindow(), SLOT(slotProgress(int)));
+            disconnect(this, &KoDocument::sigProgress, d->parentPart->currentMainwindow(), &KoMainWindow::slotProgress);
             if (!ret && !d->disregardAutosaveFailure) {
                 emit statusBarMessage(i18n("Error during autosave! Partition full?"));
             }
@@ -1599,7 +1599,7 @@ bool KoDocument::openFile()
         KNotification *notify = new KNotification("DocumentLoaded");
         notify->setText(i18n("Document <i>%1</i> loaded", url().url()));
         notify->addContext("url", url().url());
-        QTimer::singleShot(0, notify, SLOT(sendEvent()));
+        QTimer::singleShot(0, notify, &KNotification::sendEvent);
         d->parentPart->deleteOpenPane();
     }
 
@@ -1880,7 +1880,7 @@ bool KoDocument::loadNativeFormatFromStoreInternal(KoStore *store)
         KNotification *notify = new KNotification("DocumentHasVersions");
         notify->setText(i18n("Document <i>%1</i> contains several versions. Go to File->Versions to open an old version.", store->urlOfStore().url()));
         notify->addContext("url", store->urlOfStore().url());
-        QTimer::singleShot(0, notify, SLOT(sendEvent()));
+        QTimer::singleShot(0, notify, &KNotification::sendEvent);
 
         KoXmlDocument versionInfo;
         KoOdfReadStore oasisStore(store);
@@ -2411,7 +2411,7 @@ KoDocumentInfoDlg *KoDocument::createDocumentInfoDialog(QWidget *parent, KoDocum
     KoDocumentInfoDlg *dlg = new KoDocumentInfoDlg(parent, docInfo);
     KoMainWindow *mainwin = dynamic_cast<KoMainWindow*>(parent);
     if (mainwin) {
-        connect(dlg, SIGNAL(saveRequested()), mainwin, SLOT(slotFileSave()));
+        connect(dlg, &KoDocumentInfoDlg::saveRequested, mainwin, &KoMainWindow::slotFileSave);
     }
     return dlg;
 }

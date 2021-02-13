@@ -71,7 +71,7 @@ DocumentSettingsDialog::DocumentSettingsDialog(Selection* selection, QWidget* pa
     setStandardButtons(QDialogButtonBox::Ok | QDialogButtonBox::Cancel/* | QDialogButtonBox::RestoreDefaults | QDialogButtonBox::Reset*/);
     button(QDialogButtonBox::Ok)->setDefault(true);
 
-    connect(this, SIGNAL(accepted()), this, SLOT(slotApply()));
+    connect(this, &QDialog::accepted, this, &DocumentSettingsDialog::slotApply);
 //     connect(button(QDialogButtonBox::RestoreDefaults), SIGNAL(clicked(bool)), this, SLOT(slotDefault()));
 //     connect(button(QDialogButtonBox::Reset), SIGNAL(clicked(bool)), this, SLOT(slotReset()));
 
@@ -180,7 +180,7 @@ parameterLocale::parameterLocale(Selection* selection, KoVBox *box)
     updateToMatchLocale(locale);
 
     m_updateButton = new QPushButton(i18n("&Use System's Locale Settings"), box);
-    connect(m_updateButton, SIGNAL(clicked()), this, SLOT(updateDefaultSystemConfig()));
+    connect(m_updateButton, &QAbstractButton::clicked, this, &parameterLocale::updateDefaultSystemConfig);
 
     box->layout()->addItem(new QSpacerItem(1, 1, QSizePolicy::Minimum, QSizePolicy::Expanding));
 }

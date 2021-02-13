@@ -51,7 +51,7 @@ KWConfigureDialog::KWConfigureDialog(KWView* parent)
     item->setHeader(i18n("Grid"));
     item->setIcon(koIcon("view-grid"));
 
-    connect(m_miscPage, SIGNAL(unitChanged(KoUnit)), m_gridPage, SLOT(slotUnitChanged(KoUnit)));
+    connect(m_miscPage, &KoConfigMiscPage::unitChanged, m_gridPage, &KoConfigGridPage::slotUnitChanged);
 
     m_docPage = new KoConfigDocumentPage(parent->koDocument());
     item = addPage(m_docPage, i18nc("@title:tab Document settings page", "Document"));
@@ -63,10 +63,10 @@ KWConfigureDialog::KWConfigureDialog(KWView* parent)
     item->setHeader(i18n("Author"));
     item->setIcon(koIcon("user-identity"));
 
-    connect(buttonBox(), SIGNAL(accepted()), this, SLOT(slotApply()));
-    connect(buttonBox(), SIGNAL(clicked(QAbstractButton*)),
-            this, SLOT(handleButtonClicked(QAbstractButton*)));
-    connect(this, SIGNAL(changed()), parent, SLOT(slotUpdateAuthorProfileActions()));
+    connect(buttonBox(), &QDialogButtonBox::accepted, this, &KWConfigureDialog::slotApply);
+    connect(buttonBox(), &QDialogButtonBox::clicked,
+            this, &KWConfigureDialog::handleButtonClicked);
+    connect(this, &KWConfigureDialog::changed, parent, &KoView::slotUpdateAuthorProfileActions);
 }
 
 void KWConfigureDialog::slotApply()

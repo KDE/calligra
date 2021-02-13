@@ -57,7 +57,7 @@ KoZoomWidget::KoZoomWidget(QWidget* parent, KoZoomAction::SpecialButtons special
     layout->setSpacing(0);
 
     d->input = new KoZoomInput(this);
-    connect(d->input, SIGNAL(zoomLevelChanged(QString)), this, SIGNAL(zoomLevelChanged(QString)));
+    connect(d->input, &KoZoomInput::zoomLevelChanged, this, &KoZoomWidget::zoomLevelChanged);
     layout->addWidget(d->input);
 
     d->slider = new QSlider(Qt::Horizontal);
@@ -79,7 +79,7 @@ KoZoomWidget::KoZoomWidget(QWidget* parent, KoZoomAction::SpecialButtons special
         d->aspectButton->setChecked(true);
         d->aspectButton->setAutoRaise(true);
         d->aspectButton->setToolTip(i18n("Use same aspect as pixels"));
-        connect(d->aspectButton, SIGNAL(toggled(bool)), this, SIGNAL(aspectModeChanged(bool)));
+        connect(d->aspectButton, &QAbstractButton::toggled, this, &KoZoomWidget::aspectModeChanged);
         layout->addWidget(d->aspectButton);
     }
     if (specialButtons & KoZoomAction::ZoomToSelection) {
@@ -88,7 +88,7 @@ KoZoomWidget::KoZoomWidget(QWidget* parent, KoZoomAction::SpecialButtons special
         zoomToSelectionButton->setIconSize(QSize(16,16));
         zoomToSelectionButton->setAutoRaise(true);
         zoomToSelectionButton->setToolTip(i18n("Zoom to Selection"));
-        connect(zoomToSelectionButton, SIGNAL(clicked(bool)), this, SIGNAL(zoomedToSelection()));
+        connect(zoomToSelectionButton, &QAbstractButton::clicked, this, &KoZoomWidget::zoomedToSelection);
         layout->addWidget(zoomToSelectionButton);
     }
     if (specialButtons & KoZoomAction::ZoomToAll) {
@@ -97,10 +97,10 @@ KoZoomWidget::KoZoomWidget(QWidget* parent, KoZoomAction::SpecialButtons special
         zoomToAllButton->setIconSize(QSize(16,16));
         zoomToAllButton->setAutoRaise(true);
         zoomToAllButton->setToolTip(i18n("Zoom to All"));
-        connect(zoomToAllButton, SIGNAL(clicked(bool)), this, SIGNAL(zoomedToAll()));
+        connect(zoomToAllButton, &QAbstractButton::clicked, this, &KoZoomWidget::zoomedToAll);
         layout->addWidget(zoomToAllButton);
     }
-    connect(d->slider, SIGNAL(valueChanged(int)), this, SIGNAL(sliderValueChanged(int)));
+    connect(d->slider, &QAbstractSlider::valueChanged, this, &KoZoomWidget::sliderValueChanged);
 }
 
 KoZoomWidget::~KoZoomWidget()

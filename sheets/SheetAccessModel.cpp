@@ -60,15 +60,15 @@ SheetAccessModel::SheetAccessModel(Map *map)
 {
     d->map = map;
 
-    connect(map, SIGNAL(sheetAdded(Sheet*)),
-            this, SLOT(slotSheetAdded(Sheet*)));
+    connect(map, &Map::sheetAdded,
+            this, &SheetAccessModel::slotSheetAdded);
     // FIXME: Check if we can simply connect sheetRevived() to slotSheetAdded()
-    connect(map, SIGNAL(sheetRevived(Sheet*)),
-            this, SLOT(slotSheetAdded(Sheet*)));
-    connect(map, SIGNAL(sheetRemoved(Sheet*)),
-            this, SLOT(slotSheetRemoved(Sheet*)));
-    connect(map, SIGNAL(damagesFlushed(QList<Damage*>)),
-            this, SLOT(handleDamages(QList<Damage*>)));
+    connect(map, &Map::sheetRevived,
+            this, &SheetAccessModel::slotSheetAdded);
+    connect(map, &Map::sheetRemoved,
+            this, &SheetAccessModel::slotSheetRemoved);
+    connect(map, &Map::damagesFlushed,
+            this, &SheetAccessModel::handleDamages);
 
     setRowCount(1);
     setColumnCount(0);

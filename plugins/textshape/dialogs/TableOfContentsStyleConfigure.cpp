@@ -41,7 +41,7 @@ TableOfContentsStyleConfigure::TableOfContentsStyleConfigure(KoStyleManager *man
     Q_ASSERT(manager);
 
     ui->stylesAvailableLabel->setText(i18n("Styles available"));
-    connect(this, SIGNAL(accepted()), this, SLOT(save()));
+    connect(this, &QDialog::accepted, this, &TableOfContentsStyleConfigure::save);
 }
 
 TableOfContentsStyleConfigure::~TableOfContentsStyleConfigure()
@@ -56,8 +56,8 @@ void TableOfContentsStyleConfigure::initializeUi(KoTableOfContentsGeneratorInfo 
 
     m_tocInfo = info;
 
-    connect(this, SIGNAL(accepted()), this, SLOT(save()));
-    connect(this, SIGNAL(rejected()), this, SLOT(discardChanges()));
+    connect(this, &QDialog::accepted, this, &TableOfContentsStyleConfigure::save);
+    connect(this, &QDialog::rejected, this, &TableOfContentsStyleConfigure::discardChanges);
 
     m_stylesModel = new TableOfContentsStyleModel(m_styleManager, m_tocInfo);
     ui->tableView->setModel(m_stylesModel);
@@ -82,8 +82,8 @@ void TableOfContentsStyleConfigure::save()
         m_stylesModel = 0;
     }
 
-    disconnect(this, SIGNAL(accepted()), this, SLOT(save()));
-    disconnect(this, SIGNAL(rejected()), this, SLOT(discardChanges()));
+    disconnect(this, &QDialog::accepted, this, &TableOfContentsStyleConfigure::save);
+    disconnect(this, &QDialog::rejected, this, &TableOfContentsStyleConfigure::discardChanges);
 }
 
 void TableOfContentsStyleConfigure::discardChanges()
@@ -93,6 +93,6 @@ void TableOfContentsStyleConfigure::discardChanges()
         m_stylesModel = 0;
     }
 
-    disconnect(this, SIGNAL(accepted()), this, SLOT(save()));
-    disconnect(this, SIGNAL(rejected()), this, SLOT(discardChanges()));
+    disconnect(this, &QDialog::accepted, this, &TableOfContentsStyleConfigure::save);
+    disconnect(this, &QDialog::rejected, this, &TableOfContentsStyleConfigure::discardChanges);
 }

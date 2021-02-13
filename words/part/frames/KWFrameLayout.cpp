@@ -735,10 +735,10 @@ void KWFrameLayout::setup()
                 Q_ASSERT(m_maintext == 0); // there can be only one!
                 if (tfs != oldMainText) {
                     oldMainText = 0;
-                    disconnect(tfs, SIGNAL(shapeRemoved(KoShape*)),
-                            this, SLOT(mainShapeRemoved(KoShape*)));
-                    connect(tfs, SIGNAL(shapeRemoved(KoShape*)),
-                            this, SLOT(mainShapeRemoved(KoShape*)));
+                    disconnect(tfs, &KWFrameSet::shapeRemoved,
+                            this, &KWFrameLayout::mainShapeRemoved);
+                    connect(tfs, &KWFrameSet::shapeRemoved,
+                            this, &KWFrameLayout::mainShapeRemoved);
                 }
                 m_maintext = tfs;
             default: ;// ignore

@@ -284,7 +284,7 @@ CellEditor::CellEditor(CellToolBase *cellTool,QHash<int,QString> &wordList, QWid
     d->complete->setWrapAround(false);
     this->setCompleter(d->complete);
     
-    connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(slotCursorPositionChanged()));
+    connect(this, &QTextEdit::cursorPositionChanged, this, &CellEditor::slotCursorPositionChanged);
     connect(this, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
 }
 

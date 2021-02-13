@@ -31,7 +31,7 @@ KeySignatureDialog::KeySignatureDialog(QWidget* parent)
     setMainWidget(w);
     m_ks = new KeySignature(widget.preview->staff(), 0, 0);
     widget.preview->setStaffElement(m_ks);
-    connect(widget.accidentals, SIGNAL(valueChanged(int)), this, SLOT(accidentalsChanged(int)));
+    connect(widget.accidentals, &QAbstractSlider::valueChanged, this, &KeySignatureDialog::accidentalsChanged);
 }
 
 void KeySignatureDialog::setBar(int bar)

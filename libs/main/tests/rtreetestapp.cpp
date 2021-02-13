@@ -119,7 +119,7 @@ void Canvas::replay()
         }
         qDebug() << "commands:" << m_list.size();
         m_listId = 0;
-        QTimer::singleShot(1000, this, SLOT(replayStep()));
+        QTimer::singleShot(1000, this, &Canvas::replayStep);
     }
 }
 
@@ -150,7 +150,7 @@ void Canvas::replayStep()
         if (QCoreApplication::arguments().size() >= 3) {
             sleep = QCoreApplication::arguments().at(2).toInt();
         }
-        QTimer::singleShot(sleep, this, SLOT(replayStep()));
+        QTimer::singleShot(sleep, this, &Canvas::replayStep);
     }
 }
 
@@ -260,11 +260,11 @@ void MainWindow::createActions()
     m_quitAct = new QAction(tr("&Quit"), this);
     m_quitAct->setShortcut(QKeySequence(tr("Ctrl+Q")));
     m_quitAct->setStatusTip(tr("Quit the application"));
-    connect(m_quitAct, SIGNAL(triggered()), this, SLOT(close()));
+    connect(m_quitAct, &QAction::triggered, this, &QWidget::close);
 
     m_aboutAct = new QAction(tr("&About"), this);
     m_aboutAct->setStatusTip(tr("Show the application's About box"));
-    connect(m_aboutAct, SIGNAL(triggered()), this, SLOT(about()));
+    connect(m_aboutAct, &QAction::triggered, this, &MainWindow::about);
 
     m_aboutQtAct = new QAction(tr("About &Qt"), this);
     m_aboutQtAct->setStatusTip(tr("Show the Qt library's About box"));
@@ -272,35 +272,35 @@ void MainWindow::createActions()
 
     m_insertAct = new QAction(tr("&Insert"), this);
     m_insertAct->setStatusTip(tr("Insert Object"));
-    connect(m_insertAct, SIGNAL(triggered()), m_canvas, SLOT(selectInsertTool()));
+    connect(m_insertAct, &QAction::triggered, m_canvas, &Canvas::selectInsertTool);
 
     m_selectAct = new QAction(tr("&Select"), this);
     m_selectAct->setStatusTip(tr("Select Objects"));
-    connect(m_selectAct, SIGNAL(triggered()), m_canvas, SLOT(selectSelectTool()));
+    connect(m_selectAct, &QAction::triggered, m_canvas, &Canvas::selectSelectTool);
 
     m_removeAct = new QAction(tr("&Remove"), this);
     m_removeAct->setStatusTip(tr("Remove Object"));
-    connect(m_removeAct, SIGNAL(triggered()), m_canvas, SLOT(selectRemoveTool()));
+    connect(m_removeAct, &QAction::triggered, m_canvas, &Canvas::selectRemoveTool);
 
     m_clearAct = new QAction(tr("&Clear"), this);
     m_clearAct->setStatusTip(tr("Clear Object"));
-    connect(m_clearAct, SIGNAL(triggered()), m_canvas, SLOT(clear()));
+    connect(m_clearAct, &QAction::triggered, m_canvas, &Canvas::clear);
 
     m_replayAct = new QAction(tr("&Replay"), this);
     m_replayAct->setShortcut(QKeySequence(tr("Ctrl+R")));
     m_replayAct->setStatusTip(tr("Replay"));
-    connect(m_replayAct, SIGNAL(triggered()), m_canvas, SLOT(replay()));
+    connect(m_replayAct, &QAction::triggered, m_canvas, &Canvas::replay);
 
     m_debugAct = new QAction(tr("&Debug"), this);
     m_debugAct->setShortcut(QKeySequence(tr("Ctrl+D")));
     m_debugAct->setStatusTip(tr("Debug"));
-    connect(m_debugAct, SIGNAL(triggered()), m_canvas, SLOT(debug()));
+    connect(m_debugAct, &QAction::triggered, m_canvas, &Canvas::debug);
 
     m_paintTreeAct = new QAction(tr("&Paint Tree"), this);
     m_paintTreeAct->setShortcut(QKeySequence(tr("Ctrl+P")));
     m_paintTreeAct->setStatusTip(tr("Paint Tree"));
     m_paintTreeAct->setCheckable(true);
-    connect(m_paintTreeAct, SIGNAL(toggled(bool)), m_canvas, SLOT(paintTree(bool)));
+    connect(m_paintTreeAct, &QAction::toggled, m_canvas, &Canvas::paintTree);
 }
 
 void MainWindow::createMenus()

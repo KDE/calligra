@@ -63,7 +63,7 @@ KWOdfLoader::KWOdfLoader(KWDocument *document)
         : QObject(document),
         m_document(document)
 {
-    connect(this, SIGNAL(progressUpdate(int)), m_document, SIGNAL(sigProgress(int)));
+    connect(this, &KWOdfLoader::progressUpdate, m_document.data(), &KoDocument::sigProgress);
 }
 
 KWOdfLoader::~KWOdfLoader()
@@ -230,7 +230,7 @@ bool KWOdfLoader::load(KoOdfReadStore &odfStore)
     QTextCursor cursor(textShapeData.document());
 
     if (loadUpdater) {
-        connect(&loader, SIGNAL(sigProgress(int)), loadUpdater, SLOT(setProgress(int)));
+        connect(&loader, &KoTextLoader::sigProgress, loadUpdater.data(), &KoUpdater::setProgress);
     }
 
     loader.loadBody(body, cursor);   // now let's load the body from the ODF KoXmlElement.

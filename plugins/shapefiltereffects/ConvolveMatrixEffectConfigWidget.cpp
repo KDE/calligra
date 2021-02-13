@@ -88,8 +88,8 @@ ConvolveMatrixEffectConfigWidget::ConvolveMatrixEffectConfigWidget(QWidget *pare
     connect(m_targetY, SIGNAL(valueChanged(int)), this, SLOT(targetChanged(int)));
     connect(m_divisor, SIGNAL(valueChanged(double)), this, SLOT(divisorChanged(double)));
     connect(m_bias, SIGNAL(valueChanged(double)), this, SLOT(biasChanged(double)));
-    connect(kernelButton, SIGNAL(clicked(bool)), this, SLOT(editKernel()));
-    connect(m_preserveAlpha, SIGNAL(toggled(bool)), this, SLOT(preserveAlphaChanged(bool)));
+    connect(kernelButton, &QAbstractButton::clicked, this, &ConvolveMatrixEffectConfigWidget::editKernel);
+    connect(m_preserveAlpha, &QAbstractButton::toggled, this, &ConvolveMatrixEffectConfigWidget::preserveAlphaChanged);
 
     m_matrixModel = new MatrixDataModel(this);
 }
@@ -226,7 +226,7 @@ void ConvolveMatrixEffectConfigWidget::editKernel()
     QVector<qreal> oldKernel = m_effect->kernel();
     QPoint kernelSize = m_effect->order();
     m_matrixModel->setMatrix(oldKernel, kernelSize.y(), kernelSize.x());
-    connect(m_matrixModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(kernelChanged()));
+    connect(m_matrixModel, &QAbstractItemModel::dataChanged, this, &ConvolveMatrixEffectConfigWidget::kernelChanged);
 
     QPointer<QDialog> dlg = new QDialog(this);
     QTableView * table = new QTableView(dlg);
@@ -243,8 +243,8 @@ void ConvolveMatrixEffectConfigWidget::editKernel()
     okButton->setDefault(true);
     okButton->setShortcut(Qt::Key_Return);
     mainLayout->addWidget(buttonBox);
-    connect(buttonBox, SIGNAL(accepted()), dlg, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), dlg, SLOT(reject()));
+    connect(buttonBox, &QDialogButtonBox::accepted, dlg.data(), &QDialog::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected, dlg.data(), &QDialog::reject);
     if (dlg->exec() == QDialog::Accepted) {
         m_effect->setKernel(m_matrixModel->matrix());
         emit filterChanged();
@@ -253,7 +253,7 @@ void ConvolveMatrixEffectConfigWidget::editKernel()
     }
     delete dlg;
 
-    disconnect(m_matrixModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(kernelChanged()));
+    disconnect(m_matrixModel, &QAbstractItemModel::dataChanged, this, &ConvolveMatrixEffectConfigWidget::kernelChanged);
 }
 
 void ConvolveMatrixEffectConfigWidget::kernelChanged()

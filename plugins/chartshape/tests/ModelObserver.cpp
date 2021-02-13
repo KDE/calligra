@@ -31,20 +31,20 @@ ModelObserver::ModelObserver(QAbstractItemModel *source)
     m_lastDataChange.valid = false;
     m_lastHeaderDataChange.valid = false;
 
-    connect(source, SIGNAL(rowsInserted(QModelIndex,int,int)),
-            this  , SLOT(slotRowsInserted(QModelIndex,int,int)));
-    connect(source, SIGNAL(columnsInserted(QModelIndex,int,int)),
-            this,   SLOT(slotColumnsInserted(QModelIndex,int,int)));
-    connect(source, SIGNAL(rowsRemoved(QModelIndex,int,int)),
-            this,   SLOT(slotRowsRemoved(QModelIndex,int,int)));
-    connect(source, SIGNAL(columnsRemoved(QModelIndex,int,int)),
-            this,   SLOT(slotColumnsRemoved(QModelIndex,int,int)));
-    connect(source, SIGNAL(headerDataChanged(Qt::Orientation,int,int)),
-            this,   SLOT(slotHeaderDataChanged(Qt::Orientation,int,int)));
-    connect(source, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
-            this,   SLOT(slotDataChanged(QModelIndex,QModelIndex)));
-    connect(source, SIGNAL(modelReset()),
-            this,   SLOT(slotModelReset()));
+    connect(source, &QAbstractItemModel::rowsInserted,
+            this  , &ModelObserver::slotRowsInserted);
+    connect(source, &QAbstractItemModel::columnsInserted,
+            this,   &ModelObserver::slotColumnsInserted);
+    connect(source, &QAbstractItemModel::rowsRemoved,
+            this,   &ModelObserver::slotRowsRemoved);
+    connect(source, &QAbstractItemModel::columnsRemoved,
+            this,   &ModelObserver::slotColumnsRemoved);
+    connect(source, &QAbstractItemModel::headerDataChanged,
+            this,   &ModelObserver::slotHeaderDataChanged);
+    connect(source, &QAbstractItemModel::dataChanged,
+            this,   &ModelObserver::slotDataChanged);
+    connect(source, &QAbstractItemModel::modelReset,
+            this,   &ModelObserver::slotModelReset);
 }
 
 void ModelObserver::slotRowsInserted(const QModelIndex & /*parent*/, int start, int end)

@@ -252,10 +252,10 @@ void KoDocumentInfoDlg::initAboutTab()
         d->aboutUi->lblEncrypted->setText(i18n("This document does not support encryption"));
         d->aboutUi->pbEncrypt->setEnabled( false );
     }
-    connect(d->aboutUi->pbReset, SIGNAL(clicked()),
-            this, SLOT(slotResetMetaData()));
-    connect(d->aboutUi->pbEncrypt, SIGNAL(clicked()),
-            this, SLOT(slotToggleEncryption()));
+    connect(d->aboutUi->pbReset, &QAbstractButton::clicked,
+            this, &KoDocumentInfoDlg::slotResetMetaData);
+    connect(d->aboutUi->pbEncrypt, &QAbstractButton::clicked,
+            this, &KoDocumentInfoDlg::slotToggleEncryption);
 }
 
 void KoDocumentInfoDlg::initAuthorTab()

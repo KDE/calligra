@@ -106,22 +106,22 @@ KPrEditAnimationsWidget::KPrEditAnimationsWidget(KPrShapeAnimationDocker *docker
     setLayout(layout);
 
     //Connect Signals.
-    connect(m_buttonPreviewAnimation, SIGNAL(clicked()), this, SIGNAL(requestAnimationPreview()));
-    connect(m_timeLineView, SIGNAL(clicked(QModelIndex)), this, SIGNAL(itemClicked(QModelIndex)));
-    connect(m_timeLineView, SIGNAL(clicked(QModelIndex)), this, SLOT(updateIndex(QModelIndex)));
-    connect(m_timeLineView, SIGNAL(timeValuesChanged(QModelIndex)), this, SLOT(updateIndex(QModelIndex)));
-    connect(m_timeLineView, SIGNAL(layoutChanged()), this, SLOT(syncCurrentItem()));
-    connect(m_delayEdit, SIGNAL(editingFinished()), this, SLOT(setBeginTime()));
-    connect(m_durationEdit, SIGNAL(editingFinished()), this, SLOT(setDuration()));
+    connect(m_buttonPreviewAnimation, &QAbstractButton::clicked, this, &KPrEditAnimationsWidget::requestAnimationPreview);
+    connect(m_timeLineView, &KPrAnimationsTimeLineView::clicked, this, &KPrEditAnimationsWidget::itemClicked);
+    connect(m_timeLineView, &KPrAnimationsTimeLineView::clicked, this, &KPrEditAnimationsWidget::updateIndex);
+    connect(m_timeLineView, &KPrAnimationsTimeLineView::timeValuesChanged, this, &KPrEditAnimationsWidget::updateIndex);
+    connect(m_timeLineView, &KPrAnimationsTimeLineView::layoutChanged, this, &KPrEditAnimationsWidget::syncCurrentItem);
+    connect(m_delayEdit, &QAbstractSpinBox::editingFinished, this, &KPrEditAnimationsWidget::setBeginTime);
+    connect(m_durationEdit, &QAbstractSpinBox::editingFinished, this, &KPrEditAnimationsWidget::setDuration);
     connect(m_triggerEventList, SIGNAL(currentIndexChanged(int)), this, SLOT(setTriggerEvent(int)));
-    connect(m_animationSelector, SIGNAL(requestPreviewAnimation(KPrShapeAnimation*)),
-            docker, SLOT(previewAnimation(KPrShapeAnimation*)));
-    connect(m_animationSelector, SIGNAL(requestAcceptAnimation(KPrShapeAnimation*)),
-            this, SLOT(changeCurrentAnimation(KPrShapeAnimation*)));
+    connect(m_animationSelector, &KPrAnimationSelectorWidget::requestPreviewAnimation,
+            docker, &KPrShapeAnimationDocker::previewAnimation);
+    connect(m_animationSelector, &KPrAnimationSelectorWidget::requestAcceptAnimation,
+            this, &KPrEditAnimationsWidget::changeCurrentAnimation);
     connect(m_timeLineView, SIGNAL(customContextMenuRequested(QPoint)), this,
             SLOT(showTimeLineCustomContextMenu(QPoint)));
-    connect(m_animationSelector, SIGNAL(previousStateChanged(bool)), this, SIGNAL(previousStateChanged(bool)));
-    QTimer::singleShot(700, this, SLOT(initializeView()));
+    connect(m_animationSelector, &KPrAnimationSelectorWidget::previousStateChanged, this, &KPrEditAnimationsWidget::previousStateChanged);
+    QTimer::singleShot(700, this, &KPrEditAnimationsWidget::initializeView);
 }
 
 KPrEditAnimationsWidget::~KPrEditAnimationsWidget()

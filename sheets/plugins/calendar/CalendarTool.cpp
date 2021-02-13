@@ -195,8 +195,8 @@ QList<QPointer<QWidget> > CalendarTool::createOptionWidgets()
     CellTool::createOptionWidgets();
 
     CalendarToolWidget* widget =  new CalendarToolWidget(canvas()->canvasWidget());
-    connect(widget, SIGNAL(insertCalendar(QDate,QDate)),
-            this, SLOT(insertCalendar(QDate,QDate)));
+    connect(widget, &CalendarToolWidget::insertCalendar,
+            this, &CalendarTool::insertCalendar);
     QList<QPointer<QWidget> > ow;
     ow.append(widget);
     return ow;

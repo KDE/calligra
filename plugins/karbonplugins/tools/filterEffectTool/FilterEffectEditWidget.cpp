@@ -56,20 +56,20 @@ FilterEffectEditWidget::FilterEffectEditWidget(QWidget *parent)
     presets->setDisplayMode(KoResourceSelector::TextMode);
     presets->setColumnCount(1);
 
-    connect(presets, SIGNAL(resourceSelected(KoResource*)),
-            this, SLOT(presetSelected(KoResource*)));
+    connect(presets, &KoResourceSelector::resourceSelected,
+            this, &FilterEffectEditWidget::presetSelected);
 
-    connect(presets, SIGNAL(resourceApplied(KoResource*)),
-            this, SLOT(presetSelected(KoResource*)));
+    connect(presets, &KoResourceSelector::resourceApplied,
+            this, &FilterEffectEditWidget::presetSelected);
 
     KoGenericRegistryModel<KoFilterEffectFactoryBase*> * filterEffectModel = new KoGenericRegistryModel<KoFilterEffectFactoryBase*>(KoFilterEffectRegistry::instance());
 
     effectSelector->setModel(filterEffectModel);
     removeEffect->setIcon(koIcon("list-remove"));
-    connect(removeEffect, SIGNAL(clicked()), this, SLOT(removeSelectedItem()));
+    connect(removeEffect, &QAbstractButton::clicked, this, &FilterEffectEditWidget::removeSelectedItem);
     addEffect->setIcon(koIcon("list-add"));
     addEffect->setToolTip(i18n("Add effect to current filter stack"));
-    connect(addEffect, SIGNAL(clicked()), this, SLOT(addSelectedEffect()));
+    connect(addEffect, &QAbstractButton::clicked, this, &FilterEffectEditWidget::addSelectedEffect);
 
     // TODO: make these buttons do something useful
     raiseEffect->setIcon(koIcon("arrow-up"));
@@ -79,18 +79,18 @@ FilterEffectEditWidget::FilterEffectEditWidget(QWidget *parent)
 
     addPreset->setIcon(koIcon("list-add"));
     addPreset->setToolTip(i18n("Add to filter presets"));
-    connect(addPreset, SIGNAL(clicked()), this, SLOT(addToPresets()));
+    connect(addPreset, &QAbstractButton::clicked, this, &FilterEffectEditWidget::addToPresets);
 
     removePreset->setIcon(koIcon("list-remove"));
     removePreset->setToolTip(i18n("Remove filter preset"));
-    connect(removePreset, SIGNAL(clicked()), this, SLOT(removeFromPresets()));
+    connect(removePreset, &QAbstractButton::clicked, this, &FilterEffectEditWidget::removeFromPresets);
 
     view->setScene(m_scene);
     view->setRenderHint(QPainter::Antialiasing, true);
     view->setResizeAnchor(QGraphicsView::AnchorViewCenter);
 
-    connect(m_scene, SIGNAL(connectionCreated(ConnectionSource,ConnectionTarget)),
-            this, SLOT(connectionCreated(ConnectionSource,ConnectionTarget)));
+    connect(m_scene, &FilterEffectScene::connectionCreated,
+            this, &FilterEffectEditWidget::connectionCreated);
     connect(m_scene, SIGNAL(selectionChanged()), this, SLOT(sceneSelectionChanged()));
 
     QSet<ConnectionSource::SourceType> inputs;
@@ -472,7 +472,7 @@ void FilterEffectEditWidget::addWidgetForItem(ConnectionSource item)
             return;
 
         configStack->insertWidget(0, currentPanel);
-        connect(currentPanel, SIGNAL(filterChanged()), this, SLOT(filterChanged()));
+        connect(currentPanel, &KoFilterEffectConfigWidgetBase::filterChanged, this, &FilterEffectEditWidget::filterChanged);
     }
 
     currentPanel = qobject_cast<KoFilterEffectConfigWidgetBase*>(configStack->widget(0));

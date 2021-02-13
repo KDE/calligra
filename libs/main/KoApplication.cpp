@@ -321,7 +321,7 @@ bool KoApplication::start()
 
         KoMainWindow *mainWindow = part->createMainWindow();
         mainWindow->show();
-        QObject::connect(doc, SIGNAL(sigProgress(int)), mainWindow, SLOT(slotProgress(int)));
+        QObject::connect(doc, &KoDocument::sigProgress, mainWindow, &KoMainWindow::slotProgress);
         // for initDoc to fill in the recent docs list
         // and for KoDocument::slotStarted
         part->addMainWindow(mainWindow);
@@ -572,11 +572,11 @@ bool KoApplication::start()
                 else {
                     if (print) {
                         connect(
-                            mainWindow, SIGNAL(loadCompleted(KoMainWindow *)),
-                            this, SLOT(slotFilePrint(KoMainWindow *)));
+                            mainWindow, &KoMainWindow::loadCompleted,
+                            this, &KoApplication::slotFilePrint);
                     } else if (exportAsPdf) {
-                        connect(mainWindow, SIGNAL(loadCompleted(KoMainWindow*)),
-                                this, SLOT(slotExportToPdf(KoMainWindow*)));
+                        connect(mainWindow, &KoMainWindow::loadCompleted,
+                                this, &KoApplication::slotExportToPdf);
                     }
                     if (mainWindow->openDocument(part, url)) {
                         if (benchmarkLoading) {
@@ -585,7 +585,7 @@ bool KoApplication::start()
                                             << appStartTime.msecsTo(QTime::currentTime())
                                             <<"\t100" << endl;
                             }
-                            QTimer::singleShot(0, this, SLOT(benchmarkLoadingFinished()));
+                            QTimer::singleShot(0, this, &KoApplication::benchmarkLoadingFinished);
                             return true; // only load one document!
                         }
                         if (print || exportAsPdf)

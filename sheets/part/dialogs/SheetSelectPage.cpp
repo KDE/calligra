@@ -50,26 +50,26 @@ SheetSelectPage::SheetSelectPage(QWidget *parent)
     m_ui.ButtonMoveBottom->setIcon(koIcon("go-bottom"));
 
     //connect buttons
-    connect(m_ui.ButtonSelectAll, SIGNAL(clicked()), this, SLOT(selectAll()));
-    connect(m_ui.ButtonSelect, SIGNAL(clicked()), this, SLOT(select()));
-    connect(m_ui.ButtonRemove, SIGNAL(clicked()), this, SLOT(remove()));
-    connect(m_ui.ButtonRemoveAll, SIGNAL(clicked()), this, SLOT(removeAll()));
+    connect(m_ui.ButtonSelectAll, &QAbstractButton::clicked, this, &SheetSelectPage::selectAll);
+    connect(m_ui.ButtonSelect, &QAbstractButton::clicked, this, &SheetSelectPage::select);
+    connect(m_ui.ButtonRemove, &QAbstractButton::clicked, this, &SheetSelectPage::remove);
+    connect(m_ui.ButtonRemoveAll, &QAbstractButton::clicked, this, &SheetSelectPage::removeAll);
 
-    connect(m_ui.ButtonMoveTop, SIGNAL(clicked()), this, SLOT(moveTop()));
-    connect(m_ui.ButtonMoveUp, SIGNAL(clicked()), this, SLOT(moveUp()));
-    connect(m_ui.ButtonMoveDown, SIGNAL(clicked()), this, SLOT(moveDown()));
-    connect(m_ui.ButtonMoveBottom, SIGNAL(clicked()), this, SLOT(moveBottom()));
+    connect(m_ui.ButtonMoveTop, &QAbstractButton::clicked, this, &SheetSelectPage::moveTop);
+    connect(m_ui.ButtonMoveUp, &QAbstractButton::clicked, this, &SheetSelectPage::moveUp);
+    connect(m_ui.ButtonMoveDown, &QAbstractButton::clicked, this, &SheetSelectPage::moveDown);
+    connect(m_ui.ButtonMoveBottom, &QAbstractButton::clicked, this, &SheetSelectPage::moveBottom);
 
-    connect(m_ui.selectedSheetsButton, SIGNAL(toggled(bool)), m_ui.ButtonSelectAll, SLOT(setEnabled(bool)));
-    connect(m_ui.selectedSheetsButton, SIGNAL(toggled(bool)), m_ui.ButtonSelect, SLOT(setEnabled(bool)));
-    connect(m_ui.selectedSheetsButton, SIGNAL(toggled(bool)), m_ui.ButtonRemove, SLOT(setEnabled(bool)));
-    connect(m_ui.selectedSheetsButton, SIGNAL(toggled(bool)), m_ui.ButtonRemoveAll, SLOT(setEnabled(bool)));
-    connect(m_ui.selectedSheetsButton, SIGNAL(toggled(bool)), m_ui.ButtonMoveTop, SLOT(setEnabled(bool)));
-    connect(m_ui.selectedSheetsButton, SIGNAL(toggled(bool)), m_ui.ButtonMoveUp, SLOT(setEnabled(bool)));
-    connect(m_ui.selectedSheetsButton, SIGNAL(toggled(bool)), m_ui.ButtonMoveDown, SLOT(setEnabled(bool)));
-    connect(m_ui.selectedSheetsButton, SIGNAL(toggled(bool)), m_ui.ButtonMoveBottom, SLOT(setEnabled(bool)));
-    connect(m_ui.selectedSheetsButton, SIGNAL(toggled(bool)), m_ui.ListViewAvailable, SLOT(setEnabled(bool)));
-    connect(m_ui.selectedSheetsButton, SIGNAL(toggled(bool)), m_ui.ListViewSelected, SLOT(setEnabled(bool)));
+    connect(m_ui.selectedSheetsButton, &QAbstractButton::toggled, m_ui.ButtonSelectAll, &QWidget::setEnabled);
+    connect(m_ui.selectedSheetsButton, &QAbstractButton::toggled, m_ui.ButtonSelect, &QWidget::setEnabled);
+    connect(m_ui.selectedSheetsButton, &QAbstractButton::toggled, m_ui.ButtonRemove, &QWidget::setEnabled);
+    connect(m_ui.selectedSheetsButton, &QAbstractButton::toggled, m_ui.ButtonRemoveAll, &QWidget::setEnabled);
+    connect(m_ui.selectedSheetsButton, &QAbstractButton::toggled, m_ui.ButtonMoveTop, &QWidget::setEnabled);
+    connect(m_ui.selectedSheetsButton, &QAbstractButton::toggled, m_ui.ButtonMoveUp, &QWidget::setEnabled);
+    connect(m_ui.selectedSheetsButton, &QAbstractButton::toggled, m_ui.ButtonMoveDown, &QWidget::setEnabled);
+    connect(m_ui.selectedSheetsButton, &QAbstractButton::toggled, m_ui.ButtonMoveBottom, &QWidget::setEnabled);
+    connect(m_ui.selectedSheetsButton, &QAbstractButton::toggled, m_ui.ListViewAvailable, &QWidget::setEnabled);
+    connect(m_ui.selectedSheetsButton, &QAbstractButton::toggled, m_ui.ListViewSelected, &QWidget::setEnabled);
 }
 
 // SheetSelectPage::~SheetSelectPage()

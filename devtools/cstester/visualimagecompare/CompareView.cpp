@@ -56,7 +56,7 @@ void CompareView::init()
     m_tabBar->addTab("Image 1");
     m_tabBar->addTab("Image 2");
     m_layout->addWidget(m_tabBar, 0, 0, 1, 2);
-    connect(m_tabBar, SIGNAL(currentChanged(int)), this, SLOT(currentChanged(int)));
+    connect(m_tabBar, &QTabBar::currentChanged, this, &CompareView::currentChanged);
     m_image1Label = new QLabel();
     m_image2Label = new QLabel();
     m_stack = new QStackedWidget();

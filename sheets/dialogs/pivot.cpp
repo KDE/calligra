@@ -51,7 +51,7 @@ Pivot::Pivot(QWidget* parent,Selection* selection):
     d->mainWidget.Current->setChecked(true);
     setMainWidget(widget);
     d->selection=selection;
-    connect(this, SIGNAL(okClicked()), this, SLOT(slotUser2Clicked()));
+    connect(this, &KoDialog::okClicked, this, &Pivot::slotUser2Clicked);
 
 }
 

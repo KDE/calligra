@@ -171,9 +171,9 @@ TextTool::TextTool(KoCanvasBase *canvas)
     m_unit = canvas->resourceManager()->unitResource(KoCanvasResourceManager::Unit);
 
     foreach (KoTextEditingPlugin* plugin, textEditingPluginContainer()->values()) {
-        connect(plugin, SIGNAL(startMacro(QString)),
-                this, SLOT(startMacro(QString)));
-        connect(plugin, SIGNAL(stopMacro()), this, SLOT(stopMacro()));
+        connect(plugin, &KoTextEditingPlugin::startMacro,
+                this, &TextTool::startMacro);
+        connect(plugin, &KoTextEditingPlugin::stopMacro, this, &TextTool::stopMacro);
         const QHash<QString, QAction*> actions = plugin->actions();
         QHash<QString, QAction*>::ConstIterator i = actions.begin();
         while (i != actions.end()) {
@@ -196,14 +196,14 @@ TextTool::TextTool(KoCanvasBase *canvas)
     }
     setPopupActionList(list);
 
-    connect(canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(shapeAddedToCanvas()));
+    connect(canvas->shapeManager()->selection(), &KoSelection::selectionChanged, this, &TextTool::shapeAddedToCanvas);
 
     m_caretTimer.setInterval(500);
-    connect(&m_caretTimer, SIGNAL(timeout()), this, SLOT(blinkCaret()));
+    connect(&m_caretTimer, &QTimer::timeout, this, &TextTool::blinkCaret);
 
     m_editTipTimer.setInterval(500);
     m_editTipTimer.setSingleShot(true);
-    connect(&m_editTipTimer, SIGNAL(timeout()), this, SLOT(showEditTip()));
+    connect(&m_editTipTimer, &QTimer::timeout, this, &TextTool::showEditTip);
 }
 
 void TextTool::createActions()
@@ -213,43 +213,43 @@ void TextTool::createActions()
 
     m_actionConfigureSection = new QAction(koIconNeededWithSubs("", "configure-text-section", "configure"), i18n("Configure current section"), this);
     addAction("configure_section", m_actionConfigureSection);
-    connect(m_actionConfigureSection, SIGNAL(triggered(bool)), this, SLOT(configureSection()));
+    connect(m_actionConfigureSection, &QAction::triggered, this, &TextTool::configureSection);
 
     m_actionInsertSection = new QAction(koIconNeededWithSubs("", "insert-text-section", "insert-text"), i18n("Insert new section"), this);
     addAction("insert_section", m_actionInsertSection);
-    connect(m_actionInsertSection, SIGNAL(triggered(bool)), this, SLOT(insertNewSection()));
+    connect(m_actionInsertSection, &QAction::triggered, this, &TextTool::insertNewSection);
 
     m_actionSplitSections = new QAction(koIconNeededWithSubs("", "text-section-split", "split"), i18n("Insert paragraph between sections"), this);
     addAction("split_sections", m_actionSplitSections);
-    connect(m_actionSplitSections, SIGNAL(triggered(bool)), this, SLOT(splitSections()));
+    connect(m_actionSplitSections, &QAction::triggered, this, &TextTool::splitSections);
 
     m_actionPasteAsText  = new QAction(koIcon("edit-paste"), i18n("Paste As Text"), this);
     addAction("edit_paste_text", m_actionPasteAsText);
     m_actionPasteAsText->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_V);
-    connect(m_actionPasteAsText, SIGNAL(triggered(bool)), this, SLOT(pasteAsText()));
+    connect(m_actionPasteAsText, &QAction::triggered, this, &TextTool::pasteAsText);
 
     m_actionFormatBold  = new QAction(koIcon("format-text-bold"), i18n("Bold"), this);
     addAction("format_bold", m_actionFormatBold);
     m_actionFormatBold->setShortcut(Qt::CTRL + Qt::Key_B);
     m_actionFormatBold->setCheckable(true);
-    connect(m_actionFormatBold, SIGNAL(triggered(bool)), this, SLOT(bold(bool)));
+    connect(m_actionFormatBold, &QAction::triggered, this, &TextTool::bold);
 
     m_actionFormatItalic  = new QAction(koIcon("format-text-italic"), i18n("Italic"), this);
     addAction("format_italic", m_actionFormatItalic);
     m_actionFormatItalic->setShortcut(Qt::CTRL + Qt::Key_I);
     m_actionFormatItalic->setCheckable(true);
-    connect(m_actionFormatItalic, SIGNAL(triggered(bool)), this, SLOT(italic(bool)));
+    connect(m_actionFormatItalic, &QAction::triggered, this, &TextTool::italic);
 
     m_actionFormatUnderline  = new QAction(koIcon("format-text-underline"), i18nc("Text formatting", "Underline"), this);
     addAction("format_underline", m_actionFormatUnderline);
     m_actionFormatUnderline->setShortcut(Qt::CTRL + Qt::Key_U);
     m_actionFormatUnderline->setCheckable(true);
-    connect(m_actionFormatUnderline, SIGNAL(triggered(bool)), this, SLOT(underline(bool)));
+    connect(m_actionFormatUnderline, &QAction::triggered, this, &TextTool::underline);
 
     m_actionFormatStrikeOut  = new QAction(koIcon("format-text-strikethrough"), i18n("Strikethrough"), this);
     addAction("format_strike", m_actionFormatStrikeOut);
     m_actionFormatStrikeOut->setCheckable(true);
-    connect(m_actionFormatStrikeOut, SIGNAL(triggered(bool)), this, SLOT(strikeOut(bool)));
+    connect(m_actionFormatStrikeOut, &QAction::triggered, this, &TextTool::strikeOut);
 
     QActionGroup *alignmentGroup = new QActionGroup(this);
     m_actionAlignLeft  = new QAction(koIcon("format-justify-left"), i18n("Align Left"), this);
@@ -257,14 +257,14 @@ void TextTool::createActions()
     m_actionAlignLeft->setShortcut(Qt::CTRL + Qt::Key_L);
     m_actionAlignLeft->setCheckable(true);
     alignmentGroup->addAction(m_actionAlignLeft);
-    connect(m_actionAlignLeft, SIGNAL(triggered(bool)), this, SLOT(alignLeft()));
+    connect(m_actionAlignLeft, &QAction::triggered, this, &TextTool::alignLeft);
 
     m_actionAlignRight  = new QAction(koIcon("format-justify-right"), i18n("Align Right"), this);
     addAction("format_alignright", m_actionAlignRight);
     m_actionAlignRight->setShortcut(Qt::CTRL + Qt::Key_R);
     m_actionAlignRight->setCheckable(true);
     alignmentGroup->addAction(m_actionAlignRight);
-    connect(m_actionAlignRight, SIGNAL(triggered(bool)), this, SLOT(alignRight()));
+    connect(m_actionAlignRight, &QAction::triggered, this, &TextTool::alignRight);
 
     m_actionAlignCenter  = new QAction(koIcon("format-justify-center"), i18n("Align Center"), this);
     addAction("format_aligncenter", m_actionAlignCenter);
@@ -272,34 +272,34 @@ void TextTool::createActions()
     m_actionAlignCenter->setCheckable(true);
 
     alignmentGroup->addAction(m_actionAlignCenter);
-    connect(m_actionAlignCenter, SIGNAL(triggered(bool)), this, SLOT(alignCenter()));
+    connect(m_actionAlignCenter, &QAction::triggered, this, &TextTool::alignCenter);
 
     m_actionAlignBlock  = new QAction(koIcon("format-justify-fill"), i18n("Align Block"), this);
     addAction("format_alignblock", m_actionAlignBlock);
     m_actionAlignBlock->setShortcut(Qt::CTRL + Qt::Key_J);
     m_actionAlignBlock->setCheckable(true);
     alignmentGroup->addAction(m_actionAlignBlock);
-    connect(m_actionAlignBlock, SIGNAL(triggered(bool)), this, SLOT(alignBlock()));
+    connect(m_actionAlignBlock, &QAction::triggered, this, &TextTool::alignBlock);
 
     m_actionChangeDirection = new QAction(koIcon("format-text-direction-rtl"), i18n("Change text direction"), this);
     addAction("change_text_direction", m_actionChangeDirection);
     m_actionChangeDirection->setToolTip(i18n("Change writing direction"));
     m_actionChangeDirection->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_D);
     m_actionChangeDirection->setCheckable(true);
-    connect(m_actionChangeDirection, SIGNAL(triggered()), this, SLOT(textDirectionChanged()));
+    connect(m_actionChangeDirection, &QAction::triggered, this, &TextTool::textDirectionChanged);
 
 
     m_actionFormatSuper = new QAction(koIcon("format-text-superscript"), i18n("Superscript"), this);
     m_actionFormatSuper->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_P);
     addAction("format_super", m_actionFormatSuper);
     m_actionFormatSuper->setCheckable(true);
-    connect(m_actionFormatSuper, SIGNAL(triggered(bool)), this, SLOT(superScript(bool)));
+    connect(m_actionFormatSuper, &QAction::triggered, this, &TextTool::superScript);
 
     m_actionFormatSub = new QAction(koIcon("format-text-subscript"), i18n("Subscript"), this);
     m_actionFormatSub->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_B);
     addAction("format_sub", m_actionFormatSub);
     m_actionFormatSub->setCheckable(true);
-    connect(m_actionFormatSub, SIGNAL(triggered(bool)), this, SLOT(subScript(bool)));
+    connect(m_actionFormatSub, &QAction::triggered, this, &TextTool::subScript);
 
     const char* const increaseIndentActionIconName =
         QApplication::isRightToLeft() ? koIconNameCStr("format-indent-less") : koIconNameCStr("format-indent-more");
@@ -307,14 +307,14 @@ void TextTool::createActions()
         QIcon::fromTheme(QLatin1String(increaseIndentActionIconName)),
         i18n("Increase Indent"), this);
     addAction("format_increaseindent", m_actionFormatIncreaseIndent);
-    connect(m_actionFormatIncreaseIndent, SIGNAL(triggered()), this, SLOT(increaseIndent()));
+    connect(m_actionFormatIncreaseIndent, &QAction::triggered, this, &TextTool::increaseIndent);
 
     const char* const decreaseIndentActionIconName =
         QApplication::isRightToLeft() ? koIconNameCStr("format-indent-more") : koIconNameCStr("format-indent-less");
     m_actionFormatDecreaseIndent = new QAction(QIcon::fromTheme(QLatin1String(decreaseIndentActionIconName)),
                                                i18n("Decrease Indent"), this);
     addAction("format_decreaseindent", m_actionFormatDecreaseIndent);
-    connect(m_actionFormatDecreaseIndent, SIGNAL(triggered()), this, SLOT(decreaseIndent()));
+    connect(m_actionFormatDecreaseIndent, &QAction::triggered, this, &TextTool::decreaseIndent);
 
     QAction *action = new QAction(koIcon("format-list-unordered"),  i18n("Toggle List or List Level Formatting"), this);
     action->setToolTip(i18n("Toggle list on/off, or change format of current level"));
@@ -323,12 +323,12 @@ void TextTool::createActions()
     action = new QAction(i18n("Increase Font Size"), this);
     action->setShortcut(Qt::CTRL + Qt::Key_Greater);
     addAction("fontsizeup", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(increaseFontSize()));
+    connect(action, &QAction::triggered, this, &TextTool::increaseFontSize);
 
     action = new QAction(i18n("Decrease Font Size"), this);
     action->setShortcut(Qt::CTRL + Qt::Key_Less);
     addAction("fontsizedown", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(decreaseFontSize()));
+    connect(action, &QAction::triggered, this, &TextTool::decreaseFontSize);
 
     m_actionFormatFontFamily = new KoFontFamilyAction(this);
     m_actionFormatFontFamily->setText(i18n("Font Family"));
@@ -343,33 +343,33 @@ void TextTool::createActions()
     action  = new QAction(i18n("Insert Non-Breaking Space"), this);
     addAction("nonbreaking_space", action);
     action->setShortcut(Qt::CTRL + Qt::Key_Space);
-    connect(action, SIGNAL(triggered()), this, SLOT(nonbreakingSpace()));
+    connect(action, &QAction::triggered, this, &TextTool::nonbreakingSpace);
 
     action  = new QAction(i18n("Insert Non-Breaking Hyphen"), this);
     addAction("nonbreaking_hyphen", action);
     action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_Minus);
-    connect(action, SIGNAL(triggered()), this, SLOT(nonbreakingHyphen()));
+    connect(action, &QAction::triggered, this, &TextTool::nonbreakingHyphen);
 
     action  = new QAction(i18n("Insert Index"), this);
     action->setShortcut(Qt::CTRL + Qt::Key_T);
     addAction("insert_index", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(insertIndexMarker()));
+    connect(action, &QAction::triggered, this, &TextTool::insertIndexMarker);
 
     action  = new QAction(i18n("Insert Soft Hyphen"), this);
     addAction("soft_hyphen", action);
     //action->setShortcut(Qt::CTRL + Qt::Key_Minus); // TODO this one is also used for the kde-global zoom-out :(
-    connect(action, SIGNAL(triggered()), this, SLOT(softHyphen()));
+    connect(action, &QAction::triggered, this, &TextTool::softHyphen);
 
     if (useAdvancedText) {
         action  = new QAction(i18n("Line Break"), this);
         addAction("line_break", action);
         action->setShortcut(Qt::SHIFT + Qt::Key_Return);
-        connect(action, SIGNAL(triggered()), this, SLOT(lineBreak()));
+        connect(action, &QAction::triggered, this, &TextTool::lineBreak);
 
         action  = new QAction(koIcon("insert-page-break"), i18n("Page Break"), this);
         addAction("insert_framebreak", action);
         action->setShortcut(Qt::CTRL + Qt::Key_Return);
-        connect(action, SIGNAL(triggered()), this, SLOT(insertFrameBreak()));
+        connect(action, &QAction::triggered, this, &TextTool::insertFrameBreak);
         action->setToolTip(i18n("Insert a page break"));
         action->setWhatsThis(i18n("All text after this point will be moved into the next page."));
     }
@@ -379,89 +379,89 @@ void TextTool::createActions()
     action->setShortcut(Qt::ALT + Qt::CTRL + Qt::Key_F);
     action->setToolTip(i18n("Change character size, font, boldface, italics etc."));
     action->setWhatsThis(i18n("Change the attributes of the currently selected characters."));
-    connect(action, SIGNAL(triggered()), this, SLOT(selectFont()));
+    connect(action, &QAction::triggered, this, &TextTool::selectFont);
 
     m_actionFormatFontSize = new FontSizeAction(i18n("Font Size"), this);
     addAction("format_fontsize", m_actionFormatFontSize);
-    connect(m_actionFormatFontSize, SIGNAL(fontSizeChanged(qreal)), this, SLOT(setFontSize(qreal)));
+    connect(m_actionFormatFontSize, &FontSizeAction::fontSizeChanged, this, &TextTool::setFontSize);
 
     m_actionFormatTextColor = new KoColorPopupAction(this);
     m_actionFormatTextColor->setIcon(koIcon("format-text-color"));
     m_actionFormatTextColor->setToolTip(i18n("Text Color..."));
     m_actionFormatTextColor->setText(i18n("Text Color"));
     addAction("format_textcolor", m_actionFormatTextColor);
-    connect(m_actionFormatTextColor, SIGNAL(colorChanged(KoColor)), this, SLOT(setTextColor(KoColor)));
+    connect(m_actionFormatTextColor, &KoColorPopupAction::colorChanged, this, &TextTool::setTextColor);
 
     m_actionFormatBackgroundColor = new KoColorPopupAction(this);
     m_actionFormatBackgroundColor->setIcon(koIcon("format-fill-color"));
     m_actionFormatBackgroundColor->setToolTip(i18n("Background Color..."));
     m_actionFormatBackgroundColor->setText(i18n("Background"));
     addAction("format_backgroundcolor", m_actionFormatBackgroundColor);
-    connect(m_actionFormatBackgroundColor, SIGNAL(colorChanged(KoColor)), this, SLOT(setBackgroundColor(KoColor)));
+    connect(m_actionFormatBackgroundColor, &KoColorPopupAction::colorChanged, this, &TextTool::setBackgroundColor);
 
     m_autoResizeAction = new QAction(koIcon("zoom-fit-best"), i18n("Auto Resize To Content"), this);
     addAction("auto_resize", m_autoResizeAction);
     m_autoResizeAction->setCheckable(true);
-    connect(m_autoResizeAction, SIGNAL(triggered(bool)), this, SLOT(setAutoResize(bool)));
+    connect(m_autoResizeAction, &QAction::triggered, this, &TextTool::setAutoResize);
 
     m_growWidthAction = new QAction(koIcon("zoom-fit-best"), i18n("Grow To Fit Width"), this);
     addAction("grow_to_fit_width", m_growWidthAction);
     m_growWidthAction->setCheckable(true);
-    connect(m_growWidthAction, SIGNAL(triggered(bool)), this, SLOT(setGrowWidthToFit(bool)));
+    connect(m_growWidthAction, &QAction::triggered, this, &TextTool::setGrowWidthToFit);
 
     m_growHeightAction = new QAction(koIcon("zoom-fit-best"), i18n("Grow To Fit Height"), this);
     addAction("grow_to_fit_height", m_growHeightAction);
     m_growHeightAction->setCheckable(true);
-    connect(m_growHeightAction, SIGNAL(triggered(bool)), this, SLOT(setGrowHeightToFit(bool)));
+    connect(m_growHeightAction, &QAction::triggered, this, &TextTool::setGrowHeightToFit);
 
     m_shrinkToFitAction = new QAction(koIcon("zoom-fit-best"), i18n("Shrink To Fit"), this);
     addAction("shrink_to_fit", m_shrinkToFitAction);
     m_shrinkToFitAction->setCheckable(true);
-    connect(m_shrinkToFitAction, SIGNAL(triggered(bool)), this, SLOT(setShrinkToFit(bool)));
+    connect(m_shrinkToFitAction, &QAction::triggered, this, &TextTool::setShrinkToFit);
 
     if (useAdvancedText) {
         action = new QAction(koIcon("insert-table"), i18n("Insert Custom..."), this);
         addAction("insert_table", action);
         action->setToolTip(i18n("Insert a table into the document."));
-        connect(action, SIGNAL(triggered()), this, SLOT(insertTable()));
+        connect(action, &QAction::triggered, this, &TextTool::insertTable);
 
         action  = new QAction(koIcon("edit-table-insert-row-above"), i18n("Row Above"), this);
         action->setToolTip(i18n("Insert Row Above"));
         addAction("insert_tablerow_above", action);
-        connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableRowAbove()));
+        connect(action, &QAction::triggered, this, &TextTool::insertTableRowAbove);
 
         action  = new QAction(koIcon("edit-table-insert-row-below"), i18n("Row Below"), this);
         action->setToolTip(i18n("Insert Row Below"));
         addAction("insert_tablerow_below", action);
-        connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableRowBelow()));
+        connect(action, &QAction::triggered, this, &TextTool::insertTableRowBelow);
 
         action  = new QAction(koIcon("edit-table-insert-column-left"), i18n("Column Left"), this);
         action->setToolTip(i18n("Insert Column Left"));
         addAction("insert_tablecolumn_left", action);
-        connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableColumnLeft()));
+        connect(action, &QAction::triggered, this, &TextTool::insertTableColumnLeft);
 
         action  = new QAction(koIcon("edit-table-insert-column-right"), i18n("Column Right"), this);
         action->setToolTip(i18n("Insert Column Right"));
         addAction("insert_tablecolumn_right", action);
-        connect(action, SIGNAL(triggered(bool)), this, SLOT(insertTableColumnRight()));
+        connect(action, &QAction::triggered, this, &TextTool::insertTableColumnRight);
 
         action  = new QAction(koIcon("edit-table-delete-column"), i18n("Column"), this);
         action->setToolTip(i18n("Delete Column"));
         addAction("delete_tablecolumn", action);
-        connect(action, SIGNAL(triggered(bool)), this, SLOT(deleteTableColumn()));
+        connect(action, &QAction::triggered, this, &TextTool::deleteTableColumn);
 
         action  = new QAction(koIcon("edit-table-delete-row"), i18n("Row"), this);
         action->setToolTip(i18n("Delete Row"));
         addAction("delete_tablerow", action);
-        connect(action, SIGNAL(triggered(bool)), this, SLOT(deleteTableRow()));
+        connect(action, &QAction::triggered, this, &TextTool::deleteTableRow);
 
         action  = new QAction(koIcon("edit-table-cell-merge"), i18n("Merge Cells"), this);
         addAction("merge_tablecells", action);
-        connect(action, SIGNAL(triggered(bool)), this, SLOT(mergeTableCells()));
+        connect(action, &QAction::triggered, this, &TextTool::mergeTableCells);
 
         action  = new QAction(koIcon("edit-table-cell-split"), i18n("Split Cells"), this);
         addAction("split_tablecells", action);
-        connect(action, SIGNAL(triggered(bool)), this, SLOT(splitTableCells()));
+        connect(action, &QAction::triggered, this, &TextTool::splitTableCells);
 
         action = new QAction(koIcon("borderpainter"), "", this);
         action->setToolTip(i18n("Select a border style and paint that style onto a table"));
@@ -473,14 +473,14 @@ void TextTool::createActions()
     action->setShortcut(Qt::ALT + Qt::CTRL + Qt::Key_P);
     action->setToolTip(i18n("Change paragraph margins, text flow, borders, bullets, numbering etc."));
     action->setWhatsThis(i18n("<p>Change paragraph margins, text flow, borders, bullets, numbering etc.</p><p>Select text in multiple paragraphs to change the formatting of all selected paragraphs.</p><p>If no text is selected, the paragraph where the cursor is located will be changed.</p>"));
-    connect(action, SIGNAL(triggered()), this, SLOT(formatParagraph()));
+    connect(action, &QAction::triggered, this, &TextTool::formatParagraph);
 
     action = new QAction(i18n("Style Manager..."), this);
     action->setShortcut(Qt::ALT + Qt::CTRL + Qt::Key_S);
     action->setToolTip(i18n("Change attributes of styles"));
     action->setWhatsThis(i18n("<p>Change font and paragraph attributes of styles.</p><p>Multiple styles can be changed using the dialog box.</p>"));
     addAction("format_stylist", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(showStyleManager()));
+    connect(action, &QAction::triggered, this, &TextTool::showStyleManager);
 
     action = KStandardAction::selectAll(this, SLOT(selectAll()), this);
     addAction("edit_select_all", action);
@@ -491,27 +491,27 @@ void TextTool::createActions()
     addAction("insert_specialchar", action);
     action->setToolTip(i18n("Insert one or more symbols or characters not found on the keyboard"));
     action->setWhatsThis(i18n("Insert one or more symbols or characters not found on the keyboard."));
-    connect(action, SIGNAL(triggered()), this, SLOT(insertSpecialCharacter()));
+    connect(action, &QAction::triggered, this, &TextTool::insertSpecialCharacter);
 
     action = new QAction(i18n("Repaint"), this);
     action->setIcon(koIcon("view-refresh"));
     addAction("repaint", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(relayoutContent()));
+    connect(action, &QAction::triggered, this, &TextTool::relayoutContent);
 
     action = new QAction(i18n("Insert Comment"), this);
     addAction("insert_annotation", action);
     action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_C);
-    connect(action, SIGNAL(triggered()), this, SLOT(insertAnnotation()));
+    connect(action, &QAction::triggered, this, &TextTool::insertAnnotation);
 
 #ifndef NDEBUG
     action = new QAction("Paragraph Debug", this); // do NOT add i18n!
     action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::ALT + Qt::Key_P);
     addAction("detailed_debug_paragraphs", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(debugTextDocument()));
+    connect(action, &QAction::triggered, this, &TextTool::debugTextDocument);
     action = new QAction("Styles Debug", this); // do NOT add i18n!
     action->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::ALT + Qt::Key_S);
     addAction("detailed_debug_styles", action);
-    connect(action, SIGNAL(triggered()), this, SLOT(debugTextStyles()));
+    connect(action, &QAction::triggered, this, &TextTool::debugTextStyles);
 #endif
 }
 
@@ -1015,15 +1015,15 @@ void TextTool::setShapeData(KoTextShapeData *data)
 {
     bool docChanged = !data || !m_textShapeData || m_textShapeData->document() != data->document();
     if (m_textShapeData) {
-        disconnect(m_textShapeData, SIGNAL(destroyed(QObject*)), this, SLOT(shapeDataRemoved()));
+        disconnect(m_textShapeData, &QObject::destroyed, this, &TextTool::shapeDataRemoved);
     }
     m_textShapeData = data;
     if (!m_textShapeData)
         return;
-    connect(m_textShapeData, SIGNAL(destroyed(QObject*)), this, SLOT(shapeDataRemoved()));
+    connect(m_textShapeData, &QObject::destroyed, this, &TextTool::shapeDataRemoved);
     if (docChanged) {
         if (!m_textEditor.isNull()) {
-            disconnect(m_textEditor.data(), SIGNAL(textFormatChanged()), this, SLOT(updateActions()));
+            disconnect(m_textEditor.data(), &KoTextEditor::textFormatChanged, this, &TextTool::updateActions);
         }
         m_textEditor = KoTextDocument(m_textShapeData->document()).textEditor();
         Q_ASSERT(m_textEditor.data());
@@ -1038,10 +1038,10 @@ void TextTool::setShapeData(KoTextShapeData *data)
         KoTextDocument document(m_textShapeData->document());
         foreach (QAction *action, document.inlineTextObjectManager()->createInsertVariableActions(canvas())) {
             m_variableMenu->addAction(action);
-            connect(action, SIGNAL(triggered()), this, SLOT(returnFocusToCanvas()));
+            connect(action, &QAction::triggered, this, &TextTool::returnFocusToCanvas);
         }
 
-        connect(m_textEditor.data(), SIGNAL(textFormatChanged()), this, SLOT(updateActions()));
+        connect(m_textEditor.data(), &KoTextEditor::textFormatChanged, this, &TextTool::updateActions);
         updateActions();
     }
 }
@@ -1114,9 +1114,9 @@ TextEditingPluginContainer *TextTool::textEditingPluginContainer()
         canvas()->resourceManager()->setResource(TextEditingPluginContainer::ResourceId, variant);
 
         foreach (KoTextEditingPlugin* plugin, m_textEditingPlugins->values()) {
-            connect(plugin, SIGNAL(startMacro(QString)),
-                    this, SLOT(startMacro(QString)));
-            connect(plugin, SIGNAL(stopMacro()), this, SLOT(stopMacro()));
+            connect(plugin, &KoTextEditingPlugin::startMacro,
+                    this, &TextTool::startMacro);
+            connect(plugin, &KoTextEditingPlugin::stopMacro, this, &TextTool::stopMacro);
             const QHash<QString, QAction*> actions = plugin->actions();
             QHash<QString, QAction*>::ConstIterator i = actions.begin();
             while (i != actions.end()) {
@@ -1384,7 +1384,7 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
         if (m_changeTracker && m_changeTracker->containsInlineChanges(mouseOver.charFormat())) {
             m_editTipPointedAt = pointedAt;
             if (QToolTip::isVisible()) {
-                QTimer::singleShot(0, this, SLOT(showEditTip()));
+                QTimer::singleShot(0, this, &TextTool::showEditTip);
             }else {
                 m_editTipTimer.start();
             }
@@ -1396,7 +1396,7 @@ void TextTool::mouseMoveEvent(KoPointerEvent *event)
             }
             m_editTipPointedAt = pointedAt;
             if (QToolTip::isVisible()) {
-                QTimer::singleShot(0, this, SLOT(showEditTip()));
+                QTimer::singleShot(0, this, &TextTool::showEditTip);
             }else {
                 m_editTipTimer.start();
             }
@@ -1858,10 +1858,10 @@ void TextTool::ensureCursorVisible(bool moveView)
         // If we have changed root area we need to update m_textShape and m_textShapeData
         m_textShape = static_cast<TextShape*>(rootArea->associatedShape());
         Q_ASSERT(m_textShape);
-        disconnect(m_textShapeData, SIGNAL(destroyed(QObject*)), this, SLOT(shapeDataRemoved()));
+        disconnect(m_textShapeData, &QObject::destroyed, this, &TextTool::shapeDataRemoved);
         m_textShapeData = static_cast<KoTextShapeData*>(m_textShape->userData());
         Q_ASSERT(m_textShapeData);
-        connect(m_textShapeData, SIGNAL(destroyed(QObject*)), this, SLOT(shapeDataRemoved()));
+        connect(m_textShapeData, &QObject::destroyed, this, &TextTool::shapeDataRemoved);
     }
 
     if (!moveView) {
@@ -2219,32 +2219,32 @@ QList<QPointer<QWidget> > TextTool::createOptionWidgets()
     }
 */
     // Connect to/with simple character widget (docker)
-    connect(this, SIGNAL(styleManagerChanged(KoStyleManager*)), scw, SLOT(setStyleManager(KoStyleManager*)));
-    connect(this, SIGNAL(charFormatChanged(QTextCharFormat,QTextCharFormat)), scw, SLOT(setCurrentFormat(QTextCharFormat,QTextCharFormat)));
-    connect(this, SIGNAL(blockFormatChanged(QTextBlockFormat)), scw, SLOT(setCurrentBlockFormat(QTextBlockFormat)));
-    connect(scw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
+    connect(this, &TextTool::styleManagerChanged, scw, &SimpleCharacterWidget::setStyleManager);
+    connect(this, &TextTool::charFormatChanged, scw, &SimpleCharacterWidget::setCurrentFormat);
+    connect(this, &TextTool::blockFormatChanged, scw, &SimpleCharacterWidget::setCurrentBlockFormat);
+    connect(scw, &SimpleCharacterWidget::doneWithFocus, this, &TextTool::returnFocusToCanvas);
     connect(scw, SIGNAL(characterStyleSelected(KoCharacterStyle*)), this, SLOT(setStyle(KoCharacterStyle*)));
-    connect(scw, SIGNAL(newStyleRequested(QString)), this, SLOT(createStyleFromCurrentCharFormat(QString)));
-    connect(scw, SIGNAL(showStyleManager(int)), this, SLOT(showStyleManager(int)));
+    connect(scw, &SimpleCharacterWidget::newStyleRequested, this, &TextTool::createStyleFromCurrentCharFormat);
+    connect(scw, &SimpleCharacterWidget::showStyleManager, this, &TextTool::showStyleManager);
 
 
     // Connect to/with simple paragraph widget (docker)
-    connect(this, SIGNAL(styleManagerChanged(KoStyleManager*)), spw, SLOT(setStyleManager(KoStyleManager*)));
-    connect(this, SIGNAL(blockChanged(QTextBlock)), spw, SLOT(setCurrentBlock(QTextBlock)));
-    connect(this, SIGNAL(blockFormatChanged(QTextBlockFormat)), spw, SLOT(setCurrentFormat(QTextBlockFormat)));
-    connect(spw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
+    connect(this, &TextTool::styleManagerChanged, spw, &SimpleParagraphWidget::setStyleManager);
+    connect(this, &TextTool::blockChanged, spw, &SimpleParagraphWidget::setCurrentBlock);
+    connect(this, &TextTool::blockFormatChanged, spw, &SimpleParagraphWidget::setCurrentFormat);
+    connect(spw, &SimpleParagraphWidget::doneWithFocus, this, &TextTool::returnFocusToCanvas);
     connect(spw, SIGNAL(paragraphStyleSelected(KoParagraphStyle*)), this, SLOT(setStyle(KoParagraphStyle*)));
-    connect(spw, SIGNAL(newStyleRequested(QString)), this, SLOT(createStyleFromCurrentBlockFormat(QString)));
-    connect(spw, SIGNAL(showStyleManager(int)), this, SLOT(showStyleManager(int)));
+    connect(spw, &SimpleParagraphWidget::newStyleRequested, this, &TextTool::createStyleFromCurrentBlockFormat);
+    connect(spw, &SimpleParagraphWidget::showStyleManager, this, &TextTool::showStyleManager);
 
     // Connect to/with simple table widget (docker)
-    connect(this, SIGNAL(styleManagerChanged(KoStyleManager*)), stw, SLOT(setStyleManager(KoStyleManager*)));
-    connect(stw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
-    connect(stw, SIGNAL(tableBorderDataUpdated(KoBorder::BorderData)), this, SLOT(setTableBorderData(KoBorder::BorderData)));
+    connect(this, &TextTool::styleManagerChanged, stw, &SimpleTableWidget::setStyleManager);
+    connect(stw, &SimpleTableWidget::doneWithFocus, this, &TextTool::returnFocusToCanvas);
+    connect(stw, &SimpleTableWidget::tableBorderDataUpdated, this, &TextTool::setTableBorderData);
 
     // Connect to/with simple insert widget (docker)
-    connect(siw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
-    connect(siw, SIGNAL(insertTableQuick(int,int)), this, SLOT(insertTableQuick(int,int)));
+    connect(siw, &SimpleInsertWidget::doneWithFocus, this, &TextTool::returnFocusToCanvas);
+    connect(siw, &SimpleInsertWidget::insertTableQuick, this, &TextTool::insertTableQuick);
 
     updateStyleManager();
     if (m_textShape) {
@@ -2779,7 +2779,7 @@ void TextTool::shapeDataRemoved()
         }
         m_textShape = static_cast<TextShape*>(lay->shapes().first());
         m_textShapeData = static_cast<KoTextShapeData*>(m_textShape->userData());
-        connect(m_textShapeData, SIGNAL(destroyed(QObject*)), this, SLOT(shapeDataRemoved()));
+        connect(m_textShapeData, &QObject::destroyed, this, &TextTool::shapeDataRemoved);
     }
 }
 

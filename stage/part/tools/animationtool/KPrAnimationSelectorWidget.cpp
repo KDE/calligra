@@ -83,8 +83,8 @@ KPrAnimationSelectorWidget::KPrAnimationSelectorWidget(KPrShapeAnimationDocker *
     m_collectionChooser->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_collectionChooser->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_collectionChooser->setFont(viewWidgetFont);
-    connect(m_collectionChooser, SIGNAL(itemClicked(QListWidgetItem*)),
-            this, SLOT(activateShapeCollection(QListWidgetItem*)));
+    connect(m_collectionChooser, &QListWidget::itemClicked,
+            this, &KPrAnimationSelectorWidget::activateShapeCollection);
 
     m_collectionView = new QListView;
     m_collectionView->setViewMode(QListView::IconMode);
@@ -96,8 +96,8 @@ KPrAnimationSelectorWidget::KPrAnimationSelectorWidget(KPrShapeAnimationDocker *
     m_collectionView->setWordWrap(true);
     m_collectionView->viewport()->setMouseTracking(true);
     m_collectionView->setFont(viewWidgetFont);
-    connect(m_collectionView, SIGNAL(clicked(QModelIndex)),
-            this, SLOT(setAnimation(QModelIndex)));
+    connect(m_collectionView, &QAbstractItemView::clicked,
+            this, &KPrAnimationSelectorWidget::setAnimation);
 
     m_subTypeView = new QListView;
     m_subTypeView->setViewMode(QListView::IconMode);
@@ -111,8 +111,8 @@ KPrAnimationSelectorWidget::KPrAnimationSelectorWidget(KPrShapeAnimationDocker *
     m_subTypeView->viewport()->setMouseTracking(true);
     m_subTypeView->hide();
     m_subTypeView->setFont(viewWidgetFont);
-    connect(m_subTypeView, SIGNAL(clicked(QModelIndex)),
-            this, SLOT(setAnimation(QModelIndex)));
+    connect(m_subTypeView, &QAbstractItemView::clicked,
+            this, &KPrAnimationSelectorWidget::setAnimation);
 
     containerLayout->addWidget(m_collectionChooser, 0, 0,2,1);
     containerLayout->addWidget(m_collectionView, 0, 1, 1, 1);
@@ -123,8 +123,8 @@ KPrAnimationSelectorWidget::KPrAnimationSelectorWidget(KPrShapeAnimationDocker *
     // set signals
     connect(m_collectionView, SIGNAL(entered(QModelIndex)), this, SLOT(automaticPreviewRequested(QModelIndex)));
     connect(m_subTypeView, SIGNAL(entered(QModelIndex)), this, SLOT(automaticPreviewRequested(QModelIndex)));
-    connect(m_previewCheckBox, SIGNAL(toggled(bool)), this, SLOT(setPreviewState(bool)));
-    connect(docker, SIGNAL(previousStateChanged(bool)), this, SLOT(setPreviewState(bool)));
+    connect(m_previewCheckBox, &QAbstractButton::toggled, this, &KPrAnimationSelectorWidget::setPreviewState);
+    connect(docker, &KPrShapeAnimationDocker::previousStateChanged, this, &KPrAnimationSelectorWidget::setPreviewState);
     setLayout(containerLayout);
 }
 

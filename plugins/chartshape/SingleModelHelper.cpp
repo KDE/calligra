@@ -39,16 +39,16 @@ SingleModelHelper::SingleModelHelper(Table *table, ChartProxyModel *proxyModel)
     Q_ASSERT(proxyModel);
 
     QAbstractItemModel *model = table->model();
-    connect(model, SIGNAL(modelReset()),
-            this,  SLOT(slotModelStructureChanged()));
-    connect(model, SIGNAL(rowsInserted(QModelIndex,int,int)),
-            this,  SLOT(slotModelStructureChanged()));
-    connect(model, SIGNAL(rowsRemoved(QModelIndex,int,int)),
-            this,  SLOT(slotModelStructureChanged()));
-    connect(model, SIGNAL(columnsInserted(QModelIndex,int,int)),
-            this,  SLOT(slotModelStructureChanged()));
-    connect(model, SIGNAL(columnsRemoved(QModelIndex,int,int)),
-            this,  SLOT(slotModelStructureChanged()));
+    connect(model, &QAbstractItemModel::modelReset,
+            this,  &SingleModelHelper::slotModelStructureChanged);
+    connect(model, &QAbstractItemModel::rowsInserted,
+            this,  &SingleModelHelper::slotModelStructureChanged);
+    connect(model, &QAbstractItemModel::rowsRemoved,
+            this,  &SingleModelHelper::slotModelStructureChanged);
+    connect(model, &QAbstractItemModel::columnsInserted,
+            this,  &SingleModelHelper::slotModelStructureChanged);
+    connect(model, &QAbstractItemModel::columnsRemoved,
+            this,  &SingleModelHelper::slotModelStructureChanged);
 
     // Initialize the proxy with this model
     slotModelStructureChanged();

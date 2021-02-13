@@ -38,14 +38,14 @@ GuidesToolOptionWidget::GuidesToolOptionWidget(QWidget *parent)
 
     connect(widget.orientation, SIGNAL(currentIndexChanged(int)),
              this, SLOT(updateList(int)));
-    connect(widget.positionList, SIGNAL(currentRowChanged(int)),
-             this, SLOT(updatePosition(int)));
-    connect(widget.position, SIGNAL(valueChangedPt(qreal)),
-             this, SLOT(positionChanged(qreal)));
-    connect(widget.removeButton, SIGNAL(clicked(bool)),
-             this, SLOT(removeLine()));
-    connect(widget.addButton, SIGNAL(clicked(bool)),
-             this, SLOT(addLine()));
+    connect(widget.positionList, &QListWidget::currentRowChanged,
+             this, &GuidesToolOptionWidget::updatePosition);
+    connect(widget.position, &KoUnitDoubleSpinBox::valueChangedPt,
+             this, &GuidesToolOptionWidget::positionChanged);
+    connect(widget.removeButton, &QAbstractButton::clicked,
+             this, &GuidesToolOptionWidget::removeLine);
+    connect(widget.addButton, &QAbstractButton::clicked,
+             this, &GuidesToolOptionWidget::addLine);
 }
 
 GuidesToolOptionWidget::~GuidesToolOptionWidget()

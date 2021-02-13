@@ -106,12 +106,12 @@ PivotMain::PivotMain(QWidget* parent, Selection* selection) :
     d->mainWidget.selectOption->addItem("devsq");
 
     extractColumnNames();
-    connect(this,SIGNAL(user2Clicked()),this,SLOT(on_AddFilter_clicked()));
-    connect(this, SIGNAL(okClicked()), this, SLOT(on_Ok_clicked()));
-    connect(d->mainWidget.Rows,SIGNAL(itemChanged(QListWidgetItem*)),this,SLOT(rows_itemChanged(QListWidgetItem*)));
-    connect(d->mainWidget.Labels,SIGNAL(itemChanged(QListWidgetItem*)),this,SLOT(labels_itemChanged(QListWidgetItem*)));
-    connect(d->mainWidget.Columns,SIGNAL(itemChanged(QListWidgetItem*)),this,SLOT(columns_itemChanged(QListWidgetItem*)));
-    connect(d->mainWidget.Values,SIGNAL(itemChanged(QListWidgetItem*)),this,SLOT(values_itemChanged(QListWidgetItem*)));
+    connect(this,&KoDialog::user2Clicked,this,&PivotMain::on_AddFilter_clicked);
+    connect(this, &KoDialog::okClicked, this, &PivotMain::on_Ok_clicked);
+    connect(d->mainWidget.Rows,&QListWidget::itemChanged,this,&PivotMain::rows_itemChanged);
+    connect(d->mainWidget.Labels,&QListWidget::itemChanged,this,&PivotMain::labels_itemChanged);
+    connect(d->mainWidget.Columns,&QListWidget::itemChanged,this,&PivotMain::columns_itemChanged);
+    connect(d->mainWidget.Values,&QListWidget::itemChanged,this,&PivotMain::values_itemChanged);
   
 }
 

@@ -44,12 +44,12 @@ SpecialPasteDialog::SpecialPasteDialog(QWidget* parent, Selection* selection)
     setupUi(widget);
     setMainWidget(widget);
 
-    connect(this, SIGNAL(okClicked()),
-            this, SLOT(slotOk()));
-    connect(formatButton, SIGNAL(toggled(bool)),
-            this, SLOT(slotToggled(bool)));
-    connect(commentButton, SIGNAL(toggled(bool)),
-            this, SLOT(slotToggled(bool)));
+    connect(this, &KoDialog::okClicked,
+            this, &SpecialPasteDialog::slotOk);
+    connect(formatButton, &QAbstractButton::toggled,
+            this, &SpecialPasteDialog::slotToggled);
+    connect(commentButton, &QAbstractButton::toggled,
+            this, &SpecialPasteDialog::slotToggled);
 }
 
 void SpecialPasteDialog::slotOk()

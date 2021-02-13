@@ -115,12 +115,12 @@ void KoFormulaTool::activate(ToolActivation toolActivation, const QSet<KoShape*>
         //TODO: there should be a extra constructor for this
         m_formulaEditor = new FormulaEditor( m_formulaShape->formulaData());
     }
-    connect(m_formulaShape->formulaData(), SIGNAL(dataChanged(FormulaCommand*,bool)), this, SLOT(updateCursor(FormulaCommand*,bool)));
+    connect(m_formulaShape->formulaData(), &FormulaData::dataChanged, this, &KoFormulaTool::updateCursor);
     for (const TemplateAction &templateAction : koAsConst(m_templateActions)) {
         connect(templateAction.action, &QAction::triggered, this, [this, templateAction] { insert(templateAction.data); });
     }
     //Only for debugging:
-    connect(action("write_elementTree"),SIGNAL(triggered(bool)), m_formulaShape->formulaData(), SLOT(writeElementTree()));
+    connect(action("write_elementTree"),&QAction::triggered, m_formulaShape->formulaData(), &FormulaData::writeElementTree);
 }
 
 void KoFormulaTool::deactivate()

@@ -111,8 +111,8 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker(KoDocumentSectionView::
     button->setPopupMode(QToolButton::InstantPopup);
     menu->addAction(koIcon("document-new"),
                     (pageType == KoPageApp::Slide) ? i18n("Slide") : i18n("Page"),
-                    this, SLOT(addPage()));
-    m_addLayerAction = menu->addAction(koIcon("layer-new"), i18n("Layer"), this, SLOT(addLayer()));
+                    this, &KoPADocumentStructureDocker::addPage);
+    m_addLayerAction = menu->addAction(koIcon("layer-new"), i18n("Layer"), this, &KoPADocumentStructureDocker::addLayer);
 
     m_buttonGroup = new QButtonGroup(mainWidget);
     m_buttonGroup->setExclusive(false);
@@ -140,11 +140,11 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker(KoDocumentSectionView::
     QActionGroup *group = new QActionGroup(this);
 
     m_viewModeActions.insert(KoDocumentSectionView::MinimalMode,
-                              menu->addAction(koIcon("view-list-text"), i18n("Minimal View"), this, SLOT(minimalView())));
+                              menu->addAction(koIcon("view-list-text"), i18n("Minimal View"), this, &KoPADocumentStructureDocker::minimalView));
     m_viewModeActions.insert(KoDocumentSectionView::DetailedMode,
-                              menu->addAction(koIcon("view-list-details"), i18n("Detailed View"), this, SLOT(detailedView())));
+                              menu->addAction(koIcon("view-list-details"), i18n("Detailed View"), this, &KoPADocumentStructureDocker::detailedView));
     m_viewModeActions.insert(KoDocumentSectionView::ThumbnailMode,
-                              menu->addAction(koIcon("view-preview"), i18n("Thumbnail View"), this, SLOT(thumbnailView())));
+                              menu->addAction(koIcon("view-preview"), i18n("Thumbnail View"), this, &KoPADocumentStructureDocker::thumbnailView));
 
     foreach (QAction* action, m_viewModeActions) {
         action->setCheckable(true);
@@ -171,12 +171,12 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker(KoDocumentSectionView::
     m_sectionView->setSelectionMode(QAbstractItemView::ExtendedSelection);
     m_sectionView->setDragDropMode(QAbstractItemView::InternalMove);
 
-    connect(m_sectionView, SIGNAL(pressed(QModelIndex)), this, SLOT(itemClicked(QModelIndex)));
-    connect(m_sectionView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-             this, SLOT(itemSelected(QItemSelection,QItemSelection)));
+    connect(m_sectionView, &QAbstractItemView::pressed, this, &KoPADocumentStructureDocker::itemClicked);
+    connect(m_sectionView->selectionModel(), &QItemSelectionModel::selectionChanged,
+             this, &KoPADocumentStructureDocker::itemSelected);
 
-    connect(m_model, SIGNAL(requestPageSelection(int,int)), this, SLOT(selectPages(int,int)));
-    connect(m_model, SIGNAL(modelReset()), this, SIGNAL(dockerReset()));
+    connect(m_model, &KoPADocumentModel::requestPageSelection, this, &KoPADocumentStructureDocker::selectPages);
+    connect(m_model, &QAbstractItemModel::modelReset, this, &KoPADocumentStructureDocker::dockerReset);
 
     KConfigGroup configGroup =  KSharedConfig::openConfig()->group("KoPageApp/DocumentStructureDocker");
     QString viewModeString = configGroup.readEntry("ViewMode", "");
@@ -621,16 +621,16 @@ void KoPADocumentStructureDocker::contextMenuEvent(QContextMenuEvent* event)
 
     // Not connected yet
     if (m_doc->pageType() == KoPageApp::Slide) {
-        menu.addAction(koIcon("document-new"), i18n("Add a new slide"), this, SLOT(addPage()));
+        menu.addAction(koIcon("document-new"), i18n("Add a new slide"), this, &KoPADocumentStructureDocker::addPage);
     }
     else {
-        menu.addAction(koIcon("document-new"), i18n("Add a new page"), this, SLOT(addPage()));
+        menu.addAction(koIcon("document-new"), i18n("Add a new page"), this, &KoPADocumentStructureDocker::addPage);
     }
-    menu.addAction(koIcon("edit-delete"), i18n("Delete selected objects"), this, SLOT(deleteItem()));
+    menu.addAction(koIcon("edit-delete"), i18n("Delete selected objects"), this, &KoPADocumentStructureDocker::deleteItem);
     menu.addSeparator();
-    menu.addAction(koIcon("edit-cut"), i18n("Cut"), this, SLOT(editCut()));
-    menu.addAction(koIcon("edit-copy"), i18n("Copy"), this, SLOT(editCopy()));
-    menu.addAction(koIcon("edit-paste"), i18n("Paste"), this, SLOT(editPaste()));
+    menu.addAction(koIcon("edit-cut"), i18n("Cut"), this, &KoPADocumentStructureDocker::editCut);
+    menu.addAction(koIcon("edit-copy"), i18n("Copy"), this, &KoPADocumentStructureDocker::editCopy);
+    menu.addAction(koIcon("edit-paste"), i18n("Paste"), this, &KoPADocumentStructureDocker::editPaste);
 
     menu.exec(event->globalPos());
 }

@@ -47,10 +47,10 @@ SolverDialog::SolverDialog(Selection* selection, QWidget* parent)
     Ui::SolverDetails::setupUi(detailsWidget);
     setDetailsWidget(detailsWidget);
 
-    connect(this, SIGNAL(okClicked()),
-            this, SLOT(finishDialog()));
-    connect(this, SIGNAL(cancelClicked()),
-            this, SLOT(finishDialog()));
+    connect(this, &KoDialog::okClicked,
+            this, &SolverDialog::finishDialog);
+    connect(this, &KoDialog::cancelClicked,
+            this, &SolverDialog::finishDialog);
 }
 
 void SolverDialog::finishDialog()

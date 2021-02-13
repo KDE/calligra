@@ -121,8 +121,8 @@ KoScriptingDocker::KoScriptingDocker(QWidget *parent)
 
     setWidget(widget);
 
-    connect(m_view, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(slotDoubleClicked()));
-    connect(m_view, SIGNAL(enabledChanged(QString)), this, SLOT(slotEnabledChanged(QString)));
+    connect(m_view, &QAbstractItemView::doubleClicked, this, &KoScriptingDocker::slotDoubleClicked);
+    connect(m_view, &Kross::ActionCollectionView::enabledChanged, this, &KoScriptingDocker::slotEnabledChanged);
 }
 
 void KoScriptingDocker::slotShowScriptManager()

@@ -703,7 +703,7 @@ void StyleStorage::garbageCollection()
         << "used" << currentPair.second->ref << "times" << endl;
         d->tree.remove(currentPair.first.toRect(), currentPair.second);
         d->subStyles[currentPair.second->type()].removeAll(currentPair.second);
-        QTimer::singleShot(g_garbageCollectionTimeOut, this, SLOT(garbageCollection()));
+        QTimer::singleShot(g_garbageCollectionTimeOut, this, &StyleStorage::garbageCollection);
         return; // already done
     }
 
@@ -723,7 +723,7 @@ void StyleStorage::garbageCollection()
         << "at" << Region(currentPair.first.toRect()).name()
         << "used" << currentPair.second->ref << "times" << endl;
         d->tree.remove(currentPair.first.toRect(), currentPair.second);
-        QTimer::singleShot(g_garbageCollectionTimeOut, this, SLOT(garbageCollection()));
+        QTimer::singleShot(g_garbageCollectionTimeOut, this, &StyleStorage::garbageCollection);
         return; // already done
     }
 
@@ -737,7 +737,7 @@ void StyleStorage::garbageCollection()
         << "at" << Region(currentPair.first.toRect()).name()
         << "used" << currentPair.second->ref << "times" << endl;
         d->tree.remove(currentPair.first.toRect(), currentPair.second);
-        QTimer::singleShot(g_garbageCollectionTimeOut, this, SLOT(garbageCollection()));
+        QTimer::singleShot(g_garbageCollectionTimeOut, this, &StyleStorage::garbageCollection);
         return; // already done
     }
 
@@ -751,7 +751,7 @@ void StyleStorage::garbageCollection()
         << "at" << Region(currentPair.first.toRect()).name()
         << "used" << currentPair.second->ref << "times" << endl;
         d->tree.remove(currentPair.first.toRect(), currentPair.second);
-        QTimer::singleShot(g_garbageCollectionTimeOut, this, SLOT(garbageCollection()));
+        QTimer::singleShot(g_garbageCollectionTimeOut, this, &StyleStorage::garbageCollection);
         return; // already done
     }
 
@@ -815,7 +815,7 @@ void StyleStorage::garbageCollection()
             break;
         }
     }
-    QTimer::singleShot(g_garbageCollectionTimeOut, this, SLOT(garbageCollection()));
+    QTimer::singleShot(g_garbageCollectionTimeOut, this, &StyleStorage::garbageCollection);
 }
 
 void StyleStorage::regionChanged(const QRect& rect)
@@ -829,7 +829,7 @@ void StyleStorage::regionChanged(const QRect& rect)
     // NOTE Stefan: The map may contain multiple indices. The already existing possible garbage has
     // has to be inserted most recently, because it should be accessed first.
     d->possibleGarbage = d->tree.intersectingPairs(rect).unite(d->possibleGarbage);
-    QTimer::singleShot(g_garbageCollectionTimeOut, this, SLOT(garbageCollection()));
+    QTimer::singleShot(g_garbageCollectionTimeOut, this, &StyleStorage::garbageCollection);
     // invalidate cache
     invalidateCache(rect);
 }

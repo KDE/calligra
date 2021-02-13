@@ -88,8 +88,8 @@ LinkDialog::LinkDialog(QWidget* parent, Selection* selection)
     d->internetLink = new KLineEdit(d->internetPage);
     iLayout->addWidget(d->internetLink);
     iLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
-    connect(d->internetText, SIGNAL(textChanged(QString)), this,
-            SLOT(setText(QString)));
+    connect(d->internetText, &QLineEdit::textChanged, this,
+            &LinkDialog::setText);
 
     // link for e-mail
     d->mailPage = new QWidget();
@@ -103,8 +103,8 @@ LinkDialog::LinkDialog(QWidget* parent, Selection* selection)
     mLayout->addWidget(new QLabel(i18n("Email address:"), d->mailPage));
     d->mailLink = new KLineEdit(d->mailPage);
     mLayout->addWidget(d->mailLink);
-    connect(d->mailText, SIGNAL(textChanged(QString)), this,
-            SLOT(setText(QString)));
+    connect(d->mailText, &QLineEdit::textChanged, this,
+            &LinkDialog::setText);
     mLayout->addWidget(new QLabel(i18n("Subject:"), d->mailPage));
     d->mailSubject = new KLineEdit(d->mailPage);
     mLayout->addWidget(d->mailSubject);
@@ -130,8 +130,8 @@ LinkDialog::LinkDialog(QWidget* parent, Selection* selection)
     recentFile->setMinimumContentsLength(40);
     fLayout->addWidget(recentFile);
     fLayout->addItem(new QSpacerItem(0, 40, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding));
-    connect(d->fileText, SIGNAL(textChanged(QString)), this,
-            SLOT(setText(QString)));
+    connect(d->fileText, &QLineEdit::textChanged, this,
+            &LinkDialog::setText);
     QObject::connect(recentFile, SIGNAL(highlighted(QString)),
                      d->fileLink->lineEdit(), SLOT(setText(QString)));
 
@@ -173,12 +173,12 @@ LinkDialog::LinkDialog(QWidget* parent, Selection* selection)
     d->cellLink->setItemText(d->cellLink->currentIndex(), "");
     cLayout->addWidget(d->cellLink);
     cLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
-    connect(d->cellText, SIGNAL(textChanged(QString)), this,
-            SLOT(setText(QString)));
+    connect(d->cellText, &QLineEdit::textChanged, this,
+            &LinkDialog::setText);
 
     d->internetText->setFocus();
     resize(400, 300);
-    connect(this, SIGNAL(accepted()), this, SLOT(slotOk()));
+    connect(this, &QDialog::accepted, this, &LinkDialog::slotOk);
 }
 
 LinkDialog::~LinkDialog()

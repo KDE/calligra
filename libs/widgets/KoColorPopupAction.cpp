@@ -101,14 +101,14 @@ KoColorPopupAction::KoColorPopupAction(QObject *parent)
     d->menu->layout()->addWidget(widget);
     d->menu->layout()->setMargin(0);
 
-    connect(this, SIGNAL(triggered()), this, SLOT(emitColorChanged()));
+    connect(this, &QAction::triggered, this, &KoColorPopupAction::emitColorChanged);
 
-    connect(d->colorSetWidget, SIGNAL(colorChanged(KoColor,bool)), this, SLOT(colorWasSelected(KoColor,bool)));
+    connect(d->colorSetWidget, &KoColorSetWidget::colorChanged, this, &KoColorPopupAction::colorWasSelected);
 
-    connect( d->colorChooser, SIGNAL(colorChanged(KoColor)),
-             this, SLOT(colorWasEdited(KoColor)) );
-    connect( d->opacitySlider, SIGNAL(valueChanged(int)),
-             this, SLOT(opacityWasChanged(int)));
+    connect( d->colorChooser, &KoTriangleColorSelector::colorChanged,
+             this, &KoColorPopupAction::colorWasEdited );
+    connect( d->opacitySlider, &QAbstractSlider::valueChanged,
+             this, &KoColorPopupAction::opacityWasChanged);
 }
 
 KoColorPopupAction::~KoColorPopupAction()

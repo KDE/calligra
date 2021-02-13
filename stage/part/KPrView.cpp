@@ -117,7 +117,7 @@ KPrView::KPrView(KPrPart *part, KPrDocument *document, QWidget *parent)
     masterShapeManager()->setPaintingStrategy( new KPrShapeManagerDisplayMasterStrategy( masterShapeManager(),
                                                    new KPrPageSelectStrategyActive( kopaCanvas() ) ) );
 
-    connect(zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)), this, SLOT(zoomChanged(KoZoomMode::Mode,qreal)));
+    connect(zoomController(), &KoZoomController::zoomChanged, this, &KPrView::zoomChanged);
 
     setAcceptDrops(true);
 }
@@ -237,7 +237,7 @@ void KPrView::initActions()
     // do special stage stuff here
     m_actionExportHtml = new QAction(i18n("Export as HTML..."), this);
     actionCollection()->addAction("file_export_html", m_actionExportHtml);
-    connect(m_actionExportHtml, SIGNAL(triggered()), this, SLOT(exportToHtml()));
+    connect(m_actionExportHtml, &QAction::triggered, this, &KPrView::exportToHtml);
 
     m_actionViewModeNormal = new QAction(m_normalMode->name(), this);
     m_actionViewModeNormal->setCheckable(true);
@@ -250,20 +250,20 @@ void KPrView::initActions()
     m_actionViewModeNotes->setCheckable(true);
     actionCollection()->setDefaultShortcut(m_actionViewModeNotes, QKeySequence("CTRL+F6"));
     actionCollection()->addAction("view_notes", m_actionViewModeNotes);
-    connect(m_actionViewModeNotes, SIGNAL(triggered()), this, SLOT(showNotes()));
+    connect(m_actionViewModeNotes, &QAction::triggered, this, &KPrView::showNotes);
 
     m_actionViewModeSlidesSorter = new QAction(m_slidesSorterMode->name(), this);
     m_actionViewModeSlidesSorter->setCheckable(true);
     actionCollection()->setDefaultShortcut(m_actionViewModeSlidesSorter, QKeySequence("CTRL+F7"));
     actionCollection()->addAction("view_slides_sorter", m_actionViewModeSlidesSorter);
-    connect(m_actionViewModeSlidesSorter, SIGNAL(triggered()), this, SLOT(showSlidesSorter()));
+    connect(m_actionViewModeSlidesSorter, &QAction::triggered, this, &KPrView::showSlidesSorter);
 
     if ( QAction *action = actionCollection()->action("view_masterpages") )
         actionCollection()->setDefaultShortcut(action, QKeySequence("CTRL+F8"));
 
     m_actionInsertPictures = new QAction(i18n("Insert Pictures as Slides..."), this);
     actionCollection()->addAction("insert_pictures", m_actionInsertPictures);
-    connect(m_actionInsertPictures, SIGNAL(triggered()), this, SLOT(insertPictures()));
+    connect(m_actionInsertPictures, &QAction::triggered, this, &KPrView::insertPictures);
 
     QActionGroup *viewModesGroup = new QActionGroup(this);
     viewModesGroup->addAction(m_actionViewModeNormal);
@@ -272,35 +272,35 @@ void KPrView::initActions()
 
     m_actionCreateAnimation = new QAction( i18n( "Create Appear Animation" ), this );
     actionCollection()->addAction( "edit_createanimation", m_actionCreateAnimation );
-    connect( m_actionCreateAnimation, SIGNAL(triggered()), this, SLOT(createAnimation()) );
+    connect( m_actionCreateAnimation, &QAction::triggered, this, &KPrView::createAnimation );
 
     m_actionEditCustomSlideShows = new QAction( i18n( "Edit Custom Slide Shows..." ), this );
     actionCollection()->addAction( "edit_customslideshows", m_actionEditCustomSlideShows );
-    connect( m_actionEditCustomSlideShows, SIGNAL(triggered()), this, SLOT(editCustomSlideShows()) );
+    connect( m_actionEditCustomSlideShows, &QAction::triggered, this, &KPrView::editCustomSlideShows );
 
     KActionMenu *actionStartPresentation = new KActionMenu(koIcon("view-presentation"), i18n("Start Presentation"), this);
     actionCollection()->addAction( "slideshow_start", actionStartPresentation );
-    connect( actionStartPresentation, SIGNAL(triggered()), this, SLOT(startPresentation()) ); // for the toolbar button
+    connect( actionStartPresentation, &QAction::triggered, this, &KPrView::startPresentation ); // for the toolbar button
     QAction* action = new QAction( i18n( "From Current Slide" ), this );
     action->setShortcut(QKeySequence("Shift+F5"));
     actionStartPresentation->addAction( action );
-    connect( action, SIGNAL(triggered()), this, SLOT(startPresentation()) );
+    connect( action, &QAction::triggered, this, &KPrView::startPresentation );
     action = new QAction( i18n( "From First Slide" ), this );
     action->setShortcut(QKeySequence("F5"));
     actionStartPresentation->addAction( action );
-    connect( action, SIGNAL(triggered()), this, SLOT(startPresentationFromBeginning()) );
+    connect( action, &QAction::triggered, this, &KPrView::startPresentationFromBeginning );
 
     m_actionStopPresentation = new QAction( i18n( "Stop presentation" ), this );
     actionCollection()->addAction( "slideshow_stop", m_actionStopPresentation );
     m_actionStopPresentation->setShortcut(Qt::Key_Escape);
-    connect(m_actionStopPresentation, SIGNAL(triggered()), this, SLOT(stopPresentation()));
+    connect(m_actionStopPresentation, &QAction::triggered, this, &KPrView::stopPresentation);
     m_actionStopPresentation->setEnabled(false);
 
     KToggleAction *showStatusbarAction = new KToggleAction(i18n("Show Status Bar"), this);
     showStatusbarAction->setCheckedState(KGuiItem(i18n("Hide Status Bar")));
     showStatusbarAction->setToolTip(i18n("Shows or hides the status bar"));
     actionCollection()->addAction("showStatusBar", showStatusbarAction);
-    connect(showStatusbarAction, SIGNAL(toggled(bool)), this, SLOT(showStatusBar(bool)));
+    connect(showStatusbarAction, &QAction::toggled, this, &KPrView::showStatusBar);
 
     //Update state of status bar action
     if (showStatusbarAction && statusBar()){
@@ -309,34 +309,34 @@ void KPrView::initActions()
 
     action = new QAction( i18n( "Configure Slide Show..." ), this );
     actionCollection()->addAction( "slideshow_configure", action );
-    connect( action, SIGNAL(triggered()), this, SLOT(configureSlideShow()) );
+    connect( action, &QAction::triggered, this, &KPrView::configureSlideShow );
 
     action = new QAction( i18n( "Configure Presenter View..." ), this );
     actionCollection()->addAction( "slideshow_presenterview", action );
-    connect( action, SIGNAL(triggered()), this, SLOT(configurePresenterView()) );
+    connect( action, &QAction::triggered, this, &KPrView::configurePresenterView );
 
     m_actionDrawOnPresentation = new QAction( i18n( "Draw on the presentation..." ), this );
     actionCollection()->setDefaultShortcut(m_actionDrawOnPresentation, Qt::Key_P);
     m_actionDrawOnPresentation->setShortcutContext(Qt::ApplicationShortcut);
     actionCollection()->addAction( "draw_on_presentation", m_actionDrawOnPresentation );
-    connect( m_actionDrawOnPresentation, SIGNAL(triggered()), this, SLOT(drawOnPresentation()) );
+    connect( m_actionDrawOnPresentation, &QAction::triggered, this, &KPrView::drawOnPresentation );
     m_actionDrawOnPresentation->setEnabled(false);
 
     m_actionHighlightPresentation = new QAction( i18n( "Highlight the presentation..." ), this );
     actionCollection()->setDefaultShortcut(m_actionHighlightPresentation, Qt::Key_H);
     m_actionHighlightPresentation->setShortcutContext(Qt::ApplicationShortcut);
     actionCollection()->addAction( "highlight_presentation", m_actionHighlightPresentation );
-    connect( m_actionHighlightPresentation, SIGNAL(triggered()), this, SLOT(highlightPresentation()) );
+    connect( m_actionHighlightPresentation, &QAction::triggered, this, &KPrView::highlightPresentation );
     m_actionHighlightPresentation->setEnabled(false);
 
     m_actionBlackPresentation = new QAction( i18n( "Blackscreen on the presentation..." ), this );
     actionCollection()->setDefaultShortcut(m_actionBlackPresentation, Qt::Key_B);
     m_actionBlackPresentation->setShortcutContext(Qt::ApplicationShortcut);
     actionCollection()->addAction( "black_presentation", m_actionBlackPresentation );
-    connect( m_actionBlackPresentation, SIGNAL(triggered()), this, SLOT(blackPresentation()) );
+    connect( m_actionBlackPresentation, &QAction::triggered, this, &KPrView::blackPresentation );
     m_actionBlackPresentation->setEnabled(false);
 
-    connect(tabBar(), SIGNAL(currentChanged(int)), this, SLOT(changeViewByIndex(int)));
+    connect(tabBar(), &QTabBar::currentChanged, this, &KPrView::changeViewByIndex);
 }
 
 bool KPrView::event(QEvent* event)

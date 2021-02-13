@@ -316,8 +316,8 @@ bool NetAccess::filecopyInternal(const QUrl &src, const QUrl &target, int permis
                     ? KIO::file_move(src, target, permissions, flags)
                     : KIO::file_copy(src, target, permissions, flags);
     KJobWidgets::setWindow(job, window);
-    connect(job, SIGNAL(result(KJob*)),
-            this, SLOT(slotResult(KJob*)));
+    connect(job, &KJob::result,
+            this, &NetAccess::slotResult);
 
     enter_loop();
     return d->bJobOK;
@@ -332,8 +332,8 @@ bool NetAccess::dircopyInternal(const QList<QUrl> &src, const QUrl &target,
                     ? KIO::move(src, target)
                     : KIO::copy(src, target);
     KJobWidgets::setWindow(job, window);
-    connect(job, SIGNAL(result(KJob*)),
-            this, SLOT(slotResult(KJob*)));
+    connect(job, &KJob::result,
+            this, &NetAccess::slotResult);
 
     enter_loop();
     return d->bJobOK;
@@ -348,8 +348,8 @@ bool NetAccess::statInternal(const QUrl &url, int details, StatSide side,
     KJobWidgets::setWindow(job, window);
     job->setDetails(details);
     job->setSide(side == SourceSide ? StatJob::SourceSide : StatJob::DestinationSide);
-    connect(job, SIGNAL(result(KJob*)),
-            this, SLOT(slotResult(KJob*)));
+    connect(job, &KJob::result,
+            this, &NetAccess::slotResult);
     enter_loop();
     return d->bJobOK;
 }
@@ -359,8 +359,8 @@ bool NetAccess::delInternal(const QUrl &url, QWidget *window)
     d->bJobOK = true; // success unless further error occurs
     KIO::Job *job = KIO::del(url);
     KJobWidgets::setWindow(job, window);
-    connect(job, SIGNAL(result(KJob*)),
-            this, SLOT(slotResult(KJob*)));
+    connect(job, &KJob::result,
+            this, &NetAccess::slotResult);
     enter_loop();
     return d->bJobOK;
 }
@@ -371,8 +371,8 @@ bool NetAccess::mkdirInternal(const QUrl &url, int permissions,
     d->bJobOK = true; // success unless further error occurs
     KIO::Job *job = KIO::mkdir(url, permissions);
     KJobWidgets::setWindow(job, window);
-    connect(job, SIGNAL(result(KJob*)),
-            this, SLOT(slotResult(KJob*)));
+    connect(job, &KJob::result,
+            this, &NetAccess::slotResult);
     enter_loop();
     return d->bJobOK;
 }
@@ -383,8 +383,8 @@ QString NetAccess::mimetypeInternal(const QUrl &url, QWidget *window)
     d->m_mimetype = QLatin1String("unknown");
     KIO::Job *job = KIO::mimetype(url);
     KJobWidgets::setWindow(job, window);
-    connect(job, SIGNAL(result(KJob*)),
-            this, SLOT(slotResult(KJob*)));
+    connect(job, &KJob::result,
+            this, &NetAccess::slotResult);
     connect(job, SIGNAL(mimetype(KIO::Job*,QString)),
             this, SLOT(slotMimetype(KIO::Job*,QString)));
     enter_loop();
@@ -418,8 +418,8 @@ QString NetAccess::fish_executeInternal(const QUrl &url, const QString &command,
 
         KIO::Job *job = KIO::special(tempPathUrl, packedArgs);
         KJobWidgets::setWindow(job, window);
-        connect(job, SIGNAL(result(KJob*)),
-                this, SLOT(slotResult(KJob*)));
+        connect(job, &KJob::result,
+                this, &NetAccess::slotResult);
         enter_loop();
 
         // since the KIO::special does not provide feedback we need to download the result
@@ -458,8 +458,8 @@ bool NetAccess::synchronousRunInternal(Job *job, QWidget *window, QByteArray *da
         }
     }
 
-    connect(job, SIGNAL(result(KJob*)),
-            this, SLOT(slotResult(KJob*)));
+    connect(job, &KJob::result,
+            this, &NetAccess::slotResult);
 
     const QMetaObject *meta = job->metaObject();
 
@@ -490,8 +490,8 @@ bool NetAccess::synchronousRunInternal(Job *job, QWidget *window, QByteArray *da
 void NetAccess::enter_loop()
 {
     QEventLoop eventLoop;
-    connect(this, SIGNAL(leaveModality()),
-            &eventLoop, SLOT(quit()));
+    connect(this, &NetAccess::leaveModality,
+            &eventLoop, &QEventLoop::quit);
     eventLoop.exec(QEventLoop::ExcludeUserInputEvents);
 }
 

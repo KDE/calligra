@@ -54,11 +54,11 @@ void KWDebugWidget::initUi()
 
     m_buttonSet = new QPushButton(this);
     m_buttonSet->setText("Set"); // No i18n as it's for debug only.
-    connect(m_buttonSet, SIGNAL(clicked(bool)), this, SLOT(doSetMagic()));
+    connect(m_buttonSet, &QAbstractButton::clicked, this, &KWDebugWidget::doSetMagic);
 
     m_buttonGet = new QPushButton(this);
     m_buttonGet->setText("Get"); // No i18n as it's for debug only.
-    connect(m_buttonGet, SIGNAL(clicked(bool)), this, SLOT(doGetMagic()));
+    connect(m_buttonGet, &QAbstractButton::clicked, this, &KWDebugWidget::doGetMagic);
 }
 
 void KWDebugWidget::initLayout()
@@ -73,7 +73,7 @@ void KWDebugWidget::initLayout()
 
 void KWDebugWidget::updateData()
 {
-    QTimer().singleShot(100, this, SLOT(updateData()));
+    QTimer().singleShot(100, this, &KWDebugWidget::updateData);
     if (!isVisible()) {
         return;
     }

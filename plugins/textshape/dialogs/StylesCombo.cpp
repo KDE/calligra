@@ -57,9 +57,9 @@ StylesCombo::StylesCombo(QWidget *parent)
 
     StylesDelegate *delegate = new StylesDelegate();
     connect(delegate, SIGNAL(needsUpdate(QModelIndex)), m_view, SLOT(update(QModelIndex)));
-    connect(delegate, SIGNAL(styleManagerButtonClicked(QModelIndex)), this, SLOT(slotShowDia(QModelIndex)));
-    connect(delegate, SIGNAL(deleteStyleButtonClicked(QModelIndex)), this, SLOT(slotDeleteStyle(QModelIndex)));
-    connect(delegate, SIGNAL(clickedInItem(QModelIndex)), this, SLOT(slotItemClicked(QModelIndex)));
+    connect(delegate, &StylesDelegate::styleManagerButtonClicked, this, &StylesCombo::slotShowDia);
+    connect(delegate, &StylesDelegate::deleteStyleButtonClicked, this, &StylesCombo::slotDeleteStyle);
+    connect(delegate, &StylesDelegate::clickedInItem, this, &StylesCombo::slotItemClicked);
     setItemDelegate(delegate);
 
 //    connect(this, SIGNAL(currentIndexChanged(int)), this, SLOT(slotSelectionChanged(int)));
@@ -123,9 +123,9 @@ void StylesCombo::setLineEdit(QLineEdit *edit)
     m_preview = qobject_cast<StylesComboPreview*>(edit);
 
     if (m_preview) {
-        connect(m_preview, SIGNAL(resized()), this, SLOT(slotUpdatePreview()));
-        connect(m_preview, SIGNAL(newStyleRequested(QString)), this, SIGNAL(newStyleRequested(QString)));
-        connect(m_preview, SIGNAL(clicked()), this, SLOT(slotPreviewClicked()));
+        connect(m_preview, &StylesComboPreview::resized, this, &StylesCombo::slotUpdatePreview);
+        connect(m_preview, &StylesComboPreview::newStyleRequested, this, &StylesCombo::newStyleRequested);
+        connect(m_preview, &StylesComboPreview::clicked, this, &StylesCombo::slotPreviewClicked);
     }
 
 }
@@ -208,9 +208,9 @@ void StylesCombo::showEditIcon(bool show){
     if (!delegate) { //the following should never get called as we are creating a StylesDelegate on the constructor;
         StylesDelegate *delegate = new StylesDelegate();
         connect(delegate, SIGNAL(needsUpdate(QModelIndex)), m_view, SLOT(update(QModelIndex)));
-        connect(delegate, SIGNAL(styleManagerButtonClicked(QModelIndex)), this, SLOT(slotShowDia(QModelIndex)));
-        connect(delegate, SIGNAL(deleteStyleButtonClicked(QModelIndex)), this, SLOT(slotDeleteStyle(QModelIndex)));
-        connect(delegate, SIGNAL(clickedInItem(QModelIndex)), this, SLOT(slotItemClicked(QModelIndex)));
+        connect(delegate, &StylesDelegate::styleManagerButtonClicked, this, &StylesCombo::slotShowDia);
+        connect(delegate, &StylesDelegate::deleteStyleButtonClicked, this, &StylesCombo::slotDeleteStyle);
+        connect(delegate, &StylesDelegate::clickedInItem, this, &StylesCombo::slotItemClicked);
         setItemDelegate(delegate);
     }
     delegate->setEditButtonEnable(show);

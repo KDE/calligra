@@ -135,8 +135,8 @@ ComponentTransferEffectConfigWidget::ComponentTransferEffectConfigWidget(QWidget
 
     connect(m_function, SIGNAL(currentIndexChanged(int)), m_stack, SLOT(setCurrentIndex(int)));
     connect(m_function, SIGNAL(currentIndexChanged(int)), this, SLOT(functionChanged(int)));
-    connect(m_tableValues, SIGNAL(editingFinished()), this, SLOT(tableValuesChanged()));
-    connect(m_discreteValues, SIGNAL(editingFinished()), this, SLOT(discreteValuesChanged()));
+    connect(m_tableValues, &QLineEdit::editingFinished, this, &ComponentTransferEffectConfigWidget::tableValuesChanged);
+    connect(m_discreteValues, &QLineEdit::editingFinished, this, &ComponentTransferEffectConfigWidget::discreteValuesChanged);
     connect(m_slope, SIGNAL(valueChanged(double)), this, SLOT(slopeChanged(double)));
     connect(m_intercept, SIGNAL(valueChanged(double)), this, SLOT(interceptChanged(double)));
     connect(m_amplitude, SIGNAL(valueChanged(double)), this, SLOT(amplitudeChanged(double)));

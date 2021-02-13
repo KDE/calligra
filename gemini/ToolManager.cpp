@@ -40,8 +40,8 @@ ToolManager::ToolManager(QQuickItem* parent)
     : QQuickItem(parent)
     , d(new Private)
 {
-    connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)),
-            this, SLOT(slotToolChanged(KoCanvasController*,int)));
+    connect(KoToolManager::instance(), &KoToolManager::changedTool,
+            this, &ToolManager::slotToolChanged);
 }
 
 ToolManager::~ToolManager()

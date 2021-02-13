@@ -299,12 +299,12 @@ PlotAreaConfigWidget::PlotAreaConfigWidget()
     d->ui.chartTypeMenu->setMenu(chartTypeMenu);
     d->ui.chartTypeMenu->setIconSize(QSize(32, 32));
 
-    connect(chartTypeMenu, SIGNAL(triggered(QAction*)),
-            this,          SLOT(chartTypeSelected(QAction*)));
+    connect(chartTypeMenu, &QMenu::triggered,
+            this,          &PlotAreaConfigWidget::chartTypeSelected);
 
 
-    connect(d->ui.threeDLook, SIGNAL(toggled(bool)),
-            this,             SLOT(setThreeDMode(bool)));
+    connect(d->ui.threeDLook, &QAbstractButton::toggled,
+            this,             &PlotAreaConfigWidget::setThreeDMode);
 
     connect(d->ui.chartOrientation, SIGNAL(currentIndexChanged(int)), this, SLOT(ui_chartOrientationChanged(int)));
 
@@ -705,16 +705,16 @@ void PlotAreaConfigWidget::slotShowTableEditor()
                     ui_dataSetSelectionChanged_CellRegionDialog(0);
 
                     debugChartUiPlotArea<<"external data source";
-                    connect(d->cellRegionDialog->xDataRegion, SIGNAL(editingFinished()),
-                            this, SLOT(ui_dataSetXDataRegionChanged()));
-                    connect(d->cellRegionDialog->yDataRegion, SIGNAL(editingFinished()),
-                            this, SLOT(ui_dataSetYDataRegionChanged()));
-                    connect(d->cellRegionDialog->labelDataRegion, SIGNAL(editingFinished()),
-                            this, SLOT(ui_dataSetLabelDataRegionChanged()));
+                    connect(d->cellRegionDialog->xDataRegion, &QLineEdit::editingFinished,
+                            this, &PlotAreaConfigWidget::ui_dataSetXDataRegionChanged);
+                    connect(d->cellRegionDialog->yDataRegion, &QLineEdit::editingFinished,
+                            this, &PlotAreaConfigWidget::ui_dataSetYDataRegionChanged);
+                    connect(d->cellRegionDialog->labelDataRegion, &QLineEdit::editingFinished,
+                            this, &PlotAreaConfigWidget::ui_dataSetLabelDataRegionChanged);
 //                     connect(d->cellRegionDialog->bubbleDataRegion, SIGNAL(textEdited(QString)),
 //                             this, SLOT(ui_dataSetCustomDataRegionChanged(QString)));
-                    connect(d->cellRegionDialog->categoryDataRegion, SIGNAL(editingFinished()),
-                            this, SLOT(ui_dataSetCategoryDataRegionChanged()));
+                    connect(d->cellRegionDialog->categoryDataRegion, &QLineEdit::editingFinished,
+                            this, &PlotAreaConfigWidget::ui_dataSetCategoryDataRegionChanged);
                     connect(d->cellRegionDialog->dataSets, SIGNAL(currentIndexChanged(int)),
                             this, SLOT(ui_dataSetSelectionChanged_CellRegionDialog(int)));
                 }

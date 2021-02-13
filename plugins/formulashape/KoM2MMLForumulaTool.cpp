@@ -137,8 +137,8 @@ QWidget* KoM2MMLFormulaTool::createOptionWidget()
     
     layout->addSpacerItem(new QSpacerItem(0,0));
     
-    connect(m_lineEdit, SIGNAL(editingFinished()), SLOT(textEdited()));
-    connect(m_lineEdit, SIGNAL(returnPressed()), SLOT(textEdited()));
+    connect(m_lineEdit, &QLineEdit::editingFinished, this, &KoM2MMLFormulaTool::textEdited);
+    connect(m_lineEdit, &QLineEdit::returnPressed, this, &KoM2MMLFormulaTool::textEdited);
     m_lineEdit->setText(m_text);
     
     return widget;

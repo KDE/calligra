@@ -150,7 +150,7 @@ KoScriptManagerDialog::KoScriptManagerDialog()
     m_collection = new KoScriptManagerCollection(mainWidget());
     setMainWidget(m_collection);
     resize(QSize(520, 380).expandedTo(minimumSizeHint()));
-    connect(this, SIGNAL(accepted()), this, SLOT(slotAccepted()));
+    connect(this, &QDialog::accepted, this, &KoScriptManagerDialog::slotAccepted);
 }
 
 KoScriptManagerDialog::~KoScriptManagerDialog()

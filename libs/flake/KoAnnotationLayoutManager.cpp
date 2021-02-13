@@ -71,10 +71,10 @@ KoAnnotationLayoutManager::~KoAnnotationLayoutManager()
 void KoAnnotationLayoutManager::setShapeManager(KoShapeManager *shapeManager)
 {
     if (d->shapeManager) {
-        disconnect(d->shapeManager, SIGNAL(shapeChanged(KoShape*)), this, SLOT(updateLayout(KoShape*)));
+        disconnect(d->shapeManager, &KoShapeManager::shapeChanged, this, &KoAnnotationLayoutManager::updateLayout);
     }
     d->shapeManager = shapeManager;
-    connect(d->shapeManager, SIGNAL(shapeChanged(KoShape*)), this, SLOT(updateLayout(KoShape*)));
+    connect(d->shapeManager, &KoShapeManager::shapeChanged, this, &KoAnnotationLayoutManager::updateLayout);
 }
 
 

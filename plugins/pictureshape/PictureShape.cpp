@@ -70,7 +70,7 @@ _Private::PixmapScaler::PixmapScaler(PictureShape *pictureShape, const QSize &pi
 {
     m_image = pictureShape->imageData()->image();
     m_imageKey = pictureShape->imageData()->key();
-    connect(this, SIGNAL(finished(QString,QImage)), &pictureShape->m_proxy, SLOT(setImage(QString,QImage)));
+    connect(this, &PixmapScaler::finished, &pictureShape->m_proxy, &PictureShapeProxy::setImage);
 }
 
 void _Private::PixmapScaler::run()

@@ -57,11 +57,11 @@ KoPABackgroundToolWidget::KoPABackgroundToolWidget( KoPABackgroundTool *tool, QW
         isSlideType ? i18n("Display shapes of master slide") : i18n("Display shapes of master page");
     widget.displayMasterShapes->setText(displayMasterShapesText);
 
-    connect(widget.useMasterBackground, SIGNAL(clicked(bool)), SLOT(useMasterBackground(bool)));
-    connect(widget.backgroundImage, SIGNAL(clicked(bool)), SLOT(setBackgroundImage()));
-    connect(widget.displayMasterShapes, SIGNAL(clicked(bool)), SLOT(displayMasterShapes(bool)));
+    connect(widget.useMasterBackground, &QAbstractButton::clicked, this, &KoPABackgroundToolWidget::useMasterBackground);
+    connect(widget.backgroundImage, &QAbstractButton::clicked, this, &KoPABackgroundToolWidget::setBackgroundImage);
+    connect(widget.displayMasterShapes, &QAbstractButton::clicked, this, &KoPABackgroundToolWidget::displayMasterShapes);
 
-    connect(m_tool->view()->proxyObject, SIGNAL(activePageChanged()), SLOT(slotActivePageChanged()));
+    connect(m_tool->view()->proxyObject, &KoPAViewProxyObject::activePageChanged, this, &KoPABackgroundToolWidget::slotActivePageChanged);
 
     slotActivePageChanged();
 }

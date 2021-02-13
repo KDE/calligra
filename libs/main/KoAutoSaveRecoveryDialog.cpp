@@ -68,7 +68,7 @@ public:
         QCheckBox *checkBox = new QCheckBox;
         checkBox->setProperty("fileitem", index.data());
 
-        connect(checkBox, SIGNAL(toggled(bool)), m_parent, SLOT(toggleFileItem(bool)));
+        connect(checkBox, &QAbstractButton::toggled, m_parent, &KoAutoSaveRecoveryDialog::toggleFileItem);
         QLabel *thumbnail = new QLabel;
         QLabel *filename = new QLabel;
         QLabel *dateModified = new QLabel;

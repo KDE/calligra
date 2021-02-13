@@ -275,15 +275,15 @@ void KoZoomAction::zoomOut()
 QWidget * KoZoomAction::createWidget(QWidget *parent)
 {
     KoZoomWidget* zoomWidget = new KoZoomWidget(parent, d->specialButtons, d->sliderLookup.size() - 1);
-    connect(this, SIGNAL(zoomLevelsChanged(QStringList)), zoomWidget, SLOT(setZoomLevels(QStringList)));
-    connect(this, SIGNAL(currentZoomLevelChanged(QString)), zoomWidget, SLOT(setCurrentZoomLevel(QString)));
-    connect(this, SIGNAL(sliderChanged(int)), zoomWidget, SLOT(setSliderValue(int)));
-    connect(this, SIGNAL(aspectModeChanged(bool)), zoomWidget, SLOT(setAspectMode(bool)));
-    connect(zoomWidget, SIGNAL(sliderValueChanged(int)), this, SLOT(sliderValueChanged(int)));
+    connect(this, &KoZoomAction::zoomLevelsChanged, zoomWidget, &KoZoomWidget::setZoomLevels);
+    connect(this, &KoZoomAction::currentZoomLevelChanged, zoomWidget, &KoZoomWidget::setCurrentZoomLevel);
+    connect(this, &KoZoomAction::sliderChanged, zoomWidget, &KoZoomWidget::setSliderValue);
+    connect(this, &KoZoomAction::aspectModeChanged, zoomWidget, &KoZoomWidget::setAspectMode);
+    connect(zoomWidget, &KoZoomWidget::sliderValueChanged, this, &KoZoomAction::sliderValueChanged);
     connect(zoomWidget, SIGNAL(zoomLevelChanged(QString)), this, SLOT(triggered(QString)));
-    connect(zoomWidget, SIGNAL(aspectModeChanged(bool)), this, SIGNAL(aspectModeChanged(bool)));
-    connect(zoomWidget, SIGNAL(zoomedToSelection()), this, SIGNAL(zoomedToSelection()));
-    connect(zoomWidget, SIGNAL(zoomedToAll()), this, SIGNAL(zoomedToAll()));
+    connect(zoomWidget, &KoZoomWidget::aspectModeChanged, this, &KoZoomAction::aspectModeChanged);
+    connect(zoomWidget, &KoZoomWidget::zoomedToSelection, this, &KoZoomAction::zoomedToSelection);
+    connect(zoomWidget, &KoZoomWidget::zoomedToAll, this, &KoZoomAction::zoomedToAll);
     regenerateItems( d->effectiveZoom, true );
     syncSliderWithZoom();
     return zoomWidget;

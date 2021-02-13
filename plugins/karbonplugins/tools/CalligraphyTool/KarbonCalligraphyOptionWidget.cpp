@@ -290,14 +290,14 @@ void KarbonCalligraphyOptionWidget::createConnections()
 
 
     // propagate changes
-    connect(m_usePath, SIGNAL(toggled(bool)),
-            SIGNAL(usePathChanged(bool)));
+    connect(m_usePath, &QAbstractButton::toggled,
+            this, &KarbonCalligraphyOptionWidget::usePathChanged);
 
-    connect(m_usePressure, SIGNAL(toggled(bool)),
-            SIGNAL(usePressureChanged(bool)));
+    connect(m_usePressure, &QAbstractButton::toggled,
+            this, &KarbonCalligraphyOptionWidget::usePressureChanged);
 
-    connect(m_useAngle, SIGNAL(toggled(bool)),
-            SIGNAL(useAngleChanged(bool)));
+    connect(m_useAngle, &QAbstractButton::toggled,
+            this, &KarbonCalligraphyOptionWidget::useAngleChanged);
 
     connect(m_widthBox, SIGNAL(valueChanged(double)),
             SIGNAL(widthChanged(double)));
@@ -322,14 +322,14 @@ void KarbonCalligraphyOptionWidget::createConnections()
 
 
     // update profile
-    connect(m_usePath, SIGNAL(toggled(bool)),
-            SLOT(updateCurrentProfile()));
+    connect(m_usePath, &QAbstractButton::toggled,
+            this, &KarbonCalligraphyOptionWidget::updateCurrentProfile);
 
-    connect(m_usePressure, SIGNAL(toggled(bool)),
-            SLOT(updateCurrentProfile()));
+    connect(m_usePressure, &QAbstractButton::toggled,
+            this, &KarbonCalligraphyOptionWidget::updateCurrentProfile);
 
-    connect(m_useAngle, SIGNAL(toggled(bool)),
-            SLOT(updateCurrentProfile()));
+    connect(m_useAngle, &QAbstractButton::toggled,
+            this, &KarbonCalligraphyOptionWidget::updateCurrentProfile);
 
     connect(m_widthBox, SIGNAL(valueChanged(double)),
             SLOT(updateCurrentProfile()));
@@ -353,11 +353,11 @@ void KarbonCalligraphyOptionWidget::createConnections()
             SLOT(updateCurrentProfile()));
 
 
-    connect(m_saveButton, SIGNAL(clicked()), SLOT(saveProfileAs()));
+    connect(m_saveButton, &QAbstractButton::clicked, this, &KarbonCalligraphyOptionWidget::saveProfileAs);
     connect(m_removeButton, SIGNAL(clicked()), SLOT(removeProfile()));
 
     // visualization
-    connect(m_useAngle, SIGNAL(toggled(bool)), SLOT(toggleUseAngle(bool)));
+    connect(m_useAngle, &QAbstractButton::toggled, this, &KarbonCalligraphyOptionWidget::toggleUseAngle);
 }
 
 void KarbonCalligraphyOptionWidget::addDefaultProfiles()

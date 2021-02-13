@@ -141,8 +141,8 @@ LatexExportDialog::LatexExportDialog(KoStore* inputStore, QWidget* parent)
     languagesList->addItem("swedish");
     languagesList->addItem("turkish");
 
-    connect(m_ui.addLanguageBtn, SIGNAL(clicked(bool)), SLOT(addLanguage()));
-    connect(m_ui.rmLanguageBtn, SIGNAL(clicked(bool)), SLOT(removeLanguage()));
+    connect(m_ui.addLanguageBtn, &QAbstractButton::clicked, this, &LatexExportDialog::addLanguage);
+    connect(m_ui.rmLanguageBtn, &QAbstractButton::clicked, this, &LatexExportDialog::removeLanguage);
 
     setMainWidget(mainWidget);
 

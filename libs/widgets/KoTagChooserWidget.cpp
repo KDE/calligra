@@ -72,18 +72,18 @@ KoTagChooserWidget::KoTagChooserWidget(QWidget* parent): QWidget(parent)
     connect(d->comboBox, SIGNAL(currentIndexChanged(QString)),
             this, SIGNAL(tagChosen(QString)));
 
-    connect(d->tagToolButton, SIGNAL(popupMenuAboutToShow()),
-            this, SLOT(tagOptionsContextMenuAboutToShow()));
-    connect(d->tagToolButton, SIGNAL(newTagRequested(QString)),
-            this, SIGNAL(newTagRequested(QString)));
-    connect(d->tagToolButton, SIGNAL(deletionOfCurrentTagRequested()),
-            this, SLOT(contextDeleteCurrentTag()));
+    connect(d->tagToolButton, &KoTagToolButton::popupMenuAboutToShow,
+            this, &KoTagChooserWidget::tagOptionsContextMenuAboutToShow);
+    connect(d->tagToolButton, &KoTagToolButton::newTagRequested,
+            this, &KoTagChooserWidget::newTagRequested);
+    connect(d->tagToolButton, &KoTagToolButton::deletionOfCurrentTagRequested,
+            this, &KoTagChooserWidget::contextDeleteCurrentTag);
     connect(d->tagToolButton, SIGNAL(renamingOfCurrentTagRequested(QString)),
             this, SLOT(tagRenamingRequested(QString)));
-    connect(d->tagToolButton, SIGNAL(undeletionOfTagRequested(QString)),
-            this, SIGNAL(tagUndeletionRequested(QString)));
-    connect(d->tagToolButton, SIGNAL(purgingOfTagUndeleteListRequested()),
-            this, SIGNAL(tagUndeletionListPurgeRequested()));
+    connect(d->tagToolButton, &KoTagToolButton::undeletionOfTagRequested,
+            this, &KoTagChooserWidget::tagUndeletionRequested);
+    connect(d->tagToolButton, &KoTagToolButton::purgingOfTagUndeleteListRequested,
+            this, &KoTagChooserWidget::tagUndeletionListPurgeRequested);
 
 }
 

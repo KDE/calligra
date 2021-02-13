@@ -76,7 +76,7 @@ KoProgressUpdater::KoProgressUpdater(KoProgressProxy *progressBar,
     : d (new Private(this, progressBar, mode, output))
 {
     Q_ASSERT(d->progressBar);
-    connect(&d->updateGuiTimer, SIGNAL(timeout()), SLOT(updateUi()));
+    connect(&d->updateGuiTimer, &QTimer::timeout, this, &KoProgressUpdater::updateUi);
 }
 
 KoProgressUpdater::~KoProgressUpdater()
@@ -135,7 +135,7 @@ QPointer<KoUpdater> KoProgressUpdater::startSubtask(int weight,
     KoUpdaterPrivate *p = new KoUpdaterPrivate(this, weight, name);
     d->totalWeight += weight;
     d->subtasks.append(p);
-    connect(p, SIGNAL(sigUpdated()), SLOT(update()));
+    connect(p, &KoUpdaterPrivate::sigUpdated, this, &KoProgressUpdater::update);
 
     QPointer<KoUpdater> updater = new KoUpdater(p);
     d->subTaskWrappers.append(updater);

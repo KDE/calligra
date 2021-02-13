@@ -89,18 +89,18 @@ StyleManagerDialog::StyleManagerDialog(QWidget* parent, Selection* selection, St
 
     connect(m_displayBox, SIGNAL(activated(int)),
             this, SLOT(slotDisplayMode(int)));
-    connect(this, SIGNAL(applyClicked()),
-            this, SLOT(slotOk()));
-    connect(m_newButton, SIGNAL(clicked(bool)),
-            this, SLOT(slotNew()));
-    connect(m_modifyButton, SIGNAL(clicked(bool)),
-            this, SLOT(slotEdit()));
-    connect(m_deleteButton, SIGNAL(clicked(bool)),
-            this, SLOT(slotRemove()));
-    connect(m_styleList, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)),
-            this, SLOT(slotEdit()));
-    connect(m_styleList, SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
-            this, SLOT(selectionChanged(QTreeWidgetItem*)));
+    connect(this, &KoDialog::applyClicked,
+            this, &StyleManagerDialog::slotOk);
+    connect(m_newButton, &QAbstractButton::clicked,
+            this, &StyleManagerDialog::slotNew);
+    connect(m_modifyButton, &QAbstractButton::clicked,
+            this, &StyleManagerDialog::slotEdit);
+    connect(m_deleteButton, &QAbstractButton::clicked,
+            this, &StyleManagerDialog::slotRemove);
+    connect(m_styleList, &QTreeWidget::itemDoubleClicked,
+            this, &StyleManagerDialog::slotEdit);
+    connect(m_styleList, &QTreeWidget::currentItemChanged,
+            this, &StyleManagerDialog::selectionChanged);
 }
 
 StyleManagerDialog::~StyleManagerDialog()

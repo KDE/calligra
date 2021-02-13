@@ -26,14 +26,14 @@ StatisticsPreferencesPopup::StatisticsPreferencesPopup(QWidget *parent)
 {
     w = new Ui::StatisticsPreferencesPopup();
     w->setupUi(this);
-    connect(w->check_words, SIGNAL(stateChanged(int)), this, SIGNAL(wordsDisplayChange(int)));
-    connect(w->check_sentences, SIGNAL(stateChanged(int)), this, SIGNAL(sentencesDisplayChange(int)));
-    connect(w->check_syllables, SIGNAL(stateChanged(int)), this, SIGNAL(syllablesDisplayChange(int)));
-    connect(w->check_lines, SIGNAL(stateChanged(int)), this, SIGNAL(linesDisplayChange(int)));
-    connect(w->check_charspace, SIGNAL(stateChanged(int)), this, SIGNAL(charspaceDisplayChange(int)));
-    connect(w->check_charnospace, SIGNAL(stateChanged(int)), this, SIGNAL(charnospaceDisplayChange(int)));
-    connect(w->check_east, SIGNAL(stateChanged(int)), this, SIGNAL(eastDisplayChange(int)));
-    connect(w->check_flesch, SIGNAL(stateChanged(int)), this, SIGNAL(fleschDisplayChange(int)));
+    connect(w->check_words, &QCheckBox::stateChanged, this, &StatisticsPreferencesPopup::wordsDisplayChange);
+    connect(w->check_sentences, &QCheckBox::stateChanged, this, &StatisticsPreferencesPopup::sentencesDisplayChange);
+    connect(w->check_syllables, &QCheckBox::stateChanged, this, &StatisticsPreferencesPopup::syllablesDisplayChange);
+    connect(w->check_lines, &QCheckBox::stateChanged, this, &StatisticsPreferencesPopup::linesDisplayChange);
+    connect(w->check_charspace, &QCheckBox::stateChanged, this, &StatisticsPreferencesPopup::charspaceDisplayChange);
+    connect(w->check_charnospace, &QCheckBox::stateChanged, this, &StatisticsPreferencesPopup::charnospaceDisplayChange);
+    connect(w->check_east, &QCheckBox::stateChanged, this, &StatisticsPreferencesPopup::eastDisplayChange);
+    connect(w->check_flesch, &QCheckBox::stateChanged, this, &StatisticsPreferencesPopup::fleschDisplayChange);
 }
 
 

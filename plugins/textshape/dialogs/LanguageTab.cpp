@@ -58,8 +58,8 @@ LanguageTab::LanguageTab(/*KSpell2::Loader::Ptr loader,*/bool uniqueFormat, QWid
         } else
             widget.languageList->addItem(*itName);
     }
-    connect(widget.languageList, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),
-            this, SIGNAL(languageChanged()));
+    connect(widget.languageList, &QListWidget::currentItemChanged,
+            this, &LanguageTab::languageChanged);
 }
 
 LanguageTab::~LanguageTab()

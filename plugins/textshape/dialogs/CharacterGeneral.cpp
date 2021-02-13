@@ -64,8 +64,8 @@ CharacterGeneral::CharacterGeneral(QWidget *parent)
     widget.inheritStyle->setEnabled(false);
 
     m_characterHighlighting = new CharacterHighlighting(this);
-    connect(m_characterHighlighting, SIGNAL(charStyleChanged()), this, SIGNAL(styleChanged()));
-    connect(m_characterHighlighting, SIGNAL(charStyleChanged()), this, SLOT(setPreviewCharacterStyle()));
+    connect(m_characterHighlighting, &CharacterHighlighting::charStyleChanged, this, &CharacterGeneral::styleChanged);
+    connect(m_characterHighlighting, &CharacterHighlighting::charStyleChanged, this, &CharacterGeneral::setPreviewCharacterStyle);
 
     m_languageTab = new LanguageTab(true, this);
 
@@ -73,13 +73,13 @@ CharacterGeneral::CharacterGeneral(QWidget *parent)
 
     m_languageTab->setVisible(false);
 
-    connect(widget.name, SIGNAL(textChanged(QString)), this, SIGNAL(nameChanged(QString)));
+    connect(widget.name, &QLineEdit::textChanged, this, &CharacterGeneral::nameChanged);
 }
 
 void CharacterGeneral::hideStyleName(bool hide)
 {
     if (hide) {
-        disconnect(widget.name, SIGNAL(textChanged(QString)), this, SIGNAL(nameChanged(QString)));
+        disconnect(widget.name, &QLineEdit::textChanged, this, &CharacterGeneral::nameChanged);
         widget.tabs->removeTab(0);
         m_nameHidden = true;
     }

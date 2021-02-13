@@ -30,9 +30,9 @@ ParagraphIndentSpacing::ParagraphIndentSpacing(QWidget *parent)
 {
     widget.setupUi(this);
 
-    connect(widget.first, SIGNAL(valueChangedPt(qreal)), this, SLOT(firstLineMarginChanged(qreal)));
-    connect(widget.left, SIGNAL(valueChangedPt(qreal)), this, SLOT(leftMarginChanged(qreal)));
-    connect(widget.right, SIGNAL(valueChangedPt(qreal)), this, SLOT(rightMarginChanged(qreal)));
+    connect(widget.first, &KoUnitDoubleSpinBox::valueChangedPt, this, &ParagraphIndentSpacing::firstLineMarginChanged);
+    connect(widget.left, &KoUnitDoubleSpinBox::valueChangedPt, this, &ParagraphIndentSpacing::leftMarginChanged);
+    connect(widget.right, &KoUnitDoubleSpinBox::valueChangedPt, this, &ParagraphIndentSpacing::rightMarginChanged);
 
     // Keep order in sync with lineSpacingType() and display()
     widget.lineSpacing->addItem(i18nc("Line spacing value", "Single"));
@@ -43,16 +43,16 @@ ParagraphIndentSpacing::ParagraphIndentSpacing(QWidget *parent)
     widget.lineSpacing->addItem(i18nc("Line spacing type", "Fixed"));
     widget.lineSpacing->addItem(i18nc("Line spacing type", "At least"));
 
-    connect(widget.first, SIGNAL(valueChangedPt(qreal)), this, SLOT(firstIndentValueChanged()));
-    connect(widget.left, SIGNAL(valueChangedPt(qreal)), this, SLOT(leftMarginValueChanged()));
-    connect(widget.right, SIGNAL(valueChangedPt(qreal)), this, SLOT(rightMarginValueChanged()));
-    connect(widget.after, SIGNAL(valueChangedPt(qreal)), this, SLOT(bottomMarginValueChanged()));
-    connect(widget.before, SIGNAL(valueChangedPt(qreal)), this, SLOT(topMarginValueChanged()));
+    connect(widget.first, &KoUnitDoubleSpinBox::valueChangedPt, this, &ParagraphIndentSpacing::firstIndentValueChanged);
+    connect(widget.left, &KoUnitDoubleSpinBox::valueChangedPt, this, &ParagraphIndentSpacing::leftMarginValueChanged);
+    connect(widget.right, &KoUnitDoubleSpinBox::valueChangedPt, this, &ParagraphIndentSpacing::rightMarginValueChanged);
+    connect(widget.after, &KoUnitDoubleSpinBox::valueChangedPt, this, &ParagraphIndentSpacing::bottomMarginValueChanged);
+    connect(widget.before, &KoUnitDoubleSpinBox::valueChangedPt, this, &ParagraphIndentSpacing::topMarginValueChanged);
     connect(widget.lineSpacing, SIGNAL(currentIndexChanged(int)), this, SLOT(lineSpacingChanged(int)));
-    connect(widget.useFont, SIGNAL(toggled(bool)), this, SLOT(useFontMetrices(bool)));
-    connect(widget.autoTextIndent, SIGNAL(stateChanged(int)), this, SLOT(autoTextIndentChanged(int)));
+    connect(widget.useFont, &QAbstractButton::toggled, this, &ParagraphIndentSpacing::useFontMetrices);
+    connect(widget.autoTextIndent, &QCheckBox::stateChanged, this, &ParagraphIndentSpacing::autoTextIndentChanged);
     connect(widget.proportional, SIGNAL(valueChanged(int)), this, SLOT(spacingPercentChanged()));
-    connect(widget.custom, SIGNAL(valueChangedPt(qreal)), this, SLOT(spacingValueChanged()));
+    connect(widget.custom, &KoUnitDoubleSpinBox::valueChangedPt, this, &ParagraphIndentSpacing::spacingValueChanged);
     lineSpacingChanged(0);
 }
 

@@ -111,14 +111,14 @@ KoToolBox::KoToolBox()
     // Update visibility of buttons
     setButtonsVisible(QList<QString>());
 
-    connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)),
-            this, SLOT(setActiveTool(KoCanvasController*,int)));
-    connect(KoToolManager::instance(), SIGNAL(currentLayerChanged(const KoCanvasController*,const KoShapeLayer*)),
-            this, SLOT(setCurrentLayer(const KoCanvasController*,const KoShapeLayer*)));
-    connect(KoToolManager::instance(), SIGNAL(toolCodesSelected(QList<QString>)), this, SLOT(setButtonsVisible(QList<QString>)));
+    connect(KoToolManager::instance(), &KoToolManager::changedTool,
+            this, &KoToolBox::setActiveTool);
+    connect(KoToolManager::instance(), &KoToolManager::currentLayerChanged,
+            this, &KoToolBox::setCurrentLayer);
+    connect(KoToolManager::instance(), &KoToolManager::toolCodesSelected, this, &KoToolBox::setButtonsVisible);
     connect(KoToolManager::instance(),
-            SIGNAL(addedTool(KoToolAction*,KoCanvasController*)),
-            this, SLOT(toolAdded(KoToolAction*,KoCanvasController*)));
+            &KoToolManager::addedTool,
+            this, &KoToolBox::toolAdded);
 
 }
 
@@ -305,13 +305,13 @@ void KoToolBox::contextMenuEvent(QContextMenuEvent *event)
 
         d->contextSize = new QMenu(i18n("Icon Size"), this);
         d->contextIconSizes.insert(d->contextSize->addAction(i18nc("@item:inmenu Icon size", "Default"),
-                                                          this, SLOT(slotContextIconSize())),
+                                                          this, &KoToolBox::slotContextIconSize),
                                    toolbuttonSize);
 
         QList<int> sizes;
         sizes << 12 << 14 << 16 << 22 << 32 << 48 << 64; //<< 96 << 128 << 192 << 256;
         foreach(int i, sizes) {
-            d->contextIconSizes.insert(d->contextSize->addAction(i18n("%1x%2", i, i), this, SLOT(slotContextIconSize())), i);
+            d->contextIconSizes.insert(d->contextSize->addAction(i18n("%1x%2", i, i), this, &KoToolBox::slotContextIconSize), i);
         }
 
         QActionGroup *sizeGroup = new QActionGroup(d->contextSize);

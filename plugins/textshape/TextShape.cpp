@@ -84,7 +84,7 @@ TextShape::TextShape(KoInlineTextObjectManager *inlineTextObjectManager, KoTextR
 
     setCollisionDetection(true);
 
-    QObject::connect(m_layout, SIGNAL(layoutIsDirty()), m_layout, SLOT(scheduleLayout()));
+    QObject::connect(m_layout, &KoTextDocumentLayout::layoutIsDirty, m_layout, &KoTextDocumentLayout::scheduleLayout);
 }
 
 TextShape::~TextShape()

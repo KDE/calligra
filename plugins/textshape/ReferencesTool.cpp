@@ -80,8 +80,8 @@ LabeledWidget::LabeledWidget(QAction *action, const QString &label, LabelPositio
     }
     layout->setMargin(0);
     setLayout(layout);
-    connect(m_lineEdit, SIGNAL(returnPressed()), this, SLOT(returnPressed()));
-    connect(m_lineEdit, SIGNAL(textChanged(QString)), this, SIGNAL(lineEditChanged(QString)));
+    connect(m_lineEdit, &QLineEdit::returnPressed, this, &LabeledWidget::returnPressed);
+    connect(m_lineEdit, &QLineEdit::textChanged, this, &LabeledWidget::lineEditChanged);
 }
 
 void LabeledWidget::returnPressed()
@@ -135,11 +135,11 @@ void ReferencesTool::createActions()
     action = new QAction(koIcon("configure"), i18n("Configure..."), this);
     addAction("format_tableofcontents", action);
     action->setToolTip(i18n("Configure the Table of Contents"));
-    connect(action, SIGNAL(triggered()), this, SLOT(formatTableOfContents()));
+    connect(action, &QAction::triggered, this, &ReferencesTool::formatTableOfContents);
 
     action = new QAction(i18n("Insert footnote with auto number"),this);
     addAction("insert_autofootnote",action);
-    connect(action, SIGNAL(triggered()), this, SLOT(insertAutoFootNote()));
+    connect(action, &QAction::triggered, this, &ReferencesTool::insertAutoFootNote);
 
     wAction = new QWidgetAction(this);
     wAction->setText(i18n("Insert Labeled Footnote"));
@@ -150,7 +150,7 @@ void ReferencesTool::createActions()
 
     action = new QAction(i18n("Insert endnote with auto number"),this);
     addAction("insert_autoendnote",action);
-    connect(action, SIGNAL(triggered()), this, SLOT(insertAutoEndNote()));
+    connect(action, &QAction::triggered, this, &ReferencesTool::insertAutoEndNote);
 
     wAction = new QWidgetAction(this);
     wAction->setText(i18n("Insert Labeled Endnote"));
@@ -160,16 +160,16 @@ void ReferencesTool::createActions()
 
     action = new QAction(koIcon("configure"), i18n("Settings..."), this);
     addAction("format_footnotes",action);
-    connect(action, SIGNAL(triggered()), this, SLOT(showFootnotesConfigureDialog()));
+    connect(action, &QAction::triggered, this, &ReferencesTool::showFootnotesConfigureDialog);
 
     action = new QAction(koIcon("configure"), i18n("Settings..."), this);
     addAction("format_endnotes",action);
-    connect(action, SIGNAL(triggered()), this, SLOT(showEndnotesConfigureDialog()));
+    connect(action, &QAction::triggered, this, &ReferencesTool::showEndnotesConfigureDialog);
 
     action = new QAction(i18n("Insert Citation"), this);
     addAction("insert_citation",action);
     action->setToolTip(i18n("Insert a citation into the document."));
-    connect(action, SIGNAL(triggered()), this, SLOT(insertCitation()));
+    connect(action, &QAction::triggered, this, &ReferencesTool::insertCitation);
 
     action = new QAction(i18n("Insert Bibliography"), this);
     addAction("insert_bibliography",action);
@@ -182,20 +182,20 @@ void ReferencesTool::createActions()
     action = new QAction(i18n("Configure"),this);
     addAction("configure_bibliography",action);
     action->setToolTip(i18n("Configure the bibliography"));
-    connect(action, SIGNAL(triggered()), this, SLOT(configureBibliography()));
+    connect(action, &QAction::triggered, this, &ReferencesTool::configureBibliography);
 
     action = new QAction(i18n("Insert Link"), this);
     addAction("insert_link", action);
     action->setToolTip(i18n("Insert a weblink or link to a bookmark."));
-    connect(action, SIGNAL(triggered()), this, SLOT(insertLink()));
+    connect(action, &QAction::triggered, this, &ReferencesTool::insertLink);
 
     wAction = new QWidgetAction(this);
     wAction->setText(i18n("Add Bookmark"));
     m_bmark = new LabeledWidget(wAction, i18n("Add Bookmark :"), LabeledWidget::ABOVE, true);
-    connect(m_bmark, SIGNAL(lineEditChanged(QString)), this, SLOT(validateBookmark(QString)));
+    connect(m_bmark, &LabeledWidget::lineEditChanged, this, &ReferencesTool::validateBookmark);
     wAction->setDefaultWidget(m_bmark);
     addAction("insert_bookmark", wAction);
-    connect(m_bmark, SIGNAL(triggered(QString)), this, SLOT(insertBookmark(QString)));
+    connect(m_bmark, &LabeledWidget::triggered, this, &ReferencesTool::insertBookmark);
     wAction->setToolTip(i18n("Insert a Bookmark. This is useful to create links that point to areas within the document"));
 
     action = new QAction(i18n("Bookmarks"), this);
@@ -252,7 +252,7 @@ QList<QPointer<QWidget> > ReferencesTool::createOptionWidgets()
     m_slw->setWindowTitle(i18n("Links and Bookmarks"));
     widgets.append(m_slw);
     //widgets.insert(i18n("Captions"), scapw);
-    connect(textEditor(), SIGNAL(cursorPositionChanged()), this, SLOT(updateButtons()));
+    connect(textEditor(), &KoTextEditor::cursorPositionChanged, this, &ReferencesTool::updateButtons);
     return widgets;
 }
 
@@ -276,19 +276,19 @@ void ReferencesTool::formatTableOfContents()
 {
     if (textEditor()->block().blockFormat().hasProperty(KoParagraphStyle::TableOfContentsData)) {
         m_configure = new TableOfContentsConfigure(textEditor(), textEditor()->block(), m_stocw);
-        connect(m_configure, SIGNAL(finished(int)), this, SLOT(hideCofigureDialog()));
+        connect(m_configure, &QDialog::finished, this, &ReferencesTool::hideCofigureDialog);
     }
 }
 
 void ReferencesTool::showConfigureDialog(QAction *action)
 {
     m_configure = new TableOfContentsConfigure(textEditor(), action->data().value<QTextBlock>(), m_stocw);
-    connect(m_configure, SIGNAL(finished(int)), this, SLOT(hideCofigureDialog()));
+    connect(m_configure, &QDialog::finished, this, &ReferencesTool::hideCofigureDialog);
 }
 
 void ReferencesTool::hideCofigureDialog()
 {
-    disconnect(m_configure, SIGNAL(finished(int)), this, SLOT(hideCofigureDialog()));
+    disconnect(m_configure, &QDialog::finished, this, &ReferencesTool::hideCofigureDialog);
     m_configure->deleteLater();
 }
 
@@ -355,8 +355,8 @@ KoTextEditor *ReferencesTool::editor()
 void ReferencesTool::insertCustomToC(KoTableOfContentsGeneratorInfo *defaultTemplate)
 {
     m_configure = new TableOfContentsConfigure(textEditor(), defaultTemplate, m_stocw);
-    connect(m_configure, SIGNAL(accepted()), this, SLOT(customToCGenerated()));
-    connect(m_configure, SIGNAL(finished(int)), this, SLOT(hideCofigureDialog()));
+    connect(m_configure, &QDialog::accepted, this, &ReferencesTool::customToCGenerated);
+    connect(m_configure, &QDialog::finished, this, &ReferencesTool::hideCofigureDialog);
 }
 
 void ReferencesTool::customToCGenerated()

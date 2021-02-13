@@ -89,7 +89,7 @@ CSVDialog::CSVDialog(QWidget* parent, Selection* selection, Mode mode)
     }
 
     if (! m_canceled)
-        QTimer::singleShot(0, this, SLOT(init()));
+        QTimer::singleShot(0, this, &CSVDialog::init);
 }
 
 CSVDialog::~CSVDialog()

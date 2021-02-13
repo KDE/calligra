@@ -76,7 +76,7 @@ QWidget * VectorTool::createOptionWidget()
     button->setIcon(koIcon("document-open"));
     button->setToolTip(i18n("Open Vector Image (EMF/WMF/SVM)"));
     layout->addWidget(button, 0, 0);
-    connect(button, SIGNAL(clicked(bool)), this, SLOT(changeUrlPressed()));
+    connect(button, &QAbstractButton::clicked, this, &VectorTool::changeUrlPressed);
 
     return optionWidget;
 }
@@ -89,7 +89,7 @@ void VectorTool::changeUrlPressed()
     if (!url.isEmpty()) {
         // TODO move this to an action in the libs, with a nice dialog or something.
         KIO::StoredTransferJob *job = KIO::storedGet(url, KIO::NoReload, 0);
-        connect(job, SIGNAL(result(KJob*)), this, SLOT(setImageData(KJob*)));
+        connect(job, &KJob::result, this, &VectorTool::setImageData);
     }
 
 }

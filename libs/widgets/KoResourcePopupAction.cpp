@@ -101,7 +101,7 @@ KoResourcePopupAction::KoResourcePopupAction(QSharedPointer<KoAbstractResourceSe
     d->menu->layout()->addWidget(widget);
     d->menu->layout()->setMargin(0);
 
-    connect(d->resourceList, SIGNAL(clicked(QModelIndex)), this, SLOT(indexChanged(QModelIndex)));
+    connect(d->resourceList, &QAbstractItemView::clicked, this, &KoResourcePopupAction::indexChanged);
 
     updateIcon();
 }

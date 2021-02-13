@@ -95,29 +95,29 @@ SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
 
     widget.moreOptions->setText("...");
     widget.moreOptions->setToolTip(i18n("Change paragraph format"));
-    connect(widget.moreOptions, SIGNAL(clicked(bool)), tool->action("format_paragraph"), SLOT(trigger()));
+    connect(widget.moreOptions, &QAbstractButton::clicked, tool->action("format_paragraph"), &QAction::trigger);
 
-    connect(widget.changeTextDirection, SIGNAL(clicked()), this, SIGNAL(doneWithFocus()));
-    connect(widget.alignCenter, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
-    connect(widget.alignBlock, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
-    connect(widget.alignLeft, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
-    connect(widget.alignRight, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
-    connect(widget.decreaseIndent, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
-    connect(widget.increaseIndent, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
+    connect(widget.changeTextDirection, &QAbstractButton::clicked, this, &SimpleParagraphWidget::doneWithFocus);
+    connect(widget.alignCenter, &QAbstractButton::clicked, this, &SimpleParagraphWidget::doneWithFocus);
+    connect(widget.alignBlock, &QAbstractButton::clicked, this, &SimpleParagraphWidget::doneWithFocus);
+    connect(widget.alignLeft, &QAbstractButton::clicked, this, &SimpleParagraphWidget::doneWithFocus);
+    connect(widget.alignRight, &QAbstractButton::clicked, this, &SimpleParagraphWidget::doneWithFocus);
+    connect(widget.decreaseIndent, &QAbstractButton::clicked, this, &SimpleParagraphWidget::doneWithFocus);
+    connect(widget.increaseIndent, &QAbstractButton::clicked, this, &SimpleParagraphWidget::doneWithFocus);
 
     widget.bulletListButton->setDefaultAction(tool->action("format_list"));
 
     fillListButtons();
     widget.bulletListButton->addSeparator();
 
-    connect(widget.bulletListButton, SIGNAL(itemTriggered(int)), this, SLOT(listStyleChanged(int)));
+    connect(widget.bulletListButton, &FormattingButton::itemTriggered, this, &SimpleParagraphWidget::listStyleChanged);
 
     m_stylesModel->setStyleThumbnailer(m_thumbnailer);
     widget.paragraphStyleCombo->setStylesModel(m_sortedStylesModel);
     connect(widget.paragraphStyleCombo, SIGNAL(selected(QModelIndex)), this, SLOT(styleSelected(QModelIndex)));
-    connect(widget.paragraphStyleCombo, SIGNAL(newStyleRequested(QString)), this, SIGNAL(newStyleRequested(QString)));
-    connect(widget.paragraphStyleCombo, SIGNAL(newStyleRequested(QString)), this, SIGNAL(doneWithFocus()));
-    connect(widget.paragraphStyleCombo, SIGNAL(showStyleManager(int)), this, SLOT(slotShowStyleManager(int)));
+    connect(widget.paragraphStyleCombo, &StylesCombo::newStyleRequested, this, &SimpleParagraphWidget::newStyleRequested);
+    connect(widget.paragraphStyleCombo, &StylesCombo::newStyleRequested, this, &SimpleParagraphWidget::doneWithFocus);
+    connect(widget.paragraphStyleCombo, &StylesCombo::showStyleManager, this, &SimpleParagraphWidget::slotShowStyleManager);
 
 
     m_sortedStylesModel->setStylesModel(m_stylesModel);
@@ -312,10 +312,10 @@ void SimpleParagraphWidget::fillListButtons()
         widget.bulletListButton->addItem(m_libraryChooserAction, generateListLevelPixmap(llp), id);
         QAction *a = widget.bulletListButton->addItemMenuItem(m_libraryChooserAction, id, i18n("Delete"));
         a->setData(id);
-        connect(a, SIGNAL(triggered(bool)), this, SLOT(deleteLevelFormat()));
+        connect(a, &QAction::triggered, this, &SimpleParagraphWidget::deleteLevelFormat);
         a = widget.bulletListButton->addItemMenuItem(m_libraryChooserAction, id, i18n("Edit..."));
         a->setData(id);
-        connect(a, SIGNAL(triggered(bool)), this, SLOT(editLevelFormat()));
+        connect(a, &QAction::triggered, this, &SimpleParagraphWidget::editLevelFormat);
         id++;
     }
 
@@ -324,7 +324,7 @@ void SimpleParagraphWidget::fillListButtons()
     QAction *action = new QAction(i18n("Define New Level Format..."),this);
     action->setToolTip(i18n("Define new bullet or numbering format"));
     widget.bulletListButton->addAction(action);
-    connect(action, SIGNAL(triggered(bool)), this, SLOT(defineLevelFormat()));
+    connect(action, &QAction::triggered, this, &SimpleParagraphWidget::defineLevelFormat);
 /*    action = new QAction(i18n("Continue Previous List"),this);
     action->setToolTip(i18n("Continue the list from a previous list"));
     widget.bulletListButton->addAction(action);
@@ -367,10 +367,10 @@ void SimpleParagraphWidget::defineLevelFormat()
         widget.bulletListButton->addItem(m_libraryChooserAction, generateListLevelPixmap(m_levelLibrary.at(id-1000)), id);
         QAction *a = widget.bulletListButton->addItemMenuItem(m_libraryChooserAction, id, i18n("Delete"));
         a->setData(id);
-        connect(a, SIGNAL(triggered(bool)), this, SLOT(deleteLevelFormat()));
+        connect(a, &QAction::triggered, this, &SimpleParagraphWidget::deleteLevelFormat);
         a = widget.bulletListButton->addItemMenuItem(m_libraryChooserAction, id, i18n("Edit..."));
         a->setData(id);
-        connect(a, SIGNAL(triggered(bool)), this, SLOT(editLevelFormat()));
+        connect(a, &QAction::triggered, this, &SimpleParagraphWidget::editLevelFormat);
     }
 }
 

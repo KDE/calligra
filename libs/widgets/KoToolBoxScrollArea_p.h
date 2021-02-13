@@ -71,7 +71,7 @@ public:
 
             scroller->setScrollerProperties(sp);
         }
-        connect(scroller, SIGNAL(stateChanged(QScroller::State)), this, SLOT(slotScrollerStateChange(QScroller::State)));
+        connect(scroller, &QScroller::stateChanged, this, &KoToolBoxScrollArea::slotScrollerStateChange);
     }
 
     void setOrientation(Qt::Orientation orientation)

@@ -181,11 +181,11 @@ void KWTextFrameSet::setupDocument()
     KoTextDocumentLayout *lay = new KoTextDocumentLayout(m_document, m_rootAreaProvider);
     lay->setWordprocessingMode();
 
-    QObject::connect(lay, SIGNAL(foundAnnotation(KoShape*,QPointF)),
-                     m_wordsDocument->annotationLayoutManager(), SLOT(registerAnnotationRefPosition(KoShape*,QPointF)));
+    QObject::connect(lay, &KoTextDocumentLayout::foundAnnotation,
+                     m_wordsDocument->annotationLayoutManager(), &KoAnnotationLayoutManager::registerAnnotationRefPosition);
 
     m_document->setDocumentLayout(lay);
-    QObject::connect(lay, SIGNAL(layoutIsDirty()), lay, SLOT(scheduleLayout()));
+    QObject::connect(lay, &KoTextDocumentLayout::layoutIsDirty, lay, &KoTextDocumentLayout::scheduleLayout);
 }
 
 void KWTextFrameSet::setPageStyle(const KWPageStyle &style)

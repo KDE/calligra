@@ -47,13 +47,13 @@ LinkInsertionDialog::LinkInsertionDialog(KoTextEditor* editor, QWidget* parent)
         dlg.hyperlinkText->setText(suggestedLinkText);
         dlg.bookmarkLinkText->setText(suggestedLinkText);
     }
-    connect(dlg.buttonBox, SIGNAL(accepted()), this, SLOT(insertLink()));
-    connect(dlg.buttonBox, SIGNAL(rejected()), this, SLOT(close()));
+    connect(dlg.buttonBox, &QDialogButtonBox::accepted, this, &LinkInsertionDialog::insertLink);
+    connect(dlg.buttonBox, &QDialogButtonBox::rejected, this, &QWidget::close);
     dlg.buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
 
     ///setting up the web link insertion tab
     m_networkAccessManager = new QNetworkAccessManager(this);
-    connect(dlg.fetchTitleButton, SIGNAL(clicked()), this, SLOT(fetchTitleFromURL()));
+    connect(dlg.fetchTitleButton, &QAbstractButton::clicked, this, &LinkInsertionDialog::fetchTitleFromURL);
     dlg.fetchTitleButton->setEnabled(false);
     setUpdatesEnabled(true);
 
@@ -65,12 +65,12 @@ LinkInsertionDialog::LinkInsertionDialog(KoTextEditor* editor, QWidget* parent)
     dlg.bookmarkLinkURL->setCompleter(bookmarkAutoCompleter);
     dlg.bookmarkLinkURL->addItems(m_bookmarkList);
     dlg.bookmarkLinkURL->clearEditText();
-    connect(dlg.hyperlinkURL, SIGNAL(textChanged(QString)), this, SLOT(enableDisableButtons(QString)));
-    connect(dlg.hyperlinkText, SIGNAL(textChanged(QString)), this, SLOT(enableDisableButtons(QString)));
-    connect(dlg.bookmarkLinkURL, SIGNAL(editTextChanged(QString)), this, SLOT(enableDisableButtons(QString)));
-    connect(dlg.bookmarkLinkText, SIGNAL(textChanged(QString)), this, SLOT(enableDisableButtons(QString)));
+    connect(dlg.hyperlinkURL, &QLineEdit::textChanged, this, &LinkInsertionDialog::enableDisableButtons);
+    connect(dlg.hyperlinkText, &QLineEdit::textChanged, this, &LinkInsertionDialog::enableDisableButtons);
+    connect(dlg.bookmarkLinkURL, &QComboBox::editTextChanged, this, &LinkInsertionDialog::enableDisableButtons);
+    connect(dlg.bookmarkLinkText, &QLineEdit::textChanged, this, &LinkInsertionDialog::enableDisableButtons);
 
-    connect(dlg.linkTypesTab, SIGNAL(currentChanged(int)), this, SLOT(checkInsertEnableValidity(int)));
+    connect(dlg.linkTypesTab, &QTabWidget::currentChanged, this, &LinkInsertionDialog::checkInsertEnableValidity);
     show();
 }
 void LinkInsertionDialog::enableDisableButtons(QString text)
@@ -216,10 +216,10 @@ void LinkInsertionDialog::sendRequest()
     m_timeoutTimer.setInterval(FETCH_TIMEOUT);
     m_timeoutTimer.setSingleShot(true);
     m_timeoutTimer.start();
-    connect(&m_timeoutTimer, SIGNAL(timeout()), this, SLOT(fetchTitleTimeout()));
-    connect(m_reply, SIGNAL(finished()), this, SLOT(replyFinished()));
+    connect(&m_timeoutTimer, &QTimer::timeout, this, &LinkInsertionDialog::fetchTitleTimeout);
+    connect(m_reply, &QNetworkReply::finished, this, &LinkInsertionDialog::replyFinished);
     connect(m_reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(fetchTitleError(QNetworkReply::NetworkError)));
-    connect(m_reply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(updateTitleDownloadProgress(qint64,qint64)));
+    connect(m_reply, &QNetworkReply::downloadProgress, this, &LinkInsertionDialog::updateTitleDownloadProgress);
 }
 
 void LinkInsertionDialog::fetchTitleTimeout()

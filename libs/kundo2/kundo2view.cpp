@@ -207,15 +207,15 @@ void KUndo2View::setGroup(KUndo2Group *group)
         return;
 
     if (d->group != 0) {
-        disconnect(d->group, SIGNAL(activeStackChanged(KUndo2QStack*)),
-                   d->model, SLOT(setStack(KUndo2QStack*)));
+        disconnect(d->group.data(), &KUndo2Group::activeStackChanged,
+                   d->model, &KUndo2Model::setStack);
     }
 
     d->group = group;
 
     if (d->group != 0) {
-        connect(d->group, SIGNAL(activeStackChanged(KUndo2QStack*)),
-                d->model, SLOT(setStack(KUndo2QStack*)));
+        connect(d->group.data(), &KUndo2Group::activeStackChanged,
+                d->model, &KUndo2Model::setStack);
         d->model->setStack((KUndo2QStack *)d->group->activeStack());
     } else {
         d->model->setStack(0);

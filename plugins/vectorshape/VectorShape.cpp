@@ -393,7 +393,7 @@ QImage* VectorShape::render(const KoViewConverter &converter, bool asynchronous,
             const QByteArray uncompressedContents =
                 m_type != VectorShape::VectorTypeNone ? qUncompress(m_contents) : QByteArray();
             RenderThread *t = new RenderThread(uncompressedContents, m_type, size(), rect.size().toSize(), zoomX, zoomY);
-            connect(t, SIGNAL(finished(QSize,QImage*)), this, SLOT(renderFinished(QSize,QImage*)));
+            connect(t, &RenderThread::finished, this, &VectorShape::renderFinished);
             if (asynchronous) { // render and paint the image threaded
                 QThreadPool::globalInstance()->start(t);
             } else { // non-threaded rendering and painting of the image

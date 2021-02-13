@@ -89,7 +89,7 @@ ColorMatrixEffectConfigWidget::ColorMatrixEffectConfigWidget(QWidget *parent)
     connect(m_type, SIGNAL(currentIndexChanged(int)), this, SLOT(typeChanged(int)));
     connect(m_saturate, SIGNAL(valueChanged(double)), this, SLOT(saturateChanged(double)));
     connect(m_hueRotate, SIGNAL(valueChanged(double)), this, SLOT(hueRotateChanged(double)));
-    connect(m_matrixModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(matrixChanged()));
+    connect(m_matrixModel, &QAbstractItemModel::dataChanged, this, &ColorMatrixEffectConfigWidget::matrixChanged);
 }
 
 bool ColorMatrixEffectConfigWidget::editFilterEffect(KoFilterEffect * filterEffect)

@@ -121,19 +121,19 @@ StockDataEditor::StockDataEditor(ChartShape *chart, QWidget *parent)
     m_dataModel->chart = chart;
     m_dataModel->setSourceModel(m_chart->internalModel());
 
-    connect(m_ui.insertRowAbove, SIGNAL(clicked()), this, SLOT(slotInsertRowAbove()));
-    connect(m_ui.insertRowBelow, SIGNAL(clicked()), this, SLOT(slotInsertRowBelow()));
-    connect(m_ui.deleteSelection,SIGNAL(clicked()), this, SLOT(slotDeleteSelection()));
+    connect(m_ui.insertRowAbove, &QAbstractButton::clicked, this, &StockDataEditor::slotInsertRowAbove);
+    connect(m_ui.insertRowBelow, &QAbstractButton::clicked, this, &StockDataEditor::slotInsertRowBelow);
+    connect(m_ui.deleteSelection,&QAbstractButton::clicked, this, &StockDataEditor::slotDeleteSelection);
 
-    connect(m_insertRowAboveAction, SIGNAL(triggered()), this, SLOT(slotInsertRowAbove()));
-    connect(m_insertRowBelowAction, SIGNAL(triggered()), this, SLOT(slotInsertRowBelow()));
-    connect(m_deleteAction, SIGNAL(triggered()), this, SLOT(slotDeleteSelection()));
+    connect(m_insertRowAboveAction, &QAction::triggered, this, &StockDataEditor::slotInsertRowAbove);
+    connect(m_insertRowBelowAction, &QAction::triggered, this, &StockDataEditor::slotInsertRowBelow);
+    connect(m_deleteAction, &QAction::triggered, this, &StockDataEditor::slotDeleteSelection);
 
-    connect(m_ui.tableView, SIGNAL(currentIndexChanged(QModelIndex)), this, SLOT(enableActions()));
+    connect(m_ui.tableView, &ChartTableView::currentIndexChanged, this, &StockDataEditor::enableActions);
 
     m_ui.tableView->setModel(m_dataModel);
 
-    connect(m_ui.tableView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&,const QItemSelection&)), this, SLOT(enableActions()));
+    connect(m_ui.tableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &StockDataEditor::enableActions);
 
     enableActions();
 

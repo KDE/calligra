@@ -39,7 +39,7 @@ PathToolOptionWidget::PathToolOptionWidget(KoPathTool *tool, QWidget *parent)
     widget.joinSegment->setDefaultAction(tool->action("pathpoint-join"));
     widget.mergePoints->setDefaultAction(tool->action("pathpoint-merge"));
 
-    connect(widget.convertToPath, SIGNAL(released()), tool->action("convert-to-path"), SLOT(trigger()));
+    connect(widget.convertToPath, &QAbstractButton::released, tool->action("convert-to-path"), &QAction::trigger);
 }
 
 PathToolOptionWidget::~PathToolOptionWidget()

@@ -29,12 +29,12 @@ KWFrameConnectSelector::KWFrameConnectSelector(FrameConfigSharedState *state)
 {
     widget.setupUi(this);
 
-    connect(widget.framesList, SIGNAL(itemClicked(QTreeWidgetItem*,int)),
-            this, SLOT(frameSetSelected()));
-    connect(widget.existingRadio, SIGNAL(clicked(bool)),
-            this, SLOT(existingRadioClicked(bool)));
-    connect(widget.frameSetName, SIGNAL(textChanged(QString)),
-            this, SLOT(nameChanged(QString)));
+    connect(widget.framesList, &QTreeWidget::itemClicked,
+            this, &KWFrameConnectSelector::frameSetSelected);
+    connect(widget.existingRadio, &QAbstractButton::clicked,
+            this, &KWFrameConnectSelector::existingRadioClicked);
+    connect(widget.frameSetName, &QLineEdit::textChanged,
+            this, &KWFrameConnectSelector::nameChanged);
 }
 
 bool KWFrameConnectSelector::canOpen(KoShape *shape)

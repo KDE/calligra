@@ -67,7 +67,7 @@ KoDockWidgetTitleBar::KoDockWidgetTitleBar(QDockWidget* dockWidget)
 
     d->closeButton = new KoDockWidgetTitleBarButton(this);
     d->closeButton->setIcon(q->style()->standardIcon(QStyle::SP_TitleBarCloseButton, nullptr, q));
-    connect(d->closeButton, SIGNAL(clicked()), q, SLOT(close()));
+    connect(d->closeButton, &QAbstractButton::clicked, q, &QWidget::close);
     d->closeButton->setVisible(true);
     d->closeButton->setToolTip(i18nc("@info:tooltip", "Close Docker"));
     d->closeButton->setStyleSheet("border: 0"); // border makes the header busy looking (appears on some OSs)
@@ -83,7 +83,7 @@ KoDockWidgetTitleBar::KoDockWidgetTitleBar(QDockWidget* dockWidget)
     d->lockButton = new KoDockWidgetTitleBarButton(this);
     d->lockButton->setCheckable(true);
     d->lockButton->setIcon(koIcon("object-unlocked"));
-    connect(d->lockButton, SIGNAL(toggled(bool)), SLOT(setLocked(bool)));
+    connect(d->lockButton, &QAbstractButton::toggled, this, &KoDockWidgetTitleBar::setLocked);
     d->lockButton->setVisible(true);
     d->lockable = true;
     d->lockButton->setToolTip(i18nc("@info:tooltip", "Lock Docker"));

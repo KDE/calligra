@@ -461,7 +461,7 @@ void KPrShapeAnimations::setTimeRange(KPrShapeAnimation *item, const int begin, 
         KPrEditAnimationTimeLineCommand *command = new KPrEditAnimationTimeLineCommand(item,
                                                                                      begin, duration);
         m_document->addCommand(command);
-        connect(item, SIGNAL(timeChanged(int,int)), this, SLOT(notifyAnimationEdited()));
+        connect(item, &KPrShapeAnimation::timeChanged, this, &KPrShapeAnimations::notifyAnimationEdited);
     }
 }
 

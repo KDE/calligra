@@ -40,10 +40,10 @@ SpellCheckMenu::SpellCheckMenu(const Sonnet::Speller &speller, SpellCheck *spell
 {
     m_suggestionsMenuAction = new KActionMenu(i18n("Spelling"), this);
     m_suggestionsMenu = m_suggestionsMenuAction->menu();
-    connect(m_suggestionsMenu, SIGNAL(aboutToShow()), this, SLOT(createSuggestionsMenu()));
+    connect(m_suggestionsMenu, &QMenu::aboutToShow, this, &SpellCheckMenu::createSuggestionsMenu);
 
     m_addToDictionaryAction = new QAction(i18n("Add to Dictionary"), this);
-    connect(m_addToDictionaryAction, SIGNAL(triggered()), this, SLOT(addWordToDictionary()));
+    connect(m_addToDictionaryAction, &QAction::triggered, this, &SpellCheckMenu::addWordToDictionary);
 
     // disabling this as if it calls the speller it's only changed in a local copy
     // see addWordToDictionary for how it should be done, except background checker

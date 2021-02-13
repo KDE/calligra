@@ -315,13 +315,13 @@ void KoToolManager::Private::connectActiveTool()
     if (canvasData->activeTool) {
         connect(canvasData->activeTool, SIGNAL(cursorChanged(QCursor)),
                 q, SLOT(updateCursor(QCursor)));
-        connect(canvasData->activeTool, SIGNAL(activateTool(QString)),
-                q, SLOT(switchToolRequested(QString)));
-        connect(canvasData->activeTool, SIGNAL(activateTemporary(QString)),
-                q, SLOT(switchToolTemporaryRequested(QString)));
-        connect(canvasData->activeTool, SIGNAL(done()), q, SLOT(switchBackRequested()));
-        connect(canvasData->activeTool, SIGNAL(statusTextChanged(QString)),
-                q, SIGNAL(changedStatusText(QString)));
+        connect(canvasData->activeTool, &KoToolBase::activateTool,
+                q, &KoToolManager::switchToolRequested);
+        connect(canvasData->activeTool, &KoToolBase::activateTemporary,
+                q, &KoToolManager::switchToolTemporaryRequested);
+        connect(canvasData->activeTool, &KoToolBase::done, q, &KoToolManager::switchBackRequested);
+        connect(canvasData->activeTool, &KoToolBase::statusTextChanged,
+                q, &KoToolManager::changedStatusText);
     }
 
     // we expect the tool to emit a cursor on activation.
@@ -337,13 +337,13 @@ void KoToolManager::Private::disconnectActiveTool()
         canvasData->activeTool->deactivate();
         disconnect(canvasData->activeTool, SIGNAL(cursorChanged(QCursor)),
                    q, SLOT(updateCursor(QCursor)));
-        disconnect(canvasData->activeTool, SIGNAL(activateTool(QString)),
-                   q, SLOT(switchToolRequested(QString)));
-        disconnect(canvasData->activeTool, SIGNAL(activateTemporary(QString)),
-                   q, SLOT(switchToolTemporaryRequested(QString)));
-        disconnect(canvasData->activeTool, SIGNAL(done()), q, SLOT(switchBackRequested()));
-        disconnect(canvasData->activeTool, SIGNAL(statusTextChanged(QString)),
-                   q, SIGNAL(changedStatusText(QString)));
+        disconnect(canvasData->activeTool, &KoToolBase::activateTool,
+                   q, &KoToolManager::switchToolRequested);
+        disconnect(canvasData->activeTool, &KoToolBase::activateTemporary,
+                   q, &KoToolManager::switchToolTemporaryRequested);
+        disconnect(canvasData->activeTool, &KoToolBase::done, q, &KoToolManager::switchBackRequested);
+        disconnect(canvasData->activeTool, &KoToolBase::statusTextChanged,
+                   q, &KoToolManager::changedStatusText);
     }
 
     // emit a empty status text to clear status text from last active tool
@@ -903,7 +903,7 @@ void KoToolManager::addController(KoCanvasController *controller)
         return;
     d->setup();
     d->attachCanvas(controller);
-    connect(controller->proxyObject, SIGNAL(destroyed(QObject*)), this, SLOT(attemptCanvasControllerRemoval(QObject*)));
+    connect(controller->proxyObject, &QObject::destroyed, this, &KoToolManager::attemptCanvasControllerRemoval);
     connect(controller->proxyObject, SIGNAL(canvasRemoved(KoCanvasController*)), this, SLOT(detachCanvas(KoCanvasController*)));
     connect(controller->proxyObject, SIGNAL(canvasSet(KoCanvasController*)), this, SLOT(attachCanvas(KoCanvasController*)));
 }

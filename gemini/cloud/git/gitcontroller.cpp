@@ -571,7 +571,7 @@ void GitController::setCloneDir(const QString& newDir)
 {
     d->cloneDir = newDir;
     d->documents->setDocumentsFolder(newDir);
-    QTimer::singleShot(100, d->documents, SLOT(startSearch()));
+    QTimer::singleShot(100, d->documents, &DocumentListModel::startSearch);
     emit cloneDirChanged();
 }
 
@@ -645,7 +645,7 @@ QAction* GitController::commitAndPushCurrentFileAction()
 {
     if(!d->commitAndPushAction) {
         d->commitAndPushAction = new QAction(koIcon("folder-remote"), "Update Git Copy", this);
-        connect(d->commitAndPushAction, SIGNAL(triggered(bool)), SLOT(commitAndPushCurrentFile()));
+        connect(d->commitAndPushAction, &QAction::triggered, this, &GitController::commitAndPushCurrentFile);
     }
     return d->commitAndPushAction;
 }
@@ -678,10 +678,10 @@ void GitController::commitAndPushCurrentFile()
             qDebug() << "Attempting to push" << d->currentFile << "in the clone dir" << d->cloneDir;
             emit operationBegun(QString("Pushing local changes to remote storage"));
             d->opThread = new GitOpsThread(d->privateKey, d->publicKey, d->userForRemote, d->needsPrivateKeyPassphrase, d->signature, d->cloneDir, GitOpsThread::PushOperation, d->currentFile, message, this);
-            connect(d->opThread, SIGNAL(destroyed()), this, SLOT(clearOpThread()));
-            connect(d->opThread, SIGNAL(transferProgress(int)), this, SIGNAL(transferProgress(int)));
-            connect(d->opThread, SIGNAL(pushCompleted()), this, SIGNAL(pushCompleted()));
-            connect(d->opThread, SIGNAL(pushCompleted()), this, SLOT(disableCommitAndPushAction()));
+            connect(d->opThread, &QObject::destroyed, this, &GitController::clearOpThread);
+            connect(d->opThread, &GitOpsThread::transferProgress, this, &GitController::transferProgress);
+            connect(d->opThread, &GitOpsThread::pushCompleted, this, &GitController::pushCompleted);
+            connect(d->opThread, &GitOpsThread::pushCompleted, this, &GitController::disableCommitAndPushAction);
             d->opThread->setAutoDelete(true);
             QThreadPool::globalInstance()->start(d->opThread);
         }
@@ -715,10 +715,10 @@ void GitController::pull()
 
     emit operationBegun(QString("Pulling any changes on the remote storage to your local clone"));
     d->opThread = new GitOpsThread(d->privateKey, d->publicKey, d->userForRemote, d->needsPrivateKeyPassphrase, d->signature, d->cloneDir, GitOpsThread::PullOperation, d->currentFile, QString(), this);
-    connect(d->opThread, SIGNAL(destroyed()), this, SLOT(clearOpThread()));
-    connect(d->opThread, SIGNAL(transferProgress(int)), this, SIGNAL(transferProgress(int)));
-    connect(d->opThread, SIGNAL(pullCompleted()), this, SIGNAL(pullCompleted()));
-    connect(d->opThread, SIGNAL(pullCompleted()), d->documents, SLOT(rescan()));
+    connect(d->opThread, &QObject::destroyed, this, &GitController::clearOpThread);
+    connect(d->opThread, &GitOpsThread::transferProgress, this, &GitController::transferProgress);
+    connect(d->opThread, &GitOpsThread::pullCompleted, this, &GitController::pullCompleted);
+    connect(d->opThread, &GitOpsThread::pullCompleted, d->documents, &DocumentListModel::rescan);
     d->opThread->setAutoDelete(true);
     QThreadPool::globalInstance()->start(d->opThread);
 }

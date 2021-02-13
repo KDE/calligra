@@ -67,7 +67,7 @@ WhirlPinchPlugin::WhirlPinchPlugin(QObject *parent, const QVariantList &)
     setXMLFile(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "karbon/plugins/WhirlPinchPlugin.rc"), true);
     QAction *a = new QAction(koIcon("effect_whirl"), i18n("&Whirl/Pinch..."), this);
     actionCollection()->addAction("path_whirlpinch", a);
-    connect(a, SIGNAL(triggered()), this, SLOT(slotWhirlPinch()));
+    connect(a, &QAction::triggered, this, &WhirlPinchPlugin::slotWhirlPinch);
 
     m_whirlPinchDlg = new WhirlPinchDlg(qobject_cast<QWidget*>(parent));
     m_whirlPinchDlg->setAngle(180.0);
@@ -150,16 +150,16 @@ WhirlPinchDlg::WhirlPinchDlg(QWidget* parent, const char* name)
     layout->addWidget(m_radius, 2, 1);
 
     // signals and Q_SLOTS:
-    connect(okButton, SIGNAL(clicked()), this, SLOT(accept()));
-    connect(buttonBox->button(QDialogButtonBox::Cancel), SIGNAL(clicked()), this, SLOT(reject()));
+    connect(okButton, &QAbstractButton::clicked, this, &QDialog::accept);
+    connect(buttonBox->button(QDialogButtonBox::Cancel), &QAbstractButton::clicked, this, &QDialog::reject);
 
     mainLayout->addWidget(info);
     mainLayout->addWidget(group);
 
     mainLayout->addWidget(mainWidget);
 
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
     mainLayout->addWidget(buttonBox);
 }
 

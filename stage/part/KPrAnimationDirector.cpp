@@ -79,9 +79,9 @@ KPrAnimationDirector::KPrAnimationDirector( KoPAView * view, KoPACanvas * canvas
 
     // updatePageAnimation was called from updateZoom() [updateActivePage()]
 
-    connect( &m_timeLine, SIGNAL(valueChanged(qreal)), this, SLOT(animate()) );
+    connect( &m_timeLine, &QTimeLine::valueChanged, this, &KPrAnimationDirector::animate );
     // this is needed as after a call to m_canvas->showFullScreen the canvas is not made fullscreen right away
-    connect( m_canvas, SIGNAL(sizeChanged(QSize)), this, SLOT(updateZoom(QSize)) );
+    connect( m_canvas, &KoPACanvas::sizeChanged, this, &KPrAnimationDirector::updateZoom );
     m_timeLine.setCurveShape( QTimeLine::LinearCurve );
     m_timeLine.setUpdateInterval( 20 );
     // set the animation strategy in the KoShapeManagers
@@ -92,8 +92,8 @@ KPrAnimationDirector::KPrAnimationDirector( KoPAView * view, KoPACanvas * canvas
 
 
     m_autoTransitionTimer.setSingleShot(true);
-    connect(&m_autoTransitionTimer, SIGNAL(timeout()), this, SLOT(nextPage()));
-    connect(&m_timeLine, SIGNAL(finished()), this, SLOT(slotTimelineFinished()));
+    connect(&m_autoTransitionTimer, &QTimer::timeout, this, &KPrAnimationDirector::nextPage);
+    connect(&m_timeLine, &QTimeLine::finished, this, &KPrAnimationDirector::slotTimelineFinished);
     if (hasAutoSlideTransition()) {
         if (hasPageEffect() || hasAnimation()) {
             nextStep();

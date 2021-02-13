@@ -108,15 +108,15 @@ ConsolidateDialog::ConsolidateDialog(QWidget* parent, Selection* selection)
     d->mainWidget.m_function->addItem(i18n("Standard Deviation"), "STDDEV");
     d->mainWidget.m_function->addItem(i18n("Variance"), "VAR");
 
-    connect(d->mainWidget.m_addButton, SIGNAL(clicked()),
-            this, SLOT(slotAdd()));
-    connect(d->mainWidget.m_removeButton, SIGNAL(clicked()),
-            this, SLOT(slotRemove()));
+    connect(d->mainWidget.m_addButton, &QAbstractButton::clicked,
+            this, &ConsolidateDialog::slotAdd);
+    connect(d->mainWidget.m_removeButton, &QAbstractButton::clicked,
+            this, &ConsolidateDialog::slotRemove);
     connect(d->mainWidget.m_sourceRange, SIGNAL(returnPressed()),
             this, SLOT(slotReturnPressed()));
 
-    connect(d->selection, SIGNAL(changed(Region)),
-            this, SLOT(slotSelectionChanged()));
+    connect(d->selection, &Selection::changed,
+            this, &ConsolidateDialog::slotSelectionChanged);
 }
 
 ConsolidateDialog::~ConsolidateDialog()

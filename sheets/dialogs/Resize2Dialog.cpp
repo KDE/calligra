@@ -80,8 +80,8 @@ ResizeRow::ResizeRow(QWidget* parent, Selection* selection)
 
     //store the visible value, for later check for changes
     rowHeight = m_pHeight->value();
-    connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
-    connect(this, SIGNAL(defaultClicked()), this, SLOT(slotDefault()));
+    connect(this, &KoDialog::okClicked, this, &ResizeRow::slotOk);
+    connect(this, &KoDialog::defaultClicked, this, &ResizeRow::slotDefault);
 }
 
 void ResizeRow::slotOk()
@@ -138,8 +138,8 @@ ResizeColumn::ResizeColumn(QWidget* parent, Selection* selection)
 
     //store the visible value, for later check for changes
     columnWidth = m_pWidth->value();
-    connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
-    connect(this, SIGNAL(defaultClicked()), this, SLOT(slotDefault()));
+    connect(this, &KoDialog::okClicked, this, &ResizeColumn::slotOk);
+    connect(this, &KoDialog::defaultClicked, this, &ResizeColumn::slotDefault);
 
 }
 

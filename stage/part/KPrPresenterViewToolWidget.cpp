@@ -36,12 +36,12 @@ KPrPresenterViewToolWidget::KPrPresenterViewToolWidget(QWidget *parent)
     QToolButton *toolButton = new QToolButton;
     toolButton->setIcon(koIcon("go-previous"));
     toolButton->setIconSize( iconSize );
-    connect( toolButton, SIGNAL(clicked()), this, SIGNAL(previousSlideClicked()) );
+    connect( toolButton, &QAbstractButton::clicked, this, &KPrPresenterViewToolWidget::previousSlideClicked );
     hLayout->addWidget(toolButton);
     toolButton = new QToolButton;
     toolButton->setIcon(koIcon("go-next"));
     toolButton->setIconSize( iconSize );
-    connect( toolButton, SIGNAL(clicked()), this, SIGNAL(nextSlideClicked()) );
+    connect( toolButton, &QAbstractButton::clicked, this, &KPrPresenterViewToolWidget::nextSlideClicked );
     hLayout->addWidget( toolButton );
 
     mainLayout->addLayout(hLayout);
@@ -55,7 +55,7 @@ KPrPresenterViewToolWidget::KPrPresenterViewToolWidget(QWidget *parent)
     m_slidesToolButton->setCheckable( true );
     m_slidesToolButton->setIcon(koIcon("view-list-icons"));
     m_slidesToolButton->setIconSize( iconSize );
-    connect( m_slidesToolButton, SIGNAL(toggled(bool)), this, SIGNAL(slideThumbnailsToggled(bool)) );
+    connect( m_slidesToolButton, &QAbstractButton::toggled, this, &KPrPresenterViewToolWidget::slideThumbnailsToggled );
     mainLayout->addWidget( m_slidesToolButton );
 
     mainLayout->addSpacing( 5 );
@@ -93,7 +93,7 @@ KPrPresenterViewToolWidget::KPrPresenterViewToolWidget(QWidget *parent)
 
     m_currentTime.start();
     m_clockTimer = new QTimer( this );
-    connect( m_clockTimer, SIGNAL(timeout()), this, SLOT(updateClock()) );
+    connect( m_clockTimer, &QTimer::timeout, this, &KPrPresenterViewToolWidget::updateClock );
     m_clockTimer->start( 1000 );
 }
 

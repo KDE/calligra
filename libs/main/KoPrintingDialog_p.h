@@ -149,7 +149,7 @@ public:
         pageNumber->setText(i18n("Printing done"));
         button->setText(i18n("Close"));
         stop = true;
-        QTimer::singleShot(1200, dialog, SLOT(accept()));
+        QTimer::singleShot(1200, dialog, &QDialog::accept);
         if (removePolicy == KoPrintJob::DeleteWhenDone) {
             parent->deleteLater();
         }
@@ -168,7 +168,7 @@ public:
         progress->cancel();
         parent->printingDone();
         pageNumber->setText(i18n("Stopped"));
-        QTimer::singleShot(1200, dialog, SLOT(accept()));
+        QTimer::singleShot(1200, dialog, &QDialog::accept);
         if (removePolicy == KoPrintJob::DeleteWhenDone)
             parent->deleteLater();
         else

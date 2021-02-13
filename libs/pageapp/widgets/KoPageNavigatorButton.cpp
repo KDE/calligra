@@ -49,8 +49,8 @@ void KoPageNavigatorButton::setAction(QAction *action)
 
     m_action = action;
 
-    connect(this, SIGNAL(clicked(bool)), SLOT(onClicked()));
-    connect(m_action, SIGNAL(changed()), SLOT(onActionChanged()));
+    connect(this, &QAbstractButton::clicked, this, &KoPageNavigatorButton::onClicked);
+    connect(m_action, &QAction::changed, this, &KoPageNavigatorButton::onActionChanged);
 
     onActionChanged();
 }

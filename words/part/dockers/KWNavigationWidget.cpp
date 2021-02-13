@@ -62,7 +62,7 @@ void KWNavigationWidget::initUi()
     m_treeView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     m_treeView->setSelectionMode(QAbstractItemView::NoSelection);
 
-    connect(m_treeView, SIGNAL(clicked(QModelIndex)), this, SLOT(navigationClicked(QModelIndex)));
+    connect(m_treeView, &QAbstractItemView::clicked, this, &KWNavigationWidget::navigationClicked);
 }
 
 void KWNavigationWidget::initLayout()
@@ -163,12 +163,12 @@ void KWNavigationWidget::setCanvas(KWCanvas* canvas)
         return;
     m_document = canvas->document();
     if (m_layout) {
-        disconnect(m_layout, SIGNAL(finishedLayout()), this, SLOT(updateData()));
+        disconnect(m_layout, &KoTextDocumentLayout::finishedLayout, this, &KWNavigationWidget::updateData);
     }
     if (m_document->mainFrameSet()) {
         m_layout = qobject_cast<KoTextDocumentLayout *>(
             m_document->mainFrameSet()->document()->documentLayout());
-        connect(m_layout, SIGNAL(finishedLayout()), this, SLOT(updateData()));
+        connect(m_layout, &KoTextDocumentLayout::finishedLayout, this, &KWNavigationWidget::updateData);
     } else {
         m_layout = 0;
     }
@@ -179,7 +179,7 @@ void KWNavigationWidget::unsetCanvas()
 {
     m_document = 0;
     if (m_layout) {
-        disconnect(m_layout, SIGNAL(finishedLayout()), this, SLOT(updateData()));
+        disconnect(m_layout, &KoTextDocumentLayout::finishedLayout, this, &KWNavigationWidget::updateData);
     }
     m_layout = 0;
 }

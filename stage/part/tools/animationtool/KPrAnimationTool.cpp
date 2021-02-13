@@ -112,11 +112,11 @@ void KPrAnimationTool::activate(ToolActivation toolActivation, const QSet<KoShap
     }
     if (m_initializeTool) {
         reloadMotionPaths();
-        connect((static_cast<KoPACanvas *>(canvas()))->koPAView()->proxyObject, SIGNAL(activePageChanged()),
-                this, SLOT(reloadMotionPaths()));
+        connect((static_cast<KoPACanvas *>(canvas()))->koPAView()->proxyObject, &KoPAViewProxyObject::activePageChanged,
+                this, &KPrAnimationTool::reloadMotionPaths);
         if (m_shapeAnimationWidget) {
-            connect((static_cast<KoPACanvas *>(canvas()))->koPAView()->proxyObject, SIGNAL(activePageChanged()),
-                     m_shapeAnimationWidget, SLOT(slotActivePageChanged()));
+            connect((static_cast<KoPACanvas *>(canvas()))->koPAView()->proxyObject, &KoPAViewProxyObject::activePageChanged,
+                     m_shapeAnimationWidget, &KPrShapeAnimationDocker::slotActivePageChanged);
         }
     }
 
@@ -140,10 +140,10 @@ void KPrAnimationTool::deactivate()
 {
     // Clean shape manager of motion paths
     cleanMotionPathManager();
-    disconnect((static_cast<KoPACanvas *>(canvas()))->koPAView()->proxyObject, SIGNAL(activePageChanged()),
-               this, SLOT(reloadMotionPaths()));
-    disconnect((static_cast<KoPACanvas *>(canvas()))->koPAView()->proxyObject, SIGNAL(activePageChanged()),
-             m_shapeAnimationWidget, SLOT(slotActivePageChanged()));
+    disconnect((static_cast<KoPACanvas *>(canvas()))->koPAView()->proxyObject, &KoPAViewProxyObject::activePageChanged,
+               this, &KPrAnimationTool::reloadMotionPaths);
+    disconnect((static_cast<KoPACanvas *>(canvas()))->koPAView()->proxyObject, &KoPAViewProxyObject::activePageChanged,
+             m_shapeAnimationWidget, &KPrShapeAnimationDocker::slotActivePageChanged);
     m_initializeTool = true;
     delete m_pathShapeManager;
     m_pathShapeManager = 0;
@@ -209,10 +209,10 @@ QList<QPointer<QWidget> > KPrAnimationTool::createOptionWidgets()
 
     m_shapeAnimationWidget = new KPrShapeAnimationDocker();
     m_shapeAnimationWidget->setView((static_cast<KoPACanvas *>(canvas()))->koPAView());
-    connect(m_shapeAnimationWidget, SIGNAL(shapeAnimationsChanged(KoShape*)), this, SLOT(verifyMotionPathChanged(KoShape*)));
-    connect(m_shapeAnimationWidget, SIGNAL(motionPathAddedRemoved()), this, SLOT(reloadMotionPaths()));
-    connect((static_cast<KoPACanvas *>(canvas()))->koPAView()->proxyObject, SIGNAL(activePageChanged()),
-             m_shapeAnimationWidget, SLOT(slotActivePageChanged()));
+    connect(m_shapeAnimationWidget, &KPrShapeAnimationDocker::shapeAnimationsChanged, this, &KPrAnimationTool::verifyMotionPathChanged);
+    connect(m_shapeAnimationWidget, &KPrShapeAnimationDocker::motionPathAddedRemoved, this, &KPrAnimationTool::reloadMotionPaths);
+    connect((static_cast<KoPACanvas *>(canvas()))->koPAView()->proxyObject, &KoPAViewProxyObject::activePageChanged,
+             m_shapeAnimationWidget, &KPrShapeAnimationDocker::slotActivePageChanged);
 
     QList<QPointer<QWidget> > widgets;
     effectWidget->setWindowTitle(i18n("Slide Transitions"));

@@ -104,13 +104,13 @@ void CellEditorDocker::setCanvas(KoCanvasBase *canvas)
 
     d->canvasResetBugWorkaround = !!d->canvas;
     if (d->toolProxy) {
-        disconnect(d->toolProxy, SIGNAL(toolChanged(QString)), this, SLOT(toolChanged(QString)));
+        disconnect(d->toolProxy.data(), &KoToolProxy::toolChanged, this, &CellEditorDocker::toolChanged);
     }
     d->canvas = dynamic_cast<CanvasBase*>(canvas);
     if (d->canvas) {
         d->locationComboBox->setSelection(d->canvas->selection());
         d->toolProxy = d->canvas->toolProxy();
-        connect(d->toolProxy, SIGNAL(toolChanged(QString)), this, SLOT(toolChanged(QString)));
+        connect(d->toolProxy.data(), &KoToolProxy::toolChanged, this, &CellEditorDocker::toolChanged);
     }
 }
 
@@ -119,7 +119,7 @@ void CellEditorDocker::unsetCanvas()
     if (d->canvasResetBugWorkaround) return;
     debugSheets << "unsetting canvas";
     if (d->toolProxy) {
-        disconnect(d->toolProxy, SIGNAL(toolChanged(QString)), this, SLOT(toolChanged(QString)));
+        disconnect(d->toolProxy.data(), &KoToolProxy::toolChanged, this, &CellEditorDocker::toolChanged);
     }
     d->canvas = 0;
     d->toolProxy = 0;

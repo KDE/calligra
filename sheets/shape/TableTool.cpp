@@ -165,7 +165,7 @@ void TableTool::Private::setTools()
     horizontalScrollBar->setSingleStep(1);
     horizontalScrollBar->setValue(tableShape->topLeftOffset().x());
     horizontalScrollBar->show();
-    connect(horizontalScrollBar, SIGNAL(valueChanged(int)), q, SLOT(slotHorizontalScrollBarValueChanged(int)));
+    connect(horizontalScrollBar, &QAbstractSlider::valueChanged, q, &TableTool::slotHorizontalScrollBarValueChanged);
 
     int maxRow = used.height();
     if (q->selection()->marker().y() > maxRow) {
@@ -178,7 +178,7 @@ void TableTool::Private::setTools()
     verticalScrollBar->setSingleStep(1);
     verticalScrollBar->setValue(tableShape->topLeftOffset().y());
     verticalScrollBar->show();
-    connect(verticalScrollBar, SIGNAL(valueChanged(int)), q, SLOT(slotVerticalScrollBarValueChanged(int)));
+    connect(verticalScrollBar, &QAbstractSlider::valueChanged, q, &TableTool::slotVerticalScrollBarValueChanged);
 
     columnRect = QRectF(shapeRect.left(), toolRect.top(), shapeRect.width(), margins.top());
     columnHeader.setGeometry(columnRect);
@@ -268,12 +268,12 @@ TableTool::TableTool(KoCanvasBase* canvas)
     QAction* importAction = new QAction(koIcon("document-import"), i18n("Import OpenDocument Spreadsheet File"), this);
     importAction->setIconText(i18n("Import"));
     addAction("import", importAction);
-    connect(importAction, SIGNAL(triggered()), this, SLOT(importDocument()));
+    connect(importAction, &QAction::triggered, this, &TableTool::importDocument);
 
     QAction* exportAction = new QAction(koIcon("document-export"), i18n("Export OpenDocument Spreadsheet File"), this);
     exportAction->setIconText(i18n("Export"));
     addAction("export", exportAction);
-    connect(exportAction, SIGNAL(triggered()), this, SLOT(exportDocument()));
+    connect(exportAction, &QAction::triggered, this, &TableTool::exportDocument);
 }
 
 TableTool::~TableTool()
@@ -625,7 +625,7 @@ void TableTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &sh
     useCursor(Qt::ArrowCursor);
 
     CellToolBase::activate(toolActivation, shapes);
-    connect(d->selection, SIGNAL(changed(const Region&)), this, SLOT(slotSelectionChanged(const Region&)));
+    connect(d->selection, &Selection::changed, this, &TableTool::slotSelectionChanged);
 
     activateSheet();
 }
@@ -639,7 +639,7 @@ void TableTool::deactivate()
     deleteEditor(false /*do not save*/);
     CellToolBase::deactivate();
 
-    disconnect(d->tableShape->sheet(), SIGNAL(documentSizeChanged(const QSizeF&)), this, SLOT(update()));
+    disconnect(d->tableShape->sheet(), &Sheet::documentSizeChanged, this, &TableTool::update);
     d->tableShape->setPaintingDisabled(false);
     d->tableShape->update();
     d->tableShape = nullptr;
@@ -734,7 +734,7 @@ void TableTool::activateSheet()
 {
     Sheet *sheet = d->tableShape->sheet();
     if (sheet) {
-        connect(sheet, SIGNAL(documentSizeChanged(const QSizeF&)), this, SLOT(update()));
+        connect(sheet, &Sheet::documentSizeChanged, this, &TableTool::update);
     }
     update();
 }
@@ -743,7 +743,7 @@ void TableTool::sheetActivated(const QString& sheetName)
 {
     Sheet *sheet = d->tableShape->sheet();
     if (sheet) {
-        disconnect(sheet, SIGNAL(documentSizeChanged(const QSizeF&)), this, SLOT(update()));
+        disconnect(sheet, &Sheet::documentSizeChanged, this, &TableTool::update);
     }
     d->tableShape->setSheet(sheetName);
     activateSheet();
@@ -792,7 +792,7 @@ QList<QPointer<QWidget> > TableTool::createOptionWidgets()
 
         QPushButton *sheetbtn = new QPushButton(koIcon("table"), QString(), d->optionWidget);
         sheetbtn->setFixedHeight(d->sheetComboBox->sizeHint().height());
-        connect(sheetbtn, SIGNAL(clicked()), this, SLOT(sheetsBtnClicked()));
+        connect(sheetbtn, &QAbstractButton::clicked, this, &TableTool::sheetsBtnClicked);
         sheetlayout->addWidget(sheetbtn);
         label = new QLabel(i18n("Sheet:"), d->optionWidget);
         label->setBuddy(d->sheetComboBox);

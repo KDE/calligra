@@ -177,10 +177,10 @@ KoView::KoView(KoPart *part, KoDocument *document, QWidget *parent)
 
     QStatusBar * sb = statusBar();
     if (sb) { // No statusbar in e.g. konqueror
-        connect(d->document, SIGNAL(statusBarMessage(QString)),
-                this, SLOT(slotActionStatusText(QString)));
-        connect(d->document, SIGNAL(clearStatusBarMessage()),
-                this, SLOT(slotClearStatusText()));
+        connect(d->document.data(), &KoDocument::statusBarMessage,
+                this, &KoView::slotActionStatusText);
+        connect(d->document.data(), &KoDocument::clearStatusBarMessage,
+                this, &KoView::slotClearStatusText);
     }
 
     // add all plugins.

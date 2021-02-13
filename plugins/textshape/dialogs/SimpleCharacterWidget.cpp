@@ -64,16 +64,16 @@ SimpleCharacterWidget::SimpleCharacterWidget(TextTool *tool, QWidget *parent)
     widget.subscript->setDefaultAction(tool->action("format_sub"));
     widget.moreOptions->setText("...");
     widget.moreOptions->setToolTip(i18n("Change font format"));
-    connect(widget.moreOptions, SIGNAL(clicked(bool)), tool->action("format_font"), SLOT(trigger()));
+    connect(widget.moreOptions, &QAbstractButton::clicked, tool->action("format_font"), &QAction::trigger);
 
-    connect(widget.bold, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
-    connect(widget.italic, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
-    connect(widget.strikeOut, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
-    connect(widget.underline, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
-    connect(widget.textColor, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
-    connect(widget.backgroundColor, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
-    connect(widget.superscript, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
-    connect(widget.subscript, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
+    connect(widget.bold, &QAbstractButton::clicked, this, &SimpleCharacterWidget::doneWithFocus);
+    connect(widget.italic, &QAbstractButton::clicked, this, &SimpleCharacterWidget::doneWithFocus);
+    connect(widget.strikeOut, &QAbstractButton::clicked, this, &SimpleCharacterWidget::doneWithFocus);
+    connect(widget.underline, &QAbstractButton::clicked, this, &SimpleCharacterWidget::doneWithFocus);
+    connect(widget.textColor, &QAbstractButton::clicked, this, &SimpleCharacterWidget::doneWithFocus);
+    connect(widget.backgroundColor, &QAbstractButton::clicked, this, &SimpleCharacterWidget::doneWithFocus);
+    connect(widget.superscript, &QAbstractButton::clicked, this, &SimpleCharacterWidget::doneWithFocus);
+    connect(widget.subscript, &QAbstractButton::clicked, this, &SimpleCharacterWidget::doneWithFocus);
 
     QWidgetAction *fontFamilyAction = qobject_cast<QWidgetAction *>(tool->action("format_fontfamily"));
     QComboBox *family = fontFamilyAction ? qobject_cast<QComboBox*> (fontFamilyAction->requestWidget(this)) : 0;
@@ -97,9 +97,9 @@ SimpleCharacterWidget::SimpleCharacterWidget(TextTool *tool, QWidget *parent)
     m_stylesModel->setStyleThumbnailer(m_thumbnailer);
     widget.characterStyleCombo->setStylesModel(m_sortedStylesModel);
     connect(widget.characterStyleCombo, SIGNAL(selected(QModelIndex)), this, SLOT(styleSelected(QModelIndex)));
-    connect(widget.characterStyleCombo, SIGNAL(newStyleRequested(QString)), this, SIGNAL(newStyleRequested(QString)));
-    connect(widget.characterStyleCombo, SIGNAL(newStyleRequested(QString)), this, SIGNAL(doneWithFocus()));
-    connect(widget.characterStyleCombo, SIGNAL(showStyleManager(int)), this, SLOT(slotShowStyleManager(int)));
+    connect(widget.characterStyleCombo, &StylesCombo::newStyleRequested, this, &SimpleCharacterWidget::newStyleRequested);
+    connect(widget.characterStyleCombo, &StylesCombo::newStyleRequested, this, &SimpleCharacterWidget::doneWithFocus);
+    connect(widget.characterStyleCombo, &StylesCombo::showStyleManager, this, &SimpleCharacterWidget::slotShowStyleManager);
 
     m_sortedStylesModel->setStylesModel(m_stylesModel);
 }

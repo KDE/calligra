@@ -67,7 +67,7 @@ KarbonConfigureDialog::KarbonConfigureDialog(KarbonView* parent)
     item->setHeader(i18n("Grid"));
     item->setIcon(koIcon("view-grid"));
 
-    connect(m_miscPage, SIGNAL(unitChanged(KoUnit)), m_gridPage, SLOT(slotUnitChanged(KoUnit)));
+    connect(m_miscPage, &KoConfigMiscPage::unitChanged, m_gridPage, &KoConfigGridPage::slotUnitChanged);
 
     m_defaultDocPage = new KoConfigDocumentPage(parent->part());
     item = addPage(m_defaultDocPage, i18nc("@title:tab Document settings page", "Document"));
@@ -79,9 +79,9 @@ KarbonConfigureDialog::KarbonConfigureDialog(KarbonView* parent)
     item->setHeader(i18n("Author"));
     item->setIcon(koIcon("user-identity"));
 
-    connect(okButton, SIGNAL(clicked()), this, SLOT(slotApply()));
-    connect(button(QDialogButtonBox::Apply), SIGNAL(clicked()), this, SLOT(slotApply()));
-    connect(button(QDialogButtonBox::RestoreDefaults), SIGNAL(clicked()), this, SLOT(slotDefault()));
+    connect(okButton, &QAbstractButton::clicked, this, &KarbonConfigureDialog::slotApply);
+    connect(button(QDialogButtonBox::Apply), &QAbstractButton::clicked, this, &KarbonConfigureDialog::slotApply);
+    connect(button(QDialogButtonBox::RestoreDefaults), &QAbstractButton::clicked, this, &KarbonConfigureDialog::slotDefault);
 }
 
 void KarbonConfigureDialog::slotApply()

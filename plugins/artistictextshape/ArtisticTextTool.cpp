@@ -76,32 +76,32 @@ ArtisticTextTool::ArtisticTextTool(KoCanvasBase *canvas)
 {
     m_detachPath  = new QAction(koIcon("text-remove-from-path"), i18n("Detach Path"), this);
     m_detachPath->setEnabled( false );
-    connect( m_detachPath, SIGNAL(triggered()), this, SLOT(detachPath()) );
+    connect( m_detachPath, &QAction::triggered, this, &ArtisticTextTool::detachPath );
     addAction("artistictext_detach_from_path", m_detachPath);
 
     m_convertText  = new QAction(koIcon("pathshape"), i18n("Convert to Path"), this);
     m_convertText->setEnabled( false );
-    connect( m_convertText, SIGNAL(triggered()), this, SLOT(convertText()) );
+    connect( m_convertText, &QAction::triggered, this, &ArtisticTextTool::convertText );
     addAction("artistictext_convert_to_path", m_convertText);
 
     m_fontBold = new QAction(koIcon("format-text-bold"), i18n("Bold text"), this);
     m_fontBold->setCheckable(true);
-    connect(m_fontBold, SIGNAL(toggled(bool)), this, SLOT(toggleFontBold(bool)));
+    connect(m_fontBold, &QAction::toggled, this, &ArtisticTextTool::toggleFontBold);
     addAction("artistictext_font_bold", m_fontBold);
 
     m_fontItalic = new QAction(koIcon("format-text-italic"), i18n("Italic text"), this);
     m_fontItalic->setCheckable(true);
-    connect(m_fontItalic, SIGNAL(toggled(bool)), this, SLOT(toggleFontItalic(bool)));
+    connect(m_fontItalic, &QAction::toggled, this, &ArtisticTextTool::toggleFontItalic);
     addAction("artistictext_font_italic", m_fontItalic);
 
     m_superScript = new QAction(koIcon("format-text-superscript"), i18n("Superscript"), this);
     m_superScript->setCheckable(true);
-    connect(m_superScript, SIGNAL(triggered()), this, SLOT(setSuperScript()));
+    connect(m_superScript, &QAction::triggered, this, &ArtisticTextTool::setSuperScript);
     addAction("artistictext_superscript", m_superScript);
 
     m_subScript = new QAction(koIcon("format-text-subscript"), i18n("Subscript"), this);
     m_subScript->setCheckable(true);
-    connect(m_subScript, SIGNAL(triggered()), this, SLOT(setSubScript()));
+    connect(m_subScript, &QAction::triggered, this, &ArtisticTextTool::setSubScript);
     addAction("artistictext_subscript", m_subScript);
 
     QAction *anchorStart = new QAction(koIcon("format-justify-left"), i18n("Anchor at Start"), this);
@@ -124,10 +124,10 @@ ArtisticTextTool::ArtisticTextTool(KoCanvasBase *canvas)
     m_anchorGroup->addAction(anchorStart);
     m_anchorGroup->addAction(anchorMiddle);
     m_anchorGroup->addAction(anchorEnd);
-    connect(m_anchorGroup, SIGNAL(triggered(QAction*)), this, SLOT(anchorChanged(QAction*)));
+    connect(m_anchorGroup, &QActionGroup::triggered, this, &ArtisticTextTool::anchorChanged);
 
     KoShapeManager *manager = canvas->shapeManager();
-    connect(manager, SIGNAL(selectionContentChanged()), this, SLOT(textChanged()));
+    connect(manager, &KoShapeManager::selectionContentChanged, this, &ArtisticTextTool::textChanged);
 
     addAction("edit_select_all", KStandardAction::selectAll(this, SLOT(selectAll()), this));
     addAction("edit_deselect_all", KStandardAction::deselect(this, SLOT(deselectAll()), this));
@@ -502,7 +502,7 @@ void ArtisticTextTool::activate(ToolActivation toolActivation, const QSet<KoShap
     repaintDecorations();
 
     KoShapeManager *manager = canvas()->shapeManager();
-    connect(manager, SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
+    connect(manager, &KoShapeManager::selectionChanged, this, &ArtisticTextTool::shapeSelectionChanged);
 }
 
 void ArtisticTextTool::blinkCursor()
@@ -522,7 +522,7 @@ void ArtisticTextTool::deactivate()
     m_hoverText = 0;
 
     KoShapeManager *manager = canvas()->shapeManager();
-    disconnect(manager, SIGNAL(selectionChanged()), this, SLOT(shapeSelectionChanged()));
+    disconnect(manager, &KoShapeManager::selectionChanged, this, &ArtisticTextTool::shapeSelectionChanged);
 }
 
 void ArtisticTextTool::updateActions()
@@ -606,20 +606,20 @@ QList<QPointer<QWidget> > ArtisticTextTool::createOptionWidgets()
     ArtisticTextShapeConfigWidget * configWidget = new ArtisticTextShapeConfigWidget(this);
     configWidget->setObjectName("ArtisticTextConfigWidget");
     configWidget->setWindowTitle(i18n("Text Properties"));
-    connect(configWidget, SIGNAL(fontFamilyChanged(QFont)), this, SLOT(setFontFamily(QFont)));
-    connect(configWidget, SIGNAL(fontSizeChanged(int)), this, SLOT(setFontSize(int)));
-    connect(this, SIGNAL(shapeSelected()), configWidget, SLOT(updateWidget()));
-    connect(canvas()->shapeManager(), SIGNAL(selectionContentChanged()),
-            configWidget, SLOT(updateWidget()));
+    connect(configWidget, &ArtisticTextShapeConfigWidget::fontFamilyChanged, this, &ArtisticTextTool::setFontFamily);
+    connect(configWidget, &ArtisticTextShapeConfigWidget::fontSizeChanged, this, &ArtisticTextTool::setFontSize);
+    connect(this, &ArtisticTextTool::shapeSelected, configWidget, &ArtisticTextShapeConfigWidget::updateWidget);
+    connect(canvas()->shapeManager(), &KoShapeManager::selectionContentChanged,
+            configWidget, &ArtisticTextShapeConfigWidget::updateWidget);
     widgets.append(configWidget);
 
     ArtisticTextShapeOnPathWidget *pathWidget = new ArtisticTextShapeOnPathWidget(this);
     pathWidget->setObjectName("ArtisticTextPathWidget");
     pathWidget->setWindowTitle(i18n("Text On Path"));
-    connect(pathWidget, SIGNAL(offsetChanged(int)), this, SLOT(setStartOffset(int)));
-    connect(this, SIGNAL(shapeSelected()), pathWidget, SLOT(updateWidget()));
-    connect(canvas()->shapeManager(), SIGNAL(selectionContentChanged()),
-            pathWidget, SLOT(updateWidget()));
+    connect(pathWidget, &ArtisticTextShapeOnPathWidget::offsetChanged, this, &ArtisticTextTool::setStartOffset);
+    connect(this, &ArtisticTextTool::shapeSelected, pathWidget, &ArtisticTextShapeOnPathWidget::updateWidget);
+    connect(canvas()->shapeManager(), &KoShapeManager::selectionContentChanged,
+            pathWidget, &ArtisticTextShapeOnPathWidget::updateWidget);
     widgets.append(pathWidget);
 
     if (m_currentShape) {
@@ -640,11 +640,11 @@ void ArtisticTextTool::enableTextCursor( bool enable )
     if ( enable ) {
         if( m_currentShape )
             setTextCursorInternal( m_currentShape->plainText().length() );
-        connect( &m_blinkingCursor, SIGNAL(timeout()), this, SLOT(blinkCursor()) );
+        connect( &m_blinkingCursor, &QTimer::timeout, this, &ArtisticTextTool::blinkCursor );
         m_blinkingCursor.start( BlinkInterval );
     } else {
         m_blinkingCursor.stop();
-        disconnect( &m_blinkingCursor, SIGNAL(timeout()), this, SLOT(blinkCursor()) );
+        disconnect( &m_blinkingCursor, &QTimer::timeout, this, &ArtisticTextTool::blinkCursor );
         setTextCursorInternal( -1 );
         m_showCursor = false;
     }

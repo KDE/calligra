@@ -51,17 +51,17 @@ DefaultToolTransformWidget::DefaultToolTransformWidget( KoInteractionTool* tool,
 
     setUnit( m_tool->canvas()->unit() );
 
-    connect( m_tool->canvas()->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
-        this, SLOT(resourceChanged(int,QVariant)) );
+    connect( m_tool->canvas()->resourceManager(), &KoCanvasResourceManager::canvasResourceChanged,
+        this, &DefaultToolTransformWidget::resourceChanged );
 
-    connect( rotateButton, SIGNAL(clicked()), this, SLOT(rotationChanged()) );
-    connect( shearXButton, SIGNAL(clicked()), this, SLOT(shearXChanged()) );
-    connect( shearYButton, SIGNAL(clicked()), this, SLOT(shearYChanged()) );
-    connect( scaleXButton, SIGNAL(clicked()), this, SLOT(scaleXChanged()) );
-    connect( scaleYButton, SIGNAL(clicked()), this, SLOT(scaleYChanged()) );
-    connect( scaleAspectCheckBox, SIGNAL(toggled(bool)), scaleYSpinBox, SLOT(setDisabled(bool)) );
-    connect( scaleAspectCheckBox, SIGNAL(toggled(bool)), scaleYButton, SLOT(setDisabled(bool)) );
-    connect( resetButton, SIGNAL(clicked()), this, SLOT(resetTransformations()) );
+    connect( rotateButton, &QAbstractButton::clicked, this, &DefaultToolTransformWidget::rotationChanged );
+    connect( shearXButton, &QAbstractButton::clicked, this, &DefaultToolTransformWidget::shearXChanged );
+    connect( shearYButton, &QAbstractButton::clicked, this, &DefaultToolTransformWidget::shearYChanged );
+    connect( scaleXButton, &QAbstractButton::clicked, this, &DefaultToolTransformWidget::scaleXChanged );
+    connect( scaleYButton, &QAbstractButton::clicked, this, &DefaultToolTransformWidget::scaleYChanged );
+    connect( scaleAspectCheckBox, &QAbstractButton::toggled, scaleYSpinBox, &QWidget::setDisabled );
+    connect( scaleAspectCheckBox, &QAbstractButton::toggled, scaleYButton, &QWidget::setDisabled );
+    connect( resetButton, &QAbstractButton::clicked, this, &DefaultToolTransformWidget::resetTransformations );
 }
 
 

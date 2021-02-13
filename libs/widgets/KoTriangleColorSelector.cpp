@@ -101,7 +101,7 @@ KoTriangleColorSelector::KoTriangleColorSelector(const KoColorDisplayRendererInt
       d(new Private(this, displayRenderer))
 {
     d->init();
-    connect(displayRenderer, SIGNAL(displayConfigurationChanged()), this, SLOT(configurationChanged()));
+    connect(displayRenderer, &KoColorDisplayRendererInterface::displayConfigurationChanged, this, &KoTriangleColorSelector::configurationChanged);
 }
 
 KoTriangleColorSelector::~KoTriangleColorSelector()

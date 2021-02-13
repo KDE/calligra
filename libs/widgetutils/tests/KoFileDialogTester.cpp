@@ -34,13 +34,13 @@ KoFileDialogTester::KoFileDialogTester(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    connect(ui->bnOpenFile, SIGNAL(clicked()), SLOT(testOpenFile()));
-    connect(ui->bnOpenFiles, SIGNAL(clicked()), SLOT(testOpenFiles()));
-    connect(ui->bnOpenDirectory, SIGNAL(clicked()), SLOT(testOpenDirectory()));
-    connect(ui->bnImportFile, SIGNAL(clicked()), SLOT(testImportFile()));
-    connect(ui->bnImportFiles, SIGNAL(clicked()), SLOT(testImportFiles()));
-    connect(ui->bnImportDirectory, SIGNAL(clicked()), SLOT(testImportDirectory()));
-    connect(ui->bnSaveFile, SIGNAL(clicked()), SLOT(testSaveFile()));
+    connect(ui->bnOpenFile, &QAbstractButton::clicked, this, &KoFileDialogTester::testOpenFile);
+    connect(ui->bnOpenFiles, &QAbstractButton::clicked, this, &KoFileDialogTester::testOpenFiles);
+    connect(ui->bnOpenDirectory, &QAbstractButton::clicked, this, &KoFileDialogTester::testOpenDirectory);
+    connect(ui->bnImportFile, &QAbstractButton::clicked, this, &KoFileDialogTester::testImportFile);
+    connect(ui->bnImportFiles, &QAbstractButton::clicked, this, &KoFileDialogTester::testImportFiles);
+    connect(ui->bnImportDirectory, &QAbstractButton::clicked, this, &KoFileDialogTester::testImportDirectory);
+    connect(ui->bnSaveFile, &QAbstractButton::clicked, this, &KoFileDialogTester::testSaveFile);
 
     m_nameFilters << "Documents (*.odt *.doc *.txt)"
                 << "Images (*.png *.jpg *.jpeg)"

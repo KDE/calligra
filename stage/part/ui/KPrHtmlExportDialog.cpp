@@ -49,18 +49,18 @@ KPrHtmlExportDialog::KPrHtmlExportDialog(const QList<KoPAPageBase*> &slides, con
     ui.klineedit_title->setText(m_title);
     ui.klineedit_author->setText(author);
 
-    connect(ui.pushbuttonBrowseTemplate, SIGNAL(clicked()), this, SLOT(browserAction()));
+    connect(ui.pushbuttonBrowseTemplate, &QAbstractButton::clicked, this, &KPrHtmlExportDialog::browserAction);
 
 //     connect(&preview, SIGNAL(loadFinished(bool)), this, SLOT(renderPreview()));
     connect(ui.klineedit_title, SIGNAL(editingFinished()), this, SLOT(generatePreview()));
     connect(ui.klineedit_author, SIGNAL(editingFinished()), this, SLOT(generatePreview()));
-    connect(ui.kListBox_slides, SIGNAL(currentRowChanged(int)), this, SLOT(generatePreview(int)));
+    connect(ui.kListBox_slides, &QListWidget::currentRowChanged, this, &KPrHtmlExportDialog::generatePreview);
     connect(ui.kcombobox, SIGNAL(currentIndexChanged(int)), this, SLOT(generatePreview()));
-    connect(ui.pushButton_selectAll, SIGNAL(clicked()), this, SLOT(checkAllItems()));
-    connect(ui.pushButton_deselectAll, SIGNAL(clicked()), this, SLOT(uncheckAllItems()));
-    connect(ui.toolButton_previous, SIGNAL(clicked()), this, SLOT(generatePrevious()));
-    connect(ui.toolButton_next, SIGNAL(clicked()), this, SLOT(generateNext()));
-    connect(ui.pushButton_Favorite, SIGNAL(clicked()), this, SLOT(favoriteAction()));
+    connect(ui.pushButton_selectAll, &QAbstractButton::clicked, this, &KPrHtmlExportDialog::checkAllItems);
+    connect(ui.pushButton_deselectAll, &QAbstractButton::clicked, this, &KPrHtmlExportDialog::uncheckAllItems);
+    connect(ui.toolButton_previous, &QAbstractButton::clicked, this, &KPrHtmlExportDialog::generatePrevious);
+    connect(ui.toolButton_next, &QAbstractButton::clicked, this, &KPrHtmlExportDialog::generateNext);
+    connect(ui.pushButton_Favorite, &QAbstractButton::clicked, this, &KPrHtmlExportDialog::favoriteAction);
     connect(ui.kcombobox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateFavoriteButton()));
 
     this->updateFavoriteButton();

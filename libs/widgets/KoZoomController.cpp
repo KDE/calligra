@@ -41,12 +41,12 @@ void KoZoomController::Private::init(KoCanvasController *co,
     zoomHandler = zh;
     connect(action, SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)),
             parent, SLOT(setZoom(KoZoomMode::Mode,qreal)));
-    connect(action, SIGNAL(aspectModeChanged(bool)),
-            parent, SIGNAL(aspectModeChanged(bool)));
-    connect(action, SIGNAL(zoomedToSelection()),
-            parent, SIGNAL(zoomedToSelection()));
-    connect(action, SIGNAL(zoomedToAll()),
-            parent, SIGNAL(zoomedToAll()));
+    connect(action, &KoZoomAction::aspectModeChanged,
+            parent, &KoZoomController::aspectModeChanged);
+    connect(action, &KoZoomAction::zoomedToSelection,
+            parent, &KoZoomController::zoomedToSelection);
+    connect(action, &KoZoomAction::zoomedToAll,
+            parent, &KoZoomController::zoomedToAll);
 
     actionCollection->addAction("view_zoom", action);
 

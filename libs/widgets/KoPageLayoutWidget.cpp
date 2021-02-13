@@ -71,14 +71,14 @@ KoPageLayoutWidget::KoPageLayoutWidget(QWidget *parent, const KoPageLayout &layo
     connect(d->widget.units, SIGNAL(currentIndexChanged(int)), this, SLOT(unitChanged(int)));
     connect(group2, SIGNAL(buttonClicked(int)), this, SLOT(facingPagesChanged()));
     connect(d->orientationGroup, SIGNAL(buttonClicked(int)), this, SLOT(orientationChanged()));
-    connect(d->widget.width, SIGNAL(valueChangedPt(qreal)), this, SLOT(optionsChanged()));
-    connect(d->widget.height, SIGNAL(valueChangedPt(qreal)), this, SLOT(optionsChanged()));
-    connect(d->widget.topMargin, SIGNAL(valueChangedPt(qreal)), this, SLOT(marginsChanged()));
-    connect(d->widget.bottomMargin, SIGNAL(valueChangedPt(qreal)), this, SLOT(marginsChanged()));
-    connect(d->widget.bindingEdgeMargin, SIGNAL(valueChangedPt(qreal)), this, SLOT(marginsChanged()));
-    connect(d->widget.pageEdgeMargin, SIGNAL(valueChangedPt(qreal)), this, SLOT(marginsChanged()));
-    connect(d->widget.width, SIGNAL(valueChangedPt(qreal)), this, SLOT(optionsChanged()));
-    connect(d->widget.height, SIGNAL(valueChangedPt(qreal)), this, SLOT(optionsChanged()));
+    connect(d->widget.width, &KoUnitDoubleSpinBox::valueChangedPt, this, &KoPageLayoutWidget::optionsChanged);
+    connect(d->widget.height, &KoUnitDoubleSpinBox::valueChangedPt, this, &KoPageLayoutWidget::optionsChanged);
+    connect(d->widget.topMargin, &KoUnitDoubleSpinBox::valueChangedPt, this, &KoPageLayoutWidget::marginsChanged);
+    connect(d->widget.bottomMargin, &KoUnitDoubleSpinBox::valueChangedPt, this, &KoPageLayoutWidget::marginsChanged);
+    connect(d->widget.bindingEdgeMargin, &KoUnitDoubleSpinBox::valueChangedPt, this, &KoPageLayoutWidget::marginsChanged);
+    connect(d->widget.pageEdgeMargin, &KoUnitDoubleSpinBox::valueChangedPt, this, &KoPageLayoutWidget::marginsChanged);
+    connect(d->widget.width, &KoUnitDoubleSpinBox::valueChangedPt, this, &KoPageLayoutWidget::optionsChanged);
+    connect(d->widget.height, &KoUnitDoubleSpinBox::valueChangedPt, this, &KoPageLayoutWidget::optionsChanged);
 
     setUnit(KoUnit(KoUnit::Millimeter));
     setPageLayout(layout);

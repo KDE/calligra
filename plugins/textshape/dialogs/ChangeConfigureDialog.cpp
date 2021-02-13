@@ -60,9 +60,9 @@ ChangeConfigureDialog::ChangeConfigureDialog(const QColor &insertionColor, const
     } else {
         ui.deltaXmlRadioButton->setChecked(true);
     }
-    connect(ui.insertionColorButton, SIGNAL(clicked()), this, SLOT(insertionColorSelect()));
-    connect(ui.deletionColorButton, SIGNAL(clicked()), this, SLOT(deletionColorSelect()));
-    connect(ui.formatColorButton, SIGNAL(clicked()), this, SLOT(formatChangeColorSelect()));
+    connect(ui.insertionColorButton, &QAbstractButton::clicked, this, &ChangeConfigureDialog::insertionColorSelect);
+    connect(ui.deletionColorButton, &QAbstractButton::clicked, this, &ChangeConfigureDialog::deletionColorSelect);
+    connect(ui.formatColorButton, &QAbstractButton::clicked, this, &ChangeConfigureDialog::formatChangeColorSelect);
     updatePreviewText();
 }
 

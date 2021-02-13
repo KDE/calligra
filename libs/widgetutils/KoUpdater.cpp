@@ -31,9 +31,9 @@ KoUpdater::KoUpdater(KoUpdaterPrivate *p)
     Q_ASSERT(p);
     Q_ASSERT(!d.isNull());
 
-    connect( this, SIGNAL(sigCancel()), d, SLOT(cancel()) );
-    connect( this, SIGNAL(sigProgress(int)), d, SLOT(setProgress(int)) );
-    connect( d, SIGNAL(sigInterrupted()), this, SLOT(interrupt()) );
+    connect( this, &KoUpdater::sigCancel, d.data(), &KoUpdaterPrivate::cancel );
+    connect( this, &KoUpdater::sigProgress, d.data(), &KoUpdaterPrivate::setProgress );
+    connect( d.data(), &KoUpdaterPrivate::sigInterrupted, this, &KoUpdater::interrupt );
 
     setRange(0, 100);
     m_interrupted = false;

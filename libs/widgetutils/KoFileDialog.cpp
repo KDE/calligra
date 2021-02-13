@@ -269,7 +269,7 @@ void KoFileDialog::createFileDialog()
         d->fileDialog->setOption(QFileDialog::HideNameFilterDetails);
     }
 
-    connect(d->fileDialog.data(), SIGNAL(filterSelected(QString)), this, SLOT(filterSelected(QString)));
+    connect(d->fileDialog.data(), &QFileDialog::filterSelected, this, &KoFileDialog::filterSelected);
 }
 
 QString KoFileDialog::filename()

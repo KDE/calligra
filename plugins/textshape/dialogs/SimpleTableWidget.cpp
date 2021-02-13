@@ -48,7 +48,7 @@ SimpleTableWidget::SimpleTableWidget(TextTool *tool, QWidget *parent)
     widget.mergeCells->setDefaultAction(tool->action("merge_tablecells"));
     widget.splitCells->setDefaultAction(tool->action("split_tablecells"));
 
-    connect(tool->action("activate_borderpainter"), SIGNAL(triggered(bool)), this, SLOT(restartPainting()));
+    connect(tool->action("activate_borderpainter"), &QAction::triggered, this, &SimpleTableWidget::restartPainting);
     widget.border->setDefaultAction(tool->action("activate_borderpainter"));
 
     fillBorderButton(QColor(0,0,0));
@@ -57,19 +57,19 @@ SimpleTableWidget::SimpleTableWidget(TextTool *tool, QWidget *parent)
     actionBorderColor->setIcon(koIcon("format-fill-color"));
     actionBorderColor->setText(i18n("Set Border Color..."));
     widget.border->addAction(actionBorderColor);
-    connect(actionBorderColor, SIGNAL(colorChanged(KoColor)), this, SLOT(setBorderColor(KoColor)));
+    connect(actionBorderColor, &KoColorPopupAction::colorChanged, this, &SimpleTableWidget::setBorderColor);
 
-    connect(widget.addRowAbove, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
-    connect(widget.addRowBelow, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
-    connect(widget.addColumnLeft, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
-    connect(widget.addColumnRight, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
-    connect(widget.deleteRow, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
-    connect(widget.deleteColumn, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
-    connect(widget.mergeCells, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
-    connect(widget.splitCells, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
-    connect(widget.border, SIGNAL(itemTriggered(int)), this, SLOT(emitTableBorderDataUpdated(int)));
-    connect(widget.border, SIGNAL(clicked(bool)), this, SIGNAL(doneWithFocus()));
-    connect(widget.border, SIGNAL(doneWithFocus()), this, SIGNAL(doneWithFocus()));
+    connect(widget.addRowAbove, &QAbstractButton::clicked, this, &SimpleTableWidget::doneWithFocus);
+    connect(widget.addRowBelow, &QAbstractButton::clicked, this, &SimpleTableWidget::doneWithFocus);
+    connect(widget.addColumnLeft, &QAbstractButton::clicked, this, &SimpleTableWidget::doneWithFocus);
+    connect(widget.addColumnRight, &QAbstractButton::clicked, this, &SimpleTableWidget::doneWithFocus);
+    connect(widget.deleteRow, &QAbstractButton::clicked, this, &SimpleTableWidget::doneWithFocus);
+    connect(widget.deleteColumn, &QAbstractButton::clicked, this, &SimpleTableWidget::doneWithFocus);
+    connect(widget.mergeCells, &QAbstractButton::clicked, this, &SimpleTableWidget::doneWithFocus);
+    connect(widget.splitCells, &QAbstractButton::clicked, this, &SimpleTableWidget::doneWithFocus);
+    connect(widget.border, &FormattingButton::itemTriggered, this, &SimpleTableWidget::emitTableBorderDataUpdated);
+    connect(widget.border, &QAbstractButton::clicked, this, &SimpleTableWidget::doneWithFocus);
+    connect(widget.border, &FormattingButton::doneWithFocus, this, &SimpleTableWidget::doneWithFocus);
 }
 
 void SimpleTableWidget::restartPainting()

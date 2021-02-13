@@ -71,12 +71,12 @@ FunctionCompletion::FunctionCompletion(CellEditor* editor)
     // When items are activated on single click, also change the help page on mouse-over, otherwise there is no (easy) way to get
     // the help (with the mouse) without inserting the function
     if (d->completionListBox->style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick, 0, d->completionListBox)) {
-        connect(d->completionListBox, SIGNAL(itemEntered(QListWidgetItem*)), this, SLOT(itemSelected(QListWidgetItem*)));
+        connect(d->completionListBox, &QListWidget::itemEntered, this, &FunctionCompletion::itemSelected);
         d->completionListBox->setMouseTracking(true);
     }
 
-    connect(d->completionListBox, SIGNAL(itemActivated(QListWidgetItem*)),
-            this, SLOT(doneCompletion()));
+    connect(d->completionListBox, &QListWidget::itemActivated,
+            this, &FunctionCompletion::doneCompletion);
     layout->addWidget(d->completionListBox);
 
     d->hintLabel = new QLabel(0, Qt::FramelessWindowHint | Qt::Tool |  Qt::X11BypassWindowManagerHint);

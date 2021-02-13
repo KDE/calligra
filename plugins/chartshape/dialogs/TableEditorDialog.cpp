@@ -81,22 +81,22 @@ void TableEditorDialog::init()
     deleteSelection->setEnabled( false );
 
     // Buttons
-    connect(insertRowAbove, SIGNAL(pressed()), this, SLOT(slotInsertRowAbovePressed()));
-    connect(insertRowBelow, SIGNAL(pressed()), this, SLOT(slotInsertRowBelowPressed()));
-    connect(insertColumnLeft, SIGNAL(pressed()), this, SLOT(slotInsertColumnLeftPressed()));
-    connect(insertColumnRight, SIGNAL(pressed()), this, SLOT(slotInsertColumnRightPressed()));
-    connect(deleteSelection, SIGNAL(pressed()), this, SLOT(slotDeleteSelectionPressed()));
+    connect(insertRowAbove, &QAbstractButton::pressed, this, &TableEditorDialog::slotInsertRowAbovePressed);
+    connect(insertRowBelow, &QAbstractButton::pressed, this, &TableEditorDialog::slotInsertRowBelowPressed);
+    connect(insertColumnLeft, &QAbstractButton::pressed, this, &TableEditorDialog::slotInsertColumnLeftPressed);
+    connect(insertColumnRight, &QAbstractButton::pressed, this, &TableEditorDialog::slotInsertColumnRightPressed);
+    connect(deleteSelection, &QAbstractButton::pressed, this, &TableEditorDialog::slotDeleteSelectionPressed);
 
     // Context Menu Actions
-    connect(m_insertRowAboveAction,    SIGNAL(triggered()), this, SLOT(slotInsertRowAbovePressed()));
-    connect(m_insertRowBelowAction,    SIGNAL(triggered()), this, SLOT(slotInsertRowBelowPressed()));
-    connect(m_insertColumnLeftAction, SIGNAL(triggered()), this, SLOT(slotInsertColumnLeftPressed()));
-    connect(m_insertColumnRightAction, SIGNAL(triggered()), this, SLOT(slotInsertColumnRightPressed()));
-    connect(m_deleteSelectionAction, SIGNAL(triggered()), this, SLOT(slotDeleteSelectionPressed()));
-    connect(m_tableView,  SIGNAL(currentIndexChanged(QModelIndex)), this, SLOT(slotCurrentIndexChanged(QModelIndex)));
+    connect(m_insertRowAboveAction,    &QAction::triggered, this, &TableEditorDialog::slotInsertRowAbovePressed);
+    connect(m_insertRowBelowAction,    &QAction::triggered, this, &TableEditorDialog::slotInsertRowBelowPressed);
+    connect(m_insertColumnLeftAction, &QAction::triggered, this, &TableEditorDialog::slotInsertColumnLeftPressed);
+    connect(m_insertColumnRightAction, &QAction::triggered, this, &TableEditorDialog::slotInsertColumnRightPressed);
+    connect(m_deleteSelectionAction, &QAction::triggered, this, &TableEditorDialog::slotDeleteSelectionPressed);
+    connect(m_tableView,  &ChartTableView::currentIndexChanged, this, &TableEditorDialog::slotCurrentIndexChanged);
 
     // We only need to connect one of the data direction buttons, since they are mutually exclusive.
-    connect(dataSetsInRows, SIGNAL(toggled(bool)), this, SLOT(slotDataSetsInRowsToggled(bool)));
+    connect(dataSetsInRows, &QAbstractButton::toggled, this, &TableEditorDialog::slotDataSetsInRowsToggled);
 
     // FIXME: QAction to create a separator??
     QAction *separator = new QAction( m_tableView );
@@ -129,8 +129,8 @@ void TableEditorDialog::setProxyModel( ChartProxyModel* proxyModel )
 
     // Connect the new proxy model.
     if ( m_proxyModel ) {
-        connect( m_proxyModel,       SIGNAL(modelReset()),
-                 this,               SLOT(slotUpdateDialog()) );
+        connect( m_proxyModel,       &QAbstractItemModel::modelReset,
+                 this,               &TableEditorDialog::slotUpdateDialog );
     }
 
     slotUpdateDialog();
@@ -139,7 +139,7 @@ void TableEditorDialog::setProxyModel( ChartProxyModel* proxyModel )
 void TableEditorDialog::setModel( QAbstractItemModel *model )
 {
     m_tableView->setModel( model );
-    connect(m_tableView->selectionModel(), SIGNAL(selectionChanged(const QItemSelection&, const QItemSelection&)), this, SLOT(slotSelectionChanged()));
+    connect(m_tableView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &TableEditorDialog::slotSelectionChanged);
 }
 
 void TableEditorDialog::slotUpdateDialog()

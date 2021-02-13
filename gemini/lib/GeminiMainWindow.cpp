@@ -160,7 +160,7 @@ void GeminiMainWindow::changeState(GeminiMainWindow::GeminiState newState, bool 
     d->currentState = newState;
     emit currentStateChanged();
 
-    QTimer::singleShot(50, this, SLOT(stateChanging()));
+    QTimer::singleShot(50, this, &GeminiMainWindow::stateChanging);
 }
 
 void GeminiMainWindow::stateChanging()

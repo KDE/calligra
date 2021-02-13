@@ -55,7 +55,7 @@ ShrinkToFitShapeContainer::ShrinkToFitShapeContainer(KoShape *childShape, KoDocu
     Q_ASSERT(data);
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(data->document()->documentLayout());
     Q_ASSERT(lay);
-    QObject::connect(lay, SIGNAL(finishedLayout()), static_cast<ShrinkToFitShapeContainerModel*>(d->model), SLOT(finishedLayout()));
+    QObject::connect(lay, &KoTextDocumentLayout::finishedLayout, static_cast<ShrinkToFitShapeContainerModel*>(d->model), &ShrinkToFitShapeContainerModel::finishedLayout);
 }
 
 ShrinkToFitShapeContainer::~ShrinkToFitShapeContainer()

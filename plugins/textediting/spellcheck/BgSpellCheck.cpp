@@ -33,7 +33,7 @@
 BgSpellCheck::BgSpellCheck(const Speller &speller, QObject *parent):
     BackgroundChecker(speller, parent)
 {
-    connect(this, SIGNAL(misspelling(QString,int)), this, SLOT(foundMisspelling(QString,int)));
+    connect(this, &Sonnet::BackgroundChecker::misspelling, this, &BgSpellCheck::foundMisspelling);
     QString lang = speller.language();
     if (lang.isEmpty()) // have *some* default...
         lang = "en_US";

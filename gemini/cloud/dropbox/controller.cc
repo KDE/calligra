@@ -45,31 +45,31 @@ Controller::Controller(QObject *parent) :
 
     m_current_list_pos = 0;
 
-    connect(m_networkcontroller, SIGNAL(authenticate_finished()), SLOT(authenticate_ok()));
-    connect(m_networkcontroller, SIGNAL(network_error(QString)), SIGNAL(network_error(QString)));
-    connect(m_networkcontroller, SIGNAL(getfolder_finished(const QVariantMap&)), SLOT(getfolder(const QVariantMap&)));
-    connect(m_networkcontroller, SIGNAL(getfolder_done()), SLOT(getfolder_done()));
+    connect(m_networkcontroller, &NetworkController::authenticate_finished, this, &Controller::authenticate_ok);
+    connect(m_networkcontroller, &NetworkController::network_error, this, &Controller::network_error);
+    connect(m_networkcontroller, &NetworkController::getfolder_finished, this, &Controller::getfolder);
+    connect(m_networkcontroller, &NetworkController::getfolder_done, this, &Controller::getfolder_done);
 
-    connect(m_networkcontroller, SIGNAL(progressBarChanged(int,double,qint64)), SIGNAL(progressBarChanged(int,double,qint64)));
-    connect(m_networkcontroller, SIGNAL(file_download_finished()), SLOT(updown_finished()));
-    connect(m_networkcontroller, SIGNAL(file_upload_finished()), SLOT(updown_finished()));
+    connect(m_networkcontroller, &NetworkController::progressBarChanged, this, &Controller::progressBarChanged);
+    connect(m_networkcontroller, &NetworkController::file_download_finished, this, &Controller::updown_finished);
+    connect(m_networkcontroller, &NetworkController::file_upload_finished, this, &Controller::updown_finished);
 
-    connect(m_networkcontroller, SIGNAL(delete_finished(bool)), SLOT(delete_finished(bool)));
-    connect(m_networkcontroller, SIGNAL(stop_and_cancel_finished()), SIGNAL(stop_and_cancel_finished()));
+    connect(m_networkcontroller, &NetworkController::delete_finished, this, &Controller::delete_finished);
+    connect(m_networkcontroller, &NetworkController::stop_and_cancel_finished, this, &Controller::stop_and_cancel_finished);
 
-    connect(m_networkcontroller, SIGNAL(create_finished(bool)), SLOT(createnewfolder_finished(bool)));
-    connect(m_networkcontroller, SIGNAL(rename_finished(bool)), SLOT(renamenewfolder_finished(bool)));
-    connect(m_networkcontroller, SIGNAL(move_finished(bool)), SLOT(movefilesfolders_finished(bool)));
-    connect(m_networkcontroller, SIGNAL(copy_finished(bool)), SLOT(copyfilesfolders_finished(bool)));
+    connect(m_networkcontroller, &NetworkController::create_finished, this, &Controller::createnewfolder_finished);
+    connect(m_networkcontroller, &NetworkController::rename_finished, this, &Controller::renamenewfolder_finished);
+    connect(m_networkcontroller, &NetworkController::move_finished, this, &Controller::movefilesfolders_finished);
+    connect(m_networkcontroller, &NetworkController::copy_finished, this, &Controller::copyfilesfolders_finished);
 
 
-    connect(m_networkcontroller, SIGNAL(shares_finished(bool)),SIGNAL(shares_finished(bool)));
-    connect(m_networkcontroller, SIGNAL(shares_metadata(QString,QString)),SIGNAL(shares_metadata(QString,QString)));
+    connect(m_networkcontroller, &NetworkController::shares_finished,this, &Controller::shares_finished);
+    connect(m_networkcontroller, &NetworkController::shares_metadata,this, &Controller::shares_metadata);
 
-    connect(m_networkcontroller, SIGNAL(accountinfo_metadata(QVariant)), SIGNAL(accountinfo_metadata(QVariant)));
-    connect(m_networkcontroller, SIGNAL(accountinfo_finished(bool)),SIGNAL(accountinfo_finished(bool)));
+    connect(m_networkcontroller, &NetworkController::accountinfo_metadata, this, &Controller::accountinfo_metadata);
+    connect(m_networkcontroller, &NetworkController::accountinfo_finished,this, &Controller::accountinfo_finished);
 
-    connect(m_networkcontroller, SIGNAL(open_oauth_authorize_page(QString)), SIGNAL(open_oauth_authorize_page(QString)));
+    connect(m_networkcontroller, &NetworkController::open_oauth_authorize_page, this, &Controller::open_oauth_authorize_page);
 }
 
 Controller::~Controller(){
@@ -88,7 +88,7 @@ void Controller::authenticate(QString email, QString password){
 void Controller::authenticate_ok(){
     emit authenticate_finished(m_networkcontroller->m_user_email,
                                m_networkcontroller->m_user_password);
-    QTimer::singleShot(250, this, SIGNAL(needAuthenticateChanged()));
+    QTimer::singleShot(250, this, &Controller::needAuthenticateChanged);
 }
 
 void Controller::getlistoffolder(QString folder_name){
@@ -328,7 +328,7 @@ void Controller::logout(){
     folder_model->clear();
     transfer_clear_log();
     m_cache.clear();
-    QTimer::singleShot(250, this, SIGNAL(needAuthenticateChanged()));
+    QTimer::singleShot(250, this, &Controller::needAuthenticateChanged);
 }
 
 void Controller::refresh_current_folder(){
@@ -561,7 +561,7 @@ QAction* Controller::uploadMostRecentAction()
     if(!m_uploadMostRecentAction)
     {
         m_uploadMostRecentAction = new QAction(koIcon("folder-remote"), "Update DropBox Copy", this);
-        connect(m_uploadMostRecentAction, SIGNAL(triggered(bool)), SLOT(uploadMostRecent()));
+        connect(m_uploadMostRecentAction, &QAction::triggered, this, &Controller::uploadMostRecent);
     }
     return m_uploadMostRecentAction;
 }

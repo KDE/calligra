@@ -58,7 +58,7 @@ NodeData NodeData::fromFrame(QTextFrame* frame)
 TextDocumentStructureModel::TextDocumentStructureModel(QObject *parent)
   : QAbstractItemModel(parent)
 {
-    connect(this, SIGNAL(modelReset()), SLOT(onModelReset()));
+    connect(this, &QAbstractItemModel::modelReset, this, &TextDocumentStructureModel::onModelReset);
 }
 
 TextDocumentStructureModel::~TextDocumentStructureModel()
@@ -303,7 +303,7 @@ void TextDocumentStructureModel::setTextDocument(QTextDocument* textDocument)
     m_textDocument = textDocument;
 
     if (m_textDocument) {
-        connect(m_textDocument, SIGNAL(contentsChanged()), SLOT(onContentsChanged()));
+        connect(m_textDocument.data(), &QTextDocument::contentsChanged, this, &TextDocumentStructureModel::onContentsChanged);
     }
 
     endResetModel();

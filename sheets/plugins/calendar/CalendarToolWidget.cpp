@@ -57,10 +57,10 @@ CalendarToolWidget::CalendarToolWidget(QWidget* parent)
     this->m_selectStartDateButton->setIcon(calendarIcon);
     this->m_selectEndDateButton->setIcon(calendarIcon);
 
-    connect(this->m_selectStartDateButton, SIGNAL(clicked()), this, SLOT(showStartDatePicker()));
-    connect(this->m_selectEndDateButton, SIGNAL(clicked()), this, SLOT(showEndDatePicker()));
+    connect(this->m_selectStartDateButton, &QAbstractButton::clicked, this, &CalendarToolWidget::showStartDatePicker);
+    connect(this->m_selectEndDateButton, &QAbstractButton::clicked, this, &CalendarToolWidget::showEndDatePicker);
 
-    connect(this->m_insertButton, SIGNAL(clicked()), this, SLOT(emitInsertCalendar()));
+    connect(this->m_insertButton, &QAbstractButton::clicked, this, &CalendarToolWidget::emitInsertCalendar);
 }
 
 CalendarToolWidget::~CalendarToolWidget()
@@ -78,7 +78,7 @@ bool CalendarToolWidget::buildDatePickerFrame()
     if (!m_datePicker)
         return false;
 
-    connect(m_datePicker, SIGNAL(destroyed()), this, SLOT(datePickerDeleted()));
+    connect(m_datePicker, &QObject::destroyed, this, &CalendarToolWidget::datePickerDeleted);
 
     const QPoint position = mapToGlobal(pos());
     m_datePicker->move(position.x() + this->width(), position.y());
@@ -103,8 +103,8 @@ void CalendarToolWidget::emitInsertCalendar()
 void CalendarToolWidget::showStartDatePicker()
 {
     if (buildDatePickerFrame()) {
-        connect(m_datePicker, SIGNAL(dateSelected(QDate)), this, SLOT(setStartDate(QDate)));
-        connect(m_datePicker, SIGNAL(dateEntered(QDate)), this, SLOT(setStartDate(QDate)));
+        connect(m_datePicker, &KDatePicker::dateSelected, this, &CalendarToolWidget::setStartDate);
+        connect(m_datePicker, &KDatePicker::dateEntered, this, &CalendarToolWidget::setStartDate);
         m_datePicker->setDate(startDate());
     }
 }
@@ -112,8 +112,8 @@ void CalendarToolWidget::showStartDatePicker()
 void CalendarToolWidget::showEndDatePicker()
 {
     if (buildDatePickerFrame()) {
-        connect(m_datePicker, SIGNAL(dateSelected(QDate)), this, SLOT(setEndDate(QDate)));
-        connect(m_datePicker, SIGNAL(dateEntered(QDate)), this, SLOT(setEndDate(QDate)));
+        connect(m_datePicker, &KDatePicker::dateSelected, this, &CalendarToolWidget::setEndDate);
+        connect(m_datePicker, &KDatePicker::dateEntered, this, &CalendarToolWidget::setEndDate);
         m_datePicker->setDate(endDate());
     }
 }

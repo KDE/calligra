@@ -48,8 +48,8 @@ ParagraphSettingsDialog::ParagraphSettingsDialog(TextTool *tool, KoTextEditor *e
     setMainWidget(m_paragraphGeneral);
 
 
-    connect(this, SIGNAL(applyClicked()), this, SLOT(slotApply()));
-    connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
+    connect(this, &KoDialog::applyClicked, this, &ParagraphSettingsDialog::slotApply);
+    connect(this, &KoDialog::okClicked, this, &ParagraphSettingsDialog::slotOk);
     initTabs();
 
     // Do this after initTabs so it doesn't cause signals prematurely

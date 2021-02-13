@@ -43,12 +43,12 @@ ManageBookmark::ManageBookmark(const QList<QString> &nameList, KoTextEditor *edi
         widget.bookmarkList->setCurrentRow(row);
     }
 
-    connect(widget.bookmarkList, SIGNAL(currentRowChanged(int)), this, SLOT(selectionChanged(int)));
-    connect(widget.buttonRename, SIGNAL(clicked()), this, SLOT(slotBookmarkRename()));
-    connect(widget.buttonDelete, SIGNAL(clicked()), this, SLOT(slotBookmarkDelete()));
-    connect(widget.buttonInsert, SIGNAL(clicked()), this, SLOT(slotBookmarkInsert()));
-    connect(widget.bookmarkList, SIGNAL(itemActivated(QListWidgetItem*)),
-            this, SLOT(slotBookmarkItemActivated(QListWidgetItem*)));
+    connect(widget.bookmarkList, &QListWidget::currentRowChanged, this, &ManageBookmark::selectionChanged);
+    connect(widget.buttonRename, &QAbstractButton::clicked, this, &ManageBookmark::slotBookmarkRename);
+    connect(widget.buttonDelete, &QAbstractButton::clicked, this, &ManageBookmark::slotBookmarkDelete);
+    connect(widget.buttonInsert, &QAbstractButton::clicked, this, &ManageBookmark::slotBookmarkInsert);
+    connect(widget.bookmarkList, &QListWidget::itemActivated,
+            this, &ManageBookmark::slotBookmarkItemActivated);
     selectionChanged(bookmarkRow());
 }
 
@@ -149,13 +149,13 @@ ManageBookmarkDialog::ManageBookmarkDialog(const QList<QString> &nameList, KoTex
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
     showButtonSeparator(true);
-    connect(ui, SIGNAL(bookmarkSelectionChanged(int)), this, SLOT(selectionChanged(int)));
-    connect(ui, SIGNAL(bookmarkNameChanged(QString,QString)),
-            this, SIGNAL(nameChanged(QString,QString)));
-    connect(ui, SIGNAL(bookmarkItemDeleted(QString)),
-            this, SIGNAL(bookmarkDeleted(QString)));
-    connect(ui, SIGNAL(bookmarkItemDoubleClicked(QListWidgetItem*)),
-            this, SLOT(bookmarkDoubleClicked(QListWidgetItem*)));
+    connect(ui, &ManageBookmark::bookmarkSelectionChanged, this, &ManageBookmarkDialog::selectionChanged);
+    connect(ui, &ManageBookmark::bookmarkNameChanged,
+            this, &ManageBookmarkDialog::nameChanged);
+    connect(ui, &ManageBookmark::bookmarkItemDeleted,
+            this, &ManageBookmarkDialog::bookmarkDeleted);
+    connect(ui, &ManageBookmark::bookmarkItemDoubleClicked,
+            this, &ManageBookmarkDialog::bookmarkDoubleClicked);
     selectionChanged(ui->bookmarkRow());
 }
 

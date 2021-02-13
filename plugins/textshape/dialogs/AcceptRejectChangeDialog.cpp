@@ -36,9 +36,9 @@ AcceptRejectChangeDialog::AcceptRejectChangeDialog(KoChangeTracker *changeTracke
         ui.changeTypeLineEdit->setText(QString("Deletion"));
     }
 
-    connect(ui.acceptButton, SIGNAL(released()), this, SLOT(changeAccepted()));
-    connect(ui.rejectButton, SIGNAL(released()), this, SLOT(changeRejected()));
-    connect(ui.cancelButton, SIGNAL(released()), this, SLOT(dialogCancelled()));
+    connect(ui.acceptButton, &QAbstractButton::released, this, &AcceptRejectChangeDialog::changeAccepted);
+    connect(ui.rejectButton, &QAbstractButton::released, this, &AcceptRejectChangeDialog::changeRejected);
+    connect(ui.cancelButton, &QAbstractButton::released, this, &AcceptRejectChangeDialog::dialogCancelled);
     
 }
 

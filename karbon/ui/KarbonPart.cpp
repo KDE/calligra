@@ -51,7 +51,7 @@
 #include <KoCanvasResourceManager.h>
 #include <KoCanvasBase.h>
 #include <KoComponentData.h>
-
+#include <KoPAPageBase.h>
 #include <kconfiggroup.h>
 
 #include <QVBoxLayout>
@@ -81,7 +81,7 @@ KoView * KarbonPart::createViewInstance(KoDocument *_document, QWidget *parent)
     layout->addWidget(result);
     layout->addWidget(result->colorBar());
 
-    connect(doc, SIGNAL(replaceActivePage(KoPAPageBase*,KoPAPageBase*)), result, SLOT(replaceActivePage(KoPAPageBase*,KoPAPageBase*)));
+    connect(doc, &KoPADocument::replaceActivePage, result, &KarbonView::replaceActivePage);
 
     return view;
 }

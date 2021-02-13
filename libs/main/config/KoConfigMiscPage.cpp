@@ -118,7 +118,7 @@ KoConfigMiscPage::KoConfigMiscPage(KoDocument* doc, KoDocumentResourceManager *d
     miscGroupBox->setLayout(miscLayout);
 
     connect(d->unit, SIGNAL(activated(int)), SLOT(slotUnitChanged(int)));
-    connect(d->pasteAtCursor, SIGNAL(clicked(bool)), d->pasteOffset, SLOT(setDisabled(bool)));
+    connect(d->pasteAtCursor, &QAbstractButton::clicked, d->pasteOffset, &QWidget::setDisabled);
 }
 
 KoConfigMiscPage::~KoConfigMiscPage()

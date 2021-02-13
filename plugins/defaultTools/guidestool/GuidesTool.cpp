@@ -385,16 +385,16 @@ QList<QPointer<QWidget> > GuidesTool::createOptionWidgets()
     QList<QPointer<QWidget> > optionwidgets;
     m_options = new GuidesToolOptionWidget();
     m_options->setWindowTitle(i18n("Guides Editor"));
-    connect(m_options, SIGNAL(guideLineSelected(Qt::Orientation,int)),
-            this, SLOT(guideLineSelected(Qt::Orientation,int)));
-    connect(m_options, SIGNAL(guideLinesChanged(Qt::Orientation)),
-            this, SLOT(guideLinesChanged(Qt::Orientation)));
+    connect(m_options, &GuidesToolOptionWidget::guideLineSelected,
+            this, &GuidesTool::guideLineSelected);
+    connect(m_options, &GuidesToolOptionWidget::guideLinesChanged,
+            this, &GuidesTool::guideLinesChanged);
     optionwidgets.append(m_options);
 
     m_insert = new InsertGuidesToolOptionWidget();
     m_insert->setWindowTitle(i18n("Guides Insertor"));
-    connect(m_insert, SIGNAL(createGuides(GuidesTransaction*)),
-             this, SLOT(insertorCreateGuidesSlot(GuidesTransaction*)));
+    connect(m_insert, &InsertGuidesToolOptionWidget::createGuides,
+             this, &GuidesTool::insertorCreateGuidesSlot);
     optionwidgets.append(m_insert);
 
     return optionwidgets;

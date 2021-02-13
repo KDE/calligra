@@ -41,10 +41,10 @@ NetworkController::NetworkController(QObject *parent) :
 
     m_droprestapi = new DropRestAPI();
 
-    QObject::connect(m_networkaccessmanager, SIGNAL(sslErrors(QNetworkReply*, const QList<QSslError>&)), this, SLOT(sslErrors(QNetworkReply*, const QList<QSslError>&)));
-    QObject::connect(m_networkaccessmanager, SIGNAL(finished(QNetworkReply*)), this, SLOT(finished(QNetworkReply*)));
-    QObject::connect(m_file_transfer, SIGNAL(sslErrors(QNetworkReply*, const QList<QSslError>&)), this, SLOT(sslErrors(QNetworkReply*, const QList<QSslError>&)));
-    QObject::connect(m_file_transfer, SIGNAL(finished(QNetworkReply*)), this, SLOT(file_transfer_finished(QNetworkReply*)));
+    QObject::connect(m_networkaccessmanager, &QNetworkAccessManager::sslErrors, this, &NetworkController::sslErrors);
+    QObject::connect(m_networkaccessmanager, &QNetworkAccessManager::finished, this, &NetworkController::finished);
+    QObject::connect(m_file_transfer, &QNetworkAccessManager::sslErrors, this, &NetworkController::sslErrors);
+    QObject::connect(m_file_transfer, &QNetworkAccessManager::finished, this, &NetworkController::file_transfer_finished);
 }
 
 NetworkController::~NetworkController(){
@@ -314,7 +314,7 @@ void NetworkController::upload(FileTransferItem *fti){
         );
 
     m_networkreply = m_file_transfer->post(m_droprestapi->file_transfer(filename, m_currentDir, boundaryStr),*m_multipartform);
-    QObject::connect(m_networkreply,SIGNAL(uploadProgress(qint64, qint64)), SLOT(uploadProgress(qint64, qint64)));
+    QObject::connect(m_networkreply,&QNetworkReply::uploadProgress, this, &NetworkController::uploadProgress);
 
 }
 
@@ -346,8 +346,8 @@ void NetworkController::download(FileTransferItem *fti){
     m_fti->setIs_finished(false);
 
     m_networkreply = m_file_transfer->get(m_droprestapi->file_transfer_download(fti->dropbox_path()));
-    QObject::connect(m_networkreply, SIGNAL(readyRead()), this, SLOT(readyRead()));
-    QObject::connect(m_networkreply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(downloadProgress(qint64,qint64)));
+    QObject::connect(m_networkreply, &QIODevice::readyRead, this, &NetworkController::readyRead);
+    QObject::connect(m_networkreply, &QNetworkReply::downloadProgress, this, &NetworkController::downloadProgress);
 }
 
 void NetworkController::readyRead(){

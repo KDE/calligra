@@ -147,20 +147,20 @@ PageLayoutDialog::PageLayoutDialog(QWidget* parent, Sheet* sheet)
     d->sheetPage.setupUi(page);
     addPage(page, i18n("Sheet"));
 
-    connect(d->sheetPage.columnsCheckBox, SIGNAL(toggled(bool)),
-            d->sheetPage.startColumnComboBox, SLOT(setEnabled(bool)));
-    connect(d->sheetPage.columnsCheckBox, SIGNAL(toggled(bool)),
-            d->sheetPage.endColumnComboBox, SLOT(setEnabled(bool)));
-    connect(d->sheetPage.rowsCheckBox, SIGNAL(toggled(bool)),
-            d->sheetPage.startRowComboBox, SLOT(setEnabled(bool)));
-    connect(d->sheetPage.rowsCheckBox, SIGNAL(toggled(bool)),
-            d->sheetPage.endRowComboBox, SLOT(setEnabled(bool)));
-    connect(d->sheetPage.zoomButton, SIGNAL(toggled(bool)),
-            d->sheetPage.zoomComboBox, SLOT(setEnabled(bool)));
-    connect(d->sheetPage.pageLimitsButton, SIGNAL(toggled(bool)),
-            d->sheetPage.horizontalComboBox, SLOT(setEnabled(bool)));
-    connect(d->sheetPage.pageLimitsButton, SIGNAL(toggled(bool)),
-            d->sheetPage.verticalComboBox, SLOT(setEnabled(bool)));
+    connect(d->sheetPage.columnsCheckBox, &QAbstractButton::toggled,
+            d->sheetPage.startColumnComboBox, &QWidget::setEnabled);
+    connect(d->sheetPage.columnsCheckBox, &QAbstractButton::toggled,
+            d->sheetPage.endColumnComboBox, &QWidget::setEnabled);
+    connect(d->sheetPage.rowsCheckBox, &QAbstractButton::toggled,
+            d->sheetPage.startRowComboBox, &QWidget::setEnabled);
+    connect(d->sheetPage.rowsCheckBox, &QAbstractButton::toggled,
+            d->sheetPage.endRowComboBox, &QWidget::setEnabled);
+    connect(d->sheetPage.zoomButton, &QAbstractButton::toggled,
+            d->sheetPage.zoomComboBox, &QWidget::setEnabled);
+    connect(d->sheetPage.pageLimitsButton, &QAbstractButton::toggled,
+            d->sheetPage.horizontalComboBox, &QWidget::setEnabled);
+    connect(d->sheetPage.pageLimitsButton, &QAbstractButton::toggled,
+            d->sheetPage.verticalComboBox, &QWidget::setEnabled);
 
     d->sheet = sheet;
     d->setup();

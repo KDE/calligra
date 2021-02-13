@@ -30,9 +30,9 @@ FormatErrorBarDialog::FormatErrorBarDialog(QWidget *parent)
     widget.setupUi(this);
     errorTypeChanged(0);
 
-    connect(widget.posIndicator, SIGNAL(toggled(bool)), this, SLOT(errorIndicatorChanged()));
-    connect(widget.negIndicator, SIGNAL(toggled(bool)), this, SLOT(errorIndicatorChanged()));
-    connect(widget.posAndNegIndicator, SIGNAL(toggled(bool)), this, SLOT(errorIndicatorChanged()));
+    connect(widget.posIndicator, &QAbstractButton::toggled, this, &FormatErrorBarDialog::errorIndicatorChanged);
+    connect(widget.negIndicator, &QAbstractButton::toggled, this, &FormatErrorBarDialog::errorIndicatorChanged);
+    connect(widget.posAndNegIndicator, &QAbstractButton::toggled, this, &FormatErrorBarDialog::errorIndicatorChanged);
     connect(widget.sameValueForBoth, SIGNAL(toggled(bool)), this, SLOT(setSameErrorValueForBoth(bool)));
     connect(widget.positiveValue, SIGNAL(valueChanged(double)), this, SLOT(setSameErrorValueForBoth(double)));
     connect(widget.errorType, SIGNAL(currentIndexChanged(int)), this, SLOT(errorTypeChanged(int)));
