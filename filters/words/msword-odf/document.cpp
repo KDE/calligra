@@ -52,6 +52,7 @@
 
 #include <QBuffer>
 #include <QColor>
+#include <QTextCodec>
 
 //TODO: provide all streams to the wv2 parser; POLE storage is going to replace
 //OLE storage soon!
@@ -228,7 +229,7 @@ void Document::processAssociatedStrings()
     }
 
     static const quint16 CP_WINUNICODE = 0x04B0;
-    bool isUnicode16 = false;
+    QTextCodec *codec = QTextCodec::codecForName("UTF-8");
 
     QString title;
     QString subject;
@@ -245,8 +246,16 @@ void Document::processAssociatedStrings()
             switch (ps.propertyIdentifierAndOffset.at(i).propertyIdentifier) {
             case PIDSI_CODEPAGE:
                 if (ps.property.at(i)._has_vt_I2) {
-                    if (ps.property.at(i).vt_I2 == CP_WINUNICODE) {
-                        isUnicode16 = true;
+                    quint16 codepage = ps.property.at(i).vt_I2;
+                    if (codepage == CP_WINUNICODE) {
+                        codec = QTextCodec::codecForName("UTF-16");
+                    } else {
+                        QTextCodec *newCodec = QTextCodec::codecForName(QString("Windows-%1").arg(codepage).toAscii());
+                        if (newCodec) {
+                            codec = newCodec;
+                        } else {
+                            warnMsDoc << "Unknown codepage " << codepage;
+                        }
                     }
                 }
                 break;
@@ -273,11 +282,7 @@ void Document::processAssociatedStrings()
             }
             if (p_str) {
                 if (ps.property.at(i).vt_lpstr) {
-                    if (isUnicode16) {
-                        *p_str = QString::fromUtf16((ushort*)ps.property.at(i).vt_lpstr->characters.data());
-                    } else {
-                        *p_str = QString::fromUtf8(ps.property.at(i).vt_lpstr->characters.data());
-                    }
+                    *p_str = codec->toUnicode(ps.property.at(i).vt_lpstr->characters.data());
                 }
                 p_str = 0;
             }
