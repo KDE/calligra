@@ -44,7 +44,7 @@ ParagraphGeneral::ParagraphGeneral(QWidget *parent)
     widget.inToc->setVisible(false);
 //
     widget.nextStyle->setVisible(true);
-    widget.label_2->setVisible(true);
+    widget.nextStyleLabel->setVisible(true);
 
     m_paragraphInheritedStyleModel->setStyleThumbnailer(m_thumbnail);
     widget.inheritStyle->setStylesModel(m_paragraphInheritedStyleModel);

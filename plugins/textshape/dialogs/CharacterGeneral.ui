@@ -41,7 +41,7 @@
         <widget class="QLineEdit" name="name"/>
        </item>
        <item row="1" column="0" colspan="2">
-        <widget class="QLabel" name="label_2">
+        <widget class="QLabel" name="nextStyleLabel">
          <property name="text">
           <string>Next style:</string>
          </property>
@@ -57,7 +57,7 @@
         <widget class="StylesCombo" name="nextStyle"/>
        </item>
        <item row="2" column="0" colspan="2">
-        <widget class="QLabel" name="label_3">
+        <widget class="QLabel" name="inheritStyleLabel">
          <property name="text">
           <string>Parent style:</string>
          </property>

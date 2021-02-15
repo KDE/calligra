@@ -47,7 +47,7 @@ CharacterGeneral::CharacterGeneral(QWidget *parent)
     widget.setupUi(this);
     // we don't have next style for character styles
     widget.nextStyle->setVisible(false);
-    widget.label_2->setVisible(false);
+    widget.nextStyleLabel->setVisible(false);
     //
 
     // paragraph style model
