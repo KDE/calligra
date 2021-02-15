@@ -250,7 +250,7 @@ void Document::processAssociatedStrings()
                     if (codepage == CP_WINUNICODE) {
                         codec = QTextCodec::codecForName("UTF-16");
                     } else {
-                        QTextCodec *newCodec = QTextCodec::codecForName(QString("Windows-%1").arg(codepage).toAscii());
+                        QTextCodec *newCodec = QTextCodec::codecForName(QString("Windows-%1").arg(codepage).toLatin1());
                         if (newCodec) {
                             codec = newCodec;
                         } else {
