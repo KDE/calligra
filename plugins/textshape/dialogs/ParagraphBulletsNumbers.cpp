@@ -86,6 +86,7 @@ void ParagraphBulletsNumbers::setDisplay(KoParagraphStyle *style, int level, boo
     widget.listPropertiesPane->setEnabled(listStyle != nullptr);
     widget.customCharacter->setText("-");
     if (listStyle == nullptr) {
+        addStyle(Lists::ListStyleItem(i18nc("None", "List style"), KoListStyle::None));
         widget.listTypes->setCurrentRow(0);
         return;
     }
@@ -129,7 +130,7 @@ void ParagraphBulletsNumbers::setDisplay(KoParagraphStyle *style, int level, boo
         widget.imageWidth->setValue(0);
     }
 
-    if(llp.alignmentMode()==false) {//for list-level-position-and-space-mode=label-width-and-position disable the following options
+    if (llp.alignmentMode() == false) {//for list-level-position-and-space-mode=label-width-and-position disable the following options
         widget.label_8->setEnabled(false);
         widget.label_9->setEnabled(false);
         widget.label_10->setEnabled(false);
