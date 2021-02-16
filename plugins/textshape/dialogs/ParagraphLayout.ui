@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>376</height>
+    <height>386</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -54,28 +54,7 @@
       <string>Behavior at End of Frame/Page</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
-      <item row="0" column="0">
-       <widget class="QCheckBox" name="keepTogether">
-        <property name="text">
-         <string>Keep lines together</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QCheckBox" name="breakBefore">
-        <property name="text">
-         <string>Insert break before paragraph</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QCheckBox" name="breakAfter">
-        <property name="text">
-         <string>Insert break after paragraph</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0">
+      <item row="4" column="0">
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
          <widget class="QLabel" name="label">
@@ -102,14 +81,35 @@
         </item>
        </layout>
       </item>
+      <item row="2" column="0">
+       <widget class="QCheckBox" name="breakBefore">
+        <property name="text">
+         <string>Insert break before paragraph</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QCheckBox" name="breakAfter">
+        <property name="text">
+         <string>Insert break after paragraph</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="keepTogether">
+        <property name="text">
+         <string>Keep lines together</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QCheckBox" name="keepWithNext">
+        <property name="text">
+         <string>Keep with next paragraph</string>
+        </property>
+       </widget>
+      </item>
      </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="QCheckBox" name="keepWithNext">
-     <property name="text">
-      <string>Keep with next paragraph</string>
-     </property>
     </widget>
    </item>
    <item>

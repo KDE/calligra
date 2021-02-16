@@ -487,6 +487,7 @@ void KoTextLayoutArea::backtrackKeepWithNext(FrameIterator *cursor)
             cursor->it = ++it;
             break;
         }
+        // --(cursor->it);
     }
 }
 
@@ -689,10 +690,9 @@ bool KoTextLayoutArea::layout(FrameIterator *cursor)
                 }
 
                 if (layoutBlock(cursor) == false) {
-                    if (cursor->lineTextStart == -1) {
-                        //Nothing was added so lets backtrack keep-with-next
-                        backtrackKeepWithNext(cursor);
-                    }
+                    // If needed, we must backtrack so the in-progress block is aborted and sent
+                    // to the next frame.
+                    backtrackKeepWithNext(cursor);
                     d->endOfArea = new FrameIterator(cursor);
                     setBottom(d->y + d->footNotesHeight);
                     d->blockRects.last().setBottom(d->y);

@@ -157,8 +157,8 @@ public:
         NormalLineHeight,         ///< bool, internal property for reserved usage
         BibliographyData,
 
-        TableOfContentsData,      // set when block is instead a TableOfContents
-        GeneratedDocument,  // set when block is instead a generated document
+        TableOfContentsData,      // set when block is inside a TableOfContents
+        GeneratedDocument,  // set when block is inside a generated document
         Shadow,                    //< KoShadowStyle, the shadow of this paragraph
         NextStyle,                  ///< holds the styleId of the style to be used on a new paragraph
         ParagraphListStyleId,        ///< this holds the listStyleId of the list got from style:list-style-name property from ODF 1.2
