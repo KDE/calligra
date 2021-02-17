@@ -90,7 +90,7 @@ bool OkularOdtGenerator::loadDocument( const QString &fileName, QVector<Okular::
     KoDocumentEntry documentEntry = KoDocumentEntry::queryByMimeType(mimetype);
     KoPart *part = documentEntry.createKoPart(&error);
 
-    if (!error.isEmpty()) {
+    if (!error.isEmpty() || !part) {
         qWarning() << "Error creating document" << mimetype << error;
         return 0;
     }
