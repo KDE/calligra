@@ -47,7 +47,7 @@
 OkularOdtGenerator::OkularOdtGenerator( QObject *parent, const QVariantList &args )
     : Okular::Generator( parent, args )
 {
-    m_doc = 0;
+    m_doc = nullptr;
     setFeature( TextExtraction );
 }
 
@@ -223,9 +223,6 @@ void OkularOdtGenerator::generatePixmap( Okular::PixmapRequest *request )
         KWPageManager *pageManager = m_doc->pageManager();
 
         KWPage page = pageManager->page(request->pageNumber()+1);
-
-        pix = new QPixmap(request->width(), request->height());
-        QPainter painter(pix);
 
         QSize rSize(request->width(), request->height());
 

@@ -48,7 +48,7 @@ public:
     bool canGenerateTextPage() const override;
 
 protected:
-    bool doCloseDocument();
+    bool doCloseDocument() override;
     Okular::TextPage* textPage( Okular::Page *page );
 
 private:
