@@ -41,7 +41,7 @@ public:
         CapitalMode,
         NumericMode
     };
-    Q_ENUMS(KeyboardMode)
+    Q_ENUM(KeyboardMode)
 
     enum KeyType {
         NormalKey,
@@ -54,7 +54,7 @@ public:
         LeftArrowKey,
         RightArrowKey
     };
-    Q_ENUMS(KeyType)
+    Q_ENUM(KeyType)
 
     explicit KeyboardModel(QObject* parent = 0);
     ~KeyboardModel() override;

@@ -62,7 +62,6 @@ class QTextBlock;
 class  KOTEXT_EXPORT KoListStyle : public QObject
 {
     Q_OBJECT
-    Q_ENUMS(Style Property)
 public:
     // ListIdType will be 32-bit in 32 bit machines and 64 bit in 64 bit machines
     typedef quintptr ListIdType;
@@ -77,6 +76,7 @@ public:
         ImageLabelType,
         NumberLabelType
     };
+    Q_ENUM(LabelType);
 
     /// further properties
     enum Property {
@@ -117,6 +117,7 @@ public:
         LabelFollowedBy,  ///< Label followed by one of the enums ListLabelFollowedBy
         TabStopPosition   ///< Specifies the additional tab stops
     };
+    Q_ENUM(Property)
 
     enum ListLabelFollowedBy
     {

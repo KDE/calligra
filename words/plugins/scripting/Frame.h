@@ -60,8 +60,6 @@ namespace Scripting
 class Frame : public QObject
 {
     Q_OBJECT
-    Q_ENUMS(textWrap)
-    Q_ENUMS(FrameBehavior)
 
 public:
     Frame(QObject* parentFrameSet, KWFrame* frame) : QObject(parentFrameSet), m_frame(frame) {}
@@ -81,6 +79,7 @@ public:
         RunThrough = KoShape::RunThrough, ///< The text will completely ignore the frame and layout as if it was not there
         RunAround = KoShape::BiggestRunAroundSide ///< The text will run around the outline of the frame
     };
+    Q_ENUM(TextWrap);
 
     /// what should happen when the frame is full (too small for its contents)
     enum FrameBehavior {
@@ -88,6 +87,7 @@ public:
         AutoCreateNewFrameBehavior = Words::AutoCreateNewFrameBehavior, ///< Create a new frame on the next page
         IgnoreContentFrameBehavior = Words::IgnoreContentFrameBehavior ///< Ignore the content and clip it
     };
+    Q_ENUM(FrameBehavior);
 
 public Q_SLOTS:
 

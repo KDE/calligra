@@ -128,7 +128,6 @@ class KoDialogPrivate;
 class KOWIDGETS_EXPORT KoDialog : public QDialog //krazy:exclude=qclasses
 {
     Q_OBJECT
-    Q_ENUMS(ButtonCode)
     Q_DECLARE_PRIVATE(KoDialog)
 
 public:
@@ -151,6 +150,7 @@ public:
         User3   = 0x00004000, ///< Show User defined button 3.
         NoDefault = 0x00008000 ///< Used when specifying a default button; indicates that no button should be marked by default.
     };
+    Q_ENUM(ButtonCode)
     // TODO KDE5: remove NoDefault and use the value None instead
     Q_DECLARE_FLAGS(ButtonCodes, ButtonCode)
 

@@ -31,7 +31,6 @@ namespace Components {
 class DocumentType : public QObject
 {
     Q_OBJECT
-    Q_ENUMS(Type)
 
 public:
     enum Type {
@@ -41,12 +40,13 @@ public:
         Presentation, ///< A presentation, for example a Keynote document.
         StaticTextDocument, ///< An unmodifiable text document, for example a PDF document.
     };
+
+    Q_ENUM(Type)
 };
 
 class DocumentStatus : public QObject
 {
     Q_OBJECT
-    Q_ENUMS(Status)
 
 public:
     enum Status {
@@ -55,6 +55,8 @@ public:
         Loaded,
         Failed,
     };
+
+    Q_ENUM(Status);
 };
 
 } // Namespace Components

@@ -33,7 +33,6 @@ class GEMINI_EXPORT GeminiMainWindow : public QMainWindow
     Q_OBJECT
     Q_PROPERTY(GeminiState currentState READ currentState NOTIFY currentStateChanged)
     Q_PROPERTY(bool fullScreen READ fullScreen WRITE setFullScreen NOTIFY fullScreenChanged)
-    Q_ENUMS(GeminiState)
 public:
     enum GeminiState {
         AllStates = -3,
@@ -43,6 +42,7 @@ public:
         EditState = 2,
         ViewState = 3
     };
+    Q_ENUM(GeminiState);
 
     explicit GeminiMainWindow(QWidget* parent = 0, Qt::WindowFlags flags = Qt::WindowFlags());
     ~GeminiMainWindow() override;

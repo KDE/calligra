@@ -50,7 +50,6 @@ class KoColorDisplayRendererInterface;
 class KOWIDGETS_EXPORT KoDualColorButton : public QWidget
 {
     Q_OBJECT
-    Q_ENUMS( Selection )
     Q_PROPERTY( KoColor foregroundColor READ foregroundColor WRITE setForegroundColor )
     Q_PROPERTY( KoColor backgroundColor READ backgroundColor WRITE setBackgroundColor )
     Q_PROPERTY( bool popDialog READ popDialog WRITE setPopDialog )
@@ -61,6 +60,7 @@ class KOWIDGETS_EXPORT KoDualColorButton : public QWidget
       Foreground,
       Background
     };
+    Q_ENUM(Selection);
 
     /**
      * Constructs a new KoDualColorButton with the supplied foreground and

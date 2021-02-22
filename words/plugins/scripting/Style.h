@@ -206,8 +206,6 @@ private:
 class ParagraphStyle : public QObject
 {
     Q_OBJECT
-    Q_ENUMS(Alignment)
-    Q_ENUMS(ListStyle)
 public:
     ParagraphStyle(QObject* parent, KoParagraphStyle* style) : QObject(parent), m_style(style) {}
     virtual ~ParagraphStyle() {}
@@ -225,6 +223,7 @@ public:
         AlignVCenter = Qt::AlignVCenter,
         AlignCenter = Qt::AlignCenter
     };
+    Q_ENUM(Alignment);
 
     enum ListStyle {
         None = KoListStyle::None,
@@ -239,6 +238,7 @@ public:
         RomanUpperItem = KoListStyle::UpperRomanItem,
         BoxItem = KoListStyle::BoxItem
     };
+    Q_ENUM(ListStyle);
 
 public Q_SLOTS:
 

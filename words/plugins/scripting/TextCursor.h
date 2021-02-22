@@ -33,7 +33,6 @@ namespace Scripting
 class TextCursor : public QObject
 {
     Q_OBJECT
-    Q_ENUMS(MoveOperation)
 public:
     TextCursor(QObject* parent, const QTextCursor& cursor);
     virtual ~TextCursor();
@@ -66,6 +65,7 @@ public:
         Left = QTextCursor::Left, //!< Move left one character.
         Right = QTextCursor::Right //!< Move right one character.
     };
+    Q_ENUM(MoveOperation);
 
 public Q_SLOTS:
 

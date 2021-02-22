@@ -37,7 +37,6 @@
 class NetworkController : public QObject
 {
     Q_OBJECT
-    Q_ENUMS(State)
 public:
     explicit NetworkController(QObject *parent = 0);
     ~NetworkController() override;
@@ -61,6 +60,7 @@ public:
         SHARES,
         ACCOUNT_INFO
     };
+    Q_ENUM(State);
 
     enum TransferState{
         DOWNLOADING,

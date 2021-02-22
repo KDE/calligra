@@ -34,9 +34,6 @@ class DocumentListModel : public QAbstractListModel, public QQmlParserStatus
     Q_OBJECT
     Q_PROPERTY(DocumentListModel::DocumentType filter READ filter WRITE setFilter NOTIFY filterChanged)
     Q_PROPERTY(QString documentsFolder READ documentsFolder CONSTANT)
-    Q_ENUMS(GroupBy)
-    Q_ENUMS(Filter)
-    Q_ENUMS(DocumentType)
     Q_INTERFACES(QQmlParserStatus)
 
 public:
@@ -56,6 +53,7 @@ public:
     };
 
     enum GroupBy { GroupByName, GroupByDocType };
+    Q_ENUM(GroupBy);
 
     enum DocumentType
     {
@@ -64,6 +62,7 @@ public:
         PresentationType,
         SpreadsheetType,
     };
+    Q_ENUM(DocumentType);
 
     struct DocumentInfo {
         bool operator==(const DocumentInfo &other) const { return filePath == other.filePath; }

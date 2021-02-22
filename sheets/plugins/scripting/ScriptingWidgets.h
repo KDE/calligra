@@ -36,16 +36,6 @@ class ScriptingSheetsListView : public QWidget
 {
     Q_OBJECT
 
-    /**
-    * Enumeration of selection types.
-    */
-    Q_ENUMS(SelectionType)
-
-    /**
-    * Enumeration of editor types.
-    */
-    Q_ENUMS(EditorType)
-
 public:
 
     /**
@@ -61,8 +51,17 @@ public:
     */
     ~ScriptingSheetsListView() override;
 
+    /**
+    * Enumeration of selection types.
+    */
     enum SelectionType { SingleSelect, MultiSelect };
+    Q_ENUM(SelectionType);
+
+    /**
+    * Enumeration of editor types.
+    */
     enum EditorType { Disabled, Cell, Range };
+    Q_ENUM(EditorType);
 
 public Q_SLOTS:
 
