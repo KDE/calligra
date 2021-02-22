@@ -286,7 +286,7 @@ bool KoApplication::start()
         int dpiY = 0;
         bool ok = true;
         if (sep != -1) {
-            dpiY = dpiValues.mid(sep + 1).toInt(&ok);
+            dpiY = dpiValues.midRef(sep + 1).toInt(&ok);
             dpiValues.truncate(sep);
         }
         if (ok) {

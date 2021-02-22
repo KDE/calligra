@@ -74,7 +74,7 @@ static void changeToPoints(QString &value) {
     if (value == "0") {
         value = "0pt";
     }
-    qreal number = value.left(value.size() - 2).toDouble();
+    qreal number = value.leftRef(value.size() - 2).toDouble();
     if (unit == "in") {
         number = number * 71;
     }
@@ -133,7 +133,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
     qreal rotationAngle = 0;
     if (!rotation.isEmpty()) {
         if (rotation.endsWith(QLatin1String("fd"))) {
-            rotationAngle = rotation.left(rotation.length()-2).toDouble() / 65536.0;
+            rotationAngle = rotation.leftRef(rotation.length()-2).toDouble() / 65536.0;
         }
         else {
             rotationAngle = rotation.toDouble();
@@ -178,7 +178,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
             if (*p_str == "0") {
                 p_str->append("in");
             }
-            x_position = p_str->left(p_str->length() - 2).toDouble();
+            x_position = p_str->leftRef(p_str->length() - 2).toDouble();
             x_pos_string = *p_str;
             p_str = 0;
         }
@@ -210,7 +210,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
             if (*p_str == "0") {
                 p_str->append("in");
             }
-            y_position = p_str->left(p_str->length() - 2).toDouble();
+            y_position = p_str->leftRef(p_str->length() - 2).toDouble();
             y_pos_string = *p_str;
             p_str = 0;
         }
@@ -229,7 +229,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         }
         //TODO: Add support for auto and percentage values.
         if (!(width == "auto" || width.endsWith('%'))) {
-            widthValue = width.left(width.length() - 2).toDouble();
+            widthValue = width.leftRef(width.length() - 2).toDouble();
             widthString = width;
         }
     }
@@ -247,7 +247,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         }
         //TODO: Add support for auto and percentage values.
         if (!(height == "auto" || height.endsWith('%'))) {
-            heightValue = height.left(height.length() - 2).toDouble();
+            heightValue = height.leftRef(height.length() - 2).toDouble();
             heightString = height;
         }
     }
@@ -281,10 +281,10 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
                 changeToPoints(heightString);
                 changeToPoints(x_pos_string);
                 changeToPoints(y_pos_string);
-                qreal width_rot = widthString.left(widthString.length()-2).toDouble();
-                qreal height_rot = heightString.left(heightString.length()-2).toDouble();
-                qreal left_rot = x_pos_string.left(x_pos_string.length()-2).toDouble();
-                qreal top_rot = y_pos_string.left(y_pos_string.length()-2).toDouble();
+                qreal width_rot = widthString.leftRef(widthString.length()-2).toDouble();
+                qreal height_rot = heightString.leftRef(heightString.length()-2).toDouble();
+                qreal left_rot = x_pos_string.leftRef(x_pos_string.length()-2).toDouble();
+                qreal top_rot = y_pos_string.leftRef(y_pos_string.length()-2).toDouble();
                 qreal xDiff = width_rot/2 - cos(rotationAngle)*width_rot/2 + sin(rotationAngle)*height_rot/2;
                 qreal yDiff = height_rot/2 - sin(rotationAngle)*width_rot/2 - cos(rotationAngle)*height_rot/2;
                 QString rotString = QString("rotate(%1) translate(%2pt %3pt)")
@@ -499,7 +499,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         if (!ok) {
             debugMsooXml << "error converting" << offset << "to int (shadow x-offset)";
         } else {
-            offset = QString::number(p * widthValue / 100.0,'f').append(widthString.right(2));
+            offset = QString::number(p * widthValue / 100.0,'f').append(widthString.rightRef(2));
         }
     }
     m_currentDrawStyle->addProperty("draw:shadow-offset-x", offset);
@@ -512,7 +512,7 @@ void MSOOXML_CURRENT_CLASS::createFrameStart(FrameStartElement startType)
         if (!ok) {
             debugMsooXml << "error converting" << offset << "to int (shadow y-offset)";
         } else {
-            offset = QString::number(p * heightValue / 100.0,'f').append(heightString.right(2));
+            offset = QString::number(p * heightValue / 100.0,'f').append(heightString.rightRef(2));
         }
     }
     m_currentDrawStyle->addProperty("draw:shadow-offset-y", offset);
@@ -885,14 +885,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_line()
     if (temp == "0") {
         temp = "0pt";
     }
-    qreal fromX = temp.left(temp.size() - 2).toDouble();
+    qreal fromX = temp.leftRef(temp.size() - 2).toDouble();
     m_currentVMLProperties.vmlStyle["left"] = temp;
     temp = from.mid(index + 1);
     doPrependCheck(temp);
     if (temp == "0") {
         temp = "0pt";
     }
-    qreal fromY = temp.left(temp.size() - 2).toDouble();
+    qreal fromY = temp.leftRef(temp.size() - 2).toDouble();
     m_currentVMLProperties.vmlStyle["top"] = temp;
     index = to.indexOf(',');
     temp = to.left(index);
@@ -901,7 +901,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_line()
         temp = "0pt";
     }
     QString unit = temp.right(2);
-    qreal toX = temp.left(temp.size() - 2).toDouble() - fromX;
+    qreal toX = temp.leftRef(temp.size() - 2).toDouble() - fromX;
     m_currentVMLProperties.vmlStyle["width"] = QString("%1%2").arg(toX).arg(unit);
     temp = to.mid(index + 1);
     doPrependCheck(temp);
@@ -909,7 +909,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_line()
         temp = "0pt";
     }
     unit = temp.right(2);
-    qreal toY = temp.left(temp.size() - 2).toDouble() - fromY;
+    qreal toY = temp.leftRef(temp.size() - 2).toDouble() - fromY;
     m_currentVMLProperties.vmlStyle["height"] = QString("%1%2").arg(toY).arg(unit);
 
     while (!atEnd()) {
@@ -1300,10 +1300,10 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
         doPrependCheck(y_mar);
         changeToPoints(y_mar);
 
-        m_currentVMLProperties.real_groupWidth = width.left(width.length() - 2).toDouble();
-        m_currentVMLProperties.real_groupHeight = height.left(height.length() - 2).toDouble();
-        m_currentVMLProperties.groupXOffset = x_mar.left(x_mar.length() - 2).toDouble();
-        m_currentVMLProperties.groupYOffset = y_mar.left(y_mar.length() - 2).toDouble();
+        m_currentVMLProperties.real_groupWidth = width.leftRef(width.length() - 2).toDouble();
+        m_currentVMLProperties.real_groupHeight = height.leftRef(height.length() - 2).toDouble();
+        m_currentVMLProperties.groupXOffset = x_mar.leftRef(x_mar.length() - 2).toDouble();
+        m_currentVMLProperties.groupYOffset = y_mar.leftRef(y_mar.length() - 2).toDouble();
     }
     else { // We are already in a group, this is a sub group, we're calculating new relative values for its children to use
         QString width(m_currentVMLProperties.vmlStyle.value("width"));
@@ -1326,14 +1326,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_group()
 
     TRY_READ_ATTR_WITHOUT_NS(coordsize)
     if (!coordsize.isEmpty()) {
-        m_currentVMLProperties.groupWidth = coordsize.mid(0, coordsize.indexOf(',')).toInt();
-        m_currentVMLProperties.groupHeight = coordsize.mid(coordsize.indexOf(',') + 1).toInt();
+        m_currentVMLProperties.groupWidth = coordsize.midRef(0, coordsize.indexOf(',')).toInt();
+        m_currentVMLProperties.groupHeight = coordsize.midRef(coordsize.indexOf(',') + 1).toInt();
     }
 
     TRY_READ_ATTR_WITHOUT_NS(coordorigin)
     if (!coordorigin.isEmpty()) {
-        m_currentVMLProperties.groupX = coordorigin.mid(0, coordorigin.indexOf(',')).toInt();
-        m_currentVMLProperties.groupY = coordorigin.mid(coordorigin.indexOf(',') + 1).toInt();
+        m_currentVMLProperties.groupX = coordorigin.midRef(0, coordorigin.indexOf(',')).toInt();
+        m_currentVMLProperties.groupY = coordorigin.midRef(coordorigin.indexOf(',') + 1).toInt();
     }
 
     MSOOXML::Utils::XmlWriteBuffer frameBuf;

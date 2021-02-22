@@ -543,7 +543,7 @@ QString Calligra::Sheets::Odf::encodeFormula(const QString& expr, const KLocale*
             result.append('[');
             // FIXME Stefan: Hack to get the apostrophes right. Fix and remove!
             const int pos = tokenText.lastIndexOf('!');
-            if (pos != -1 && tokenText.left(pos).contains(' '))
+            if (pos != -1 && tokenText.leftRef(pos).contains(' '))
                 result.append(Odf::saveRegion('\'' + tokenText.left(pos) + '\'' + tokenText.mid(pos)));
             else
                 result.append(Odf::saveRegion(tokenText));

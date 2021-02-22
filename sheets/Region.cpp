@@ -1016,7 +1016,7 @@ Region::Point::Point(const QString& string)
     }
 
     bool ok;
-    int y = string.mid(p2, p - p2).toInt(&ok);
+    int y = string.midRef(p2, p - p2).toInt(&ok);
 
     //limit the y-value
     //Q_ASSERT(y >= 1 && y <= KS_rowMax);

@@ -148,7 +148,7 @@ bool VideoShape::loadOdfFrameElement(const KoXmlElement &element, KoShapeLoading
                 if (!path.endsWith(QLatin1Char('/'))) {
                     path.append(QLatin1Char('/'));
                 }
-                path.append(href.mid(3));
+                path.append(href.midRef(3));
                 url.setPath(path);
                 data = m_videoCollection->createExternalVideoData(url, false);
             } else if(!url.isRelative()) {

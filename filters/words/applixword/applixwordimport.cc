@@ -140,7 +140,7 @@ bool APPLIXWORDImport::parseFontProperty(const QString& type, KoGenStyle& style)
         style.addProperty("style:text-underline-style", "none", KoGenStyle::TextType);
         return true;
     } else if (type.startsWith("size:")) {
-        style.addPropertyPt("fo:font-size", type.mid(5).toInt(), KoGenStyle::TextType);
+        style.addPropertyPt("fo:font-size", type.midRef(5).toInt(), KoGenStyle::TextType);
         return true;
     } else if (type.startsWith("face:")) { // e.g. face:"Symbol"
         const QString fontname = type.mid(6, type.length() - 6 - 1);

@@ -37,9 +37,9 @@
 
 QColor NumberFormatParser::color(const QString& name)
 {
-    if (name.toUpper().startsWith(QLatin1String("COLOR"))) {
+    if (name.startsWith(QLatin1String("color"), Qt::CaseInsensitive)) {
         bool ok = false;
-        const int index = name.mid(5).toInt(&ok) + 7;
+        const int index = name.midRef(5).toInt(&ok) + 7;
         return MSO::defaultIndexedColor(index);
     } else {
         return QColor(name);

@@ -2824,7 +2824,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_r()
             else {
                 int spacePosition = m_complexCharValue.indexOf(' ');
                 QString textValue(QLatin1Char('#'));
-                textValue.append(m_complexCharValue.left(spacePosition));
+                textValue.append(m_complexCharValue.leftRef(spacePosition));
                 m_complexCharValue.remove(0, textValue.length());
                 body->addAttribute("xlink:href", QUrl(textValue).toEncoded());
             }

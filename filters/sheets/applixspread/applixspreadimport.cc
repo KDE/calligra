@@ -360,13 +360,13 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
                     kDebug() << "   = underline";
                     underline = 1;
                 } else if (typeChar.startsWith("FG")) {
-                    fg = typeChar.mid(2).toInt();
+                    fg = typeChar.midRef(2).toInt();
                     kDebug() << "  = Colornr" << fg;
                 } else if (typeChar.startsWith("TF")) {
-                    fontnr = typeChar.mid(2).toInt();
+                    fontnr = typeChar.midRef(2).toInt();
                     kDebug() << " = Font :" << fontnr << "" << typefacetab[fontnr];
                 } else if (typeChar.startsWith('P')) {
-                    fontsize = typeChar.mid(1).toInt();
+                    fontsize = typeChar.midRef(1).toInt();
                     kDebug() << "   = Fontsize" << fontsize;
                 } else {
                     kDebug() << "   = ??? Unknown typeChar:" << typeChar;

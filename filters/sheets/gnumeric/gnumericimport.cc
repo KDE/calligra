@@ -195,10 +195,10 @@ void  convert_string_to_qcolor(const QString &color_string, QColor * color)
     /* GNUmeric gives us two bytes of color data per element. */
     /* We only care about the top byte. */
 
-    red   = color_string.mid(0, first_col_pos).toInt(&number_ok, 16) >> 8;
-    green = color_string.mid(first_col_pos + 1,
+    red   = color_string.midRef(0, first_col_pos).toInt(&number_ok, 16) >> 8;
+    green = color_string.midRef(first_col_pos + 1,
                              (second_col_pos - first_col_pos) - 1).toInt(&number_ok, 16) >> 8;
-    blue  = color_string.mid(second_col_pos + 1,
+    blue  = color_string.midRef(second_col_pos + 1,
                              (color_string.length() - first_col_pos) - 1).toInt(&number_ok, 16) >> 8;
     color->setRgb(red, green, blue);
 }
@@ -219,11 +219,11 @@ void areaNames(Doc * ksdoc, const QString &_name, QString _zone)
             int pos = left.indexOf('$');
 
             rect.setLeft(Util::decodeColumnLabelText(left.left(pos)));
-            rect.setTop(left.right(left.length() - pos - 1).toInt());
+            rect.setTop(left.rightRef(left.length() - pos - 1).toInt());
 
             pos = right.indexOf('$');
             rect.setRight(Util::decodeColumnLabelText(right.left(pos)));
-            rect.setBottom(right.right(right.length() - pos - 1).toInt());
+            rect.setBottom(right.rightRef(right.length() - pos - 1).toInt());
         } else {
             QString left = _zone;
             int pos = left.indexOf('$');
@@ -231,7 +231,7 @@ void areaNames(Doc * ksdoc, const QString &_name, QString _zone)
             rect.setLeft(leftPos);
             rect.setRight(leftPos);
 
-            int top = left.right(left.length() - pos - 1).toInt();
+            int top = left.rightRef(left.length() - pos - 1).toInt();
             rect.setTop(top);
             rect.setBottom(top);
         }

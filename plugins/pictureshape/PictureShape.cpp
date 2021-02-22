@@ -651,19 +651,19 @@ void PictureShape::loadStyle(const KoXmlElement& element, KoShapeLoadingContext&
     QString blue = styleStack.property(KoXmlNS::draw, "blue");
     QString luminance = styleStack.property(KoXmlNS::draw, "luminance");
     QString contrast = styleStack.property(KoXmlNS::draw, "contrast");
-    setColoring(red.right(1) == "%" ? (red.left(red.length() - 1).toDouble() / 100.0) : 0.0
-              , green.right(1) == "%" ? (green.left(green.length() - 1).toDouble() / 100.0) : 0.0
-              , blue.right(1) == "%" ? (blue.left(blue.length() - 1).toDouble() / 100.0) : 0.0
-              , luminance.right(1) == "%" ? (luminance.left(luminance.length() - 1).toDouble() / 100.0) : 0.0
-              , contrast.right(1) == "%" ? (contrast.left(contrast.length() - 1).toDouble() / 100.0) : 0.0);
+    setColoring(red.right(1) == "%" ? (red.leftRef(red.length() - 1).toDouble() / 100.0) : 0.0
+              , green.right(1) == "%" ? (green.leftRef(green.length() - 1).toDouble() / 100.0) : 0.0
+              , blue.right(1) == "%" ? (blue.leftRef(blue.length() - 1).toDouble() / 100.0) : 0.0
+              , luminance.right(1) == "%" ? (luminance.leftRef(luminance.length() - 1).toDouble() / 100.0) : 0.0
+              , contrast.right(1) == "%" ? (contrast.leftRef(contrast.length() - 1).toDouble() / 100.0) : 0.0);
 
     QString gamma = styleStack.property(KoXmlNS::draw, "gamma");
-    setGamma(gamma.right(1) == "%" ? (gamma.left(gamma.length() - 1).toDouble() / 100.0) : 0.0);
+    setGamma(gamma.right(1) == "%" ? (gamma.leftRef(gamma.length() - 1).toDouble() / 100.0) : 0.0);
 
     // image opacity
     QString opacity(styleStack.property(KoXmlNS::draw, "image-opacity"));
     if (! opacity.isEmpty() && opacity.right(1) == "%") {
-        setTransparency(1.0 - (opacity.left(opacity.length() - 1).toFloat() / 100.0));
+        setTransparency(1.0 - (opacity.leftRef(opacity.length() - 1).toFloat() / 100.0));
     }
 
     // clip rect

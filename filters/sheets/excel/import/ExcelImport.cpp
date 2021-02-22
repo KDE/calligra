@@ -769,7 +769,7 @@ QString ExcelImport::Private::convertHeaderFooter(const QString& text)
     if ((pos < 0) && (text.length() > 0))   // If there is no &
         result += text;
     else if (pos > 0) // Some text and '&'
-        result += text.mid(0,  pos - 1);
+        result += text.midRef(0,  pos - 1);
 
     while (pos >= 0) {
         switch (text[pos + 1].unicode()) {
@@ -799,9 +799,9 @@ QString ExcelImport::Private::convertHeaderFooter(const QString& text)
         lastPos = pos;
         pos = text.indexOf('&', lastPos + 1);
         if (!skipUnsupported && (pos > (lastPos + 1)))
-            result += text.mid(lastPos + 2, (pos - lastPos - 2));
+            result += text.midRef(lastPos + 2, (pos - lastPos - 2));
         else if (!skipUnsupported && (pos < 0))  //Remaining text
-            result += text.mid(lastPos + 2, len - (lastPos + 2));
+            result += text.midRef(lastPos + 2, len - (lastPos + 2));
         else
             skipUnsupported = false;
     }

@@ -227,28 +227,28 @@ bool Odf::loadCell(Cell *cell, const KoXmlElement& element, OdfLoadingContext& t
 
             int p1 = value.indexOf('-');
             if (p1 > 0) {
-                year  = value.left(p1).toInt(&ok);
+                year  = value.leftRef(p1).toInt(&ok);
                 if (ok) {
                     int p2 = value.indexOf('-', ++p1);
-                    month = value.mid(p1, p2 - p1).toInt(&ok);
+                    month = value.midRef(p1, p2 - p1).toInt(&ok);
                     if (ok) {
                         // the date can optionally have a time attached
                         int p3 = value.indexOf('T', ++p2);
                         if (p3 > 0) {
                             hasTime = true;
-                            day = value.mid(p2, p3 - p2).toInt(&ok);
+                            day = value.midRef(p2, p3 - p2).toInt(&ok);
                             if (ok) {
                                 int p4 = value.indexOf(':', ++p3);
-                                hours = value.mid(p3, p4 - p3).toInt(&ok);
+                                hours = value.midRef(p3, p4 - p3).toInt(&ok);
                                 if (ok) {
                                     int p5 = value.indexOf(':', ++p4);
-                                    minutes = value.mid(p4, p5 - p4).toInt(&ok);
+                                    minutes = value.midRef(p4, p5 - p4).toInt(&ok);
                                     if (ok)
-                                        seconds = value.right(value.length() - p5 - 1).toInt(&ok);
+                                        seconds = value.rightRef(value.length() - p5 - 1).toInt(&ok);
                                 }
                             }
                         } else {
-                            day = value.right(value.length() - p2).toInt(&ok);
+                            day = value.rightRef(value.length() - p2).toInt(&ok);
                         }
                     }
                 }

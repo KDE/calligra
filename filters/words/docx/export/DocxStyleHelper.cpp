@@ -60,10 +60,10 @@ static qreal getHalfPoints(const QString &fontSize, qreal defaultSize)
     bool ok1 = true;
     bool ok2 = true;
     if (unit == "pt") {
-        sizeInHalfPoints = ptToHalfPt(fontSize.left(fontSize.length() - 2).toDouble(&ok1));
+        sizeInHalfPoints = ptToHalfPt(fontSize.leftRef(fontSize.length() - 2).toDouble(&ok1));
     }
     else if (unit == "in") {
-        sizeInHalfPoints = inToHalfPt(fontSize.left(fontSize.length() - 2).toDouble(&ok2));
+        sizeInHalfPoints = inToHalfPt(fontSize.leftRef(fontSize.length() - 2).toDouble(&ok2));
     }
     else {
         // Other units not implemented yet?
@@ -172,7 +172,7 @@ void DocxStyleHelper::handleParagraphStyles(KoOdfStyleProperties *properties, Ko
     if (!lineHeight.isEmpty()) {
         writer->startElement("w:spacing");
         writer->addAttribute("w:lineRule", "auto");
-        int percentage = lineHeight.left(lineHeight.length() - 1).toDouble() * 2.4;
+        int percentage = lineHeight.leftRef(lineHeight.length() - 1).toDouble() * 2.4;
         writer->addAttribute("w:line", percentage);
         writer->endElement(); // w:spacing
     }

@@ -1949,7 +1949,7 @@ void CellView::obscureHorizontalCells(SheetView* sheetView, const Cell& masterCe
                     d->rtlOffset += extraWidth;
                 }
 
-                const QRect obscuredRange(effectiveCol + 1, masterCell.row(), d->obscuredCellsX, 1);
+                // const QRect obscuredRange(effectiveCol + 1, masterCell.row(), d->obscuredCellsX, 1);
                 sheetView->obscureCells(masterCell.cellPosition(), d->obscuredCellsX, d->obscuredCellsY);
 
                 // Not enough space
@@ -2011,7 +2011,7 @@ void CellView::obscureVerticalCells(SheetView* sheetView, const Cell& masterCell
             d->obscuredCellsY = row - effectiveRow;
             d->height += extraHeight;
 
-            const QRect obscuredRange(masterCell.column(), effectiveRow + 1, 1, d->obscuredCellsY);
+            // const QRect obscuredRange(masterCell.column(), effectiveRow + 1, 1, d->obscuredCellsY);
             sheetView->obscureCells(masterCell.cellPosition(), d->obscuredCellsX, d->obscuredCellsY);
 
             // Not enough space
@@ -2234,7 +2234,7 @@ void CellView::Private::truncateHorizontalText(const QFont& font, const QFontMet
             int count = 0;
             while (count < textLines[i].count() && fontMetrics.width(textLines[i].left(count)) <= this->width)
                 ++count;
-            displayText += textLines[i].left(count);
+            displayText += textLines[i].leftRef(count);
             height += fontMetrics.height();
             if (height <= this->height)
                 displayText += '\n';

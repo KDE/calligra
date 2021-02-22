@@ -748,7 +748,7 @@ bool ChartShape::loadEmbeddedDocument(KoStore *store,
         if (!path.isEmpty() && !path.endsWith('/'))
             path += '/';
         QString relPath = QUrl::fromUserInput(tmpURL).path();
-        path += relPath.mid(1); // remove leading '/'
+        path += relPath.midRef(1); // remove leading '/'
     }
     if (!path.endsWith('/'))
         path += '/';

@@ -531,19 +531,19 @@ bool OpenCalcImport::readCells(KoXmlElement & rowNode, Sheet  * table, int row, 
 
                 int p1 = value.indexOf('-');
                 if (p1 > 0)
-                    year  = value.left(p1).toInt(&ok);
+                    year  = value.leftRef(p1).toInt(&ok);
 
                 kDebug(30518) << "year:" << value.left(p1);
 
                 int p2 = value.indexOf('-', ++p1);
 
                 if (ok)
-                    month = value.mid(p1, p2 - p1).toInt(&ok);
+                    month = value.midRef(p1, p2 - p1).toInt(&ok);
 
                 kDebug(30518) << "month:" << value.mid(p1, p2 - p1);
 
                 if (ok)
-                    day = value.right(value.length() - p2 - 1).toInt(&ok);
+                    day = value.rightRef(value.length() - p2 - 1).toInt(&ok);
 
                 kDebug(30518) << "day:" << value.right(value.length() - p2);
 

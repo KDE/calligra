@@ -36,7 +36,7 @@ OAuth::OAuth():
 //    m_consumer_key("8xf1b5hrsgmempk"),
 //    m_consumer_secret("6se47g35sdqsouw")
 {
-    qsrand(QDateTime::currentDateTime().toTime_t());
+    qsrand(QDateTime::currentDateTimeUtc().toTime_t());
     m_token = "";
     m_secret = "";
 }
@@ -61,7 +61,7 @@ void OAuth::sign(QString method, QNetworkRequest *nr)
 
 QString OAuth::oauth_timestamp()
 {
-    int currentTimeStamp = QDateTime::currentDateTime().toUTC().toTime_t();
+    int currentTimeStamp = QDateTime::currentDateTimeUtc().toTime_t();
     QString strtimestamp("oauth_timestamp=\"%1\",oauth_nonce=\"%2\"");
     return strtimestamp.arg(currentTimeStamp).arg(qrand());
 }

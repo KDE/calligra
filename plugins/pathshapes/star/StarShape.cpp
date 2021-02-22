@@ -292,7 +292,7 @@ bool StarShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext & co
             QString sharpness = element.attributeNS(KoXmlNS::draw, "sharpness", "");
             if (! sharpness.isEmpty() && sharpness.right(1) == "%")
             {
-                float percent = sharpness.left(sharpness.length()-1).toFloat();
+                float percent = sharpness.leftRef(sharpness.length()-1).toFloat();
                 m_radius[base] = m_radius[tip] * (100-percent)/100;
             }
         }
@@ -323,7 +323,7 @@ bool StarShape::loadOdf(const KoXmlElement & element, KoShapeLoadingContext & co
             } else if (pair[0] == "tipAngle") {
                 m_angles[tip] = pair[1].toDouble();
             } else if (pair[0] == "sharpness") {
-                float percent = pair[1].left(pair[1].length()-1).toFloat();
+                float percent = pair[1].leftRef(pair[1].length()-1).toFloat();
                 m_radius[base] = m_radius[tip] * (100-percent)/100;
             }
         }

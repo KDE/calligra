@@ -539,8 +539,8 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_hslClr()
     READ_ATTR_WITHOUT_NS(lum)
 
     qreal trueHue = hue.toDouble() / 6000.0 / 360;
-    qreal trueSat = sat.left(sat.size() - 1).toDouble() / 100.0;
-    qreal trueLum = lum.left(lum.size() - 1).toDouble() / 100.0;
+    qreal trueSat = sat.leftRef(sat.size() - 1).toDouble() / 100.0;
+    qreal trueLum = lum.leftRef(lum.size() - 1).toDouble() / 100.0;
 
     m_currentColor.setHslF(trueHue, trueSat, trueLum);
 

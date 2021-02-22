@@ -674,7 +674,7 @@ QString Cell::decodeFormula(const QString &_text) const
             unsigned int oldPos = pos;
             while (pos < length && (_text[pos].isDigit() || _text[pos] == '-')) ++pos;
             if (pos != oldPos)
-                col = _text.mid(oldPos, pos - oldPos).toInt();
+                col = _text.midRef(oldPos, pos - oldPos).toInt();
             if (!abs1 && !era1)
                 col += d->column;
             // Skip '#' or '$'
@@ -689,7 +689,7 @@ QString Cell::decodeFormula(const QString &_text) const
             oldPos = pos;
             while (pos < length && (_text[pos].isDigit() || _text[pos] == '-')) ++pos;
             if (pos != oldPos)
-                row = _text.mid(oldPos, pos - oldPos).toInt();
+                row = _text.midRef(oldPos, pos - oldPos).toInt();
             if (!abs2 && !era2)
                 row += d->row;
             // Skip '#' or '$'
@@ -1207,10 +1207,10 @@ bool Cell::load(const KoXmlElement & cell, int _xshift, int _yshift,
                     setValue(value);
                 } else {
                     int pos   = t.indexOf('/');
-                    int year  = t.mid(0, pos).toInt();
+                    int year  = t.midRef(0, pos).toInt();
                     int pos1  = t.indexOf('/', pos + 1);
-                    int month = t.mid(pos + 1, ((pos1 - 1) - pos)).toInt();
-                    int day   = t.right(t.length() - pos1 - 1).toInt();
+                    int month = t.midRef(pos + 1, ((pos1 - 1) - pos)).toInt();
+                    int day   = t.rightRef(t.length() - pos1 - 1).toInt();
                     QDate date(year, month, day);
                     if (date.isValid())
                         setValue(Value(date, sheet()->map()->calculationSettings()));
@@ -1228,10 +1228,10 @@ bool Cell::load(const KoXmlElement & cell, int _xshift, int _yshift,
                     int second  = -1;
                     int pos, pos1;
                     pos   = t.indexOf(':');
-                    hours = t.mid(0, pos).toInt();
+                    hours = t.midRef(0, pos).toInt();
                     pos1  = t.indexOf(':', pos + 1);
-                    minutes = t.mid(pos + 1, ((pos1 - 1) - pos)).toInt();
-                    second  = t.right(t.length() - pos1 - 1).toInt();
+                    minutes = t.midRef(pos + 1, ((pos1 - 1) - pos)).toInt();
+                    second  = t.rightRef(t.length() - pos1 - 1).toInt();
                     QTime time(hours, minutes, second);
                     if (time.isValid())
                         setValue(Value(time));
@@ -1358,10 +1358,10 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op, const QS
             // date ?
             else if (dataType == "Date") {
                 int pos = t.indexOf('/');
-                int year = t.mid(0, pos).toInt();
+                int year = t.midRef(0, pos).toInt();
                 int pos1 = t.indexOf('/', pos + 1);
-                int month = t.mid(pos + 1, ((pos1 - 1) - pos)).toInt();
-                int day = t.right(t.length() - pos1 - 1).toInt();
+                int month = t.midRef(pos + 1, ((pos1 - 1) - pos)).toInt();
+                int day = t.rightRef(t.length() - pos1 - 1).toInt();
                 setValue(Value(QDate(year, month, day), sheet()->map()->calculationSettings()));
                 if (value().asDate(sheet()->map()->calculationSettings()).isValid())   // Should always be the case for new docs
                     setUserInput(locale()->formatDate(value().asDate(sheet()->map()->calculationSettings()), KLocale::ShortDate));
@@ -1377,10 +1377,10 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op, const QS
                 int second = -1;
                 int pos, pos1;
                 pos = t.indexOf(':');
-                hours = t.mid(0, pos).toInt();
+                hours = t.midRef(0, pos).toInt();
                 pos1 = t.indexOf(':', pos + 1);
-                minutes = t.mid(pos + 1, ((pos1 - 1) - pos)).toInt();
-                second = t.right(t.length() - pos1 - 1).toInt();
+                minutes = t.midRef(pos + 1, ((pos1 - 1) - pos)).toInt();
+                second = t.rightRef(t.length() - pos1 - 1).toInt();
                 setValue(Value(QTime(hours, minutes, second)));
                 if (value().asTime().isValid())    // Should always be the case for new docs
                     setUserInput(locale()->formatTime(value().asTime(), true));
@@ -1413,10 +1413,10 @@ QTime Cell::toTime(const KoXmlElement &element)
     int second = -1;
     int pos, pos1;
     pos = t.indexOf(':');
-    hours = t.mid(0, pos).toInt();
+    hours = t.midRef(0, pos).toInt();
     pos1 = t.indexOf(':', pos + 1);
-    minutes = t.mid(pos + 1, ((pos1 - 1) - pos)).toInt();
-    second = t.right(t.length() - pos1 - 1).toInt();
+    minutes = t.midRef(pos + 1, ((pos1 - 1) - pos)).toInt();
+    second = t.rightRef(t.length() - pos1 - 1).toInt();
     setValue(Value(QTime(hours, minutes, second)));
     return value().asTime();
 }
@@ -1430,10 +1430,10 @@ QDate Cell::toDate(const KoXmlElement &element)
     int month = -1;
     int day = -1;
     pos = t.indexOf('/');
-    year = t.mid(0, pos).toInt();
+    year = t.midRef(0, pos).toInt();
     pos1 = t.indexOf('/', pos + 1);
-    month = t.mid(pos + 1, ((pos1 - 1) - pos)).toInt();
-    day = t.right(t.length() - pos1 - 1).toInt();
+    month = t.midRef(pos + 1, ((pos1 - 1) - pos)).toInt();
+    day = t.rightRef(t.length() - pos1 - 1).toInt();
     setValue(Value(QDate(year, month, day), sheet()->map()->calculationSettings()));
     return value().asDate(sheet()->map()->calculationSettings());
 }
