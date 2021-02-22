@@ -50,46 +50,6 @@ public:
     */
     ~KoScriptManagerCollection() override;
 
-    /**
-    * \return true if the collection was modified.
-    */
-    //bool isModified() const;
-
-#if 0
-public Q_SLOTS:
-
-    /**
-    * Run the selected script.
-    */
-    void slotRun();
-
-    /**
-    * Stop the selected script if running.
-    */
-    void slotStop();
-
-    /**
-    * Edit the select item.
-    */
-    void slotEdit();
-
-    /**
-    * Add a new item.
-    */
-    void slotAdd();
-
-    /**
-    * Remove the selected item.
-    */
-    void slotRemove();
-
-private Q_SLOTS:
-    /// The selected item changed.
-    void slotSelectionChanged();
-    /// The data changed.
-    void slotDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight);
-#endif
-
 private:
     bool m_modified;
     KoScriptManagerView *m_view;
