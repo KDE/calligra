@@ -813,7 +813,7 @@ bool ChartShape::loadEmbeddedDocument(KoStore *store,
     }
 
     if (!res) {
-        QString errorMessage = d->document->errorMessage();
+        //QString errorMessage = d->document->errorMessage();
         return false;
     }
         // Still waiting...

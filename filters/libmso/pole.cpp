@@ -633,7 +633,9 @@ bool valid_enames(DirTree* dirtree, unsigned index)
 bool DirTree::valid() const
 {
     const DirEntry* e;
+#ifdef POLE_CHECK_SIBLINGS
     QString str1, str2;
+#endif
 
 #ifdef POLE_DEBUG
         qDebug() << Q_FUNC_INFO;

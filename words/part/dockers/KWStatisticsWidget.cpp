@@ -343,7 +343,6 @@ void KWStatisticsWidget::updateData()
             m_words += wordlist.count();
             re.setCaseSensitivity(Qt::CaseInsensitive);
             for (QStringList::ConstIterator it1 = wordlist.begin(); it1 != wordlist.end(); ++it1) {
-                QString word1 = *it1;
                 QString word = *it1;
                 re.setPattern("[!?.,:_\"-]");    // clean word from punctuation
                 word.remove(re);

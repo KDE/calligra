@@ -108,7 +108,6 @@ void Changecase::process()
 void Changecase::sentenceCase()
 {
     QTextBlock block = m_document->findBlock(m_startPosition);
-    QTextCursor backCursor(m_cursor);
     int pos = block.position() + block.length() - 1;
 
     // TODO

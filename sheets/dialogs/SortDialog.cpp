@@ -88,7 +88,6 @@ public:
         }
         KComboBox *const combo = static_cast<KComboBox*>(editor);
         const QAbstractItemModel *const model = index.model();
-        const QString itemText = model->data(index, Qt::DisplayRole).toString();
         const int itemIndex = model->data(index, Qt::UserRole).toInt();
         const bool hasHeader = mainWidget.m_useHeader->isChecked();
         Sheet *const sheet = selection->lastSheet();

@@ -427,13 +427,13 @@ void WordsTableHandler::tableCellStart()
         m_colSpan = colSpan;
         return;
     }
+#ifdef DEBUG_TABLEHANDLER
     // We are now sure we have a real cell (and not a covered one)
     QRectF cellRect(leftEdgePos / 20.0,  // left
                     m_currentY, // top
                     (rightEdgePos - leftEdgePos) / 20.0,   // width
                     rowHeight());  // height
     // I can pass these sizes to ODF now...
-#ifdef DEBUG_TABLEHANDLER
     debugMsDoc << " tableCellStart row=" << m_row << ", column=" << m_column <<
                      " colSpan=" << colSpan <<
                      " (from" << leftCellNumber << " to" << rightCellNumber << " for Words)" <<

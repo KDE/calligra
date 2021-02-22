@@ -307,7 +307,6 @@ void Odf::loadDataStyle(Style *style, KoOdfStylesReader& stylesReader, const KoX
                              Conditions& conditions, const StyleManager* styleManager,
                              const ValueParser *parser)
 {
-    QString str;
     if (element.hasAttributeNS(KoXmlNS::style, "data-style-name")) {
         const QString styleName = element.attributeNS(KoXmlNS::style, "data-style-name", QString());
         loadDataStyle(style, stylesReader, styleName, conditions, styleManager, parser);

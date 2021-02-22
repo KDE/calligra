@@ -53,7 +53,6 @@ bool AbstractDataManipulator::process(Element* element)
     for (int col = range.left(); col <= range.right(); ++col)
         for (int row = range.top(); row <= range.bottom(); ++row) {
             Value val;
-            QString text;
 //       int colidx = col - range.left();
 //       int rowidx = row - range.top();
             bool parse = false;

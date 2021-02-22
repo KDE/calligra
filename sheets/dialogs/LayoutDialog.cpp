@@ -1251,8 +1251,6 @@ void CellFormatPageFloat::slotChangeState()
 void CellFormatPageFloat::init()
 {
     QStringList list;
-    QString tmp;
-    QString tmp2;
     QDate tmpDate(2000, 2, 18);
     list += i18n("System: ") + dlg->locale()->formatDate(QDate::currentDate(), KLocale::ShortDate);
     list += i18n("System: ") + dlg->locale()->formatDate(QDate::currentDate(), KLocale::LongDate);
@@ -1917,7 +1915,6 @@ void CellFormatPageFont::style_chosen_slot(const QString & style)
 
 void CellFormatPageFont::display_example(const QFont& font)
 {
-    QString string;
     fontChanged = true;
     example_label->setFont(font);
     example_label->repaint();
@@ -2690,7 +2687,6 @@ void CellFormatPageBorder::slotChangeStyle(const QString &)
 void CellFormatPageBorder::slotChangeStyle(int)
 {
     int index = style->currentIndex();
-    QString tmp;
     int penSize = size->currentText().toInt();
     if (!penSize) {
         preview->setPattern(preview->getColor(), penSize, Qt::NoPen);

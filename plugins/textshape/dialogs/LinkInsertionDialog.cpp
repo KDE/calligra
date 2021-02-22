@@ -160,7 +160,6 @@ void LinkInsertionDialog::displayInlineWarning(const QString& warning, QLabel *l
 
 void LinkInsertionDialog::insertHyperlink(QString& linkURLString, const QString& linkText)
 {
-    QString linkhtml;
     QUrl linkURL  = QUrl(linkURLString);
     dlg.weblinkStatusLabel->setText("");
     if (!linkURL.isValid()) {

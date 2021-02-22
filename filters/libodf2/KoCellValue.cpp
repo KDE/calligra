@@ -32,9 +32,7 @@ KoCellValue::~KoCellValue()
 
 void KoCellValue::saveOdf(KoXmlWriter& writer) const
 {
-    QString stringType;
-
-    if(!type().isEmpty()) {
+    if (!type().isEmpty()) {
         writer.addAttribute("office:value-type", type());
     }
 

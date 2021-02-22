@@ -340,7 +340,6 @@ void ConditionalDialog::init(Conditional const & tmp, int numCondition)
     KComboBox * sb  = 0;
     KLineEdit * kl1 = 0;
     KLineEdit * kl2 = 0;
-    QString value;
     Map *const map = m_selection->activeSheet()->map();
     ValueConverter *const converter = map->converter();
 

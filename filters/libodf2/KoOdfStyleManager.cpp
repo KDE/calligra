@@ -124,7 +124,7 @@ void KoOdfStyleManager::clear()
 
 bool KoOdfStyleManager::loadStyles(KoStore *odfStore)
 {
-    QString errorMsg;
+    //QString errorMsg;
     //int errorLine;
     //int errorColumn;
 

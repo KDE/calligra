@@ -133,7 +133,6 @@ void SeriesDialog::slotButtonClicked(int button)
     bool isColumn = column->isChecked();
     bool isLinear = linear->isChecked();
 
-    QString tmp;
     double dstep, dend, dstart;
 
     dstart = start->value();

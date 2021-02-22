@@ -158,7 +158,7 @@ void DocumentManager::delayedNewDocument()
     }
     else
     {
-        QString name = d->newDocOptions.value("name", "Untitled").toString();
+        //QString name = d->newDocOptions.value("name", "Untitled").toString();
         //int width = d->newDocOptions.value("width").toInt();
         //int height = d->newDocOptions.value("height").toInt();
         // internal resolution is pixels per point, not ppi

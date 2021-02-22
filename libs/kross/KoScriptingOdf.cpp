@@ -287,7 +287,6 @@ QByteArray KoScriptingOdfStore::getByteArray()
     odfStore.manifestWriter("");
     KoEmbeddedDocumentSaver embeddedSaver;
     KoDocument::SavingContext documentContext(odfStore, embeddedSaver);
-    QByteArray mime = getMimeType();
     if (! m_document->saveOdf(documentContext)) {
         warnKoKross  << "KoScriptingOdfStore::open() Failed to save Oasis to ByteArray";
         m_byteArray = QByteArray();

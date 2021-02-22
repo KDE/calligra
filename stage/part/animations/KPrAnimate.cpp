@@ -127,9 +127,9 @@ bool KPrAnimate::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
             m_values = smilValue;
         }
         else {
-            QString from = element.attributeNS(KoXmlNS::smil, "from", "0");
-            QString to = element.attributeNS(KoXmlNS::smil, "to", "0");
-            QString by = element.attributeNS(KoXmlNS::smil, "by", "0");
+            //QString from = element.attributeNS(KoXmlNS::smil, "from", "0");
+            //QString to = element.attributeNS(KoXmlNS::smil, "to", "0");
+            //QString by = element.attributeNS(KoXmlNS::smil, "by", "0");
             warnStageAnimation << "from to by not yes supported";
             retval = false;
         }

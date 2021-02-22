@@ -237,7 +237,7 @@ void CellToolBase::Private::processEnterKey(QKeyEvent* event)
     /* never extend a selection with the enter key -- the shift key reverses
         direction, not extends the selection
     */
-    QRect r(moveDirection(direction, false));
+    moveDirection(direction, false);
     event->accept(); // QKeyEvent
 }
 
@@ -289,7 +289,7 @@ void CellToolBase::Private::processArrowKey(QKeyEvent *event)
         break;
     }
 
-    QRect r(moveDirection(direction, makingSelection));
+    moveDirection(direction, makingSelection);
     event->accept(); // QKeyEvent
 }
 
