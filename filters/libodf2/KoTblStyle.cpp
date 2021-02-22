@@ -21,67 +21,43 @@
 KOSTYLE_DECLARE_SHARED_POINTER_IMPL(KoTblStyle)
 
 namespace {
-    class BreakStyleMap : public QMap<KoTblStyle::BreakType, QString>
-    {
-    public:
-        BreakStyleMap()
-        {
-            insert(KoTblStyle::NoBreak, QString());
-            insert(KoTblStyle::AutoBreak, "auto");
-            insert(KoTblStyle::ColumnBreak, "column");
-            insert(KoTblStyle::PageBreak, "page");
-        }
-    } breakStyleMap;
 
-    class HorizontalAlignMap : public QMap<KoTblStyle::HorizontalAlign, QString>
-    {
-    public:
-        HorizontalAlignMap()
-        {
-            insert(KoTblStyle::CenterAlign, "center");
-            insert(KoTblStyle::LeftAlign, "left");
-            insert(KoTblStyle::MarginsAlign, "margins");
-            insert(KoTblStyle::RightAlign, "right");
-        }
-    } horizontalAlignMap;
+    const QMap<KoTblStyle::BreakType, QString> breakStyleMap {
+        { KoTblStyle::NoBreak, QString() },
+        { KoTblStyle::AutoBreak, "auto" },
+        { KoTblStyle::ColumnBreak, "column" },
+        { KoTblStyle::PageBreak, "page" },
+    };
 
-    class BorderModelMap : public QMap<KoTblStyle::BorderModel, QString>
-    {
-    public:
-        BorderModelMap()
-        {
-            insert(KoTblStyle::CollapsingModel, "collapsing");
-            insert(KoTblStyle::SeparatingModel, "separating");
-        }
-    } borderModelMap;
+    const QMap<KoTblStyle::HorizontalAlign, QString> horizontalAlignMap {
+        { KoTblStyle::CenterAlign, "center" },
+        { KoTblStyle::LeftAlign, "left" },
+        { KoTblStyle::MarginsAlign, "margins" },
+        { KoTblStyle::RightAlign, "right" },
+    };
 
-    class KeepWithNextMap : public QMap<KoTblStyle::KeepWithNext, QString>
-    {
-    public:
-        KeepWithNextMap()
-        {
-            insert(KoTblStyle::AutoKeepWithNext, "auto");
-            insert(KoTblStyle::AlwaysKeepWithNext, "always");
-        }
-    } keepWithNextMap;
+    const QMap<KoTblStyle::BorderModel, QString> borderModelMap {
+        { KoTblStyle::CollapsingModel, "collapsing" },
+        { KoTblStyle::SeparatingModel, "separating" },
+    };
 
-    class WritingModeMap : public QMap<KoTblStyle::WritingMode, QString>
-    {
-    public:
-        WritingModeMap()
-        {
-            insert(KoTblStyle::LrTbWritingMode, "lr-tb");
-            insert(KoTblStyle::RlTbWritingMode, "rl-tb");
-            insert(KoTblStyle::TbRlWritingMode, "tb-rl");
-            insert(KoTblStyle::TbLrWritingMode, "tb-lr");
-            insert(KoTblStyle::LrWritingMode, "lr");
-            insert(KoTblStyle::RlWritingMode, "rl");
-            insert(KoTblStyle::TbWritingMode, "tb");
-            insert(KoTblStyle::PageWritingMode, "page");
-        }
-    } writingModeMap;
+    const QMap<KoTblStyle::KeepWithNext, QString> keepWithNextMap {
+        { KoTblStyle::AutoKeepWithNext, "auto" },
+        { KoTblStyle::AlwaysKeepWithNext, "always" },
+    };
 
-    QString prefix = "table";
+    const QMap<KoTblStyle::WritingMode, QString> writingModeMap {
+        { KoTblStyle::LrTbWritingMode, "lr-tb" },
+        { KoTblStyle::RlTbWritingMode, "rl-tb" },
+        { KoTblStyle::TbRlWritingMode, "tb-rl" },
+        { KoTblStyle::TbLrWritingMode, "tb-lr" },
+        { KoTblStyle::LrWritingMode, "lr" },
+        { KoTblStyle::RlWritingMode, "rl" },
+        { KoTblStyle::TbWritingMode, "tb" },
+        { KoTblStyle::PageWritingMode, "page" },
+    };
+
+    const QString prefix = "table";
     const char familyName[] = "table";
 }
 

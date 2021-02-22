@@ -24,17 +24,11 @@
 #include <QString>
 
 namespace {
-    class VisibilityMap : public QMap<KoRow::Visibility, QString>
-    {
-    public:
-        VisibilityMap()
-        : QMap<KoRow::Visibility, QString>()
-        {
-            insert(KoRow::Collapse, "colapse");
-            insert(KoRow::Filter, "filter");
-            insert(KoRow::Visible, "visible");
-        }
-    } visibilityMap;
+    const QMap<KoRow::Visibility, QString> visibilityMap {
+        { KoRow::Collapse, "collapse" },
+        { KoRow::Filter, "filter" },
+        { KoRow::Visible, "visible" }
+    };
 }
 
 

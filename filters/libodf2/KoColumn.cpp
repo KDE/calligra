@@ -25,16 +25,11 @@
 #include <QString>
 
 namespace {
-    class VisibilityMap : public QMap<KoColumn::Visibility, QString> {
-    public:
-        VisibilityMap()
-        : QMap<KoColumn::Visibility, QString>()
-        {
-            insert(KoColumn::Collapse, "colapse");
-            insert(KoColumn::Filter, "filter");
-            insert(KoColumn::Visible, "visible");
-        }
-    } visibilityMap;
+    const QMap<KoColumn::Visibility, QString> visibilityMap {
+        { KoColumn::Collapse, "collapse" },
+        { KoColumn::Filter, "filter" },
+        { KoColumn::Visible, "visible" }
+    };
 }
 
 KoColumn::KoColumn()
