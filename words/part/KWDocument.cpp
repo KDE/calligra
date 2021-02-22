@@ -220,8 +220,8 @@ void KWDocument::removeShape(KoShape *shape)
 
 void KWDocument::shapesRemoved(const QList<KoShape*> &shapes, KUndo2Command *command)
 {
-    QMap<KoTextEditor *, QList<KoShapeAnchor *> > anchors;
-    QMap<KoTextEditor *, QList<KoAnnotation *> > annotations;
+    QHash<KoTextEditor *, QList<KoShapeAnchor *> > anchors;
+    QHash<KoTextEditor *, QList<KoAnnotation *> > annotations;
     const KoAnnotationManager *annotationManager = textRangeManager()->annotationManager();
     foreach (KoShape *shape, shapes) {
         KoShapeAnchor *anchor = shape->anchor();
@@ -244,12 +244,12 @@ void KWDocument::shapesRemoved(const QList<KoShape*> &shapes, KUndo2Command *com
         }
     }
 
-    QMap<KoTextEditor *, QList<KoShapeAnchor *> >::const_iterator anchorIter(anchors.constBegin());
+    QHash<KoTextEditor *, QList<KoShapeAnchor *> >::const_iterator anchorIter(anchors.constBegin());
     for (; anchorIter != anchors.constEnd(); ++anchorIter) {
         anchorIter.key()->removeAnchors(anchorIter.value(), command);
     }
 
-    QMap<KoTextEditor *, QList<KoAnnotation *> >::const_iterator annotationIter(annotations.constBegin());
+    QHash<KoTextEditor *, QList<KoAnnotation *> >::const_iterator annotationIter(annotations.constBegin());
     for (; annotationIter != annotations.constEnd(); ++annotationIter) {
         annotationIter.key()->removeAnnotations(annotationIter.value(), command);
     }

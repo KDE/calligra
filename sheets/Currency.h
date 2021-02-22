@@ -85,13 +85,13 @@ private:
     QString m_code;
 };
 
-static inline uint qHash(const Currency& cur) {
-    return ::qHash(cur.code());
-}
-
 } // namespace Sheets
 } // namespace Calligra
 
 Q_DECLARE_METATYPE(Calligra::Sheets::Currency)
+
+static inline uint qHash(const Calligra::Sheets::Currency& cur) {
+    return ::qHash(cur.code());
+}
 
 #endif

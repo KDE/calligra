@@ -32,6 +32,16 @@
 #include "Format.h"
 #include "Global.h"
 
+
+static inline uint qHash(const QColor& color)
+{ return uint(color.rgb()); }
+
+static inline uint qHash(const QPen& pen)
+{ return qHash(pen.color()) ^ 37 * uint(pen.style()); }
+
+static inline uint qHash(const QBrush& brush)
+{ return qHash(brush.color()) ^ 91 * uint(brush.style()); }
+
 namespace Calligra
 {
 namespace Sheets
@@ -433,16 +443,6 @@ public:
     QString name;
 };
 
-
-static inline uint qHash(const QColor& color)
-{ return uint(color.rgb()); }
-
-static inline uint qHash(const QPen& pen)
-{ return qHash(pen.color()) ^ 37 * uint(pen.style()); }
-
-static inline uint qHash(const QBrush& brush)
-{ return qHash(brush.color()) ^ 91 * uint(brush.style()); }
-
 template<Style::Key key, class Value1>
 class SubStyleOne : public SubStyle
 {
@@ -457,7 +457,7 @@ public:
     QString debugData(bool withName = true) const override {
         QString out; if (withName) out = name(key) + ' '; QDebug qdbg(&out); qdbg << value1; return out;
     }
-    uint koHash() const override { return uint(type()) ^ qHash(value1); }
+    uint koHash() const override { return uint(type()) ^ ::qHash(value1); }
     Value1 value1;
 };
 

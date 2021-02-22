@@ -42,7 +42,7 @@ class QIcon;
 class FontSizeAction : public KSelectAction
 {
     Q_OBJECT
-    Q_PROPERTY( qreal fontSize READ fontSize WRITE setFontSize )
+    Q_PROPERTY( qreal fontSize READ fontSize WRITE setFontSize NOTIFY fontSizeChanged)
 
 public:
     explicit FontSizeAction(QObject *parent);

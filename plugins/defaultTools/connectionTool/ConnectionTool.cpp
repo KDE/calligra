@@ -69,7 +69,7 @@ ConnectionTool::ConnectionTool(KoCanvasBase * canvas)
     , m_currentShape(0)
     , m_activeHandle(-1)
     , m_currentStrategy(0)
-    , m_oldSnapStrategies(0)
+    , m_oldSnapStrategies(KoSnapGuide::Strategies())
     , m_resetPaint(true)
 {
     QPixmap connectPixmap;

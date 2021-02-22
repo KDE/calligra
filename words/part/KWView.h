@@ -195,7 +195,7 @@ private Q_SLOTS:
     void semanticObjectViewSiteUpdated(hKoRdfBasicSemanticItem item, const QString &xmlid);
 #endif
     /// A match was found when searching.
-    void findMatchFound(KoFindMatch match);
+    void findMatchFound(const KoFindMatch &match);
     /// This is used to update the text that can be searched.
     void refreshFindTexts();
     /// The KWPageSettingsDialog was closed.

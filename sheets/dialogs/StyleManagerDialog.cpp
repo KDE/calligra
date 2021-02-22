@@ -109,7 +109,7 @@ StyleManagerDialog::~StyleManagerDialog()
 
 void StyleManagerDialog::fillComboBox()
 {
-    typedef QMap<CustomStyle*, QTreeWidgetItem*> Map;
+    typedef QHash<CustomStyle*, QTreeWidgetItem*> Map;
     Map entries;
 
     entries.clear();

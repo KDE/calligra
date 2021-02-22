@@ -51,7 +51,7 @@ public:
 
 Q_SIGNALS:
     /**
-     * @brief This signal is send when the current document has reached its end
+     * @brief This signal is sent when the current document has reached its end
      *
      * Connect to this signal if you want to support find in multiple text shapes.
      * In you code you then should select the next text shape and select the text
@@ -62,7 +62,7 @@ Q_SIGNALS:
     void findDocumentSetNext(QTextDocument *document);
 
     /**
-     * @brief This signal is send when the current document has reached its beginning
+     * @brief This signal is sent when the current document has reached its beginning
      *
      * Connect to this signal if you want to support find in multiple text shapes.
      * In you code you then should select the next text shape and select the text

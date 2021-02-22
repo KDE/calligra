@@ -258,7 +258,7 @@ void NetworkController::getfolderlist(QString folder_name){
     m_state = NetworkController::FILES_FOLDERS;
     m_currentDir_temp = folder_name;
     QNetworkRequest __request = m_droprestapi->root_dir(
-                QString("%1%2").arg(m_currentDir).arg(folder_name)
+                QString("%1%2").arg(m_currentDir, folder_name)
                 );
     __request.setAttribute(QNetworkRequest::CacheLoadControlAttribute, QNetworkRequest::PreferCache);
     __request.setPriority(QNetworkRequest::HighPriority);
@@ -338,7 +338,7 @@ void NetworkController::download(FileTransferItem *fti){
     m_transfer_state = NetworkController::DOWNLOADING;
 
     m_downloadtime.start();
-    m_file.setFileName(QString("%1/%2").arg(Dropbox_Folder()).arg(fti->filename()));
+    m_file.setFileName(QString("%1/%2").arg(Dropbox_Folder(), fti->filename()));
     m_file.open(QFile::WriteOnly);
 
     m_fti = fti;

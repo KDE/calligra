@@ -135,7 +135,7 @@ public:
     /// returns the page style applied on this page
     KWPageStyle pageStyle() const;
     /// set the page style to apply on this page
-    void setPageStyle(const KWPageStyle style);
+    void setPageStyle(const KWPageStyle &style);
 
     /**
      * Return the orientation property of the page.

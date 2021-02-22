@@ -89,7 +89,7 @@ bool KoPAPastePage::process( const KoXmlElement & body, KoOdfReadStore & odfStor
 
         m_doc->saveOdfPages( savingContext, emptyList, newMasterPages );
 
-        QMap<KoPAMasterPage*, KoPAMasterPage*> masterPagesToUpdate;
+        QHash<KoPAMasterPage*, KoPAMasterPage*> masterPagesToUpdate;
         foreach ( KoPAPageBase * page, newMasterPages )
         {
             KoPAMasterPage * masterPage = dynamic_cast<KoPAMasterPage*>( page );
@@ -110,7 +110,7 @@ bool KoPAPastePage::process( const KoXmlElement & body, KoOdfReadStore & odfStor
             Q_ASSERT( p );
             if ( p ) {
                 KoPAMasterPage * masterPage( p->masterPage() );
-                QMap<KoPAMasterPage*, KoPAMasterPage*>::const_iterator pageIt( masterPagesToUpdate.constFind( masterPage ) );
+                auto pageIt( masterPagesToUpdate.constFind( masterPage ) );
                 if ( pageIt != masterPagesToUpdate.constEnd() ) {
                     p->setMasterPage( pageIt.value() );
                 }
@@ -118,7 +118,7 @@ bool KoPAPastePage::process( const KoXmlElement & body, KoOdfReadStore & odfStor
         }
 
         // delete duplicate master pages;
-        QMap<KoPAMasterPage*, KoPAMasterPage*>::const_iterator pageIt( masterPagesToUpdate.constBegin() );
+        auto pageIt( masterPagesToUpdate.constBegin() );
         for ( ; pageIt != masterPagesToUpdate.constEnd(); ++pageIt )
         {
             newMasterPages.removeAll( pageIt.key() );

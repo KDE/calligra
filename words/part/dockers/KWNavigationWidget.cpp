@@ -75,7 +75,7 @@ void KWNavigationWidget::initLayout()
     setLayout(mainBox); // FIXME: Is this necessary?
 }
 
-void KWNavigationWidget::navigationClicked(QModelIndex idx)
+void KWNavigationWidget::navigationClicked(const QModelIndex &idx)
 {
     if (idx.column() == 0) {
         QTextDocument *doc = static_cast<QTextDocument *>(

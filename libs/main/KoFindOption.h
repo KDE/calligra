@@ -41,7 +41,7 @@ class KOMAIN_EXPORT KoFindOption : public QObject
     /**
      * The name of this option. Used to identify options.
      */
-    Q_PROPERTY(QString name READ name)
+    Q_PROPERTY(QString name READ name CONSTANT)
     /**
      * The title of the option. Can be used for, for example, action names.
      */

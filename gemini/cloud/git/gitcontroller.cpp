@@ -686,7 +686,7 @@ void GitController::commitAndPushCurrentFile()
             QThreadPool::globalInstance()->start(d->opThread);
         }
     } else {
-        KMessageBox::sorry(0, QString("The file %1 is not located within the current clone directory of %2. Before you can commit the file, please save it there and try again.").arg(d->currentFile).arg(d->cloneDir));
+        KMessageBox::sorry(0, QString("The file %1 is not located within the current clone directory of %2. Before you can commit the file, please save it there and try again.").arg(d->currentFile, d->cloneDir));
     }
 }
 

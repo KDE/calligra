@@ -48,16 +48,6 @@
 
 K_PLUGIN_FACTORY_WITH_JSON(ExcelExportFactory, "calligra_filter_sheets2xls.json", registerPlugin<ExcelExport>();)
 
-static uint qHash(const QFont& f)
-{
-    return qHash(f.family()) ^ 37 * f.pointSize();
-}
-
-static uint qHash(const QColor& c)
-{
-    return uint(c.rgba());
-}
-
 using namespace Swinder;
 
 class ExcelExport::Private

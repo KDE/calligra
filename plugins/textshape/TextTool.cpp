@@ -1825,7 +1825,7 @@ void TextTool::inputMethodEvent(QInputMethodEvent *event)
         }
     }
     if (!event->commitString().isEmpty()) {
-        QKeyEvent ke(QEvent::KeyPress, -1, 0, event->commitString());
+        QKeyEvent ke(QEvent::KeyPress, -1, Qt::KeyboardModifiers(), event->commitString());
         keyPressEvent(&ke);
         // The cursor may reside in a different block before vs. after keyPressEvent.
         QTextBlock block = textEditor->block();

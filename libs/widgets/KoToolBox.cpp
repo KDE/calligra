@@ -181,8 +181,9 @@ void KoToolBox::setActiveTool(KoCanvasController *canvas, int id)
 
 void KoToolBox::setButtonsVisible(const QList<QString> &codes)
 {
-    foreach(QToolButton *button, d->visibilityCodes.keys()) {
-        QString code = d->visibilityCodes.value(button);
+    for (auto i = d->visibilityCodes.constBegin() ; i != d->visibilityCodes.constEnd() ; ++i) {
+        QToolButton *button = i.key();
+        QString code = i.value();
 
         if (code.startsWith(QLatin1String("flake/"))) {
             continue;
@@ -208,11 +209,11 @@ void KoToolBox::setCurrentLayer(const KoCanvasController *canvas, const KoShapeL
 {
     Q_UNUSED(canvas);
     const bool enabled = layer == nullptr || (layer->isEditable() && layer->isVisible());
-    foreach (QToolButton *button, d->visibilityCodes.keys()) {
-        if (d->visibilityCodes[button].endsWith( QLatin1String( "/always") ) ) {
+    for (auto i = d->visibilityCodes.constBegin() ; i != d->visibilityCodes.constEnd() ; ++i) {
+        if (i.value().endsWith( QLatin1String( "/always") ) ) {
             continue;
         }
-        button->setEnabled(enabled);
+        i.key()->setEnabled(enabled);
     }
 }
 

@@ -84,7 +84,7 @@ void BibliographyConfigureDialog::save(QAbstractButton *button)
 
         KoTextDocument(m_document).styleManager()->setBibliographyConfiguration(m_bibConfiguration);
     }
-    emit accept();
+    accept();
 }
 
 void BibliographyConfigureDialog::addSortKey()

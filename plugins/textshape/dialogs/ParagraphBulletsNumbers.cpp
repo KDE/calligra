@@ -333,7 +333,7 @@ void ParagraphBulletsNumbers::labelFollowedByIndexChanged(int index)
         widget.doubleSpinBox->setEnabled(true);
     }
     emit parStyleChanged();
-    emit recalcPreview();
+    recalcPreview();
 }
 
 void ParagraphBulletsNumbers::setImageCollection(KoImageCollection *imageCollection)
@@ -360,7 +360,7 @@ void ParagraphBulletsNumbers::setImageData(KJob *job)
     if (m_imageCollection) {
         m_data = m_imageCollection->createImageData(transferJob->data());
     }
-    emit recalcPreview();
+    recalcPreview();
 }
 
 void ParagraphBulletsNumbers::setFontSize(const KoCharacterStyle *style)

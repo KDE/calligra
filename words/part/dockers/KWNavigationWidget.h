@@ -56,7 +56,7 @@ public:
     void unsetCanvas();
 
 private Q_SLOTS:
-    void navigationClicked(QModelIndex idx);
+    void navigationClicked(const QModelIndex &idx);
 
 public Q_SLOTS:
     void updateData();

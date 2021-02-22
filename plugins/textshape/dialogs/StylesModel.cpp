@@ -152,7 +152,7 @@ QVariant StylesModel::data(const QModelIndex &index, int role) const
 Qt::ItemFlags StylesModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
-        return 0;
+        return Qt::ItemFlags();
     return (Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 }
 
@@ -556,11 +556,11 @@ void StylesModel::addDraftCharacterStyle(KoCharacterStyle *style)
 
 void StylesModel::clearDraftStyles()
 {
-    foreach(KoParagraphStyle *style, m_draftParStyleList.values()) {
+    for (KoParagraphStyle *style: m_draftParStyleList) {
         removeParagraphStyle(style);
     }
     m_draftParStyleList.clear();
-    foreach(KoCharacterStyle *style, m_draftCharStyleList.values()) {
+    for(KoCharacterStyle *style: m_draftCharStyleList) {
         removeCharacterStyle(style);
     }
     m_draftCharStyleList.clear();

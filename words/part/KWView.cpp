@@ -1043,7 +1043,7 @@ void KWView::semanticObjectViewSiteUpdated(hKoRdfBasicSemanticItem basicitem, co
 }
 #endif
 
-void KWView::findMatchFound(KoFindMatch match)
+void KWView::findMatchFound(const KoFindMatch &match)
 {
     if(!match.isValid() || !match.location().canConvert<QTextCursor>() || !match.container().canConvert<QTextDocument*>()) {
         return;

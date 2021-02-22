@@ -98,6 +98,11 @@ public:
     /// reimplemented
     QSize sizeHint() const override;
 
+    /***
+     * Return the list of tabs set on this ruler.
+     */
+    QList<KoRuler::Tab> tabs() const;
+
 public Q_SLOTS:
     /// Set the unit of the ruler
     void setUnit(const KoUnit &unit);
@@ -198,12 +203,7 @@ public Q_SLOTS:
      * @param tabs a list of tabs that is shown on the ruler
      * @param tabDistance the distance between regular interval tabs
      */
-    void updateTabs(const QList<Tab> &tabs, qreal tabDistance);
-
-    /***
-     * Return the list of tabs set on this ruler.
-     */
-    QList<Tab> tabs() const;
+    void updateTabs(const QList<KoRuler::Tab> &tabs, qreal tabDistance);
 
     /**
      * Clear all previously set hotspots.

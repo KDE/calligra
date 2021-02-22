@@ -54,7 +54,7 @@ KWPageStyle KWPage::pageStyle() const
     return priv->pages[n].style;
 }
 
-void KWPage::setPageStyle(const KWPageStyle style)
+void KWPage::setPageStyle(const KWPageStyle &style)
 {
     if (! isValid())
         return;
