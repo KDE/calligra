@@ -31,8 +31,6 @@
 
 #include <algorithm>
 
-static QVector<SortKeyPair> sortKeys;
-
 BibliographyGenerator::BibliographyGenerator(QTextDocument *bibDocument, const QTextBlock &block, KoBibliographyInfo *bibInfo)
     : QObject(bibDocument)
     , m_bibDocument(bibDocument)
@@ -53,7 +51,7 @@ BibliographyGenerator::~BibliographyGenerator()
     delete m_bibInfo;
 }
 
-static bool compare_on(int keyIndex, KoInlineCite *c1, KoInlineCite *c2)
+static bool compare_on(const QVector<SortKeyPair> &sortKeys, int keyIndex, KoInlineCite *c1, KoInlineCite *c2)
 {
     if ( keyIndex == sortKeys.size() ) return false;
     else if (sortKeys[keyIndex].second == Qt::AscendingOrder) {
@@ -62,21 +60,18 @@ static bool compare_on(int keyIndex, KoInlineCite *c1, KoInlineCite *c2)
     } else if (sortKeys[keyIndex].second == Qt::DescendingOrder) {
         if (c1->dataField( sortKeys[keyIndex].first ) < c2->dataField( sortKeys[keyIndex].first )) return false;
         else if (c1->dataField( sortKeys[keyIndex].first ) > c2->dataField( sortKeys[keyIndex].first )) return true;
-    } else return compare_on( keyIndex + 1, c1, c2 );
+    } else return compare_on( sortKeys, keyIndex + 1, c1, c2 );
 
     return false;
 }
 
-static bool lessThan(KoInlineCite *c1, KoInlineCite *c2)
-{
-    return compare_on(0, c1, c2);
-}
-
 static QList<KoInlineCite *> sort(QList<KoInlineCite *> cites, const QVector<SortKeyPair> &keys)
 {
-    sortKeys = keys;
+    QVector<SortKeyPair> sortKeys = keys;
     sortKeys << QPair<QString, Qt::SortOrder>("identifier", Qt::AscendingOrder);
-    std::sort(cites.begin(), cites.end(), lessThan);
+    std::sort(cites.begin(), cites.end(), [sortKeys] (KoInlineCite *c1, KoInlineCite *c2) {
+        return compare_on(sortKeys, 0, c1, c2);
+    });
     return cites;
 }
 
@@ -203,13 +198,14 @@ QMap<QString, BibliographyEntryTemplate> BibliographyGenerator::defaultBibliogra
         otherSpan->text = ",";
 
         bibEntryTemplate.bibliographyType = bibType;
-        bibEntryTemplate.indexEntries.append(static_cast<IndexEntry *>(identifier));
-        bibEntryTemplate.indexEntries.append(static_cast<IndexEntry *>(firstSpan));
-        bibEntryTemplate.indexEntries.append(static_cast<IndexEntry *>(author));
-        bibEntryTemplate.indexEntries.append(static_cast<IndexEntry *>(otherSpan));
-        bibEntryTemplate.indexEntries.append(static_cast<IndexEntry *>(title));
-        bibEntryTemplate.indexEntries.append(static_cast<IndexEntry *>(otherSpan));
-        bibEntryTemplate.indexEntries.append(static_cast<IndexEntry *>(year));
+        bibEntryTemplate.indexEntries = {identifier,
+            firstSpan,
+            author,
+            otherSpan,
+            title,
+            otherSpan,
+            year
+        };
 
         entryTemplates[bibType] = bibEntryTemplate;
     }
