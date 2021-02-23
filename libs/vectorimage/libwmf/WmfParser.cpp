@@ -1660,7 +1660,7 @@ QPainter::CompositionMode  WmfParser::winToQtComposition(quint32 param) const
 
 bool WmfParser::dibToBmp(QImage& bmp, QDataStream& stream, quint32 size)
 {
-    typedef struct _BMPFILEHEADER {
+    typedef struct __attribute__((__packed__)) _BMPFILEHEADER {
         quint16 bmType;
         quint32 bmSize;
         quint16 bmReserved1;
@@ -1668,12 +1668,12 @@ bool WmfParser::dibToBmp(QImage& bmp, QDataStream& stream, quint32 size)
         quint32 bmOffBits;
     }  BMPFILEHEADER;
 
-    int sizeBmp = size + 14;
+    int sizeBmp = size + sizeof(BMPFILEHEADER);
 
     QByteArray pattern;           // BMP header and DIB data
     pattern.resize(sizeBmp);
     pattern.fill(0);
-    stream.readRawData(pattern.data() + 14, size);
+    stream.readRawData(pattern.data() + sizeof(BMPFILEHEADER), size);
 
     // add BMP header
     BMPFILEHEADER* bmpHeader;
