@@ -447,7 +447,7 @@ void KoStyleManager::add(KoCharacterStyle *style)
         if (style->isApplied() && !d->m_usedCharacterStyles.contains(d->s_stylesNumber)) {
             d->m_usedCharacterStyles.append(d->s_stylesNumber);
         }
-        connect(style, SIGNAL(styleApplied(const KoCharacterStyle*)), this, SLOT(slotAppliedStyle(const KoCharacterStyle*)));
+        connect(style, &KoCharacterStyle::styleApplied, this, &KoStyleManager::slotAppliedCharacterStyle);
     }
 
     ++d->s_stylesNumber;
@@ -479,7 +479,7 @@ void KoStyleManager::add(KoParagraphStyle *style)
         if (style->isApplied() && !d->m_usedParagraphStyles.contains(d->s_stylesNumber)) {
             d->m_usedParagraphStyles.append(d->s_stylesNumber);
         }
-        connect(style, SIGNAL(styleApplied(const KoParagraphStyle*)), this, SLOT(slotAppliedStyle(const KoParagraphStyle*)));
+        connect(style, &KoParagraphStyle::styleApplied, this, &KoStyleManager::slotAppliedParagraphStyle);
     }
 
     ++d->s_stylesNumber;
@@ -573,13 +573,13 @@ void KoStyleManager::add(KoTextTableTemplate *tableTemplate)
     ++d->s_stylesNumber;
 }
 
-void KoStyleManager::slotAppliedStyle(const KoParagraphStyle *style)
+void KoStyleManager::slotAppliedParagraphStyle(const KoParagraphStyle *style)
 {
     d->m_usedParagraphStyles.append(style->styleId());
     emit styleApplied(style);
 }
 
-void KoStyleManager::slotAppliedStyle(const KoCharacterStyle *style)
+void KoStyleManager::slotAppliedCharacterStyle(const KoCharacterStyle *style)
 {
     d->m_usedCharacterStyles.append(style->styleId());
     emit styleApplied(style);

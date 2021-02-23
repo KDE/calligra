@@ -532,8 +532,8 @@ public Q_SLOTS:
      */
     void alteredStyle(const KoSectionStyle *style);
 
-    void slotAppliedStyle(const KoCharacterStyle*);
-    void slotAppliedStyle(const KoParagraphStyle*);
+    void slotAppliedCharacterStyle(const KoCharacterStyle*);
+    void slotAppliedParagraphStyle(const KoParagraphStyle*);
 
 private:
     friend class KoTextSharedLoadingData;
