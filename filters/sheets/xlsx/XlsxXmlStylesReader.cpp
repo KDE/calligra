@@ -691,7 +691,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_font()
 {
     READ_PROLOGUE
 
-    MSOOXML::Utils::AutoPtrSetter<KoGenStyle> currentFontStyleSetter(m_currentFontStyle);
+    MSOOXML::Utils::AutoPtrSetter<KoGenStyle> currentFontStyleSetter(&m_currentFontStyle);
 
     m_currentTextStyleProperties = new KoCharacterStyle;
 
@@ -929,7 +929,7 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_xf()
 
     qCDebug(lcXlsxImport) << "cell format #" << m_cellFormatIndex;
     m_currentCellFormat = new XlsxCellFormat;
-    MSOOXML::Utils::AutoPtrSetter<XlsxCellFormat> currentCellFormatSetter(m_currentCellFormat);
+    MSOOXML::Utils::AutoPtrSetter<XlsxCellFormat> currentCellFormatSetter(&m_currentCellFormat);
 
     // -- read attrs --
     const QXmlStreamAttributes attrs(attributes());

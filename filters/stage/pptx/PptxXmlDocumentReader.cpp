@@ -219,7 +219,7 @@ PptxSlideProperties* PptxXmlDocumentReader::slideLayoutProperties(const QString&
         }
     }
 
-    MSOOXML::Utils::AutoPtrSetter<PptxSlideProperties> slideLayoutPropertiesSetter(result);
+    MSOOXML::Utils::AutoPtrSetter<PptxSlideProperties> slideLayoutPropertiesSetter(&result);
     PptxXmlSlideReaderContext context(
         *m_context->import,
         slideLayoutPath, slideLayoutFile,

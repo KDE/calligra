@@ -216,8 +216,8 @@ class AutoPtrSetter
 public:
     //! Creates a new auto-ptr setter object for variable pointer of type T* @a ptr,
     //! which will be set to 0 setter's destruction, unless release() was called.
-    explicit AutoPtrSetter(T* ptr)
-            : m_pptr(&ptr) {
+    explicit AutoPtrSetter(T** ptr)
+            : m_pptr(ptr) {
     }
     ~AutoPtrSetter() {
         if (m_pptr && *m_pptr) {
