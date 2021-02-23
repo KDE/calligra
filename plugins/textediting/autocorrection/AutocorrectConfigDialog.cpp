@@ -90,8 +90,8 @@ AutocorrectConfig::AutocorrectConfig(Autocorrect *autocorrect, QWidget *parent)
     /* tab 4 - Exceptions */
     m_upperCaseExceptions = m_autocorrect->getUpperCaseExceptions();
     m_twoUpperLetterExceptions = m_autocorrect->getTwoUpperLetterExceptions();
-    widget.abbreviationList->addItems(m_upperCaseExceptions.toList());
-    widget.twoUpperLetterList->addItems(m_twoUpperLetterExceptions.toList());
+    widget.abbreviationList->addItems(m_upperCaseExceptions.values());
+    widget.twoUpperLetterList->addItems(m_twoUpperLetterExceptions.values());
     widget.add1->setEnabled(false);
     widget.add2->setEnabled(false);
 

@@ -622,16 +622,16 @@ void KoUnavailShape::Private::storeFile(const QString &fileName, KoShapeLoadingC
         return;
 
     // Actually store the file in the list.
-        FileEntry *entry = new FileEntry;
-        entry->path = fileName;
-        if (entry->path.startsWith(QLatin1String("./")))
-            entry->path.remove(0, 2);
-        entry->mimeType = context.odfLoadingContext().mimeTypeForPath(entry->path);
-        entry->isDir = false;
-        entry->contents = fileContent;
-        embeddedFiles.append(entry);
+    FileEntry *entry = new FileEntry;
+    entry->path = fileName;
+    if (entry->path.startsWith(QLatin1String("./")))
+        entry->path.remove(0, 2);
+    entry->mimeType = context.odfLoadingContext().mimeTypeForPath(entry->path);
+    entry->isDir = false;
+    entry->contents = fileContent;
+    embeddedFiles.append(entry);
 
-        debugFlake << "File length: " << fileContent.size();
+    debugFlake << "File length: " << fileContent.size();
 }
 
 QByteArray KoUnavailShape::Private::loadFile(const QString &fileName, KoShapeLoadingContext &context)

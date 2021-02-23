@@ -116,7 +116,7 @@ KoStore* KoStore::createStore(QIODevice *device, Mode mode, const QByteArray & a
         return new KoTarStore(device, mode, appIdentification, writeMimetype);
     case Directory:
         errorStore << "Can't create a Directory store for a memory buffer!" << endl;
-        // fallback
+        /* fall through */
     case Zip:
 #ifdef QCA2
         if (automatic && mode == Read) {

@@ -72,11 +72,11 @@ SizeChooserGrid::SizeChooserGrid(QuickTableButton *button, QAction *action)
     m_rowHeight = metrics.height() + 2;
     m_columnWidth = metrics.width("8x22") + 2;
 
-    getContentsMargins(&m_leftMargin, &m_topMargin, &m_extraWidth, &m_extraHeight);
-    m_leftMargin += 4;
-    m_topMargin += 4;
-    m_extraWidth += m_leftMargin+4+1;
-    m_extraHeight += m_topMargin+4+1;
+    auto margins = contentsMargins();
+    m_leftMargin = margins.left() + 4;
+    m_topMargin = margins.top() + 4;
+    m_extraWidth = margins.right() + m_leftMargin + 4 + 1;
+    m_extraHeight = margins.bottom() + m_topMargin + 4 + 1;
 }
 
 QSize SizeChooserGrid::sizeHint() const

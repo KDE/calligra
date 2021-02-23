@@ -136,9 +136,9 @@ class PIGMENTCMS_EXPORT KoBasicF16HalfHistogramProducer : public KoBasicHistogra
 {
 public:
     KoBasicF16HalfHistogramProducer(const KoID& id, const KoColorSpace *colorSpace);
-    virtual void addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, const KoColorSpace *colorSpace);
-    virtual QString positionToString(qreal pos) const;
-    virtual qreal maximalZoom() const;
+    virtual void addRegionToBin(const quint8 * pixels, const quint8 * selectionMask, quint32 nPixels, const KoColorSpace *colorSpace) override;
+    virtual QString positionToString(qreal pos) const override;
+    virtual qreal maximalZoom() const override;
 };
 #endif
 

@@ -501,6 +501,7 @@ void KoCsvImportDialog::Private::fillTable()
                 break;
             }
             state = InNormalField;
+            /* fall through */
          case InNormalField :
             if (x == '\n')
             {

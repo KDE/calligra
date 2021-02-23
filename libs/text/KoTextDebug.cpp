@@ -168,8 +168,8 @@ QString KoTextDebug::textAttributes(const QTextCharFormat &textFormat)
         attrs.append(QString(" font=\"%1\"").arg(fontProps));
 
     if (textFormat.isAnchor()) {
-        attrs.append(QString(" achorHref=\"%1\"").arg(textFormat.anchorHref()));
-        attrs.append(QString(" achorName=\"%1\"").arg(textFormat.anchorName()));
+        attrs.append(QString(" anchorHref=\"%1\"").arg(textFormat.anchorHref()));
+        attrs.append(QString(" anchorName=\"%1\"").arg(textFormat.anchorNames().join(',')));
     }
 
     foreach(int id, properties.keys()) {

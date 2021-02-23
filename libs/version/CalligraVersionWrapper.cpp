@@ -22,7 +22,7 @@
 
 QString CalligraVersionWrapper::versionYear()
 {
-    return QLatin1Literal(CALLIGRA_YEAR);
+    return QLatin1String(CALLIGRA_YEAR);
 }
 
 QString CalligraVersionWrapper::versionString(bool checkGit)

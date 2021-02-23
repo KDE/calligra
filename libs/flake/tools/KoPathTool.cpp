@@ -945,7 +945,7 @@ void KoPathTool::pointSelectionChanged()
 {
     Q_D(KoToolBase);
     updateActions();
-    d->canvas->snapGuide()->setIgnoredPathPoints(m_pointSelection.selectedPoints().toList());
+    d->canvas->snapGuide()->setIgnoredPathPoints(m_pointSelection.selectedPoints().values());
     emit selectionChanged(m_pointSelection.hasSelection());
 }
 

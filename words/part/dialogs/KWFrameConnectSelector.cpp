@@ -73,7 +73,7 @@ void KWFrameConnectSelector::nameChanged(const QString &text)
 {
     widget.newRadio->setChecked(true);
     foreach (QTreeWidgetItem *item, widget.framesList->selectedItems())
-        widget.framesList->setItemSelected(item, false);
+        item->setSelected(false);
     foreach (QTreeWidgetItem *item, m_items) {
         if (item->text(0) == text) {
             widget.framesList->setCurrentItem(item);
