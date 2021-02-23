@@ -98,7 +98,7 @@ public:
     {
         QStyledItemDelegate::paint(painter, option, index);
 
-        if(!(option.state & (int)(QStyle::State_Active && QStyle::State_Enabled)))
+        if(!(option.state & (int)(QStyle::State_Active & QStyle::State_Enabled)))
         {
             int ypos = option.rect.y() + ((option.rect.height() - 2) / 2);
             QRect lineRect(option.rect.left(), ypos, option.rect.width(), 2);
