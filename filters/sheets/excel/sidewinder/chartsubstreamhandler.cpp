@@ -97,7 +97,7 @@ public:
     void dump(std::ostream& out) const override {
         QStringList tokens;
         foreach(XmlTk* t, m_tokens)
-            tokens.append( QString("%1(%2)=%3").arg(QString::fromUtf8(xmlTkTagName(XmlTkTags(t->m_xmlTkTag)))).arg(t->type()).arg(t->value()) );
+            tokens.append( QString("%1(%2)=%3").arg(QString::fromUtf8(xmlTkTagName(XmlTkTags(t->m_xmlTkTag))), t->type(), t->value()) );
         out << qPrintable(QString("[%1]").arg(tokens.join(", ")));
     }
     void setData(unsigned size, const unsigned char* data, const unsigned int* /*continuePositions*/) override {

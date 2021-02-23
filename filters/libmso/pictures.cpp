@@ -393,7 +393,7 @@ QMap<QByteArray, QString> createPictures(KoStore* store, KoXmlWriter* manifest, 
 // removed some commented code, and changed the kWarning to qDebug here
 bool dibToBmp(QImage& bmp, const char* dib, long int size)
 {
-    typedef struct _BMPFILEHEADER {
+    typedef struct __attribute__((packed)) _BMPFILEHEADER {
         short bmType;
         int bmSize;
         short bmReserved1;

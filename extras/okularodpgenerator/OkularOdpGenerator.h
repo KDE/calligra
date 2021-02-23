@@ -37,15 +37,15 @@ public:
     OkularOdpGenerator( QObject *parent, const QVariantList &args );
     ~OkularOdpGenerator();
 
-    bool loadDocument( const QString &fileName, QVector<Okular::Page*> &pages );
+    bool loadDocument( const QString &fileName, QVector<Okular::Page*> &pages ) override;
 
-    bool canGeneratePixmap() const;
-    void generatePixmap( Okular::PixmapRequest *request );
+    bool canGeneratePixmap() const override;
+    void generatePixmap( Okular::PixmapRequest *request ) override;
 
-    Okular::DocumentInfo generateDocumentInfo( const QSet<Okular::DocumentInfo::Key> &keys ) const;
+    Okular::DocumentInfo generateDocumentInfo( const QSet<Okular::DocumentInfo::Key> &keys ) const override;
 
 protected:
-    bool doCloseDocument();
+    bool doCloseDocument() override;
 
 private:
     const KoPADocument* m_doc;

@@ -235,7 +235,7 @@ void KPrDocument::postAddShape( KoPAPageBase * page, KoShape * shape )
     if ( applicationData ) {
         // reinsert animations. this is needed on undo of a delete shape that had a animations
         QSet<KPrShapeAnimation *> animations = applicationData->animations();
-        for ( QSet<KPrShapeAnimation *>::const_iterator it( animations.begin() ); it != animations.end(); ++it ) {
+        for ( QSet<KPrShapeAnimation *>::const_iterator it( animations.constBegin() ); it != animations.constEnd(); ++it ) {
             addAnimation( *it );
         }
     }
@@ -247,7 +247,7 @@ void KPrDocument::postRemoveShape( KoPAPageBase * page, KoShape * shape )
     KPrShapeApplicationData * applicationData = dynamic_cast<KPrShapeApplicationData*>( shape->applicationData() );
     if ( applicationData ) {
         QSet<KPrShapeAnimation *> animations = applicationData->animations();
-        for ( QSet<KPrShapeAnimation *>::const_iterator it( animations.begin() ); it != animations.end(); ++it ) {
+        for ( QSet<KPrShapeAnimation *>::const_iterator it( animations.constBegin() ); it != animations.constEnd(); ++it ) {
             // remove animations, don't remove from shape application data so that it can be reinserted on undo.
             removeAnimation( *it, false );
         }

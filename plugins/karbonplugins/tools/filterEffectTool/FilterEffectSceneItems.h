@@ -107,7 +107,6 @@ public:
     explicit EffectItem(KoFilterEffect *effect);
 
 private:
-    KoFilterEffect * m_effect;
 };
 
 /// Graphics item representing an connection between an output and input

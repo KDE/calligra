@@ -566,7 +566,7 @@ void RectStorageLoader<T>::run()
 {
     static int total = 0;
     debugSheets << "Loading conditional styles";
-    QTime t; t.start();
+    QElapsedTimer t; t.start();
 
     QList<QPair<QRegion, T> > treeData;
     typedef QPair<QRegion, T> TRegion;

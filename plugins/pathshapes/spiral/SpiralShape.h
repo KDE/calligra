@@ -84,8 +84,10 @@ private:
 
     // fade parameter
     qreal m_fade;
+#if 0
     // angle for modifying the kind in radiant
     qreal m_kindAngle;
+#endif
     // the center of the spiral
     QPointF m_center;
     // the radii of the spiral

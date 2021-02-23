@@ -27,7 +27,6 @@
 
 ChangeVideoCommand::ChangeVideoCommand(VideoShape *videoShape, VideoData *newVideoData, KUndo2Command *parent)
     : KUndo2Command(parent),
-      m_first(true),
       m_newVideoData(newVideoData),
       m_shape(videoShape)
 {

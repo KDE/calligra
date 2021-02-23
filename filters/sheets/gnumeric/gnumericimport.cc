@@ -29,9 +29,9 @@
 #include <QByteArray>
 #include <QPen>
 #include <QDomDocument>
+#include <QDebug>
 
 #include <KCompressionDevice>
-#include <kdebug.h>
 #include <kpluginfactory.h>
 
 #include <KoFilterChain.h>
@@ -145,12 +145,12 @@ void GNUMERICFilter::GnumericDate::jul2greg(double num, int & y, int & m, int & 
     if (i > g_dateSerial_19000228)
         --i;
     else if (i == g_dateSerial_19000228 + 1)
-        kWarning(30521) << "Request for date 02/29/1900.";
+        qDebug() << "Request for date 02/29/1900.";
 
-    kDebug(30521) << "***** Num:" << num << ", i:" << i;
+    qDebug() << "***** Num:" << num << ", i:" << i;
 
     QDate::fromJulianDay(i + g_dateOrigin).getDate(&y, &m, &d);
-    kDebug(30521) << "y:" << y << ", m:" << m << ", d:" << d;
+    qDebug() << "y:" << y << ", m:" << m << ", d:" << d;
 }
 
 QTime GNUMERICFilter::GnumericDate::getTime(double num)
@@ -159,14 +159,14 @@ QTime GNUMERICFilter::GnumericDate::getTime(double num)
     num += HALF_SEC;
     int secs = qRound((num - floor(num)) * SECS_PER_DAY);
 
-    kDebug(30521) << "***** Num:" << num << ", secs" << secs;
+    qDebug() << "***** Num:" << num << ", secs" << secs;
 
     const int h = secs / 3600;
     secs -= h * 3600;
     const int m = secs / 60;
     secs -= h * 60;
 
-    kDebug(30521) << "****** h:" << h << ", m:" << m << ", secs:" << secs;
+    qDebug() << "****** h:" << h << ", m:" << m << ", secs:" << secs;
     const QTime time(h, m, (secs < 0 || secs > 59 ? 0 : secs));
 
     return time;
@@ -649,9 +649,9 @@ bool GNUMERICFilter::setType(const Cell& kspread_cell,
 {
     int i = 0;
     for (i = 0; cell_date_format[i] ; ++i) {
-        kDebug(30521) << "Format::Cell:" << cell_date_format[i] << ", FormatString:" << formatString;
+        qDebug() << "Format::Cell:" << cell_date_format[i] << ", FormatString:" << formatString;
         if ((formatString == "d/m/yy") || (formatString == cell_date_format[i])) {
-            kDebug(30521) << "   FormatString: Date:" << formatString << ", CellContent:" << cell_content;
+            qDebug() << "   FormatString: Date:" << formatString << ", CellContent:" << cell_content;
             QDate date;
             if (!kspread_cell.isDate()) {
                 // convert cell_content to date
@@ -659,13 +659,13 @@ bool GNUMERICFilter::setType(const Cell& kspread_cell,
                 bool ok = true;
                 int val  = cell_content.toInt(&ok);
 
-                kDebug(30521) << "!!!   FormatString: Date:" << formatString << ", CellContent:" << cell_content
+                qDebug() << "!!!   FormatString: Date:" << formatString << ", CellContent:" << cell_content
                 << ", Double: " << val << endl;
                 if (!ok)
                     return false;
 
                 GnumericDate::jul2greg(val, y, m, d);
-                kDebug(30521) << "     num:" << val << ", y:" << y << ", m:" << m << ", d:" << d;
+                qDebug() << "     num:" << val << ", y:" << y << ", m:" << m << ", d:" << d;
 
                 date.setDate(y, m, d);
             } else
@@ -705,7 +705,7 @@ bool GNUMERICFilter::setType(const Cell& kspread_cell,
                 /* 12, 13, 14, 15, 20, 21 */
             }
 
-            kDebug(30521) << "i:" << i << ", Type:" << type << ", Date:" << date.toString();
+            qDebug() << "i:" << i << ", Type:" << type << ", Date:" << date.toString();
 
             Cell cell(kspread_cell);
             cell.setValue(Value(date, kspread_cell.sheet()->map()->calculationSettings()));
@@ -725,7 +725,7 @@ bool GNUMERICFilter::setType(const Cell& kspread_cell,
                 bool ok = true;
                 double content = cell_content.toDouble(&ok);
 
-                kDebug(30521) << "   FormatString: Time:" << formatString << ", CellContent:" << cell_content
+                qDebug() << "   FormatString: Time:" << formatString << ", CellContent:" << cell_content
                 << ", Double: " << content << endl;
 
                 if (!ok)
@@ -747,7 +747,7 @@ bool GNUMERICFilter::setType(const Cell& kspread_cell,
                 type = Format::Time1; break;
             }
 
-            kDebug(30521) << "i:" << i << ", Type:" << type;
+            qDebug() << "i:" << i << ", Type:" << type;
             Cell cell(kspread_cell);
             cell.setValue(Value(time));
             Style style;
@@ -777,7 +777,7 @@ QString GNUMERICFilter::convertVars(QString const & str, Sheet * table) const
         int n = result.indexOf(list1[i]);
 
         if (n != -1) {
-            kDebug(30521) << "Found var:" << list1[i];
+            qDebug() << "Found var:" << list1[i];
             if (i == 0)
                 result.replace(list1[i], table->sheetName());
             else
@@ -809,7 +809,7 @@ double GNUMERICFilter::parseAttribute(const QDomElement &_element)
 
 void GNUMERICFilter::ParsePrintInfo(QDomNode const & printInfo, Sheet * table)
 {
-    kDebug(30521) << "Parsing print info";
+    qDebug() << "Parsing print info";
 
     float fleft = 2.0;
     float fright = 2.0;
@@ -842,7 +842,7 @@ void GNUMERICFilter::ParsePrintInfo(QDomNode const & printInfo, Sheet * table)
 
     QDomElement foot(printInfo.namedItem("Footer").toElement());
     if (!foot.isNull()) {
-        kDebug(30521) << "Parsing footer:" << foot.attribute("Left") << "," << foot.attribute("Middle") << ","
+        qDebug() << "Parsing footer:" << foot.attribute("Left") << "," << foot.attribute("Middle") << ","
         << foot.attribute("Right") << ", " << endl;
         if (foot.hasAttribute("Left"))
             footLeft = convertVars(foot.attribute("Left"), table);
@@ -854,7 +854,7 @@ void GNUMERICFilter::ParsePrintInfo(QDomNode const & printInfo, Sheet * table)
 
     QDomElement head(printInfo.namedItem("Header").toElement());
     if (!head.isNull()) {
-        kDebug(30521) << "Parsing header:" << head.attribute("Left") << "," << head.attribute("Middle") << "," << head.attribute("Right") << ",";
+        qDebug() << "Parsing header:" << head.attribute("Left") << "," << head.attribute("Middle") << "," << head.attribute("Right") << ",";
         if (head.hasAttribute("Left"))
             headLeft = convertVars(head.attribute("Left"), table);
         if (head.hasAttribute("Middle"))
@@ -1036,7 +1036,7 @@ void GNUMERICFilter::convertFormula(QString & formula) const
 
 void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
 {
-    kDebug(30521) << "SetStyleInfo entered";
+    qDebug() << "SetStyleInfo entered";
     ValueParser *const parser = table->map()->parser();
 
     int row, column;
@@ -1058,7 +1058,7 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
             int startRow = e.attribute("startRow").toInt() + 1;
             int endRow   = e.attribute("endRow").toInt() + 1;
 
-            kDebug(30521) << "------Style:" << startCol << ","
+            qDebug() << "------Style:" << startCol << ","
             << startRow << " - " << endCol << ", " << endRow << endl;
 
             if (endCol - startCol > 200 || endRow - startRow > 200) {
@@ -1068,20 +1068,20 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
 
             for (column = startCol; column <= endCol; ++column) {
                 for (row = startRow; row <= endRow; ++row) {
-                    kDebug(30521) << "Cell:" << column << "," << row;
+                    qDebug() << "Cell:" << column << "," << row;
                     Cell kspread_cell(table, column, row);
                     Style style;
 
                     // don't create new cells -> don't apply format on empty cells, if bigger region
                     if ((kspread_cell.isDefault() || kspread_cell.isEmpty())
                             && ((endCol - startCol > 2) || (endRow - startRow > 2))) {
-                        kDebug(30521) << "CELL EMPTY OR RANGE TOO BIG";
+                        qDebug() << "CELL EMPTY OR RANGE TOO BIG";
                         continue;
                     }
 
                     QDomElement style_element = gnumericStyle.toElement(); // try to convert the node to an element.
 
-                    kDebug(30521) << "Style valid for Calligra Sheets";
+                    qDebug() << "Style valid for Calligra Sheets";
                     kspread_cell = Cell(table, column, row);
 
                     if (style_element.hasAttribute("Fore")) {
@@ -1245,7 +1245,7 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
                     if (style_element.hasAttribute("Format")) {
                         QString formatString = style_element.attribute("Format");
 
-                        kDebug(30521) << "Format:" << formatString;
+                        qDebug() << "Format:" << formatString;
                         ParseFormat(formatString, kspread_cell);
 
                     } // End "Format"
@@ -1257,7 +1257,7 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
                     if (!validation.isNull()) {
                         QDomElement validation_element = validation.toElement();
                         if (!validation_element.isNull()) {
-                            kDebug(30521) << " Cell validation";
+                            qDebug() << " Cell validation";
                             Validity kspread_validity = kspread_cell.validity();
                             if (validation_element.hasAttribute("AllowBlank") && validation_element.attribute("AllowBlank") == "true") {
                                 kspread_validity.setAllowEmptyCell(true);
@@ -1284,7 +1284,7 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
                                     kspread_validity.setAction(Validity::Information);
                                     break;
                                 default:
-                                    kDebug() << " Error in validation style :" << value;
+                                    qDebug() << " Error in validation style :" << value;
                                     break;
                                 }
                             }
@@ -1350,7 +1350,7 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
                                                 kspread_validity.setMinimumValue(value1);
                                             break;
                                         default:
-                                            kDebug() << " Error in validation Operator :" << value;
+                                            qDebug() << " Error in validation Operator :" << value;
                                             break;
                                         }
                                     }
@@ -1408,7 +1408,7 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
                                                 kspread_validity.setMinimumValue(value1);
                                             break;
                                         default:
-                                            kDebug() << " Error in validation Operator :" << value;
+                                            qDebug() << " Error in validation Operator :" << value;
                                             break;
                                         }
                                     }
@@ -1469,7 +1469,7 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
                                             kspread_validity.setCondition(Conditional::InferiorEqual);
                                             break;
                                         default:
-                                            kDebug() << " Error in validation Operator :" << value;
+                                            qDebug() << " Error in validation Operator :" << value;
                                             break;
                                         }
                                     }
@@ -1524,7 +1524,7 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
                                             kspread_validity.setCondition(Conditional::InferiorEqual);
                                             break;
                                         default:
-                                            kDebug() << " Error in validation Operator :" << value;
+                                            qDebug() << " Error in validation Operator :" << value;
                                             break;
                                         }
                                     }
@@ -1581,13 +1581,13 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
                                             kspread_validity.setCondition(Conditional::InferiorEqual);
                                             break;
                                         default:
-                                            kDebug() << " Error in validation Operator :" << value;
+                                            qDebug() << " Error in validation Operator :" << value;
                                             break;
                                         }
                                     }
                                     break;
                                 default:
-                                    kDebug() << " Error in Type element :" << valueOp;
+                                    qDebug() << " Error in Type element :" << valueOp;
                                 }
 
                             }
@@ -1649,7 +1649,7 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
                                 } else if (linkType == "GnmHLinkCurWB") {
                                     kspread_cell.setLink(target);
                                 } else
-                                    kDebug() << " linkType not defined :" << linkType;
+                                    qDebug() << " linkType not defined :" << linkType;
                             }
                         }
                     }
@@ -1675,30 +1675,30 @@ KoFilter::ConversionStatus GNUMERICFilter::convert(const QByteArray & from, cons
     dateInit();
     bool bSuccess = true;
 
-    kDebug(30521) << "Entering GNUmeric Import filter.";
+    qDebug() << "Entering GNUmeric Import filter.";
 
     KoDocument * document = m_chain->outputDocument();
     if (!document)
         return KoFilter::StupidError;
 
-    kDebug(30521) << "here we go..." << document->metaObject()->className();
+    qDebug() << "here we go..." << document->metaObject()->className();
 
     if (!qobject_cast<const Calligra::Sheets::Doc *>(document)) {    // it's safer that way :)
-        kWarning(30521) << "document isn't a Calligra::Sheets::Doc but a " << document->metaObject()->className();
+        qDebug() << "document isn't a Calligra::Sheets::Doc but a " << document->metaObject()->className();
         return KoFilter::NotImplemented;
     }
     if (from != "application/x-gnumeric" || to != "application/x-kspread") {
-        kWarning(30521) << "Invalid mimetypes " << from << " " << to;
+        qDebug() << "Invalid mimetypes " << from << " " << to;
         return KoFilter::NotImplemented;
     }
 
-    kDebug(30521) << "...still here...";
+    qDebug() << "...still here...";
 
     // No need for a dynamic cast here, since we use Qt's moc magic
     Doc * ksdoc = (Doc *) document;
 
     if (ksdoc->mimeType() != "application/x-kspread") {
-        kWarning(30521) << "Invalid document mimetype " << ksdoc->mimeType();
+        qDebug() << "Invalid document mimetype " << ksdoc->mimeType();
         return KoFilter::NotImplemented;
     }
 
@@ -1706,12 +1706,12 @@ KoFilter::ConversionStatus GNUMERICFilter::convert(const QByteArray & from, cons
     QIODevice* in = new KCompressionDevice(m_chain->inputFile(), KCompressionDevice::GZip);
 
     if (!in) {
-        kError(30521) << "Cannot create device for uncompressing! Aborting!" << endl;
+        qDebug() << "Cannot create device for uncompressing! Aborting!" << endl;
         return KoFilter::FileNotFound;
     }
 
     if (!in->open(QIODevice::ReadOnly)) {
-        kError(30521) << "Cannot open file for uncompressing! Aborting!" << endl;
+        qDebug() << "Cannot open file for uncompressing! Aborting!" << endl;
         delete in;
         return KoFilter::FileNotFound;
     }
@@ -1720,7 +1720,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert(const QByteArray & from, cons
     QString errorMsg;
     int errorLine, errorColumn;
     if (!doc.setContent(in, true, &errorMsg, &errorLine, &errorColumn)) {
-        kError(30521) << "Parsing error in " << from << "! Aborting!" << endl
+        qDebug() << "Parsing error in " << from << "! Aborting!" << endl
         << " In line: " << errorLine << ", column: " << errorColumn << endl
         << " Error message: " << errorMsg << endl;
         in->close();
@@ -1820,7 +1820,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert(const QByteArray & from, cons
         if (!printInfo.isNull())
             ParsePrintInfo(printInfo, table);
 
-        kDebug(30521) << "Reading in cells";
+        qDebug() << "Reading in cells";
 
         /* CELL handling START */
         QDomNode cells = sheet.namedItem("Cells");
@@ -1828,7 +1828,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert(const QByteArray & from, cons
         QDomNode mergedCells = sheet.namedItem("MergedRegions");
         QDomNode mergedRegion = mergedCells.namedItem("Merge");
         if (cell.isNull()) {
-            kWarning(30521) << "No cells";
+            qDebug() << "No cells";
         }
 
         while (!cell.isNull()) {
@@ -1837,7 +1837,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert(const QByteArray & from, cons
 
             QDomElement e = cell.toElement(); // try to convert the node to an element.
             if (!e.isNull()) { // the node was really an element.
-                kDebug(30521) << "New Cell";
+                qDebug() << "New Cell";
                 QDomNode content_node = cell.namedItem("Content");
 
                 if (!content_node.isNull()) {
@@ -1890,13 +1890,13 @@ KoFilter::ConversionStatus GNUMERICFilter::convert(const QByteArray & from, cons
                             char * tmp_string = (char *) malloc(strlen(encoded_string.toLatin1()));
                             strcpy(tmp_string, encoded_string.toLatin1());
 
-                            kDebug(30521) << encoded_string.toLatin1();
+                            qDebug() << encoded_string.toLatin1();
 
                             exprID_dict.insert(e.attribute("ExprID").toLower(), tmp_string);
 
-                            kDebug(30521) << exprID_dict[e.attribute(QString("ExprID").toLower())];
-                            kDebug(30521) << exprID_dict[QString("1")];
-                            kDebug(30521) << e.attribute("ExprID");
+                            qDebug() << exprID_dict[e.attribute(QString("ExprID").toLower())];
+                            qDebug() << exprID_dict[QString("1")];
+                            qDebug() << e.attribute("ExprID");
 
                         }
                         kspread_cell.setStyle(style);
@@ -1952,10 +1952,10 @@ KoFilter::ConversionStatus GNUMERICFilter::convert(const QByteArray & from, cons
                         expr = exprID_dict[e.attribute("ExprID").toLower()];
                         // expr = exprID_dict[QString("1")];
 
-                        kDebug(30521) << "FOO:" << column << row;
-                        kDebug(30521) <<
+                        qDebug() << "FOO:" << column << row;
+                        qDebug() <<
                         Cell(table, column, row).decodeFormula(expr).toLatin1() << endl;
-                        kDebug(30521) << expr;
+                        qDebug() << expr;
 
                         setText(table, row, column, Cell(table, column, row).decodeFormula(expr), false);
                     }
@@ -1965,10 +1965,10 @@ KoFilter::ConversionStatus GNUMERICFilter::convert(const QByteArray & from, cons
             cell = cell.nextSibling();
         }
 
-        kDebug(30521) << "Reading in cells done";
+        qDebug() << "Reading in cells done";
 
         if (mergedRegion.isNull()) {
-            kWarning(30521) << "No cells merged !";
+            qDebug() << "No cells merged !";
         }
         while (!mergedRegion.isNull()) {
             QDomElement e = mergedRegion.toElement(); // try to convert the node to an element.

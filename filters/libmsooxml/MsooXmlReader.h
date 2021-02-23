@@ -143,7 +143,7 @@ private:
 
     QString m_fileName;
     bool m_readUndoed;
-    QXmlStreamReader::TokenType m_recentType;
+    // QXmlStreamReader::TokenType m_recentType;
 
     void init();
 };

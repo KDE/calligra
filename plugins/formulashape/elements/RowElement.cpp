@@ -75,7 +75,6 @@ void RowElement::layout( const AttributeManager* am )
         return;
     }
 
-    QPointF origin;
     qreal width = 0.0;
     qreal topToBaseline = 0.0;
     qreal baselineToBottom = 0.0;    

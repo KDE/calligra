@@ -26,8 +26,7 @@
 
 
 XFigStreamLineReader::XFigStreamLineReader(QIODevice* device)
-  : m_Device(device)
-  , m_TextStream(device)
+  : m_TextStream(device)
   , m_ObjectCode(-1)
   , m_HasError((device==0)||(! device->isReadable()))
 {

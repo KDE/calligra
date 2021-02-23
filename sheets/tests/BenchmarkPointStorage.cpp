@@ -254,7 +254,6 @@ void PointStorageBenchmark::testIterationPerformance()
     }
 
     //     qDebug() << endl << qPrintable( storage.dump() );
-    QString prefix = QString("%1 x %2").arg(maxrow).arg(maxcol);
 
     int v;
     QBENCHMARK {

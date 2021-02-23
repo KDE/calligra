@@ -25,7 +25,7 @@
 #include <QList>
 #include <QTextStream>
 #include <QByteArray>
-#include <kdebug.h>
+#include <QDebug>
 #include <math.h>
 #include <KoFilterChain.h>
 #include <kpluginfactory.h>
@@ -89,7 +89,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
 
     QFile in(m_chain->inputFile());
     if (!in.open(QIODevice::ReadOnly)) {
-        kError(30502) << "Unable to open input file!" << endl;
+        qWarning() << "Unable to open input file!";
         in.close();
         return KoFilter::FileNotFound;
     }
@@ -133,7 +133,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
         // Read one line
         QString mystr = nextLine(stream);
 
-        kDebug() << "INPUT :" << mystr;
+        qDebug() << "INPUT :" << mystr;
 
 
         /**********************************************************************
@@ -168,7 +168,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
 
             // Remember length of the string
             if (mystr.length() >= 80 - 1) {
-                //kDebug() << " Line >= 80 chars";
+                //qDebug() << " Line >= 80 chars";
                 bool ok = true;
                 do {
                     QString mystrn = nextLine(stream);
@@ -180,7 +180,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
                         ok = false;
                     }
                 } while (ok);
-                kDebug() << " Long line -> new input line:" << mystr;
+                qDebug() << " Long line -> new input line:" << mystr;
             }
 
             // Search for ')'
@@ -243,7 +243,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
                 while (mystr.at(pos).isSpace()) {
                     ++pos;
                 }
-                kDebug() << "Skipping value" << mystr.mid(0, pos);
+                qDebug() << "Skipping value" << mystr.mid(0, pos);
                 mystr.remove(0, pos);
 
                 if (contentType == ';') {
@@ -308,7 +308,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
                 if (pos > -1) str += my_rc.rc[pos];
             }
 
-            //kDebug()<<" Data : Text :"<<mystr<<" tab :"<<tabnostr<<""<< cellnostr <<"" <<ccol<<"" << irow<<""<< typeFormStr<<"" <<typeCharStr<<"" <<typeCellStr;
+            //qDebug()<<" Data : Text :"<<mystr<<" tab :"<<tabnostr<<""<< cellnostr <<"" <<ccol<<"" << irow<<""<< typeFormStr<<"" <<typeCharStr<<"" <<typeCellStr;
 
             /********************************************************************
              * Support for shared formulas                                      *
@@ -319,9 +319,9 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
                 mystr = convertFormula(mystr);
 
                 const QString formulaRefLine = nextLine(stream); // "Formula: 358"
-                kDebug() << "shared formula: next line is" << formulaRefLine;
+                qDebug() << "shared formula: next line is" << formulaRefLine;
                 if (!formulaRefLine.startsWith("Formula: ")) {
-                    kError() << "Missing formula ID after" << mystr;
+                    qWarning() << "Missing formula ID after" << mystr;
                 } else {
                     const QString key = formulaRefLine.mid(9);
                     t_sharedFormula sf;
@@ -348,31 +348,31 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
             const QStringList typeCharList = typeCharStr.split(',', QString::SkipEmptyParts);
             Q_FOREACH(const QString& typeChar, typeCharList) {
                 // Output
-                kDebug() << "typeChar: " << typeChar;
+                qDebug() << "typeChar: " << typeChar;
 
                 if (typeChar == "B") {
-                    kDebug() << " bold";
+                    qDebug() << " bold";
                     bold  = 1;
                 } else if (typeChar == "I") {
-                    kDebug() << "   = italic";
+                    qDebug() << "   = italic";
                     italic = 1;
                 } else if (typeChar == "U") {
-                    kDebug() << "   = underline";
+                    qDebug() << "   = underline";
                     underline = 1;
                 } else if (typeChar.startsWith("FG")) {
                     fg = typeChar.midRef(2).toInt();
-                    kDebug() << "  = Colornr" << fg;
+                    qDebug() << "  = Colornr" << fg;
                 } else if (typeChar.startsWith("TF")) {
                     fontnr = typeChar.midRef(2).toInt();
-                    kDebug() << " = Font :" << fontnr << "" << typefacetab[fontnr];
+                    qDebug() << " = Font :" << fontnr << "" << typefacetab[fontnr];
                 } else if (typeChar.startsWith('P')) {
                     fontsize = typeChar.midRef(1).toInt();
-                    kDebug() << "   = Fontsize" << fontsize;
+                    qDebug() << "   = Fontsize" << fontsize;
                 } else {
-                    kDebug() << "   = ??? Unknown typeChar:" << typeChar;
+                    qDebug() << "   = ??? Unknown typeChar:" << typeChar;
                 }
             }
-            kDebug();
+            qDebug();
 
 
             /********************************************************************
@@ -384,28 +384,28 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
             Q_FOREACH(const QString& typeFormat, typeFormList) {
                 // Grep horizontal alignment
                 if (typeFormat == "1") {
-                    kDebug() << " = left align";
+                    qDebug() << " = left align";
                     align = 1; // left
                 } else if (typeFormat == "2") {
-                    kDebug() << " = right align";
+                    qDebug() << " = right align";
                     align = 3; // right
                 } else if (typeFormat == "3") {
-                    kDebug() << " = center align";
+                    qDebug() << " = center align";
                     align = 2; // center
                 }
 
                 // Grep vertical alignment
                 else if (typeFormat == "VT") {
-                    kDebug() << " = top valign";
+                    qDebug() << " = top valign";
                     valign =  1; // top
                 } else if (typeFormat == "VC") {
-                    kDebug() << " = center valign";
+                    qDebug() << " = center valign";
                     valign =  0; // center - default (2)
                 } else if (typeFormat == "VB") {
-                    kDebug() << " = bottom valign";
+                    qDebug() << " = bottom valign";
                     valign =  3; // bottom
                 } else {
-                    kDebug() << "   = ??? unknown typeFormat" << typeFormat;
+                    qDebug() << "   = ??? unknown typeFormat" << typeFormat;
                 }
             }
 
@@ -425,7 +425,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
             Q_FOREACH(/*can't use const QString&*/ QString typeCell, typeCellList) {
 
                 if (typeCell[0] == 'T') {
-                    kDebug() << " = top";
+                    qDebug() << " = top";
                     transPenFormat(typeCell, &topPenWidth, &topPenStyle);
 
                     if (typeCell.length() > 2) {
@@ -436,7 +436,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
                 }
 
                 else if (typeCell[0] == 'B') {
-                    kDebug() << " = bottom";
+                    qDebug() << " = bottom";
                     transPenFormat(typeCell, &bottomPenWidth, &bottomPenStyle);
 
                     if (typeCell.length() > 2) {
@@ -446,7 +446,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
                 }
 
                 else if (typeCell[0] == 'L') {
-                    kDebug() << " = left";
+                    qDebug() << " = left";
                     transPenFormat(typeCell, &leftPenWidth, &leftPenStyle);
 
                     if (typeCell.length() > 2) {
@@ -456,7 +456,7 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
                 }
 
                 else if (typeCell[0] == 'R') {
-                    kDebug() << " = right";
+                    qDebug() << " = right";
                     transPenFormat(typeCell, &rightPenWidth, &rightPenStyle);
 
                     if (typeCell.length() > 2) {
@@ -467,12 +467,12 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
 
                 else if ((typeCell.startsWith("SH")) || (typeCell.startsWith("FG")) ||
                          (typeCell.startsWith("BG"))) {
-                    kDebug() << " =";
+                    qDebug() << " =";
                     filterSHFGBG(typeCell, &brushstyle, &fg_bg, &brushcolor);
                 }
 
                 else {
-                    kDebug() << "   = ??? unknown typeCell" << typeCell;
+                    qDebug() << "   = ??? unknown typeCell" << typeCell;
                 }
 
             }
@@ -584,12 +584,12 @@ KoFilter::ConversionStatus APPLIXSPREADImport::convert(const QByteArray& from, c
            "</spreadsheet>\n";
 //  str += "</DOC>\n";
 
-    kDebug() << "Text" << str;
+    qDebug() << "Text" << str;
 
     KoStoreDevice* out = m_chain->storageFile("root", KoStore::Write);
 
     if (!out) {
-        kError(38000/*30502*/) << "Unable to open output file!" << endl;
+        qWarning() << "Unable to open output file!";
         in.close();
         return KoFilter::StorageCreationError;
     }
@@ -838,7 +838,7 @@ APPLIXSPREADImport::readTypefaceTable(QTextStream &stream, QStringList &typeface
     QString mystr;
 
     // Read the colormap
-    kDebug() << "Reading typeface table:";
+    qDebug() << "Reading typeface table:";
 
     bool ok = true;
     do {
@@ -852,7 +852,7 @@ APPLIXSPREADImport::readTypefaceTable(QTextStream &stream, QStringList &typeface
         }
     } while (ok == true);
 
-    kDebug() << "... done";
+    qDebug() << "... done";
 }
 
 
@@ -866,7 +866,7 @@ APPLIXSPREADImport::readColormap(QTextStream &stream,  QList<t_mycolor*> &mcol)
     int contcount, pos;
 
     QString colstr, mystr;
-    kDebug() << "Reading colormap:";
+    qDebug() << "Reading colormap:";
 
     bool ok = true;
 
@@ -876,11 +876,11 @@ APPLIXSPREADImport::readColormap(QTextStream &stream,  QList<t_mycolor*> &mcol)
 
         if (mystr == "END COLORMAP") ok = false;
         else {
-            kDebug() << "  ->" << mystr;
+            qDebug() << "  ->" << mystr;
 
             // Count the number of  whitespaces
             contcount = mystr.count(' ');
-            kDebug() << "contcount:" << contcount;
+            qDebug() << "contcount:" << contcount;
             contcount -= 5;
 
             // Begin off interest
@@ -917,7 +917,7 @@ APPLIXSPREADImport::readColormap(QTextStream &stream,  QList<t_mycolor*> &mcol)
 
     } while (ok == true);
 
-    kDebug() << "... done" << mcol.count();
+    qDebug() << "... done" << mcol.count();
 
     foreach(t_mycolor* emp, mcol) {
         printf(" c:%3d m:%3d y:%3d k:%3d   r:%3d g:%3d b:%3d\n",
@@ -937,26 +937,26 @@ APPLIXSPREADImport::readView(QTextStream &stream, const QString &instr, t_rc &rc
     QString rowcolstr;
     QString mystr, tabname;
 
-    kDebug() << "Reading View";
+    qDebug() << "Reading View";
 
     tabname = instr;
 
     tabname.remove(0, 19);
     tabname.remove(tabname.length() - 2, 2);
-    kDebug() << "  - Table name:" << tabname;
+    qDebug() << "  - Table name:" << tabname;
 
     bool ok = true;
     do {
         mystr = nextLine(stream);
 
-        kDebug() << "" << mystr;
+        qDebug() << "" << mystr;
         if (mystr.startsWith("View End, Name:")) ok = false;
         else {
             // COLUMN Widths
             if (mystr.startsWith("View Column Widths")) {
-                kDebug() << "   - Column Widths";
+                qDebug() << "   - Column Widths";
                 mystr.remove(0, 20);
-                kDebug() << "" << mystr;
+                qDebug() << "" << mystr;
 
                 int  colwidth, icolumn;
                 char ccolumn;
@@ -994,9 +994,9 @@ APPLIXSPREADImport::readView(QTextStream &stream, const QString &instr, t_rc &rc
 
             // ROW Heights
             else if (mystr.startsWith("View Row Heights")) {
-                kDebug() << "   - Row Heights";
+                qDebug() << "   - Row Heights";
                 mystr.remove(0, 17);
-                kDebug() << "" << mystr;
+                qDebug() << "" << mystr;
 
                 int irow, rowheight;
 
@@ -1210,26 +1210,26 @@ APPLIXSPREADImport::translateColumnNumber(const QString& colstr)
     int p = len - 1;
     int x = 1;
 
-    //kDebug() << "len=" << len;
+    //qDebug() << "len=" << len;
     while (p >= 0) {
-        //kDebug() << "x=" << x << "p=" << p << "char=" << colstr[p].toLatin1();
+        //qDebug() << "x=" << x << "p=" << p << "char=" << colstr[p].toLatin1();
         const char c = colstr[p].toLatin1();
         // Upper chars
         if ((c >= 'A') && (c <= 'Z')) {
-            //kDebug() << " UPPER";
+            //qDebug() << " UPPER";
             icol += ((int)pow((double)x, 26) * (c - 'A' + 1));
             ++x;
         }
         // lower chars
         else if ((c >= 'a') && (c <= 'z')) {
-            //kDebug() << " lower";
+            //qDebug() << " lower";
             icol += ((int)pow((double)x, 26) * (c - 'a' + 1));
             ++x;
         }
         p--;
     }
 
-    kDebug() << colstr << "->" << icol;
+    qDebug() << colstr << "->" << icol;
     return icol;
 }
 

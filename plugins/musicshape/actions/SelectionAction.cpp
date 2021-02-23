@@ -47,7 +47,7 @@ SelectionAction::SelectionAction(SimpleEntryTool* tool)
     m_firstBar = -1;
 }
 
-inline static qreal sqr(qreal a) { return a*a; }
+// inline static qreal sqr(qreal a) { return a*a; }
 
 void SelectionAction::mousePress(Staff* staff, int barIdx, const QPointF& pos)
 {

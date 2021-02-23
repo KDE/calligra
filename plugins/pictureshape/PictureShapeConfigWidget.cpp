@@ -117,7 +117,7 @@ void PictureShapeConfigWidget::slotAccept()
     m_fileWidget->accept();
     const QUrl url = m_fileWidget->selectedUrl();
     if (!url.isEmpty()) {
-        KIO::StoredTransferJob *job = KIO::storedGet(url, KIO::NoReload, 0);
+        KIO::StoredTransferJob *job = KIO::storedGet(url, KIO::NoReload, {});
         PictureShapeLoadWaiter *waiter = new PictureShapeLoadWaiter(m_shape);
         connect(job, &KJob::result, waiter, &PictureShapeLoadWaiter::setImageData);
     }

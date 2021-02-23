@@ -40,8 +40,8 @@ void decompose(const QTransform &m, qreal &scaleX, qreal &scaleY, qreal &rotatio
     qreal b = m.m12();
     qreal c = m.m21();
     qreal d = m.m22();
-    qreal e = m.m31();
-    qreal f = m.m32();
+    //qreal e = m.m31();
+    //qreal f = m.m32();
     
     qreal Delta = a * d - b * c;
     
@@ -151,6 +151,8 @@ void CalloutContainerModel::containerChanged(KoShapeContainer *container, KoShap
 
 void CalloutContainerModel::childChanged(KoShape *shape, KoShape::ChangeType type)
 {
+    Q_UNUSED(shape);
+    Q_UNUSED(type);
 //     debugCalloutF<<type;
 //     if (type == KoShape::Deleted) {
 //         return;
@@ -211,10 +213,6 @@ void CalloutContainerModel::resizePath(PathShape *path, const QPointF &newPos, c
     params.property("viewBox", viewboxData);
     QRect viewBox = path->viewBox();
     
-    qreal currViewboxModifierRatioX = modifiers[0] / viewBox.width();
-    qreal currViewboxModifierRatioY = modifiers[1] / viewBox.height();
-    qreal viewboxModifierRatioX = 1.0;
-    qreal viewboxModifierRatioY = 1.0;
     if (m_prevSize.isValid()) {
         bool pointerLeft = modifiers[0] < viewBox.left();
         bool pointerRight = modifiers[0] > viewBox.right();
@@ -279,7 +277,6 @@ void CalloutContainerModel::resizePath(PathShape *path, const QPointF &newPos, c
             debugCallout<<'\t'<<"right side resize and modifier X is inside viewbox";
             qreal ax = newSize.width();
             qreal bx = m_prevSize.width();
-            qreal vbx = viewBox.width();
             qreal rx = ax / bx;
             qreal x = modifiers[0] - viewBox.left();
             qreal mx = x / rx;
@@ -310,7 +307,6 @@ void CalloutContainerModel::resizePath(PathShape *path, const QPointF &newPos, c
             debugCallout<<'\t'<<"bottom side resize and modifier Y is inside viewbox";
             qreal a = newSize.height();
             qreal b = m_prevSize.height();
-            qreal vb = viewBox.height();
             qreal ry = a / b;
             qreal y = modifiers[1] - viewBox.top();
             qreal m = y / ry;

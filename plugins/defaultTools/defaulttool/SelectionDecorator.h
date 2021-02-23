@@ -68,8 +68,10 @@ public:
     static KoFlake::Position hotPosition();
 
 private:
+#if 0
     bool m_rotationHandles, m_shearHandles;
     KoFlake::SelectionHandle m_arrows;
+#endif
     static KoFlake::Position m_hotPosition;
     KoSelection *m_selection;
     int m_handleRadius;

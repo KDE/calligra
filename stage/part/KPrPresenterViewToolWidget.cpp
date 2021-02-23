@@ -24,7 +24,7 @@
 #include <QLabel>
 #include <QToolButton>
 #include <QTimer>
-
+#include <QTime>
 
 KPrPresenterViewToolWidget::KPrPresenterViewToolWidget(QWidget *parent)
     : QFrame(parent)

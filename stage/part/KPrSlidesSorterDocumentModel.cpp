@@ -213,7 +213,7 @@ bool KPrSlidesSorterDocumentModel::removeRows(int row, int count, const QModelIn
 Qt::ItemFlags KPrSlidesSorterDocumentModel::flags(const QModelIndex &index) const
 {
     if (!m_document) {
-        return 0;
+        return {};
     }
 
     Qt::ItemFlags defaultFlags = QAbstractListModel::flags (index);

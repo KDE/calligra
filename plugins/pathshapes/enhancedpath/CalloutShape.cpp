@@ -262,6 +262,7 @@ KoTextShapeDataBase *CalloutShape::textData() const
 
 void CalloutShape::setTextArea(const QRectF &rect)
 {
+    Q_UNUSED(rect);
     //setPreferredTextRect(rect);
 }
 

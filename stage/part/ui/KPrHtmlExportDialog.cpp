@@ -260,7 +260,7 @@ void KPrHtmlExportDialog::generatePreview(int item)
     slides.append(this->m_allSlides.at(frameToRender));
     slidesNames.append(ui.kListBox_slides->item(frameToRender)->text());
 
-    QUrl url = previewGenerator.exportPreview(KPrHtmlExport::Parameter(templateUrl(), static_cast<KPrView*>(parentWidget()), slides, QUrl(),
+    previewGenerator.exportPreview(KPrHtmlExport::Parameter(templateUrl(), static_cast<KPrView*>(parentWidget()), slides, QUrl(),
                                               this->author(), ui.klineedit_title->text(), slidesNames, false));
 //     preview.mainFrame()->load(url);
 }

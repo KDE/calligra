@@ -32,12 +32,15 @@ KoFlake::Position SelectionDecorator::m_hotPosition = KoFlake::TopLeftCorner;
 
 SelectionDecorator::SelectionDecorator(KoFlake::SelectionHandle arrows,
         bool rotationHandles, bool shearHandles)
-: m_rotationHandles(rotationHandles)
+:/* m_rotationHandles(rotationHandles)
 , m_shearHandles(shearHandles)
 , m_arrows(arrows)
-, m_handleRadius( 3 )
+,*/ m_handleRadius( 3 )
 , m_lineWidth( 1 )
 {
+    Q_UNUSED(arrows);
+    Q_UNUSED(rotationHandles);
+    Q_UNUSED(shearHandles);
 #if 0
     if(s_rotateCursor == 0) {
         s_rotateCursor->load(QStandardPaths::locate(QStandardPaths::GenericDataLocation, "calligra/cursors/cursor_rotate.png"));
@@ -78,7 +81,6 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
     pen.setWidth(m_lineWidth);
     pen.setJoinStyle(Qt::RoundJoin);
     painter.setPen( pen );
-    bool editable=false;
     KoShape::AllowedInteractions interactions;
     foreach (KoShape *shape, m_selection->selectedShapes(KoFlake::StrippedSelection)) {
         // apply the shape transformation on top of the old painter transformation

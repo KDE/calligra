@@ -88,7 +88,7 @@ void VectorTool::changeUrlPressed()
     const QUrl url = QFileDialog::getOpenFileUrl(/*QT5TODO: QLatin1String("image/x-emf image/x-wmf image/x-svm image/svg+xml")*/);
     if (!url.isEmpty()) {
         // TODO move this to an action in the libs, with a nice dialog or something.
-        KIO::StoredTransferJob *job = KIO::storedGet(url, KIO::NoReload, 0);
+        KIO::StoredTransferJob *job = KIO::storedGet(url, KIO::NoReload, {});
         connect(job, &KJob::result, this, &VectorTool::setImageData);
     }
 

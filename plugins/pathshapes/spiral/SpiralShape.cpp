@@ -29,7 +29,7 @@
 
 SpiralShape::SpiralShape()
     : m_fade(.9)
-    , m_kindAngle(M_PI)
+    //, m_kindAngle(M_PI)
     , m_radii(100.0, 100.0)
     , m_type(Curve)
     , m_clockwise(true)

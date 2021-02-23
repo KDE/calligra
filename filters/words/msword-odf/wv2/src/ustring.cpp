@@ -76,7 +76,7 @@ bool wvWare::isNaN(double d)
 bool wvWare::isPosInf(double d)
 {
 #if defined(HAVE_FUNC_ISINF)
-  return (isinf(d) == 1);
+  return (isinf(d) && (d > 0));
 #elif defined(HAVE_FUNC_ISFINITE)
   return isfinite(d) == 0 && d == d; // ### can we distinguish between + and - ?
 #elif defined(HAVE_FUNC_FINITE)
@@ -91,7 +91,7 @@ bool wvWare::isPosInf(double d)
 bool wvWare::isNegInf(double d)
 {
 #if defined(HAVE_FUNC_ISINF)
-  return (isinf(d) == -1);
+  return (isinf(d) && (d < 0));
 #elif defined(HAVE_FUNC_ISFINITE)
   return isfinite(d) == 0 && d == d; // ###
 #elif defined(HAVE_FUNC_FINITE)

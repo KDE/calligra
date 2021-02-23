@@ -49,18 +49,19 @@ public:
      */
     ~KoColorPopupAction() override;
 
-public Q_SLOTS:
-    /// Sets a new color to be displayed
-    void setCurrentColor( const QColor &color );
-
-    /// Sets a new color to be displayed
-    void setCurrentColor( const KoColor &color );
 
     /// Returns the current color
     QColor currentColor() const;
 
     /// Returns the current color as a KoColor
     KoColor currentKoColor() const;
+
+public Q_SLOTS:
+    /// Sets a new color to be displayed
+    void setCurrentColor( const QColor &color );
+
+    /// Sets a new color to be displayed
+    void setCurrentColor( const KoColor &color );
 
     /// update the icon - only needed if you resize the iconsize in the widget that shows the action
     void updateIcon();

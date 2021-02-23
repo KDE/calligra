@@ -216,7 +216,7 @@ void CollectionTreeWidget::handleMousePress(QTreeWidgetItem* item)
 {
     if (item && !item->parent() &&
         QApplication::mouseButtons() == Qt::LeftButton)
-        setItemExpanded(item, !isItemExpanded(item));
+        item->setExpanded(!item->isExpanded());
 }
 
 void CollectionTreeWidget::slotListMode()

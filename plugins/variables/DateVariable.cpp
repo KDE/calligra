@@ -128,7 +128,7 @@ bool DateVariable::loadOdf(const KoXmlElement & element, KoShapeLoadingContext &
                 m_datetime = QDateTime(QDate::currentDate(), time);
             } else {
                 const QDate date = QDate::fromString(value, Qt::ISODate);
-                m_datetime = QDateTime(date);
+                m_datetime = date.startOfDay();
             }
             m_valueType = DateOrTime;
         }

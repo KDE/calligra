@@ -70,7 +70,7 @@ FixedDateFormat::FixedDateFormat(DateVariable *variable)
     int index = listDateFormat.indexOf(variable->definition());
     if (index >= 0) {
         widget.widgetStack->setCurrentWidget(widget.normalPage);
-        widget.formatList->setItemSelected(widget.formatList->item(index), true);
+        widget.formatList->item(index)->setSelected(true);
     } else {
         widget.widgetStack->setCurrentWidget(widget.customPage);
         widget.custom->setChecked(true);
@@ -167,6 +167,6 @@ void FixedDateFormat::customTextChanged(const QString& text)
         // back by selecting one.
         QListWidgetItem * item = widget.formatList->currentItem();
         if (item) // deselect it.
-            widget.formatList->setItemSelected(item, false);
+            item->setSelected(false);
     }
 }

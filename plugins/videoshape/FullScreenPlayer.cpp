@@ -197,7 +197,7 @@ void FullScreenPlayer::updatePlaybackTime(qint64 currentTime)
             .arg((time / 60000) % 60, 2, 10, QChar('0'))
             .arg((time / 1000) % 60, 2, 10, QChar('0'));
 
-    m_playbackTime->setText(QString("%1/%2").arg(currentPlayTime).arg(totalTime));
+    m_playbackTime->setText(QString("%1/%2").arg(currentPlayTime, totalTime));
 }
 
 

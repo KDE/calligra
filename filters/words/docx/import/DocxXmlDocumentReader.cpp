@@ -5472,7 +5472,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
         m_tableMainStyle->setMasterPageName("placeholder");
     }
     // Fix me, for tables inside tables this might not work
-    m_activeRoles = 0;
+    m_activeRoles = {};
 
     MSOOXML::Utils::XmlWriteBuffer buffer;
     body = buffer.setWriter(body);

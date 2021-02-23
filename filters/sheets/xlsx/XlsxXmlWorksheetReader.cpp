@@ -964,7 +964,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_cfRule()
         odf["style:condition"] = QString("cell-content()>%1").arg(m_formula);
     }
     else if (op == "between") {
-        odf["style:condition"] = QString("cell-content-is-between(%1, %2)").arg(formulas.at(0)).arg(formulas.at(1));
+        odf["style:condition"] = QString("cell-content-is-between(%1, %2)").arg(formulas.at(0), formulas.at(1));
     }
     odf["style:apply-style-name"] = m_context->styles->conditionalStyle(dxfId.toInt() + 1);
 

@@ -37,7 +37,6 @@ public:
     void undo() override;
 
 private:
-    bool m_first;
     VideoData *m_oldVideoData;
     VideoData *m_newVideoData;
     VideoShape *m_shape;

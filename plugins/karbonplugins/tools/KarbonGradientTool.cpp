@@ -70,7 +70,7 @@ KarbonGradientTool::KarbonGradientTool(KoCanvasBase *canvas)
         , m_hoverStrategy(0)
         , m_gradientWidget(0)
         , m_currentCmd(0)
-        , m_oldSnapStrategies(0)
+        , m_oldSnapStrategies({})
 {
 }
 

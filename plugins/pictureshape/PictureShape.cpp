@@ -612,7 +612,7 @@ void PictureShape::loadStyle(const KoXmlElement& element, KoShapeLoadingContext&
     if (styleStack.hasProperty(KoXmlNS::style, "mirror")) {
         QString mirrorMode = styleStack.property(KoXmlNS::style, "mirror");
 
-        QFlags<PictureShape::MirrorMode>  mode = 0;
+        QFlags<PictureShape::MirrorMode> mode = {};
 
         // Only one of the horizontal modes
         if (mirrorMode.contains("horizontal-on-even")) {

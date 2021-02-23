@@ -1040,13 +1040,13 @@ QString extractConditional(const QString &_text)
         else qCDebug(lcExcelImport) << "Probably unhandled condition=" << text[1] << "in text=" << text;
         if (! end.isNull()) {
             {
-                QString regex = QString("^_%1(.*\"\\$\".*)%2;.*").arg(QString("\\%1").arg(text[1])).arg(QString("\\%1").arg(end));
+                QString regex = QString("^_%1(.*\"\\$\".*)%2;.*").arg(QString("\\%1").arg(text[1]), QString("\\%1").arg(end));
                 QRegExp ex(regex);
                 ex.setMinimal(true);
                 if (ex.indexIn(text) >= 0) return ex.cap(1);
             }
             {
-                QString regex = QString("^_%1(.*\\[\\$.*\\].*)%2;.*").arg(QString("\\%1").arg(text[1])).arg(QString("\\%1").arg(end));
+                QString regex = QString("^_%1(.*\\[\\$.*\\].*)%2;.*").arg(QString("\\%1").arg(text[1]), QString("\\%1").arg(end));
                 QRegExp ex(regex);
                 ex.setMinimal(true);
                 if (ex.indexIn(text) >= 0) return ex.cap(1);

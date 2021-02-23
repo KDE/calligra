@@ -83,7 +83,7 @@ void FormulaCursor::paint( QPainter& painter ) const
     pen.setColor(Qt::black);
     painter.setPen( pen );
     painter.drawLine(m_currentElement->cursorLine( m_position ));
-    pen.setWidth( 0.1);
+    pen.setWidthF( 0.1);
     pen.setColor(Qt::blue);
     pen.setStyle(Qt::DashLine);
     painter.setPen( pen );

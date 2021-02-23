@@ -238,7 +238,6 @@ EffectItem::EffectItem(KoFilterEffect *effect)
         : EffectItemBase(effect)
 {
     Q_ASSERT(effect);
-    QRectF circle(QPointF(), ConnectorSize);
 
     QPointF position(ItemWidth, ConnectorSize.height());
 

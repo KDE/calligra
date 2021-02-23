@@ -800,7 +800,7 @@ void KarbonView::pathSnapToGrid()
                     continue;
 
                 QPointF docPoint = path->shapeToDocument(p->point());
-                QPointF offset = snapGuide.snap(docPoint, 0) - docPoint;
+                QPointF offset = snapGuide.snap(docPoint, {}) - docPoint;
                 points.append(KoPathPointData(path, index));
                 offsets.append(offset);
             }

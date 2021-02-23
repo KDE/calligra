@@ -123,8 +123,6 @@ void FileHeader::generate(QTextStream &out)
 /*******************************************/
 void FileHeader::generatePaper(QTextStream &out)
 {
-    QString unit;
-
     out << "% Format of paper" << endl;
     debugLatex << "Generate custom size paper";
     /* paper size */

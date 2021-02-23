@@ -236,7 +236,7 @@ bool KoFormulaShape::loadEmbeddedDocument( KoStore *store,
     }
 
     if ( !res ) {
-        QString errorMessage = m_document->errorMessage();
+        // QString errorMessage = m_document->errorMessage();
         return false;
     }
 

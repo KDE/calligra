@@ -136,7 +136,7 @@ private:
         XMLSchemaDate,                      //11
         XMLSchemaDateTime,                  //12
         FixedUserDateFormat,                //13
-    }eDateTimeFormat;
+    } eDateTimeFormat;
 
     //Slide *master;
     /**

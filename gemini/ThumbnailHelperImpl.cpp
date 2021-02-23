@@ -34,8 +34,7 @@
 #include <QPainter>
 #include <QMimeType>
 
-static const int minThumbnailSize = 400;
-static const int timeoutTime = 5000; // in msec
+// static const int minThumbnailSize = 400;
 
 ThumbnailHelperImpl::ThumbnailHelperImpl(QObject* parent)
     : QObject(parent)
@@ -72,7 +71,6 @@ bool ThumbnailHelperImpl::convert(const QString& in, const QString& out, int wid
     // prepare the document object
     m_doc->setCheckAutoSaveFile(false);
     m_doc->setAutoErrorHandlingEnabled(false); // don't show message boxes
-    connect(m_doc, SIGNAL(completed()), SLOT(onLoadingCompleted()));
 
     // load the document content
     QUrl url = QUrl::fromLocalFile(in);

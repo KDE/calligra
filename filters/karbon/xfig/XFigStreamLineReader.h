@@ -50,7 +50,6 @@ public:
     bool readNextLine(CommentReadModus commentModus = DropComments);
 
 private:
-    QIODevice* const m_Device;
     QTextStream m_TextStream;
 
     QString m_Comment;

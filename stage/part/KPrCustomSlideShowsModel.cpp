@@ -97,7 +97,7 @@ int KPrCustomSlideShowsModel::rowCount(const QModelIndex &parent) const
 Qt::ItemFlags KPrCustomSlideShowsModel::flags(const QModelIndex &index) const
 {
     if (m_activeCustomSlideShowName.isEmpty()) {
-        return 0;
+        return {};
     }
 
     Qt::ItemFlags defaultFlags = QAbstractListModel::flags (index);

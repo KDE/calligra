@@ -607,13 +607,13 @@ void KarbonImport::loadPath(const KoXmlElement &element)
             KoXmlElement cmd;
             forEachElement(cmd, child) {
                 if (cmd.tagName() == "MOVE") {
-                    data += QString("M%1,%2 ").arg(cmd.attribute("x")).arg(cmd.attribute("y"));
+                    data += QString("M%1,%2 ").arg(cmd.attribute("x"), cmd.attribute("y"));
                 } else if (cmd.tagName() == "LINE") {
-                    data += QString("L%1,%2 ").arg(cmd.attribute("x")).arg(cmd.attribute("y"));
+                    data += QString("L%1,%2 ").arg(cmd.attribute("x"), cmd.attribute("y"));
                 } else if (cmd.tagName() == "CURVE") {
-                    data += QString("C%1,%2 %3,%4 %5,%6").arg(cmd.attribute("x1")).arg(cmd.attribute("y1"))
-                            .arg(cmd.attribute("x2")).arg(cmd.attribute("y2"))
-                            .arg(cmd.attribute("x3")).arg(cmd.attribute("y3"));
+                    data += QString("C%1,%2 %3,%4 %5,%6").arg(cmd.attribute("x1"), cmd.attribute("y1"),
+                            cmd.attribute("x2"), cmd.attribute("y2"),
+                            cmd.attribute("x3"), cmd.attribute("y3"));
                 }
             }
 

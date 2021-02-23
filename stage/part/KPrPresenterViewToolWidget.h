@@ -20,7 +20,7 @@
 #ifndef KPRPRESENTERVIEWTOOLWIDGET
 #define KPRPRESENTERVIEWTOOLWIDGET
 
-#include <QTime>
+#include <QElapsedTimer>
 #include <QFrame>
 
 class QLabel;
@@ -52,7 +52,7 @@ private:
     QLabel *m_clockLabel;
     QLabel *m_timerLabel;
 
-    QTime m_currentTime;
+    QElapsedTimer m_currentTime;
     QTimer *m_clockTimer;
 };
 

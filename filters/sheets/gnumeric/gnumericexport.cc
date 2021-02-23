@@ -22,13 +22,12 @@
    2004 - Some updates by Tim Beaulen (tbscope@gmail.com) */
 
 #include <gnumericexport.h>
-#include <kdebug.h>
 #include <KCompressionDevice>
 #include <kpluginfactory.h>
 #include <klocale.h>
 #include <KoFilterChain.h>
 #include <KoZoomHandler.h>
-#include <QApplication>
+#include <QDebug>
 #include <QList>
 #include <QFile>
 #include <QTextStream>
@@ -472,7 +471,7 @@ QDomElement GNUMERICExport::GetFontStyle(QDomDocument gnumeric_doc, const Cell& 
 {
     QDomElement font_style;
     const Style style = cell.style();
-    kDebug(30521) << " currentcolumn :" << currentcolumn << " currentrow :" << currentrow;
+    qDebug() << " currentcolumn :" << currentcolumn << " currentrow :" << currentrow;
     font_style = gnumeric_doc.createElement("gmr:Font");
     font_style.appendChild(gnumeric_doc.createTextNode(style.fontFamily()));
 
@@ -862,7 +861,7 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc, const Cell& 
         break;
     default:
         // This is a required parameter, so let's write a sane default
-        kWarning(30521) << "Unhandled Format value, setting 'General' as default: " << style.formatType();
+        qWarning() << "Unhandled Format value, setting 'General' as default: " << style.formatType();
         stringFormat = "General";
         break;
     }
@@ -923,7 +922,7 @@ void GNUMERICExport::addSummaryItem(QDomDocument gnumeric_doc, QDomElement summa
 // approach is because we don't want to export formulas but values !
 KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const QByteArray& to)
 {
-    kDebug(30521) << "Exporting GNUmeric";
+    qDebug() << "Exporting GNUmeric";
 
     QDomDocument gnumeric_doc = QDomDocument();
 
@@ -933,18 +932,18 @@ KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const
         return KoFilter::StupidError;
 
     if (!qobject_cast<const Calligra::Sheets::Doc *>(document)) {    // it's safer that way :)
-        kWarning(30521) << "document isn't a Calligra::Sheets::Doc but a " << document->metaObject()->className();
+        qWarning() << "document isn't a Calligra::Sheets::Doc but a " << document->metaObject()->className();
         return KoFilter::NotImplemented;
     }
     if (to != "application/x-gnumeric" || from != "application/x-kspread") {
-        kWarning(30521) << "Invalid mimetypes " << to << " " << from;
+        qWarning() << "Invalid mimetypes " << to << " " << from;
         return KoFilter::NotImplemented;
     }
 
     Doc* ksdoc = (Doc*)document;
 
     if (ksdoc->mimeType() != "application/x-kspread") {
-        kWarning(30521) << "Invalid document mimetype " << ksdoc->mimeType();
+        qWarning() << "Invalid document mimetype " << ksdoc->mimeType();
         return KoFilter::NotImplemented;
     }
 
@@ -1354,7 +1353,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const
                             domNode = domNode.firstChild();
                         }
 
-                        //kDebug(30521) <<"---> link, text =" << text;
+                        //qDebug() <<"---> link, text =" << text;
 
                         linkUrl = domRoot.attribute("href");
                         linkText = text;
@@ -1460,12 +1459,12 @@ KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const
     QIODevice* out = new KCompressionDevice(m_chain->outputFile(), KCompressionDevice::GZip);
 
     if (!out) {
-        kError(30521) << "No output file! Aborting!" << endl;
+        qWarning() << "No output file! Aborting!";
         return KoFilter::FileNotFound;
     }
 
     if (!out->open(QIODevice::WriteOnly)) {
-        kError(30521) << "Unable to open output file! Aborting!" << endl;
+        qWarning() << "Unable to open output file! Aborting!";
         delete out;
         return KoFilter::FileNotFound;
     }

@@ -175,7 +175,7 @@ void PictureTool::changeUrlPressed()
 
     if (!url.isEmpty()) {
         // TODO move this to an action in the libs, with a nice dialog or something.
-        KIO::StoredTransferJob *job = KIO::storedGet(url, KIO::NoReload, 0);
+        KIO::StoredTransferJob *job = KIO::storedGet(url, KIO::NoReload, {});
         connect(job, &KJob::result, this, &PictureTool::setImageData);
     }
 }

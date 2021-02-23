@@ -202,7 +202,7 @@ KoFilter::ConversionStatus HTMLImport::loadUrl(const QUrl &url)
         QDomNode frame = frameset.item(0);
 
         if (!frame.isNull()) {
-            for(uint i = 0; i < frameset.length(); ++i) {
+            for(int i = 0; i < frameset.length(); ++i) {
                 for (QDomNode n = frameset.item(i).firstChild(); !n.isNull(); n = n.nextSibling()) {
                     QDomElement f = n.toElement();
                     if(!f.isNull() && f.nodeName().toLower() == "frame" && f.attribute("name") == "frSheet")

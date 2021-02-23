@@ -40,7 +40,7 @@ QObject* singletonFactory(QQmlEngine*, QJSEngine*)
 
 void CalligraComponentsPlugin::registerTypes(const char* uri)
 {
-    Q_ASSERT(uri == QLatin1Literal{"org.kde.calligra"});
+    Q_ASSERT(uri == QLatin1String{"org.kde.calligra"});
 
     qmlRegisterType<Calligra::Components::Document>(uri, 1, 0, "Document");
     qmlRegisterType<Calligra::Components::View>(uri, 1, 0, "View");

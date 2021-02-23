@@ -100,7 +100,7 @@ void KPrPlaceholderTool::activate(ToolActivation toolActivation, const QSet<KoSh
         QList<KoShape *> shapes;
         shapes.append( newShape );
         canvas()->shapeManager()->selection()->select( newShape );
-        activateTool( KoToolManager::instance()->preferredToolForSelection( shapes ) );
+        emit activateTool( KoToolManager::instance()->preferredToolForSelection( shapes ) );
     }
     else {
         emit done();
