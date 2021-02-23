@@ -360,7 +360,7 @@ void KoTableCellStyle::applyStyle(QTextTableCellFormat &format) const
             parentBorder.setBorderData(KoBorder::BltrBorder, childBorder.borderData(KoBorder::BltrBorder));
         if (childBorder.hasBorder(KoBorder::TlbrBorder))
             parentBorder.setBorderData(KoBorder::TlbrBorder, childBorder.borderData(KoBorder::TlbrBorder));
-        format.setProperty(Borders, QVariant::fromValue<KoBorder>(parentBorder));
+        format.setProperty(Borders, QVariant::fromValue(parentBorder));
     }
 }
 

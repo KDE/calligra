@@ -39,9 +39,9 @@ void TestTableSource::init()
 
     QStandardItem *table3 = new QStandardItem;
     QStandardItem *table4 = new QStandardItem;
-    table3->setData(qVariantFromValue(QPointer<QAbstractItemModel>(&m_table3)),
+    table3->setData(QVariant::fromValue(QPointer<QAbstractItemModel>(&m_table3)),
                     Qt::DisplayRole);
-    table4->setData(qVariantFromValue(QPointer<QAbstractItemModel>(&m_table4)),
+    table4->setData(QVariant::fromValue(QPointer<QAbstractItemModel>(&m_table4)),
                     Qt::DisplayRole);
 
     m_sheetAccessModel.setItem(0, 0, table3);

@@ -206,7 +206,7 @@ bool KoTableStyle::keepWithNext() const
 
 void KoTableStyle::setShadow(const KoShadowStyle &shadow)
 {
-    d->setProperty(Shadow, QVariant::fromValue<KoShadowStyle>(shadow));
+    d->setProperty(Shadow, QVariant::fromValue(shadow));
 }
 
 KoShadowStyle KoTableStyle::shadow() const

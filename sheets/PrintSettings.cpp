@@ -139,9 +139,7 @@ void PrintSettings::setPageOrientation(KoPageFormat::Orientation orientation)
 QString PrintSettings::paperFormatString() const
 {
     if (d->pageLayout.format == KoPageFormat::CustomSize) {
-        QString tmp;
-        tmp.sprintf("%fx%f", d->pageLayout.width, d->pageLayout.height);
-        return tmp;
+        return QString::asprintf("%fx%f", d->pageLayout.width, d->pageLayout.height);
     }
     return KoPageFormat::formatString(d->pageLayout.format);
 }

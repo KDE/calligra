@@ -1212,7 +1212,7 @@ KoParagraphStyle::VerticalAlign KoParagraphStyle::verticalAlignment() const
 
 void KoParagraphStyle::setShadow(const KoShadowStyle &shadow)
 {
-    d->setProperty(Shadow, QVariant::fromValue<KoShadowStyle>(shadow));
+    d->setProperty(Shadow, QVariant::fromValue(shadow));
 }
 
 KoShadowStyle KoParagraphStyle::shadow() const

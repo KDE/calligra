@@ -148,9 +148,7 @@ static void splitToRowAndColumn(const char *source, int sourceStart, int sourceL
 //! @return value @a cm with cm suffix
 static QString printCm(double cm)
 {
-    QString string;
-    string.sprintf("%3.3fcm", cm);
-    return string;
+    return QString::asprintf("%3.3fcm", cm);
 }
 
 

@@ -1263,7 +1263,7 @@ int KoCharacterStyle::textScale() const
 
 void KoCharacterStyle::setTextShadow(const KoShadowStyle& shadow)
 {
-    d->setProperty(TextShadow, qVariantFromValue<KoShadowStyle>(shadow));
+    d->setProperty(TextShadow, QVariant::fromValue(shadow));
 }
 
 KoShadowStyle KoCharacterStyle::textShadow() const

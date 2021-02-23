@@ -133,7 +133,7 @@ void KWNavigationWidget::updateData()
 
             QStandardItem *item = new QStandardItem(block.text());
             item->setData(block.position(), Qt::UserRole + 1);
-            item->setData(qVariantFromValue((void *)doc), Qt::UserRole + 2);
+            item->setData(QVariant::fromValue((void *)doc), Qt::UserRole + 2);
             QList< QStandardItem *> buf;
 
             KoTextLayoutRootArea *a = m_layout->rootAreaForPosition(block.position());
