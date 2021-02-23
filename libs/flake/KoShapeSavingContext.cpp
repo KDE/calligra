@@ -71,7 +71,7 @@ public:
 KoShapeSavingContextPrivate::KoShapeSavingContextPrivate(KoXmlWriter &w,
         KoGenStyles &s, KoEmbeddedDocumentSaver &e)
         : xmlWriter(&w),
-        savingOptions(0),
+        savingOptions({}),
         imageId(0),
         mainStyles(s),
         embeddedSaver(e)

@@ -168,7 +168,7 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
 
     layout->addWidget(toolbar);
 
-    m_zoomController = new KoZoomController(m_gui->canvasController(), &m_zoomHandler, actionCollection(), 0, this);
+    m_zoomController = new KoZoomController(m_gui->canvasController(), &m_zoomHandler, actionCollection(), KoZoomAction::SpecialButtons(), this);
     if (statusBar())
         KWStatusBar::addViewControls(statusBar(), this);
 

@@ -248,7 +248,7 @@ QVariant KoPADocumentModel::data( const QModelIndex &index, int role ) const
 Qt::ItemFlags KoPADocumentModel::flags(const QModelIndex &index) const
 {
     if ( !m_document ) {
-        return 0;
+        return {};
     }
 
     if ( ! index.isValid() ) {

@@ -92,7 +92,7 @@ KoDockWidgetTitleBar::KoDockWidgetTitleBar(QDockWidget* dockWidget)
     connect(dockWidget, SIGNAL(featuresChanged(QDockWidget::DockWidgetFeatures)), SLOT(featuresChanged(QDockWidget::DockWidgetFeatures)));
     connect(dockWidget, SIGNAL(topLevelChanged(bool)), SLOT(topLevelChanged(bool)));
 
-    d->featuresChanged(0);
+    d->featuresChanged({});
 }
 
 KoDockWidgetTitleBar::~KoDockWidgetTitleBar()

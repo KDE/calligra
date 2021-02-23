@@ -347,7 +347,7 @@ void ParagraphBulletsNumbers::selectListImage()
     dlg.setCaption(i18n("Select a list image"));
     QUrl url = QUrl::fromLocalFile(dlg.filename());
     if (!url.isEmpty()) {
-        KIO::StoredTransferJob *job = KIO::storedGet(url, KIO::NoReload, 0);
+        KIO::StoredTransferJob *job = KIO::storedGet(url, KIO::NoReload, {});
         connect(job, &KJob::result, this, &ParagraphBulletsNumbers::setImageData);
     }
 }

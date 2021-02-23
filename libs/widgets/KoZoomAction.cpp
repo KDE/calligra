@@ -120,7 +120,7 @@ KoZoomAction::KoZoomAction(KoZoomMode::Modes zoomModes, const QString& text, QOb
     , d(new Private(this))
 {
     d->zoomModes = zoomModes;
-    d->specialButtons = nullptr;
+    d->specialButtons = {};
     setIcon(koIcon("zoom-original"));
     setEditable( true );
     setMaxComboViewCount( 15 );

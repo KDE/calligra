@@ -132,7 +132,7 @@ bool TableOfContentsEntryModel::setData(const QModelIndex &index, const QVariant
 Qt::ItemFlags TableOfContentsEntryModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid()) {
-        return 0;
+        return {};
     }
     if (index.column() == Levels) {
         return (Qt::ItemIsSelectable | Qt::ItemIsEnabled);
@@ -140,7 +140,7 @@ Qt::ItemFlags TableOfContentsEntryModel::flags(const QModelIndex &index) const
     if (index.column() == Styles) {
         return (Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEditable);
     }
-    return 0;
+    return {};
 }
 
 QVariant TableOfContentsEntryModel::headerData(int section, Qt::Orientation orientation, int role) const

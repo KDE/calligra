@@ -104,8 +104,8 @@ void KoDockWidgetTitleBarButton::paintEvent(QPaintEvent *)
     style()->drawPrimitive(QStyle::PE_PanelButtonTool, &opt, &p, this);
 
     opt.icon = icon();
-    opt.subControls = 0;
-    opt.activeSubControls = 0;
+    opt.subControls = {};
+    opt.activeSubControls = {};
     opt.features = QStyleOptionToolButton::None;
     opt.arrowType = Qt::NoArrow;
     int size = style()->pixelMetric(QStyle::PM_SmallIconSize, 0, this);

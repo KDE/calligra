@@ -70,7 +70,7 @@ KoFindText::~KoFindText()
 void KoFindText::findImplementation(const QString &pattern, QList<KoFindMatch> & matchList)
 {
     KoFindOptionSet *opts = options();
-    QTextDocument::FindFlags flags = 0;
+    QTextDocument::FindFlags flags = {};
 
     if(opts->option("caseSensitive")->value().toBool()) {
         flags |= QTextDocument::FindCaseSensitively;

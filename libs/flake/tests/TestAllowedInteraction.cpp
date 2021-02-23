@@ -292,7 +292,7 @@ void TestAllowedInteraction::testParentAllowedInteractions()
     QVERIFY(shape->allowedInteractions() == parent->allowedInteractions(shape));
     parent->addShape(shape);
     QVERIFY(shape->allowedInteractions() == parent->allowedInteractions(shape));
-    parent->setAllowedInteractions(0);
+    parent->setAllowedInteractions({});
     QVERIFY(shape->allowedInteractions() == parent->allowedInteractions(shape));
     QVERIFY(!(shape->allowedInteractions() & KoShape::MoveAllowed));
     QVERIFY(!(shape->allowedInteractions() & KoShape::ResizeAllowed));
@@ -386,7 +386,7 @@ void TestAllowedInteraction::testGrandParentAllowedInteractions()
     grandParent->addShape(parent);
     QVERIFY(shape->allowedInteractions() == parent->allowedInteractions(shape));
 
-    grandParent->setAllowedInteractions(0);
+    grandParent->setAllowedInteractions({});
     QVERIFY(shape->allowedInteractions() == grandParent->allowedInteractions());
     QVERIFY(!(shape->allowedInteractions() & KoShape::MoveAllowed));
     QVERIFY(!(shape->allowedInteractions() & KoShape::ResizeAllowed));

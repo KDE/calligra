@@ -2264,7 +2264,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_p()
     m_minParaFontPt = TEXT_FONTSIZE_MAX;
     m_maxParaFontPt = TEXT_FONTSIZE_MIN;
 
-    m_read_DrawingML_p_args = 0;
+    m_read_DrawingML_p_args = {};
     m_paragraphStyleNameWritten = false;
     m_listStylePropertiesAltered = false;
 

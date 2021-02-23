@@ -935,7 +935,7 @@ void KoPathTool::documentResourceChanged(int key, const QVariant & res)
         // repaint with the bigger of old and new handle radius
         int maxRadius = qMax(m_handleRadius, oldHandleRadius);
         foreach(KoPathShape *shape, m_pointSelection.selectedShapes()) {
-            QRectF controlPointRect = shape->absoluteTransformation(0).map(shape->outline()).controlPointRect();
+            QRectF controlPointRect = shape->absoluteTransformation(nullptr).map(shape->outline()).controlPointRect();
             repaint(controlPointRect.adjusted(-maxRadius, -maxRadius, maxRadius, maxRadius));
         }
     }

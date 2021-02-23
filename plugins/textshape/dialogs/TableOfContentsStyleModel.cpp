@@ -125,14 +125,14 @@ QVariant TableOfContentsStyleModel::data(const QModelIndex &index, int role) con
 Qt::ItemFlags TableOfContentsStyleModel::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
-        return 0;
+        return {};
     if (index.column() == 0) {
         return (Qt::ItemIsSelectable | Qt::ItemIsEnabled);
     }
     if (index.column() == 1) {
         return (Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEditable);
     }
-    return 0;
+    return {};
 }
 
 bool TableOfContentsStyleModel::setData(const QModelIndex &index, const QVariant &value, int role)

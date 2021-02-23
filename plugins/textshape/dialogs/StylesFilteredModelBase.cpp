@@ -88,7 +88,7 @@ QVariant StylesFilteredModelBase::data(const QModelIndex &index, int role) const
 Qt::ItemFlags StylesFilteredModelBase::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
-        return 0;
+        return {};
     return (Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 }
 

@@ -558,7 +558,7 @@ bool KoEncryptedStore::openRead(const QString& name)
             } else {
                 if (!m_filename.isNull())
                     keepPass = false;
-                KPasswordDialog dlg(d->window , keepPass ? KPasswordDialog::ShowKeepPassword : static_cast<KPasswordDialog::KPasswordDialogFlags>(0));
+                KPasswordDialog dlg(d->window , keepPass ? KPasswordDialog::ShowKeepPassword : KPasswordDialog::KPasswordDialogFlags());
                 dlg.setPrompt(i18n("Please enter the password to open this file."));
                 if (! dlg.exec()) {
                     m_bPasswordDeclined = true;

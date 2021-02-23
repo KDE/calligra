@@ -1364,7 +1364,7 @@ void OutputPainterStrategy::stretchDiBits( StretchDiBitsRecord &record )
 
     QPainter::RenderHints      oldRenderHints = m_painter->renderHints();
     QPainter::CompositionMode  oldCompMode    = m_painter->compositionMode();
-    m_painter->setRenderHints(0); // Antialiasing makes composition modes invalid
+    m_painter->setRenderHints({}); // Antialiasing makes composition modes invalid
     m_painter->setCompositionMode(rasteropToQtComposition(record.rasterOperation()));
     m_painter->drawImage(target, record.image(), source);
     m_painter->setCompositionMode(oldCompMode);
