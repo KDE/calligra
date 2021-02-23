@@ -39,7 +39,7 @@ class StylesModel;
 class DockerStylesComboModel;
 class StylesDelegate;
 
-namespace Lists {class ListStyleItem;};
+namespace Lists {struct ListStyleItem;};
 
 class SimpleParagraphWidget : public QWidget
 {
