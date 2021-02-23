@@ -129,7 +129,6 @@ bool KoShapeContainer::isChildLocked(const KoShape *child) const
 KoShape::AllowedInteractions KoShapeContainer::allowedInteractions(const KoShape *child) const
 {
     Q_D(const KoShapeContainer);
-    KoShape::AllowedInteractions state;
     if (!d->model) {
         return child->allowedInteractions(false);
     }

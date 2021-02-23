@@ -194,6 +194,7 @@ void FormattingButton::addItem(ItemChooserAction *chooser, const QPixmap &pm, in
 
 QAction *FormattingButton::addItemMenuItem(ItemChooserAction *chooser, int id, const QString &text)
 {
+    Q_UNUSED(chooser);
     //Note: Do not use 0 as the item id, because that will break the m_lastId functionality
     Q_ASSERT(id != 0);
 

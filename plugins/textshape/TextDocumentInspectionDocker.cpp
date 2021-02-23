@@ -32,12 +32,10 @@
 #include <QTreeView>
 
 
-const int MsecsThresholdForMergingCommands = 2000;
-
 
 TextDocumentInspectionDocker::TextDocumentInspectionDocker(QWidget * parent)
     : QDockWidget(parent)
-    , m_canvas(0)
+    , m_canvas(nullptr)
     , m_mainWidget(new QTreeView(this))
     , m_textDocumentStructureModel(new TextDocumentStructureModel(this))
 {

@@ -684,7 +684,7 @@ void KoApplication::slotFilePrint(KoMainWindow *mainWindow)
 
 void KoApplication::slotExportToPdf(KoMainWindow *mainWindow)
 {
-    KoPrintJob *job = mainWindow->exportToPdf(d->pdfFileName);
+    mainWindow->exportToPdf(d->pdfFileName);
     // TODO: exit if all jobs over
 }
 

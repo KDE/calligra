@@ -756,7 +756,6 @@ void KoPAView::pageUpdated(KoPAPageBase* page)
 void KoPAView::updateCanvasSize(bool forceUpdate)
 {
     const KoPageLayout &layout = viewMode()->activePageLayout();
-    QPoint scrollValue(d->canvasController->scrollBarValue());
 
     QSizeF pageSize(layout.width, layout.height);
     QSizeF viewportSize = d->canvasController->viewportSize();

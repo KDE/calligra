@@ -81,10 +81,11 @@ int ParagraphBulletsNumbers::addStyle(const Lists::ListStyleItem &lsi)
 
 void ParagraphBulletsNumbers::setDisplay(KoParagraphStyle *style, int level, bool directFormattingMode)
 {
+    Q_UNUSED(directFormattingMode);
     KoListStyle *listStyle = style->listStyle();
-    widget.listPropertiesPane->setEnabled(listStyle != 0);
+    widget.listPropertiesPane->setEnabled(listStyle != nullptr);
     widget.customCharacter->setText("-");
-    if (listStyle == 0) {
+    if (listStyle == nullptr) {
         widget.listTypes->setCurrentRow(0);
         return;
     }
@@ -123,7 +124,7 @@ void ParagraphBulletsNumbers::setDisplay(KoParagraphStyle *style, int level, boo
         widget.imageHeight->setValue(llp.height());
         widget.imageWidth->setValue(llp.width());
     } else {
-        m_data = 0;
+        m_data = nullptr;
         widget.imageHeight->setValue(0);
         widget.imageWidth->setValue(0);
     }

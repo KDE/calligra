@@ -46,6 +46,7 @@
 namespace Libwmf
 {
 
+#if DEBUG_RECORDS
 // Used for debugging of records
 static const struct KoWmfFunc {
     const char *name;
@@ -164,7 +165,7 @@ static const struct KoWmfFunc {
     { "createBitmap" }, // 110 0xfe
     { "createRegion" } // 111 0xff
 };
-
+#endif
 
 WmfParser::WmfParser()
 {
