@@ -182,16 +182,6 @@ void IndexTitleTemplate::saveOdf(KoXmlWriter* writer) const
     writer->endElement();
 }
 
-IndexSourceStyle::IndexSourceStyle()
-{
-}
-
-IndexSourceStyle::IndexSourceStyle(const IndexSourceStyle& indexSourceStyle)
-{
-    styleName = indexSourceStyle.styleName;
-    styleId = indexSourceStyle.styleId;
-}
-
 void IndexSourceStyle::saveOdf(KoXmlWriter* writer) const
 {
     writer->startElement("text:index-source-style");
@@ -213,6 +203,17 @@ IndexSourceStyles::IndexSourceStyles(const IndexSourceStyles &indexSourceStyles)
         styles.append(style);
     }
 }
+
+IndexSourceStyles& IndexSourceStyles::operator=(const IndexSourceStyles &indexSourceStyles)
+{
+    outlineLevel = indexSourceStyles.outlineLevel;
+
+    foreach (const IndexSourceStyle &style, indexSourceStyles.styles) {
+        styles.append(style);
+    }
+    return *this;
+}
+
 
 void IndexSourceStyles::saveOdf(KoXmlWriter* writer) const
 {
@@ -246,10 +247,6 @@ IndexEntry *IndexEntryLinkEnd::clone()
     return newIndexEntry;
 }
 
-TocEntryTemplate::TocEntryTemplate()
-{
-}
-
 TocEntryTemplate::TocEntryTemplate(const TocEntryTemplate &entryTemplate)
 {
     outlineLevel = entryTemplate.outlineLevel;
@@ -259,6 +256,18 @@ TocEntryTemplate::TocEntryTemplate(const TocEntryTemplate &entryTemplate)
     foreach (IndexEntry *entry, entryTemplate.indexEntries) {
         indexEntries.append(entry->clone());
     }
+}
+
+TocEntryTemplate & TocEntryTemplate::operator=(const TocEntryTemplate& entryTemplate)
+{
+    outlineLevel = entryTemplate.outlineLevel;
+    styleName = entryTemplate.styleName;
+    styleId = entryTemplate.styleId;
+
+    foreach (IndexEntry *entry, entryTemplate.indexEntries) {
+        indexEntries.append(entry->clone());
+    }
+    return *this;
 }
 
 void TocEntryTemplate::saveOdf(KoXmlWriter* writer) const
@@ -325,6 +334,11 @@ BibliographyEntryTemplate::BibliographyEntryTemplate()
 {
 }
 
+BibliographyEntryTemplate::BibliographyEntryTemplate(const QString& type, const QList<IndexEntry *>& entries)
+    : indexEntries(entries), bibliographyType(type)
+{
+}
+
 BibliographyEntryTemplate::BibliographyEntryTemplate(const BibliographyEntryTemplate &entryTemplate)
 {
     styleName = entryTemplate.styleName;
@@ -335,5 +349,18 @@ BibliographyEntryTemplate::BibliographyEntryTemplate(const BibliographyEntryTemp
     }
 
     bibliographyType = entryTemplate.bibliographyType;
+}
+
+BibliographyEntryTemplate & BibliographyEntryTemplate::operator=(const BibliographyEntryTemplate& entryTemplate)
+{
+    styleName = entryTemplate.styleName;
+    styleId = entryTemplate.styleId;
+
+    foreach (IndexEntry *entry, entryTemplate.indexEntries) {
+        indexEntries.append(entry->clone());
+    }
+
+    bibliographyType = entryTemplate.bibliographyType;
+    return *this;
 }
 

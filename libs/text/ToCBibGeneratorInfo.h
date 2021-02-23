@@ -20,7 +20,7 @@
 #ifndef TOCBIBGENERATORINFO_H
 #define TOCBIBGENERATORINFO_H
 
-#include <KoText.h>
+#include "KoText.h"
 
 const int INVALID_OUTLINE_LEVEL = 0;
 
@@ -114,8 +114,9 @@ public:
 class KOTEXT_EXPORT TocEntryTemplate
 {
 public:
-    TocEntryTemplate();
+    TocEntryTemplate() = default;
     TocEntryTemplate(const TocEntryTemplate &other);
+    TocEntryTemplate& operator=(const TocEntryTemplate& other);
     void saveOdf(KoXmlWriter * writer) const;
 
     int outlineLevel;
@@ -139,8 +140,6 @@ public:
 class KOTEXT_EXPORT IndexSourceStyle
 {
 public:
-    IndexSourceStyle(const IndexSourceStyle& indexSourceStyle);
-    IndexSourceStyle();
     void saveOdf(KoXmlWriter * writer) const;
 
     QString styleName;
@@ -153,6 +152,7 @@ class KOTEXT_EXPORT IndexSourceStyles
 public:
     IndexSourceStyles();
     IndexSourceStyles(const IndexSourceStyles &indexSourceStyles);
+    IndexSourceStyles& operator=(const IndexSourceStyles& indexSourceStyles);
     void saveOdf(KoXmlWriter * writer) const;
 
     int outlineLevel;
@@ -173,7 +173,9 @@ class KOTEXT_EXPORT BibliographyEntryTemplate
 {
 public:
     BibliographyEntryTemplate();
+    BibliographyEntryTemplate(const QString &type, const QList<IndexEntry*> &entries);
     BibliographyEntryTemplate(const BibliographyEntryTemplate &other);
+    BibliographyEntryTemplate& operator=(const BibliographyEntryTemplate&);
     void saveOdf(KoXmlWriter * writer) const;
 
     QString styleName;

@@ -153,7 +153,7 @@ QTextCharFormat KoTableCellStyle::cleanCharFormat(const QTextCharFormat &charFor
 
             ++it;
         }
-        return format;
+        return std::move(format);
     }
     return QTextCharFormat();
 }
