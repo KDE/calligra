@@ -74,7 +74,7 @@ public:
      * @param size the size you want to have the pixmap
      * @param pm the pixmap
      */
-    bool find( const QString & key, const QSize & size, QPixmap & pm );
+    bool find( const QString & key, const QSize & size, QPixmap * pm );
 
     /**
      * Insert a copy of the pixmap into the cache.

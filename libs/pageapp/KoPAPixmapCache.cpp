@@ -66,7 +66,7 @@ void KoPAPixmapCache::clear( bool all )
     }
 }
 
-bool KoPAPixmapCache::find( const QString & key, const QSize & size, QPixmap & pm )
+bool KoPAPixmapCache::find( const QString & key, const QSize & size, QPixmap * pm )
 {
     QString k = generateKey( key, size );
     return QPixmapCache::find( k, pm );

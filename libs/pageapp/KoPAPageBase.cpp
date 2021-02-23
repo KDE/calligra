@@ -275,7 +275,7 @@ QPixmap KoPAPageBase::thumbnail( const QSize& size )
 #ifdef CACHE_PAGE_THUMBNAILS
     QString key = thumbnailKey();
     QPixmap pm;
-    if ( !KoPAPixmapCache::instance()->find( key, size, pm ) ) {
+    if ( !KoPAPixmapCache::instance()->find( key, size, &pm ) ) {
         pm = generateThumbnail( size );
         KoPAPixmapCache::instance()->insert( key, pm, size );
         debugPageApp << "create thumbnail" << this << key << size;
