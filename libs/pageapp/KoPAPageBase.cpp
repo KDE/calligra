@@ -342,9 +342,7 @@ void KoPAPageBase::pageUpdated()
 
 QString KoPAPageBase::thumbnailKey() const
 {
-     QString key;
-     key.sprintf( "%p", static_cast<const void *>( this ) );
-     return key;
+     return QString::asprintf( "%p", static_cast<const void *>( this ) );
 }
 
 KoShapeManagerPaintingStrategy * KoPAPageBase::getPaintingStrategy() const

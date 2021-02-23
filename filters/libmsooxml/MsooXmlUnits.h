@@ -66,8 +66,7 @@ namespace Utils {
 //! Performs EMU conversion and returns string.
 inline QString cmString(qreal cm)
 {
-    QString res;
-    return res.sprintf("%3.3fcm", cm);
+    return QString::asprintf("%3.3fcm", cm);
 }
 
 //! Converts EMU Unit of Measurement to cm.
