@@ -290,6 +290,8 @@ public Q_SLOTS:
     void setListProperties(const KoListLevelProperties &llp,
                            ChangeListFlags flags = ChangeListFlags(ModifyExistingList | MergeWithAdjacentList), KUndo2Command *parent = 0);
 
+
+public:
     // -------------------------------------------------------------
     // Wrapped QTextCursor methods
     // -------------------------------------------------------------
