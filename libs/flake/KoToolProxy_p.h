@@ -21,7 +21,7 @@
 #define KOTOOLPROXYPRIVATE_P
 
 #include <QTimer>
-#include <QTime>
+#include <QElapsedTimer>
 #include <QPointF>
 
 class KoPointerEvent;
@@ -63,7 +63,7 @@ public:
     int multiClickCount;
     Qt::MouseButton multiClickButton;
     QPointF multiClickGlobalPoint;
-    QTime multiClickTimeStamp;
+    QElapsedTimer multiClickTimeStamp;
 };
 
 #endif

@@ -2473,7 +2473,7 @@ void TestXmlReader::testLargeOpenDocumentSpreadsheet()
     printf("Raw XML size: %lld KB\n", xmldevice.size() / 1024);
 
 
-    QTime timer;
+    QElapsedTimer timer;
 
 #if 0
     // just to test parsing speed with plain dumb handler
@@ -2499,7 +2499,7 @@ void TestXmlReader::testLargeOpenDocumentSpreadsheet()
         return;
     }
 
-    printf("Large spreadsheet: KoXmlDocument parsing time is %d ms\n", timer.elapsed());
+    printf("Large spreadsheet: KoXmlDocument parsing time is %lld ms\n", timer.elapsed());
 
     // release memory taken by the XML document content
     //xmlstream.setDevice( 0 );
@@ -2585,7 +2585,7 @@ void TestXmlReader::testLargeOpenDocumentSpreadsheet()
         tableElement = tableElement.nextSibling().nextSibling().toElement();
     }
 
-    printf("Large spreadsheet: iterating time is %d ms\n", timer.elapsed());
+    printf("Large spreadsheet: iterating time is %lld ms\n", timer.elapsed());
 }
 
 void TestXmlReader::testExternalOpenDocumentSpreadsheet(const QString& filename)
@@ -2621,7 +2621,7 @@ void TestXmlReader::testExternalOpenDocumentSpreadsheet(const QString& filename)
 
     printf("Test external file: %s   %lld KB\n", qPrintable(filename), xmlfile.size() / 1024);
 
-    QTime timer;
+    QElapsedTimer timer;
     timer.start();
 
     KoXmlDocument doc;
@@ -2631,7 +2631,7 @@ void TestXmlReader::testExternalOpenDocumentSpreadsheet(const QString& filename)
     QCOMPARE(errorLine, 0);
     QCOMPARE(errorColumn, 0);
 
-    printf("External spreadsheet: parsing time is %d ms\n", timer.elapsed());
+    printf("External spreadsheet: parsing time is %lld ms\n", timer.elapsed());
 
     // namespaces that will be used
     QString officeNS = "urn:oasis:names:tc:opendocument:xmlns:office:1.0";

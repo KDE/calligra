@@ -97,7 +97,7 @@
 #include <QTextCursor>
 #include <QTextList>
 #include <QTextTable>
-#include <QTime>
+#include <QElapsedTimer>
 #include <QString>
 #include <QTextInlineObject>
 #include <QTextStream>
@@ -121,7 +121,7 @@ public:
     int bodyProgressTotal;
     int bodyProgressValue;
     int nextProgressReportMs;
-    QTime progressTime;
+    QElapsedTimer progressTime;
 
     QVector<KoList *> currentLists;
     KoListStyle *currentListStyle;

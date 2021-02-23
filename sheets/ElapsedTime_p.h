@@ -33,7 +33,7 @@
 #define ELAPSED_TIME_P_H
 
 #include "SheetsDebug.h"
-#include <QTime>
+#include <QElapsedTimer>
 
 namespace Calligra
 {
@@ -78,7 +78,7 @@ public:
     }
 
 private:
-    QTime   m_time;
+    QElapsedTimer   m_time;
     QString m_name;
 
 #endif // NDEBUG

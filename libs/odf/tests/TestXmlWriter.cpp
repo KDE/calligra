@@ -232,7 +232,7 @@ static const int NumParagraphs = 30000;
 
 void TestXmlWriter::speedTest()
 {
-    QTime time;
+    QElapsedTimer time;
     time.start();
     QString paragText = QString::fromUtf8("This is the text of the paragraph. I'm including a euro sign to test encoding issues: €");
     QString styleName = "Heading 1";
