@@ -1963,18 +1963,15 @@ bool KoDocument::addVersion(const QString& comment)
     if (!oasis)
         return false;
 
-    // TODO: use std::auto_ptr or create store on stack [needs API fixing],
-    // to remove all the 'delete store' in all the branches
     QByteArray data;
     QBuffer buffer(&data);
-    KoStore *store = KoStore::createStore(&buffer/*file*/, KoStore::Write, mimeType, backend);
+    auto store = std::unique_ptr<KoStore>(KoStore::createStore(&buffer/*file*/, KoStore::Write, mimeType, backend));
     if (store->bad()) {
-        delete store;
         return false;
     }
 
     debugMain << "Saving to OASIS format";
-    KoOdfWriteStore odfStore(store);
+    KoOdfWriteStore odfStore(store.get());
 
     KoXmlWriter *manifestWriter = odfStore.manifestWriter(mimeType);
     Q_UNUSED(manifestWriter); // XXX why?
@@ -1984,29 +1981,24 @@ bool KoDocument::addVersion(const QString& comment)
 
     if (!saveOdf(documentContext)) {
         debugMain << "saveOdf failed";
-        delete store;
         return false;
     }
 
     // Save embedded objects
     if (!embeddedSaver.saveEmbeddedDocuments(documentContext)) {
         debugMain << "save embedded documents failed";
-        delete store;
         return false;
     }
 
     // Write out manifest file
     if (!odfStore.closeManifestWriter()) {
         d->lastErrorMessage = i18n("Error while trying to write '%1'. Partition full?", QString("META-INF/manifest.xml"));
-        delete store;
         return false;
     }
 
     if (!store->finalize()) {
-        delete store;
         return false;
     }
-    delete store;
 
     KoVersionInfo version;
     version.comment = comment;
