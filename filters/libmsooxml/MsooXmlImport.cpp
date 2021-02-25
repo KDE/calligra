@@ -594,8 +594,8 @@ KoFilter::ConversionStatus MsooXmlImport::imageFromFile(const QString& sourceNam
     QString errorMessage;
     KoFilter::ConversionStatus status = KoFilter::OK;
 
-    std::auto_ptr<QIODevice> inputDevice(Utils::openDeviceForFile(m_zip, errorMessage, sourceName, status));
-    if (!inputDevice.get()) {
+    std::unique_ptr<QIODevice> inputDevice(Utils::openDeviceForFile(m_zip, errorMessage, sourceName, status));
+    if (!inputDevice) {
         return status;
     }
     QImageReader r(inputDevice.get(), QFileInfo(sourceName).suffix().toLatin1());
