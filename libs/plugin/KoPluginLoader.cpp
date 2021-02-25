@@ -122,7 +122,7 @@ void KoPluginLoader::load(const QString & directory, const PluginsConfig &config
     QList<QString> whiteList;
     foreach(QPluginLoader *loader, serviceNames) {
         KPluginFactory *factory = qobject_cast<KPluginFactory *>(loader->instance());
-        QObject *plugin = factory->create<QObject>(owner ? owner : pluginLoaderInstance, QVariantList());
+        QObject *plugin = factory ? factory->create<QObject>(owner ? owner : pluginLoaderInstance, QVariantList()) : nullptr;
         if (plugin) {
             QJsonObject json = loader->metaData().value("MetaData").toObject();
             json = json.value("KPlugin").toObject();
