@@ -185,9 +185,9 @@ PptxSlideProperties* PptxXmlDocumentReader::slideLayoutProperties(const QString&
     MSOOXML::Utils::splitPathAndFile(slideLayoutPathAndFile, &slideLayoutPath, &slideLayoutFile);
 
     // load layout or find in cache
-    PptxSlideProperties *result = d->slideLayoutPropertiesMap.value(slideLayoutPathAndFile);
-    if (result)
-        return result;
+    PptxSlideProperties *resultInCache = d->slideLayoutPropertiesMap.value(slideLayoutPathAndFile);
+    if (resultInCache)
+        return resultInCache;
 
     QString slideMasterPath, slideMasterFile;
     MSOOXML::Utils::splitPathAndFile(m_context->relationships->targetForType(slidePath, slideFile,
@@ -195,7 +195,7 @@ PptxSlideProperties* PptxXmlDocumentReader::slideLayoutProperties(const QString&
     const QString slideMasterPathAndFile = m_context->relationships->targetForType(slideMasterPath, slideMasterFile,
          QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/slideMaster");
 
-    result = new PptxSlideProperties();
+    auto result = std::unique_ptr<PptxSlideProperties>(new PptxSlideProperties());
     result->m_slideMasterName = slideMasterPathAndFile;
 
     VmlDrawingReader vmlreader(this);
@@ -219,13 +219,12 @@ PptxSlideProperties* PptxXmlDocumentReader::slideLayoutProperties(const QString&
         }
     }
 
-    MSOOXML::Utils::AutoPtrSetter<PptxSlideProperties> slideLayoutPropertiesSetter(&result);
     PptxXmlSlideReaderContext context(
         *m_context->import,
         slideLayoutPath, slideLayoutFile,
         0/*unused*/, &d->slideMasterPageProperties[slideMasterPathAndFile].theme,
         PptxXmlSlideReader::SlideLayout,
-        result,
+        result.get(),
         &d->slideMasterPageProperties[slideMasterPathAndFile], //PptxSlideMasterPageProperties
         0,
         *m_context->relationships,
@@ -255,9 +254,8 @@ PptxSlideProperties* PptxXmlDocumentReader::slideLayoutProperties(const QString&
         return 0;
     }
 
-    slideLayoutPropertiesSetter.release();
-    d->slideLayoutPropertiesMap.insert(slideLayoutPathAndFile, result);
-    return result;
+    d->slideLayoutPropertiesMap.insert(slideLayoutPathAndFile, result.get());
+    return result.release();
 }
 
 #undef CURRENT_EL

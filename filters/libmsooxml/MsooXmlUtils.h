@@ -181,63 +181,6 @@ private:
     T* const m_container;
 };
 
-//! Helper that sets given variable to specified value on destruction
-//! Object of type Setter are supposed to be created on the stack.
-//! @todo Copied from calligra/kexi/kexiutils/utils.h; replace with a shared code
-template <typename T>
-class Setter
-{
-public:
-    //! Creates a new setter object for variable @a var,
-    //! which will be set to value @a val on setter's destruction.
-    Setter(T* var, const T& val)
-            : m_var(var), m_value(val) {
-    }
-    ~Setter() {
-        if (m_var)
-            *m_var = m_value;
-    }
-    //! Clears the assignment, so the setter
-    //! will not alter the variable on destruction
-    void clear() {
-        m_var = 0;
-    }
-private:
-    T* m_var;
-    const T m_value;
-};
-
-//! Helper that works like the @ref Setter class but also has behaviour of std::auto_ptr.
-//! When std::auto_ptr is used, the pointer of type T* is not set back to 0 on destruction.
-//! @todo replace with a shared code
-template <typename T>
-class AutoPtrSetter
-{
-public:
-    //! Creates a new auto-ptr setter object for variable pointer of type T* @a ptr,
-    //! which will be set to 0 setter's destruction, unless release() was called.
-    explicit AutoPtrSetter(T** ptr)
-            : m_pptr(ptr) {
-    }
-    ~AutoPtrSetter() {
-        if (m_pptr && *m_pptr) {
-            delete *m_pptr;
-            *m_pptr = 0;
-        }
-    }
-    //! Bypasses the smart pointer, and returns it, so on destruction
-    //! of the AutoPtrSetter object the pointed object will not be deleted
-    //! (so it is the behaviour like std::auto__ptr::release())
-    //! but also the pointer of type T* will not be cleared.
-    T* release() {
-        T* p = m_pptr ? *m_pptr : 0;
-        m_pptr = 0;
-        return p;
-    }
-private:
-    T** m_pptr;
-};
-
 //! Decodes boolean attribute @a value. If unspecified returns @a defaultValue.
 //! @return true unless @a value is equal to "false", "off" or "0".
 KOMSOOXML_EXPORT bool convertBooleanAttr(const QString& value, bool defaultValue = false);

@@ -41,6 +41,7 @@
 
 #include <QMap>
 #include <QGlobalStatic>
+#include <memory>
 
 #include <math.h>
 
@@ -691,7 +692,9 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_font()
 {
     READ_PROLOGUE
 
-    MSOOXML::Utils::AutoPtrSetter<KoGenStyle> currentFontStyleSetter(&m_currentFontStyle);
+    auto deleter = [this](KoGenStyle *ptr) { delete ptr; m_currentFontStyle = nullptr; };
+    auto currentFontStyleSetter = std::unique_ptr<KoGenStyle, decltype(deleter)>(m_currentFontStyle, deleter);
+
 
     m_currentTextStyleProperties = new KoCharacterStyle;
 
@@ -928,8 +931,9 @@ KoFilter::ConversionStatus XlsxXmlStylesReader::read_xf()
     }
 
     qCDebug(lcXlsxImport) << "cell format #" << m_cellFormatIndex;
-    m_currentCellFormat = new XlsxCellFormat;
-    MSOOXML::Utils::AutoPtrSetter<XlsxCellFormat> currentCellFormatSetter(&m_currentCellFormat);
+    m_currentCellFormat = new XlsxCellFormat();
+    auto deleter = [this](XlsxCellFormat *ptr) { delete ptr; m_currentCellFormat = nullptr; };
+    auto currentCellFormatSetter = std::unique_ptr<XlsxCellFormat, decltype(deleter)>(m_currentCellFormat, deleter);
 
     // -- read attrs --
     const QXmlStreamAttributes attrs(attributes());
