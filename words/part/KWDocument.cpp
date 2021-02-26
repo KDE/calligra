@@ -388,8 +388,8 @@ void KWDocument::layoutFinished()
 {
     Q_ASSERT(m_layoutProgressUpdater);
     KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(sender());
-    disconnect(lay, &KoTextDocumentLayout::layoutProgressChanged, this, nullptr);
-    disconnect(lay, &KoTextDocumentLayout::finishedLayout, this, nullptr);
+    disconnect(lay, &KoTextDocumentLayout::layoutProgressChanged, this, &KWDocument::layoutProgressChanged);
+    disconnect(lay, &KoTextDocumentLayout::finishedLayout, this, &KWDocument::layoutFinished);
     m_layoutProgressUpdater->setProgress(100);
     m_layoutProgressUpdater = 0; // free the instance
 }
