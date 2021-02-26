@@ -384,8 +384,9 @@ void KWDocument::layoutProgressChanged(int percent)
 void KWDocument::layoutFinished()
 {
     Q_ASSERT(m_layoutProgressUpdater);
-    disconnect(QObject::sender(), SIGNAL(layoutProgressChanged(int)), this, SLOT(layoutProgressChanged(int)));
-    disconnect(QObject::sender(), SIGNAL(finishedLayout()), this, SLOT(layoutFinished()));
+    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(sender());
+    disconnect(lay, &KoTextDocumentLayout::layoutProgressChanged, this, nullptr);
+    disconnect(lay, &KoTextDocumentLayout::finishedLayout, this, nullptr);
     m_layoutProgressUpdater->setProgress(100);
     m_layoutProgressUpdater = 0; // free the instance
 }
