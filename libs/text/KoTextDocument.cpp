@@ -307,7 +307,9 @@ void KoTextDocument::setSelections(const QVector< QAbstractTextDocumentLayout::S
         variants.append(QVariant::fromValue<QAbstractTextDocumentLayout::Selection>(selection));
     }
 
-    m_document->addResource(KoTextDocument::Selections, SelectionsURL, variants);
+    if (!variants.isEmpty()) {
+        m_document->addResource(KoTextDocument::Selections, SelectionsURL, variants);
+    }
 }
 
 KoInlineTextObjectManager *KoTextDocument::inlineTextObjectManager() const
