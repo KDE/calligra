@@ -156,7 +156,10 @@ KWDocument::~KWDocument()
     qDeleteAll(m_panelFactories);
     m_config.setUnit(unit());
     saveConfig();
-    qDeleteAll(m_frameSets);
+    // Deleting frameSet objects may end-up calling this->frameSets();
+    QList<KWFrameSet*> &frameSets = m_frameSets;
+    m_frameSets.clear();
+    qDeleteAll(frameSets);
 }
 
 bool KWDocument::isMasterDocument() const
