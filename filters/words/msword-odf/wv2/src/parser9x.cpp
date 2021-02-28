@@ -581,7 +581,8 @@ void Parser9x::processPiece( String* string, U32 fc, U32 limit, const Position& 
         // same ASCII code as TTP_MARK (0x0007), NOTE: table depth == 1
         case CELL_MARK:
             m_cellMarkFound = true;
-            // Fall-through intended. A row/cell end is also a paragraph end.
+            // A row/cell end is also a paragraph end.
+            // fall through
         case PARAGRAPH_MARK:
         {
             // No "index - start + 1" here, as we don't want to copy the
@@ -1064,6 +1065,7 @@ void Parser9x::emitSpecialCharacter( UChar character, U32 globalCP, SharedPtr<co
             if (m_subDocument == Main) {
                 emitAnnotation( UString(character), globalCP, chp );
             }
+            break;
         }
     case TextHandler::FieldEscapeChar:
         wvlog << "Found an escape character ++++++++++++++++++++?" << endl;

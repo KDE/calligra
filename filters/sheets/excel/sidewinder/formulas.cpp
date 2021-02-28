@@ -1513,7 +1513,7 @@ static void mergeTokens(UStringStack* stack, unsigned count, const QString &merg
     if (!stack) return;
     if (stack->size() < count) return;
 
-    QString s1, s2;
+    QString s1;
 
     while (count) {
         count--;

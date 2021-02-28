@@ -872,7 +872,6 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_conditionalFormatting()
     while (index < m_conditionalIndices.size()) {
         QString conditionalArea;
         Condition examinedCondition = m_conditionalIndices.at(index);
-        QString sqrefOriginal = sqref;
         int areaIndex = 0;
         Condition previousCond;
 

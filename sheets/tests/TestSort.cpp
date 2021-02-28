@@ -68,7 +68,7 @@ void TestSort::AscendingOrder()
     command->setSheet(sheet);
 
     // Parameters.
-    command->setSortRows(Qt::Vertical);
+    command->setSortRows(true);
     command->setSkipFirst(false);
     command->setCopyFormat(false);
 
@@ -121,7 +121,7 @@ void TestSort::DescendingOrder()
     command->setSheet(sheet);
 
     // Parameters.
-    command->setSortRows(Qt::Vertical);
+    command->setSortRows(true);
     command->setSkipFirst(false);
     command->setCopyFormat(false);
 

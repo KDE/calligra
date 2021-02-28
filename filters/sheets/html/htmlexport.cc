@@ -242,7 +242,6 @@ void HTMLExport::convertSheet(Sheet *sheet, QString &str, int iMaxUsedRow, int i
             i = 0;
         }
 
-        QString separators;
         QString line;
         unsigned int nonempty_cells = 0;
 
@@ -435,7 +434,6 @@ void HTMLExport::detectFilledCells(Sheet *sheet, int &rows, int &columns)
         int iUsedColumn = 0;
         for (int currentcolumn = 1 ; currentcolumn <= iMaxColumn ; currentcolumn++) {
             cell = Cell(sheet, currentcolumn, currentrow);
-            QString text;
             if (!cell.isDefault() && !cell.isEmpty()) {
                 iUsedColumn = currentcolumn;
             }

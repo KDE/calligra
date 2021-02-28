@@ -294,6 +294,7 @@ void VectorShape::saveOdf(KoShapeSavingContext & context) const
         break;
     case VectorTypeSvg:
         mimeType = "image/svg+xml";
+        break;
     default:
         // FIXME: What here?
         mimeType = "application/x-what";

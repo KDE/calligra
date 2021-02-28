@@ -49,7 +49,7 @@ KoPAOdfPageSaveHelper::KoPAOdfPageSaveHelper( KoPADocument * doc, QList<KoPAPage
             KoPAPage * p = static_cast<KoPAPage *>( page );
             masterPages.insert( p->masterPage() );
         }
-        m_masterPages = masterPages.toList();
+        m_masterPages = masterPages.values();
     }
 }
 

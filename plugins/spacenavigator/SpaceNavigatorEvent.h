@@ -33,7 +33,7 @@ public:
     void setPosition( int x, int y, int z );
     void setRotation( int rx, int ry, int rz );
 
-    virtual KoPointerEvent * pointerEvent();
+    virtual KoPointerEvent * pointerEvent() override;
 
 private:
     int m_x, m_y, m_z;

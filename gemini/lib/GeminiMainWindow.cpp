@@ -136,8 +136,10 @@ void GeminiMainWindow::setFullScreen(bool newState)
 }
 
 
+
 void GeminiMainWindow::changeState(GeminiMainWindow::GeminiState newState, bool lockNewState)
 {
+    Q_UNUSED(lockNewState);
     d->syncObject = new GeminiModeSynchronisationObject;
 
     if(centralWidget()) {

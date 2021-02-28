@@ -316,7 +316,7 @@ KoFilter::ConversionStatus PptxXmlDocumentReader::read_sldId()
 
     QString slideMasterPath, slideMasterFile;
     MSOOXML::Utils::splitPathAndFile(m_context->relationships->targetForType(slidePath, slideFile, QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/slideLayout"), &slideMasterPath, &slideMasterFile);
-    const QString slideMasterPathAndFile = m_context->relationships->targetForType(slideMasterPath, slideMasterFile, QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/slideMaster");
+    // const QString slideMasterPathAndFile = m_context->relationships->targetForType(slideMasterPath, slideMasterFile, QLatin1String(MSOOXML::Schemas::officeDocument::relationships) + "/slideMaster");
 
     // Delay the reading of a tableStyle until we find a table as we need the
     // clrMap from the master slide

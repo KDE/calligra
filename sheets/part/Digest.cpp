@@ -596,10 +596,10 @@ static void __rtl_digest_endSHA(DigestContextSHA *ctx)
     }
 
     switch (ctx->m_nDatLen & 0x03) {
-    case 0: X[i]  = ((sal_uInt32)(*(p++))) <<  0L;
-    case 1: X[i] |= ((sal_uInt32)(*(p++))) <<  8L;
-    case 2: X[i] |= ((sal_uInt32)(*(p++))) << 16L;
-    case 3: X[i] |= ((sal_uInt32)(*(p++))) << 24L;
+    case 0: X[i]  = ((sal_uInt32)(*(p++))) <<  0L; /* fall through */
+    case 1: X[i] |= ((sal_uInt32)(*(p++))) <<  8L; /* fall through */
+    case 2: X[i] |= ((sal_uInt32)(*(p++))) << 16L; /* fall through */
+    case 3: X[i] |= ((sal_uInt32)(*(p++))) << 24L; /* fall through */
     }
 
     __rtl_digest_swapLong(X, i + 1);

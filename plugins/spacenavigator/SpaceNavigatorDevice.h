@@ -31,10 +31,8 @@ public:
     explicit SpaceNavigatorDevice(QObject *parent);
     virtual ~SpaceNavigatorDevice();
 
-    /// reimplemented from KoInputDeviceHandler
-    virtual bool start();
-    /// reimplemented from KoInputDeviceHandler
-    virtual bool stop();
+    virtual bool start() override;
+    virtual bool stop() override;
 private Q_SLOTS:
     void slotMoveEvent( int x, int y, int z, int rx, int ry, int rz, Qt::MouseButtons );
     void slotButtonEvent( int x, int y, int z, int rx, int ry, int rz, Qt::MouseButtons, Qt::MouseButton, int type );

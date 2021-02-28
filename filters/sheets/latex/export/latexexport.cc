@@ -38,7 +38,6 @@ LATEXExport::LATEXExport(QObject* parent, const QVariantList&) :
 
 KoFilter::ConversionStatus LATEXExport::convert(const QByteArray& from, const QByteArray& to)
 {
-    QString config;
 
     if (to != "text/x-tex" || from != "application/x-kspread")
         return KoFilter::NotImplemented;

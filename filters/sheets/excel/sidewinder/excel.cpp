@@ -2449,6 +2449,7 @@ bool ExcelReader::load(Workbook* workbook, const char* filename)
               } else {
                 bytes_read = combObjStream->read( buffer, markerOrLength );
                 QString ansiString = readByteString(buffer, markerOrLength);
+                Q_UNUSED(ansiString);
                 //TODO...
                 //printf( "markerOrLength=%i ansiString=%s\n",markerOrLength,ansiString.ascii() );
               }

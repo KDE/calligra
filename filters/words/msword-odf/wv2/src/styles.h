@@ -58,8 +58,9 @@ struct STD
     STD();
     /**
      * Simply calls read(...)
+     * @throw InvalidFormatException
      */
-    STD( U16 stdfSize, U16 totalSize, OLEStreamReader* stream, bool preservePos = false ) throw(InvalidFormatException);
+    STD( U16 stdfSize, U16 totalSize, OLEStreamReader* stream, bool preservePos = false );
     /**
      * Attention: This struct allocates memory on the heap
      */
@@ -74,8 +75,9 @@ struct STD
      * false the state of stream will be changed!
      *
      * @return true - success, false - failed
+     * @throw InvalidFormatException
      */
-    bool read( const U16 cbStd, const U16 stdfSize, OLEStreamReader* stream, bool preservePos = false ) throw(InvalidFormatException);
+    bool read( const U16 cbStd, const U16 stdfSize, OLEStreamReader* stream, bool preservePos = false );
 
     /**
      * Same as reading :)
@@ -365,7 +367,10 @@ private:
 class WV2_EXPORT StyleSheet
 {
 public:
-    StyleSheet( OLEStreamReader* tableStream, U32 fcStshf, U32 lcbStshf ) throw(InvalidFormatException);
+    /**
+     * @throw InvalidFormatException
+     */
+    StyleSheet( OLEStreamReader* tableStream, U32 fcStshf, U32 lcbStshf );
     ~StyleSheet();
 
     /**

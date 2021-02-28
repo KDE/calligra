@@ -39,8 +39,7 @@ Q_SIGNALS:
 
 protected:
 
-    /// reimplemented from QThread
-    virtual void run();
+    virtual void run() override;
 
 private:
     bool m_stopped;

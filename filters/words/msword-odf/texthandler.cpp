@@ -408,6 +408,7 @@ void WordsTextHandler::footnoteFound(wvWare::FootnoteData data,
         }
         case msonfcUCLetter:
             letter = 'A';
+            // fall through
         case msonfcLCLetter:
         {
             while (noteNumber / 25 > 0) {
@@ -1064,6 +1065,7 @@ void WordsTextHandler::fieldStart(const wvWare::FLD* fld, wvWare::SharedPtr<cons
         break;
     case UNSUPPORTED:
         warnMsDoc << "Warning: Fld data missing, ignoring!";
+        // fall through
     default:
         warnMsDoc << "Warning: unrecognized field type, ignoring!";
         m_fld->m_type = UNSUPPORTED;

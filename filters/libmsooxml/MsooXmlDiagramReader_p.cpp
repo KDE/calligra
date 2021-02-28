@@ -872,6 +872,7 @@ void LayoutNodeAtom::finishBuild(Context* context) {
         case AlgorithmAtom::UnknownAlg:
             warnMsooXml << "Layout with name=" << m_name << "defines an unknown algorithm.";
             // fall through and use the composite-algorithm
+        // fall through
         case AlgorithmAtom::CompositeAlg: m_algorithmImpl = new CompositeAlgorithm; break;
         case AlgorithmAtom::ConnectorAlg: m_algorithmImpl = new ConnectorAlgorithm; break;
         case AlgorithmAtom::CycleAlg: m_algorithmImpl = new CycleAlgorithm; break;

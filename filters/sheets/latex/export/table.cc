@@ -118,6 +118,7 @@ void Table::analyzePaper(const QDomNode node)
 
     /* borders */
     QDomNode border = getChild(node, "borders");
+    Q_UNUSED(border);
     setBorderRight(getAttr(node, "right").toLong());
     setBorderLeft(getAttr(node, "left").toLong());
     setBorderBottom(getAttr(node, "bottom").toLong());

@@ -597,6 +597,7 @@ Value func_currentDate(valVector, ValueCalc * calc, FuncExtra *)
 // Function: CURRENTTIME
 Value func_currentTime(valVector, ValueCalc * calc, FuncExtra *)
 {
+    Q_UNUSED(calc);
     return Value(QTime::currentTime());
 }
 

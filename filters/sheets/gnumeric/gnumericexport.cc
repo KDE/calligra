@@ -1293,15 +1293,13 @@ KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const
                 i = 0;
             }
 
-            QString line;
             for (int currentcolumn = 1; currentcolumn <= iMaxColumn; currentcolumn++) {
                 QDomElement cell_contents;
                 Cell cell(table, currentcolumn, currentrow);
 
-                QString text, style;
+                QString text;
                 QDomDocument domLink;
                 QDomElement domRoot;
-                QDomNode domNode;
                 QDomNodeList childNodes;
 
                 if (!cell.isDefault() && !cell.isEmpty()) {
@@ -1342,6 +1340,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const
                         text = domNode.toElement().text();
 
                         while (!domNode.isNull()) {
+                            QString style;
                             style = domNode.toElement().tagName();
 
                             if (style == "b")
