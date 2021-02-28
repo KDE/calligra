@@ -180,9 +180,9 @@ ConditionalWidget::ConditionalWidget(QWidget* parent, const char* /*name*/, Qt::
     textLabel2_2->setText(i18n("Cell style"));
     textLabel2_3->setText(i18n("Cell style"));
 
-    connect(m_condition_1, SIGNAL(highlighted(QString)), this, SLOT(slotTextChanged1(QString)));
-    connect(m_condition_2, SIGNAL(highlighted(QString)), this, SLOT(slotTextChanged2(QString)));
-    connect(m_condition_3, SIGNAL(highlighted(QString)), this, SLOT(slotTextChanged3(QString)));
+    connect(m_condition_1, QOverload<const QString &>::of(&QComboBox::highlighted), this, &ConditionalWidget::slotTextChanged1);
+    connect(m_condition_2, QOverload<const QString &>::of(&QComboBox::highlighted), this, &ConditionalWidget::slotTextChanged2);
+    connect(m_condition_3, QOverload<const QString &>::of(&QComboBox::highlighted), this, &ConditionalWidget::slotTextChanged3);
 }
 
 ConditionalWidget::~ConditionalWidget()

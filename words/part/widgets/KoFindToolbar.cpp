@@ -47,14 +47,14 @@ KoFindToolbar::KoFindToolbar(KoFindBase *finder, KActionCollection *ac, QWidget 
     QGridLayout *layout = new QGridLayout();
 
     d->finder = finder;
-    connect(d->finder, SIGNAL(matchFound(KoFindMatch)), this, SLOT(matchFound()));
-    connect(d->finder, SIGNAL(noMatchFound()), this, SLOT(noMatchFound()));
-    connect(d->finder, SIGNAL(wrapAround(bool)), this, SLOT(searchWrapped(bool)));
+    connect(d->finder, &KoFindBase::matchFound, this, [&]() { d->matchFound(); });
+    connect(d->finder, &KoFindBase::noMatchFound, this, [&]() { d->noMatchFound(); });
+    connect(d->finder, &KoFindBase::wrapAround, this, [&](bool direction) { d->searchWrapped(direction); });
 
     d->textTimeout = new QTimer(this);
     d->textTimeout->setInterval(1000);
     d->textTimeout->setSingleShot(true);
-    connect(d->textTimeout, SIGNAL(timeout()), this, SLOT(inputTimeout()));
+    connect(d->textTimeout, &QTimer::timeout, this, [&]() { d->inputTimeout(); });
 
     d->closeButton = new QToolButton(this);
     d->closeButton->setAutoRaise(true);
@@ -70,9 +70,9 @@ KoFindToolbar::KoFindToolbar(KoFindBase *finder, KActionCollection *ac, QWidget 
     d->searchLine = new KHistoryComboBox(true, this);
     d->searchLine->setCompletedItems(d->searchCompletionItems);
     d->searchLine->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    connect(d->searchLine, SIGNAL(editTextChanged(QString)), d->textTimeout, SLOT(start()));
-    connect(d->searchLine, SIGNAL(returnPressed()), this, SLOT(returnPressed()));
-    connect(d->searchLine, SIGNAL(returnPressed(QString)), d->searchLine, SLOT(addToHistory(QString)));
+    connect(d->searchLine, &KHistoryComboBox::editTextChanged, this, [&]() { d->textTimeout->start(); });
+    connect(d->searchLine, QOverload<>::of(&KHistoryComboBox::returnPressed), this, [&]() { d->returnPressed(); });
+    connect(d->searchLine, QOverload<const QString&>::of(&KHistoryComboBox::returnPressed), d->searchLine, &KHistoryComboBox::addToHistory);
     connect(d->searchLine, &KHistoryComboBox::cleared, finder, &KoFindBase::finished);
     layout->addWidget(d->searchLine, 0, 2);
 
@@ -82,7 +82,7 @@ KoFindToolbar::KoFindToolbar(KoFindBase *finder, KActionCollection *ac, QWidget 
     d->nextButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     d->nextButton->setEnabled(false);
     connect(d->nextButton, &QAbstractButton::clicked, d->finder, &KoFindBase::findNext);
-    connect(d->nextButton, SIGNAL(clicked(bool)), this, SLOT(addToHistory()));
+    connect(d->nextButton, &QToolButton::clicked, this, [&](bool) { d->addToHistory(); });
     connect(d->finder, &KoFindBase::hasMatchesChanged, d->nextButton, &QWidget::setEnabled);
     layout->addWidget(d->nextButton, 0, 3);
 
@@ -92,7 +92,7 @@ KoFindToolbar::KoFindToolbar(KoFindBase *finder, KActionCollection *ac, QWidget 
     d->previousButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     d->previousButton->setEnabled(false);
     connect(d->previousButton, &QAbstractButton::clicked, d->finder, &KoFindBase::findPrevious);
-    connect(d->previousButton, SIGNAL(clicked(bool)), this, SLOT(addToHistory()));
+    connect(d->previousButton, &QToolButton::clicked, this, [&](bool) { d->addToHistory(); });
     connect(d->finder, &KoFindBase::hasMatchesChanged, d->previousButton, &QWidget::setEnabled);
     layout->addWidget(d->previousButton, 0, 4);
 
@@ -110,7 +110,7 @@ KoFindToolbar::KoFindToolbar(KoFindBase *finder, KActionCollection *ac, QWidget 
             action->setObjectName(option->name());
             action->setCheckable(true);
             action->setChecked(option->value().toBool());
-            connect(action, SIGNAL(triggered(bool)), this, SLOT(optionChanged()));
+            connect(action, &QAction::triggered, this, [&](bool) { d->optionChanged(); });
             menu->addAction(action);
         }
     }
@@ -131,19 +131,19 @@ KoFindToolbar::KoFindToolbar(KoFindBase *finder, KActionCollection *ac, QWidget 
     d->replaceLine = new KHistoryComboBox(true, this);
     d->replaceLine->setHistoryItems(d->replaceCompletionItems);
     d->replaceLine->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    connect(d->replaceLine, SIGNAL(returnPressed()), this, SLOT(replace()));
+    connect(d->replaceLine, QOverload<>::of(&KHistoryComboBox::returnPressed), this, [&]() { d->replace(); });
     layout->addWidget(d->replaceLine, 1, 2);
 
     d->replaceButton = new QToolButton(this);
     d->replaceButton->setText(i18nc("Replace the current match", "Replace"));
     d->replaceButton->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
-    connect(d->replaceButton, SIGNAL(clicked(bool)), this, SLOT(replace()));
+    connect(d->replaceButton, &QToolButton::clicked, this, [&]() { d->replace(); });
     layout->addWidget(d->replaceButton, 1, 3);
 
     d->replaceAllButton = new QToolButton(this);
     d->replaceAllButton->setText(i18nc("Replace all found matches", "Replace All"));
     d->replaceAllButton->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
-    connect(d->replaceAllButton, SIGNAL(clicked(bool)), this, SLOT(replaceAll()));
+    connect(d->replaceAllButton, &QToolButton::clicked, this, [&]() { d->replaceAll(); });
     layout->addWidget(d->replaceAllButton, 1, 4);
 
     setLayout(layout);

@@ -116,7 +116,7 @@ AutoFormatDialog::AutoFormatDialog(QWidget* parent, Selection* selection)
     slotActivated(0);
 
     connect(this, &KoDialog::okClicked, this, &AutoFormatDialog::slotOk);
-    connect(d->combo, SIGNAL(activated(int)), this, SLOT(slotActivated(int)));
+    connect(d->combo, QOverload<int>::of(&QComboBox::activated), this, &AutoFormatDialog::slotActivated);
 }
 
 AutoFormatDialog::~AutoFormatDialog()
