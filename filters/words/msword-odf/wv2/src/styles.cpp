@@ -1066,7 +1066,9 @@ StyleSheet::~StyleSheet()
 
 bool StyleSheet::valid() const
 {
-    if ( (m_stsh.cstd < 0x000f) && (m_stsh.cstd >= 0x0ffe) ) {
+    // m_stsh.cstd >= 0x0ffe : range of cstd is 0-4095 from the .doc specification
+    // m_stsh.cstd < 0x000f : styles 0 to 14 are reserved
+    if ( (m_stsh.cstd < 0x000f) || (m_stsh.cstd >= 0x0ffe) ) {
         return false;
     }
     return true;
