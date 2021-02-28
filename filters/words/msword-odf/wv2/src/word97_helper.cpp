@@ -1168,24 +1168,6 @@ void CHP::applyExceptions( const U8* exceptions, const Style* paragraphStyle, co
 }
 
 // Helper functions for more complex sprms
-namespace
-{
-    const Word97::CHP* determineCHP( U16 istd, const Style* paragraphStyle, const StyleSheet* styleSheet )
-    {
-        const Word97::CHP* chp( 0 );
-        if ( istd == 10 && paragraphStyle ) {
-            chp = &paragraphStyle->chp();
-        }
-        else if ( istd != 10 && styleSheet ) {
-            const Style* style( styleSheet->styleByIndex( istd ) );
-            chp = ((style != 0) && (style->type() == sgcChp)) ? &style->chp() : 0;
-        }
-        else {
-            wvlog << "Warning: sprmCFxyz couldn't find a style" << endl;
-        }
-        return chp;
-    }
-}
 
 // Returns -1 if this wasn't a CHP sprm and it returns the length
 // of the applied sprm if it was successful
