@@ -86,14 +86,12 @@ void KUndo2Model::setStack(KUndo2QStack *stack)
         disconnect(m_stack, &KUndo2QStack::cleanChanged, this, &KUndo2Model::stackChanged);
         disconnect(m_stack, &KUndo2QStack::indexChanged, this, &KUndo2Model::stackChanged);
         disconnect(m_stack, &QObject::destroyed, this, &KUndo2Model::stackDestroyed);
-        disconnect(m_stack, SIGNAL(indexChanged(int)), this, SLOT(addImage(int)));
     }
     m_stack = stack;
     if (m_stack != 0) {
         connect(m_stack, &KUndo2QStack::cleanChanged, this, &KUndo2Model::stackChanged);
         connect(m_stack, &KUndo2QStack::indexChanged, this, &KUndo2Model::stackChanged);
         connect(m_stack, &QObject::destroyed, this, &KUndo2Model::stackDestroyed);
-        connect(m_stack, SIGNAL(indexChanged(int)), this, SLOT(addImage(int)));
     }
 
     stackChanged();
