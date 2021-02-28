@@ -36,10 +36,10 @@ KoPAPageDeleteCommand::KoPAPageDeleteCommand( KoPADocument *document, KoPAPageBa
     m_pages.insert(index, page);
 
     if ( page->pageType() == KoPageApp::Slide ) {
-        setText( kundo2_i18n( "Delete slide" ) );
+        setText( kundo2_i18nc( "Delete one slide", "Delete slide" ) );
     }
     else {
-        setText( kundo2_i18n( "Delete page" ) );
+        setText( kundo2_i18nc( "Delete one page", "Delete page" ) );
     }
 }
 

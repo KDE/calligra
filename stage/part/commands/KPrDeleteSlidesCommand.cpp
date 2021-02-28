@@ -35,7 +35,7 @@ KPrDeleteSlidesCommand::KPrDeleteSlidesCommand(KPrDocument *document, KoPAPageBa
     int index = m_document->pageIndex(page);
     Q_ASSERT(index != -1);
     m_pages.insert(index, page);
-    setText(kundo2_i18n("Delete slide"));
+    setText(kundo2_i18nc("Delete one slide", "Delete slide"));
 }
 
 KPrDeleteSlidesCommand::KPrDeleteSlidesCommand(KPrDocument *document, const QList<KoPAPageBase*> &pages, KUndo2Command *parent)
