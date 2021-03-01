@@ -67,10 +67,10 @@ KoPageLayoutWidget::KoPageLayoutWidget(QWidget *parent, const KoPageLayout &layo
     d->widget.sizes->addItems(KoPageFormat::localizedPageFormatNames());
     setPageSpread(false);
 
-    connect(d->widget.sizes, SIGNAL(currentIndexChanged(int)), this, SLOT(sizeChanged(int)));
-    connect(d->widget.units, SIGNAL(currentIndexChanged(int)), this, SLOT(unitChanged(int)));
-    connect(group2, SIGNAL(buttonClicked(int)), this, SLOT(facingPagesChanged()));
-    connect(d->orientationGroup, SIGNAL(buttonClicked(int)), this, SLOT(orientationChanged()));
+    connect(d->widget.sizes, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KoPageLayoutWidget::sizeChanged);
+    connect(d->widget.units, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KoPageLayoutWidget::slotUnitChanged);
+    connect(group2, QOverload<int>::of(&QButtonGroup::buttonClicked), this, &KoPageLayoutWidget::facingPagesChanged);
+    connect(d->orientationGroup, QOverload<int>::of(&QButtonGroup::buttonClicked), this, &KoPageLayoutWidget::orientationChanged);
     connect(d->widget.width, &KoUnitDoubleSpinBox::valueChangedPt, this, &KoPageLayoutWidget::optionsChanged);
     connect(d->widget.height, &KoUnitDoubleSpinBox::valueChangedPt, this, &KoPageLayoutWidget::optionsChanged);
     connect(d->widget.topMargin, &KoUnitDoubleSpinBox::valueChangedPt, this, &KoPageLayoutWidget::marginsChanged);
@@ -128,7 +128,7 @@ void KoPageLayoutWidget::sizeChanged(int row)
     d->allowSignals = true;
 }
 
-void KoPageLayoutWidget::unitChanged(int row)
+void KoPageLayoutWidget::slotUnitChanged(int row)
 {
     setUnit(KoUnit::fromListForUi(row, KoUnit::HidePixel));
 }

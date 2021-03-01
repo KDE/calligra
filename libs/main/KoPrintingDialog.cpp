@@ -66,7 +66,7 @@ KoPrintingDialog::KoPrintingDialog(QWidget *parent)
 {
     d->dialog = new PrintDialog(d, parent);
 
-    connect(d->button, SIGNAL(released()), this, SLOT(stopPressed()));
+    connect(d->button, &QPushButton::released, this, [this]() { d->stopPressed(); });
 }
 
 KoPrintingDialog::~KoPrintingDialog()

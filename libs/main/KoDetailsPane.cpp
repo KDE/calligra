@@ -58,9 +58,9 @@ KoDetailsPane::KoDetailsPane(QWidget* parent, const QString& header)
 
     connect(m_documentList->selectionModel(), &QItemSelectionModel::currentChanged,
             this, &KoDetailsPane::selectionChanged);
-    connect(m_documentList, SIGNAL(doubleClicked(QModelIndex)),
-            this, SLOT(openFile(QModelIndex)));
-    connect(m_openButton, SIGNAL(clicked()), this, SLOT(openFile()));
+    connect(m_documentList, &QTreeView::doubleClicked,
+            this, QOverload<const QModelIndex &>::of(&KoDetailsPane::openFile));
+    connect(m_openButton, &QPushButton::clicked, this, QOverload<>::of(&KoDetailsPane::openFile));
 }
 
 KoDetailsPane::~KoDetailsPane()

@@ -279,7 +279,7 @@ KoMainWindow::KoMainWindow(const QByteArray &nativeMimeType, const KoComponentDa
     d->exportPdf  = new QAction(i18n("Export as PDF..."), this);
     d->exportPdf->setIcon(koIcon("application-pdf"));
     actionCollection()->addAction("file_export_pdf", d->exportPdf);
-    connect(d->exportPdf, SIGNAL(triggered()), this, SLOT(exportToPdf()));
+    connect(d->exportPdf, &QAction::triggered, this, [this]() { exportToPdf(); });
 
     d->sendFileAction = actionCollection()->addAction(KStandardAction::Mail,  "file_send_file", this, SLOT(slotEmailFile()));
 
@@ -1416,7 +1416,7 @@ void KoMainWindow::slotFilePrintPreview()
     printJob->setProperty("blocking", true);
     QPrintPreviewDialog *preview = new QPrintPreviewDialog(&printJob->printer(), this);
     printJob->setParent(preview); // will take care of deleting the job
-    connect(preview, SIGNAL(paintRequested(QPrinter*)), printJob, SLOT(startPrinting()));
+    connect(preview, &QPrintPreviewDialog::paintRequested, printJob, [printJob]() { printJob->startPrinting(); });
     preview->exec();
     delete preview;
 }

@@ -64,7 +64,7 @@ KoDockerManager::KoDockerManager(KoMainWindow *mainWindow)
     Q_ASSERT(d->toolOptionsDocker);
     d->toolOptionsDocker->setVisible(false);
 
-    connect(mainWindow, SIGNAL(restoringDone()), this, SLOT(restoringDone()));
+    connect(mainWindow, &KoMainWindow::restoringDone, [this]() { d->restoringDone(); });
 }
 
 KoDockerManager::~KoDockerManager()

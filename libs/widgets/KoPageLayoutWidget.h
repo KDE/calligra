@@ -60,7 +60,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void sizeChanged(int row);
-    void unitChanged(int row);
+    void slotUnitChanged(int row);
     void facingPagesChanged();
     void optionsChanged();
     void marginsChanged();

@@ -268,7 +268,7 @@ void MainWindow::createActions()
 
     m_aboutQtAct = new QAction(tr("About &Qt"), this);
     m_aboutQtAct->setStatusTip(tr("Show the Qt library's About box"));
-    connect(m_aboutQtAct, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
+    connect(m_aboutQtAct, &QAction::triggered, qApp, &QApplication::aboutQt);
 
     m_insertAct = new QAction(tr("&Insert"), this);
     m_insertAct->setStatusTip(tr("Insert Object"));

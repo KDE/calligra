@@ -323,8 +323,10 @@ public:
             KJobWidgets::setWindow(m_job, parentPart->currentMainwindow());
         }
 #endif
-        QObject::connect(m_job, SIGNAL(result(KJob*)), document, SLOT(_k_slotJobFinished(KJob*)));
-        QObject::connect(m_job, SIGNAL(mimetype(KIO::Job*,QString)), document, SLOT(_k_slotGotMimeType(KIO::Job*,QString)));
+        QObject::connect(m_job, &KIO::FileCopyJob::result,
+                         document, [this](KJob* job) { _k_slotJobFinished(job); });
+        QObject::connect(m_job, &KIO::FileCopyJob::mimetype,
+                         document, [this](KIO::Job* job, const QString &mime) { _k_slotGotMimeType(job, mime); });
     }
 
     // Set m_file correctly for m_url
@@ -2631,7 +2633,7 @@ bool KoDocument::saveToUrl()
 #ifndef QT_NO_DBUS
         KJobWidgets::setWindow(d->m_uploadJob, 0);
 #endif
-        connect( d->m_uploadJob, SIGNAL(result(KJob*)), this, SLOT(_k_slotUploadFinished(KJob*)) );
+        connect( d->m_uploadJob, &KIO::FileCopyJob::result, this, [this](KJob *job) { d->_k_slotUploadFinished(job); });
         return true;
     }
 #else

@@ -117,7 +117,7 @@ KoConfigMiscPage::KoConfigMiscPage(KoDocument* doc, KoDocumentResourceManager *d
 
     miscGroupBox->setLayout(miscLayout);
 
-    connect(d->unit, SIGNAL(activated(int)), SLOT(slotUnitChanged(int)));
+    connect(d->unit, QOverload<int>::of(&QComboBox::activated), this, &KoConfigMiscPage::slotUnitChanged);
     connect(d->pasteAtCursor, &QAbstractButton::clicked, d->pasteOffset, &QWidget::setDisabled);
 }
 

@@ -176,7 +176,7 @@ void KoList::setStyle(KoListStyle *style)
         if (d->style)
             disconnect(d->style, 0, this, 0);
         d->style = style->clone(this);
-        connect(d->style, SIGNAL(styleChanged(int)), this, SLOT(styleChanged(int)));
+        connect(d->style, &KoListStyle::styleChanged, this, [this](int level) { d->styleChanged(level); });
     }
 
     for (int i = 0; i < d->textLists.count(); i++) {
