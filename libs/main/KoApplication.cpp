@@ -339,7 +339,7 @@ bool KoApplication::start()
         const QString extension = mimeType.preferredSuffix();
 
         QStringList filters;
-        filters << QString(".%1-%2-%3-autosave%4").arg(part->componentData().componentName()).arg("*").arg("*").arg(extension);
+        filters << QString(".%1-%2-%3-autosave%4").arg(part->componentData().componentName(), "*", "*", extension);
 
 #ifdef Q_OS_WIN
         QDir autosaveDir = QDir::tempPath();

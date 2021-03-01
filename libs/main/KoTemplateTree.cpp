@@ -181,7 +181,6 @@ void KoTemplateTree::readTemplates()
                 QString icon;
                 QString text;
                 QString description;
-                QString hidden_str;
                 QString fileName;
                 QString color;
                 QString swatch;

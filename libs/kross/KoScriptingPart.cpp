@@ -104,7 +104,7 @@ KoScriptingPart::KoScriptingPart(KoScriptingModule *const module)
         Kross::Manager::self().setProperty("configfile", file);
         Kross::Manager::self().setProperty("configfiles", files);
 
-        if (QFileInfo(file).exists())
+        if (QFileInfo::exists(file))
             Kross::Manager::self().actionCollection()->readXmlFile(file);
         else
             foreach(const QString &f, files)

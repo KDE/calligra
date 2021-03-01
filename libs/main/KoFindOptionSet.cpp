@@ -39,7 +39,7 @@ KoFindOptionSet::KoFindOptionSet(QObject *parent)
 
 KoFindOptionSet::~KoFindOptionSet()
 {
-    qDeleteAll(d->options.values());
+    qDeleteAll(d->options);
     delete d;
 }
 

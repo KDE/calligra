@@ -51,14 +51,14 @@ QTextDocument *KoDocumentSectionToolTip::createDocument(const QModelIndex &index
         else
             value = properties[i].state.toString();
 
-        rows.append(row.arg(properties[i].name).arg(value));
+        rows.append(row.arg(properties[i].name, value));
     }
 
     rows = QString("<table>%1</table>").arg(rows);
 
     const QString image = QString("<table border=\"1\"><tr><td><img src=\"data:thumbnail\"></td></tr></table>");
     const QString body = QString("<h3 align=\"center\">%1</h3>").arg(name)
-                       + QString("<table><tr><td>%1</td><td>%2</td></tr></table>").arg(image).arg(rows);
+                       + QString("<table><tr><td>%1</td><td>%2</td></tr></table>").arg(image, rows);
     const QString html = QString("<html><body>%1</body></html>").arg(body);
 
     doc->setHtml(html);

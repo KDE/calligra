@@ -43,8 +43,6 @@
 
 #include <algorithm>
 
-static const QString INVALID_HREF_TARGET = "INVALID_HREF";
-
 ToCGenerator::ToCGenerator(QTextDocument *tocDocument, KoTableOfContentsGeneratorInfo *tocInfo)
     : QObject(tocDocument)
     , m_ToCDocument(tocDocument)

@@ -152,6 +152,18 @@ public:
    */
     void setAspectMode(bool status);
 
+    /**
+    * Returns the size of the whole document currently being shown on the canvas.
+    * @returns the document size in points
+    */
+    QSizeF documentSize() const;
+
+    /**
+    * Returns the size of the current page in document coordinates
+    * @returns the page size in points
+    */
+    QSizeF pageSize() const;
+
 public Q_SLOTS:
     /**
     * Set the size of the current page in document coordinates which allows zoom modes that use the pageSize
@@ -159,12 +171,6 @@ public Q_SLOTS:
     * @param pageSize the new page size in points
     */
     void setPageSize(const QSizeF &pageSize);
-
-    /**
-    * Returns the size of the current page in document coordinates
-    * @returns the page size in points
-    */
-    QSizeF pageSize() const;
 
     /**
     * Set the dimensions of where text can appear which allows zoom modes that use the text
@@ -183,12 +189,6 @@ public Q_SLOTS:
     *        preferredCenterFraction
     */
     void setDocumentSize(const QSizeF &documentSize, bool recalculateCenter = false);
-
-    /**
-    * Returns the size of the whole document currently being shown on the canvas.
-    * @returns the document size in points
-    */
-    QSizeF documentSize() const;
 
 Q_SIGNALS:
     /**

@@ -91,7 +91,6 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, const QString& hea
     // load list of recent files from config
     KConfigGroup config(KSharedConfig::openConfig(), "RecentFiles");
 
-    QString fileKey;
     QString fileValue;
     QUrl url;
     QString nameValue;

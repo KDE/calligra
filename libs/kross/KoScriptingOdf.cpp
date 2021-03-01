@@ -210,10 +210,10 @@ void dumpElem(KoXmlElement elem, int level=0)
     QString prefix;
     for (int i = 0; i < level; ++i)
         prefix+="  ";
-    debugKoKross  << QString("%1  %2").arg(prefix).arg(elem.tagName());
+    debugKoKross  << QString("%1  %2").arg(prefix, elem.tagName());
 #ifndef KOXML_USE_QDOM
     foreach (const QString &s, elem.attributeNames())
-        debugKoKross  << QString("%1    %2 = %3").arg(prefix).arg(s).arg(elem.attribute(s));
+        debugKoKross  << QString("%1    %2 = %3").arg(prefix, s, elem.attribute(s));
 #endif
     level++;
     KoXmlElement e;

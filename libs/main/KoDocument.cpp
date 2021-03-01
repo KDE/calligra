@@ -1161,14 +1161,14 @@ QString KoDocument::autoSaveFile(const QString & path) const
         retval = QString("%1/.%2-%3-%4-autosave%5").arg(QDir::tempPath()).arg(d->parentPart->componentData().componentName()).arg(QApplication::applicationPid()).arg(objectName()).arg(extension);
 #else
         // On Linux, use a temp file in $HOME then. Mark it with the pid so two instances don't overwrite each other's autosave file
-        retval = QString("%1/.%2-%3-%4-autosave%5").arg(QDir::homePath()).arg(d->parentPart->componentData().componentName()).arg(QApplication::applicationPid()).arg(objectName()).arg(extension);
+        retval = QString("%1/.%2-%3-%4-autosave%5").arg(QDir::homePath(), d->parentPart->componentData().componentName()).arg(QApplication::applicationPid()).arg(objectName(), extension);
 #endif
     } else {
         QUrl url = QUrl::fromLocalFile(path);
         Q_ASSERT(url.isLocalFile());
         QString dir = QFileInfo(url.toLocalFile()).absolutePath();
         QString filename = url.fileName();
-        retval = QString("%1.%2-autosave%3").arg(dir).arg(filename).arg(extension);
+        retval = QString("%1.%2-autosave%3").arg(dir, filename, extension);
     }
     return retval;
 }
@@ -2121,7 +2121,7 @@ QString KoDocument::caption() const
     }
     const QString _url(url().fileName());
     if (!c.isEmpty() && !_url.isEmpty()) {
-        c = QString("%1 - %2").arg(c).arg(_url);
+        c = QString("%1 - %2").arg(c, _url);
     }
     else if (c.isEmpty()) {
         c = _url; // Fall back to document URL
@@ -2153,9 +2153,9 @@ QDomDocument KoDocument::createDomDocument(const QString& tagName, const QString
 QDomDocument KoDocument::createDomDocument(const QString& appName, const QString& tagName, const QString& version)
 {
     QDomImplementation impl;
-    QString url = QString("http://www.calligra.org/DTD/%1-%2.dtd").arg(appName).arg(version);
+    QString url = QString("http://www.calligra.org/DTD/%1-%2.dtd").arg(appName, version);
     QDomDocumentType dtype = impl.createDocumentType(tagName,
-                             QString("-//KDE//DTD %1 %2//EN").arg(appName).arg(version),
+                             QString("-//KDE//DTD %1 %2//EN").arg(appName, version),
                              url);
     // The namespace URN doesn't need to include the version number.
     QString namespaceURN = QString("http://www.calligra.org/DTD/%1").arg(appName);
