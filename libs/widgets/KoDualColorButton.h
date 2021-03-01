@@ -50,9 +50,9 @@ class KoColorDisplayRendererInterface;
 class KOWIDGETS_EXPORT KoDualColorButton : public QWidget
 {
     Q_OBJECT
-    Q_PROPERTY( KoColor foregroundColor READ foregroundColor WRITE setForegroundColor )
-    Q_PROPERTY( KoColor backgroundColor READ backgroundColor WRITE setBackgroundColor )
-    Q_PROPERTY( bool popDialog READ popDialog WRITE setPopDialog )
+    Q_PROPERTY( KoColor foregroundColor READ foregroundColor WRITE setForegroundColor NOTIFY foregroundColorChanged)
+    Q_PROPERTY( KoColor backgroundColor READ backgroundColor WRITE setBackgroundColor NOTIFY backgroundColorChanged)
+    Q_PROPERTY( bool popDialog READ popDialog WRITE setPopDialog)
 
 
   public:

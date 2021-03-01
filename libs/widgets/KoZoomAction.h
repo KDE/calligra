@@ -70,6 +70,26 @@ public:
 
     qreal effectiveZoom() const;
 
+    /**
+     * Returns next preferred zoom level that should be used for
+     * zoom in operations.
+     *
+     * This can be used by the caller, when it needs some special
+     * mode of zooming (e.g. relative to point) and needs
+     * KoCanvasControllerWidget to accomplish this.
+     */
+    qreal nextZoomLevel() const;
+
+    /**
+     * Returns previous preferred zoom level that should be used for
+     * zoom out operations.
+     *
+     * This can be used by the caller, when it needs some special
+     * mode of zooming (e.g. relative to point) and needs
+     * KoCanvasControllerWidget to accomplish this.
+     */
+    qreal prevZoomLevel() const;
+
 public Q_SLOTS:
 
   /**
@@ -114,26 +134,6 @@ public Q_SLOTS:
    * (emits aspectModeChanged(bool) after the change, ALWAYS)
    */
     void setAspectMode(bool status);
-
-    /**
-     * Returns next preferred zoom level that should be used for
-     * zoom in operations.
-     *
-     * This can be used by the caller, when it needs some special
-     * mode of zooming (e.g. relative to point) and needs
-     * KoCanvasControllerWidget to accomplish this.
-     */
-    qreal nextZoomLevel() const;
-
-    /**
-     * Returns previous preferred zoom level that should be used for
-     * zoom out operations.
-     *
-     * This can be used by the caller, when it needs some special
-     * mode of zooming (e.g. relative to point) and needs
-     * KoCanvasControllerWidget to accomplish this.
-     */
-    qreal prevZoomLevel() const;
 
 protected Q_SLOTS:
 

@@ -60,7 +60,7 @@ Q_SIGNALS:
     void tagChosen(const QString &tag);
 
 private Q_SLOTS:
-    void tagRenamingRequested(const QString &newName);
+    void slotTagRenamingRequested(const QString &newName);
     void tagOptionsContextMenuAboutToShow();
     void contextDeleteCurrentTag();
 

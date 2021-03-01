@@ -556,7 +556,7 @@ public Q_SLOTS:
      * @param id Button identifier.
      * @param state @p true enables the button(s).
      */
-    void enableButton(ButtonCode id, bool state);
+    void enableButton(KoDialog::ButtonCode id, bool state);
 
     /**
      * Enable or disable (gray out) the OK button.

@@ -78,8 +78,8 @@ KoTagChooserWidget::KoTagChooserWidget(QWidget* parent): QWidget(parent)
             this, &KoTagChooserWidget::newTagRequested);
     connect(d->tagToolButton, &KoTagToolButton::deletionOfCurrentTagRequested,
             this, &KoTagChooserWidget::contextDeleteCurrentTag);
-    connect(d->tagToolButton, SIGNAL(renamingOfCurrentTagRequested(QString)),
-            this, SLOT(tagRenamingRequested(QString)));
+    connect(d->tagToolButton, &KoTagToolButton::renamingOfCurrentTagRequested,
+            this, &KoTagChooserWidget::slotTagRenamingRequested);
     connect(d->tagToolButton, &KoTagToolButton::undeletionOfTagRequested,
             this, &KoTagChooserWidget::tagUndeletionRequested);
     connect(d->tagToolButton, &KoTagToolButton::purgingOfTagUndeleteListRequested,
@@ -100,7 +100,7 @@ void KoTagChooserWidget::contextDeleteCurrentTag()
     emit tagDeletionRequested(currentlySelectedTag());
 }
 
-void KoTagChooserWidget::tagRenamingRequested(const QString& newName)
+void KoTagChooserWidget::slotTagRenamingRequested(const QString& newName)
 {
     if (newName.isEmpty() || selectedTagIsReadOnly()) {
         return;
