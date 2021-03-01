@@ -156,7 +156,10 @@ KWDocument::~KWDocument()
     qDeleteAll(m_panelFactories);
     m_config.setUnit(unit());
     saveConfig();
-    qDeleteAll(m_frameSets);
+    // Deleting frameSet objects may end-up calling this->frameSets();
+    QList<KWFrameSet*> &frameSets = m_frameSets;
+    m_frameSets.clear();
+    qDeleteAll(frameSets);
 }
 
 bool KWDocument::isMasterDocument() const
@@ -384,8 +387,9 @@ void KWDocument::layoutProgressChanged(int percent)
 void KWDocument::layoutFinished()
 {
     Q_ASSERT(m_layoutProgressUpdater);
-    disconnect(QObject::sender(), SIGNAL(layoutProgressChanged(int)), this, SLOT(layoutProgressChanged(int)));
-    disconnect(QObject::sender(), SIGNAL(finishedLayout()), this, SLOT(layoutFinished()));
+    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(sender());
+    disconnect(lay, &KoTextDocumentLayout::layoutProgressChanged, this, &KWDocument::layoutProgressChanged);
+    disconnect(lay, &KoTextDocumentLayout::finishedLayout, this, &KWDocument::layoutFinished);
     m_layoutProgressUpdater->setProgress(100);
     m_layoutProgressUpdater = 0; // free the instance
 }

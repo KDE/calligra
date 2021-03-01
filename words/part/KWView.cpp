@@ -264,7 +264,8 @@ void KWView::buildAssociatedWidget() {
     wordCount = new KWStatisticsWidget(this,true);
     wordCount->setLayoutDirection(KWStatisticsWidget::LayoutHorizontal);
     wordCount->setCanvas(dynamic_cast<KWCanvas*>(this->canvas()));
-    statusBar()->insertWidget(0,wordCount);
+    if (statusBar())
+        statusBar()->insertWidget(0,wordCount);
 }
 
 void KWView::setupActions()
@@ -373,12 +374,14 @@ void KWView::setupActions()
     actionCollection()->addAction("showStatusBar", tAction);
     connect(tAction, &QAction::toggled, this, &KWView::showStatusBar);
 
-    mainWindow()->actionCollection()->action("view_fullscreen")->setEnabled(false);
-    tAction = new KToggleAction(i18n("Fullscreen Mode"), this);
-    tAction->setToolTip(i18n("Set view in fullscreen mode"));
-    tAction->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_F));
-    actionCollection()->addAction("view_fullscreen", tAction);
-    connect(tAction, &QAction::toggled, this, &KWView::setFullscreenMode);
+    if (mainWindow()) {
+        mainWindow()->actionCollection()->action("view_fullscreen")->setEnabled(false);
+        tAction = new KToggleAction(i18n("Fullscreen Mode"), this);
+        tAction->setToolTip(i18n("Set view in fullscreen mode"));
+        tAction->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_F));
+        actionCollection()->addAction("view_fullscreen", tAction);
+        connect(tAction, &QAction::toggled, this, &KWView::setFullscreenMode);
+    }
 
 #ifdef SHOULD_BUILD_RDF
     action = new QAction(i18n("Semantic Stylesheets..."), this);
