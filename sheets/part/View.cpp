@@ -741,7 +741,7 @@ void View::initView()
     }
     // Setup the zoom controller.
     d->zoomHandler = new KoZoomHandler();
-    d->zoomController = new KoZoomController(d->canvasController, d->zoomHandler, actionCollection(), 0, this);
+    d->zoomController = new KoZoomController(d->canvasController, d->zoomHandler, actionCollection(), {}, this);
     d->zoomController->zoomAction()->setZoomModes(KoZoomMode::ZOOM_CONSTANT);
     QWidget *zoomWidget = d->zoomController->zoomAction()->createWidget(statusBar());
     zoomWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
