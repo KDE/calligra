@@ -389,30 +389,42 @@ QMap<QByteArray, QString> createPictures(KoStore* store, KoXmlWriter* manifest, 
     return fileNames;
 }
 
-// NOTE: copied from qwmf.cc, I just changed WORD -> short and DWORD -> int,
-// removed some commented code, and changed the kWarning to qDebug here
+
+// NOTE: copied from qwmf.cc, patched to use QDataStream to prevent alignment issues
+
+typedef struct {
+    char bmType[2];
+    qint32 bmSize;
+    qint16 bmReserved1;
+    qint16 bmReserved2;
+    qint32 bmOffBits;
+} BMPFILEHEADER;
+static const int BMPFILEHEADER_SIZE = 14;
+
+static QDataStream &operator<<(QDataStream &s, const BMPFILEHEADER &header)
+{
+    s.writeRawData(header.bmType, 2);
+    s << header.bmSize << header.bmReserved1 << header.bmReserved2 << header.bmOffBits;
+    return s;
+}
+
 bool dibToBmp(QImage& bmp, const char* dib, long int size)
 {
-    typedef struct __attribute__((packed)) _BMPFILEHEADER {
-        short bmType;
-        int bmSize;
-        short bmReserved1;
-        short bmReserved2;
-        int bmOffBits;
-    }  BMPFILEHEADER;
-
-    int sizeBmp = size + 14;
+    int sizeBmp = size + BMPFILEHEADER_SIZE;
     QByteArray pattern;       // BMP header and DIB data
-    pattern.fill(0, sizeBmp);    //resize and fill
-    pattern.insert(14, QByteArray::fromRawData(dib, size));
+    pattern.reserve(sizeBmp);
+    QDataStream stream(&pattern, QIODevice::WriteOnly);
 
-    // add BMP header
-    BMPFILEHEADER* bmpHeader;
-    bmpHeader = (BMPFILEHEADER*)((const char*)pattern);
-    bmpHeader->bmType = 0x4D42;
-    bmpHeader->bmSize = sizeBmp;
+    // Build a BMP header
+    BMPFILEHEADER bmpHeader;
+    bmpHeader.bmType[0] = 'B';
+    bmpHeader.bmType[1] = 'M';
+    bmpHeader.bmSize = sizeBmp;
 
-    if (!bmp.loadFromData((const uchar*)bmpHeader, pattern.size(), "BMP")) {
+    stream << bmpHeader;
+    stream.writeRawData(dib, size);
+
+    if (!bmp.loadFromData(pattern, "BMP")) {
         qDebug() << "dibToBmp: invalid bitmap";
         return false;
     } else {

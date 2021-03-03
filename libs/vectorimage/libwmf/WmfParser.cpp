@@ -1659,30 +1659,40 @@ QPainter::CompositionMode  WmfParser::winToQtComposition(quint32 param) const
 }
 
 
+typedef struct {
+    char bmType[2];
+    qint32 bmSize;
+    qint16 bmReserved1;
+    qint16 bmReserved2;
+    qint32 bmOffBits;
+} BMPFILEHEADER;
+static const int BMPFILEHEADER_SIZE = 14;
+
+static QDataStream &operator<<(QDataStream &s, const BMPFILEHEADER &header)
+{
+    s.writeRawData(header.bmType, 2);
+    s << header.bmSize << header.bmReserved1 << header.bmReserved2 << header.bmOffBits;
+    return s;
+}
+
 bool WmfParser::dibToBmp(QImage& bmp, QDataStream& stream, quint32 size)
 {
-    typedef struct __attribute__((__packed__)) _BMPFILEHEADER {
-        quint16 bmType;
-        quint32 bmSize;
-        quint16 bmReserved1;
-        quint16 bmReserved2;
-        quint32 bmOffBits;
-    }  BMPFILEHEADER;
-
-    int sizeBmp = size + sizeof(BMPFILEHEADER);
-
-    QByteArray pattern;           // BMP header and DIB data
+    int sizeBmp = size + BMPFILEHEADER_SIZE;
+    QByteArray pattern;       // BMP header and DIB data
     pattern.resize(sizeBmp);
-    pattern.fill(0);
-    stream.readRawData(pattern.data() + sizeof(BMPFILEHEADER), size);
+    QDataStream outputStream(&pattern, QIODevice::WriteOnly);
+    outputStream.setByteOrder(QDataStream::LittleEndian);
 
-    // add BMP header
-    BMPFILEHEADER* bmpHeader;
-    bmpHeader = (BMPFILEHEADER*)(pattern.data());
-    bmpHeader->bmType = 0x4D42;
-    bmpHeader->bmSize = sizeBmp;
+    // Build a BMP header
+    BMPFILEHEADER bmpHeader;
+    bmpHeader.bmType[0] = 'B';
+    bmpHeader.bmType[1] = 'M';
+    bmpHeader.bmSize = sizeBmp;
+    bmpHeader.bmOffBits = 0;
 
-//    if ( !bmp.loadFromData( (const uchar*)bmpHeader, pattern.size(), "BMP" ) ) {
+    outputStream << bmpHeader;
+    stream.readRawData(pattern.data() + BMPFILEHEADER_SIZE, size);
+
     if (!bmp.loadFromData(pattern, "BMP")) {
         debugVectorImage << "WmfParser::dibToBmp: invalid bitmap";
         return false;
