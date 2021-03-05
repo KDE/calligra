@@ -74,7 +74,7 @@ public:
     {
         links.clear();
 
-        if(!canvas)
+        if(!canvas || !canvas->activeSheet())
             return;
         foreach(const KoShape* shape, canvas->activeSheet()->shapes()) {
             if(!shape->hyperLink().isEmpty()) {
