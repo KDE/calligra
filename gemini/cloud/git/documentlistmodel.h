@@ -133,7 +133,7 @@ public:
     SearchThread(const QHash<QString, DocumentListModel::DocumentType> &docTypes, QString docDir, QObject *parent = 0);
     ~SearchThread();
 
-    void run();
+    void run() override;
 
     void abort() { m_abort = true; }
 

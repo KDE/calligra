@@ -105,7 +105,7 @@ public:
     GitOpsThread(QString privateKey, QString publicKey, QString userForRemote, bool needsPrivateKeyPassphrase, git_signature* signature, QString gitDir, GitOperation operation, QString currentFile, QString message, QObject *parent = 0);
     ~GitOpsThread();
 
-    void run();
+    void run() override;
 
     void abort();
 
