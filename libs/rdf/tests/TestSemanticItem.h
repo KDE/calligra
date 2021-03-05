@@ -76,8 +76,9 @@ public:
     {
     }
 
-    virtual QWidget *createEditor(QWidget */*parent*/)
+    virtual QWidget *createEditor(QWidget *parent)
     {
+        Q_UNUSED(parent)
         return 0;
     }
 
@@ -89,8 +90,11 @@ public:
     {
     }
 
-    virtual void importFromData(const QByteArray &/*ba*/, const KoDocumentRdf */*rdf*/ = 0, KoCanvasBase */*host*/ = 0)
+    virtual void importFromData(const QByteArray &ba, const KoDocumentRdf *rdf = 0, KoCanvasBase *host = 0)
     {
+        Q_UNUSED(ba)
+        Q_UNUSED(rdf)
+        Q_UNUSED(host)
     }
 
     void setName(const QString &name)

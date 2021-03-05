@@ -47,8 +47,9 @@ public:
 
     ~DummyInlineObject() override {}
 
-    void saveOdf(KoShapeSavingContext &/*context*/) override
+    void saveOdf(KoShapeSavingContext &context) override
     {
+        Q_UNUSED(context)
         // dummy impl
     }
 
@@ -58,26 +59,40 @@ public:
         return false;
     }
 
-    void updatePosition(const QTextDocument *document, int posInDocument, const QTextCharFormat &/*format*/) override
+    void updatePosition(const QTextDocument *document, int posInDocument, const QTextCharFormat &format) override
     {
+        Q_UNUSED(format)
         Q_ASSERT(posInDocument <= document->toPlainText().size()); Q_UNUSED(document);
         m_position = posInDocument;
     }
 
-    void resize(const QTextDocument */*document*/, QTextInlineObject &/*object*/,
-                        int /*posInDocument*/, const QTextCharFormat &/*format*/, QPaintDevice */*pd*/) override
+    void resize(const QTextDocument *document, QTextInlineObject &object,
+                        int posInDocument, const QTextCharFormat &format, QPaintDevice *pd) override
     {
+        Q_UNUSED(document)
+        Q_UNUSED(object)
+        Q_UNUSED(posInDocument)
+        Q_UNUSED(format)
+        Q_UNUSED(pd)
         // dummy impl
     }
 
-    void paint(QPainter &/*painter*/, QPaintDevice */*pd*/, const QTextDocument */*document*/,
-                       const QRectF &/*rect*/, const QTextInlineObject &/*object*/, int /*posInDocument*/, const QTextCharFormat &/*format*/) override
+    void paint(QPainter &painter, QPaintDevice *pd, const QTextDocument *document,
+                       const QRectF &rect, const QTextInlineObject &object, int posInDocument, const QTextCharFormat &format) override
     {
+        Q_UNUSED(painter)
+        Q_UNUSED(pd)
+        Q_UNUSED(document)
+        Q_UNUSED(rect)
+        Q_UNUSED(object)
+        Q_UNUSED(posInDocument)
+        Q_UNUSED(format)
         // dummy impl
     }
 
-    void propertyChanged(Property /*property*/, const QVariant &value) override
+    void propertyChanged(Property property, const QVariant &value) override
     {
+        Q_UNUSED(property)
         m_property = value;
     }
 

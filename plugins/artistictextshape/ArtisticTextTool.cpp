@@ -348,8 +348,9 @@ void ArtisticTextTool::shortcutOverrideEvent(QKeyEvent *event)
     }
 }
 
-void ArtisticTextTool::mouseDoubleClickEvent(KoPointerEvent */*event*/)
+void ArtisticTextTool::mouseDoubleClickEvent(KoPointerEvent *event)
 {
+    Q_UNUSED(event)
     if (m_hoverPath && m_currentShape) {
         if (!m_currentShape->isOnPath() || m_currentShape->baselineShape() != m_hoverPath) {
             m_blinkingCursor.stop();

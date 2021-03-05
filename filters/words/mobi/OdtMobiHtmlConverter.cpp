@@ -679,8 +679,9 @@ void OdtMobiHtmlConverter::handleTagA(KoXmlElement &nodeElement, KoXmlWriter *ht
     htmlWriter->endElement();
 }
 
-void OdtMobiHtmlConverter::handleTagTab (KoXmlWriter */*htmlWriter*/)
+void OdtMobiHtmlConverter::handleTagTab (KoXmlWriter *htmlWriter)
 {
+    Q_UNUSED(htmlWriter)
 //    for (int i = 0; i <10; ++i)
 //        htmlWriter->addTextNode("\u00a0");
 }
@@ -739,8 +740,9 @@ void OdtMobiHtmlConverter::handleTagBookMarkStart(KoXmlElement &nodeElement, KoX
     m_bookMarksList.insert(anchor, htmlWriter->device()->pos());
 }
 
-void OdtMobiHtmlConverter::handleTagBookMarkEnd(KoXmlWriter */*htmlWriter*/)
+void OdtMobiHtmlConverter::handleTagBookMarkEnd(KoXmlWriter *htmlWriter)
 {
+    Q_UNUSED(htmlWriter)
 //    htmlWriter->endElement();
 }
 

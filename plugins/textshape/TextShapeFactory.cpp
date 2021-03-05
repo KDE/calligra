@@ -116,8 +116,9 @@ KoShape *TextShapeFactory::createDefaultShape(KoDocumentResourceManager *documen
     return text;
 }
 
-KoShape *TextShapeFactory::createShape(const KoProperties */*params*/, KoDocumentResourceManager *documentResources) const
+KoShape *TextShapeFactory::createShape(const KoProperties *params, KoDocumentResourceManager *documentResources) const
 {
+    Q_UNUSED(params)
     TextShape *shape = static_cast<TextShape*>(createDefaultShape(documentResources));
     shape->textShapeData()->document()->setUndoRedoEnabled(false);
     shape->setSize(QSizeF(300, 200));

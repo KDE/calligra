@@ -61,8 +61,9 @@ void MockRootAreaProvider::releaseAllAfter(KoTextLayoutRootArea *afterThis)
     Q_UNUSED(afterThis);
 }
 
-QRectF MockRootAreaProvider::suggestRect(KoTextLayoutRootArea */*rootArea*/)
+QRectF MockRootAreaProvider::suggestRect(KoTextLayoutRootArea *rootArea)
 {
+    Q_UNUSED(rootArea)
     return m_suggestedRect;
 }
 

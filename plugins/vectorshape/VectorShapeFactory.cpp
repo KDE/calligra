@@ -45,8 +45,9 @@ VectorShapeFactory::VectorShapeFactory()
     setLoadingPriority(5);
 }
 
-KoShape *VectorShapeFactory::createDefaultShape(KoDocumentResourceManager */*documentResources*/) const
+KoShape *VectorShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
+    Q_UNUSED(documentResources)
     VectorShape *shape = new VectorShape();
     shape->setShapeId(VectorShape_SHAPEID);
 

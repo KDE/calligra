@@ -114,8 +114,10 @@ public:
         return 0;
     }
 
-    static int acquireCredentialsCallback(git_cred **cred, const char */*url*/, const char *username_from_url, unsigned int /*allowed_types*/, void *data)
+    static int acquireCredentialsCallback(git_cred **cred, const char *url, const char *username_from_url, unsigned int allowed_types, void *data)
     {
+        Q_UNUSED(url)
+        Q_UNUSED(allowed_types)
         int result = -1;
         if (data) {
             Private* payload = static_cast<Private*>(data);

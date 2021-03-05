@@ -353,8 +353,10 @@ Value func_iseven(valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 // Function: ISFORMULA
-Value func_isformula(valVector /*args*/, ValueCalc */*calc*/, FuncExtra *e)
+Value func_isformula(valVector args, ValueCalc *calc, FuncExtra *e)
 {
+    Q_UNUSED(args)
+    Q_UNUSED(calc)
     const Calligra::Sheets::Region &region = e->regions[0];
     QPoint p = region.firstRange().topLeft();
     CellStorage *s = region.firstSheet()->cellStorage();

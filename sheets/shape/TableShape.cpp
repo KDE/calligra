@@ -83,7 +83,11 @@ public:
         return nullptr;//new KoMainWindow("application/vnd.oasis.opendocument.spreadsheet", componentData());
     }
 protected:
-    KoView *createViewInstance(KoDocument */*document*/, QWidget */*parent*/) override { return nullptr; }
+    KoView *createViewInstance(KoDocument *document, QWidget *parent) override {
+        Q_UNUSED(document)
+        Q_UNUSED(parent)
+        return nullptr;
+    }
 };
 
 class TableShapeDoc : public DocBase
@@ -137,6 +141,10 @@ TableShape::TableShape(KoDocumentResourceManager *resourceManager, KoDocumentBas
     : KoFrameShape(KoXmlNS::draw, "object")
     , d(new Private(this))
 {
+    Q_UNUSED(firstColumn)
+    Q_UNUSED(firstRow)
+    Q_UNUSED(columns)
+    Q_UNUSED(rows)
     setObjectName(QLatin1String("TableShape"));
     debugSheetsTableShape<<this;
     d->resourceManager = resourceManager;

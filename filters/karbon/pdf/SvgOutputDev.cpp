@@ -95,8 +95,9 @@ bool SvgOutputDev::interpretType3Chars()
     return false;
 }
 
-void SvgOutputDev::startPage(int pageNum, GfxState *state, XRef */*xref*/)
+void SvgOutputDev::startPage(int pageNum, GfxState *state, XRef *xref)
 {
+    Q_UNUSED(xref)
     debugPdf << "starting page" << pageNum;
     d->pageSize = QSizeF(state->getPageWidth(), state->getPageHeight());
     debugPdf << "page size =" << d->pageSize;

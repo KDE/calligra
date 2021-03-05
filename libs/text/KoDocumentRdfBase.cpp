@@ -74,13 +74,17 @@ bool KoDocumentRdfBase::saveOasis(KoStore *store, KoXmlWriter *manifestWriter)
     return true;
 }
 
-bool KoDocumentRdfBase::completeLoading(KoStore */*store*/)
+bool KoDocumentRdfBase::completeLoading(KoStore *store)
 {
+    Q_UNUSED(store)
     return false;
 }
 
-bool KoDocumentRdfBase::completeSaving(KoStore */*store*/, KoXmlWriter */*manifestWriter*/, KoShapeSavingContext */*context*/)
+bool KoDocumentRdfBase::completeSaving(KoStore *store, KoXmlWriter *manifestWriter, KoShapeSavingContext *context)
 {
+    Q_UNUSED(store)
+    Q_UNUSED(manifestWriter)
+    Q_UNUSED(context)
     return false;
 }
 
