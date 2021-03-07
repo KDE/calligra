@@ -387,7 +387,7 @@ void PictureShape::waitUntilReady(const KoViewConverter &converter, bool asynchr
     else {
         QSize pixmapSize = calcOptimalPixmapSize(converter.documentToView(QRectF(QPointF(0,0), size())).size(), imageData->image().size());
         QString key(generate_key(imageData->key(), pixmapSize));
-        if (QPixmapCache::find(key) == 0) {
+        if (QPixmapCache::find(key, nullptr) == 0) {
             QPixmap pixmap = imageData->pixmap(pixmapSize);
             QPixmapCache::insert(key, pixmap);
         }

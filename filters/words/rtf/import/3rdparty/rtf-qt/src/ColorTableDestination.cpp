@@ -32,20 +32,21 @@ namespace RtfReader
 
     void ColorTableDestination::handleControlWord( const QByteArray &controlWord, bool hasValue, const int value )
     {
-	bool handled = true;
-	if ( controlWord == "red" ) {
-	    m_currentColor.setRed( value );
-	} else if (controlWord == "green" ) {
-	    m_currentColor.setGreen( value );
-	} else if (controlWord == "blue" ) {
-	    m_currentColor.setBlue( value );
-	} else {
-	    handled = false;
-            qCDebug(lcRtf) << "unexpected control word in colortbl:" << controlWord;
-	}
-	if ( handled ) {
-	    m_colorSet = true;
-	}
+        Q_UNUSED(hasValue);
+        bool handled = true;
+        if ( controlWord == "red" ) {
+            m_currentColor.setRed( value );
+        } else if (controlWord == "green" ) {
+            m_currentColor.setGreen( value );
+        } else if (controlWord == "blue" ) {
+            m_currentColor.setBlue( value );
+        } else {
+            handled = false;
+                qCDebug(lcRtf) << "unexpected control word in colortbl:" << controlWord;
+        }
+        if ( handled ) {
+            m_colorSet = true;
+        }
     }
 
     void ColorTableDestination::handlePlainText( const QByteArray &plainText )

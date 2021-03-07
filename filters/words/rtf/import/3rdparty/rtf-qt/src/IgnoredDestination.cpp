@@ -32,10 +32,14 @@ namespace RtfReader
 
     void IgnoredDestination::handleControlWord( const QByteArray &controlWord, bool hasValue, const int value )
     {
+        Q_UNUSED(controlWord);
+        Q_UNUSED(hasValue);
+        Q_UNUSED(value);
     }
 
     void IgnoredDestination::handlePlainText( const QByteArray &plainText )
     {
+        Q_UNUSED(plainText);
     }
 
     void IgnoredDestination::aboutToEndDestination()

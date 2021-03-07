@@ -33,6 +33,7 @@ namespace RtfReader
 
     void InfoTimeDestination::handleControlWord( const QByteArray &controlWord, bool hasValue, const int value )
     {
+        Q_UNUSED(hasValue);
 	if ( controlWord == "yr" ) {
 	    m_year = value;
 	} else if ( controlWord == "mo" ) {

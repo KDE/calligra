@@ -70,7 +70,7 @@ void KoContextBarButton::paintEvent(QPaintEvent*)
 
     const QRectF rectF = QRectF(opt.rect).adjusted(0.5, 0.5, -0.5, -0.5);
     QPainterPath path;
-    path.addRoundRect(rectF, CONTEXTBAR_RADIUS, CONTEXTBAR_RADIUS);
+    path.addRoundedRect(rectF, CONTEXTBAR_RADIUS, CONTEXTBAR_RADIUS, Qt::RelativeSize);
 
     if (m_fadingValue < 255) {
         color.setAlpha(m_fadingValue);

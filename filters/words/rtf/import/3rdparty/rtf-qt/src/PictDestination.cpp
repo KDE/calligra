@@ -37,6 +37,7 @@ namespace RtfReader
 
     void PictDestination::handleControlWord( const QByteArray &controlWord, bool hasValue, const int value )
     {
+        Q_UNUSED(hasValue);
 	if ( controlWord == "jpegblip" ) {
 	    qCDebug(lcRtf) << "JPEG";
 	    m_format = "jpg";

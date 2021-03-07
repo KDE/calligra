@@ -33,6 +33,8 @@ namespace RtfReader
 
     void PcdataDestination::handleControlWord( const QByteArray &controlWord, bool hasValue, const int value )
     {
+        Q_UNUSED(hasValue);
+        Q_UNUSED(value);
         qCDebug(lcRtf) << "unexpected control word in" << m_name << ": " << controlWord;
     }
 

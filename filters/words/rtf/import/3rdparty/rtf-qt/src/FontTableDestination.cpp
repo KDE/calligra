@@ -64,6 +64,7 @@ namespace RtfReader
 
     void FontTableDestination::handleControlWord( const QByteArray &controlWord, bool hasValue, const int value )
     {
+        Q_UNUSED(hasValue);
 	if ( controlWord == "f" ) {
 	  m_currentFontTableIndex = value;
 	} else if ( controlWord == "froman" ) {
