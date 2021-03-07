@@ -31,6 +31,13 @@ StylePrivate::StylePrivate(const StylePrivate &other)
 {
 }
 
+StylePrivate & StylePrivate::operator=(const StylePrivate& other)
+{
+    m_properties = other.m_properties;
+    return *this;
+}
+
+
 StylePrivate::~StylePrivate()
 {
 }

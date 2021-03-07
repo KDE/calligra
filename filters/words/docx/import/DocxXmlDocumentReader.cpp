@@ -60,44 +60,36 @@
 
 #include <QTime>
 
-namespace {
-
-class BorderMap : public QMap<QString, KoBorder::BorderStyle>
-{
-public:
-    BorderMap() {
-        insert(QString(), KoBorder::BorderNone);
-        insert("nil", KoBorder::BorderNone);
-        insert("none", KoBorder::BorderSolid);
-        insert("single", KoBorder::BorderSolid);
-        insert("thick", KoBorder::BorderSolid); //FIXME find a better representation
-        insert("double", KoBorder::BorderDouble);
-        insert("dotted", KoBorder::BorderDotted);
-        insert("dashed", KoBorder::BorderDashed);
-        insert("dotDash", KoBorder::BorderDashDot);
-        insert("dotDotDash", KoBorder::BorderDashDotDot);
-        insert("triple", KoBorder::BorderDouble); //FIXME
-        insert("thinThickSmallGap", KoBorder::BorderSolid); //FIXME
-        insert("thickThinSmallGap", KoBorder::BorderSolid); //FIXME
-        insert("thinThickThinSmallGap", KoBorder::BorderSolid); //FIXME
-        insert("thinThickMediumGap", KoBorder::BorderSolid); //FIXME
-        insert("thickThinMediumGap", KoBorder::BorderSolid); //FIXME
-        insert("thinThickThinMediumGap", KoBorder::BorderSolid); //FIXME
-        insert("thinThickLargeGap", KoBorder::BorderSolid); //FIXME
-        insert("thickThinLargeGap", KoBorder::BorderSolid); //FIXME
-        insert("thinThickThinLargeGap", KoBorder::BorderSolid); //FIXME
-        insert("wave", KoBorder::BorderSolid); //FIXME
-        insert("dobleWave", KoBorder::BorderSolid); //FIXME
-        insert("dashSmallGap", KoBorder::BorderSolid); //FIXME
-        insert("dashDotStroked", KoBorder::BorderSolid); //FIXME
-        insert("threeDEmboss", KoBorder::BorderSolid); //FIXME
-        insert("threeDEngrave", KoBorder::BorderSolid); //FIXME
-        insert("outset", KoBorder::BorderOutset);
-        insert("inset", KoBorder::BorderInset);
-    }
-} borderMap;
-
-}
+static QMap<QString, KoBorder::BorderStyle> borderMap = {
+    {QString(), KoBorder::BorderNone},
+    {"nil", KoBorder::BorderNone},
+    {"none", KoBorder::BorderSolid},    //TODO: verify this value, it seems surprising
+    {"single", KoBorder::BorderSolid},
+    {"thick", KoBorder::BorderSolid}, //FIXME find a better representation
+    {"double", KoBorder::BorderDouble},
+    {"dotted", KoBorder::BorderDotted},
+    {"dashed", KoBorder::BorderDashed},
+    {"dotDash", KoBorder::BorderDashDot},
+    {"dotDotDash", KoBorder::BorderDashDotDot},
+    {"triple", KoBorder::BorderDouble}, //FIXME
+    {"thinThickSmallGap", KoBorder::BorderSolid}, //FIXME
+    {"thickThinSmallGap", KoBorder::BorderSolid}, //FIXME
+    {"thinThickThinSmallGap", KoBorder::BorderSolid}, //FIXME
+    {"thinThickMediumGap", KoBorder::BorderSolid}, //FIXME
+    {"thickThinMediumGap", KoBorder::BorderSolid}, //FIXME
+    {"thinThickThinMediumGap", KoBorder::BorderSolid}, //FIXME
+    {"thinThickLargeGap", KoBorder::BorderSolid}, //FIXME
+    {"thickThinLargeGap", KoBorder::BorderSolid}, //FIXME
+    {"thinThickThinLargeGap", KoBorder::BorderSolid}, //FIXME
+    {"wave", KoBorder::BorderSolid}, //FIXME
+    {"dobleWave", KoBorder::BorderSolid}, //FIXME
+    {"dashSmallGap", KoBorder::BorderSolid}, //FIXME
+    {"dashDotStroked", KoBorder::BorderSolid}, //FIXME
+    {"threeDEmboss", KoBorder::BorderSolid}, //FIXME
+    {"threeDEngrave", KoBorder::BorderSolid}, //FIXME
+    {"outset", KoBorder::BorderOutset},
+    {"inset", KoBorder::BorderInset},
+};
 
 DocxXmlDocumentReaderContext::DocxXmlDocumentReaderContext(
     DocxImport& _import,

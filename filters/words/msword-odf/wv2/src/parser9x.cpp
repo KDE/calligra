@@ -316,7 +316,7 @@ void Parser9x::parseTextBox(unsigned int index, bool stylesxml)
     //NOTE: text ranges for each FTXBXS structure are separated by 0x0D
     //characters that MUST be the last character in each range.
 
-    PLCFIterator<Word97::FTXBXS> it( plcftxbxTxt->at( index ) );
+    PLCFIterator<Word97::FTXBXS> it { plcftxbxTxt->at( index ) };
 
     //TODO: Do we need to save the state here?
     saveState( it.currentRun() - 1, TextBox );
@@ -486,7 +486,7 @@ bool Parser9x::parseBody()
 
 void Parser9x::parseHelper( Position startPos )
 {
-    PLCFIterator<Word97::PCD> it( m_plcfpcd->at( startPos.piece ) );
+    PLCFIterator<Word97::PCD> it { m_plcfpcd->at( startPos.piece ) };
 
     while ( m_remainingChars > 0 && it.current() ) {
         U32 fc = it.current()->fc;   // Start FC of this piece
@@ -758,7 +758,7 @@ void Parser9x::processParagraph( U32 fc )
             BookmarkData data( m_bookmarks->bookmark(UString("_PictureBullets"), ok) );
             if (ok) {
                 Position pos(data.startCP + bulletChp->picBulletCP, m_plcfpcd);
-                PLCFIterator<Word97::PCD> it( m_plcfpcd->at( pos.piece ));
+                PLCFIterator<Word97::PCD> it { m_plcfpcd->at( pos.piece )};
                 U32 fc = it.current()->fc;
                 bool unicode;
 
@@ -800,7 +800,7 @@ void Parser9x::processParagraph( U32 fc )
         for ( ; it != end; ++it ) {
             U32 index = 0;
             const U32 limit = ( *it ).m_text.length();
-            const PLCFIterator<Word97::PCD> pcdIt( m_plcfpcd->at( ( *it ).m_position.piece ) );
+            const PLCFIterator<Word97::PCD> pcdIt { m_plcfpcd->at( ( *it ).m_position.piece ) };
 
             while ( index < limit ) {
                 // A temporary character style initialized to CHP of the

@@ -57,6 +57,7 @@ public:
     FormulaCursor(BasicElement* element, int position);
     FormulaCursor();
     FormulaCursor(const FormulaCursor& other);
+    FormulaCursor& operator=(const FormulaCursor& other);
 
     /**
      * Draw the cursor to the given QPainter

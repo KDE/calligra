@@ -40,51 +40,47 @@
 
 //#define CONVERSION_DEBUG_SHD
 
-static QMap<int, qreal> prepareShdPairs() {
-    QMap<int, qreal> shadingTable;
-    shadingTable[2] = 0.05;
-    shadingTable[3] = 0.10;
-    shadingTable[4] = 0.20;
-    shadingTable[5] = 0.25;
-    shadingTable[6] = 0.30;
-    shadingTable[7] = 0.40;
-    shadingTable[8] = 0.50;
-    shadingTable[9] = 0.60;
-    shadingTable[10] = 0.70;
-    shadingTable[11] = 0.75;
-    shadingTable[12] = 0.80;
-    shadingTable[13] = 0.90;
-    shadingTable[35] = 0.025;
-    shadingTable[36] = 0.075;
-    shadingTable[37] = 0.125;
-    shadingTable[38] = 0.15;
-    shadingTable[39] = 0.175;
-    shadingTable[40] = 0.225;
-    shadingTable[41] = 0.275;
-    shadingTable[42] = 0.325;
-    shadingTable[43] = 0.35;
-    shadingTable[44] = 0.375;
-    shadingTable[45] = 0.425;
-    shadingTable[46] = 0.45;
-    shadingTable[47] = 0.475;
-    shadingTable[48] = 0.525;
-    shadingTable[49] = 0.55;
-    shadingTable[50] = 0.575;
-    shadingTable[51] = 0.625;
-    shadingTable[52] = 0.65;
-    shadingTable[53] = 0.675;
-    shadingTable[54] = 0.725;
-    shadingTable[55] = 0.775;
-    shadingTable[56] = 0.825;
-    shadingTable[57] = 0.85;
-    shadingTable[58] = 0.875;
-    shadingTable[59] = 0.925;
-    shadingTable[60] = 0.95;
-    shadingTable[61] = 0.975;
-    return shadingTable;
-}
-
-static const QMap<int, qreal> SHADING_TABLE = prepareShdPairs();
+static const QMap<int, qreal> SHADING_TABLE = {
+    { 2, 0.05 },
+    { 3, 0.10 },
+    { 4, 0.20 },
+    { 5, 0.25 },
+    { 6, 0.30 },
+    { 7, 0.40 },
+    { 8, 0.50 },
+    { 9, 0.60 },
+    { 10, 0.70 },
+    { 11, 0.75 },
+    { 12, 0.80 },
+    { 13, 0.90 },
+    { 35, 0.025 },
+    { 36, 0.075 },
+    { 37, 0.125 },
+    { 38, 0.15 },
+    { 39, 0.175 },
+    { 40, 0.225 },
+    { 41, 0.275 },
+    { 42, 0.325 },
+    { 43, 0.35 },
+    { 44, 0.375 },
+    { 45, 0.425 },
+    { 46, 0.45 },
+    { 47, 0.475 },
+    { 48, 0.525 },
+    { 49, 0.55 },
+    { 50, 0.575 },
+    { 51, 0.625 },
+    { 52, 0.65 },
+    { 53, 0.675 },
+    { 54, 0.725 },
+    { 55, 0.775 },
+    { 56, 0.825 },
+    { 57, 0.85 },
+    { 58, 0.875 },
+    { 59, 0.925 },
+    { 60, 0.95 },
+    { 61, 0.975 }
+};
 
 
 QString Conversion::styleName2QString(const wvWare::UString& str)
@@ -117,6 +113,7 @@ QString Conversion::color(int number, int defaultcolor, bool defaultWhite)
     case 0:
         if (defaultWhite)
             return QString("#FFFFFF");
+        // fall through
     case 1://black
         return QString("#000000");
     case 2://blue

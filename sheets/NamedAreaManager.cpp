@@ -184,7 +184,6 @@ void NamedAreaManager::loadXML(const KoXmlElement& parent)
     forEachElement(element, parent) {
         if (element.tagName() == "reference") {
             Sheet* sheet = 0;
-            QString tabname;
             QString refname;
             int left = 0;
             int right = 0;

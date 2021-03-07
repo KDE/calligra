@@ -30,6 +30,7 @@ public:
     StylePrivate();
     StylePrivate(const StylePrivate &other);
     StylePrivate(const QMap<int, QVariant> &other);
+    StylePrivate & operator=(const StylePrivate &other);
     ~StylePrivate();
 
     void add(int key, const QVariant &value);

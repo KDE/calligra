@@ -533,11 +533,10 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetHelper(const QStrin
 
     if (m_context->firstRoundOfReading) {
         // Sorting conditional styles according to the priority
-
-        typedef QPair<int, QMap<QString, QString> > Condition;
+        using Condition = QPair<int, QMap<QString, QString> >;
 
         // Transforming to a list for easier handling
-        QList<QPair<QPair<QString, QMap<QString, QString> >, int> > diffFormulasList;
+        QVector<QPair<QPair<QString, QMap<QString, QString> >, int> > diffFormulasList;
         QMapIterator<QString, QList<Condition> > i(m_conditionalStyles);
         while (i.hasNext()) {
             i.next();
@@ -555,7 +554,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_sheetHelper(const QStrin
                 ++index;
             }
         }
-        QList<QPair<int, int> > priorityActualIndex;
+        QVector<QPair<int, int> > priorityActualIndex;
         int index = 0;
         while (index < diffFormulasList.size()) {
             priorityActualIndex.push_back(QPair<int, int>(diffFormulasList.at(index).second, index));

@@ -358,7 +358,7 @@ void MainWindow::switchTouchForced()
 
 void MainWindow::switchToTouch()
 {
-    QTime timer;
+    QElapsedTimer timer;
     timer.start();
     qDebug() << "Switching to touch";
 
@@ -426,7 +426,7 @@ void MainWindow::touchChange()
 
 void MainWindow::switchToDesktop()
 {
-    QTime timer;
+    QElapsedTimer timer;
     timer.start();
     qDebug() << "Switching to desktop";
 

@@ -3442,7 +3442,7 @@ void XlsxXmlChartReader::WriteIntoInternalTable(QString &range, QVector< QString
     if(range.isEmpty()) {
         return;
     }
-    const QString sheet = range.section( '!', 0, 0 );
+//    const QString sheet = range.section( '!', 0, 0 );
     const QString cellRange = range.section( '!', 1, -1 );
     const QStringList& res = cellRange.split( QRegExp( "[$:]" ), QString::SkipEmptyParts );
 

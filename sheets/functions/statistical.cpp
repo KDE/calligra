@@ -1296,11 +1296,10 @@ Value func_frequency(valVector args, ValueCalc*, FuncExtra*)
 
     Value result(Value::Array);
     QVector<double>::ConstIterator begin = data.constBegin();
-    QVector<double>::ConstIterator it = data.constBegin();
     for (uint v = 0; v < bins.count(); ++v) {
         if (!bins.element(v).isNumber())
             continue;
-        it = std::upper_bound(begin, data.constEnd(), bins.element(v).asFloat());
+        QVector<double>::ConstIterator it = std::upper_bound(begin, data.constEnd(), bins.element(v).asFloat());
         // exact match?
         if (*it == numToDouble(bins.element(v).asFloat()))
             ++it;

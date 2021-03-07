@@ -140,6 +140,7 @@ bool FixedElement::moveSingleSituation ( FormulaCursor& newcursor, FormulaCursor
             newcursor.moveTo(newcursor.currentElement()->childElements()[pos]);
             break;
         }
+        // fall through
     case MoveUp:
     case MoveDown:
         return false;

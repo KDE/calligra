@@ -65,7 +65,7 @@ WordsGraphicsHandler::DrawClient::getRect(const MSO::OfficeArtClientAnchor& ca)
         return QRectF();
     }
 
-    PLCFIterator<Word97::FSPA> it(plcfSpa->at(a->clientAnchor));
+    PLCFIterator<Word97::FSPA> it { plcfSpa->at(a->clientAnchor) };
     Word97::FSPA* spa = it.current();
     if (!spa) {
         return QRectF();

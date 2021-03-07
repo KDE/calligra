@@ -25,7 +25,7 @@
 #include <QNetworkReply>
 #include <QObject>
 #include <QFile>
-#include <QTime>
+#include <QElapsedTimer>
 #include <qdir.h>
 
 #include "droprestapi.h"
@@ -108,8 +108,8 @@ private:
     FolderItem *m_fi;
     QByteArray *m_multipartform;
     QFile m_file;
-    QTime m_uploadtime;
-    QTime m_downloadtime;
+    QElapsedTimer m_uploadtime;
+    QElapsedTimer m_downloadtime;
 
     void file_transfer_success(bool);
     bool recheck_token_and_secret();

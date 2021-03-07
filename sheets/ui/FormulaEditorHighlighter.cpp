@@ -79,7 +79,6 @@ void FormulaEditorHighlighter::highlightBlock(const QString& text)
     d->tokens = f.scan(text);
 
     QFont editorFont = document()->defaultFont();
-    QFont font;
 
     uint oldRangeCount = d->rangeCount;
 

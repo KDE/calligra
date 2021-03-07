@@ -136,7 +136,7 @@ void StyleManager::createBuiltinStyles()
     m_styles[ header1->name()] = header1;
 
     CustomStyle * header2 = new CustomStyle(i18n("Header1"), header1);
-    QColor color("#F0F0FF");
+    QColor color(0xF0, 0xF0, 0xFF);
     header2->setBackgroundColor(color);
     QPen pen(Qt::black, 1, Qt::SolidLine);
     header2->setBottomBorderPen(pen);

@@ -59,12 +59,6 @@ static QRectF itemRect(const KoShape *shape)
     return ChartLayout::itemRect(shape);
 }
 
-static void setItemPosition(KoShape *shape, const QPointF& pos)
-{
-    ChartLayout::setItemPosition(shape, pos);
-}
-
-
 TestChartLayout::TestChartLayout()
 {
 }

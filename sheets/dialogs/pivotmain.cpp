@@ -259,7 +259,6 @@ Sheet* PivotMain::filter()
   int r= range2.right();
   int b=range2.bottom();
   int row=range2.top();
-  QVector<QString> vect;
   QVector<int> filtered;
   
   
@@ -395,7 +394,7 @@ void PivotMain::Summarize()
     }
     const QRect range(1,1,d->selection->lastRange().right(),d->filtersize);
     
-    QColor color,color2("lightGray");
+    QColor color;
     color.setBlue(50);
     QPen pen(color);
     
@@ -773,7 +772,7 @@ void PivotMain::styling(Sheet* mySheet)
 {
     int lastRow=mySheet->cellStorage()->rows();
     int lastColumn=mySheet->cellStorage()->columns();
-    QColor color,color2("lightGray");
+    QColor color;
     color.setBlue(50);
     QPen pen(color);
     

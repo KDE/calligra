@@ -177,7 +177,7 @@ void Autocorrect::uppercaseFirstCharOfSentence()
         constIter--;
 
         while (constIter != text.constBegin()) {
-            while (constIter != text.begin() && constIter->isSpace()) {
+            while (constIter != text.constBegin() && constIter->isSpace()) {
                 constIter--;
                 position--;
             }

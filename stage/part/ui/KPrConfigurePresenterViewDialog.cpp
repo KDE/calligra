@@ -19,7 +19,8 @@
 
 #include "KPrConfigurePresenterViewDialog.h"
 
-#include <QDesktopWidget>
+#include <QGuiApplication>
+#include <QScreen>
 
 #include <klocalizedstring.h>
 
@@ -34,19 +35,15 @@ KPrConfigurePresenterViewDialog::KPrConfigurePresenterViewDialog( KPrDocument *d
 
     ui.setupUi( widget );
 
-    QDesktopWidget desktop;
-    int numScreens = desktop.numScreens();
-    int primaryScreen = desktop.primaryScreen();
-    for ( int i = 0; i < numScreens; i++ ) {
-        if ( i == primaryScreen ) {
-            ui.monitorComboBox->addItem( i18n( "Monitor %1 (primary)", i + 1 ) );
-        }
-        else {
-            ui.monitorComboBox->addItem( i18n( "Monitor %1", i + 1 ) );
+    for (auto screen: qGuiApp->screens()) {
+        if (screen == qGuiApp->primaryScreen()) {
+            ui.monitorComboBox->addItem( i18n( "Monitor %1 (primary)", screen->name() ) );
+        } else {
+            ui.monitorComboBox->addItem( i18n( "Monitor %1", screen->name() ) );
         }
     }
 
-    if ( numScreens <= 1 )
+    if ( qGuiApp->screens().count() <= 1 )
         ui.presenterViewCheckBox->setEnabled( false );
 
     setMainWidget( widget );

@@ -199,7 +199,6 @@ void Style::saveXML(QDomDocument& doc, QDomElement& format, const StyleManager* 
         // check, if it's an unmodified named style
         keysToStore = difference(*namedStyle);
         if (type() == AUTO) {
-            const QList<Key> keys = keysToStore.toList();
             if ((keysToStore.count() == 0) ||
                     (keysToStore.count() == 1 && keysToStore.toList().first() == NamedStyleKey)) {
                 // just save the name and we are done.

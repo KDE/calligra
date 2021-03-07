@@ -380,7 +380,7 @@ void WordsGraphicsHandler::handleFloatingObject(unsigned int globalCP)
         return;
     }
 
-    PLCFIterator<Word97::FSPA> it(plcfSpa->at(0));
+    PLCFIterator<Word97::FSPA> it { plcfSpa->at(0) };
     for (size_t i = 0; i < plcfSpa->count(); i++, ++it) {
 #ifdef DEBUG_GHANDLER
         debugMsDoc << "FSPA start:" << it.currentStart();
@@ -464,7 +464,7 @@ QRect WordsGraphicsHandler::getRect(const MSO::OfficeArtSpContainer &o)
         } else {
             plcfSpa = m_drawings->getSpaMom();
         }
-        PLCFIterator<wvWare::Word97::FSPA> it(plcfSpa->at(a->clientAnchor));
+        PLCFIterator<wvWare::Word97::FSPA> it { plcfSpa->at(a->clientAnchor) };
         const wvWare::Word97::FSPA* spa = it.current();
     Q_ASSERT(m_pSpa == spa);
         return QRect(spa->xaLeft, spa->yaTop, spa->xaRight - spa->xaLeft, spa->yaBottom - spa->yaTop);

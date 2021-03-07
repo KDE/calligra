@@ -639,7 +639,7 @@ View::~View()
     // delete the sheetView's after calling d->selection->emitCloseEditor cause the
     // emitCloseEditor may trigger over the Selection::emitChanged a Canvas::scrollToCell
     // which in turn needs the sheetview's to access the sheet itself.
-    qDeleteAll(d->sheetViews.values());
+    qDeleteAll(d->sheetViews);
 
     delete d->scrollTimer;
 
@@ -917,7 +917,6 @@ SheetView* View::sheetView(const Sheet* sheet) const
 
 void View::refreshSheetViews()
 {
-    QList<const Sheet*> sheets = d->sheetViews.keys();
     QList< QPointer<SheetView> > sheetViews = d->sheetViews.values();
 
     foreach(const Sheet *sheet, d->sheetViews.keys()) {

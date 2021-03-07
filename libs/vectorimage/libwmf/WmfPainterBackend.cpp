@@ -499,7 +499,7 @@ void WmfPainterBackend::drawRoundRect(WmfDeviceContext &context, int x, int y, i
 #endif
 
     updateFromDeviceContext(context);
-    mPainter->drawRoundRect(x, y, w, h, roudw, roudh);
+    mPainter->drawRoundedRect(x, y, w, h, roudw, roudh, Qt::RelativeSize);
 }
 
 

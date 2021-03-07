@@ -40,30 +40,17 @@ using namespace KoChart;
 class LegendConfigWidget::Private
 {
 public:
-    Private(QWidget *parent);
-    ~Private();
-
     Ui::LegendConfigWidget ui;
 
     FontEditorDialog legendFontEditorDialog;
 
 };
 
-
-LegendConfigWidget::Private::Private(QWidget *parent)
-{
-}
-
-LegendConfigWidget::Private::~Private()
-{
-}
-
-
 // ================================================================
 //                     class LegendConfigWidget
 
 LegendConfigWidget::LegendConfigWidget()
-    : d(new Private(this))
+    : d(new Private())
 {
     setObjectName("LegendConfigWidget");
     d->ui.setupUi(this);

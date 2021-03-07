@@ -118,7 +118,7 @@ bool OpcRelSetManager::loadRelSets(KoStore *odfStore)
 {
     Q_UNUSED(odfStore);
 
-    QString errorMsg;
+    //QString errorMsg;
     //int errorLine;
     //int errorColumn;
 

@@ -70,7 +70,7 @@ void EncloseElement::layout( const AttributeManager* am )
         m_enclosePath.addRect( 0, 0, tmpRect.width(), tmpRect.height() );
     }
     if( tmp.contains( "roundedbox" ) ) { // TODO spacing is missing - might look odd
-    m_enclosePath.addRoundRect( 0, 0, tmpRect.width(), tmpRect.height(), 25 );
+        m_enclosePath.addRoundedRect( 0, 0, tmpRect.width(), tmpRect.height(), 25, Qt::RelativeSize);
     }
     if( tmp.contains( "updiagonalstrike" ) ) {
         m_enclosePath.moveTo( 0, tmpRect.height() );

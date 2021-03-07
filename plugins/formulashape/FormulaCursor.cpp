@@ -68,6 +68,15 @@ FormulaCursor::FormulaCursor (const FormulaCursor& other )
     m_selecting=other.isSelecting();
 }
 
+FormulaCursor& FormulaCursor::operator=(const FormulaCursor& other)
+{
+    m_currentElement=other.currentElement();
+    m_position=other.position();
+    m_mark=other.mark();
+    m_selecting=other.isSelecting();
+    return *this;
+}
+
 
 void FormulaCursor::paint( QPainter& painter ) const
 {

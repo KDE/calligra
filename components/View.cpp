@@ -86,8 +86,8 @@ void View::setDocument(Document* newValue)
         }
 
         d->document = newValue;
-        connect(d->document, &Document::statusChanged, [&]() { d->updateCanvas(); });
-        connect(d->document, SIGNAL(requestViewUpdate()), this, SLOT(update()));
+        connect(d->document, &Document::statusChanged, this, [&]() { d->updateCanvas(); });
+        connect(d->document, &Document::requestViewUpdate, this, [&]() { update(); });
 
         d->updateCanvas();
         emit documentChanged();

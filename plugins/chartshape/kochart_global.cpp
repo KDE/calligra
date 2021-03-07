@@ -71,6 +71,7 @@ ChartSubtype defaultChartSubtype(ChartType type)
 
 int numDimensions(ChartType type, ChartSubtype subtype)
 {
+    Q_UNUSED(subtype);
     int dimensions = 1;
 
     switch (type) {
