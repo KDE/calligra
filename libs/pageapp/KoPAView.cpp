@@ -451,8 +451,12 @@ void KoPAView::initActions()
     connect( d->find, &KoFind::findDocumentSetPrevious,
              this,    &KoPAView::findDocumentSetPrevious );
 
-    actionCollection()->action( "object_group" )->setShortcut( QKeySequence( "Ctrl+G" ) );
-    actionCollection()->action( "object_ungroup" )->setShortcut( QKeySequence( "Ctrl+Shift+G" ) );
+    if (actionCollection()->action( "object_group" )) {
+        actionCollection()->action( "object_group" )->setShortcut( QKeySequence( "Ctrl+G" ) );
+    }
+    if (actionCollection()->action( "object_ungroup" )) {
+        actionCollection()->action( "object_ungroup" )->setShortcut( QKeySequence( "Ctrl+Shift+G" ) );
+    }
 
     connect(d->doc, &KoPADocument::actionsPossible, this, &KoPAView::setActionEnabled);
 }
