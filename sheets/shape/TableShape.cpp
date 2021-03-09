@@ -45,6 +45,7 @@
 #include <KoPart.h>
 #include <KoMainWindow.h>
 #include <KoDocumentBase.h>
+#include <KoDocumentEntry.h>
 
 #include <SheetsDebug.h>
 #include <CellView.h>
@@ -60,8 +61,6 @@
 #include <Value.h>
 #include <odf/SheetsOdf.h>
 #include <FunctionModuleRegistry.h>
-#include <Doc.h>
-#include <Part.h>
 
 // Define the protocol used here for embedded documents' URL
 // This used to "store" but KUrl didn't like it,
@@ -109,7 +108,7 @@ class TableShape::Private
 public:
     Private(TableShape *parent) : q(parent), paintingDisabled(false) {}
     TableShape *q;
-    Part part;
+    KoPart *part;
     KoDocumentResourceManager *resourceManager;
     KoDocumentBase *parentDoc;
     QPointF topLeftOffset;
@@ -153,10 +152,11 @@ TableShape::TableShape(KoDocumentResourceManager *resourceManager, KoDocumentBas
     d->isMaster = false;
     d->pageManager = nullptr;
     d->currentSheet = nullptr;
-    Doc *doc = new Doc(&d->part);
-    d->part.setDocument(doc);
+    d->part = createPart();
+    Q_ASSERT(d->part);
+    Q_ASSERT(document());
     if (parentDoc) {
-        parentDoc->setEmbeddedDocument(doc);
+        parentDoc->setEmbeddedDocument(document());
     }
     setMap();
 }
@@ -165,7 +165,20 @@ TableShape::~TableShape()
 {
     delete d->pageManager;
     delete d->sheetView;
+    delete document();
     delete d;
+}
+
+KoPart *TableShape::createPart() const
+{
+    KoDocumentEntry entry = KoDocumentEntry::queryByMimeType(SHEETS_MIME_TYPE);
+    QString errorMsg;
+    KoPart *part = entry.createKoPart(&errorMsg);
+
+    if (!part || !errorMsg.isEmpty()) {
+        return nullptr;
+    }
+    return part;
 }
 
 KoDocumentResourceManager *TableShape::resourceManager() const
@@ -173,9 +186,9 @@ KoDocumentResourceManager *TableShape::resourceManager() const
     return d->resourceManager;
 }
 
-Doc *TableShape::document() const
+DocBase *TableShape::document() const
 {
-    return dynamic_cast<Doc*>(d->part.document());
+    return dynamic_cast<DocBase*>(d->part->document());
 }
 
 void TableShape::paint(QPainter& painter, const KoViewConverter& converter, KoShapePaintingContext &)

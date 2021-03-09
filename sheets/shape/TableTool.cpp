@@ -83,9 +83,6 @@
 #include "TableShape.h"
 #include "ToolHeaders.h"
 #include "ScreenConversions.h"
-#include "View.h"
-#include "Doc.h"
-#include "Canvas.h"
 
 #include <algorithm>
 

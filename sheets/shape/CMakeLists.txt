@@ -5,7 +5,6 @@ include_directories(
     ${CMAKE_BINARY_DIR}/sheets
     ${CMAKE_SOURCE_DIR}/sheets/ui
     ${CMAKE_SOURCE_DIR}/sheets/database
-    ${CMAKE_SOURCE_DIR}/sheets/part
     ${CMAKE_SOURCE_DIR}/sheets/commands
     ${KOMAIN_INCLUDES}
     ${KOTEXT_INCLUDES}
@@ -31,7 +30,6 @@ calligra_shape_desktop_to_json(calligra_shape_spreadsheet calligra_shape_spreads
 target_link_libraries(calligra_shape_spreadsheet
     PUBLIC
         calligrasheetscommon
-        calligrasheetspart
         flake
         komain
     PRIVATE

@@ -41,7 +41,7 @@ class Damage;
 class Map;
 class Sheet;
 class SheetView;
-class Doc;
+class DocBase;
 
 class TableShape : public QObject, public KoShape, public KoFrameShape
 {
@@ -83,7 +83,7 @@ public:
     QRect visibleCells() const;
     void updateVisibleCellRange();
 
-    Doc *document() const;
+    DocBase *document() const;
 
     KoDocumentResourceManager *resourceManager() const;
     void paintCells(QPainter& painter);
@@ -101,6 +101,8 @@ protected:
 private Q_SLOTS:
     void handleDamages(const QList<Damage*>& damages);
 
+private:
+    KoPart* createPart() const;
 private:
     Q_DISABLE_COPY(TableShape)
 
