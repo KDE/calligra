@@ -359,7 +359,6 @@ void KWStatisticsWidget::selectionChanged()
 
 void KWStatisticsWidget::computeStatistics(const QTextDocument &doc, KWDocumentStatistics &stats)
 {
-    
     // parts of words for better counting of syllables:
     // (only use reg exp if necessary -> speed up)
 
@@ -372,9 +371,10 @@ void KWStatisticsWidget::computeStatistics(const QTextDocument &doc, KWDocumentS
         QStringLiteral("ion"),
         QStringLiteral("iou")
     };
-    const QStringList subs_syl_regexp {
-        QStringLiteral("sia$"),
-        QStringLiteral("ely$")
+    
+    static const QVector<QRegularExpression> subs_syl_regexp {
+        QRegularExpression("sia$", QRegularExpression::CaseInsensitiveOption),
+        QRegularExpression("ely$", QRegularExpression::CaseInsensitiveOption)
     };
 
     const QStringList add_syl {
@@ -385,16 +385,24 @@ void KWStatisticsWidget::computeStatistics(const QTextDocument &doc, KWDocumentS
         QStringLiteral("io"),
         QStringLiteral("ii")
     };
-    const QStringList add_syl_regexp {
-        QStringLiteral("[aeiouym]bl$"),
-        QStringLiteral("[aeiou]{3}"),
-        QStringLiteral("^mc"),
-        QStringLiteral("ism$"),
-        QStringLiteral("[^l]lien"),
-        QStringLiteral("^coa[dglx]."),
-        QStringLiteral("[^gq]ua[^auieo]"),
-        QStringLiteral("dnt$")
+    static const QVector<QRegularExpression> add_syl_regexp {
+        QRegularExpression("[aeiouym]bl$", QRegularExpression::CaseInsensitiveOption),
+        QRegularExpression("[aeiou]{3}", QRegularExpression::CaseInsensitiveOption),
+        QRegularExpression("^mc", QRegularExpression::CaseInsensitiveOption),
+        QRegularExpression("ism$", QRegularExpression::CaseInsensitiveOption),
+        QRegularExpression("[^l]lien", QRegularExpression::CaseInsensitiveOption),
+        QRegularExpression("^coa[dglx].", QRegularExpression::CaseInsensitiveOption),
+        QRegularExpression("[^gq]ua[^auieo]", QRegularExpression::CaseInsensitiveOption),
+        QRegularExpression("dnt$", QRegularExpression::CaseInsensitiveOption)
     };
+    
+    static QRegularExpression punctuation("[!?.,:_\"-]", QRegularExpression::CaseInsensitiveOption);
+    static QRegularExpression final_e("e$", QRegularExpression::CaseInsensitiveOption);
+    static QRegularExpression vowels("[^aeiouy]+", QRegularExpression::CaseInsensitiveOption);
+    static QRegularExpression space("\\s+");
+    static QRegularExpression multiplePunctuation("[.?!]+");
+    static QRegularExpression floatingPoint("\\d\\.\\d");
+    static QRegularExpression acronyms("[A-Z]\\.+");
 
     QTextBlock block = doc.begin();
     while (block.isValid()) {
@@ -416,31 +424,25 @@ void KWStatisticsWidget::computeStatistics(const QTextDocument &doc, KWDocumentS
         // is quite good, as some words get a number that's too high and others get
         // one that's too low.
         // IMPORTANT: please test any changes against the unit test
-        QRegExp re("\\s+");
-        const QStringList wordlist = s.split(re, QString::SkipEmptyParts);
+        const QStringList wordlist = s.split(space, QString::SkipEmptyParts);
         stats.words += wordlist.count();
-        re.setCaseSensitivity(Qt::CaseInsensitive);
         for (QStringList::ConstIterator it1 = wordlist.begin(); it1 != wordlist.end(); ++it1) {
             QString word = *it1;
-            re.setPattern("[!?.,:_\"-]");    // clean word from punctuation
-            word.remove(re);
+            word.remove(punctuation);   // clean word from punctuation
             if (word.length() <= 3) {  // extension to the original algorithm
                 stats.syllables++;
                 continue;
             }
-            re.setPattern("e$");
-            word.remove(re);
-            re.setPattern("[^aeiouy]+");
-            const QStringList syls = word.split(re, QString::SkipEmptyParts);
+            word.remove(final_e);
+            const QStringList syls = word.split(vowels, QString::SkipEmptyParts);
             int word_syllables = 0;
             for (QStringList::ConstIterator it = subs_syl.begin(); it != subs_syl.end(); ++it) {
                 if (word.indexOf(*it, 0, Qt::CaseInsensitive) != -1) {
                     word_syllables--;
                 }
             }
-            for (QStringList::ConstIterator it = subs_syl_regexp.begin(); it != subs_syl_regexp.end(); ++it) {
-                re.setPattern(*it);
-                if (word.indexOf(re) != -1) {
+            for (auto &regexp: subs_syl_regexp) {
+                if (word.indexOf(regexp) != -1) {
                     word_syllables--;
                 }
             }
@@ -449,9 +451,8 @@ void KWStatisticsWidget::computeStatistics(const QTextDocument &doc, KWDocumentS
                     word_syllables++;
                 }
             }
-            for (QStringList::ConstIterator it = add_syl_regexp.begin(); it != add_syl_regexp.end(); ++it) {
-                re.setPattern(*it);
-                if (word.indexOf(re) != -1) {
+            for (auto &regexp: add_syl_regexp) {
+                if (word.indexOf(regexp) != -1) {
                     word_syllables++;
                 }
             }
@@ -461,7 +462,6 @@ void KWStatisticsWidget::computeStatistics(const QTextDocument &doc, KWDocumentS
             }
             stats.syllables += word_syllables;
         }
-        re.setCaseSensitivity(Qt::CaseSensitive);
 
         block = block.next();
 
@@ -475,12 +475,9 @@ void KWStatisticsWidget::computeStatistics(const QTextDocument &doc, KWDocumentS
         if (! s.isEmpty() && lastchar != QChar('.') && lastchar != QChar('?') && lastchar != QChar('!')) {  // e.g. for headlines
             s = s + '.';
         }
-        re.setPattern("[.?!]+");         // count "..." as only one "."
-        s.replace(re, ".");
-        re.setPattern("\\d\\.\\d");      // don't count floating point numbers as sentences
-        s.replace(re, "0,0");
-        re.setPattern("[A-Z]\\.+");      // don't count "U.S.A." as three sentences
-        s.replace(re, "*");
+        s.replace(multiplePunctuation, ".");    // count "..." as only one "."
+        s.replace(floatingPoint, "0,0");        // don't count floating point numbers as sentences
+        s.replace(acronyms, "*");               // don't count "U.S.A." as three sentences
         for (int i = 0 ; i < s.length(); ++i) {
             QChar ch = s[i];
             if (ch == QChar('.') || ch == QChar('?') || ch == QChar('!')) {
