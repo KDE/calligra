@@ -81,10 +81,10 @@ struct KWDocumentStatistics {
  * FIXME: The pure statistics part should be separated from the
  *        widget, e.g. to a QAbstractListModel so that it could also
  *        be used from a QML based interface.
- * FIXME: stop exposing this object once the statistics are separated
+ * FIXME: stop exporting this object once the statistics are separated
  */ 
 
-class WORDS_EXPORT KWStatisticsWidget : public QWidget
+class WORDS_TEST_EXPORT KWStatisticsWidget : public QWidget
 {
     Q_OBJECT
 
