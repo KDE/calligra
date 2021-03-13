@@ -49,7 +49,12 @@ public:
 
 protected:
     bool doCloseDocument() override;
+#if OKULAR_VERSION < 0x010400
+    Okular::TextPage* textPage( Okular::Page *page ) override;
+#else
     Okular::TextPage* textPage( Okular::Page *page );
+    Okular::TextPage* textPage( Okular::TextRequest *request ) override;
+#endif
 
 private:
     KWDocument* m_doc;

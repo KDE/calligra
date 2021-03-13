@@ -240,6 +240,13 @@ bool OkularOdtGenerator::canGenerateTextPage() const
     return true;
 }
 
+#if OKULAR_VERSION >= 0x010400
+Okular::TextPage* OkularOdtGenerator::textPage( Okular::TextRequest *request )
+{
+    return textPage(request->page());
+}
+#endif
+
 Okular::TextPage* OkularOdtGenerator::textPage( Okular::Page *page )
 {
     QTextDocument* textDocument = m_doc->mainFrameSet()->document();
