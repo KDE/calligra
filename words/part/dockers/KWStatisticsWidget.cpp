@@ -51,14 +51,6 @@ KWStatisticsWidget::KWStatisticsWidget(QWidget *parent, bool shortVersion)
           m_document(0),
           m_textDocument(0),
           m_timer(0),
-          m_words(0),
-          m_sentences(0),
-          m_syllables(0),
-          m_cjkChars(0),
-          m_charsWithSpace(0),
-          m_charsWithoutSpace(0),
-          m_lines(0),
-          m_paragraphs(0),
           m_running(false)
 {
     this->shortVersion = shortVersion;
@@ -266,15 +258,108 @@ void KWStatisticsWidget::updateData()
         return;
     }
     m_running = true;
-    m_charsWithSpace = 0;
-    m_charsWithoutSpace = 0;
-    m_words = 0;
-    m_sentences = 0;
-    m_lines = 0;
-    m_syllables = 0;
-    m_paragraphs = 0;
-    m_cjkChars = 0;
+    m_stats.reset();
 
+    foreach (KWFrameSet *fs, m_document->frameSets()) {
+        QPointer<KWTextFrameSet> tfs = dynamic_cast<KWTextFrameSet*>(fs);
+        if (!tfs)
+            continue;
+
+        QPointer<QTextDocument> doc = tfs->document();
+        if (!doc)
+            continue;
+        computeStatistics(*doc, m_stats);
+    }
+    updateDataUi();
+    m_running = false;
+}
+
+void KWStatisticsWidget::setLayoutDirection(KWStatisticsWidget::LayoutDirection direction)
+{
+    if (direction == KWStatisticsWidget::LayoutHorizontal) {
+        m_mainBox->setDirection(QBoxLayout::LeftToRight);
+    } else {
+        m_mainBox->setDirection(QBoxLayout::TopToBottom);
+    }
+}
+
+void KWStatisticsWidget::setCanvas(KWCanvas* canvas)
+{
+    if (!canvas) {
+        return;
+    }
+    m_resourceManager = canvas->resourceManager();
+    m_selection = canvas->shapeManager()->selection();
+    m_document = canvas->document();
+    // It is apparently possible to have a document which lacks a main frameset...
+    // so let's handle that and avoid crashes.
+    if (m_document->mainFrameSet()) {
+        connect(static_cast<KoTextDocumentLayout*>(m_document->mainFrameSet()->document()->documentLayout()), &KoTextDocumentLayout::finishedLayout, m_timer, QOverload<>::of(&QTimer::start));
+    }
+    m_timer->start();
+}
+
+void KWStatisticsWidget::unsetCanvas()
+{
+    m_timer->stop();
+    m_resourceManager = 0;
+    m_selection = 0;
+    m_document = 0;
+}
+
+void KWStatisticsWidget::updateDataUi()
+{
+    QLocale locale;
+    QString flesch = locale.toString(m_stats.fleschScore(), 'f', 2);
+    QString newText[8];
+    newText[0] = locale.toString(m_stats.words);
+    m_countWords->setText(newText[0]);
+
+    newText[1] = locale.toString(m_stats.sentences);
+    m_countSentences->setText(newText[1]);
+
+    newText[2] = locale.toString(m_stats.syllables);
+    m_countSyllables->setText(newText[2]);
+
+    newText[3] = locale.toString(m_stats.lines);
+    m_countLines->setText(newText[3]);
+
+    newText[4] = locale.toString(m_stats.charsWithSpace);
+    m_countSpaces->setText(newText[4]);
+
+    newText[5] = locale.toString(m_stats.charsWithoutSpace);
+    m_countNospaces->setText(newText[5]);
+
+    newText[6] = locale.toString(m_stats.cjkChars);
+    m_countCjkchars->setText(newText[6]);
+
+    newText[7] = flesch;
+    m_countFlesch->setText(newText[7]);
+}
+
+
+void KWStatisticsWidget::selectionChanged()
+{
+    if (m_selection->count() != 1) {
+        return;
+    }
+
+    KoShape *shape = m_selection->firstSelectedShape();
+    if (!shape) return;
+    KWTextFrameSet *fs = dynamic_cast<KWTextFrameSet*>(KWFrameSet::from(shape));
+    if (fs) {
+        if (m_textDocument) {
+            disconnect(m_textDocument, &QTextDocument::contentsChanged, m_timer, QOverload<>::of(&QTimer::start));
+        }
+        m_textDocument = fs->document();
+    }
+}
+
+// ----------------------------------------------------------------
+
+void KWStatisticsWidget::computeStatistics(const QTextDocument &doc, KWDocumentStatistics &stats)
+{
+    
     // parts of words for better counting of syllables:
     // (only use reg exp if necessary -> speed up)
 
@@ -311,193 +396,97 @@ void KWStatisticsWidget::updateData()
         QStringLiteral("dnt$")
     };
 
-    foreach (KWFrameSet *fs, m_document->frameSets()) {
-        QPointer<KWTextFrameSet> tfs = dynamic_cast<KWTextFrameSet*>(fs);
-        if (tfs == 0) continue;
+    QTextBlock block = doc.begin();
+    while (block.isValid()) {
+        // Don't be so heavy on large documents...
+        qApp->processEvents();
+        stats.paragraphs += 1;
+        stats.charsWithSpace += block.text().length();
+        stats.charsWithoutSpace += block.text().length() - block.text().count(QRegExp("\\s"));
+        if (block.layout()) {
+            stats.lines += block.layout()->lineCount();
+        }
+        stats.cjkChars += countCJKChars(block.text());
 
-        QPointer<QTextDocument> doc = tfs->document();
-        QTextBlock block = doc->begin();
-        while (block.isValid()) {
-            // Don't be so heavy on large documents...
-            qApp->processEvents();
-            if(!tfs || !doc)
-                return;
-            m_paragraphs += 1;
-            m_charsWithSpace += block.text().length();
-            m_charsWithoutSpace += block.text().length() - block.text().count(QRegExp("\\s"));
-            if (block.layout()) {
-                m_lines += block.layout()->lineCount();
-            }
-            m_cjkChars += countCJKChars(block.text());
+        QString s = block.text();
 
-            QString s = block.text();
-
-            // Syllable and Word count
-            // Algorithm mostly taken from Greg Fast's Lingua::EN::Syllable module for Perl.
-            // This guesses correct for 70-90% of English words, but the overall value
-            // is quite good, as some words get a number that's too high and others get
-            // one that's too low.
-            // IMPORTANT: please test any changes against demos/statistics.kwd
-            QRegExp re("\\s+");
-            const QStringList wordlist = s.split(re, QString::SkipEmptyParts);
-            m_words += wordlist.count();
-            re.setCaseSensitivity(Qt::CaseInsensitive);
-            for (QStringList::ConstIterator it1 = wordlist.begin(); it1 != wordlist.end(); ++it1) {
-                QString word = *it1;
-                re.setPattern("[!?.,:_\"-]");    // clean word from punctuation
-                word.remove(re);
-                if (word.length() <= 3) {  // extension to the original algorithm
-                    m_syllables++;
-                    continue;
-                }
-                re.setPattern("e$");
-                word.remove(re);
-                re.setPattern("[^aeiouy]+");
-                const QStringList syls = word.split(re, QString::SkipEmptyParts);
-                int word_syllables = 0;
-                for (QStringList::ConstIterator it = subs_syl.begin(); it != subs_syl.end(); ++it) {
-                    if (word.indexOf(*it, 0, Qt::CaseInsensitive) != -1) {
-                        word_syllables--;
-                    }
-                }
-                for (QStringList::ConstIterator it = subs_syl_regexp.begin(); it != subs_syl_regexp.end(); ++it) {
-                    re.setPattern(*it);
-                    if (word.indexOf(re) != -1) {
-                        word_syllables--;
-                    }
-                }
-                for (QStringList::ConstIterator it = add_syl.begin(); it != add_syl.end(); ++it) {
-                    if (word.indexOf(*it, 0, Qt::CaseInsensitive) != -1) {
-                        word_syllables++;
-                    }
-                }
-                for (QStringList::ConstIterator it = add_syl_regexp.begin(); it != add_syl_regexp.end(); ++it) {
-                    re.setPattern(*it);
-                    if (word.indexOf(re) != -1) {
-                        word_syllables++;
-                    }
-                }
-                word_syllables += syls.count();
-                if (word_syllables == 0) {
-                    word_syllables = 1;
-                }
-                m_syllables += word_syllables;
-            }
-            re.setCaseSensitivity(Qt::CaseSensitive);
-
-            block = block.next();
-
-            // Sentence count
-            // Clean up for better result, destroys the original text but we only want to count
-            s = s.trimmed();
-            if (s.isEmpty()) {
+        // Syllable and Word count
+        // Algorithm mostly taken from Greg Fast's Lingua::EN::Syllable module for Perl.
+        // This guesses correct for 70-90% of English words, but the overall value
+        // is quite good, as some words get a number that's too high and others get
+        // one that's too low.
+        // IMPORTANT: please test any changes against the unit test
+        QRegExp re("\\s+");
+        const QStringList wordlist = s.split(re, QString::SkipEmptyParts);
+        stats.words += wordlist.count();
+        re.setCaseSensitivity(Qt::CaseInsensitive);
+        for (QStringList::ConstIterator it1 = wordlist.begin(); it1 != wordlist.end(); ++it1) {
+            QString word = *it1;
+            re.setPattern("[!?.,:_\"-]");    // clean word from punctuation
+            word.remove(re);
+            if (word.length() <= 3) {  // extension to the original algorithm
+                stats.syllables++;
                 continue;
             }
-            QChar lastchar = s.at(s.length() - 1);
-            if (! s.isEmpty() && lastchar != QChar('.') && lastchar != QChar('?') && lastchar != QChar('!')) {  // e.g. for headlines
-                s = s + '.';
-            }
-            re.setPattern("[.?!]+");         // count "..." as only one "."
-            s.replace(re, ".");
-            re.setPattern("\\d\\.\\d");      // don't count floating point numbers as sentences
-            s.replace(re, "0,0");
-            re.setPattern("[A-Z]\\.+");      // don't count "U.S.A." as three sentences
-            s.replace(re, "*");
-            for (int i = 0 ; i < s.length(); ++i) {
-                QChar ch = s[i];
-                if (ch == QChar('.') || ch == QChar('?') || ch == QChar('!')) {
-                    ++m_sentences;
+            re.setPattern("e$");
+            word.remove(re);
+            re.setPattern("[^aeiouy]+");
+            const QStringList syls = word.split(re, QString::SkipEmptyParts);
+            int word_syllables = 0;
+            for (QStringList::ConstIterator it = subs_syl.begin(); it != subs_syl.end(); ++it) {
+                if (word.indexOf(*it, 0, Qt::CaseInsensitive) != -1) {
+                    word_syllables--;
                 }
             }
+            for (QStringList::ConstIterator it = subs_syl_regexp.begin(); it != subs_syl_regexp.end(); ++it) {
+                re.setPattern(*it);
+                if (word.indexOf(re) != -1) {
+                    word_syllables--;
+                }
+            }
+            for (QStringList::ConstIterator it = add_syl.begin(); it != add_syl.end(); ++it) {
+                if (word.indexOf(*it, 0, Qt::CaseInsensitive) != -1) {
+                    word_syllables++;
+                }
+            }
+            for (QStringList::ConstIterator it = add_syl_regexp.begin(); it != add_syl_regexp.end(); ++it) {
+                re.setPattern(*it);
+                if (word.indexOf(re) != -1) {
+                    word_syllables++;
+                }
+            }
+            word_syllables += syls.count();
+            if (word_syllables == 0) {
+                word_syllables = 1;
+            }
+            stats.syllables += word_syllables;
         }
-    }
-    updateDataUi();
-    m_running = false;
-}
+        re.setCaseSensitivity(Qt::CaseSensitive);
 
-void KWStatisticsWidget::setLayoutDirection(KWStatisticsWidget::LayoutDirection direction)
-{
-    if (direction == KWStatisticsWidget::LayoutHorizontal) {
-        m_mainBox->setDirection(QBoxLayout::LeftToRight);
-    } else {
-        m_mainBox->setDirection(QBoxLayout::TopToBottom);
-    }
-}
+        block = block.next();
 
-void KWStatisticsWidget::setCanvas(KWCanvas* canvas)
-{
-    if (!canvas) {
-        return;
-    }
-    m_resourceManager = canvas->resourceManager();
-    m_selection = canvas->shapeManager()->selection();
-    m_document = canvas->document();
-    // It is apparently possible to have a document which lacks a main frameset...
-    // so let's handle that and avoid crashes.
-    if (m_document->mainFrameSet()) {
-        connect(static_cast<KoTextDocumentLayout*>(m_document->mainFrameSet()->document()->documentLayout()), SIGNAL(finishedLayout()), m_timer, SLOT(start()));
-    }
-    m_timer->start();
-}
-
-void KWStatisticsWidget::unsetCanvas()
-{
-    m_timer->stop();
-    m_resourceManager = 0;
-    m_selection = 0;
-    m_document = 0;
-}
-
-void KWStatisticsWidget::updateDataUi()
-{
-    QLocale locale;
-    // calculate Flesch reading ease score:
-    float flesch_score = 0;
-    if (m_words > 0 && m_sentences > 0) {
-        flesch_score = 206.835 - (1.015 * (m_words / m_sentences)) - (84.6 * m_syllables / m_words);
-    }
-    QString flesch = locale.toString(flesch_score, 'f', 2);
-    QString newText[8];
-    newText[0] = locale.toString(m_words);
-    m_countWords->setText(newText[0]);
-
-    newText[1] = locale.toString(m_sentences);
-    m_countSentences->setText(newText[1]);
-
-    newText[2] = locale.toString(m_syllables);
-    m_countSyllables->setText(newText[2]);
-
-    newText[3] = locale.toString(m_lines);
-    m_countLines->setText(newText[3]);
-
-    newText[4] = locale.toString(m_charsWithSpace);
-    m_countSpaces->setText(newText[4]);
-
-    newText[5] = locale.toString(m_charsWithoutSpace);
-    m_countNospaces->setText(newText[5]);
-
-    newText[6] = locale.toString(m_cjkChars);
-    m_countCjkchars->setText(newText[6]);
-
-    newText[7] = flesch;
-    m_countFlesch->setText(newText[7]);
-}
-
-
-void KWStatisticsWidget::selectionChanged()
-{
-    if (m_selection->count() != 1) {
-        return;
-    }
-
-    KoShape *shape = m_selection->firstSelectedShape();
-    if (!shape) return;
-    KWTextFrameSet *fs = dynamic_cast<KWTextFrameSet*>(KWFrameSet::from(shape));
-    if (fs) {
-        if (m_textDocument) {
-            disconnect(m_textDocument, SIGNAL(contentsChanged()), m_timer, SLOT(start()));
+        // Sentence count
+        // Clean up for better result, destroys the original text but we only want to count
+        s = s.trimmed();
+        if (s.isEmpty()) {
+            continue;
         }
-        m_textDocument = fs->document();
+        QChar lastchar = s.at(s.length() - 1);
+        if (! s.isEmpty() && lastchar != QChar('.') && lastchar != QChar('?') && lastchar != QChar('!')) {  // e.g. for headlines
+            s = s + '.';
+        }
+        re.setPattern("[.?!]+");         // count "..." as only one "."
+        s.replace(re, ".");
+        re.setPattern("\\d\\.\\d");      // don't count floating point numbers as sentences
+        s.replace(re, "0,0");
+        re.setPattern("[A-Z]\\.+");      // don't count "U.S.A." as three sentences
+        s.replace(re, "*");
+        for (int i = 0 ; i < s.length(); ++i) {
+            QChar ch = s[i];
+            if (ch == QChar('.') || ch == QChar('?') || ch == QChar('!')) {
+                ++stats.sentences;
+            }
+        }
     }
 }
 

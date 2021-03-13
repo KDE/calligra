@@ -40,6 +40,39 @@ class KoSelection;
 class KWDocument;
 class StatisticsPreferencesPopup;
 
+struct KWDocumentStatistics {
+    int charsWithSpace;
+    int charsWithoutSpace;
+    int words;
+    int sentences;
+    int lines;
+    int syllables;
+    int paragraphs;
+    int cjkChars;
+    
+    KWDocumentStatistics() {
+        reset();
+    }
+
+    void reset() {
+        charsWithSpace = 0;
+        charsWithoutSpace = 0;
+        words = 0;
+        sentences = 0;
+        lines = 0;
+        syllables = 0;
+        paragraphs = 0;
+        cjkChars = 0;
+    }
+    
+    float fleschScore() const {
+        // calculate Flesch reading ease score
+        if ((syllables == 0) || (words == 0))
+            return 0;
+        return 206.835 - (1.015 * (words / sentences)) - (84.6 * syllables / words);
+    }
+};
+
 /** KWStatisticswidget shows text statistics about a text document.
  *
  * In addition to being a widget, it also contains the statistics data
@@ -48,9 +81,10 @@ class StatisticsPreferencesPopup;
  * FIXME: The pure statistics part should be separated from the
  *        widget, e.g. to a QAbstractListModel so that it could also
  *        be used from a QML based interface.
+ * FIXME: stop exposing this object once the statistics are separated
  */ 
 
-class KWStatisticsWidget : public QWidget
+class WORDS_EXPORT KWStatisticsWidget : public QWidget
 {
     Q_OBJECT
 
@@ -72,6 +106,8 @@ public:
 
     void unsetCanvas();
     
+    static void computeStatistics(const QTextDocument &doc, KWDocumentStatistics &stats);
+    
 public Q_SLOTS:
     void wordsDisplayChanged(int);
     void sentencesDisplayChanged(int);
@@ -90,7 +126,7 @@ private:
     void initLayout();
 
     void updateDataUi();
-    int countCJKChars(const QString &text);
+    static int countCJKChars(const QString &text);
 
 private:
     //to know if this instance is a short version or a full one
@@ -140,14 +176,7 @@ private:
     StatisticsPreferencesPopup *m_menu;
 
     // The actual data.
-    int m_words;
-    int m_sentences;
-    int m_syllables;
-    int m_cjkChars;
-    int m_charsWithSpace;
-    int m_charsWithoutSpace;
-    int m_lines;
-    int m_paragraphs;
+    KWDocumentStatistics m_stats;
 
     // to ensure we're not running over ourselves.
     bool m_running;

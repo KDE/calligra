@@ -42,6 +42,13 @@ words_part_add_unit_test(TestClipToPage
 
 ########### next target ###############
 
+words_part_add_unit_test(TestTextStatistics
+    TestTextStatistics.cpp
+    LINK_LIBRARIES wordsprivate Qt5::Test
+)
+
+########### next target ###############
+
 # words_part_add_unit_test(TestViewMode
 #     TestViewMode.cpp
 #     LINK_LIBRARIES wordsprivate Qt5::Test
