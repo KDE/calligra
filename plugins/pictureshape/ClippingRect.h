@@ -32,6 +32,7 @@ struct ClippingRect
 {
     ClippingRect();
     ClippingRect(const ClippingRect& rect);
+    ClippingRect &operator=(const ClippingRect& rect);
     explicit ClippingRect(const QRectF& rect, bool isUniform=false);
 
     void scale(const QSizeF& size, bool isUniform=false);
