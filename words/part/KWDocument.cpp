@@ -751,7 +751,7 @@ KoShapeAnchor* KWDocument::anchorOfShape(KoShape *shape) const
 
 KWFrame *KWDocument::frameOfShape(KoShape* shape) const
 {
-    while (shape) {
+    while (true) {
         KWFrame *answer = dynamic_cast<KWFrame*>(shape->applicationData());
         if (answer)
             return answer;
@@ -764,7 +764,7 @@ KWFrame *KWDocument::frameOfShape(KoShape* shape) const
     if (answer == 0) { // this may be a clipping shape containing the frame-shape
         KoShapeContainer *container = dynamic_cast<KoShapeContainer*>(shape);
         if (container && container->shapeCount() == 1) {
-            answer = dynamic_cast<KWFrame*>(container->shapes()[0]->applicationData());
+            answer = dynamic_cast<KWFrame*>(container->shapes().first()->applicationData());
         }
     }
 
