@@ -61,7 +61,7 @@ KWStartupWidget::KWStartupWidget(QWidget *parent, KWDocument *doc, const KoColum
 
     connect(m_sizeWidget, &KoPageLayoutWidget::layoutChanged, this, &KWStartupWidget::sizeUpdated);
     connect(widget.createButton, &QAbstractButton::clicked, this, &KWStartupWidget::buttonClicked);
-    connect(m_sizeWidget, SIGNAL(unitChanged(KoUnit)), this, SLOT(unitChanged(KoUnit)));
+    connect(m_sizeWidget, &KoPageLayoutWidget::unitChanged, this, &KWStartupWidget::unitChanged);
     connect(m_columnsWidget, &KWDocumentColumns::columnsChanged, prev, &KoPagePreviewWidget::setColumns);
     connect(m_columnsWidget, &KWDocumentColumns::columnsChanged, this, &KWStartupWidget::columnsUpdated);
     connect(m_sizeWidget, &KoPageLayoutWidget::layoutChanged, prev, &KoPagePreviewWidget::setPageLayout);

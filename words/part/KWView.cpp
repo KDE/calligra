@@ -158,7 +158,7 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     KoFindToolbar *toolbar = new KoFindToolbar(m_find, actionCollection(), this);
     toolbar->setVisible(false);
     connect(m_find, &KoFindBase::matchFound, this, &KWView::findMatchFound);
-    connect(m_find, SIGNAL(updateCanvas()), m_canvas, SLOT(update()));
+    connect(m_find, &KoFindText::updateCanvas, m_canvas, QOverload<>::of(&KWCanvas::update));
     // The text documents to search in will potentially change when we add/remove shapes and after load
     connect(m_document, &KWDocument::shapeAdded, this, &KWView::refreshFindTexts);
     connect(m_document, &KWDocument::shapeRemoved, this, &KWView::refreshFindTexts);
@@ -184,7 +184,7 @@ KWView::KWView(KoPart *part, KWDocument *document, QWidget *parent)
     if (m_canvas->viewMode()->hasPages())
         modes |= KoZoomMode::ZOOM_PAGE;
     m_zoomController->zoomAction()->setZoomModes(modes);
-    connect(m_canvas, SIGNAL(documentSize(QSizeF)), m_zoomController, SLOT(setDocumentSize(QSizeF)));
+    connect(m_canvas, &KWCanvas::documentSize, m_zoomController, [this](const QSizeF &sz) { m_zoomController->setDocumentSize(sz); });
     m_canvas->updateSize(); // to emit the doc size at least once
     m_zoomController->setZoom(m_document->config().zoomMode(), m_document->config().zoom() / 100.);
     connect(m_zoomController, &KoZoomController::zoomChanged, this, &KWView::zoomChanged);
@@ -210,7 +210,7 @@ KWView::~KWView()
 {
     KoToolManager::instance()->removeCanvasController(m_gui->canvasController());
 
-    m_canvas = 0;
+    m_canvas = nullptr;
 }
 
 KoCanvasBase *KWView::canvasBase() const

@@ -68,16 +68,20 @@ KWDocument *KWPart::document() const
 
 KoView *KWPart::createViewInstance(KoDocument *document, QWidget *parent)
 {
-    KWView *view = new KWView(this, qobject_cast<KWDocument*>(document), parent);
-    setupViewInstance(document, view);
+    auto kwdocument = qobject_cast<KWDocument*>(document);
+    KWView *view = new KWView(this, kwdocument, parent);
+    setupViewInstance(kwdocument, view);
     return view;
 }
 
-void KWPart::setupViewInstance(KoDocument *document, KWView *view)
+void KWPart::setupViewInstance(KWDocument *document, KWView *view)
 {
-    connect(document, SIGNAL(shapeAdded(KoShape*,KoShapeManager::Repaint)), view->canvasBase()->shapeManager(), SLOT(addShape(KoShape*,KoShapeManager::Repaint)));
-    connect(document, SIGNAL(shapeRemoved(KoShape*)), view->canvasBase()->shapeManager(), SLOT(remove(KoShape*)));
-    connect(document, SIGNAL(resourceChanged(int,QVariant)), view->canvasBase()->resourceManager(), SLOT(setResource(int,QVariant)));
+    connect(document, &KWDocument::shapeAdded,
+            view->canvasBase()->shapeManager(), &KoShapeManager::addShape);
+    connect(document, &KWDocument::shapeRemoved,
+            view->canvasBase()->shapeManager(), &KoShapeManager::remove);
+    connect(document, &KWDocument::resourceChanged,
+            view->canvasBase()->resourceManager(), QOverload<int, const QVariant&>::of(&KoCanvasResourceManager::setResource));
 
     bool switchToolCalled = false;
     foreach (KWFrameSet *fs, qobject_cast<KWDocument*>(document)->frameSets()) {

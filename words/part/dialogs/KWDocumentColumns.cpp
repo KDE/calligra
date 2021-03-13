@@ -38,7 +38,7 @@ KWDocumentColumns::KWDocumentColumns(QWidget *parent, const KoColumns &columns)
     layout->addWidget(m_preview);
     m_preview->setColumns(columns);
 
-    connect(widget.columns, SIGNAL(valueChanged(int)), this, SLOT(optionsChanged()));
+    connect(widget.columns, QOverload<int>::of(&QSpinBox::valueChanged), this, &KWDocumentColumns::optionsChanged);
     connect(widget.spacing, &KoUnitDoubleSpinBox::valueChangedPt, this, &KWDocumentColumns::optionsChanged);
     connect(this, &KWDocumentColumns::columnsChanged, m_preview, &KoPagePreviewWidget::setColumns);
 }

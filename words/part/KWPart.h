@@ -59,7 +59,7 @@ private Q_SLOTS:
 protected:
 
     KoView *createViewInstance(KoDocument *document, QWidget *parent) override; ///reimplemented
-    virtual void setupViewInstance(KoDocument *document, KWView *view);
+    virtual void setupViewInstance(KWDocument *document, KWView *view);
 
     KWDocument *m_document;
 };

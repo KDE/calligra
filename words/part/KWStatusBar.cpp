@@ -131,7 +131,7 @@ KWStatusBar::KWStatusBar(QStatusBar *statusBar, KWView *view)
     m_pageLabel->setFixedWidth(QFontMetrics(m_pageLabel->m_label->font()).width(i18nPageRange.subs("9999").subs("9999").subs("9999").toString()));
     m_statusbar->addWidget(m_pageLabel);
     m_pageLabel->setVisible(document->config().statusBarShowPage());
-    connect(m_pageLabel->m_edit, SIGNAL(returnPressed()), this, SLOT(gotoPage()));
+    connect(m_pageLabel->m_edit, &QLineEdit::returnPressed, this, [this]() { gotoPage(); });
     connect(document, &KWDocument::pageSetupChanged, this, &KWStatusBar::updatePageCount);
 
     QAction *action = new QAction(i18n("Page Number"), this);
@@ -160,7 +160,7 @@ KWStatusBar::KWStatusBar(QStatusBar *statusBar, KWView *view)
     m_pageStyleLabel->m_button->setMinimumHeight(psfm.height());
     m_pageStyleLabel->m_label->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     m_statusbar->addWidget(m_pageStyleLabel);
-    connect(m_pageStyleLabel->m_button, SIGNAL(clicked()), this, SLOT(showPageStyle()));
+    connect(m_pageStyleLabel->m_button, &QToolButton::clicked, this, [this]() { showPageStyle(); });
     connect(document, &KWDocument::pageSetupChanged, this, &KWStatusBar::updatePageStyle);
     m_pageStyleLabel->setVisible(document->config().statusBarShowPageStyle());
 
@@ -169,7 +169,7 @@ KWStatusBar::KWStatusBar(QStatusBar *statusBar, KWView *view)
     action->setCheckable(true);
     action->setChecked(document->config().statusBarShowPageStyle());
     m_statusbar->addAction(action);
-    connect(action, SIGNAL(toggled(bool)), this, SLOT(showPageStyle(bool)));
+    connect(action, &QAction::toggled, this, QOverload<bool>::of(&KWStatusBar::showPageStyle));
 
     m_pageSizeLabel = new QLabel();
     m_pageSizeLabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);

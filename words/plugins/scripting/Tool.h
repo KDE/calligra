@@ -70,7 +70,7 @@ public:
             connect(it.value(), &QAction::triggered, this, [this, key] { actionTriggered(key); });
         }
 
-        connect(KoToolManager::instance(), SIGNAL(changedTool(KoCanvasController*,int)), this, SIGNAL(changedTool()));
+        connect(KoToolManager::instance(), &KoToolManager::changedTool, this, [this]() { emit changedTool(); });
     }
     virtual ~Tool() {}
 
