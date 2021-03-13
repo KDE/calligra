@@ -721,7 +721,7 @@ public:
 
 
 Q_SIGNALS:
-    void styleApplied(const KoParagraphStyle*) const;
+    void styleApplied(const KoParagraphStyle*);
 
 private:
     /**

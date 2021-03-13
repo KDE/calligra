@@ -257,7 +257,7 @@ void KoParagraphStyle::applyStyle(QTextBlockFormat &format) const
     if ((hasProperty(DefaultOutlineLevel)) && (!format.hasProperty(OutlineLevel))) {
        format.setProperty(OutlineLevel, defaultOutlineLevel());
     }
-    emit styleApplied(this);
+    emit const_cast<KoParagraphStyle*>(this)->styleApplied(this);
     d->m_inUse = true;
 }
 
