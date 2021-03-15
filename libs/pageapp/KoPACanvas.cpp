@@ -172,9 +172,15 @@ void KoPACanvas::updateInputMethodInfo()
 QVariant KoPACanvas::inputMethodQuery(Qt::InputMethodQuery query) const
 {
     if (query == Qt::ImMicroFocus) {
+        // We get a query after canvasController() has been deleted.
+        // See ~KoCanvasControllerWidget()
+        const auto controller = canvasController();
+        if (!controller) {
+            return QVariant();
+        }
         QRectF rect = (toolProxy()->inputMethodQuery(query, *(viewConverter())).toRectF()).toRect();
-        QPointF scroll(canvasController()->scrollBarValue());
-        if (canvasController()->canvasMode() == KoCanvasController::Spreadsheet &&
+        QPointF scroll(controller->scrollBarValue());
+        if (controller->canvasMode() == KoCanvasController::Spreadsheet &&
                 canvasWidget()->layoutDirection() == Qt::RightToLeft) {
             scroll.setX(-scroll.x());
         }

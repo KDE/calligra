@@ -207,9 +207,7 @@ KoCanvasControllerWidget::~KoCanvasControllerWidget()
 {
     d->viewportWidget->canvas()->removeEventFilter(this);
     d->unsetCanvas();
-    // TODO: Review this
     // The canvas gets a query after canvasController() has been deleted.
-    // See KWCanvas::inputMethodQuery()
     d->canvas->setCanvasController(nullptr);
     delete d;
 }
