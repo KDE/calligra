@@ -25,6 +25,7 @@
 
 #include "KWDocument.h"
 
+#include "KWDocumentStatistics.h"
 #include "KWFactory.h"
 #include "KWView.h"
 #include "KWCanvas.h"
@@ -148,6 +149,7 @@ KWDocument::KWDocument(KoPart *part)
 
     m_annotationManager = new KoAnnotationLayoutManager(this);
 
+    m_documentStatistics = new KWDocumentStatistics(this);
     clear();
 }
 

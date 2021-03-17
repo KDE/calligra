@@ -38,6 +38,7 @@ class KWTextFrame;
  */
 class WORDS_EXPORT KWTextFrameSet : public KWFrameSet
 {
+    Q_OBJECT
 public:
     /**
      * Constructor with a type of text specified

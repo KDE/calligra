@@ -27,8 +27,6 @@
 #include <QLabel>
 #include <QHBoxLayout>
 
-// FIXME: Don't cross include
-//#include "KWStatisticsDocker.h"
 #include "StatisticsPreferencesPopup.h"
 #include <KWCanvas.h>
 
@@ -40,51 +38,10 @@ class KoSelection;
 class KWDocument;
 class StatisticsPreferencesPopup;
 
-struct KWDocumentStatistics_ {
-    int charsWithSpace;
-    int charsWithoutSpace;
-    int words;
-    int sentences;
-    int lines;
-    int syllables;
-    int paragraphs;
-    int cjkChars;
-    
-    KWDocumentStatistics_() {
-        reset();
-    }
-
-    void reset() {
-        charsWithSpace = 0;
-        charsWithoutSpace = 0;
-        words = 0;
-        sentences = 0;
-        lines = 0;
-        syllables = 0;
-        paragraphs = 0;
-        cjkChars = 0;
-    }
-    
-    float fleschScore() const {
-        // calculate Flesch reading ease score
-        if ((syllables == 0) || (words == 0))
-            return 0;
-        return 206.835 - (1.015 * (words / sentences)) - (84.6 * syllables / words);
-    }
-};
-
 /** KWStatisticswidget shows text statistics about a text document.
- *
- * In addition to being a widget, it also contains the statistics data
- * itself and functions to update this data.
- *
- * FIXME: The pure statistics part should be separated from the
- *        widget, e.g. to a QAbstractListModel so that it could also
- *        be used from a QML based interface.
- * FIXME: stop exporting this object once the statistics are separated
  */ 
 
-class WORDS_TEST_EXPORT KWStatisticsWidget : public QWidget
+class KWStatisticsWidget : public QWidget
 {
     Q_OBJECT
 
@@ -106,8 +63,6 @@ public:
 
     void unsetCanvas();
     
-    static void computeStatistics(const QTextDocument &doc, KWDocumentStatistics_ &stats);
-    
 public Q_SLOTS:
     void wordsDisplayChanged(int);
     void sentencesDisplayChanged(int);
@@ -118,15 +73,11 @@ public Q_SLOTS:
     void eastDisplayChanged(int);
     void fleschDisplayChanged(int);
 
-    void updateData();
-    void selectionChanged();
-
 private:
     void initUi();
     void initLayout();
 
     void updateDataUi();
-    static int countCJKChars(const QString &text);
 
 private:
     //to know if this instance is a short version or a full one
@@ -166,20 +117,10 @@ private:
     QHBoxLayout *m_fleschLayout;
     QHBoxLayout *m_linesLayout;
 
-    KoCanvasResourceManager *m_resourceManager;
-    KoSelection *m_selection;
     KWDocument *m_document;
-    QTextDocument *m_textDocument;
-    QTimer *m_timer;
 
     QToolButton *m_preferencesButton;
     StatisticsPreferencesPopup *m_menu;
-
-    // The actual data.
-    KWDocumentStatistics_ m_stats;
-
-    // to ensure we're not running over ourselves.
-    bool m_running;
 };
 
 #endif // KWSTATISTICSWIDGET_H

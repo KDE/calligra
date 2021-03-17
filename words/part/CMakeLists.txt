@@ -18,6 +18,7 @@ set(wordsprivate_LIB_SRCS
     KWCanvas.cpp
     KWCanvasItem.cpp
     KWDocument.cpp
+    KWDocumentStatistics.cpp
     KWGui.cpp
     KWView.cpp
     KWPart.cpp
@@ -168,6 +169,7 @@ KWCanvasBase.h
 KWCanvas.h
 KWCanvasItem.h
 KWDocument.h
+KWDocumentStatistics.h
 KWApplicationConfig.h
 KWViewMode.h
 KWView.h

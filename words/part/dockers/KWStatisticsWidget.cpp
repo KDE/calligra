@@ -23,14 +23,9 @@
 
 #include "Words.h"
 #include "KWDocument.h"
-#include "frames/KWFrame.h"
-#include "frames/KWFrameSet.h"
-#include "frames/KWTextFrameSet.h"
+#include "KWDocumentStatistics.h"
 #include "dockers/StatisticsPreferencesPopup.h"
 #include "ui_StatisticsPreferencesPopup.h"
-#include <KoCanvasResourceManager.h>
-#include <KoSelection.h>
-#include <KoShape.h>
 #include <KoIcon.h>
 #include <KoTextDocumentLayout.h>
 
@@ -38,32 +33,17 @@
 #include <kconfiggroup.h>
 
 #include <QLocale>
-#include <QPointer>
-#include <QTextLayout>
-#include <QTextDocument>
-#include <QTextBlock>
-#include <QTimer>
 
 KWStatisticsWidget::KWStatisticsWidget(QWidget *parent, bool shortVersion)
         : QWidget(parent),
-          m_resourceManager(0),
-          m_selection(0),
-          m_document(0),
-          m_textDocument(0),
-          m_timer(0),
-          m_running(false)
+          m_document(0)
 {
     this->shortVersion = shortVersion;
-    m_timer = new QTimer(this);
-    // Three seconds being the Human Moment, we're going to be slightly quicker than that
-    // This means we're waiting long enough to let people start typing again, but not long
-    // enough that they think something is wrong (which would happen if we waited longer)
-    m_timer->setInterval(2500);
-    m_timer->setSingleShot(true);
+
     initUi();
     initLayout();
-    //All kind of stuff related to the option menu, unnecessary stuff in short version
-    if(!shortVersion) {
+    // All kind of stuff related to the option menu, unnecessary stuff in short version
+    if (!shortVersion) {
         m_menu = new StatisticsPreferencesPopup(m_preferencesButton);
         m_preferencesButton->setMenu(m_menu);
         m_preferencesButton->setPopupMode(QToolButton::InstantPopup);
@@ -80,9 +60,6 @@ KWStatisticsWidget::KWStatisticsWidget(QWidget *parent, bool shortVersion)
 
         connect(m_preferencesButton, &QAbstractButton::clicked, m_preferencesButton, &QToolButton::showMenu);
     }
-
-    //use to refresh statistics
-    connect(m_timer, &QTimer::timeout, this, &KWStatisticsWidget::updateData); // FIXME: better idea ?
 
     KConfigGroup cfgGroup = KSharedConfig::openConfig()->group("Statistics");
     bool visible = false;
@@ -156,7 +133,6 @@ KWStatisticsWidget::KWStatisticsWidget(QWidget *parent, bool shortVersion)
 
 KWStatisticsWidget::~KWStatisticsWidget()
 {
-    m_timer->stop();
 }
 
 
@@ -244,36 +220,6 @@ void KWStatisticsWidget::initLayout()
     setLayout(m_mainBox); // FIXME: Is this necessary?
 }
 
-void KWStatisticsWidget::updateData()
-{
-    if (!isVisible()) {
-        // rather than returning, schedule another update - this means we don't have to capture
-        // the visible change signal and update then. This does mean we will have up to 2500 ms
-        // before the update is done after showing the bar, but it's better than not updating
-        // at all, and results in less code
-        m_timer->start();
-        return;
-    }
-    if (m_running) {
-        return;
-    }
-    m_running = true;
-    m_stats.reset();
-
-    foreach (KWFrameSet *fs, m_document->frameSets()) {
-        QPointer<KWTextFrameSet> tfs = dynamic_cast<KWTextFrameSet*>(fs);
-        if (!tfs)
-            continue;
-
-        QPointer<QTextDocument> doc = tfs->document();
-        if (!doc)
-            continue;
-        computeStatistics(*doc, m_stats);
-    }
-    updateDataUi();
-    m_running = false;
-}
-
 void KWStatisticsWidget::setLayoutDirection(KWStatisticsWidget::LayoutDirection direction)
 {
     if (direction == KWStatisticsWidget::LayoutHorizontal) {
@@ -288,228 +234,46 @@ void KWStatisticsWidget::setCanvas(KWCanvas* canvas)
     if (!canvas) {
         return;
     }
-    m_resourceManager = canvas->resourceManager();
-    m_selection = canvas->shapeManager()->selection();
+    if (m_document)
+        disconnect(m_document->statistics(), &KWDocumentStatistics::refreshed, this, &KWStatisticsWidget::updateDataUi);
     m_document = canvas->document();
-    // It is apparently possible to have a document which lacks a main frameset...
-    // so let's handle that and avoid crashes.
-    if (m_document->mainFrameSet()) {
-        connect(static_cast<KoTextDocumentLayout*>(m_document->mainFrameSet()->document()->documentLayout()), &KoTextDocumentLayout::finishedLayout, m_timer, QOverload<>::of(&QTimer::start));
-    }
-    m_timer->start();
+    connect(m_document->statistics(), &KWDocumentStatistics::refreshed, this, &KWStatisticsWidget::updateDataUi);
 }
 
 void KWStatisticsWidget::unsetCanvas()
 {
-    m_timer->stop();
-    m_resourceManager = 0;
-    m_selection = 0;
-    m_document = 0;
+    m_document = nullptr;
 }
 
 void KWStatisticsWidget::updateDataUi()
 {
     QLocale locale;
-    QString flesch = locale.toString(m_stats.fleschScore(), 'f', 2);
+    auto stats = m_document->statistics();
+    QString flesch = locale.toString(stats->fleschScore(), 'f', 2);
     QString newText[8];
-    newText[0] = locale.toString(m_stats.words);
+    newText[0] = locale.toString(stats->words());
     m_countWords->setText(newText[0]);
 
-    newText[1] = locale.toString(m_stats.sentences);
+    newText[1] = locale.toString(stats->sentences());
     m_countSentences->setText(newText[1]);
 
-    newText[2] = locale.toString(m_stats.syllables);
+    newText[2] = locale.toString(stats->syllables());
     m_countSyllables->setText(newText[2]);
 
-    newText[3] = locale.toString(m_stats.lines);
+    newText[3] = locale.toString(stats->lines());
     m_countLines->setText(newText[3]);
 
-    newText[4] = locale.toString(m_stats.charsWithSpace);
+    newText[4] = locale.toString(stats->charsWithSpace());
     m_countSpaces->setText(newText[4]);
 
-    newText[5] = locale.toString(m_stats.charsWithoutSpace);
+    newText[5] = locale.toString(stats->charsWithoutSpace());
     m_countNospaces->setText(newText[5]);
 
-    newText[6] = locale.toString(m_stats.cjkChars);
+    newText[6] = locale.toString(stats->cjkChars());
     m_countCjkchars->setText(newText[6]);
 
     newText[7] = flesch;
     m_countFlesch->setText(newText[7]);
-}
-
-
-void KWStatisticsWidget::selectionChanged()
-{
-    if (m_selection->count() != 1) {
-        return;
-    }
-
-    KoShape *shape = m_selection->firstSelectedShape();
-    if (!shape) return;
-    KWTextFrameSet *fs = dynamic_cast<KWTextFrameSet*>(KWFrameSet::from(shape));
-    if (fs) {
-        if (m_textDocument) {
-            disconnect(m_textDocument, &QTextDocument::contentsChanged, m_timer, QOverload<>::of(&QTimer::start));
-        }
-        m_textDocument = fs->document();
-    }
-}
-
-// ----------------------------------------------------------------
-
-void KWStatisticsWidget::computeStatistics(const QTextDocument &doc, KWDocumentStatistics_ &stats)
-{
-    // parts of words for better counting of syllables:
-    // (only use reg exp if necessary -> speed up)
-
-    const QStringList subs_syl {
-        QStringLiteral("cial"),
-        QStringLiteral("tia"),
-        QStringLiteral("cius"),
-        QStringLiteral("cious"),
-        QStringLiteral("giu"),
-        QStringLiteral("ion"),
-        QStringLiteral("iou")
-    };
-    
-    static const QVector<QRegularExpression> subs_syl_regexp {
-        QRegularExpression("sia$", QRegularExpression::CaseInsensitiveOption),
-        QRegularExpression("ely$", QRegularExpression::CaseInsensitiveOption)
-    };
-
-    const QStringList add_syl {
-        QStringLiteral("ia"),
-        QStringLiteral("riet"),
-        QStringLiteral("dien"),
-        QStringLiteral("iu"),
-        QStringLiteral("io"),
-        QStringLiteral("ii")
-    };
-    static const QVector<QRegularExpression> add_syl_regexp {
-        QRegularExpression("[aeiouym]bl$", QRegularExpression::CaseInsensitiveOption),
-        QRegularExpression("[aeiou]{3}", QRegularExpression::CaseInsensitiveOption),
-        QRegularExpression("^mc", QRegularExpression::CaseInsensitiveOption),
-        QRegularExpression("ism$", QRegularExpression::CaseInsensitiveOption),
-        QRegularExpression("[^l]lien", QRegularExpression::CaseInsensitiveOption),
-        QRegularExpression("^coa[dglx].", QRegularExpression::CaseInsensitiveOption),
-        QRegularExpression("[^gq]ua[^auieo]", QRegularExpression::CaseInsensitiveOption),
-        QRegularExpression("dnt$", QRegularExpression::CaseInsensitiveOption)
-    };
-    
-    static QRegularExpression punctuation("[!?.,:_\"-]", QRegularExpression::CaseInsensitiveOption);
-    static QRegularExpression final_e("e$", QRegularExpression::CaseInsensitiveOption);
-    static QRegularExpression vowels("[^aeiouy]+", QRegularExpression::CaseInsensitiveOption);
-    static QRegularExpression space("\\s+");
-    static QRegularExpression multiplePunctuation("[.?!]+");
-    static QRegularExpression floatingPoint("\\d\\.\\d");
-    static QRegularExpression acronyms("[A-Z]\\.+");
-
-    QTextBlock block = doc.begin();
-    while (block.isValid()) {
-        // Don't be so heavy on large documents...
-        qApp->processEvents();
-        stats.paragraphs += 1;
-        stats.charsWithSpace += block.text().length();
-        stats.charsWithoutSpace += block.text().length() - block.text().count(QRegExp("\\s"));
-        if (block.layout()) {
-            stats.lines += block.layout()->lineCount();
-        }
-        stats.cjkChars += countCJKChars(block.text());
-
-        QString s = block.text();
-
-        // Syllable and Word count
-        // Algorithm mostly taken from Greg Fast's Lingua::EN::Syllable module for Perl.
-        // This guesses correct for 70-90% of English words, but the overall value
-        // is quite good, as some words get a number that's too high and others get
-        // one that's too low.
-        // IMPORTANT: please test any changes against the unit test
-        const QStringList wordlist = s.split(space, QString::SkipEmptyParts);
-        stats.words += wordlist.count();
-        for (QStringList::ConstIterator it1 = wordlist.begin(); it1 != wordlist.end(); ++it1) {
-            QString word = *it1;
-            word.remove(punctuation);   // clean word from punctuation
-            if (word.length() <= 3) {  // extension to the original algorithm
-                stats.syllables++;
-                continue;
-            }
-            word.remove(final_e);
-            const QStringList syls = word.split(vowels, QString::SkipEmptyParts);
-            int word_syllables = 0;
-            for (QStringList::ConstIterator it = subs_syl.begin(); it != subs_syl.end(); ++it) {
-                if (word.indexOf(*it, 0, Qt::CaseInsensitive) != -1) {
-                    word_syllables--;
-                }
-            }
-            for (auto &regexp: subs_syl_regexp) {
-                if (word.indexOf(regexp) != -1) {
-                    word_syllables--;
-                }
-            }
-            for (QStringList::ConstIterator it = add_syl.begin(); it != add_syl.end(); ++it) {
-                if (word.indexOf(*it, 0, Qt::CaseInsensitive) != -1) {
-                    word_syllables++;
-                }
-            }
-            for (auto &regexp: add_syl_regexp) {
-                if (word.indexOf(regexp) != -1) {
-                    word_syllables++;
-                }
-            }
-            word_syllables += syls.count();
-            if (word_syllables == 0) {
-                word_syllables = 1;
-            }
-            stats.syllables += word_syllables;
-        }
-
-        block = block.next();
-
-        // Sentence count
-        // Clean up for better result, destroys the original text but we only want to count
-        s = s.trimmed();
-        if (s.isEmpty()) {
-            continue;
-        }
-        QChar lastchar = s.at(s.length() - 1);
-        if (! s.isEmpty() && lastchar != QChar('.') && lastchar != QChar('?') && lastchar != QChar('!')) {  // e.g. for headlines
-            s = s + '.';
-        }
-        s.replace(multiplePunctuation, ".");    // count "..." as only one "."
-        s.replace(floatingPoint, "0,0");        // don't count floating point numbers as sentences
-        s.replace(acronyms, "*");               // don't count "U.S.A." as three sentences
-        for (int i = 0 ; i < s.length(); ++i) {
-            QChar ch = s[i];
-            if (ch == QChar('.') || ch == QChar('?') || ch == QChar('!')) {
-                ++stats.sentences;
-            }
-        }
-    }
-}
-
-int KWStatisticsWidget::countCJKChars(const QString &text)
-{
-    int count = 0;
-
-    QString::const_iterator it;
-    for (it = text.constBegin(); it != text.constEnd(); ++it) {
-        QChar qChar = *it;
-        /*
-         * CJK punctuations: 0x3000 - 0x303F (but I believe we shouldn't include this in the statistics)
-         * Hiragana: 0x3040 - 0x309F
-         * Katakana: 0x30A0 - 0x30FF
-         * CJK Unified Ideographs: 4E00 - 9FFF (Chinese Traditional & Simplified, Kanji and Hanja
-         * Hangul: 0xAC00 - 0xD7AF
-         */
-        if ((qChar >= 0x3040 && qChar <= 0x309F)
-                || (qChar >= 0x30A0 && qChar <= 0x30FF)
-                || (qChar >= 0x4E00 && qChar <= 0x9FFF)
-                || (qChar >= 0xAC00 && qChar <= 0xD7AF)) {
-            count++;
-        }
-    }
-
-    return count;
 }
 
 // ----------------------------------------------------------------

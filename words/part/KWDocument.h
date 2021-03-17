@@ -44,6 +44,7 @@ class KWView;
 class KWPage;
 class KWFrameSet;
 class KWFrame;
+class KWDocumentStatistics;
 class KoInlineTextObjectManager;
 class KoTextRangeManager;
 class KoShapeConfigFactoryBase;
@@ -128,6 +129,12 @@ public:
      */
     Q_SCRIPTABLE KWFrameLayout *frameLayout() {
         return &m_frameLayout;
+    }
+    /**
+     * Return the statistics of this document.
+     */
+    Q_SCRIPTABLE KWDocumentStatistics *statistics() {
+        return m_documentStatistics;
     }
 
     /**
@@ -285,6 +292,7 @@ private:
     KoShapeController *m_shapeController;
     QList<KoShape*> m_loadedAnnotationShapes;
     KoAnnotationLayoutManager *m_annotationManager;
+    KWDocumentStatistics *m_documentStatistics;
 };
 
 #endif
