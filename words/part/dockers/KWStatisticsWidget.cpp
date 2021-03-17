@@ -357,7 +357,7 @@ void KWStatisticsWidget::selectionChanged()
 
 // ----------------------------------------------------------------
 
-void KWStatisticsWidget::computeStatistics(const QTextDocument &doc, KWDocumentStatistics &stats)
+void KWStatisticsWidget::computeStatistics(const QTextDocument &doc, KWDocumentStatistics_ &stats)
 {
     // parts of words for better counting of syllables:
     // (only use reg exp if necessary -> speed up)

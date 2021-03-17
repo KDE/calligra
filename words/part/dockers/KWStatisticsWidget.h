@@ -40,7 +40,7 @@ class KoSelection;
 class KWDocument;
 class StatisticsPreferencesPopup;
 
-struct KWDocumentStatistics {
+struct KWDocumentStatistics_ {
     int charsWithSpace;
     int charsWithoutSpace;
     int words;
@@ -50,7 +50,7 @@ struct KWDocumentStatistics {
     int paragraphs;
     int cjkChars;
     
-    KWDocumentStatistics() {
+    KWDocumentStatistics_() {
         reset();
     }
 
@@ -106,7 +106,7 @@ public:
 
     void unsetCanvas();
     
-    static void computeStatistics(const QTextDocument &doc, KWDocumentStatistics &stats);
+    static void computeStatistics(const QTextDocument &doc, KWDocumentStatistics_ &stats);
     
 public Q_SLOTS:
     void wordsDisplayChanged(int);
@@ -176,7 +176,7 @@ private:
     StatisticsPreferencesPopup *m_menu;
 
     // The actual data.
-    KWDocumentStatistics m_stats;
+    KWDocumentStatistics_ m_stats;
 
     // to ensure we're not running over ourselves.
     bool m_running;

@@ -7,7 +7,7 @@
 
 void TestTextStatistics::testTextStatistics()
 {
-    KWDocumentStatistics stats;
+    KWDocumentStatistics_ stats;
     QTextDocument doc;
     doc.setHtml("<html><body><p>Test cases for Words statistics</p></body></html>");
     KWStatisticsWidget::computeStatistics(doc, stats);
