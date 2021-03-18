@@ -36,7 +36,7 @@
 
 KWStatisticsWidget::KWStatisticsWidget(QWidget *parent, bool shortVersion)
         : QWidget(parent),
-          m_document(0)
+          m_document(nullptr)
 {
     this->shortVersion = shortVersion;
 
@@ -248,7 +248,7 @@ void KWStatisticsWidget::unsetCanvas()
 void KWStatisticsWidget::updateDataUi()
 {
     QLocale locale;
-    auto stats = m_document->statistics();
+    const auto stats = m_document->statistics();
     QString flesch = locale.toString(stats->fleschScore(), 'f', 2);
     QString newText[8];
     newText[0] = locale.toString(stats->words());

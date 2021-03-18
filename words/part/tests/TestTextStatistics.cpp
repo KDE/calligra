@@ -60,7 +60,7 @@ void TestTextStatistics::testTextStatistics()
     QThread::sleep(3);
     qApp->processEvents();
     QCOMPARE(spy.count(), 1);
-    auto stats = doc.statistics();
+    const auto stats = doc.statistics();
 
     QCOMPARE(stats->lines(), 11);
     QCOMPARE(stats->words(), 109);
@@ -80,7 +80,7 @@ void TestTextStatistics::testListenBehaviour()
     doc.mainFrameSet()->document()->setHtml("<html><body><p>Hello world</p></body></html>");
 
     qApp->processEvents();
-    auto stats = doc.statistics();
+    const auto stats = doc.statistics();
 
     // Stats should be empty, nobody is listening
     QCOMPARE(stats->lines(), 0);
