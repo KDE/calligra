@@ -1,0 +1,36 @@
+include:
+  - https://invent.kde.org/sysadmin/ci-tooling/raw/master/invent/ci-before.yml
+  - https://invent.kde.org/sysadmin/ci-tooling/raw/master/invent/ci-applications-linux.yml
+
+build_clazy_clang_tidy:
+  stage: build
+  image: "kdeorg/ci-suse-qt515"
+  extends: .linux
+  only:
+    - merge_requests
+  before_script:
+    - zypper install -y clazy jq
+    - git clone --depth=1 https://invent.kde.org/sysadmin/ci-tooling.git $CI_TOOLING
+    - git clone --depth=1 https://invent.kde.org/sysadmin/repo-metadata.git $CI_TOOLING/repo-metadata
+    - git clone --depth=1 https://invent.kde.org/sysadmin/kde-build-metadata.git $CI_TOOLING/kde-build-metadata
+    - git clone --depth=1 https://invent.kde.org/sdk/kde-dev-scripts.git $CI_TOOLING/kde-dev-scripts
+
+  script:
+    - export CXX=clazy
+    - export CXXFLAGS="-Werror -Wno-deprecated-declarations -Wno-deprecated-copy"
+    - export CLAZY_CHECKS="level0,level1,level2,no-ctor-missing-parent-argument,isempty-vs-count,qhash-with-char-pointer-key,raw-environment-function,qproperty-type-mismatch"
+    - export CLAZY_HEADER_FILTER='^(?!ui_)\w+.h\$'
+    - export CLAZY_IGNORE_DIRS="autotests"
+    - python3 -u $CI_TOOLING/helpers/prepare-dependencies.py --product $PRODUCT --project $PROJECT --branchGroup $BRANCH_GROUP --environment production --platform $PLATFORM --installTo $INSTALL_PREFIX
+    - python3 -u $CI_TOOLING/helpers/configure-build.py --product $PRODUCT --project $PROJECT --branchGroup $BRANCH_GROUP --platform $PLATFORM --installTo $INSTALL_PREFIX
+    - python3 -u $CI_TOOLING/helpers/compile-build.py --product $PRODUCT --project $PROJECT --branchGroup $BRANCH_GROUP --platform $PLATFORM --usingInstall $INSTALL_PREFIX
+    - time ./tools/run-clang-tidy.sh $(pwd) $(pwd)/build
+  variables:
+    PLATFORM: SUSEQt5.15
+    BRANCH_GROUP: kf5-qt5
+  artifacts:
+    paths:
+      - build/clang-tidy-report.xml
+    reports:
+      junit: build/clang-tidy-report.xml
+
