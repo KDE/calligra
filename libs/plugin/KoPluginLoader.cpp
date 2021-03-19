@@ -43,11 +43,11 @@ const QLoggingCategory &PLUGIN_LOG()
 #define debugPlugin qCDebug(PLUGIN_LOG)
 #define warnPlugin qCWarning(PLUGIN_LOG)
 
-
 class KoPluginLoaderImpl : public QObject
 {
 Q_OBJECT
 public:
+    using QObject::QObject;
     QStringList loadedDirectories;
 };
 
@@ -81,9 +81,9 @@ void KoPluginLoader::load(const QString & directory, const PluginsConfig &config
             configChanged = true;
         }
         foreach(QPluginLoader *loader, offers) {
-            QJsonObject json = loader->metaData().value("MetaData").toObject();
-            json = json.value("KPlugin").toObject();
-            const QString pluginName = json.value("Id").toString();
+            QJsonObject json = loader->metaData().value(QStringLiteral("MetaData")).toObject();
+            json = json.value(QStringLiteral("KPlugin")).toObject();
+            const QString pluginName = json.value(QStringLiteral("Id")).toString();
             if (pluginName.isEmpty()) {
                 warnPlugin << "Loading plugin" << loader->fileName() << "failed, has no X-KDE-PluginInfo-Name.";
                 continue;
@@ -104,14 +104,14 @@ void KoPluginLoader::load(const QString & directory, const PluginsConfig &config
     QMap<QString, QPluginLoader *> serviceNames;
     foreach(QPluginLoader *loader, plugins) {
         if (serviceNames.contains(loader->fileName())) { // duplicate
-            QJsonObject json2 = loader->metaData().value("MetaData").toObject();
-            QVariant pluginVersion2 = json2.value("X-Flake-PluginVersion").toVariant();
+            QJsonObject json2 = loader->metaData().value(QStringLiteral("MetaData")).toObject();
+            QVariant pluginVersion2 = json2.value(QStringLiteral("X-Flake-PluginVersion")).toVariant();
             if (pluginVersion2.isNull()) { // just take the first one found...
                 continue;
             }
             QPluginLoader *currentLoader = serviceNames.value(loader->fileName());
-            QJsonObject json = currentLoader->metaData().value("MetaData").toObject();
-            QVariant pluginVersion = json.value("X-Flake-PluginVersion").toVariant();
+            QJsonObject json = currentLoader->metaData().value(QStringLiteral("MetaData")).toObject();
+            QVariant pluginVersion = json.value(QStringLiteral("X-Flake-PluginVersion")).toVariant();
             if (!(pluginVersion.isNull() || pluginVersion.toInt() < pluginVersion2.toInt())) {
                 continue; // replace the old one with this one, since its newer.
             }
@@ -124,9 +124,9 @@ void KoPluginLoader::load(const QString & directory, const PluginsConfig &config
         KPluginFactory *factory = qobject_cast<KPluginFactory *>(loader->instance());
         QObject *plugin = factory ? factory->create<QObject>(owner ? owner : pluginLoaderInstance, QVariantList()) : nullptr;
         if (plugin) {
-            QJsonObject json = loader->metaData().value("MetaData").toObject();
-            json = json.value("KPlugin").toObject();
-            const QString pluginName = json.value("Id").toString();
+            QJsonObject json = loader->metaData().value(QStringLiteral("MetaData")).toObject();
+            json = json.value(QStringLiteral("KPlugin")).toObject();
+            const QString pluginName = json.value(QStringLiteral("Id")).toString();
             whiteList << pluginName;
             debugPlugin << "Loaded plugin" << loader->fileName() << owner;
             if (!owner) {
@@ -178,7 +178,7 @@ QList<QPluginLoader *> KoPluginLoader::pluginLoaders(const QString &directory, c
     KPluginLoader::forEachPlugin(directory, [&](const QString &pluginPath) {
         debugPlugin << "Trying to load" << pluginPath;
         QPluginLoader *loader = new QPluginLoader(pluginPath);
-        QJsonObject metaData = loader->metaData().value("MetaData").toObject();
+        QJsonObject metaData = loader->metaData().value(QStringLiteral("MetaData")).toObject();
 
         if (metaData.isEmpty()) {
             debugPlugin << pluginPath << "has no MetaData!";
@@ -186,10 +186,10 @@ QList<QPluginLoader *> KoPluginLoader::pluginLoaders(const QString &directory, c
         }
 
         if (!mimeType.isEmpty()) {
-            QJsonObject pluginData = metaData.value("KPlugin").toObject();
-            QStringList mimeTypes = pluginData.value("MimeTypes").toVariant().toStringList();
-            mimeTypes += metaData.value("X-KDE-ExtraNativeMimeTypes").toVariant().toStringList();
-            mimeTypes += metaData.value("X-KDE-NativeMimeType").toString();
+            QJsonObject pluginData = metaData.value(QStringLiteral("KPlugin")).toObject();
+            QStringList mimeTypes = pluginData.value(QStringLiteral("MimeTypes")).toVariant().toStringList();
+            mimeTypes += metaData.value(QStringLiteral("X-KDE-ExtraNativeMimeTypes")).toVariant().toStringList();
+            mimeTypes += metaData.value(QStringLiteral("X-KDE-NativeMimeType")).toString();
             if (! mimeTypes.contains(mimeType)) {
                 return;
             }

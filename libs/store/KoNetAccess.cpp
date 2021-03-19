@@ -387,7 +387,7 @@ QString NetAccess::fish_executeInternal(const QUrl &url, const QString &command,
     QTemporaryFile tmpFile;
     tmpFile.open();
 
-    if (url.scheme() == "fish") {
+    if (url.scheme() == QLatin1String("fish")) {
         // construct remote temp filename
         QUrl tempPathUrl = url;
         remoteTempFileName = tmpFile.fileName();

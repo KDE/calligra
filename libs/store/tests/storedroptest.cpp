@@ -61,7 +61,7 @@ int main(int argc, char** argv)
 StoreDropTest::StoreDropTest(QWidget* parent)
         : QTextBrowser(parent)
 {
-    setText("KoStore drop/paste test\nDrop or paste a selection from a Calligra application into this widget to see the ZIP contents");
+    setText(QStringLiteral("KoStore drop/paste test\nDrop or paste a selection from a Calligra application into this widget to see the ZIP contents"));
     setAcceptDrops(true);
 }
 
@@ -91,17 +91,17 @@ void StoreDropTest::paste()
     if (!m)
         return;
 
-    const QString acceptMimeType("application/vnd.oasis.opendocument.");
+    const QString acceptMimeType(QStringLiteral("application/vnd.oasis.opendocument."));
     QStringList formats = m->formats();
     foreach(QString fmt, formats) {
         bool oasis = fmt.startsWith(acceptMimeType);
-        if (oasis || fmt == "application/x-kpresenter") {
+        if (oasis || fmt == QLatin1String("application/x-kpresenter")) {
             QByteArray data = m->data(fmt);
             showZipContents(data, fmt.toLatin1(), oasis);
             return;
         }
     }
-    setText("No acceptable format found. All I got was:\n" + formats.join("\n"));
+    setText("No acceptable format found. All I got was:\n" + formats.join(QStringLiteral("\n")));
 
 }
 
@@ -115,43 +115,43 @@ void StoreDropTest::contentsDropEvent(QDropEvent *ev)
 
 bool StoreDropTest::processMimeData(const QMimeData* mimeData)
 {
-    const QString acceptMimeType("application/vnd.oasis.opendocument.");
+    const QString acceptMimeType(QStringLiteral("application/vnd.oasis.opendocument."));
     foreach (const QString &format, mimeData->formats()) {
         bool oasis = format.startsWith(acceptMimeType);
-        if (oasis || format == "application/x-kpresenter") {
+        if (oasis || format == QLatin1String("application/x-kpresenter")) {
             const QByteArray data = mimeData->data(format);
             showZipContents(data, format, oasis);
             return true;
         }
     }
-    setText("No acceptable format found. All I got was:\n" + mimeData->formats().join("\n"));
+    setText("No acceptable format found. All I got was:\n" + mimeData->formats().join(QStringLiteral("\n")));
     return false;
 }
 
 void StoreDropTest::showZipContents(QByteArray data, const QString &mimeType, bool oasis)
 {
     if (data.isEmpty()) {
-        setText("No data!");
+        setText(QStringLiteral("No data!"));
         return;
     }
     QBuffer buffer(&data);
     KoStore * store = KoStore::createStore(&buffer, KoStore::Read);
     if (store->bad()) {
-        setText("Invalid ZIP!");
+        setText(QStringLiteral("Invalid ZIP!"));
 	delete store;
         return;
     }
     
 
-    QString txt = QString("Valid ZIP file found for format ") + mimeType + "\n";
+    QString txt = QStringLiteral("Valid ZIP file found for format ") + mimeType + "\n";
 
     if (oasis) {
-        txt += loadTextFile(store, "content.xml");
-        txt += loadTextFile(store, "styles.xml");
-        txt += loadTextFile(store, "settings.xml");
-        txt += loadTextFile(store, "META-INF/manifest.xml");
+        txt += loadTextFile(store, QStringLiteral("content.xml"));
+        txt += loadTextFile(store, QStringLiteral("styles.xml"));
+        txt += loadTextFile(store, QStringLiteral("settings.xml"));
+        txt += loadTextFile(store, QStringLiteral("META-INF/manifest.xml"));
     } else {
-        txt += loadTextFile(store, "maindoc.xml");
+        txt += loadTextFile(store, QStringLiteral("maindoc.xml"));
     }
     setText(txt);
     delete store;
@@ -160,13 +160,13 @@ void StoreDropTest::showZipContents(QByteArray data, const QString &mimeType, bo
 QString StoreDropTest::loadTextFile(KoStore* store, const QString& fileName)
 {
     if (!store->open(fileName))
-        return QString("%1 not found\n").arg(fileName);
+        return QStringLiteral("%1 not found\n").arg(fileName);
 
     QByteArray data = store->device()->readAll();
     store->close();
-    QString txt = QString("Found %1: \n").arg(fileName);
+    QString txt = QStringLiteral("Found %1: \n").arg(fileName);
     txt += QString::fromUtf8(data.data(), data.size());
-    txt += "\n";
+    txt += QLatin1String("\n");
     return txt;
 }
 #include "storedroptest.moc"

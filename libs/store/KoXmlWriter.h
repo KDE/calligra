@@ -257,6 +257,15 @@ private:
             openingTagClosed = original.openingTagClosed;
             indentInside = original.indentInside;
         }
+        Tag& operator=(const Tag& other)
+        {
+            tagName = other.tagName;
+            hasChildren = other.hasChildren;
+            lastChildIsText = other.lastChildIsText;
+            openingTagClosed = other.openingTagClosed;
+            indentInside = other.indentInside;
+            return *this;
+        }
         const char* tagName;
         bool hasChildren : 1; ///< element or text children
         bool lastChildIsText : 1; ///< last child is a text node

@@ -143,7 +143,7 @@ bool KoZipStore::openWrite(const QString& name)
 {
     Q_D(KoStore);
     d->stream = 0; // Don't use!
-    return m_pZip->prepareWriting(name, "", "" /*m_pZip->rootDir()->user(), m_pZip->rootDir()->group()*/, 0);
+    return m_pZip->prepareWriting(name, QLatin1String(""), QLatin1String("") /*m_pZip->rootDir()->user(), m_pZip->rootDir()->group()*/, 0);
 }
 
 bool KoZipStore::openRead(const QString& name)

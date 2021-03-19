@@ -50,7 +50,7 @@ class KoXmlText;
 class KoXmlCDATASection;
 class KoXmlDocumentType;
 class KoXmlDocument;
-class KoXmlNodeData;
+class KoXmlNodePrivate;
 class KoXmlDocumentData;
 
 /**
@@ -159,8 +159,8 @@ public:
     void asQDomNode(QDomDocument& ownerDoc) const;
 
 protected:
-    KoXmlNodeData* d;
-    explicit KoXmlNode(KoXmlNodeData*);
+    KoXmlNodePrivate* d;
+    explicit KoXmlNode(KoXmlNodePrivate*);
 };
 
 /**
@@ -194,7 +194,7 @@ public:
 private:
     friend class KoXmlNode;
     friend class KoXmlDocument;
-    explicit KoXmlElement(KoXmlNodeData*);
+    explicit KoXmlElement(KoXmlNodePrivate*);
 };
 
 /**
@@ -216,7 +216,7 @@ private:
     friend class KoXmlNode;
     friend class KoXmlCDATASection;
     friend class KoXmlDocument;
-    explicit KoXmlText(KoXmlNodeData*);
+    explicit KoXmlText(KoXmlNodePrivate*);
 };
 
 /**
@@ -236,7 +236,7 @@ public:
 private:
     friend class KoXmlNode;
     friend class KoXmlDocument;
-    explicit KoXmlCDATASection(KoXmlNodeData*);
+    explicit KoXmlCDATASection(KoXmlNodePrivate*);
 };
 
 /**
@@ -261,7 +261,7 @@ private:
     friend class KoXmlNode;
     friend class KoXmlDocument;
     friend class KoXmlDocumentData;
-    explicit KoXmlDocumentType(KoXmlNodeData*);
+    explicit KoXmlDocumentType(KoXmlNodePrivate*);
 };
 
 

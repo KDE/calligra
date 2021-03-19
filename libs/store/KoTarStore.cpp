@@ -41,7 +41,7 @@ KoTarStore::KoTarStore(const QString & _filename, Mode mode, const QByteArray & 
 
     d->localFileName = _filename;
 
-    m_pTar = new KTar(_filename, "application/x-gzip");
+    m_pTar = new KTar(_filename, QStringLiteral("application/x-gzip"));
 
     init(appIdentification);   // open the targz file and init some vars
 }
@@ -73,10 +73,10 @@ KoTarStore::KoTarStore(QWidget* window, const QUrl &_url, const QString & _filen
 
     } else {
         d->fileMode = KoStorePrivate::RemoteWrite;
-        d->localFileName = "/tmp/kozip"; // ### FIXME with KTempFile
+        d->localFileName = QStringLiteral("/tmp/kozip"); // ### FIXME with KTempFile
     }
 
-    m_pTar = new KTar(d->localFileName, "application/x-gzip");
+    m_pTar = new KTar(d->localFileName, QStringLiteral("application/x-gzip"));
 
     init(appIdentification);   // open the targz file and init some vars
 }

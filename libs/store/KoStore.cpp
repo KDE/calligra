@@ -541,7 +541,7 @@ QString KoStorePrivate::toExternalNaming(const QString & _internalNaming) const
         return q->currentPath() + MAINNAME;
 
     QString intern;
-    if (_internalNaming.startsWith("tar:/"))     // absolute reference
+    if (_internalNaming.startsWith(QLatin1String("tar:/")))     // absolute reference
         intern = _internalNaming.mid(5);   // remove protocol
     else
         intern = q->currentPath() + _internalNaming;
