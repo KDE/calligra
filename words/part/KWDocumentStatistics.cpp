@@ -27,39 +27,108 @@
 #include <QTextBlock>
 #include <QDebug>
 
-KWDocumentStatistics::KWDocumentStatistics(KWDocument *doc)
-    : m_document(doc)
+class KWDocumentStatisticsPrivate
 {
-    m_running = false;
-    m_timer = new QTimer(this);
+public:
+    KWDocument *document;
+    QTimer *timer;
+    bool running;
+    int charsWithSpace;
+    int charsWithoutSpace;
+    int words;
+    int sentences;
+    int lines;
+    int syllables;
+    int paragraphs;
+    int cjkChars;
+};
+
+KWDocumentStatistics::KWDocumentStatistics(KWDocument *doc)
+	: QObject(doc), d(new KWDocumentStatisticsPrivate())
+{
+    d->document = doc;
+    d->running = false;
+    d->timer = new QTimer(this);
     // Three seconds being the Human Moment, we're going to be slightly quicker than that
     // This means we're waiting long enough to let people start typing again, but not long
     // enough that they think something is wrong (which would happen if we waited longer)
-    m_timer->setInterval(2500);
-    m_timer->setSingleShot(true);
-    connect(m_timer, &QTimer::timeout, this, &KWDocumentStatistics::updateData);
+    d->timer->setInterval(2500);
+    d->timer->setSingleShot(true);
+    connect(d->timer, &QTimer::timeout, this, &KWDocumentStatistics::updateData);
 
     // We will have to connect to each frame set when it is created
-    connect(m_document->frameLayout(), &KWFrameLayout::newFrameSet, this, [this](KWFrameSet *fs) {
+    connect(d->document->frameLayout(), &KWFrameLayout::newFrameSet, this, [this](KWFrameSet *fs) {
         KWTextFrameSet *tfs = qobject_cast<KWTextFrameSet*>(fs);
         if (tfs)
-            connect(tfs->document(), &QTextDocument::contentsChanged, m_timer, QOverload<>::of(&QTimer::start));
+            connect(tfs->document(), &QTextDocument::contentsChanged, d->timer, QOverload<>::of(&QTimer::start));
     });
     
     // Initialize values
     reset();
 }
 
+KWDocumentStatistics::~KWDocumentStatistics()
+{
+    delete(d);
+}
+
 void KWDocumentStatistics::reset()
 {
-    m_charsWithSpace = 0;
-    m_charsWithoutSpace = 0;
-    m_words = 0;
-    m_sentences = 0;
-    m_lines = 0;
-    m_syllables = 0;
-    m_paragraphs = 0;
-    m_cjkChars = 0;
+    d->charsWithSpace = 0;
+    d->charsWithoutSpace = 0;
+    d->words = 0;
+    d->sentences = 0;
+    d->lines = 0;
+    d->syllables = 0;
+    d->paragraphs = 0;
+    d->cjkChars = 0;
+}
+
+float KWDocumentStatistics::fleschScore() const {
+    // calculate Flesch reading ease score
+    if ((d->sentences == 0) || (d->words == 0))
+        return 0;
+    return 206.835 - (1.015 * (d->words / d->sentences)) - (84.6 * d->syllables / d->words);
+}
+
+int KWDocumentStatistics::charsWithSpace() const
+{
+   return d->charsWithSpace;
+}
+
+int KWDocumentStatistics::charsWithoutSpace() const
+{
+   return d->charsWithoutSpace;
+}
+
+int KWDocumentStatistics::words() const
+{
+   return d->words;
+}
+
+int KWDocumentStatistics::sentences() const
+{
+   return d->sentences;
+}
+
+int KWDocumentStatistics::lines() const
+{
+   return d->lines;
+}
+
+int KWDocumentStatistics::syllables() const
+{
+   return d->syllables;
+}
+
+int KWDocumentStatistics::paragraphs() const
+{
+   return d->paragraphs;
+}
+
+int KWDocumentStatistics::cjkChars() const
+{
+   return d->cjkChars;
 }
 
 void KWDocumentStatistics::connectNotify(const QMetaMethod& signal)
@@ -72,13 +141,13 @@ void KWDocumentStatistics::connectNotify(const QMetaMethod& signal)
     //   => no data ever come
     // We should probably add a fast-track refresh too
     if (signal == QMetaMethod::fromSignal(&KWDocumentStatistics::refreshed)) {
-        m_timer->start();
+        d->timer->start();
     }
 }
 
 void KWDocumentStatistics::updateData()
 {
-    if (m_running) {
+    if (d->running) {
         return;
     }
     if (!isSignalConnected(QMetaMethod::fromSignal(&KWDocumentStatistics::refreshed))) {
@@ -86,13 +155,13 @@ void KWDocumentStatistics::updateData()
         // the visible change signal and update then. This does mean we will have up to 2500 ms
         // before the update is done after showing the bar, but it's better than not updating
         // at all, and results in less code
-        m_timer->start();
+        d->timer->start();
         return;
     }
-    m_running = true;
+    d->running = true;
     reset();
 
-    foreach (KWFrameSet *fs, m_document->frameSets()) {
+    foreach (KWFrameSet *fs, d->document->frameSets()) {
         QPointer<KWTextFrameSet> tfs = dynamic_cast<KWTextFrameSet*>(fs);
         if (!tfs)
             continue;
@@ -103,7 +172,7 @@ void KWDocumentStatistics::updateData()
         computeStatistics(*doc);
     }
     emit refreshed();
-    m_running = false;
+    d->running = false;
 }
 
 
@@ -158,13 +227,13 @@ void KWDocumentStatistics::computeStatistics(const QTextDocument &doc)
     while (block.isValid()) {
         // Don't be so heavy on large documents...
         qApp->processEvents();
-        m_paragraphs += 1;
-        m_charsWithSpace += block.text().length();
-        m_charsWithoutSpace += block.text().length() - block.text().count(QRegExp("\\s"));
+        d->paragraphs += 1;
+        d->charsWithSpace += block.text().length();
+        d->charsWithoutSpace += block.text().length() - block.text().count(QRegExp("\\s"));
         if (block.layout()) {
-            m_lines += block.layout()->lineCount();
+            d->lines += block.layout()->lineCount();
         }
-        m_cjkChars += countCJKChars(block.text());
+        d->cjkChars += countCJKChars(block.text());
 
         QString s = block.text();
 
@@ -175,12 +244,12 @@ void KWDocumentStatistics::computeStatistics(const QTextDocument &doc)
         // one that's too low.
         // IMPORTANT: please test any changes against the unit test
         const QStringList wordlist = s.split(space, QString::SkipEmptyParts);
-        m_words += wordlist.count();
+        d->words += wordlist.count();
         for (QStringList::ConstIterator it1 = wordlist.begin(); it1 != wordlist.end(); ++it1) {
             QString word = *it1;
             word.remove(punctuation);   // clean word from punctuation
             if (word.length() <= 3) {  // extension to the original algorithm
-                m_syllables++;
+                d->syllables++;
                 continue;
             }
             word.remove(final_e);
@@ -210,7 +279,7 @@ void KWDocumentStatistics::computeStatistics(const QTextDocument &doc)
             if (word_syllables == 0) {
                 word_syllables = 1;
             }
-            m_syllables += word_syllables;
+            d->syllables += word_syllables;
         }
 
         block = block.next();
@@ -231,7 +300,7 @@ void KWDocumentStatistics::computeStatistics(const QTextDocument &doc)
         for (int i = 0 ; i < s.length(); ++i) {
             QChar ch = s[i];
             if (ch == QChar('.') || ch == QChar('?') || ch == QChar('!')) {
-                ++m_sentences;
+                ++d->sentences;
             }
         }
     }

@@ -28,6 +28,8 @@ class QTimer;
 class QTextDocument;
 class KWDocument;
 
+class KWDocumentStatisticsPrivate;
+
 /**
  * This class stores and compute statistics about a KWDocument
  * text content.
@@ -49,24 +51,20 @@ class WORDS_EXPORT KWDocumentStatistics : public QObject
 
 public:
     explicit KWDocumentStatistics(KWDocument *document);
+    ~KWDocumentStatistics();
 
     void reset();
 
-    float fleschScore() const {
-        // calculate Flesch reading ease score
-        if ((m_sentences == 0) || (m_words == 0))
-            return 0;
-        return 206.835 - (1.015 * (m_words / m_sentences)) - (84.6 * m_syllables / m_words);
-    }
+    float fleschScore() const;
 
-    int charsWithSpace() const { return m_charsWithSpace; }
-    int charsWithoutSpace() const { return m_charsWithoutSpace; }
-    int words() const { return m_words; }
-    int sentences() const { return m_sentences; }
-    int lines() const { return m_lines; }
-    int syllables() const { return m_syllables; }
-    int paragraphs() const { return m_paragraphs; }
-    int cjkChars() const { return m_cjkChars; }
+    int charsWithSpace() const;
+    int charsWithoutSpace() const;
+    int words() const;
+    int sentences() const;
+    int lines() const;
+    int syllables() const;
+    int paragraphs() const;
+    int cjkChars() const;
 
 protected:
     void connectNotify(const QMetaMethod &signal) override;
@@ -81,17 +79,9 @@ private:
     void computeStatistics(const QTextDocument &doc);
     int countCJKChars(const QString &text);
 
-    KWDocument *m_document;
-    QTimer *m_timer;
-    bool m_running;
-    int m_charsWithSpace;
-    int m_charsWithoutSpace;
-    int m_words;
-    int m_sentences;
-    int m_lines;
-    int m_syllables;
-    int m_paragraphs;
-    int m_cjkChars;
+    KWDocumentStatisticsPrivate *d;
+
+    Q_DISABLE_COPY(KWDocumentStatistics);
 };
 
 #endif

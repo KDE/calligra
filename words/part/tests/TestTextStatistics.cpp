@@ -62,7 +62,6 @@ void TestTextStatistics::testTextStatistics()
     QCOMPARE(spy.count(), 1);
     const auto stats = doc.statistics();
 
-    QCOMPARE(stats->lines(), 11);
     QCOMPARE(stats->words(), 109);
     QCOMPARE(stats->sentences(), 15);
     QCOMPARE(stats->syllables(), 160);
