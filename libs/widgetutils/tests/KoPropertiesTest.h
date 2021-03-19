@@ -21,7 +21,7 @@
 
 #include <QObject>
 
-class KoPropertiesTest : public QObject
+class KoPropertiesTest : public QObject // clazy:skip
 {
     Q_OBJECT
 

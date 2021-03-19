@@ -42,23 +42,23 @@ KoFileDialogTester::KoFileDialogTester(QWidget *parent) :
     connect(ui->bnImportDirectory, &QAbstractButton::clicked, this, &KoFileDialogTester::testImportDirectory);
     connect(ui->bnSaveFile, &QAbstractButton::clicked, this, &KoFileDialogTester::testSaveFile);
 
-    m_nameFilters << "Documents (*.odt *.doc *.txt)"
-                << "Images (*.png *.jpg *.jpeg)"
-                << "Presentations (*.ppt *.odp)"
-                << "Patterns (*.pat *.jpg *.gif *.png *.tif *.xpm *.bmp)"
-                << "Palettes (*.gpl *.pal *.act *.aco *.colors)";
+    m_nameFilters << QStringLiteral("Documents (*.odt *.doc *.txt)")
+                << QStringLiteral("Images (*.png *.jpg *.jpeg)")
+                << QStringLiteral("Presentations (*.ppt *.odp)")
+                << QStringLiteral("Patterns (*.pat *.jpg *.gif *.png *.tif *.xpm *.bmp)")
+                << QStringLiteral("Palettes (*.gpl *.pal *.act *.aco *.colors)");
 
     m_mimeFilter = QStringList()
-            << "image/x-exr" << "image/openraster" << "image/x-tga" << "image/vnd.adobe.photoshop"
-            << "image/x-xcf" << "image/x-portable-pixmap" << "image/x-portable-graymap"
-            << "image/x-portable-bitmap" << "image/png" << "image/jp2"
-            << "image/tiff" << "application/vnd.oasis.opendocument.graphics"
-            << "application/pdf" << "image/jpeg" << "image/bmp" << "image/x-xpixmap"
-            << "image/gif" << "image/x-xbitmap"
-            << "image/x-adobe-dng" << "image/x-xfig" << "image/svg+xml" << "image/svg+xml-compressed"
-            << "image/x-eps" << "image/eps" << "application/eps" << "application/x-eps" << "application/postscript"
-            << "image/x-wmf" << "application/x-karbon"
-            << "image/tiff" << "application/vnd.oasis.opendocument.graphics"
+            << QStringLiteral("image/x-exr") << QStringLiteral("image/openraster") << QStringLiteral("image/x-tga") << QStringLiteral("image/vnd.adobe.photoshop")
+            << QStringLiteral("image/x-xcf") << QStringLiteral("image/x-portable-pixmap") << QStringLiteral("image/x-portable-graymap")
+            << QStringLiteral("image/x-portable-bitmap") << QStringLiteral("image/png") << QStringLiteral("image/jp2")
+            << QStringLiteral("image/tiff") << QStringLiteral("application/vnd.oasis.opendocument.graphics")
+            << QStringLiteral("application/pdf") << QStringLiteral("image/jpeg") << QStringLiteral("image/bmp") << QStringLiteral("image/x-xpixmap")
+            << QStringLiteral("image/gif") << QStringLiteral("image/x-xbitmap")
+            << QStringLiteral("image/x-adobe-dng") << QStringLiteral("image/x-xfig") << QStringLiteral("image/svg+xml") << QStringLiteral("image/svg+xml-compressed")
+            << QStringLiteral("image/x-eps") << QStringLiteral("image/eps") << QStringLiteral("application/eps") << QStringLiteral("application/x-eps") << QStringLiteral("application/postscript")
+            << QStringLiteral("image/x-wmf") << QStringLiteral("application/x-karbon")
+            << QStringLiteral("image/tiff") << QStringLiteral("application/vnd.oasis.opendocument.graphics")
             ;
 }
 
@@ -73,7 +73,7 @@ void KoFileDialogTester::testOpenFile()
 {
     ui->listResults->clear();
     KoFileDialog dlg(this, KoFileDialog::OpenFile, ui->txtUniqueKey->text());
-    dlg.setCaption("Testing: OpenFile");
+    dlg.setCaption(QStringLiteral("Testing: OpenFile"));
     dlg.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
     if (ui->radioName->isChecked()) {
 
@@ -109,7 +109,7 @@ void KoFileDialogTester::testOpenFiles()
 {
     ui->listResults->clear();
     KoFileDialog dlg(this, KoFileDialog::OpenFiles, ui->txtUniqueKey->text());
-    dlg.setCaption("Testing: OpenFile");
+    dlg.setCaption(QStringLiteral("Testing: OpenFile"));
     dlg.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
     if (ui->radioName->isChecked()) {
 
@@ -147,7 +147,7 @@ void KoFileDialogTester::testOpenDirectory()
 {
     ui->listResults->clear();
     KoFileDialog dlg(this, KoFileDialog::OpenDirectory, ui->txtUniqueKey->text());
-    dlg.setCaption("Testing: OpenDirectory");
+    dlg.setCaption(QStringLiteral("Testing: OpenDirectory"));
     dlg.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
     if (ui->radioName->isChecked()) {
 
@@ -185,7 +185,7 @@ void KoFileDialogTester::testImportFile()
     ui->listResults->clear();
 
     KoFileDialog dlg(this, KoFileDialog::ImportFile, ui->txtUniqueKey->text());
-    dlg.setCaption("Testing: ImportFile");
+    dlg.setCaption(QStringLiteral("Testing: ImportFile"));
     dlg.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
     if (ui->radioName->isChecked()) {
 
@@ -222,7 +222,7 @@ void KoFileDialogTester::testImportFiles()
 {
     ui->listResults->clear();
     KoFileDialog dlg(this, KoFileDialog::ImportFiles, ui->txtUniqueKey->text());
-    dlg.setCaption("Testing: ImportFiles");
+    dlg.setCaption(QStringLiteral("Testing: ImportFiles"));
     dlg.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
     if (ui->radioName->isChecked()) {
 
@@ -260,7 +260,7 @@ void KoFileDialogTester::testImportDirectory()
 {
     ui->listResults->clear();
     KoFileDialog dlg(this, KoFileDialog::ImportDirectory, ui->txtUniqueKey->text());
-    dlg.setCaption("Testing: Import Directory");
+    dlg.setCaption(QStringLiteral("Testing: Import Directory"));
     dlg.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
     if (ui->radioName->isChecked()) {
 
@@ -297,7 +297,7 @@ void KoFileDialogTester::testSaveFile()
     ui->listResults->clear();
 
     KoFileDialog dlg(this, KoFileDialog::SaveFile, ui->txtUniqueKey->text());
-    dlg.setCaption("Testing: SaveFile");
+    dlg.setCaption(QStringLiteral("Testing: SaveFile"));
     dlg.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
     if (ui->radioName->isChecked()) {
         if (ui->chkSetDefaultFilter->isChecked()) {

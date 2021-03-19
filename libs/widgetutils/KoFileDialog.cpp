@@ -37,9 +37,9 @@ class Q_DECL_HIDDEN KoFileDialog::Private
 public:
     Private(QWidget *parent_,
             KoFileDialog::DialogType dialogType_,
-            const QString caption_,
-            const QString defaultDir_,
-            const QString dialogName_)
+            const QString &caption_,
+            const QString &defaultDir_,
+            const QString &dialogName_)
         : parent(parent_)
         , type(dialogType_)
         , dialogName(dialogName_)
@@ -105,7 +105,7 @@ public:
 KoFileDialog::KoFileDialog(QWidget *parent,
                            KoFileDialog::DialogType type,
                            const QString &dialogName)
-    : d(new Private(parent, type, "", getUsedDir(dialogName), dialogName))
+    : d(new Private(parent, type, QLatin1String(""), getUsedDir(dialogName), dialogName))
 {
 }
 
@@ -220,7 +220,7 @@ QString KoFileDialog::selectedMimeType() const
         return d->mimeType.name();
     }
     else {
-        return "";
+        return QLatin1String("");
     }
 }
 
@@ -292,7 +292,7 @@ QString KoFileDialog::filename()
             url = QFileDialog::getOpenFileName(d->parent,
                                                d->caption,
                                                d->defaultDirectory,
-                                               d->filterList.join(";;"),
+                                               d->filterList.join(QStringLiteral(";;")),
                                                &d->defaultFilter);
             break;
         }
@@ -309,7 +309,7 @@ QString KoFileDialog::filename()
             url = QFileDialog::getOpenFileName(d->parent,
                                                d->caption,
                                                d->defaultDirectory,
-                                               d->filterList.join(";;"),
+                                               d->filterList.join(QStringLiteral(";;")),
                                                &d->defaultFilter);
             break;
         }
@@ -326,7 +326,7 @@ QString KoFileDialog::filename()
             url = QFileDialog::getSaveFileName(d->parent,
                                                d->caption,
                                                d->defaultDirectory,
-                                               d->filterList.join(";;"),
+                                               d->filterList.join(QStringLiteral(";;")),
                                                &d->defaultFilter);
             break;
         }
@@ -338,8 +338,8 @@ QString KoFileDialog::filename()
     if (!url.isEmpty()) {
 
         if (d->type == SaveFile && QFileInfo(url).suffix().isEmpty()) {
-            int start = d->defaultFilter.lastIndexOf("*.") + 1;
-            int end = d->defaultFilter.lastIndexOf(" )");
+            int start = d->defaultFilter.lastIndexOf(QLatin1String("*.")) + 1;
+            int end = d->defaultFilter.lastIndexOf(QLatin1String(" )"));
             int n = end - start;
             QString extension = d->defaultFilter.mid(start, n);
             url.append(extension);
@@ -372,7 +372,7 @@ QStringList KoFileDialog::filenames()
             urls = QFileDialog::getOpenFileNames(d->parent,
                                                  d->caption,
                                                  d->defaultDirectory,
-                                                 d->filterList.join(";;"),
+                                                 d->filterList.join(QStringLiteral(";;")),
                                                  &d->defaultFilter);
             break;
         }
@@ -389,8 +389,8 @@ QStringList KoFileDialog::filenames()
 void KoFileDialog::filterSelected(const QString &filter)
 {
     // "Windows BMP image ( *.bmp )";
-    int start = filter.lastIndexOf("*.") + 2;
-    int end = filter.lastIndexOf(" )");
+    int start = filter.lastIndexOf(QLatin1String("*.")) + 2;
+    int end = filter.lastIndexOf(QLatin1String(" )"));
     int n = end - start;
     QString extension = filter.mid(start, n);
     d->defaultFilter = filter;
@@ -404,27 +404,27 @@ QStringList KoFileDialog::splitNameFilter(const QString &nameFilter, QStringList
     QStringList filters;
     QString description;
 
-    if (nameFilter.contains("(")) {
-        description = nameFilter.left(nameFilter.indexOf("(") -1).trimmed();
+    if (nameFilter.contains(QLatin1String("("))) {
+        description = nameFilter.left(nameFilter.indexOf(QLatin1String("(")) -1).trimmed();
     }
 
-    QStringList entries = nameFilter.mid(nameFilter.indexOf("(") + 1).split(" ",QString::SkipEmptyParts );
+    QStringList entries = nameFilter.mid(nameFilter.indexOf(QLatin1String(QLatin1String("("))) + 1).split(QStringLiteral(" "),QString::SkipEmptyParts );
 
     foreach(QString entry, entries) {
 
-        entry = entry.remove("*");
-        entry = entry.remove(")");
+        entry = entry.remove(QStringLiteral("*"));
+        entry = entry.remove(QStringLiteral(")"));
 
         QMimeDatabase db;
         QMimeType mime = db.mimeTypeForName("bla" + entry);
-        if (mime.name() != "application/octet-stream") {
+        if (mime.name() != QLatin1String("application/octet-stream")) {
             if (!mimeList->contains(mime.name())) {
                 mimeList->append(mime.name());
                 filters.append(mime.comment() + " ( *" + entry + " )");
             }
         }
         else {
-            filters.append(entry.remove(".").toUpper() + " " + description + " ( *." + entry + " )");
+            filters.append(entry.remove(QStringLiteral(".")).toUpper() + " " + description + " ( *." + entry + " )");
         }
     }
 
@@ -480,7 +480,7 @@ const QStringList KoFileDialog::getFilterStringListFromMime(const QStringList &m
 
 QString KoFileDialog::getUsedDir(const QString &dialogName)
 {
-    if (dialogName.isEmpty()) return "";
+    if (dialogName.isEmpty()) return QLatin1String("");
 
     KConfigGroup group =  KSharedConfig::openConfig()->group("File Dialogs");
     QString dir = group.readEntry(dialogName);

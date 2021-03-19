@@ -67,8 +67,8 @@ void  KoProperties::load(const QDomElement &root)
         // We don't nest elements.
         QDomElement e = n.toElement();
         if (!e.isNull()) {
-            if (e.tagName() == "property") {
-                const QString name = e.attribute("name");
+            if (e.tagName() == QLatin1String("property")) {
+                const QString name = e.attribute(QStringLiteral("name"));
                 const QString value = e.text();
                 QDataStream in(QByteArray::fromBase64(value.toLatin1()));
                 QVariant v;
@@ -96,10 +96,10 @@ void KoProperties::save(QDomElement &root) const
     QDomDocument doc = root.ownerDocument();
     QMap<QString, QVariant>::ConstIterator it;
     for (it = d->properties.constBegin(); it != d->properties.constEnd(); ++it) {
-        QDomElement e = doc.createElement("property");
-        e.setAttribute("name", QString(it.key().toLatin1()));
+        QDomElement e = doc.createElement(QStringLiteral("property"));
+        e.setAttribute(QStringLiteral("name"), QString(it.key().toLatin1()));
         QVariant v = it.value();
-        e.setAttribute("type", v.typeName());
+        e.setAttribute(QStringLiteral("type"), v.typeName());
 
         QByteArray bytes;
         QDataStream out(&bytes, QIODevice::WriteOnly);

@@ -41,10 +41,13 @@ KoRulerController::KoRulerController(KoRuler *horizontalRuler, KoCanvasResourceM
         : QObject(horizontalRuler),
         d(new Private(horizontalRuler, crp))
 {
-    connect(crp, SIGNAL(canvasResourceChanged(int,QVariant)), this, SLOT(canvasResourceChanged(int)));
-    connect(horizontalRuler, SIGNAL(indentsChanged(bool)), this, SLOT(indentsChanged()));
-    connect(horizontalRuler, SIGNAL(aboutToChange()), this, SLOT(tabChangeInitiated()));
-    connect(horizontalRuler, SIGNAL(tabChanged(int,KoRuler::Tab*)), this, SLOT(tabChanged(int,KoRuler::Tab*)));
+    connect(crp, &KoCanvasResourceManager::canvasResourceChanged, this, [this] (int key, const QVariant &value) {
+        Q_UNUSED(value);
+        d->canvasResourceChanged(key);
+    });
+    connect(horizontalRuler, &KoRuler::indentsChanged, this, [this] (bool final) { Q_UNUSED(final); d->indentsChanged(); });
+    connect(horizontalRuler, &KoRuler::aboutToChange, this, [this] () { d->tabChangeInitiated(); });
+    connect(horizontalRuler, &KoRuler::tabChanged, this, [this] (int id, KoRuler::Tab *tab) { d->tabChanged(id, tab); });
 }
 
 KoRulerController::~KoRulerController()

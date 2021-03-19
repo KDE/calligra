@@ -39,8 +39,8 @@ void KoZoomController::Private::init(KoCanvasController *co,
     canvasController = co;
     fitMargin = co->margin();
     zoomHandler = zh;
-    connect(action, SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)),
-            parent, SLOT(setZoom(KoZoomMode::Mode,qreal)));
+    connect(action, &KoZoomAction::zoomChanged,
+            parent, QOverload<KoZoomMode::Mode, qreal>::of(&KoZoomController::setZoom));
     connect(action, &KoZoomAction::aspectModeChanged,
             parent, &KoZoomController::aspectModeChanged);
     connect(action, &KoZoomAction::zoomedToSelection,
@@ -48,16 +48,18 @@ void KoZoomController::Private::init(KoCanvasController *co,
     connect(action, &KoZoomAction::zoomedToAll,
             parent, &KoZoomController::zoomedToAll);
 
-    actionCollection->addAction("view_zoom", action);
+    actionCollection->addAction(QStringLiteral("view_zoom"), action);
 
     if (createZoomShortcuts) {
-        actionCollection->addAction(KStandardAction::ZoomIn,  "zoom_in", action, SLOT(zoomIn()));
-        actionCollection->addAction(KStandardAction::ZoomOut,  "zoom_out", action, SLOT(zoomOut()));
+        actionCollection->addAction(KStandardAction::ZoomIn, QStringLiteral("zoom_in"), action, SLOT(zoomIn()));
+        actionCollection->addAction(KStandardAction::ZoomOut, QStringLiteral("zoom_out"), action, SLOT(zoomOut()));
     }
 
-    connect(canvasController->proxyObject, SIGNAL(sizeChanged(QSize)), parent, SLOT(setAvailableSize()) );
+    connect(canvasController->proxyObject, &KoCanvasControllerProxyObject::sizeChanged,
+            parent, [this] (const QSize sz) { Q_UNUSED(sz); setAvailableSize(); });
 
-    connect(canvasController->proxyObject, SIGNAL(zoomRelative(qreal,QPointF)), parent, SLOT(requestZoomRelative(qreal,QPointF)) );
+    connect(canvasController->proxyObject, &KoCanvasControllerProxyObject::zoomRelative,
+            parent, [this] (qreal r, const QPointF pt) { requestZoomRelative(r, pt); });
 }
 
 KoZoomController::KoZoomController(KoCanvasController *co, KoZoomHandler *zh, KActionCollection *actionCollection, KoZoomAction::SpecialButtons specialButtons, QObject *parent)

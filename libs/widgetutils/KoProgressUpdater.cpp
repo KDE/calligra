@@ -63,7 +63,7 @@ public:
     QTime referenceTime;
 
     static void logEvents(QTextStream& out, KoProgressUpdater::Private *updater,
-                          const QTime& startTime, const QString& prefix);
+                          QTime startTime, const QString& prefix);
     bool canceled;
 };
 
@@ -82,7 +82,7 @@ KoProgressUpdater::KoProgressUpdater(KoProgressProxy *progressBar,
 KoProgressUpdater::~KoProgressUpdater()
 {
     if (d->output) {
-        Private::logEvents(*d->output, d, referenceTime(), "");
+        Private::logEvents(*d->output, d, referenceTime(), QLatin1String(""));
     }
     d->progressBar->setValue(d->progressBar->maximum());
 
@@ -99,7 +99,7 @@ KoProgressUpdater::~KoProgressUpdater()
     delete d;
 }
 
-void KoProgressUpdater::setReferenceTime(const QTime &referenceTime)
+void KoProgressUpdater::setReferenceTime(QTime referenceTime)
 {
     d->referenceTime = referenceTime;
 }
@@ -221,7 +221,7 @@ bool KoProgressUpdater::hasOutput() const
 
 void KoProgressUpdater::Private::logEvents(QTextStream& out,
                                            KoProgressUpdater::Private *updater,
-                                           const QTime& startTime,
+                                           QTime startTime,
                                            const QString& prefix) {
     // initial implementation: write out the names of all events
     foreach (QPointer<KoUpdaterPrivate> p, updater->subtasks) {

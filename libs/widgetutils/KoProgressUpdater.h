@@ -95,7 +95,7 @@ public:
      * @see KoProgressProxy::setRange()
      * @see KoProgressProxy::setFormat()
      */
-    void start(int range = 100, const QString &text = QLatin1String("%p%"));
+    void start(int range = 100, const QString &text = QStringLiteral("%p%"));
 
     /**
      * After calling start() you can create any number of Updaters,
@@ -119,7 +119,7 @@ public:
     /**
      * Set the time with respect to which the progress events are logged.
      */
-    void setReferenceTime(const QTime &referenceTime);
+    void setReferenceTime(QTime referenceTime);
 
     /**
      * Get the time with respect to which the progress events are logged.

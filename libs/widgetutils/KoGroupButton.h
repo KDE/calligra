@@ -46,9 +46,8 @@ public:
         GroupCenter  //!< The button is on the center of the group, so it would have separators on both sides
     };
     Q_ENUM(GroupPosition);
-private:
-    Q_PROPERTY( GroupPosition groupPosition READ groupPosition WRITE setGroupPosition )
-public:
+
+    Q_PROPERTY( GroupPosition groupPosition READ groupPosition WRITE setGroupPosition NOTIFY groupPositionChanged)
 
     explicit KoGroupButton(GroupPosition position, QWidget* parent = 0);
 
@@ -62,6 +61,9 @@ public:
     void setGroupPosition(KoGroupButton::GroupPosition groupPosition);
 
     KoGroupButton::GroupPosition groupPosition() const;
+
+Q_SIGNALS:
+    void groupPositionChanged();
 
 protected:
     void paintEvent(QPaintEvent* event) override;

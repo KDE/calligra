@@ -21,6 +21,7 @@
 #define KO_PROGRESS_PROXY
 
 #include "kowidgetutils_export.h"
+#include <QObject>
 
 class QString;
 
@@ -33,6 +34,7 @@ class KOWIDGETUTILS_EXPORT KoProgressProxy
 {
 
 public:
+	KoProgressProxy() = default;
 
     virtual ~KoProgressProxy() { }
 
@@ -40,6 +42,7 @@ public:
     virtual void setValue(int value) = 0;
     virtual void setRange(int minimum, int maximum) = 0;
     virtual void setFormat(const QString &format) = 0;
+	Q_DISABLE_COPY(KoProgressProxy)
 };
 
 
