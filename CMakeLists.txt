@@ -337,6 +337,13 @@ if(WIN32)
     set(WIN32_PLATFORM_NET_LIBS ws2_32.lib netapi32.lib)
 endif()
 
+# Add a clang-format target if available
+if(${KF5_VERSION} VERSION_GREATER_EQUAL "5.64")
+	include(KDEClangFormat)
+	file(GLOB_RECURSE ALL_CLANG_FORMAT_SOURCE_FILES libs/*.cpp libs/*.h)
+	kde_clang_format(${ALL_CLANG_FORMAT_SOURCE_FILES})
+endif()
+
 ###########################
 ############################
 ## Required dependencies  ##
