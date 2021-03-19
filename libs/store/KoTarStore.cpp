@@ -183,7 +183,7 @@ bool KoTarStore::closeWrite()
 
     debugStore << "Writing file" << d->fileName << " into TAR archive. size" << d->size;
     m_byteArray.resize(d->size); // TODO: check if really needed
-    if (!m_pTar->writeFile(d->fileName, m_byteArray, 0100644, QLatin1String("user"), QLatin1String("group")))
+    if (!m_pTar->writeFile(d->fileName, m_byteArray, 0100644, QStringLiteral("user"), QStringLiteral("group")))
         warnStore << "Failed to write " << d->fileName;
     m_byteArray.resize(0);   // save memory
     return true;

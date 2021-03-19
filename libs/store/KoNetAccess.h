@@ -371,42 +371,6 @@ public:
     static QString fish_execute(const QUrl &url, const QString &command, QWidget *window);
 
     /**
-     * This function executes a job in a synchronous way.
-     * If a job fetches some data, pass a QByteArray pointer as data parameter to this function
-     * and after the function returns it will contain all the data fetched by this job.
-     *
-     * @code
-     * KIO::Job *job = KIO::get( url );
-     * QMap<QString, QString> metaData;
-     * metaData.insert( "PropagateHttpHeader", "true" );
-     * if ( NetAccess::synchronousRun( job, 0, &data, &url, &metaData ) ) {
-     *   QString responseHeaders = metaData[ "HTTP-Headers" ];
-     *   qDebug()<<"Response header = "<< responseHeaders;
-     * }
-     * @endcode
-     *
-     * @param job job which the function will run. Note that after this function
-     *            finishes running, job is deleted and you can't access it anymore!
-     * @param window main window associated with this job. This is used to
-     *               automatically cache and discard authentication information
-     *               as needed. If NULL, authentication information will be
-     *               cached only for a short duration after which the user will
-     *               again be prompted for passwords as needed.
-     * @param data if passed and relevant to this job then it will contain the data
-     *               that was fetched by the job
-     * @param finalURL if passed will contain the final url of this job (it might differ
-     *                 from the one it was created with if there was a redirection)
-     * @param metaData you can pass a pointer to the map with meta data you wish to
-     *                 set on the job. After the job finishes this map will hold all the
-     *                 meta data from the job.
-     *
-     * @return true on success, false on failure.
-     * @deprecated since 5.0, KJobWidgets::setWindow + job->exec() instead
-     */
-    static bool synchronousRun(Job *job, QWidget *window, QByteArray *data = 0,
-                               QUrl *finalURL = 0, QMap<QString, QString> *metaData = 0);
-
-    /**
      * Determines the mimetype of a given URL.
      *
      * This is a convenience function for KIO::mimetype.  You
@@ -465,8 +429,6 @@ private:
     bool delInternal(const QUrl &url, QWidget *window = 0);
     bool mkdirInternal(const QUrl &url, int permissions, QWidget *window = 0);
     QString fish_executeInternal(const QUrl &url, const QString &command, QWidget *window = 0);
-    bool synchronousRunInternal(Job *job, QWidget *window, QByteArray *data,
-                                QUrl *finalURL, QMap<QString, QString> *metaData);
 
     QString mimetypeInternal(const QUrl &url, QWidget *window = 0);
     void enter_loop();

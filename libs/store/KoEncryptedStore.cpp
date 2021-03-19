@@ -153,7 +153,7 @@ void KoEncryptedStore::init(const QByteArray & appIdentification)
             // Write identification
             if (d->writeMimetype) {
                 m_pZip->setCompression(KZip::NoCompression);
-                (void)m_pZip->writeFile(QLatin1String("mimetype"), appIdentification);
+                (void)m_pZip->writeFile(QStringLiteral("mimetype"), appIdentification);
             }
             // FIXME: Hmm, seems to be a bug here since this is
             //        inconsistent with the code in openWrite():

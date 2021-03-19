@@ -264,21 +264,6 @@ QString NetAccess::fish_execute(const QUrl &url, const QString &command, QWidget
     return kioNet.fish_executeInternal(url, command, window);
 }
 
-bool NetAccess::synchronousRun(Job *job, QWidget *window, QByteArray *data,
-                               QUrl *finalURL, QMap<QString, QString> *metaData)
-{
-    NetAccess kioNet;
-    // Disable autodeletion until we are back from this event loop (#170963)
-    // We just have to hope people don't mess with setAutoDelete in slots connected to the job, though.
-    const bool wasAutoDelete = job->isAutoDelete();
-    job->setAutoDelete(false);
-    const bool ok = kioNet.synchronousRunInternal(job, window, data, finalURL, metaData);
-    if (wasAutoDelete) {
-        job->deleteLater();
-    }
-    return ok;
-}
-
 QString NetAccess::mimetype(const QUrl &url, QWidget *window)
 {
     NetAccess kioNet;
@@ -380,13 +365,13 @@ bool NetAccess::mkdirInternal(const QUrl &url, int permissions,
 QString NetAccess::mimetypeInternal(const QUrl &url, QWidget *window)
 {
     d->bJobOK = true; // success unless further error occurs
-    d->m_mimetype = QLatin1String("unknown");
-    KIO::Job *job = KIO::mimetype(url);
+    d->m_mimetype = QStringLiteral("unknown");
+    KIO::MimetypeJob *job = KIO::mimetype(url);
     KJobWidgets::setWindow(job, window);
     connect(job, &KJob::result,
             this, &NetAccess::slotResult);
-    connect(job, SIGNAL(mimetype(KIO::Job*,QString)),
-            this, SLOT(slotMimetype(KIO::Job*,QString)));
+    connect(job, QOverload<KIO::Job*, const QString &>::of(&KIO::MimetypeJob::mimetype),
+            this, &NetAccess::slotMimetype);
     enter_loop();
     return d->m_mimetype;
 }
@@ -437,54 +422,6 @@ QString NetAccess::fish_executeInternal(const QUrl &url, const QString &command,
         resultData = i18n("ERROR: Unknown protocol '%1'", url.scheme());
     }
     return resultData;
-}
-
-bool NetAccess::synchronousRunInternal(Job *job, QWidget *window, QByteArray *data,
-                                       QUrl *finalURL, QMap<QString, QString> *metaData)
-{
-    KJobWidgets::setWindow(job, window);
-
-    d->m_metaData = metaData;
-    if (d->m_metaData) {
-        for (QMap<QString, QString>::iterator it = d->m_metaData->begin(); it != d->m_metaData->end(); ++it) {
-            job->addMetaData(it.key(), it.value());
-        }
-    }
-
-    if (finalURL) {
-        SimpleJob *sj = qobject_cast<SimpleJob *>(job);
-        if (sj) {
-            d->m_url = sj->url();
-        }
-    }
-
-    connect(job, &KJob::result,
-            this, &NetAccess::slotResult);
-
-    const QMetaObject *meta = job->metaObject();
-
-    static const char dataSignal[] = "data(KIO::Job*,QByteArray)";
-    if (meta->indexOfSignal(dataSignal) != -1) {
-        connect(job, SIGNAL(data(KIO::Job*,QByteArray)),
-                this, SLOT(slotData(KIO::Job*,QByteArray)));
-    }
-
-    static const char redirSignal[] = "redirection(KIO::Job*,QUrl)";
-    if (meta->indexOfSignal(redirSignal) != -1) {
-        connect(job, SIGNAL(redirection(KIO::Job*,QUrl)),
-                this, SLOT(slotRedirection(KIO::Job*,QUrl)));
-    }
-
-    enter_loop();
-
-    if (finalURL) {
-        *finalURL = d->m_url;
-    }
-    if (data) {
-        *data = d->m_data;
-    }
-
-    return d->bJobOK;
 }
 
 void NetAccess::enter_loop()

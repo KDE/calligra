@@ -54,7 +54,7 @@ int main(int argc, char** argv)
     window->resize(500, 500);
     window->show();
 
-    QObject::connect(qApp, SIGNAL(lastWindowClosed()), qApp, SLOT(quit()));
+    QObject::connect(qGuiApp, &QApplication::lastWindowClosed, qGuiApp, &QApplication::quit);
     return app.exec();
 }
 

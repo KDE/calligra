@@ -154,22 +154,22 @@ static inline bool operator==(const KoXmlStringPair &a, const KoXmlStringPair &b
 // does translate the old namespaces into the new ones.
 static QString fixNamespace(const QString &nsURI)
 {
-    static QString office = QString::fromLatin1("http://openoffice.org/2000/office");
-    static QString text = QString::fromLatin1("http://openoffice.org/2000/text");
-    static QString style = QString::fromLatin1("http://openoffice.org/2000/style");
-    static QString fo = QString::fromLatin1("http://www.w3.org/1999/XSL/Format");
-    static QString table = QString::fromLatin1("http://openoffice.org/2000/table");
-    static QString drawing = QString::fromLatin1("http://openoffice.org/2000/drawing");
-    static QString datastyle = QString::fromLatin1("http://openoffice.org/2000/datastyle");
-    static QString svg = QString::fromLatin1("http://www.w3.org/2000/svg");
-    static QString chart = QString::fromLatin1("http://openoffice.org/2000/chart");
-    static QString dr3d = QString::fromLatin1("http://openoffice.org/2000/dr3d");
-    static QString form = QString::fromLatin1("http://openoffice.org/2000/form");
-    static QString script = QString::fromLatin1("http://openoffice.org/2000/script");
-    static QString meta = QString::fromLatin1("http://openoffice.org/2000/meta");
-    static QString config = QString::fromLatin1("http://openoffice.org/2001/config");
-    static QString pres = QString::fromLatin1("http://openoffice.org/2000/presentation");
-    static QString manifest = QString::fromLatin1("http://openoffice.org/2001/manifest");
+    static QString office = QStringLiteral("http://openoffice.org/2000/office");
+    static QString text = QStringLiteral("http://openoffice.org/2000/text");
+    static QString style = QStringLiteral("http://openoffice.org/2000/style");
+    static QString fo = QStringLiteral("http://www.w3.org/1999/XSL/Format");
+    static QString table = QStringLiteral("http://openoffice.org/2000/table");
+    static QString drawing = QStringLiteral("http://openoffice.org/2000/drawing");
+    static QString datastyle = QStringLiteral("http://openoffice.org/2000/datastyle");
+    static QString svg = QStringLiteral("http://www.w3.org/2000/svg");
+    static QString chart = QStringLiteral("http://openoffice.org/2000/chart");
+    static QString dr3d = QStringLiteral("http://openoffice.org/2000/dr3d");
+    static QString form = QStringLiteral("http://openoffice.org/2000/form");
+    static QString script = QStringLiteral("http://openoffice.org/2000/script");
+    static QString meta = QStringLiteral("http://openoffice.org/2000/meta");
+    static QString config = QStringLiteral("http://openoffice.org/2001/config");
+    static QString pres = QStringLiteral("http://openoffice.org/2000/presentation");
+    static QString manifest = QStringLiteral("http://openoffice.org/2001/manifest");
     if (nsURI == text)
         return KoXmlNS::text;
     if (nsURI == style)
@@ -913,9 +913,9 @@ QString KoXmlNodeData::nodeName() const
     }
     break;
 
-    case KoXmlNode::TextNode:         return QLatin1String("#text");
-    case KoXmlNode::CDATASectionNode: return QLatin1String("#cdata-section");
-    case KoXmlNode::DocumentNode:     return QLatin1String("#document");
+    case KoXmlNode::TextNode:         return QStringLiteral("#text");
+    case KoXmlNode::CDATASectionNode: return QStringLiteral("#cdata-section");
+    case KoXmlNode::DocumentNode:     return QStringLiteral("#document");
     case KoXmlNode::DocumentTypeNode: return tagName;
 
     default: return QString(); break;
@@ -2123,7 +2123,7 @@ KoXmlDocumentType KoXmlDocument::doctype() const
 
 QString KoXmlDocument::nodeName() const
 {
-    return (KOXMLDOCDATA(d)->emptyDocument) ? QString::fromLatin1("#document") : QString();
+    return (KOXMLDOCDATA(d)->emptyDocument) ? QStringLiteral("#document") : QString();
 }
 
 void KoXmlDocument::clear()
