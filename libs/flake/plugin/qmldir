@@ -1,0 +1,2 @@
+module org.kde.calligra.flake
+plugin flakeplugin

@@ -116,9 +116,8 @@ static bool compareToolActions(const KoToolAction *b1, const KoToolAction *b2)
     }
 }
 
-
 KoModeBox::KoModeBox(KoCanvasControllerWidget *canvas, const QString &appName)
-    : QWidget()
+    : QQuickWidget()
     , d(new Private(canvas))
 {
     applicationName = appName;
@@ -128,9 +127,13 @@ KoModeBox::KoModeBox(KoCanvasControllerWidget *canvas, const QString &appName)
     d->verticalTabsSide = (VerticalTabsSide)cfg.readEntry("ModeBoxVerticalTabsSide", (int)TopSide);
     d->horizontalTabsSide = (HorizontalTabsSide)cfg.readEntry("ModeBoxHorizontalTabsSide", (int)LeftSide);
 
+    Q_INIT_RESOURCE(KoModeBox);
+    setSource(QUrl("qrc:/KoModeBox.qml"));
+    show();
+
+    /*
     d->layout = new QGridLayout();
     d->stack = new QStackedWidget();
-
     d->tabBar = new QTabBar();
     setIconSize();
     d->tabBar->setExpanding(d->horizontalMode);
@@ -144,6 +147,7 @@ KoModeBox::KoModeBox(KoCanvasControllerWidget *canvas, const QString &appName)
 
     d->layout->setContentsMargins(0,0,0,0);
     setLayout(d->layout);
+    */
 
     foreach(KoToolAction *toolAction, KoToolManager::instance()->toolActionList()) {
         addToolAction(toolAction);
@@ -154,9 +158,9 @@ KoModeBox::KoModeBox(KoCanvasControllerWidget *canvas, const QString &appName)
     // Update visibility of toolActions
     updateShownTools(QList<QString>());
 
-    d->tabBar->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(d->tabBar, &QTabBar::currentChanged, this, &KoModeBox::toolSelected);
-    connect(d->tabBar, &QWidget::customContextMenuRequested, this, &KoModeBox::slotContextMenuRequested);
+    //d->tabBar->setContextMenuPolicy(Qt::CustomContextMenu);
+    //connect(d->tabBar, &QTabBar::currentChanged, this, &KoModeBox::toolSelected);
+    //connect(d->tabBar, &QWidget::customContextMenuRequested, this, &KoModeBox::slotContextMenuRequested);
 
     connect(KoToolManager::instance(), &KoToolManager::changedTool,
             this, &KoModeBox::setActiveTool);
@@ -173,7 +177,6 @@ KoModeBox::KoModeBox(KoCanvasControllerWidget *canvas, const QString &appName)
 
 KoModeBox::~KoModeBox()
 {
-    delete d;
 }
 
 void KoModeBox::addToolAction(KoToolAction *toolAction)
@@ -183,6 +186,7 @@ void KoModeBox::addToolAction(KoToolAction *toolAction)
 
 void KoModeBox::locationChanged(Qt::DockWidgetArea area)
 {
+    /*
     resize(0,0);
     switch(area) {
         case Qt::TopDockWidgetArea:
@@ -214,10 +218,12 @@ void KoModeBox::locationChanged(Qt::DockWidgetArea area)
     } else {
         switchTabsSide(d->horizontalTabsSide);
     }
+    */
 }
 
 void KoModeBox::setActiveTool(KoCanvasController *canvas, int id)
 {
+    /*
     if (canvas->canvas() == d->canvas) {
         // Clear the minimumSize instigated by the previous tool
         // The new minimumSize will be set in updateShownTools()
@@ -240,7 +246,7 @@ void KoModeBox::setActiveTool(KoCanvasController *canvas, int id)
         }
         d->tabBar->blockSignals(false);
         return;
-    }
+    }*/
 }
 
 QIcon KoModeBox::createTextIcon(KoToolAction *toolAction) const
@@ -327,6 +333,7 @@ QIcon KoModeBox::createSimpleIcon(KoToolAction *toolAction) const
 
 void KoModeBox::addItem(KoToolAction *toolAction)
 {
+    /*
     QWidget *oldwidget = d->addedWidgets[toolAction->buttonGroupId()];
     QWidget *widget;
 
@@ -371,10 +378,12 @@ void KoModeBox::addItem(KoToolAction *toolAction)
     sa->setFocusPolicy(Qt::NoFocus);
     d->stack->addWidget(sa);
     d->addedToolActions.append(toolAction);
+    */
 }
 
 void KoModeBox::updateShownTools(const QList<QString> &codes)
 {
+    /*
     if (d->iconTextFitted) {
         d->fittingIterations = 0;
     }
@@ -432,10 +441,12 @@ void KoModeBox::updateShownTools(const QList<QString> &codes)
         updateShownTools(codes);
     }
     d->iconTextFitted = true;
+    */
 }
 
 void KoModeBox::setOptionWidgets(const QList<QPointer<QWidget> > &optionWidgetList)
 {
+    /*
     if (! d->addedWidgets.contains(d->activeId)) return;
 
     // For some reason we need to set some attr on our placeholder widget here
@@ -519,16 +530,18 @@ void KoModeBox::setOptionWidgets(const QList<QPointer<QWidget> > &optionWidgetLi
             layout->setRowStretch(cnt, 100);
         }
     }
+*/
 }
 
 void ScrollArea::showEvent(QShowEvent *e)
 {
+    /*
     QScrollArea::showEvent(e);
     if (horizontalScrollBarPolicy() == Qt::ScrollBarAlwaysOff) {
         setMinimumWidth(widget()->minimumSizeHint().width() + (verticalScrollBar()->isVisible() ? verticalScrollBar()->width() : 0));
     } else {
         setMinimumHeight(widget()->minimumSizeHint().height() + (horizontalScrollBar()->isVisible() ? horizontalScrollBar()->height() : 0));
-    }
+    }*/
 }
 
 void KoModeBox::setCurrentLayer(const KoCanvasController *canvas, const KoShapeLayer *layer)
@@ -581,6 +594,7 @@ void KoModeBox::toolSelected(int index)
 
 void KoModeBox::slotContextMenuRequested(const QPoint &pos)
 {
+    /*
     QMenu menu;
     KSelectAction* textAction = new KSelectAction(i18n("Text"), &menu);
     connect(textAction, SIGNAL(triggered(int)), SLOT(switchIconMode(int)));
@@ -603,21 +617,24 @@ void KoModeBox::slotContextMenuRequested(const QPoint &pos)
     }
 
     menu.exec(d->tabBar->mapToGlobal(pos));
+    */
 }
 
 void KoModeBox::switchIconMode(int mode)
 {
+    /*
     d->iconMode = static_cast<IconMode>(mode);
     setIconSize();
     updateShownTools(QList<QString>());
 
     KConfigGroup cfg =  KSharedConfig::openConfig()->group("calligra");
     cfg.writeEntry("ModeBoxIconMode", (int)d->iconMode);
-
+    */
 }
 
 void KoModeBox::switchTabsSide(int side)
 {
+    /*
     if (d->horizontalMode) {
         d->verticalTabsSide = static_cast<VerticalTabsSide>(side);
         if (d->verticalTabsSide == TopSide) {
@@ -648,12 +665,15 @@ void KoModeBox::switchTabsSide(int side)
         cfg.writeEntry("ModeBoxHorizontalTabsSide", (int)d->horizontalTabsSide);
     }
     updateShownTools(QList<QString>());
+    */
 }
 
 void KoModeBox::setIconSize() const {
+    /*
     if (!d->horizontalMode && d->iconMode == IconAndText) {
         d->tabBar->setIconSize(QSize(32,64));
     } else {
         d->tabBar->setIconSize(QSize(22,22));
     }
+    */
 }

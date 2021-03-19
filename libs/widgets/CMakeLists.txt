@@ -107,6 +107,8 @@ ki18n_wrap_ui( kowidgets_LIB_SRCS
 )
 
 
+qt5_add_resources(kowidgets_LIB_SRCS KoModeBox.qrc)
+
 add_library(kowidgets SHARED ${kowidgets_LIB_SRCS})
 generate_export_header(kowidgets BASE_NAME kowidgets)
 
@@ -116,6 +118,7 @@ target_link_libraries(kowidgets
         pigmentcms
         kowidgetutils
         KF5::KIOWidgets
+        Qt5::QuickWidgets
     PRIVATE
         KF5::GuiAddons
         KF5::WidgetsAddons

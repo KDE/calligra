@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="/">
+    <file alias="KoModeBox.qml">qml/KoModeBox.qml</file>
+  </qresource>
+</RCC>
+

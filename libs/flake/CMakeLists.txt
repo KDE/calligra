@@ -359,3 +359,5 @@ install(
 )
 
 endif()
+
+add_subdirectory(plugin)

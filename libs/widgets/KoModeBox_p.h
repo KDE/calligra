@@ -30,7 +30,9 @@
 #include <QMap>
 #include <QHash>
 #include <QDockWidget>
+#include <QQuickWidget>
 #include <QScrollArea>
+#include <memory>
 
 #include <KoToolManager.h>
 
@@ -55,7 +57,7 @@ protected:
  *
  * @see KoToolManager
  */
-class KoModeBox : public QWidget {
+class KoModeBox : public QQuickWidget {
     Q_OBJECT
 public:
     /// constructor
@@ -147,7 +149,7 @@ private:
 
 private:
     class Private;
-    Private * const d;
+    std::unique_ptr<Private> const d;
 };
 
 #endif // _KO_TOOLBOX_H_

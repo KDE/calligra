@@ -54,6 +54,11 @@ class QCursor;
 class FLAKE_EXPORT KoToolAction : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QString id READ id CONSTANT)
+    Q_PROPERTY(QString iconText READ iconText CONSTANT)
+    Q_PROPERTY(QString toolTip READ toolTip CONSTANT)
+    Q_PROPERTY(QString iconName READ iconName CONSTANT)
+    Q_PROPERTY(QKeySequence shortcut READ shortcut CONSTANT)
 public:
     // toolHelper takes over ownership, and those live till the end of KoToolManager.
     explicit KoToolAction(ToolHelper *toolHelper);
@@ -64,7 +69,7 @@ public:
     QString iconText() const;       ///< The icontext of the tool
     QString toolTip() const;        ///< The tooltip of the tool
     QString iconName() const;       ///< The icon name of the tool
-    QKeySequence shortcut() const;     ///< The shortcut to activate the tool
+    QKeySequence shortcut() const;  ///< The shortcut to activate the tool
 
     QString section() const;        ///< The section the tool wants to be in.
     int priority() const;           ///< Lower number (higher priority) means coming first in the section.
@@ -141,6 +146,7 @@ private:
 class FLAKE_EXPORT KoToolManager : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QList<KoToolAction *> toolActionList READ toolActionList NOTIFY addedTool)
 
 public:
     KoToolManager();
