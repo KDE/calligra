@@ -49,7 +49,7 @@ void TableElement::paint( QPainter& painter, AttributeManager* am )
     //}
     painter.save();
     QList<qreal> frameSpacing = am->doubleListOf( "framespacing", this );
-    QList<qreal> rowSpacing = am->doubleListOf( "rowspacing", this );
+    //QList<qreal> rowSpacing = am->doubleListOf( "rowspacing", this );
     debugFormula << frameSpacing;
     painter.setPen(QPen(Qt::NoPen));//debugging 
     painter.drawRect( QRectF( 0.0, 0.0, width(), height() ) );

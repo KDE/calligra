@@ -1221,8 +1221,6 @@ KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const
         int step = iMaxRow > 50 ? iMaxRow / 50 : 1;
         int i = 1;
 
-        QString emptyLines;
-
         /* Save selection info. */
 
         /* can't save selection anymore -- part of the view, not table */

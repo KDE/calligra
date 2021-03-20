@@ -102,10 +102,10 @@ public Q_SLOTS:
     void startSearch();
     void stopSearch();
     void addDocument(const DocumentListModel::DocumentInfo &info);
-    void setFilter(DocumentType newFilter);
+    void setFilter(DocumentListModel::DocumentType newFilter);
 
 public:
-    Q_INVOKABLE void groupBy(GroupBy role);
+    Q_INVOKABLE void groupBy(DocumentListModel::GroupBy role);
 
 private Q_SLOTS:
     void searchFinished();

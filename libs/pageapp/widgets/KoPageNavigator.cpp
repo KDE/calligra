@@ -123,7 +123,7 @@ KoPageNavigator::KoPageNavigator(KoPAView *view)
 
     KoPADocument *const kopaDocument = d->view->kopaDocument();
     connect(kopaDocument, &KoPADocument::pageAdded, this, &KoPageNavigator::updateDisplayLabel);
-    connect(kopaDocument, SIGNAL(pageRemoved(KoPAPageBase*,int)), SLOT(slotPageRemoved(KoPAPageBase*,int)));
+    connect(kopaDocument, QOverload<KoPAPageBase*, int>::of(&KoPADocument::pageRemoved), this, &KoPageNavigator::slotPageRemoved);
     connect(d->view->proxyObject, &KoPAViewProxyObject::activePageChanged, this, &KoPageNavigator::updateDisplayLabel);
 
     // Fix width by the largest needed

@@ -875,10 +875,6 @@ const QString Filterkpr2odf::createParagraphStyle(const KoXmlElement& element)
 
     KoXmlElement indents = element.namedItem("INDENTS").toElement();
     if (!indents.isNull()) {
-        QString marginLeft = QString("%1pt").arg(indents.attribute("left").toDouble());
-        QString marginRight = QString("%1pt").arg(indents.attribute("right").toDouble());
-        QString textIndent = QString("%1pt").arg(indents.attribute("first").toDouble());
-
         if (indents.hasAttribute("left")) {
             style.addPropertyPt("fo:margin-left", indents.attribute("left").toDouble());
         }

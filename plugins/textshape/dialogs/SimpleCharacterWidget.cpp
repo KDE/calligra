@@ -117,7 +117,7 @@ void SimpleCharacterWidget::setStyleManager(KoStyleManager *sm)
         return;
     }
     if (m_styleManager) {
-        disconnect(m_styleManager, SIGNAL(styleApplied(const KoCharacterStyle*)), this, SLOT(slotParagraphStyleApplied(const KoCharacterStyle*)));
+        disconnect(m_styleManager, &KoStyleManager::characterStyleApplied, this, &SimpleCharacterWidget::slotCharacterStyleApplied);
     }
     m_styleManager = sm;
     //we want to disconnect this before setting the stylemanager. Populating the model apparently selects the first inserted item. We don't want this to actually set a new style.
@@ -125,7 +125,7 @@ void SimpleCharacterWidget::setStyleManager(KoStyleManager *sm)
     m_stylesModel->setStyleManager(sm);
     m_sortedStylesModel->setStyleManager(sm);
     connect(widget.characterStyleCombo, SIGNAL(selected(QModelIndex)), this, SLOT(styleSelected(QModelIndex)));
-    connect(m_styleManager, SIGNAL(styleApplied(const KoCharacterStyle*)), this, SLOT(slotCharacterStyleApplied(const KoCharacterStyle*)));
+    connect(m_styleManager, &KoStyleManager::characterStyleApplied, this, &SimpleCharacterWidget::slotCharacterStyleApplied);
 }
 
 void SimpleCharacterWidget::setInitialUsedStyles(QVector<int> list)

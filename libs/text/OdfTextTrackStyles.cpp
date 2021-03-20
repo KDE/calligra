@@ -61,9 +61,9 @@ OdfTextTrackStyles::OdfTextTrackStyles(KoStyleManager *manager)
 {
     connect(manager, &KoStyleManager::editHasBegun, this, &OdfTextTrackStyles::beginEdit);
     connect(manager, &KoStyleManager::editHasEnded, this, &OdfTextTrackStyles::endEdit);
-    connect(manager, QOverload<int,const KoCharacterStyle*,const KoCharacterStyle*>::of(&KoStyleManager::styleHasChanged),
+    connect(manager, &KoStyleManager::characterStyleHasChanged,
             this,    QOverload<int,const KoCharacterStyle*,const KoCharacterStyle*>::of(&OdfTextTrackStyles::recordStyleChange));
-    connect(manager, QOverload<int,const KoParagraphStyle*,const KoParagraphStyle*>::of(&KoStyleManager::styleHasChanged),
+    connect(manager, &KoStyleManager::paragraphStyleHasChanged,
             this,    QOverload<int,const KoParagraphStyle*,const KoParagraphStyle*>::of(&OdfTextTrackStyles::recordStyleChange));
 }
 

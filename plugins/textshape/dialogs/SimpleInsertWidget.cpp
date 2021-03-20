@@ -47,8 +47,8 @@ SimpleInsertWidget::SimpleInsertWidget(TextTool *tool, QWidget *parent)
     connect(widget.configureSection, &QAbstractButton::clicked, this, &SimpleInsertWidget::doneWithFocus);
     connect(widget.splitSections, &QAbstractButton::clicked, this, &SimpleInsertWidget::doneWithFocus);
 
-    connect(widget.quickTable, SIGNAL(create(int,int)), this, SIGNAL(insertTableQuick(int,int)));
-    connect(widget.quickTable, SIGNAL(create(int,int)), this, SIGNAL(doneWithFocus()));
+    connect(widget.quickTable, QOverload<int, int>::of(&QuickTableButton::create), this, &SimpleInsertWidget::insertTableQuick);
+    connect(widget.quickTable, QOverload<int, int>::of(&QuickTableButton::create), this, &SimpleInsertWidget::doneWithFocus);
 }
 
 void SimpleInsertWidget::setStyleManager(KoStyleManager *sm)

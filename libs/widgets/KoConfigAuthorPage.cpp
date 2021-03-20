@@ -119,7 +119,7 @@ KoConfigAuthorPage::KoConfigAuthorPage()
     }
 
     // Connect slots
-    connect(d->combo, SIGNAL(currentIndexChanged(int)), this, SLOT(profileChanged(int)));
+    connect(d->combo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KoConfigAuthorPage::profileChanged);
     connect(newUser, &QAbstractButton::clicked, this, &KoConfigAuthorPage::addUser);
     connect(d->deleteUser, &QAbstractButton::clicked, this, &KoConfigAuthorPage::deleteUser);
     profileChanged(0);

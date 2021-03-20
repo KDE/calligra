@@ -272,10 +272,10 @@ void StylesModel::setStyleManager(KoStyleManager *sm)
     if (sm == m_styleManager)
         return;
     if (m_styleManager) {
-        disconnect(sm, SIGNAL(styleAdded(KoParagraphStyle*)), this, SLOT(addParagraphStyle(KoParagraphStyle*)));
-        disconnect(sm, SIGNAL(styleAdded(KoCharacterStyle*)), this, SLOT(addCharacterStyle(KoCharacterStyle*)));
-        disconnect(sm, SIGNAL(styleRemoved(KoParagraphStyle*)), this, SLOT(removeParagraphStyle(KoParagraphStyle*)));
-        disconnect(sm, SIGNAL(styleRemoved(KoCharacterStyle*)), this, SLOT(removeCharacterStyle(KoCharacterStyle*)));
+        disconnect(sm, &KoStyleManager::paragraphStyleAdded, this, &StylesModel::addParagraphStyle);
+        disconnect(sm, &KoStyleManager::characterStyleRemoved, this, &StylesModel::removeCharacterStyle);
+        disconnect(sm, &KoStyleManager::paragraphStyleRemoved, this, &StylesModel::removeParagraphStyle);
+        disconnect(sm, &KoStyleManager::characterStyleRemoved, this, &StylesModel::removeCharacterStyle);
     }
     m_styleManager = sm;
     if (m_styleManager == 0) {
@@ -284,12 +284,12 @@ void StylesModel::setStyleManager(KoStyleManager *sm)
 
     if (m_modelType == StylesModel::ParagraphStyle) {
         updateParagraphStyles();
-        connect(sm, SIGNAL(styleAdded(KoParagraphStyle*)), this, SLOT(addParagraphStyle(KoParagraphStyle*)));
-        connect(sm, SIGNAL(styleRemoved(KoParagraphStyle*)), this, SLOT(removeParagraphStyle(KoParagraphStyle*)));
+        connect(sm, &KoStyleManager::paragraphStyleAdded, this, &StylesModel::addParagraphStyle);
+        connect(sm, &KoStyleManager::paragraphStyleRemoved, this, &StylesModel::removeParagraphStyle);
     } else {
         updateCharacterStyles();
-        connect(sm, SIGNAL(styleAdded(KoCharacterStyle*)), this, SLOT(addCharacterStyle(KoCharacterStyle*)));
-        connect(sm, SIGNAL(styleRemoved(KoCharacterStyle*)), this, SLOT(removeCharacterStyle(KoCharacterStyle*)));
+        connect(sm, &KoStyleManager::characterStyleAdded, this, &StylesModel::addCharacterStyle);
+        connect(sm, &KoStyleManager::characterStyleRemoved, this, &StylesModel::removeCharacterStyle);
     }
 }
 

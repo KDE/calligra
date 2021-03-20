@@ -652,7 +652,7 @@ void KoPADocumentModel::setDocument( KoPADocument* document )
 
     if (m_document) {
         disconnect( m_document, &KoPADocument::pageAdded, this, &KoPADocumentModel::update );
-        disconnect( m_document, SIGNAL(pageRemoved(KoPAPageBase*)), this, SLOT(update()) );
+        disconnect( m_document, QOverload<KoPAPageBase*, int>::of(&KoPADocument::pageRemoved), this, &KoPADocumentModel::update);
         disconnect( m_document, &KoPADocument::update, this, &KoPADocumentModel::update );
         disconnect( m_document, &KoPADocument::shapeAdded, this, &KoPADocumentModel::update );
         disconnect( m_document, &KoPADocument::shapeRemoved, this, &KoPADocumentModel::update );
@@ -664,7 +664,7 @@ void KoPADocumentModel::setDocument( KoPADocument* document )
 
     if ( m_document ) {
         connect( m_document, &KoPADocument::pageAdded, this, &KoPADocumentModel::update );
-        connect( m_document, SIGNAL(pageRemoved(KoPAPageBase*)), this, SLOT(update()) );
+        connect( m_document, QOverload<KoPAPageBase*, int>::of(&KoPADocument::pageRemoved), this, &KoPADocumentModel::update);
         connect( m_document, &KoPADocument::update, this, &KoPADocumentModel::update );
         connect( m_document, &KoPADocument::shapeAdded, this, &KoPADocumentModel::update );
         connect( m_document, &KoPADocument::shapeRemoved, this, &KoPADocumentModel::update );

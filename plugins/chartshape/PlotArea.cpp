@@ -330,7 +330,7 @@ void PlotArea::proxyModelStructureChanged()
 
     Q_ASSERT(xAxis());
     Q_ASSERT(yAxis());
-    QMap<DataSet*, Axis*> attachedAxes;
+    QHash<DataSet*, Axis*> attachedAxes;
     QList<DataSet*> dataSets = proxyModel()->dataSets();
 
     // Remember to what y axis each data set belongs
@@ -924,8 +924,9 @@ void PlotArea::saveOdf(KoShapeSavingContext &context) const
     saveOdfSubType(bodyWriter, plotAreaStyle);
 
     // Save extra stuff (like auto-position)
-    QMap<QByteArray, QString>::const_iterator it(additionalStyleAttributes().constBegin());
-    for (; it != additionalStyleAttributes().constEnd(); ++it) {
+    const auto styleAttributes = additionalStyleAttributes();
+    QMap<QByteArray, QString>::const_iterator it(styleAttributes.constBegin());
+    for (; it != styleAttributes.constEnd(); ++it) {
         plotAreaStyle.addProperty(it.key(), it.value(), KoGenStyle::ChartType);
     }
 

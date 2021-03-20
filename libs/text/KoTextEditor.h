@@ -288,7 +288,7 @@ public Q_SLOTS:
      * change the current block's list properties
      */
     void setListProperties(const KoListLevelProperties &llp,
-                           ChangeListFlags flags = ChangeListFlags(ModifyExistingList | MergeWithAdjacentList), KUndo2Command *parent = 0);
+                           KoTextEditor::ChangeListFlags flags = ChangeListFlags(ModifyExistingList | MergeWithAdjacentList), KUndo2Command *parent = 0);
 
 
 public:

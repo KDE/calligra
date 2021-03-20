@@ -465,15 +465,17 @@ void SimpleParagraphWidget::setStyleManager(KoStyleManager *sm)
         return;
     }
     if (m_styleManager) {
-        disconnect(m_styleManager, SIGNAL(styleApplied(const KoParagraphStyle*)), this, SLOT(slotParagraphStyleApplied(const KoParagraphStyle*)));
+        disconnect(m_styleManager, &KoStyleManager::paragraphStyleApplied, this, &SimpleParagraphWidget::slotParagraphStyleApplied);
     }
     m_styleManager = sm;
     //we want to disconnect this before setting the stylemanager. Populating the model apparently selects the first inserted item. We don't want this to actually set a new style.
-    disconnect(widget.paragraphStyleCombo, SIGNAL(selected(QModelIndex)), this, SLOT(styleSelected(QModelIndex)));
+    disconnect(widget.paragraphStyleCombo, QOverload<const QModelIndex &>::of(&StylesCombo::selected),
+               this, QOverload<const QModelIndex &>::of(&SimpleParagraphWidget::styleSelected));
     m_stylesModel->setStyleManager(sm);
     m_sortedStylesModel->setStyleManager(sm);
-    connect(widget.paragraphStyleCombo, SIGNAL(selected(QModelIndex)), this, SLOT(styleSelected(QModelIndex)));
-    connect(m_styleManager, SIGNAL(styleApplied(const KoParagraphStyle*)), this, SLOT(slotParagraphStyleApplied(const KoParagraphStyle*)));
+    connect(widget.paragraphStyleCombo, QOverload<const QModelIndex &>::of(&StylesCombo::selected),
+            this, QOverload<const QModelIndex &>::of(&SimpleParagraphWidget::styleSelected));
+    connect(m_styleManager, &KoStyleManager::paragraphStyleApplied, this, &SimpleParagraphWidget::slotParagraphStyleApplied);
 }
 
 void SimpleParagraphWidget::setInitialUsedStyles(QVector<int> list)

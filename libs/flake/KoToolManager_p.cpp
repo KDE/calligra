@@ -159,10 +159,10 @@ Connector::Connector(KoShapeManager *parent)
         : QObject(parent),
         m_shapeManager(parent)
 {
-    connect(m_shapeManager, SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
+    connect(m_shapeManager, &KoShapeManager::selectionChanged, this, &Connector::slotSelectionChanged);
 }
 
-void Connector::selectionChanged()
+void Connector::slotSelectionChanged()
 {
     emit selectionChanged(m_shapeManager->selection()->selectedShapes());
 }

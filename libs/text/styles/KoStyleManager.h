@@ -433,30 +433,32 @@ public:
     QVector<int> usedParagraphStyles() const;
 
 Q_SIGNALS:
-    void styleAdded(KoParagraphStyle*);
-    void styleAdded(KoCharacterStyle*);
-    void styleAdded(KoListStyle*);
-    void styleAdded(KoTableStyle*);
-    void styleAdded(KoTableColumnStyle*);
-    void styleAdded(KoTableRowStyle*);
-    void styleAdded(KoTableCellStyle*);
-    void styleAdded(KoSectionStyle*);
-    void styleRemoved(KoParagraphStyle*);
-    void styleRemoved(KoCharacterStyle*);
-    void styleRemoved(KoListStyle*);
-    void styleRemoved(KoTableStyle*);
-    void styleRemoved(KoTableColumnStyle*);
-    void styleRemoved(KoTableRowStyle*);
-    void styleRemoved(KoTableCellStyle*);
-    void styleRemoved(KoSectionStyle*);
+
+    void paragraphStyleAdded(KoParagraphStyle*);
+    void characterStyleAdded(KoCharacterStyle*);
+    void listStyleAdded(KoListStyle*);
+    void tableStyleAdded(KoTableStyle*);
+    void tableColumnStyleAdded(KoTableColumnStyle*);
+    void tableRowStyleAdded(KoTableRowStyle*);
+    void tableCellStyleAdded(KoTableCellStyle*);
+    void sectionStyleAdded(KoSectionStyle*);
+
+    void paragraphStyleRemoved(KoParagraphStyle*);
+    void characterStyleRemoved(KoCharacterStyle*);
+    void listStyleRemoved(KoListStyle*);
+    void tableStyleRemoved(KoTableStyle*);
+    void tableColumnStyleRemoved(KoTableColumnStyle*);
+    void tableRowStyleRemoved(KoTableRowStyle*);
+    void tableCellStyleRemoved(KoTableCellStyle*);
+    void sectionStyleRemoved(KoSectionStyle*);
 
     /// This signal is emitted whenever the style has been applied to a qtextdocument
     /// This allows listeners to know which styles are in use
-    void styleApplied(const KoCharacterStyle*);
+    void characterStyleApplied(const KoCharacterStyle*);
 
     /// This signal is emitted whenever the style has been applied to a qtextdocument
     /// This allows listeners to know which styles are in use
-    void styleApplied(const KoParagraphStyle*);
+    void paragraphStyleApplied(const KoParagraphStyle*);
 
     /// This signal is to allow listener to start an undo command
     void editHasBegun();
@@ -470,11 +472,11 @@ Q_SIGNALS:
 
     /// This signal is to allow listener to record into an undo command and apply to text
     /// It's emitted when someone calls alteredStyle on a paragraph style
-    void styleHasChanged(int, const KoParagraphStyle*, const KoParagraphStyle*);
+    void paragraphStyleHasChanged(int, const KoParagraphStyle*, const KoParagraphStyle*);
 
     /// This signal is to allow listener to record into an undo command and apply to text
     /// It's emitted when someone calls alteredStyle on a character style
-    void styleHasChanged(int, const KoCharacterStyle*, const KoCharacterStyle*);
+    void characterStyleHasChanged(int, const KoCharacterStyle*, const KoCharacterStyle*);
 
 public Q_SLOTS:
     /**

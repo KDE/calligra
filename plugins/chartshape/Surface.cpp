@@ -257,13 +257,6 @@ QBrush Surface::loadOdfPatternStyle(const KoStyleStack &styleStack,
     if (href.isEmpty())
         return QBrush();
 
-    QString strExtension;
-    const int result = href.lastIndexOf('.');
-    if (result >= 0) {
-        strExtension = href.mid(result + 1); // As we are using KoPicture, the extension should be without the dot.
-    }
-    QString filename(href);
-
     KoImageData data;
     data.setImage(href, context.store());
     if (data.errorCode() != KoImageData::Success)

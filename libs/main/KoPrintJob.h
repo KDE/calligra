@@ -89,7 +89,7 @@ public Q_SLOTS:
      * @param removePolicy a policy that should be honored so the caller can make sure
      *   this job doesn't leak memory after being used.
      */
-    virtual void startPrinting(RemovePolicy removePolicy = DoNotDelete);
+    virtual void startPrinting(KoPrintJob::RemovePolicy removePolicy = DoNotDelete);
 };
 
 #endif

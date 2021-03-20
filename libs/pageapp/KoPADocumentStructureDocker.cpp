@@ -163,7 +163,7 @@ KoPADocumentStructureDocker::KoPADocumentStructureDocker(KoDocumentSectionView::
 
     setWidget(mainWidget);
 
-    connect(m_buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(slotButtonClicked(int)));
+    connect(m_buttonGroup, QOverload<int>::of(&QButtonGroup::buttonClicked), this, &KoPADocumentStructureDocker::slotButtonClicked);
 
     m_model = new KoPADocumentModel(this);
     m_sectionView->setModel(m_model);

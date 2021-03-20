@@ -36,7 +36,6 @@ QDebug operator<<(QDebug dbg, const QXmlStreamReader& reader)
     if (reader.isStartElement()) {
         dbg.nospace() << "<";
         dbg.nospace() << reader.qualifiedName().toString().toLocal8Bit().constData();
-        QString attrsString;
         const QXmlStreamAttributes& attrs = reader.attributes();
         for (int i = 0; i < attrs.count(); i++) {
             dbg.nospace() << " " << attrs[i].qualifiedName().toString().toLocal8Bit().constData();

@@ -37,8 +37,8 @@ KoPABackgroundFillWidget::KoPABackgroundFillWidget(QWidget *parent)
 void KoPABackgroundFillWidget::setView(KoPAViewBase *view)
 {
     Q_ASSERT(view);
-    connect(view->proxyObject, SIGNAL(activePageChanged()),
-             this, SLOT(shapeChanged()));
+    connect(view->proxyObject, &KoPAViewProxyObject::activePageChanged,
+            this, &KoPABackgroundFillWidget::shapeChanged);
 }
 
 KoShape* KoPABackgroundFillWidget::currentShape()

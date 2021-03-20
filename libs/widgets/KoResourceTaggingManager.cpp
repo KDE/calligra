@@ -88,12 +88,12 @@ KoResourceTaggingManager::KoResourceTaggingManager(KoResourceModel *model, QWidg
 
     connect(d->tagChooser, &KoTagChooserWidget::tagChosen,
             this, &KoResourceTaggingManager::tagChooserIndexChanged);
-    connect(d->tagChooser, SIGNAL(newTagRequested(QString)),
-            this, SLOT(contextCreateNewTag(QString)));
+    connect(d->tagChooser, &KoTagChooserWidget::newTagRequested,
+            this, QOverload<const QString &>::of(&KoResourceTaggingManager::contextCreateNewTag));
     connect(d->tagChooser, &KoTagChooserWidget::tagDeletionRequested,
             this, &KoResourceTaggingManager::removeTagFromComboBox);
-    connect(d->tagChooser, SIGNAL(tagRenamingRequested(QString,QString)),
-            this, SLOT(renameTag(QString,QString)));
+    connect(d->tagChooser, &KoTagChooserWidget::tagRenamingRequested,
+            this, &KoResourceTaggingManager::renameTag);
     connect(d->tagChooser, &KoTagChooserWidget::tagUndeletionRequested,
             this, &KoResourceTaggingManager::undeleteTag);
     connect(d->tagChooser, &KoTagChooserWidget::tagUndeletionListPurgeRequested,
@@ -368,8 +368,8 @@ void KoResourceTaggingManager::contextMenuRequested(KoResource* resource, const 
     connect(&menu, &KoResourceItemChooserContextMenu::resourceTagRemovalRequested,
             this, &KoResourceTaggingManager::contextRemoveTagFromResource);
 
-    connect(&menu, SIGNAL(resourceAssignmentToNewTagRequested(KoResource*,QString)),
-            this, SLOT(contextCreateNewTag(KoResource*,QString)));
+    connect(&menu, &KoResourceItemChooserContextMenu::resourceAssignmentToNewTagRequested,
+            this, QOverload<KoResource*, const QString &>::of(&KoResourceTaggingManager::contextCreateNewTag));
     menu.exec(pos);
 }
 

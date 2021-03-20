@@ -1383,7 +1383,6 @@ KoFilter::ConversionStatus PptxXmlSlideReader::read_bgPr()
 {
     READ_PROLOGUE
 
-    QString fillImageName;
     m_currentColor = QColor();
 
     while (!atEnd()) {

@@ -69,7 +69,7 @@ void KoSelectionPrivate::requestSelectionChangedEvent()
     if (eventTriggered)
         return;
     eventTriggered = true;
-    QTimer::singleShot(0, q, SLOT(selectionChangedEvent()));
+    QTimer::singleShot(0, q, [this] () { selectionChangedEvent(); });
 }
 
 void KoSelectionPrivate::selectionChangedEvent()

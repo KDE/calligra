@@ -58,7 +58,7 @@ LatexExportDialog::LatexExportDialog(KoStore* inputStore, QWidget* parent)
     /* Recent files */
     m_config = new KConfig("kspreadlatexexportdialog");
     //m_config->setGroup( "KSpread latex export filter" );
-    QString value;
+    //QString value;
     while (i < 10) {
         /*value = m_config->readPathEntry( QString("Recent%1").arg(i), QString() );
         debugLatex <<"recent :" << value;

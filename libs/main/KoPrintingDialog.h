@@ -93,7 +93,7 @@ public Q_SLOTS:
     /**
      * @see KoPrintJob::startPrinting
      */
-    void startPrinting(RemovePolicy removePolicy = DoNotDelete) override;
+    void startPrinting(KoPrintJob::RemovePolicy removePolicy = DoNotDelete) override;
 
 protected:
     /**

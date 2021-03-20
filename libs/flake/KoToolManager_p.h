@@ -165,8 +165,8 @@ class Connector : public QObject
 public:
     explicit Connector(KoShapeManager *parent);
 
-public Q_SLOTS:
-    void selectionChanged();
+private Q_SLOTS:
+    void slotSelectionChanged();
 
 Q_SIGNALS:
     void selectionChanged(const QList<KoShape*> &shape);

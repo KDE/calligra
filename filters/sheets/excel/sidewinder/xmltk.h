@@ -176,7 +176,7 @@ public:
     QString value() const override {
         QStringList tokens;
         foreach(XmlTk* t, m_tokens)
-            tokens.append( QString("%1 %2 %3").arg(t->m_xmlTkTag, 0, 16).arg(t->type()).arg(t->value()) );
+            tokens.append( QStringLiteral("%1 %2 %3").arg(t->m_xmlTkTag, 0, 16).arg(t->type(), t->value()) );
         return QString("[%1]").arg(tokens.join(", "));
     }
     QString type() const override { return "blob"; }

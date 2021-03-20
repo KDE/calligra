@@ -162,7 +162,7 @@ QString XlsxChartOdfWriter::genChartAreaStyle(KoGenStyle& style, KoGenStyles& st
                 color = chart()->m_areaFormat->m_foreground;
 	    }
             else
-                color = QColor("#FFFFFF");
+                color = QColor(255, 255, 255);
             style.addProperty("draw:fill-color", color.name(), KoGenStyle::GraphicType);
 
             if (color.alpha() < 255)

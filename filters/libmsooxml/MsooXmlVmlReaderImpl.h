@@ -2915,13 +2915,14 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_wrap()
         }
     }
 
-    TRY_READ_ATTR_WITHOUT_NS(anchorx)
-    TRY_READ_ATTR_WITHOUT_NS(anchory)
 
     // Documentation says default to be 'page', however because these are always in a paragraph
     // in a text run, a better default for odf purposes seems to be 'paragraph'
 
 #ifdef DOCXMLDOCREADER_H
+    TRY_READ_ATTR_WITHOUT_NS(anchorx)
+    TRY_READ_ATTR_WITHOUT_NS(anchory)
+
     if (anchory == "page") {
         if (m_headerActive || m_footerActive) {
             m_currentDrawStyle->addProperty("style:vertical-rel", "frame");

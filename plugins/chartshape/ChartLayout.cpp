@@ -76,7 +76,7 @@ ChartLayout::ChartLayout()
 
 ChartLayout::~ChartLayout()
 {
-    foreach(LayoutData *data, m_layoutItems.values())
+    for (LayoutData *data: m_layoutItems)
         delete data;
 }
 

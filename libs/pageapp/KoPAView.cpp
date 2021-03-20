@@ -332,13 +332,15 @@ void KoPAView::initGUI(KoPAFlags flags)
     }
 
     connect(shapeManager(), &KoShapeManager::selectionChanged, this, &KoPAView::selectionChanged);
-    connect(shapeManager(), SIGNAL(contentChanged()), this, SLOT(updateCanvasSize()));
-    connect(d->doc, SIGNAL(shapeAdded(KoShape*)), this, SLOT(updateCanvasSize()));
-    connect(d->doc, SIGNAL(shapeRemoved(KoShape*)), this, SLOT(updateCanvasSize()));
+    connect(shapeManager(), &KoShapeManager::contentChanged, this, [this]() { updateCanvasSize(); });
+    connect(d->doc, &KoPADocument::shapeAdded, this, [this]() { updateCanvasSize(); });
+    connect(d->doc, &KoPADocument::shapeRemoved, this, [this]() { updateCanvasSize(); });
     connect(d->doc, &KoPADocument::update, this, &KoPAView::pageUpdated);
-    connect(d->canvas, SIGNAL(documentSize(QSize)), d->canvasController->proxyObject, SLOT(updateDocumentSize(QSize)));
+    connect(d->canvas, &KoPACanvas::documentSize, d->canvasController->proxyObject, [this] (QSize sz) {
+        d->canvasController->proxyObject->updateDocumentSize(sz);
+    });
     connect(d->canvasController->proxyObject, &KoCanvasControllerProxyObject::moveDocumentOffset, d->canvas, &KoPACanvas::slotSetDocumentOffset);
-    connect(d->canvasController->proxyObject, SIGNAL(sizeChanged(QSize)), this, SLOT(updateCanvasSize()));
+    connect(d->canvasController->proxyObject, &KoCanvasControllerProxyObject::sizeChanged, this, [this] () { updateCanvasSize(); });
 
     if (mw) {
         KoToolManager::instance()->requestToolActivation( d->canvasController );

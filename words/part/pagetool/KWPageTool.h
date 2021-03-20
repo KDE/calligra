@@ -36,7 +36,7 @@ public:
     void paint(QPainter &painter, const KoViewConverter &converter) override;
 
 public Q_SLOTS:
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(KoToolBase::ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
 
 public: // Events
 

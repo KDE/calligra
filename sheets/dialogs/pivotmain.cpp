@@ -437,7 +437,7 @@ void PivotMain::Summarize()
   //For Creating QLists for Rows,Columns,Values and PageField
   int counter;
   QListWidgetItem *item1;
-  QList<QListWidgetItem *> rowList,columnList,valueList,pageList;
+  QList<QListWidgetItem *> rowList, columnList, valueList;
   
   counter= d->mainWidget.Rows->count();
   for(int i=0;i<counter;i++)

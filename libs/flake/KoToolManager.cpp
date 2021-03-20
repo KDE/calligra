@@ -612,11 +612,17 @@ void KoToolManager::Private::attachCanvas(KoCanvasController *controller)
     }
 
     Connector *connector = new Connector(controller->canvas()->shapeManager());
-    connect(connector, SIGNAL(selectionChanged(QList<KoShape*>)), q,
-            SLOT(selectionChanged(QList<KoShape*>)));
+    connect(connector, &Connector::selectionChanged,
+            q, [this](const QList<KoShape*> &list) {
+                selectionChanged(list);
+            });
+
     connect(controller->canvas()->shapeManager()->selection(),
-            SIGNAL(currentLayerChanged(const KoShapeLayer*)),
-            q, SLOT(currentLayerChanged(const KoShapeLayer*)));
+            &KoSelection::currentLayerChanged,
+            q,
+            [this](const KoShapeLayer *layer) {
+                currentLayerChanged(layer);
+            });
 
     emit q->changedCanvas(canvasData ? canvasData->canvas->canvas() : 0);
 }
@@ -825,8 +831,10 @@ KoToolManager::KoToolManager()
     : QObject(),
     d(new Private(this))
 {
-    connect(QApplication::instance(), SIGNAL(focusChanged(QWidget*,QWidget*)),
-            this, SLOT(movedFocus(QWidget*,QWidget*)));
+    connect(qApp, &QApplication::focusChanged,
+            this, [this] (QWidget *old, QWidget *now) {
+                d->movedFocus(old, now);
+            });
 }
 
 KoToolManager::~KoToolManager()
@@ -904,15 +912,21 @@ void KoToolManager::addController(KoCanvasController *controller)
     d->setup();
     d->attachCanvas(controller);
     connect(controller->proxyObject, &QObject::destroyed, this, &KoToolManager::attemptCanvasControllerRemoval);
-    connect(controller->proxyObject, SIGNAL(canvasRemoved(KoCanvasController*)), this, SLOT(detachCanvas(KoCanvasController*)));
-    connect(controller->proxyObject, SIGNAL(canvasSet(KoCanvasController*)), this, SLOT(attachCanvas(KoCanvasController*)));
+    connect(controller->proxyObject, &KoCanvasControllerProxyObject::canvasRemoved,
+            this, [this](KoCanvasController* c) {
+                d->detachCanvas(c);
+            });
+    connect(controller->proxyObject, &KoCanvasControllerProxyObject::canvasSet,
+            this, [this](KoCanvasController* c) {
+                d->attachCanvas(c);
+            });
 }
 
 void KoToolManager::removeCanvasController(KoCanvasController *controller)
 {
     Q_ASSERT(controller);
-    disconnect(controller->proxyObject, SIGNAL(canvasRemoved(KoCanvasController*)), this, SLOT(detachCanvas(KoCanvasController*)));
-    disconnect(controller->proxyObject, SIGNAL(canvasSet(KoCanvasController*)), this, SLOT(attachCanvas(KoCanvasController*)));
+    disconnect(controller->proxyObject, &KoCanvasControllerProxyObject::canvasRemoved, this, nullptr);
+    disconnect(controller->proxyObject, &KoCanvasControllerProxyObject::canvasSet, this, nullptr);
     d->detachCanvas(controller);
 }
 
@@ -1051,7 +1065,10 @@ void KoToolManager::addDeferredToolFactory(KoToolFactoryBase *toolFactory)
     d->tools.append(tool);
 
     // connect to all tools so we can hear their button-clicks
-    connect(tool, SIGNAL(toolActivated(ToolHelper*)), this, SLOT(toolActivated(ToolHelper*)));
+    connect(tool, &ToolHelper::toolActivated,
+            this, [this](ToolHelper *helper) {
+                d->toolActivated(helper);
+            });
 
     // now create tools for all existing canvases
     foreach(KoCanvasController *controller, d->canvasses.keys()) {

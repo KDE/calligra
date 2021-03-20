@@ -96,8 +96,8 @@ KoTagFilterWidget::KoTagFilterWidget(QWidget* parent): QWidget(parent)
 
     connect(d->tagSearchSaveButton, &QAbstractButton::pressed,
             this, &KoTagFilterWidget::onSaveButtonClicked);
-    connect(d->tagSearchLineEdit, SIGNAL(returnPressed()),
-            this, SLOT(onSaveButtonClicked()));
+    connect(d->tagSearchLineEdit, &KLineEdit::returnPressed,
+            this, &KoTagFilterWidget::onSaveButtonClicked);
     connect(d->tagSearchLineEdit, &QLineEdit::textChanged,
             this, &KoTagFilterWidget::onTextChanged);
     allowSave(false);

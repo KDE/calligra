@@ -66,8 +66,8 @@ KoTagToolButton::KoTagToolButton(QWidget* parent)
     addTagAction->closeParentOnTrigger(true);
     popup->addAction(addTagAction);
 
-    connect(addTagAction, SIGNAL(triggered(QString)),
-            this, SIGNAL(newTagRequested(QString)));
+    connect(addTagAction, QOverload<const QString&>::of(&KoLineEditAction::triggered),
+            this, &KoTagToolButton::newTagRequested);
 
     d->action_renameTag = new KoLineEditAction(popup);
     d->action_renameTag->setPlaceholderText(i18n("Rename tag"));
@@ -75,8 +75,8 @@ KoTagToolButton::KoTagToolButton(QWidget* parent)
     d->action_renameTag->closeParentOnTrigger(true);
     popup->addAction(d->action_renameTag);
 
-    connect(d->action_renameTag, SIGNAL(triggered(QString)),
-            this, SIGNAL(renamingOfCurrentTagRequested(QString)));
+    connect(d->action_renameTag, QOverload<const QString&>::of(&KoLineEditAction::triggered),
+            this, &KoTagToolButton::renamingOfCurrentTagRequested);
 
     popup->addSeparator();
 

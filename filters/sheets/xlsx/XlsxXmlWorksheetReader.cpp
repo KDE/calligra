@@ -930,7 +930,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_cfRule()
     READ_PROLOGUE
 
     const QXmlStreamAttributes attrs(attributes());
-    TRY_READ_ATTR_WITHOUT_NS(type)
+    //TRY_READ_ATTR_WITHOUT_NS(type)
     TRY_READ_ATTR_WITHOUT_NS(dxfId)
     TRY_READ_ATTR_WITHOUT_NS(priority)
     QString op = attrs.value("operator").toString();

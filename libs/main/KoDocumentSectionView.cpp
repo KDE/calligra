@@ -118,8 +118,8 @@ void KoDocumentSectionView::addPropertyActions(QMenu *menu, const QModelIndex &i
     for (int i = 0, n = list.count(); i < n; ++i) {
         if (list.at(i).isMutable) {
             PropertyAction *a = new PropertyAction(i, list.at(i), index, menu);
-            connect(a, SIGNAL(toggled(bool,QPersistentModelIndex,int)),
-                    this, SLOT(slotActionToggled(bool,QPersistentModelIndex,int)));
+            connect(a, QOverload<bool, const QPersistentModelIndex &, int>::of(&PropertyAction::toggled),
+                    this, &KoDocumentSectionView::slotActionToggled);
             menu->addAction(a);
         }
     }

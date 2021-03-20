@@ -207,7 +207,6 @@ bool Extrude::loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &
     loadOdfAttributes(objectElement, context, OdfObjectAttributes);
     Object3D::loadOdf(objectElement, context);
 
-    QString dummy;
     m_path = objectElement.attributeNS(KoXmlNS::svg, "d", "");
     m_viewBox = objectElement.attributeNS(KoXmlNS::svg, "viewBox", "");
 
@@ -325,7 +324,6 @@ bool Rotate::loadOdf(const KoXmlElement &objectElement, KoShapeLoadingContext &c
     loadOdfAttributes(objectElement, context, OdfObjectAttributes);
     Object3D::loadOdf(objectElement, context);
 
-    QString dummy;
     m_path = objectElement.attributeNS(KoXmlNS::svg, "d", "");
     m_viewBox = objectElement.attributeNS(KoXmlNS::svg, "viewBox", "");
 

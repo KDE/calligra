@@ -368,7 +368,7 @@ public Q_SLOTS:
      *                  and should emit done when it is done.
      * @see deactivate()
      */
-    virtual void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) = 0;
+    virtual void activate(KoToolBase::ToolActivation toolActivation, const QSet<KoShape*> &shapes) = 0;
 
     /**
      * This method is called whenever this tool is no longer the

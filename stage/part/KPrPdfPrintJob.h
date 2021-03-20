@@ -34,7 +34,7 @@ public:
     ~KPrPdfPrintJob() override;
 
 public Q_SLOTS:
-    void startPrinting(RemovePolicy removePolicy = DoNotDelete) override;
+    void startPrinting(KoPrintJob::RemovePolicy removePolicy = DoNotDelete) override;
 };
 
 #endif // KPRPDFPRINTJOB_H

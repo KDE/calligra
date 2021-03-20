@@ -111,7 +111,9 @@ KoScriptManagerAddFileWidget::KoScriptManagerAddFileWidget(KoScriptManagerAddWiz
     m_filewidget->setMimeFilter(mimetypes /*, defaultmime*/);
 
     layout->addWidget(m_filewidget);
-    connect(m_filewidget, SIGNAL(fileHighlighted(QString)), this, SLOT(slotFileHighlighted(QString)));
+    connect(m_filewidget, &KFileWidget::fileHighlighted, this, [this] (const QUrl &url) {
+        slotFileHighlighted(url.toString());
+    });
     connect(m_filewidget, &KFileWidget::fileSelected, this, &KoScriptManagerAddFileWidget::slotUpdate);
 }
 

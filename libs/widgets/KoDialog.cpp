@@ -984,7 +984,7 @@ void KoDialog::enableLinkedHelp(bool state)
         d->mUrlHelp->setFloatEnabled(true);
         d->mUrlHelp->setUnderline(true);
         d->mUrlHelp->setMinimumHeight(fontMetrics().height() + marginHint());
-        connect(d->mUrlHelp, SIGNAL(leftClickedUrl()), SLOT(helpLinkClicked()));
+        connect(d->mUrlHelp, QOverload<>::of(&KUrlLabel::leftClickedUrl), this, [this]() { d_func()->helpLinkClicked(); });
 
         d->mUrlHelp->show();
     } else {

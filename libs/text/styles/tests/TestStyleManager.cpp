@@ -72,7 +72,7 @@ void TestStyleManager::testAddRemoveCharacterStyle()
     // Add character style.
     KoCharacterStyle characterStyle;
     characterStyle.setName("Test Character Style");
-    QSignalSpy addSignalSpy(m_styleManager, SIGNAL(styleAdded(KoCharacterStyle*)));
+    QSignalSpy addSignalSpy(m_styleManager, &KoStyleManager::characterStyleAdded);
     m_styleManager->beginEdit();
     m_styleManager->add(&characterStyle);
     m_styleManager->endEdit();
@@ -85,7 +85,7 @@ void TestStyleManager::testAddRemoveCharacterStyle()
     QCOMPARE(addSignalSpy.at(0).at(0).value<KoCharacterStyle *>(), &characterStyle);
 
     // Remove character style.
-    QSignalSpy removeSignalSpy(m_styleManager, SIGNAL(styleRemoved(KoCharacterStyle*)));
+    QSignalSpy removeSignalSpy(m_styleManager, &KoStyleManager::characterStyleRemoved);
     m_styleManager->beginEdit();
     m_styleManager->remove(&characterStyle);
     m_styleManager->endEdit();
@@ -101,7 +101,7 @@ void TestStyleManager::testAddRemoveParagraphStyle()
     // Add paragraph style.
     KoParagraphStyle paragraphStyle;
     paragraphStyle.setName("Test Paragraph Style");
-    QSignalSpy addSignalSpy(m_styleManager, SIGNAL(styleAdded(KoParagraphStyle*)));
+    QSignalSpy addSignalSpy(m_styleManager, &KoStyleManager::paragraphStyleAdded);
     m_styleManager->beginEdit();
     m_styleManager->add(&paragraphStyle);
     m_styleManager->endEdit();
@@ -114,7 +114,7 @@ void TestStyleManager::testAddRemoveParagraphStyle()
     QCOMPARE(addSignalSpy.at(0).at(0).value<KoParagraphStyle *>(), &paragraphStyle);
 
     // Remove paragraph style.
-    QSignalSpy removeSignalSpy(m_styleManager, SIGNAL(styleRemoved(KoParagraphStyle*)));
+    QSignalSpy removeSignalSpy(m_styleManager, &KoStyleManager::paragraphStyleRemoved);
     m_styleManager->beginEdit();
     m_styleManager->remove(&paragraphStyle);
     m_styleManager->endEdit();
@@ -130,7 +130,7 @@ void TestStyleManager::testAddRemoveListStyle()
     // Add list style.
     KoListStyle listStyle;
     listStyle.setName("Test List Style");
-    QSignalSpy addSignalSpy(m_styleManager, SIGNAL(styleAdded(KoListStyle*)));
+    QSignalSpy addSignalSpy(m_styleManager, &KoStyleManager::listStyleAdded);
     m_styleManager->beginEdit();
     m_styleManager->add(&listStyle);
     m_styleManager->endEdit();
@@ -142,7 +142,7 @@ void TestStyleManager::testAddRemoveListStyle()
     QCOMPARE(addSignalSpy.at(0).at(0).value<KoListStyle *>(), &listStyle);
 
     // Remove list style.
-    QSignalSpy removeSignalSpy(m_styleManager, SIGNAL(styleRemoved(KoListStyle*)));
+    QSignalSpy removeSignalSpy(m_styleManager, &KoStyleManager::listStyleRemoved);
     m_styleManager->beginEdit();
     m_styleManager->remove(&listStyle);
     m_styleManager->endEdit();
@@ -158,7 +158,7 @@ void TestStyleManager::testAddRemoveTableStyle()
     // Add table style.
     KoTableStyle tableStyle;
     tableStyle.setName("Test Table Style");
-    QSignalSpy addSignalSpy(m_styleManager, SIGNAL(styleAdded(KoTableStyle*)));
+    QSignalSpy addSignalSpy(m_styleManager, &KoStyleManager::tableStyleAdded);
     m_styleManager->beginEdit();
     m_styleManager->add(&tableStyle);
     m_styleManager->endEdit();
@@ -170,7 +170,7 @@ void TestStyleManager::testAddRemoveTableStyle()
     QCOMPARE(addSignalSpy.at(0).at(0).value<KoTableStyle *>(), &tableStyle);
 
     // Remove table style.
-    QSignalSpy removeSignalSpy(m_styleManager, SIGNAL(styleRemoved(KoTableStyle*)));
+    QSignalSpy removeSignalSpy(m_styleManager, &KoStyleManager::tableStyleRemoved);
     m_styleManager->beginEdit();
     m_styleManager->remove(&tableStyle);
     m_styleManager->endEdit();
@@ -186,7 +186,7 @@ void TestStyleManager::testAddRemoveTableColumnStyle()
     // Add table column style.
     KoTableColumnStyle tableColumnStyle;
     tableColumnStyle.setName("Test Table Column Style");
-    QSignalSpy addSignalSpy(m_styleManager, SIGNAL(styleAdded(KoTableColumnStyle*)));
+    QSignalSpy addSignalSpy(m_styleManager, &KoStyleManager::tableColumnStyleAdded);
     m_styleManager->beginEdit();
     m_styleManager->add(&tableColumnStyle);
     m_styleManager->endEdit();
@@ -198,7 +198,7 @@ void TestStyleManager::testAddRemoveTableColumnStyle()
     QCOMPARE(addSignalSpy.at(0).at(0).value<KoTableColumnStyle *>(), &tableColumnStyle);
 
     // Remove table column style.
-    QSignalSpy removeSignalSpy(m_styleManager, SIGNAL(styleRemoved(KoTableColumnStyle*)));
+    QSignalSpy removeSignalSpy(m_styleManager, &KoStyleManager::tableColumnStyleRemoved);
     m_styleManager->beginEdit();
     m_styleManager->remove(&tableColumnStyle);
     m_styleManager->endEdit();
@@ -214,7 +214,7 @@ void TestStyleManager::testAddRemoveTableRowStyle()
     // Add table row style.
     KoTableRowStyle tableRowStyle;
     tableRowStyle.setName("Test Table Row Style");
-    QSignalSpy addSignalSpy(m_styleManager, SIGNAL(styleAdded(KoTableRowStyle*)));
+    QSignalSpy addSignalSpy(m_styleManager, &KoStyleManager::tableRowStyleAdded);
     m_styleManager->beginEdit();
     m_styleManager->add(&tableRowStyle);
     m_styleManager->endEdit();
@@ -226,7 +226,7 @@ void TestStyleManager::testAddRemoveTableRowStyle()
     QCOMPARE(addSignalSpy.at(0).at(0).value<KoTableRowStyle *>(), &tableRowStyle);
 
     // Remove table row style.
-    QSignalSpy removeSignalSpy(m_styleManager, SIGNAL(styleRemoved(KoTableRowStyle*)));
+    QSignalSpy removeSignalSpy(m_styleManager, &KoStyleManager::tableRowStyleRemoved);
     m_styleManager->beginEdit();
     m_styleManager->remove(&tableRowStyle);
     m_styleManager->endEdit();
@@ -242,7 +242,7 @@ void TestStyleManager::testAddRemoveTableCellStyle()
     // Add table cell style.
     KoTableCellStyle tableCellStyle;
     tableCellStyle.setName("Test Table Cell Style");
-    QSignalSpy addSignalSpy(m_styleManager, SIGNAL(styleAdded(KoTableCellStyle*)));
+    QSignalSpy addSignalSpy(m_styleManager, &KoStyleManager::tableCellStyleAdded);
     m_styleManager->beginEdit();
     m_styleManager->add(&tableCellStyle);
     m_styleManager->endEdit();
@@ -254,7 +254,7 @@ void TestStyleManager::testAddRemoveTableCellStyle()
     QCOMPARE(addSignalSpy.at(0).at(0).value<KoTableCellStyle *>(), &tableCellStyle);
 
     // Remove table cell style.
-    QSignalSpy removeSignalSpy(m_styleManager, SIGNAL(styleRemoved(KoTableCellStyle*)));
+    QSignalSpy removeSignalSpy(m_styleManager, &KoStyleManager::tableCellStyleRemoved);
     m_styleManager->beginEdit();
     m_styleManager->remove(&tableCellStyle);
     m_styleManager->endEdit();
@@ -270,7 +270,7 @@ void TestStyleManager::testAddRemoveSectionStyle()
     // Add section style.
     KoSectionStyle sectionStyle;
     sectionStyle.setName("Test Section Style");
-    QSignalSpy addSignalSpy(m_styleManager, SIGNAL(styleAdded(KoSectionStyle*)));
+    QSignalSpy addSignalSpy(m_styleManager, &KoStyleManager::sectionStyleAdded);
     m_styleManager->beginEdit();
     m_styleManager->add(&sectionStyle);
     m_styleManager->endEdit();
@@ -282,7 +282,7 @@ void TestStyleManager::testAddRemoveSectionStyle()
     QCOMPARE(addSignalSpy.at(0).at(0).value<KoSectionStyle *>(), &sectionStyle);
 
     // Remove section style.
-    QSignalSpy removeSignalSpy(m_styleManager, SIGNAL(styleRemoved(KoSectionStyle*)));
+    QSignalSpy removeSignalSpy(m_styleManager, &KoStyleManager::sectionStyleRemoved);
     m_styleManager->beginEdit();
     m_styleManager->remove(&sectionStyle);
     m_styleManager->endEdit();
@@ -310,7 +310,7 @@ void TestStyleManager::testAddAppliedCharacterStyle()
 
 void TestStyleManager::testApplyAddedCharacterStyle()
 {
-    QSignalSpy appliedSignalSpy(m_styleManager, SIGNAL(styleApplied(const KoCharacterStyle*)));
+    QSignalSpy appliedSignalSpy(m_styleManager, &KoStyleManager::characterStyleApplied);
 
     // Create style, add it to the manager, then apply it.
     KoCharacterStyle characterStyle;
@@ -345,7 +345,7 @@ void TestStyleManager::testAddAppliedParagraphStyle()
 
 void TestStyleManager::testApplyAddedParagraphStyle()
 {
-    QSignalSpy appliedSignalSpy(m_styleManager, SIGNAL(styleApplied(const KoParagraphStyle*)));
+    QSignalSpy appliedSignalSpy(m_styleManager, &KoStyleManager::paragraphStyleApplied);
 
     // Create style, add it to the manager, then apply it.
     KoParagraphStyle paragraphStyle;

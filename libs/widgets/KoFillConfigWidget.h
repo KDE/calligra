@@ -69,6 +69,7 @@ private Q_SLOTS:
     /// the pattern of the fill changed, apply the changes
     void patternChanged(QSharedPointer<KoShapeBackground> background);
 
+protected:
     virtual void shapeChanged();
 private:
     /// update the widget with the KoShape background

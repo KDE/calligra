@@ -203,13 +203,13 @@ void KoGradientEditWidget::setupUI()
 
 void KoGradientEditWidget::setupConnections()
 {
-    connect(m_gradientType, SIGNAL(activated(int)), this, SLOT(combosChange(int)));
-    connect(m_gradientRepeat, SIGNAL(activated(int)), this, SLOT(combosChange(int)));
-    connect(m_gradientTarget, SIGNAL(activated(int)), this, SLOT(combosChange(int)));
+    connect(m_gradientType, QOverload<int>::of(&QComboBox::activated), this, &KoGradientEditWidget::combosChange);
+    connect(m_gradientRepeat, QOverload<int>::of(&QComboBox::activated), this, &KoGradientEditWidget::combosChange);
+    connect(m_gradientTarget, QOverload<int>::of(&QComboBox::activated), this, &KoGradientEditWidget::combosChange);
     connect(m_addToPredefs, &QAbstractButton::clicked, this, &KoGradientEditWidget::addGradientToPredefs);
     connect(m_opacity, &KoSliderCombo::valueChanged, this, &KoGradientEditWidget::opacityChanged);
     connect(m_actionStopColor, &KoColorPopupAction::colorChanged, this, &KoGradientEditWidget::stopChanged);
-    connect(m_stopPosition, SIGNAL(valueChanged(double)), this, SLOT(stopChanged()));
+    connect(m_stopPosition, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &KoGradientEditWidget::stopChanged);
 }
 
 void KoGradientEditWidget::blockChildSignals(bool block)

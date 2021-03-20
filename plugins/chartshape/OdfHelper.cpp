@@ -186,8 +186,9 @@ void saveOdfTitleStyle(KoShape *title, KoGenStyle &style, KoShapeSavingContext &
         b->saveOdf(style);
     }
 
-    QMap<QByteArray, QString>::const_iterator it(title->additionalStyleAttributes().constBegin());
-    for (; it != title->additionalStyleAttributes().constEnd(); ++it) {
+    const auto styleAttributes = title->additionalStyleAttributes();
+    QMap<QByteArray, QString>::const_iterator it(styleAttributes.constBegin());
+    for (; it != styleAttributes.constEnd(); ++it) {
         style.addProperty(it.key(), it.value(), KoGenStyle::ChartType);
     }
     style.addProperty("chart:auto-size", (titleData->resizeMethod() == KoTextShapeDataBase::AutoResize), KoGenStyle::ChartType);

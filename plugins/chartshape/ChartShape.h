@@ -235,7 +235,7 @@ public:
     ChartDocument *document() const;
 
 Q_SIGNALS:
-    void chartTypeChanged(ChartType, ChartType prev = LastChartType);
+    void chartTypeChanged(KoChart::ChartType, KoChart::ChartType prev = LastChartType);
     void updateConfigWidget() const;
 
 public Q_SLOTS:

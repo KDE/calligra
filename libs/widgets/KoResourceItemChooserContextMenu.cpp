@@ -43,8 +43,8 @@ KoLineEditAction::KoLineEditAction(QObject* parent)
     pWidget->setLayout(pLayout);
     setDefaultWidget(pWidget);
 
-    connect (m_editBox, SIGNAL(returnPressed(QString)),
-             this, SLOT(onTriggered(QString)));
+    connect (m_editBox, QOverload<const QString &>::of(&KLineEdit::returnPressed),
+             this, &KoLineEditAction::onTriggered);
 }
 
 void KoLineEditAction::setIcon(const QIcon &icon)
@@ -104,8 +104,8 @@ ContextMenuExistingTagAction::ContextMenuExistingTagAction(KoResource* resource,
     , m_tag(tag)
 {
     setText(tag);
-    connect (this, SIGNAL(triggered()),
-             this, SLOT(onTriggered()));
+    connect (this, QOverload<KoResource *, const QString &>::of(&ContextMenuExistingTagAction::triggered),
+             this, &ContextMenuExistingTagAction::onTriggered);
 }
 
 void ContextMenuExistingTagAction::onTriggered()
@@ -120,8 +120,8 @@ NewTagAction::NewTagAction(KoResource* resource, QMenu* parent)
     setPlaceholderText(i18n("New tag"));
     closeParentOnTrigger(true);
 
-    connect (this, SIGNAL(triggered(QString)),
-             this, SLOT(onTriggered(QString)));
+    connect (this, QOverload<KoResource *, const QString &>::of(&NewTagAction::triggered),
+             this, [this] (KoResource *res, const QString &tag) { Q_UNUSED(res); onTriggered(tag); });
 }
 
 void NewTagAction::onTriggered(const QString & tagName)
@@ -162,8 +162,8 @@ KoResourceItemChooserContextMenu::KoResourceItemChooserContextMenu(KoResource* r
             removeTagAction->setText(i18n("Remove from this tag"));
             removeTagAction->setIcon(koIcon("list-remove"));
 
-            connect(removeTagAction, SIGNAL(triggered(KoResource*,QString)),
-                    this, SIGNAL(resourceTagRemovalRequested(KoResource*,QString)));
+            connect(removeTagAction, QOverload<KoResource*, const QString &>::of(&ContextMenuExistingTagAction::triggered),
+                    this, &KoResourceItemChooserContextMenu::resourceTagRemovalRequested);
             addAction(removeTagAction);
         }
         if (!removables.isEmpty()) {
@@ -172,8 +172,8 @@ KoResourceItemChooserContextMenu::KoResourceItemChooserContextMenu(KoResource* r
                 assignables.removeAll(tag);
                 ContextMenuExistingTagAction * removeTagAction = new ContextMenuExistingTagAction(resource, tag, this);
 
-                connect(removeTagAction, SIGNAL(triggered(KoResource*,QString)),
-                        this, SIGNAL(resourceTagRemovalRequested(KoResource*,QString)));
+                connect(removeTagAction, QOverload<KoResource*, const QString &>::of(&ContextMenuExistingTagAction::triggered),
+                        this, &KoResourceItemChooserContextMenu::resourceTagRemovalRequested);
                 removableTagsMenu->addAction(removeTagAction);
             }
         }
@@ -182,14 +182,14 @@ KoResourceItemChooserContextMenu::KoResourceItemChooserContextMenu(KoResource* r
     foreach (const QString &tag, assignables) {
         ContextMenuExistingTagAction * addTagAction = new ContextMenuExistingTagAction(resource, tag, this);
 
-        connect(addTagAction, SIGNAL(triggered(KoResource*,QString)),
-                this, SIGNAL(resourceTagAdditionRequested(KoResource*,QString)));
+        connect(addTagAction, QOverload<KoResource*, const QString &>::of(&ContextMenuExistingTagAction::triggered),
+                this, &KoResourceItemChooserContextMenu::resourceTagAdditionRequested);
         assignableTagsMenu->addAction(addTagAction);
     }
     assignableTagsMenu->addSeparator();
 
     NewTagAction * addTagAction = new NewTagAction(resource, this);
-    connect(addTagAction, SIGNAL(triggered(KoResource*,QString)),
-            this, SIGNAL(resourceAssignmentToNewTagRequested(KoResource*,QString)));
+    connect(addTagAction, QOverload<KoResource*, const QString &>::of(&NewTagAction::triggered),
+            this, &KoResourceItemChooserContextMenu::resourceAssignmentToNewTagRequested);
     assignableTagsMenu->addAction(addTagAction);
 }

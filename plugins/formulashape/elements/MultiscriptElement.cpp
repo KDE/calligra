@@ -261,7 +261,6 @@ ElementType MultiscriptElement::elementType() const
 
 bool MultiscriptElement::readMathMLContent( const KoXmlElement& parent )
 {
-    QString name = parent.tagName().toLower();
     BasicElement* tmpElement = 0;
     KoXmlElement tmp;
     bool prescript = false; //When we see a mprescripts tag, we enable this

@@ -73,9 +73,9 @@ KoSliderCombo::KoSliderCombo(QWidget *parent)
     setEditable(true);
     setEditText(QLocale().toString(0.0, d->decimals));
 
-    connect(d->slider, SIGNAL(valueChanged(int)), SLOT(sliderValueChanged(int)));
-    connect(d->slider, SIGNAL(sliderReleased()), SLOT(sliderReleased()));
-    connect(lineEdit(), SIGNAL(editingFinished()), SLOT(lineEditFinished()));
+    connect(d->slider, &QSlider::valueChanged, this, [this] (int value) { d->sliderValueChanged(value); });
+    connect(d->slider, &QSlider::sliderReleased, this, [this] () { d->sliderReleased(); });
+    connect(lineEdit(), &QLineEdit::editingFinished, this, [this] () { d->lineEditFinished(); });
 }
 
 KoSliderCombo::~KoSliderCombo()

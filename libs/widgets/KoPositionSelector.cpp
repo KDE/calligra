@@ -182,7 +182,7 @@ KoPositionSelector::KoPositionSelector(QWidget *parent)
     lay->addWidget(d->bottomLeft, 2, 0);
     setLayout(lay);
 
-    connect(&d->buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(positionChanged(int)));
+    connect(&d->buttonGroup, QOverload<int>::of(&QButtonGroup::buttonClicked), this, &KoPositionSelector::positionChanged);
 }
 
 KoPositionSelector::~KoPositionSelector() {
