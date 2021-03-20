@@ -49,7 +49,7 @@ KoFilter::~KoFilter()
 void KoFilter::setUpdater(const QPointer<KoUpdater>& updater)
 {
     if (d->updater && !updater) {
-        disconnect(this, SLOT(slotProgress(int)));
+        disconnect(this, &KoFilter::sigProgress, this, &KoFilter::slotProgress);
     } else if (!d->updater && updater) {
         connect(this, &KoFilter::sigProgress, this, &KoFilter::slotProgress);
     }

@@ -173,7 +173,7 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
     d->addRemoveButton = new QToolButton(this);
     d->addRemoveButton->setText(i18n("Add / Remove Colors..."));
     d->addRemoveButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    connect(d->addRemoveButton, SIGNAL(clicked()), SLOT(addRemoveColors()));
+    connect(d->addRemoveButton, &QToolButton::clicked, this, [this]() { d->addRemoveColors(); });
     d->mainLayout->addWidget(d->addRemoveButton);
 
     setLayout(d->mainLayout);

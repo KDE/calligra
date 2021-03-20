@@ -25,6 +25,7 @@
 class KoCanvasBase;
 class QAction;
 
+// KoCopyControllerPrivate
 class KoCopyControllerPrivate
 {
 public:
@@ -32,6 +33,9 @@ public:
 
     // request to start the actual copy
     void copy();
+
+    // request to start the actual cut
+    void cut();
 
     void selectionChanged(bool hasSelection);
 

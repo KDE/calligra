@@ -46,7 +46,7 @@ KoColorSlider::KoColorSlider(QWidget* parent, KoColorDisplayRendererInterface *d
 {
     setMaximum(255);
     d->displayRenderer = displayRenderer;
-    connect(d->displayRenderer, SIGNAL(displayConfigurationChanged()), SLOT(update()));
+    connect(d->displayRenderer, &KoColorDisplayRendererInterface::displayConfigurationChanged, this, QOverload<>::of(&KoColorSlider::update));
 }
 
 KoColorSlider::KoColorSlider(Qt::Orientation o, QWidget *parent, KoColorDisplayRendererInterface *displayRenderer)
@@ -54,7 +54,7 @@ KoColorSlider::KoColorSlider(Qt::Orientation o, QWidget *parent, KoColorDisplayR
 {
     setMaximum(255);
     d->displayRenderer = displayRenderer;
-    connect(d->displayRenderer, SIGNAL(displayConfigurationChanged()), SLOT(update()));
+    connect(d->displayRenderer, &KoColorDisplayRendererInterface::displayConfigurationChanged, this, QOverload<>::of(&KoColorSlider::update));
 }
 
 KoColorSlider::~KoColorSlider()
@@ -67,7 +67,7 @@ void KoColorSlider::setColors(const KoColor& mincolor, const KoColor& maxcolor)
     d->minColor = mincolor;
     d->maxColor = maxcolor;
     d->upToDate = false;
-    QTimer::singleShot(1, this, SLOT(update()));
+    QTimer::singleShot(1, this, QOverload<>::of(&KoColorSlider::update));
 }
 
 void KoColorSlider::drawContents( QPainter *painter )

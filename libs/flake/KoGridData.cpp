@@ -225,6 +225,6 @@ KToggleAction *KoGridData::gridToggleAction(QWidget* canvas)
         d->toggleGridAction->setChecked(d->showGrid);
     }
     if (canvas)
-        QObject::connect(d->toggleGridAction, SIGNAL(toggled(bool)), canvas, SLOT(update()));
+        QObject::connect(d->toggleGridAction, &KToggleAction::toggled, canvas, QOverload<>::of(&QWidget::update));
     return d->toggleGridAction;
 }

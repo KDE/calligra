@@ -41,7 +41,7 @@ KoImageDataPrivate::KoImageDataPrivate(KoImageData *q)
 {
     cleanCacheTimer.setSingleShot(true);
     cleanCacheTimer.setInterval(1000);
-    QObject::connect(&cleanCacheTimer, SIGNAL(timeout()), q, SLOT(cleanupImageCache()));
+    QObject::connect(&cleanCacheTimer, &QTimer::timeout, q, [this] () { cleanupImageCache(); });
 }
 
 KoImageDataPrivate::~KoImageDataPrivate()

@@ -43,7 +43,7 @@ SnapGuideConfigWidget::SnapGuideConfigWidget(KoSnapGuide * snapGuide, QWidget * 
     connect(widget.intersectionSnapGuide, &QAbstractButton::toggled, this, &SnapGuideConfigWidget::strategyChanged);
     connect(widget.boundingBoxSnapGuide, &QAbstractButton::toggled, this, &SnapGuideConfigWidget::strategyChanged);
     connect(widget.lineGuideSnapGuide, &QAbstractButton::toggled, this, &SnapGuideConfigWidget::strategyChanged);
-    connect(widget.snapDistance, SIGNAL(valueChanged(int)), this, SLOT(distanceChanged(int)));
+    connect(widget.snapDistance, QOverload<int>::of(&QSpinBox::valueChanged), this, &SnapGuideConfigWidget::distanceChanged);
 
     widget.useSnapGuides->setChecked(snapGuide->isSnapping());
 }

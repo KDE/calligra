@@ -27,26 +27,7 @@
 
 #include <FlakeDebug.h>
 #include <QAction>
-
-// KoCopyControllerPrivate
-class KoCopyControllerPrivate
-{
-public:
-    KoCopyControllerPrivate(KoCopyController *p, KoCanvasBase *c, QAction *a);
-
-    // request to start the actual copy
-    void copy();
-
-    // request to start the actual cut
-    void cut();
-
-    void selectionChanged(bool hasSelection);
-
-    KoCopyController *parent;
-    KoCanvasBase *canvas;
-    QAction *action;
-    bool appHasSelection;
-};
+#include "KoCopyController_p.h"
 
 KoCopyControllerPrivate::KoCopyControllerPrivate(KoCopyController *p, KoCanvasBase *c, QAction *a)
     : parent(p),
@@ -86,8 +67,8 @@ KoCopyController::KoCopyController(KoCanvasBase *canvas, QAction *copyAction)
     : QObject(copyAction),
     d(new KoCopyControllerPrivate(this, canvas, copyAction))
 {
-    connect(canvas->toolProxy(), SIGNAL(selectionChanged(bool)), this, SLOT(selectionChanged(bool)));
-    connect(copyAction, SIGNAL(triggered()), this, SLOT(copy()));
+    connect(canvas->toolProxy(), &KoToolProxy::selectionChanged, this, [this](bool v) { d->selectionChanged(v); });
+    connect(copyAction, &QAction::triggered, this, [this]() { d->copy(); });
     hasSelection(false);
 }
 

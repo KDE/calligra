@@ -159,7 +159,7 @@ KoResourceItemChooser::KoResourceItemChooser(QSharedPointer<KoAbstractResourceSe
     d->buttonGroup->addButton(button, Button_Remove);
     d->buttonLayout->addWidget(button, 0, 1);
 
-    connect(d->buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(slotButtonClicked(int)));
+    connect(d->buttonGroup, QOverload<int>::of(&QButtonGroup::buttonClicked), this, &KoResourceItemChooser::slotButtonClicked);
 
     d->buttonLayout->setColumnStretch(0, 1);
     d->buttonLayout->setColumnStretch(1, 1);

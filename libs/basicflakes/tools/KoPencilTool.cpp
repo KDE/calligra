@@ -332,12 +332,12 @@ QList<QPointer<QWidget> > KoPencilTool::createOptionWidgets()
     layout->addWidget(stackedWidget);
     layout->addStretch(1);
 
-    connect(modeBox, SIGNAL(activated(int)), stackedWidget, SLOT(setCurrentIndex(int)));
-    connect(modeBox, SIGNAL(activated(int)), this, SLOT(selectMode(int)));
+    connect(modeBox, QOverload<int>::of(&QComboBox::activated), stackedWidget, &QStackedWidget::setCurrentIndex);
+    connect(modeBox, QOverload<int>::of(&QComboBox::activated), this, &KoPencilTool::selectMode);
     connect(optimizeRaw, &QCheckBox::stateChanged, this, &KoPencilTool::setOptimize);
     connect(optimizeCurve, &QCheckBox::stateChanged, this, &KoPencilTool::setOptimize);
-    connect(fittingError, SIGNAL(valueChanged(double)), this, SLOT(setDelta(double)));
-    connect(combineAngle, SIGNAL(valueChanged(double)), this, SLOT(setDelta(double)));
+    connect(fittingError, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &KoPencilTool::setDelta);
+    connect(combineAngle, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &KoPencilTool::setDelta);
 
     modeBox->setCurrentIndex(m_mode);
     stackedWidget->setCurrentIndex(m_mode);

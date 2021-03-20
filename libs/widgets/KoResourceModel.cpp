@@ -34,18 +34,19 @@ KoResourceModel::KoResourceModel(QSharedPointer<KoAbstractResourceServerAdapter>
 {
     Q_ASSERT(m_resourceAdapter);
     m_resourceAdapter->connectToResourceServer();
-    connect(m_resourceAdapter.data(), SIGNAL(resourceAdded(KoResource*)),
-            this, SLOT(resourceAdded(KoResource*)));
-    connect(m_resourceAdapter.data(), SIGNAL(removingResource(KoResource*)),
-            this, SLOT(resourceRemoved(KoResource*)));
-    connect(m_resourceAdapter.data(), SIGNAL(resourceChanged(KoResource*)),
-            this, SLOT(resourceChanged(KoResource*)));
-    connect(m_resourceAdapter.data(), SIGNAL(tagsWereChanged()),
-            this, SLOT(tagBoxEntryWasModified()));
-    connect(m_resourceAdapter.data(), SIGNAL(tagCategoryWasAdded(QString)),
-            this, SLOT(tagBoxEntryWasAdded(QString)));
-    connect(m_resourceAdapter.data(), SIGNAL(tagCategoryWasRemoved(QString)),
-            this, SLOT(tagBoxEntryWasRemoved(QString)));
+    
+    connect(m_resourceAdapter.data(), &KoAbstractResourceServerAdapter::resourceAdded,
+            this, &KoResourceModel::resourceAdded);
+    connect(m_resourceAdapter.data(), &KoAbstractResourceServerAdapter::removingResource,
+            this, &KoResourceModel::resourceRemoved);
+    connect(m_resourceAdapter.data(), &KoAbstractResourceServerAdapter::resourceChanged,
+            this, &KoResourceModel::resourceChanged);
+    connect(m_resourceAdapter.data(), &KoAbstractResourceServerAdapter::tagsWereChanged,
+            this, &KoResourceModel::tagBoxEntryWasModified);
+    connect(m_resourceAdapter.data(), &KoAbstractResourceServerAdapter::tagCategoryWasAdded,
+            this, &KoResourceModel::tagBoxEntryWasAdded);
+    connect(m_resourceAdapter.data(), &KoAbstractResourceServerAdapter::tagCategoryWasRemoved,
+            this, &KoResourceModel::tagBoxEntryWasRemoved);
 }
 
 KoResourceModel::~KoResourceModel()

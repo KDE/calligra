@@ -61,8 +61,8 @@ public:
 KoResourceSelector::KoResourceSelector(QWidget * parent)
     : QComboBox( parent ), d( new Private() )
 {
-    connect( this, SIGNAL(currentIndexChanged(int)),
-             this, SLOT(indexChanged(int)) );
+    connect( this, QOverload<int>::of(&KoResourceSelector::currentIndexChanged),
+             this, &KoResourceSelector::indexChanged);
 
     setMouseTracking(true);
 }
@@ -78,8 +78,8 @@ KoResourceSelector::KoResourceSelector( QSharedPointer<KoAbstractResourceServerA
     setMouseTracking(true);
     d->updateIndex(this);
 
-    connect( this, SIGNAL(currentIndexChanged(int)),
-             this, SLOT(indexChanged(int)) );
+    connect( this, QOverload<int>::of(&KoResourceSelector::currentIndexChanged),
+             this, &KoResourceSelector::indexChanged);
 
     connect(resourceAdapter.data(), &KoAbstractResourceServerAdapter::resourceAdded,
             this, &KoResourceSelector::resourceAdded);

@@ -129,7 +129,7 @@ KoToolProxy::KoToolProxy(KoCanvasBase *canvas, QObject *parent)
 {
     KoToolManager::instance()->priv()->registerToolProxy(this, canvas);
 
-    connect(&d->scrollTimer, SIGNAL(timeout()), this, SLOT(timeout()));
+    connect(&d->scrollTimer, &QTimer::timeout, this, [this] () { d->timeout(); });
 }
 
 KoToolProxy::~KoToolProxy()
@@ -499,10 +499,10 @@ void KoToolProxy::inputMethodEvent(QInputMethodEvent *event)
 void KoToolProxy::setActiveTool(KoToolBase *tool)
 {
     if (d->activeTool)
-        disconnect(d->activeTool, SIGNAL(selectionChanged(bool)), this, SLOT(selectionChanged(bool)));
+        disconnect(d->activeTool, &KoToolBase::selectionChanged, this, nullptr);
     d->activeTool = tool;
     if (tool) {
-        connect(d->activeTool, SIGNAL(selectionChanged(bool)), this, SLOT(selectionChanged(bool)));
+        connect(d->activeTool, &KoToolBase::selectionChanged, this, [this] (bool v) { d->selectionChanged(v); });
         d->selectionChanged(hasSelection());
         emit toolChanged(tool->toolId());
     }

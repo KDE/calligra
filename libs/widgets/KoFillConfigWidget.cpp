@@ -250,7 +250,7 @@ KoFillConfigWidget::KoFillConfigWidget(QWidget *parent)
     d->group->addButton(button, Pattern);
     layout->addWidget(button);
 
-    connect(d->group, SIGNAL(buttonClicked(int)), this, SLOT(styleButtonPressed(int)));
+    connect(d->group, QOverload<int>::of(&QButtonGroup::buttonClicked), this, &KoFillConfigWidget::styleButtonPressed);
 
     d->colorButton = new KoColorPopupButton(this);
     d->colorButton->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -271,14 +271,14 @@ KoFillConfigWidget::KoFillConfigWidget(QWidget *parent)
     QSharedPointer<KoAbstractResourceServerAdapter> gradientResourceAdapter(new KoResourceServerAdapter<KoAbstractGradient>(serverProvider->gradientServer()));
     d->gradientAction = new KoResourcePopupAction(gradientResourceAdapter, d->colorButton);
     d->gradientAction->setToolTip(i18n("Change the filling gradient"));
-    connect(d->gradientAction, SIGNAL(resourceSelected(QSharedPointer<KoShapeBackground>)), this, SLOT(gradientChanged(QSharedPointer<KoShapeBackground>)));
+    connect(d->gradientAction, &KoResourcePopupAction::resourceSelected, this, &KoFillConfigWidget::gradientChanged);
     connect(d->colorButton, &KoColorPopupButton::iconSizeChanged, d->gradientAction, &KoResourcePopupAction::updateIcon);
 
     // Pattern selector
     QSharedPointer<KoAbstractResourceServerAdapter>patternResourceAdapter(new KoResourceServerAdapter<KoPattern>(serverProvider->patternServer()));
     d->patternAction = new KoResourcePopupAction(patternResourceAdapter, d->colorButton);
     d->patternAction->setToolTip(i18n("Change the filling pattern"));
-    connect(d->patternAction, SIGNAL(resourceSelected(QSharedPointer<KoShapeBackground>)), this, SLOT(patternChanged(QSharedPointer<KoShapeBackground>)));
+    connect(d->patternAction, &KoResourcePopupAction::resourceSelected, this, &KoFillConfigWidget::patternChanged);
     connect(d->colorButton, &KoColorPopupButton::iconSizeChanged, d->patternAction, &KoResourcePopupAction::updateIcon);
 
     // Spacer

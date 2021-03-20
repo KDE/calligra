@@ -257,14 +257,14 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(QWidget * parent)
     d->colorAction->setCurrentColor(Qt::black);
 
     // Make the signals visible on the outside of this widget.
-    connect(d->lineStyle,  SIGNAL(currentIndexChanged(int)), this, SLOT(applyChanges()));
+    connect(d->lineStyle,  QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KoStrokeConfigWidget::applyChanges);
     connect(d->lineWidth,  &KoUnitDoubleSpinBox::valueChangedPt,    this, &KoStrokeConfigWidget::applyChanges);
     connect(d->colorAction, &KoColorPopupAction::colorChanged, this, &KoStrokeConfigWidget::applyChanges);
-    connect(d->capNJoinMenu->capGroup,   SIGNAL(buttonClicked(int)),       this, SLOT(applyChanges()));
-    connect(d->capNJoinMenu->joinGroup,  SIGNAL(buttonClicked(int)),       this, SLOT(applyChanges()));
+    connect(d->capNJoinMenu->capGroup,   QOverload<int>::of(&QButtonGroup::buttonClicked),       this, &KoStrokeConfigWidget::applyChanges);
+    connect(d->capNJoinMenu->joinGroup,  QOverload<int>::of(&QButtonGroup::buttonClicked),       this, &KoStrokeConfigWidget::applyChanges);
     connect(d->capNJoinMenu->miterLimit, &KoUnitDoubleSpinBox::valueChangedPt,    this, &KoStrokeConfigWidget::applyChanges);
-    connect(d->startMarkerSelector,  SIGNAL(currentIndexChanged(int)), this, SLOT(startMarkerChanged()));
-    connect(d->endMarkerSelector,  SIGNAL(currentIndexChanged(int)), this, SLOT(endMarkerChanged()));
+    connect(d->startMarkerSelector,  QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KoStrokeConfigWidget::startMarkerChanged);
+    connect(d->endMarkerSelector,  QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KoStrokeConfigWidget::endMarkerChanged);
 }
 
 KoStrokeConfigWidget::~KoStrokeConfigWidget()

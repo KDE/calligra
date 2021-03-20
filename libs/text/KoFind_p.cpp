@@ -68,8 +68,8 @@ KoFindPrivate::KoFindPrivate(KoFind *find, KoCanvasResourceManager *crp, QWidget
         , findForward(crp)
         , findBackward(crp)
 {
-    QObject::connect(findStrategy.dialog(), SIGNAL(okClicked()), q, SLOT(startFind()));
-    QObject::connect(replaceStrategy.dialog(), SIGNAL(okClicked()), q, SLOT(startReplace()));
+    QObject::connect(findStrategy.dialog(), &KFindDialog::okClicked, q, [this] () { startFind(); });
+    QObject::connect(replaceStrategy.dialog(), &KFindDialog::okClicked, q, [this] () { startReplace(); });
 }
 
 void KoFindPrivate::resourceChanged(int key, const QVariant &variant)

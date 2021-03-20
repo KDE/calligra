@@ -52,7 +52,7 @@ KoEditColorSetWidget::KoEditColorSetWidget(const QList<KoColorSet *> &palettes, 
         colorSet->load();
         widget.selector->addItem(colorSet->name());
     }
-    connect(widget.selector, SIGNAL(currentIndexChanged(int)), this, SLOT(setActiveColorSet(int)));
+    connect(widget.selector, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KoEditColorSetWidget::setActiveColorSet);
 
     // A widget that shows all colors from active palette
     // FIXME no need to handcode the QScrollArea if designer can add QScrollArea (Qt 4.4?)

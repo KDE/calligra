@@ -304,7 +304,7 @@ void KoToolManager::Private::setup()
 
     // connect to all tools so we can hear their button-clicks
     foreach(ToolHelper *tool, tools)
-        connect(tool, SIGNAL(toolActivated(ToolHelper*)), q, SLOT(toolActivated(ToolHelper*)));
+        connect(tool, &ToolHelper::toolActivated, q, [this] (ToolHelper *tool) { toolActivated(tool); });
 
     // load pluggable input devices
     KoInputDeviceHandlerRegistry::instance();
@@ -313,8 +313,8 @@ void KoToolManager::Private::setup()
 void KoToolManager::Private::connectActiveTool()
 {
     if (canvasData->activeTool) {
-        connect(canvasData->activeTool, SIGNAL(cursorChanged(QCursor)),
-                q, SLOT(updateCursor(QCursor)));
+        connect(canvasData->activeTool, &KoToolBase::cursorChanged,
+                q, [this] (const QCursor &cursor) { updateCursor(cursor); });
         connect(canvasData->activeTool, &KoToolBase::activateTool,
                 q, &KoToolManager::switchToolRequested);
         connect(canvasData->activeTool, &KoToolBase::activateTemporary,
@@ -335,8 +335,8 @@ void KoToolManager::Private::disconnectActiveTool()
         // repaint the decorations before we deactivate the tool as it might deleted
         // data needed for the repaint
         canvasData->activeTool->deactivate();
-        disconnect(canvasData->activeTool, SIGNAL(cursorChanged(QCursor)),
-                   q, SLOT(updateCursor(QCursor)));
+        disconnect(canvasData->activeTool, &KoToolBase::cursorChanged,
+                   q, nullptr);
         disconnect(canvasData->activeTool, &KoToolBase::activateTool,
                    q, &KoToolManager::switchToolRequested);
         disconnect(canvasData->activeTool, &KoToolBase::activateTemporary,

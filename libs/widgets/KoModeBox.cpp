@@ -583,14 +583,14 @@ void KoModeBox::slotContextMenuRequested(const QPoint &pos)
 {
     QMenu menu;
     KSelectAction* textAction = new KSelectAction(i18n("Text"), &menu);
-    connect(textAction, SIGNAL(triggered(int)), SLOT(switchIconMode(int)));
+    connect(textAction, QOverload<int>::of(&KSelectAction::triggered), this, &KoModeBox::switchIconMode);
     menu.addAction(textAction);
     textAction->addAction(i18n("Icon and Text"));
     textAction->addAction(i18n("Icon only"));
     textAction->setCurrentItem(d->iconMode);
 
     KSelectAction* buttonPositionAction = new KSelectAction(i18n("Tabs side"), &menu);
-    connect(buttonPositionAction, SIGNAL(triggered(int)), SLOT(switchTabsSide(int)));
+    connect(buttonPositionAction, QOverload<int>::of(&KSelectAction::triggered), this, &KoModeBox::switchTabsSide);
     menu.addAction(buttonPositionAction);
     if (d->horizontalMode) {
         buttonPositionAction->addAction(i18n("Top side"));

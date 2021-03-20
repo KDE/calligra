@@ -32,8 +32,8 @@ KoConnectionShapeConfigWidget::KoConnectionShapeConfigWidget()
     widget.connectionType->addItem(koIcon("straight-connector"), i18n("Straight"));
     widget.connectionType->addItem(koIcon("curve-connector"), i18n("Curve"));
 
-    connect(widget.connectionType, SIGNAL(currentIndexChanged(int)), this, SIGNAL(propertyChanged()));
-    connect(widget.connectionType, SIGNAL(currentIndexChanged(int)), this, SIGNAL(connectionTypeChanged(int)));
+    connect(widget.connectionType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KoConnectionShapeConfigWidget::propertyChanged);
+    connect(widget.connectionType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KoConnectionShapeConfigWidget::connectionTypeChanged);
 }
 
 void KoConnectionShapeConfigWidget::setConnectionType(int type)

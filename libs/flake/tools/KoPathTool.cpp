@@ -849,7 +849,7 @@ void KoPathTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &s
     }
     m_pointSelection.setSelectedShapes(selectedShapes);
     useCursor(m_selectCursor);
-    connect(d->canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(activate()));
+    connect(d->canvas->shapeManager()->selection(), &KoSelection::selectionChanged, this, QOverload<>::of(&KoPathTool::activate));
     updateOptionsWidget();
     updateActions();
 }
@@ -913,7 +913,7 @@ void KoPathTool::updateActions()
 void KoPathTool::deactivate()
 {
     Q_D(KoToolBase);
-    disconnect(d->canvas->shapeManager()->selection(), SIGNAL(selectionChanged()), this, SLOT(activate()));
+    disconnect(d->canvas->shapeManager()->selection(), &KoSelection::selectionChanged, this, QOverload<>::of(&KoPathTool::activate));
     m_pointSelection.clear();
     m_pointSelection.setSelectedShapes(QList<KoPathShape*>());
     delete m_activeHandle;

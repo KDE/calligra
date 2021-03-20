@@ -60,7 +60,7 @@ KoDockWidgetTitleBar::KoDockWidgetTitleBar(QDockWidget* dockWidget)
 
     d->floatButton = new KoDockWidgetTitleBarButton(this);
     d->floatButton->setIcon(q->style()->standardIcon(QStyle::SP_TitleBarNormalButton, nullptr, q));
-    connect(d->floatButton, SIGNAL(clicked()), SLOT(toggleFloating()));
+    connect(d->floatButton, &KoDockWidgetTitleBarButton::clicked, this, [this] () { d->toggleFloating(); });
     d->floatButton->setVisible(true);
     d->floatButton->setToolTip(i18nc("@info:tooltip", "Float Docker"));
     d->floatButton->setStyleSheet("border: 0");
@@ -74,7 +74,7 @@ KoDockWidgetTitleBar::KoDockWidgetTitleBar(QDockWidget* dockWidget)
 
     d->collapseButton = new KoDockWidgetTitleBarButton(this);
     d->collapseButton->setIcon(openIcon(q));
-    connect(d->collapseButton, SIGNAL(clicked()), SLOT(toggleCollapsed()));
+    connect(d->collapseButton, &KoDockWidgetTitleBarButton::clicked, this, [this] () { d->toggleCollapsed(); });
     d->collapseButton->setVisible(true);
     d->collapsable = true;
     d->collapseButton->setToolTip(i18nc("@info:tooltip", "Collapse Docker"));
@@ -89,8 +89,8 @@ KoDockWidgetTitleBar::KoDockWidgetTitleBar(QDockWidget* dockWidget)
     d->lockButton->setToolTip(i18nc("@info:tooltip", "Lock Docker"));
     d->lockButton->setStyleSheet("border: 0");
 
-    connect(dockWidget, SIGNAL(featuresChanged(QDockWidget::DockWidgetFeatures)), SLOT(featuresChanged(QDockWidget::DockWidgetFeatures)));
-    connect(dockWidget, SIGNAL(topLevelChanged(bool)), SLOT(topLevelChanged(bool)));
+    connect(dockWidget, &QDockWidget::featuresChanged, this, [this] (QDockWidget::DockWidgetFeatures f) { d->featuresChanged(f); });
+    connect(dockWidget, &QDockWidget::topLevelChanged, this, [this] (bool v) { d->topLevelChanged(v); });
 
     d->featuresChanged({});
 }

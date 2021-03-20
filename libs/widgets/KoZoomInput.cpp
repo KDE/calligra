@@ -73,7 +73,7 @@ KoZoomInput::KoZoomInput(QWidget* parent)
     addWidget(d->combo);
     d->inside = false;
 
-    connect(d->combo, SIGNAL(activated(QString)), this, SIGNAL(zoomLevelChanged(QString)));
+    connect(d->combo, QOverload<const QString &>::of(&QComboBox::activated), this, &KoZoomInput::zoomLevelChanged);
 }
 
 KoZoomInput::~KoZoomInput()

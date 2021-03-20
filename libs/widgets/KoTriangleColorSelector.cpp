@@ -86,7 +86,7 @@ void KoTriangleColorSelector::Private::init()
     q->updateTriangleCircleParameters();
     updateTimer.setInterval(1);
     updateTimer.setSingleShot(true);
-    q->connect(&updateTimer, SIGNAL(timeout()), q, SLOT(update()));
+    q->connect(&updateTimer, &QTimer::timeout, q, QOverload<>::of(&KoTriangleColorSelector::update));
 }
 
 KoTriangleColorSelector::KoTriangleColorSelector(QWidget* parent)

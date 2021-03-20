@@ -268,7 +268,7 @@ void KoProgressUpdaterTest::testFromWeaver()
     for (int i = 0; i < 10; ++i) {
         QPointer<KoUpdater> up = pu.startSubtask();
         ThreadWeaver::QObjectDecorator * job = new ThreadWeaver::QObjectDecorator(new TestWeaverJob(up, 10));
-        connect( job, SIGNAL(done(ThreadWeaver::JobPointer)), SLOT(jobDone(ThreadWeaver::JobPointer)) );
+        connect(job, &ThreadWeaver::QObjectDecorator::done, this, &KoProgressUpdaterTest::jobDone);
         ThreadWeaver::Queue::instance()->enqueue(ThreadWeaver::make_job_raw(job));
     }
     while (!ThreadWeaver::Queue::instance()->isIdle()) {

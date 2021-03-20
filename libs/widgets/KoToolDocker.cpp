@@ -204,7 +204,7 @@ KoToolDocker::KoToolDocker(QWidget *parent)
     setFeatures(DockWidgetMovable|DockWidgetFloatable);
     setTitleBarWidget(new KoDockWidgetTitleBar(this));
 
-    connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(locationChanged(Qt::DockWidgetArea)));
+    connect(this, &KoToolDocker::dockLocationChanged, this, [this] (Qt::DockWidgetArea v) { d->locationChanged(v); });
 
     d->housekeeperWidget = new QWidget();
     d->housekeeperLayout = new QGridLayout();
@@ -228,7 +228,7 @@ KoToolDocker::KoToolDocker(QWidget *parent)
     d->tabButton->setIcon(d->tabIcon);
     d->tabButton->setToolTip(i18n("Toggles organizing the options in tabs or not"));
     d->tabButton->setAutoRaise(true);
-    connect(d->tabButton, SIGNAL(clicked()), SLOT(toggleTab()));
+    connect(d->tabButton, &QToolButton::clicked, this, [this] () { d->toggleTab(); });
     d->tabButton->resize(d->tabButton->sizeHint());
 }
 

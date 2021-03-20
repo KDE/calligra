@@ -21,10 +21,12 @@
 
 #include <QAction>
 
+#include "KoCopyController_p.h"
+
 KoCutController::KoCutController(KoCanvasBase *canvas, QAction *cutAction)
     : KoCopyController(canvas, cutAction)
 {
-    disconnect(cutAction, SIGNAL(triggered()), this, SLOT(copy())); // countering the super
-    connect(cutAction, SIGNAL(triggered()), this, SLOT(cut()));
+    disconnect(cutAction, &QAction::triggered, this, nullptr); // countering the super
+    connect(cutAction, &QAction::triggered, this, [this] () { d->cut(); });
 }
 

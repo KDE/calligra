@@ -258,7 +258,7 @@ void KoToolBox::setOrientation(Qt::Orientation orientation)
 {
     d->orientation = orientation;
     d->layout->setOrientation(orientation);
-    QTimer::singleShot(0, this, SLOT(update()));
+    QTimer::singleShot(0, this, QOverload<>::of(&KoToolBox::update));
     foreach(Section* section, d->sections) {
         section->setOrientation(orientation);
     }

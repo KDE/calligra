@@ -483,8 +483,8 @@ QList<QPointer<QWidget> > KoCreatePathTool::createOptionWidgets()
     list.append(d->strokeWidget);
 
 
-    connect(angleEdit, SIGNAL(valueChanged(int)), this, SLOT(angleDeltaChanged(int)));
-    connect(angleSnap, SIGNAL(stateChanged(int)), this, SLOT(angleSnapChanged(int)));
+    connect(angleEdit, QOverload<int>::of(&QSpinBox::valueChanged), this, [this](int v) { d_func()->angleDeltaChanged(v); });
+    connect(angleSnap, QOverload<int>::of(&QCheckBox::stateChanged), this, [this](int v) { d_func()->angleSnapChanged(v); });
 
     return list;
 }
