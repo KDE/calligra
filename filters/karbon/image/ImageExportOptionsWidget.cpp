@@ -66,13 +66,13 @@ ImageExportOptionsWidget::ImageExportOptionsWidget(KarbonDocument *doc, QWidget 
 
     connect(widget.unitWidth, &KoUnitDoubleSpinBox::valueChangedPt, this, &ImageExportOptionsWidget::unitWidthChanged);
     connect(widget.unitHeight, &KoUnitDoubleSpinBox::valueChangedPt, this, &ImageExportOptionsWidget::unitHeightChanged);
-    connect(widget.pxWidth, SIGNAL(valueChanged(int)), this, SLOT(pxWidthChanged(int)));
-    connect(widget.pxHeight, SIGNAL(valueChanged(int)), this, SLOT(pxHeightChanged(int)));
-    connect(widget.dpi, SIGNAL(valueChanged(int)), this, SLOT(dpiChanged(int)));
-    connect(widget.unit, SIGNAL(activated(int)), this, SLOT(unitChanged(int)));
+    connect(widget.pxWidth, QOverload<int>::of(&QSpinBox::valueChanged), this, &ImageExportOptionsWidget::pxWidthChanged);
+    connect(widget.pxHeight, QOverload<int>::of(&QSpinBox::valueChanged), this, &ImageExportOptionsWidget::pxHeightChanged);
+    connect(widget.dpi, QOverload<int>::of(&QSpinBox::valueChanged), this, &ImageExportOptionsWidget::dpiChanged);
+    connect(widget.unit, QOverload<int>::of(&QComboBox::activated), this, &ImageExportOptionsWidget::unitChanged);
     connect(widget.pxAspect, &KoAspectButton::keepAspectRatioChanged, this, &ImageExportOptionsWidget::aspectChanged);
     connect(widget.unitAspect, &KoAspectButton::keepAspectRatioChanged, this, &ImageExportOptionsWidget::aspectChanged);
-    connect(widget.pageCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(setPage(int)));
+    connect(widget.pageCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ImageExportOptionsWidget::setPage);
 }
 
 void ImageExportOptionsWidget::setPage(int idx)

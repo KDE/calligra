@@ -66,14 +66,14 @@ CSVExportDialog::CSVExportDialog(QWidget * parent)
     m_delimiterValidator = new QRegExpValidator(rx, m_dialog->m_delimiterBox);
     m_dialog->m_delimiterEdit->setValidator(m_delimiterValidator);
 
-    connect(m_dialog->m_delimiterBox, SIGNAL(clicked(int)),
-            this, SLOT(delimiterClicked(int)));
+    connect(m_dialog->m_delimiterBox, QOverload<int>::of(&KButtonGroup::clicked),
+            this, &CSVExportDialog::delimiterClicked);
     connect(m_dialog->m_delimiterEdit, &QLineEdit::returnPressed,
             this, &CSVExportDialog::returnPressed);
     connect(m_dialog->m_delimiterEdit, &QLineEdit::textChanged,
             this, &CSVExportDialog::textChanged);
-    connect(m_dialog->m_comboQuote, SIGNAL(activated(QString)),
-            this, SLOT(textquoteSelected(QString)));
+    connect(m_dialog->m_comboQuote, QOverload<const QString &>::of(&QComboBox::activated),
+            this, &CSVExportDialog::textquoteSelected);
     connect(m_dialog->m_selectionOnly, &QAbstractButton::toggled,
             this, &CSVExportDialog::selectionOnlyChanged);
     connect(this, &KoDialog::okClicked, this, &CSVExportDialog::slotOk);

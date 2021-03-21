@@ -361,7 +361,7 @@ int main(int argc, char *argv[])
         qDebug() << "Totals:" << successful << "passed" << failed << "failed";
     }
 
-    QTimer::singleShot(1, &app, SLOT(quit()));
+    QTimer::singleShot(1, &app, &QApplication::quit);
     app.exec();
     return exitValue;
 }

@@ -68,7 +68,8 @@ void CSTProcessRunner::start()
 {
     for (int i = 0; i < m_concurrentProcesses; ++i) {
         QProcess *process = new QProcess();
-        connect(process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(processFinished(int, QProcess::ExitStatus)));
+        connect(process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
+                this, &CSTProcessRunner::processFinished);
         startCstester(process);
     }
 }

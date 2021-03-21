@@ -208,7 +208,7 @@ QString XlsxChartOdfWriter::genPlotAreaStyle(KoGenStyle& style, KoGenStyles& sty
                 case(38):
                 case(39):
                 case(40): {
-                    QString prop = QString::fromLatin1("accent%1").arg(chart()->m_style - 34);
+                    //QString prop = QString::fromLatin1("accent%1").arg(chart()->m_style - 34);
                     style.addProperty("draw:fill-color",
 				      colorScheme.value("dk1")->value().name(),
 				      KoGenStyle::GraphicType);

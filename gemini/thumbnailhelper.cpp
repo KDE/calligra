@@ -114,7 +114,7 @@ int main( int argc, char** argv )
         ThumbnailHelperImpl helper;
         helper.convert(inFile, outFile, parser.value("width").toInt(), parser.value("height").toInt());
     }
-    QTimer::singleShot(0, &app, SLOT(quit()));
+    QTimer::singleShot(0, &app, &QApplication::quit);
 
     return app.exec();
 }

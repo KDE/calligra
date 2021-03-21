@@ -112,12 +112,12 @@ Document::Document(const std::string& fileName,
 
         connect(m_textHandler, &WordsTextHandler::subDocFound,
                 this, &Document::slotSubDocFound);
-        connect(m_textHandler, SIGNAL(footnoteFound(const wvWare::FunctorBase*, int)),
-                this, SLOT(slotFootnoteFound(const wvWare::FunctorBase*, int)));
-        connect(m_textHandler, SIGNAL(annotationFound(const wvWare::FunctorBase*,int)),
-                this, SLOT(slotAnnotationFound(const wvWare::FunctorBase*, int)));
-        connect(m_textHandler, SIGNAL(headersFound(const wvWare::FunctorBase*, int)),
-                this, SLOT(slotHeadersFound(const wvWare::FunctorBase*, int)));
+        connect(m_textHandler, QOverload<const wvWare::FunctorBase*, int>::of(&WordsTextHandler::footnoteFound),
+                this, &Document::slotFootnoteFound);
+        connect(m_textHandler, QOverload<const wvWare::FunctorBase*, int>::of(&WordsTextHandler::annotationFound),
+                this, &Document::slotAnnotationFound);
+        connect(m_textHandler, QOverload<const wvWare::FunctorBase*, int>::of(&WordsTextHandler::headersFound),
+                this, &Document::slotHeadersFound);
         connect(m_textHandler, &WordsTextHandler::tableFound,
                 this, &Document::slotTableFound);
         connect(m_textHandler, &WordsTextHandler::inlineObjectFound,
@@ -463,10 +463,10 @@ void Document::setProgress(const int percent)
 void Document::bodyStart()
 {
     debugMsDoc;
-    connect(m_textHandler, SIGNAL(sectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP>)),
-            this, SLOT(slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP>)));
-    connect(m_textHandler, SIGNAL(sectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP>)),
-            this, SLOT(slotSectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP>)));
+    connect(m_textHandler, QOverload<wvWare::SharedPtr<const wvWare::Word97::SEP>>::of(&WordsTextHandler::sectionFound),
+            this, &Document::slotSectionFound);
+    connect(m_textHandler, QOverload<wvWare::SharedPtr<const wvWare::Word97::SEP>>::of(&WordsTextHandler::sectionEnd),
+            this, &Document::slotSectionEnd);
     m_bodyFound = true;
 }
 
@@ -479,8 +479,8 @@ void Document::bodyEnd()
         m_textHandler->closeList();
     }
 
-    disconnect(m_textHandler, SIGNAL(sectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP>)),
-               this, SLOT(slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP>)));
+    disconnect(m_textHandler, QOverload<wvWare::SharedPtr<const wvWare::Word97::SEP>>::of(&WordsTextHandler::sectionFound),
+            this, &Document::slotSectionFound);
 }
 
 //create page-layout and master-page

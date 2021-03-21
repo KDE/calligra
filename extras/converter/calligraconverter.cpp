@@ -246,7 +246,7 @@ int main(int argc, char **argv)
         ok = convert(urlIn, inputMimetype.name(), urlOut, outputFormat, batch);
     }
 
-    QTimer::singleShot(0, &app, SLOT(quit()));
+    QTimer::singleShot(0, &app, &QApplication::quit);
     app.exec();
 
     QApplication::restoreOverrideCursor();

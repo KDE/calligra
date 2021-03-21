@@ -258,7 +258,7 @@ bool TextDocumentImpl::load(const QUrl& url)
     d->canvas->updateSize();
 
     setCanvas(d->canvas);
-    connect(canvasController()->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), &d->indexChangedDelay, SLOT(start()));
+    connect(canvasController()->proxyObject, &KoCanvasControllerProxyObject::moveDocumentOffset, &d->indexChangedDelay, QOverload<>::of(&QTimer::start));
 
     d->updateLinkTargets();
 
