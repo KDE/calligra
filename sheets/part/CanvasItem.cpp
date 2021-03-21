@@ -259,8 +259,8 @@ SheetView* CanvasItem::sheetView(const Sheet* sheet) const
         debugSheetsRender << "Creating SheetView for" << sheet->sheetName();
         d->sheetViews.insert(sheet, new SheetView(sheet));
         d->sheetViews[ sheet ]->setViewConverter(zoomHandler());
-        connect(d->sheetViews[ sheet ], SIGNAL(visibleSizeChanged(QSizeF)),
-                this, SLOT(setDocumentSize(QSizeF)));
+        connect(d->sheetViews[ sheet ], &Calligra::Sheets::SheetView::visibleSizeChanged,
+                this, QOverload<const QSizeF &>::of(&CanvasItem::setDocumentSize));
         connect(d->sheetViews[ sheet ], &SheetView::obscuredRangeChanged,
                 this, &CanvasItem::setObscuredRange);
         //connect(d->sheetViews[ sheet ], SIGNAL(visibleSizeChanged(QSizeF)),
@@ -275,8 +275,8 @@ void CanvasItem::refreshSheetViews()
 {
     const QList<SheetView*> sheetViews = d->sheetViews.values();
     for (int i = 0; i < sheetViews.count(); ++i) {
-        disconnect(sheetViews[i], SIGNAL(visibleSizeChanged(QSizeF)),
-                   this, SLOT(setDocumentSize(QSizeF)));
+        disconnect(sheetViews[i], &Calligra::Sheets::SheetView::visibleSizeChanged,
+                   this, QOverload<const QSizeF &>::of(&CanvasItem::setDocumentSize));
         disconnect(sheetViews[i], &SheetView::obscuredRangeChanged,
                 this, &CanvasItem::setObscuredRange);
         //disconnect(sheetViews[i], SIGNAL(visibleSizeChanged(QSizeF)),

@@ -339,8 +339,8 @@ PreferenceDialog::PreferenceDialog(View* view)
 
     KComboBox* unitComboBox = d->interfaceOptions.m_unit;
     unitComboBox->addItems(KoUnit::listOfUnitNameForUi(KoUnit::ListAll));
-    connect(unitComboBox, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(unitChanged(int)));
+    connect(unitComboBox, QOverload<int>::of(&KComboBox::currentIndexChanged),
+            this, &PreferenceDialog::unitChanged);
     unitChanged(0);
 
     d->interfaceOptions.m_indentationStep->setMinMaxStep(0.0, 400.0, 10.0);

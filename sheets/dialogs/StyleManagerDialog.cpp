@@ -87,8 +87,8 @@ StyleManagerDialog::StyleManagerDialog(QWidget* parent, Selection* selection, St
     m_modifyButton->setEnabled(true);
     m_deleteButton->setEnabled(false);
 
-    connect(m_displayBox, SIGNAL(activated(int)),
-            this, SLOT(slotDisplayMode(int)));
+    connect(m_displayBox, QOverload<int>::of(&KComboBox::activated),
+            this, &StyleManagerDialog::slotDisplayMode);
     connect(this, &KoDialog::applyClicked,
             this, &StyleManagerDialog::slotOk);
     connect(m_newButton, &QAbstractButton::clicked,

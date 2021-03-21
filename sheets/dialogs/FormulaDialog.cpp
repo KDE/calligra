@@ -119,8 +119,8 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
 
     QItemSelectionModel* selectionmodel = new QItemSelectionModel(proxyModel, this);
     functions->setSelectionModel(selectionmodel);
-    connect(selectionmodel, SIGNAL(currentRowChanged(QModelIndex,QModelIndex)),
-            this, SLOT(slotSelected()));
+    connect(selectionmodel, &QItemSelectionModel::currentRowChanged,
+            this, [this] () { slotSelected(); });
     // When items are activated on single click, also change the help page on mouse-over, otherwise there is no (easy) way to get
     // the help without inserting the function
     if (functions->style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick, 0, functions)) {
@@ -194,8 +194,8 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
 
     connect(this, &KoDialog::cancelClicked, this, &FormulaDialog::slotClose);
     connect(this, &KoDialog::okClicked, this, &FormulaDialog::slotOk);
-    connect(typeFunction, SIGNAL(activated(QString)),
-            this, SLOT(slotActivated(QString)));
+    connect(typeFunction, QOverload<const QString &>::of(&KComboBox::activated),
+            this, &FormulaDialog::slotActivated);
     /*
         connect( functions, SIGNAL(highlighted(QString)),
                  this, SLOT(slotSelected(QString)) );
@@ -281,8 +281,8 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
 
     connect(searchFunct, &QLineEdit::textChanged,
             this, &FormulaDialog::slotSearchText);
-    connect(searchFunct, SIGNAL(returnPressed()),
-            this, SLOT(slotPressReturn()));
+    connect(searchFunct, &KLineEdit::returnPressed,
+            this, &FormulaDialog::slotPressReturn);
 
     resize(QSize(660, 520).expandedTo(minimumSizeHint()));
 }

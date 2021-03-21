@@ -199,8 +199,8 @@ GeneralTab::GeneralTab(QWidget* parent, CellFormatDialog * dlg)
     else
         m_parentBox->setCurrentIndex(m_parentBox->findText(i18n("Default")));
 
-    connect(m_parentBox, SIGNAL(activated(QString)),
-            this, SLOT(parentChanged(QString)));
+    connect(m_parentBox, QOverload<const QString &>::of(&KComboBox::activated),
+            this, &GeneralTab::parentChanged);
     connect(m_nameEdit, &QLineEdit::textChanged,
             this, &GeneralTab::styleNameChanged);
 
@@ -1097,12 +1097,12 @@ CellFormatPageFloat::CellFormatPageFloat(QWidget* parent, CellFormatDialog *_dlg
     connect(customFormat, &QAbstractButton::clicked, this, &CellFormatPageFloat::slotChangeState);
 
     connect(listFormat, &QListWidget::itemSelectionChanged, this, &CellFormatPageFloat::makeformat);
-    connect(precision, SIGNAL(valueChanged(int)), this, SLOT(slotChangeValue(int)));
+    connect(precision, QOverload<int>::of(&QSpinBox::valueChanged), this, &CellFormatPageFloat::slotChangeValue);
     connect(prefix, &QLineEdit::textChanged, this, &CellFormatPageFloat::makeformat);
     connect(postfix, &QLineEdit::textChanged, this, &CellFormatPageFloat::makeformat);
-    connect(currency, SIGNAL(activated(QString)), this, SLOT(currencyChanged(QString)));
-    connect(format, SIGNAL(activated(int)), this, SLOT(formatChanged(int)));
-    connect(format, SIGNAL(activated(int)), this, SLOT(makeformat()));
+    connect(currency, QOverload<const QString &>::of(&KComboBox::activated), this, &CellFormatPageFloat::currencyChanged);
+    connect(format, QOverload<int>::of(&KComboBox::activated), this, &CellFormatPageFloat::formatChanged);
+    connect(format, QOverload<int>::of(&KComboBox::activated), this, &CellFormatPageFloat::makeformat);
     slotChangeState();
     m_bFormatColorChanged = false;
     m_bFormatTypeChanged = false;
@@ -1790,16 +1790,16 @@ CellFormatPageFont::CellFormatPageFont(QWidget* parent, CellFormatDialog *_dlg)
 
     size_combo->setInsertPolicy(KComboBox::NoInsert);
 
-    connect(size_combo, SIGNAL(activated(QString)),
-            SLOT(size_chosen_slot(QString)));
+    connect(size_combo, QOverload<const QString &>::of(&KComboBox::activated),
+            this, &CellFormatPageFont::size_chosen_slot);
     connect(size_combo , &QComboBox::editTextChanged,
             this, &CellFormatPageFont::size_chosen_slot);
 
-    connect(weight_combo, SIGNAL(activated(QString)),
-            SLOT(weight_chosen_slot(QString)));
+    connect(weight_combo, QOverload<const QString &>::of(&KComboBox::activated),
+            this, &CellFormatPageFont::weight_chosen_slot);
 
-    connect(style_combo, SIGNAL(activated(QString)),
-            SLOT(style_chosen_slot(QString)));
+    connect(style_combo, QOverload<const QString &>::of(&KComboBox::activated),
+            this, &CellFormatPageFont::style_chosen_slot);
 
     strike->setChecked(dlg->strike);
     connect(strike, &QAbstractButton::clicked,
@@ -1989,7 +1989,7 @@ CellFormatPagePosition::CellFormatPagePosition(QWidget* parent, CellFormatDialog
 {
     setupUi(this);
     connect(angleRotation, &QAbstractSlider::valueChanged, spinBox3, &QSpinBox::setValue);
-    connect(spinBox3, SIGNAL(valueChanged(int)), angleRotation, SLOT(setValue(int)));
+    connect(spinBox3, QOverload<int>::of(&QSpinBox::valueChanged), angleRotation, &QAbstractSlider::setValue);
 
     if (dlg->alignX == Style::Left)
         left->setChecked(true);
@@ -2005,7 +2005,7 @@ CellFormatPagePosition::CellFormatPagePosition(QWidget* parent, CellFormatDialog
     horizontalGroup->addButton(center);
     horizontalGroup->addButton(right);
     horizontalGroup->addButton(standard);
-    connect(horizontalGroup, SIGNAL(buttonClicked(int)), this, SLOT(slotStateChanged(int)));
+    connect(horizontalGroup, QOverload<int>::of(&QButtonGroup::buttonClicked), this, &CellFormatPagePosition::slotStateChanged);
 
     if (dlg->alignY == Style::Top)
         top->setChecked(true);
@@ -2645,23 +2645,23 @@ void CellFormatPageBorder::SetConnections()
     }
 
     for (int i = BorderType_Top; i < BorderType_END; i++) {
-        connect(borderButtons[i], SIGNAL(clicked(BorderButton*)),
-                this, SLOT(changeState(BorderButton*)));
+        connect(borderButtons[i], QOverload<BorderButton*>::of(&BorderButton::clicked),
+                this, &CellFormatPageBorder::changeState);
     }
 
     for (int i = BorderShortcutType_Remove; i < BorderShortcutType_END; i++) {
-        connect(shortcutButtons[i], SIGNAL(clicked(BorderButton*)),
-                this, SLOT(preselect(BorderButton*)));
+        connect(shortcutButtons[i], QOverload<BorderButton*>::of(&BorderButton::clicked),
+                this, &CellFormatPageBorder::preselect);
     }
 
     connect(area , &Border::redraw, this, &CellFormatPageBorder::draw);
     connect(area , &Border::choosearea,
             this, &CellFormatPageBorder::slotPressEvent);
 
-    connect(style, SIGNAL(activated(int)), this, SLOT(slotChangeStyle(int)));
-    connect(size, SIGNAL(editTextChanged(QString)),
-            this, SLOT(slotChangeStyle(QString)));
-    connect(size , SIGNAL(activated(int)), this, SLOT(slotChangeStyle(int)));
+    connect(style, QOverload<int>::of(&KComboBox::activated), this, QOverload<int>::of(&CellFormatPageBorder::slotChangeStyle));
+    connect(size, &KComboBox::editTextChanged,
+            this, QOverload<const QString &>::of(&CellFormatPageBorder::slotChangeStyle));
+    connect(size , QOverload<int>::of(&KComboBox::activated), this, QOverload<int>::of(&CellFormatPageBorder::slotChangeStyle));
 }
 
 void CellFormatPageBorder::cutomize_chosen_slot()

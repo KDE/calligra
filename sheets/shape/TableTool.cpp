@@ -785,7 +785,7 @@ QList<QPointer<QWidget> > TableTool::createOptionWidgets()
             d->sheetComboBox->addItem(s->sheetName());
             //d->sheetComboBox->setCurrentIndex( d->sheetComboBox->count()-1 );
         }
-        connect(d->sheetComboBox, SIGNAL(activated(QString)), this, SLOT(sheetActivated(QString)));
+        connect(d->sheetComboBox, QOverload<const QString &>::of(&KComboBox::activated), this, &TableTool::sheetActivated);
 
         QPushButton *sheetbtn = new QPushButton(koIcon("table"), QString(), d->optionWidget);
         sheetbtn->setFixedHeight(d->sheetComboBox->sizeHint().height());

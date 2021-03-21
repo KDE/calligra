@@ -285,7 +285,7 @@ CellEditor::CellEditor(CellToolBase *cellTool,QHash<int,QString> &wordList, QWid
     this->setCompleter(d->complete);
     
     connect(this, &QTextEdit::cursorPositionChanged, this, &CellEditor::slotCursorPositionChanged);
-    connect(this, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
+    connect(this, QOverload<>::of(&KTextEdit::textChanged), this, &CellEditor::slotTextChanged);
 }
 
 CellEditor::~CellEditor()
@@ -346,8 +346,8 @@ void CellEditor::setCompleter(QCompleter *completer)
      d->complete->setWidget(this);
      d->complete->setCompletionMode(QCompleter::PopupCompletion);
      d->complete->setCaseSensitivity(Qt::CaseInsensitive);
-     QObject::connect(d->complete, SIGNAL(activated(QString)),
-                      this, SLOT(insertCompletion(QString)));
+     QObject::connect(d->complete, QOverload<const QString &>::of(&QCompleter::activated),
+                      this, &CellEditor::insertCompletion);
 }
 
 QCompleter *CellEditor::completer() const

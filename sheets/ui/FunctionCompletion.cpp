@@ -67,7 +67,7 @@ FunctionCompletion::FunctionCompletion(CellEditor* editor)
     d->completionListBox->setFrameStyle(QFrame::NoFrame);
 //   d->completionListBox->setVariableWidth( true );
     d->completionListBox->installEventFilter(this);
-    connect(d->completionListBox, SIGNAL(currentRowChanged(int)), SLOT(itemSelected()));
+    connect(d->completionListBox, &QListWidget::currentRowChanged, this, [this]() { itemSelected(); });
     // When items are activated on single click, also change the help page on mouse-over, otherwise there is no (easy) way to get
     // the help (with the mouse) without inserting the function
     if (d->completionListBox->style()->styleHint(QStyle::SH_ItemView_ActivateItemOnSingleClick, 0, d->completionListBox)) {

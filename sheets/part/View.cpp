@@ -365,8 +365,8 @@ void View::Private::initActions()
     actions->shapeAnchor->setEnabled(false);
     actions->shapeAnchor->setToolTip(i18n("Switch shape anchoring"));
     ac->addAction("shapeAnchor", actions->shapeAnchor);
-    connect(actions->shapeAnchor, SIGNAL(triggered(QString)),
-            view, SLOT(setShapeAnchoring(QString)));
+    connect(actions->shapeAnchor, QOverload<const QString &>::of(&KSelectAction::triggered),
+            view, &View::setShapeAnchoring);
 
     // -- navigation actions --
 
@@ -586,10 +586,10 @@ View::View(KoPart *part, QWidget *_parent, Doc *_doc)
     // child widgets: the column/row headers and the select all button.
     // Connect to Canvas::update() explicitly as it lives in the viewport
     // of the KoCanvasController.
-    connect(doc(), SIGNAL(updateView()),
-            this, SLOT(update()));
-    connect(doc(), SIGNAL(updateView()),
-            d->canvas, SLOT(update()));
+    connect(doc(), &Doc::updateView,
+            this, QOverload<>::of(&View::update));
+    connect(doc(), &Doc::updateView,
+            d->canvas, QOverload<>::of(&View::update));
     connect(doc()->map(), &Map::sheetAdded,
             this, &View::addSheet);
     connect(doc()->map(), &Map::sheetRemoved,
@@ -818,10 +818,12 @@ void View::initView()
     }
 
     // signal slot
-    connect(d->canvas, SIGNAL(documentSizeChanged(QSize)),
-            d->canvasController->proxyObject, SLOT(updateDocumentSize(QSize)));
-    connect(d->canvasController->proxyObject, SIGNAL(moveDocumentOffset(QPoint)),
-            d->canvas, SLOT(setDocumentOffset(QPoint)));
+    connect(d->canvas, &Canvas::documentSizeChanged,
+            d->canvasController->proxyObject, [this] (const QSize &sz) {
+                d->canvasController->proxyObject->updateDocumentSize(sz);
+            });
+    connect(d->canvasController->proxyObject, &KoCanvasControllerProxyObject::moveDocumentOffset,
+            d->canvas, &Canvas::setDocumentOffset);
     connect(d->canvas->shapeManager(), &KoShapeManager::selectionChanged,
             this, &View::shapeSelectionChanged);
 }
@@ -903,12 +905,16 @@ SheetView* View::sheetView(const Sheet* sheet) const
         sheetView = new SheetView(sheet);
         d->sheetViews.insert(sheet, sheetView);
         sheetView->setViewConverter(zoomHandler());
-        connect(sheetView, SIGNAL(visibleSizeChanged(QSizeF)),
-                d->canvas, SLOT(setDocumentSize(QSizeF)));
-        connect(sheetView, SIGNAL(visibleSizeChanged(QSizeF)),
-                d->zoomController, SLOT(setDocumentSize(QSizeF)));
-        connect(sheet, SIGNAL(visibleSizeChanged()),
-                sheetView, SLOT(updateAccessedCellRange()));
+        connect(sheetView, &SheetView::visibleSizeChanged,
+                d->canvas, &Canvas::setDocumentSize);
+        connect(sheetView, &SheetView::visibleSizeChanged,
+                d->zoomController, [this](const QSizeF &sz) {
+                    d->zoomController->setDocumentSize(sz);
+                });
+        connect(sheet, &Sheet::visibleSizeChanged,
+                sheetView, [sheetView]() {
+                    sheetView->updateAccessedCellRange();
+                });
         connect(sheet, &QObject::destroyed,
                 this, &View::sheetDestroyed);
     }
@@ -924,12 +930,12 @@ void View::refreshSheetViews()
     }
 
     foreach (SheetView *sheetView, sheetViews) {
-        disconnect(sheetView, SIGNAL(visibleSizeChanged(QSizeF)),
-                   d->canvas, SLOT(setDocumentSize(QSizeF)));
-        disconnect(sheetView, SIGNAL(visibleSizeChanged(QSizeF)),
-                   d->zoomController, SLOT(setDocumentSize(QSizeF)));
-        disconnect(sheetView->sheet(), SIGNAL(visibleSizeChanged()),
-                   sheetView, SLOT(updateAccessedCellRange()));
+        disconnect(sheetView, &SheetView::visibleSizeChanged,
+                   d->canvas, &Canvas::setDocumentSize);
+        disconnect(sheetView, &SheetView::visibleSizeChanged,
+                   d->zoomController, nullptr);
+        disconnect(sheetView->sheet(), &Sheet::visibleSizeChanged,
+                   sheetView, nullptr);
     }
 
     qDeleteAll(sheetViews);

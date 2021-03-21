@@ -62,7 +62,7 @@ ExternalEditor::ExternalEditor(QWidget *parent)
     document()->setDocumentMargin(1);
     setMinimumHeight(fontMetrics().height() + 2 * frameWidth() + 1);
 
-    connect(this, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
+    connect(this, &ExternalEditor::textChanged, this, &ExternalEditor::slotTextChanged);
     connect(this, &QTextEdit::cursorPositionChanged,
             this, &ExternalEditor::slotCursorPositionChanged);
 

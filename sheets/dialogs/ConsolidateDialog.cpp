@@ -112,8 +112,8 @@ ConsolidateDialog::ConsolidateDialog(QWidget* parent, Selection* selection)
             this, &ConsolidateDialog::slotAdd);
     connect(d->mainWidget.m_removeButton, &QAbstractButton::clicked,
             this, &ConsolidateDialog::slotRemove);
-    connect(d->mainWidget.m_sourceRange, SIGNAL(returnPressed()),
-            this, SLOT(slotReturnPressed()));
+    connect(d->mainWidget.m_sourceRange, &KLineEdit::returnPressed,
+            this, &ConsolidateDialog::slotReturnPressed);
 
     connect(d->selection, &Selection::changed,
             this, &ConsolidateDialog::slotSelectionChanged);

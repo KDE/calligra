@@ -71,8 +71,10 @@ SpellCheckCommand::SpellCheckCommand(const Region &region, KoCanvasBase* canvasB
 
     connect(this, &Sonnet::BackgroundChecker::done,
             this, &SpellCheckCommand::finishCommand);
-    connect(d->dialog, SIGNAL(replace(QString,int,QString)),
-            this, SLOT(replace(QString,int,QString)));
+    connect(d->dialog, &Sonnet::Dialog::replace,
+            this, [this] (const QString &oldText, int start, const QString &newText) {
+                replace(start, oldText, newText);
+            });
 }
 
 SpellCheckCommand::~SpellCheckCommand()

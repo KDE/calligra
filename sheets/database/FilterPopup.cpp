@@ -61,8 +61,8 @@ void FilterPopup::Private::initGUI(FilterPopup* parent, const Cell& cell, const 
 {
     QButtonGroup* buttonGroup = new QButtonGroup(parent);
     buttonGroup->setExclusive(false);
-    connect(buttonGroup, SIGNAL(buttonClicked(QAbstractButton*)),
-            parent, SLOT(buttonClicked(QAbstractButton*)));
+    connect(buttonGroup, QOverload<QAbstractButton*>::of(&QButtonGroup::buttonClicked),
+            parent, &FilterPopup::buttonClicked);
 
     QVBoxLayout* layout = new QVBoxLayout(parent);
     layout->setMargin(3);

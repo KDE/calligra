@@ -177,7 +177,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     d->createPopupMenuActions();
     
     // Create the actions.
-    QAction* action = 0;
+    QAction* action = nullptr;
 
     // -- cell style actions --
 
@@ -198,10 +198,10 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     connect(action, &QAction::triggered, this, &CellToolBase::styleDialog);
     action->setToolTip(i18n("Edit and organize cell styles"));
 
-    action = new KSelectAction(i18n("Style"), this);
-    addAction("setStyle", action);
-    action->setToolTip(i18n("Apply a predefined style to the selected cells"));
-    connect(action, SIGNAL(triggered(QString)), this, SLOT(setStyle(QString)));
+    auto selectAction = new KSelectAction(i18n("Style"), this);
+    addAction("setStyle", selectAction);
+    selectAction->setToolTip(i18n("Apply a predefined style to the selected cells"));
+    connect(selectAction, QOverload<const QString &>::of(&KSelectAction::triggered), this, &CellToolBase::setStyle);
 
     action = new QAction(i18n("Create Style From Cell..."), this);
     action->setIconText(i18n("Style From Cell"));
@@ -230,15 +230,15 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     addAction("strikeOut", action);
     connect(action, &QAction::triggered, this, &CellToolBase::strikeOut);
 
-    action = new KFontAction(i18n("Select Font..."), this);
-    action->setIconText(i18n("Font"));
-    addAction("font", action);
-    connect(action, SIGNAL(triggered(QString)), this, SLOT(font(QString)));
+    auto fontAction = new KFontAction(i18n("Select Font..."), this);
+    fontAction->setIconText(i18n("Font"));
+    addAction("font", fontAction);
+    connect(fontAction, QOverload<const QString &>::of(&KFontAction::triggered), this, &CellToolBase::font);
 
-    action = new KFontSizeAction(i18n("Select Font Size"), this);
-    action->setIconText(i18n("Font Size"));
-    addAction("fontSize", action);
-    connect(action, SIGNAL(fontSizeChanged(int)), this, SLOT(fontSize(int)));
+    auto fontSizeAction = new KFontSizeAction(i18n("Select Font Size"), this);
+    fontSizeAction->setIconText(i18n("Font Size"));
+    addAction("fontSize", fontSizeAction);
+    connect(fontSizeAction, &KFontSizeAction::fontSizeChanged, this, &CellToolBase::fontSize);
 
     action = new QAction(koIcon("format-font-size-more"), i18n("Increase Font Size"), this);
     addAction("increaseFontSize", action);
@@ -248,12 +248,12 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     addAction("decreaseFontSize", action);
     connect(action, &QAction::triggered, this, &CellToolBase::decreaseFontSize);
 
-    action = new KoColorPopupAction(this);
-    action->setIcon(koIcon("format-text-color"));
-    action->setText(i18n("Text Color"));
-    action->setToolTip(i18n("Set the text color"));
-    addAction("textColor", action);
-    connect(action, SIGNAL(colorChanged(KoColor)), this, SLOT(changeTextColor(KoColor)));
+    auto colorAction = new KoColorPopupAction(this);
+    colorAction->setIcon(koIcon("format-text-color"));
+    colorAction->setText(i18n("Text Color"));
+    colorAction->setToolTip(i18n("Set the text color"));
+    addAction("textColor", colorAction);
+    connect(colorAction, &KoColorPopupAction::colorChanged, this, &CellToolBase::changeTextColor);
 
     // -- horizontal alignment actions --
 
@@ -347,13 +347,13 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     connect(action, &QAction::triggered, this, &CellToolBase::borderOutline);
     action->setToolTip(i18n("Set a border to the outline of the selected area"));
 
-    action = new KoColorPopupAction(this);
-    action->setIcon(koIcon("format-stroke-color"));
-    action->setToolTip(i18n("Select a new border color"));
-    action->setText(i18n("Border Color"));
-    static_cast<KoColorPopupAction*>(action)->setCurrentColor(Qt::black);
-    addAction("borderColor", action);
-    connect(action, SIGNAL(colorChanged(KoColor)), this, SLOT(borderColor(KoColor)));
+    colorAction = new KoColorPopupAction(this);
+    colorAction->setIcon(koIcon("format-stroke-color"));
+    colorAction->setToolTip(i18n("Select a new border color"));
+    colorAction->setText(i18n("Border Color"));
+    colorAction->setCurrentColor(Qt::black);
+    addAction("borderColor", colorAction);
+    connect(colorAction, &KoColorPopupAction::colorChanged, this, &CellToolBase::borderColor);
 
     // -- text layout actions --
 
@@ -429,12 +429,12 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     connect(action, &QAction::triggered, this, &CellToolBase::firstLetterToUpperCase);
     action->setToolTip(i18n("Capitalize the first letter"));
 
-    action = new KoColorPopupAction(this);
-    action->setIcon(koIcon("format-fill-color"));
-    action->setToolTip(i18n("Set the background color"));
-    action->setText(i18n("Background Color"));
-    addAction("backgroundColor", action);
-    connect(action, SIGNAL(colorChanged(KoColor)), this, SLOT(changeBackgroundColor(KoColor)));
+    colorAction = new KoColorPopupAction(this);
+    colorAction->setIcon(koIcon("format-fill-color"));
+    colorAction->setToolTip(i18n("Set the background color"));
+    colorAction->setText(i18n("Background Color"));
+    addAction("backgroundColor", colorAction);
+    connect(colorAction, &KoColorPopupAction::colorChanged, this, &CellToolBase::changeBackgroundColor);
 
     // -- cell merging actions --
 
@@ -738,21 +738,14 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     addAction("namedAreaDialog", action);
     connect(action, &QAction::triggered, this, &CellToolBase::namedAreaDialog);
 
-    action = new KSelectAction(i18n("Formula Selection"), this);
-    addAction("formulaSelection", action);
-    action->setToolTip(i18n("Insert a function"));
-    QStringList functionList;
-    functionList.append("SUM");
-    functionList.append("AVERAGE");
-    functionList.append("IF");
-    functionList.append("COUNT");
-    functionList.append("MIN");
-    functionList.append("MAX");
-    functionList.append(i18n("Others..."));
-    static_cast<KSelectAction*>(action)->setItems(functionList);
-    static_cast<KSelectAction*>(action)->setComboWidth(80);
-    static_cast<KSelectAction*>(action)->setCurrentItem(0);
-    connect(action, SIGNAL(triggered(QString)), this, SLOT(formulaSelection(QString)));
+    selectAction = new KSelectAction(i18n("Formula Selection"), this);
+    addAction("formulaSelection", selectAction);
+    selectAction->setToolTip(i18n("Insert a function"));
+    QStringList functionList = {"SUM", "AVERAGE", "IF", "COUNT", "MIN", "MAX", i18n("Others...")};
+    selectAction->setItems(functionList);
+    selectAction->setComboWidth(80);
+    selectAction->setCurrentItem(0);
+    connect(selectAction, QOverload<const QString &>::of(&KSelectAction::triggered), this, &CellToolBase::formulaSelection);
 
     // -- general editing actions --
 
@@ -1119,8 +1112,8 @@ void CellToolBase::activate(ToolActivation toolActivation, const QSet<KoShape*> 
     static_cast<KSelectAction*>(this->action("setStyle"))->setItems(styleManager->styleNames());
 
     // Establish connections.
-    connect(selection(), SIGNAL(changed(Region)),
-            this, SLOT(selectionChanged(Region)));
+    connect(selection(), &Selection::changed,
+            this, QOverload<const Region &>::of(&CellToolBase::selectionChanged));
     connect(selection(), &Selection::closeEditor,
             this, &CellToolBase::deleteEditor);
     connect(selection(), &Selection::modified,
@@ -1413,10 +1406,12 @@ bool CellToolBase::createEditor(bool clear, bool focus, bool captureArrows)
                 d->cellEditor, &CellEditor::permuteFixation);
 
         if(d->externalEditor) {
-            connect(d->cellEditor, SIGNAL(textChanged(QString)),
-                    d->externalEditor, SLOT(setText(QString)));
-            connect(d->externalEditor, SIGNAL(textChanged(QString)),
-                    d->cellEditor, SLOT(setText(QString)));
+            connect(d->cellEditor, QOverload<const QString &>::of(&CellEditor::textChanged),
+                    d->externalEditor, &ExternalEditor::setText);
+            connect(d->externalEditor, QOverload<const QString &>::of(&ExternalEditor::textChanged),
+                    d->cellEditor, [this] (const QString &text) {
+                        d->cellEditor->setText(text);
+                    });
             d->externalEditor->applyAction()->setEnabled(true);
             d->externalEditor->cancelAction()->setEnabled(true);
         }
@@ -2772,8 +2767,8 @@ void CellToolBase::insertSpecialChar()
         d->specialCharDialog = new CharacterSelectDialog(canvas()->canvasWidget(), "SpecialCharDialog", fontFamily, c, false);
         connect(d->specialCharDialog, &CharacterSelectDialog::insertChar,
                 this, &CellToolBase::specialChar);
-        connect(d->specialCharDialog, SIGNAL(finished()),
-                this, SLOT(specialCharDialogClosed()));
+        connect(d->specialCharDialog, &CharacterSelectDialog::finished,
+                   this, &CellToolBase::specialCharDialogClosed);
     }
     d->specialCharDialog->show();
 }
@@ -2783,8 +2778,8 @@ void CellToolBase::specialCharDialogClosed()
     if (d->specialCharDialog) {
         disconnect(d->specialCharDialog, &CharacterSelectDialog::insertChar,
                    this, &CellToolBase::specialChar);
-        disconnect(d->specialCharDialog, SIGNAL(finished()),
-                   this, SLOT(specialCharDialogClosed()));
+        disconnect(d->specialCharDialog, &CharacterSelectDialog::finished,
+                   this, &CellToolBase::specialCharDialogClosed);
         d->specialCharDialog->deleteLater();
         d->specialCharDialog = 0;
     }
@@ -3145,8 +3140,8 @@ void CellToolBase::initFindReplace()
 {
     KFind* findObj = d->find ? d->find : d->replace;
     Q_ASSERT(findObj);
-    connect(findObj, SIGNAL(highlight(QString,int,int)),
-            this, SLOT(slotHighlight(QString,int,int)));
+    connect(findObj, QOverload<const QString &, int, int>::of(&KFind::highlight),
+            this, &CellToolBase::slotHighlight);
     connect(findObj, &KFind::findNext,
             this, &CellToolBase::findNext);
 
@@ -3362,8 +3357,8 @@ void CellToolBase::replace()
     d->searchInSheets.currentSheet = selection()->activeSheet();
     d->searchInSheets.firstSheet = d->searchInSheets.currentSheet;
     initFindReplace();
-    connect(d->replace, SIGNAL(replace(QString,int,int,int)),
-            this, SLOT(slotReplace(QString,int,int,int)));
+    connect(d->replace, QOverload<const QString &, int, int, int>::of(&KReplace::replace),
+            this, &CellToolBase::slotReplace);
 
     d->replaceCommand = new KUndo2Command(kundo2_i18n("Replace"));
 

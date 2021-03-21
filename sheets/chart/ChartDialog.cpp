@@ -30,19 +30,9 @@ ChartDialog::ChartDialog(const QList<KoChart::ChartShape*> &charts, QWidget *par
         : KPageDialog(parent)
 {
     Q_UNUSED(charts);
-    connect(this, &ChartDialog::okClicked, this, &ChartDialog::okClicked);
-    connect(this, &ChartDialog::cancelClicked, this, &ChartDialog::cancelClicked);
 }
 
 ChartDialog::~ChartDialog()
-{
-}
-
-void ChartDialog::okClicked()
-{
-}
-
-void ChartDialog::cancelClicked()
 {
 }
 

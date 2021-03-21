@@ -2745,7 +2745,7 @@ Value func_trend(valVector args, ValueCalc *calc, FuncExtra *)
     if (args.count() > 3)
         withOffset = calc->conv()->asInteger(args[3]).asInteger();
 
-    List knownY, knownX, newX;
+    List knownX, newX;
     int  knownXcount = 0, newXcount = 0;
 
     //

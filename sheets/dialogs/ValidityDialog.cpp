@@ -211,8 +211,8 @@ ValidityDialog::ValidityDialog(QWidget* parent, Selection* selection)
     messageHelp = new KTextEdit(page3);
     tmpGridLayout->addWidget(messageHelp, 2, 1);
 
-    connect(choose, SIGNAL(activated(int)), this, SLOT(changeIndexCond(int)));
-    connect(chooseType, SIGNAL(activated(int)), this, SLOT(changeIndexType(int)));
+    connect(choose, QOverload<int>::of(&KComboBox::activated), this, &ValidityDialog::changeIndexCond);
+    connect(chooseType, QOverload<int>::of(&KComboBox::activated), this, &ValidityDialog::changeIndexType);
     connect(this, &QDialog::accepted, this, &ValidityDialog::OkPressed);
     connect(clearAllButton, &QAbstractButton::clicked, this, &ValidityDialog::clearAllPressed);
 

@@ -132,8 +132,8 @@ LinkDialog::LinkDialog(QWidget* parent, Selection* selection)
     fLayout->addItem(new QSpacerItem(0, 40, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding));
     connect(d->fileText, &QLineEdit::textChanged, this,
             &LinkDialog::setText);
-    QObject::connect(recentFile, SIGNAL(highlighted(QString)),
-                     d->fileLink->lineEdit(), SLOT(setText(QString)));
+    connect(recentFile, QOverload<const QString &>::of(&KComboBox::highlighted),
+                     d->fileLink->lineEdit(), &KLineEdit::setText);
 
     // populate recent files
     int index = 0;

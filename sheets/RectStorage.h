@@ -616,7 +616,7 @@ public:
 
 protected Q_SLOTS:
     void triggerGarbageCollection() override {
-        QTimer::singleShot(g_garbageCollectionTimeOut, this, SLOT(garbageCollection()));
+        QTimer::singleShot(g_garbageCollectionTimeOut, this, &CommentStorage::garbageCollection);
     }
     void garbageCollection() override {
         RectStorage<QString>::garbageCollection();
@@ -634,7 +634,7 @@ public:
 
 protected Q_SLOTS:
     void triggerGarbageCollection() override {
-        QTimer::singleShot(g_garbageCollectionTimeOut, this, SLOT(garbageCollection()));
+        QTimer::singleShot(g_garbageCollectionTimeOut, this, &FusionStorage::garbageCollection);
     }
     void garbageCollection() override {
         RectStorage<bool>::garbageCollection();
@@ -652,7 +652,7 @@ public:
 
 protected Q_SLOTS:
     void triggerGarbageCollection() override {
-        QTimer::singleShot(g_garbageCollectionTimeOut, this, SLOT(garbageCollection()));
+        QTimer::singleShot(g_garbageCollectionTimeOut, this, &MatrixStorage::garbageCollection);
     }
     void garbageCollection() override {
         RectStorage<bool>::garbageCollection();

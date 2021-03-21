@@ -345,7 +345,7 @@ DatabaseDialog::DatabaseDialog(QWidget* parent, Selection* selection)
     connect(m_andBox, &QAbstractButton::clicked, this, &DatabaseDialog::andBox_clicked);
     connect(m_startingCell, &QAbstractButton::clicked, this, &DatabaseDialog::startingCell_clicked);
     connect(m_startingRegion, &QAbstractButton::clicked, this, &DatabaseDialog::startingRegion_clicked);
-    connect(m_driver, SIGNAL(activated(int)), this, SLOT(databaseDriverChanged(int)));
+    connect(m_driver, QOverload<int>::of(&KComboBox::activated), this, &DatabaseDialog::databaseDriverChanged);
     connect(m_host, &QLineEdit::textChanged, this, &DatabaseDialog::databaseHostChanged);
     connect(m_databaseName, &QLineEdit::textChanged, this, &DatabaseDialog::databaseNameChanged);
     /*connect( m_tableView, SIGNAL(contextMenuRequested(Q3ListViewItem*,QPoint,int)),
