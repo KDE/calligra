@@ -69,6 +69,8 @@ public Q_SLOTS:
     void reset();
     void enableContextBar();
     void disableContextBar();
+    /** Update Bar */
+    void update();
 
 private Q_SLOTS:
     void slotEntered(const QModelIndex &index);
@@ -81,8 +83,6 @@ private Q_SLOTS:
     void showContextBar(const QRect &rect);
     /** Updates Selection Button state*/
     void updateToggleSelectionButton();
-    /** Update Bar */
-    void update();
     /** Called when model resets */
     void slotModelReset();
 

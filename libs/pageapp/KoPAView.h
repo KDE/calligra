@@ -224,6 +224,8 @@ public Q_SLOTS:
     /// Show/hide page margins
     void setShowPageMargins(bool state);
 
+    /// FIXME Made public due to usage from KPrViewModeSlidesSorter, to reconsider
+    void editDeleteSelection();
 protected Q_SLOTS:
 
     void pageUpdated(KoPAPageBase* page);
@@ -231,7 +233,6 @@ protected Q_SLOTS:
     void viewGuides(bool show);
     void slotZoomChanged( KoZoomMode::Mode mode, qreal zoom );
 
-    void editDeleteSelection();
     void editSelectAll();
     void editDeselectAll();
 

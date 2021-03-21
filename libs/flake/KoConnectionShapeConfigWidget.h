@@ -24,9 +24,11 @@
 
 #include <KoShapeConfigWidgetBase.h>
 
+#include "flake_export.h"
+
 class KoConnectionShape;
 
-class KoConnectionShapeConfigWidget : public KoShapeConfigWidgetBase
+class FLAKE_EXPORT KoConnectionShapeConfigWidget : public KoShapeConfigWidgetBase
 {
     Q_OBJECT
 public:
