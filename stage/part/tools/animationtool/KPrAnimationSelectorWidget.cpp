@@ -121,8 +121,8 @@ KPrAnimationSelectorWidget::KPrAnimationSelectorWidget(KPrShapeAnimationDocker *
 
 
     // set signals
-    connect(m_collectionView, SIGNAL(entered(QModelIndex)), this, SLOT(automaticPreviewRequested(QModelIndex)));
-    connect(m_subTypeView, SIGNAL(entered(QModelIndex)), this, SLOT(automaticPreviewRequested(QModelIndex)));
+    connect(m_collectionView, &QListView::entered, this, QOverload<const QModelIndex &>::of(&KPrAnimationSelectorWidget::automaticPreviewRequested));
+    connect(m_subTypeView, &QListView::entered, this, QOverload<const QModelIndex &>::of(&KPrAnimationSelectorWidget::automaticPreviewRequested));
     connect(m_previewCheckBox, &QAbstractButton::toggled, this, &KPrAnimationSelectorWidget::setPreviewState);
     connect(docker, &KPrShapeAnimationDocker::previousStateChanged, this, &KPrAnimationSelectorWidget::setPreviewState);
     setLayout(containerLayout);
@@ -324,7 +324,7 @@ void KPrAnimationSelectorWidget::createCollectionContextBar()
     m_collectionContextBar = new KoViewItemContextBar(m_collectionView);
     m_collectionPreviewButton = m_collectionContextBar->addContextButton(i18n("Preview animation"),QString("media-playback-start"));
     m_collectionContextBar->setShowSelectionToggleButton(false);
-    connect(m_collectionPreviewButton, SIGNAL(clicked()), this, SLOT(automaticPreviewRequested()));
+    connect(m_collectionPreviewButton, &QToolButton::clicked, this, QOverload<>::of(&KPrAnimationSelectorWidget::automaticPreviewRequested));
 }
 
 void KPrAnimationSelectorWidget::createSubTypeContextBar()
@@ -332,5 +332,5 @@ void KPrAnimationSelectorWidget::createSubTypeContextBar()
     m_subTypeContextBar = new KoViewItemContextBar(m_subTypeView);
     m_subTypePreviewButton = m_subTypeContextBar->addContextButton(i18n("Preview animation"),QString("media-playback-start"));
     m_subTypeContextBar->setShowSelectionToggleButton(false);
-    connect(m_subTypePreviewButton, SIGNAL(clicked()), this, SLOT(automaticPreviewRequested()));
+    connect(m_subTypePreviewButton, &QToolButton::clicked, this, QOverload<>::of(&KPrAnimationSelectorWidget::automaticPreviewRequested));
 }

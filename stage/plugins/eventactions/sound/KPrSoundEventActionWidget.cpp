@@ -43,7 +43,7 @@ KPrSoundEventActionWidget::KPrSoundEventActionWidget( QWidget * parent )
     QVBoxLayout* layout = new QVBoxLayout( this );
     layout->addWidget( m_soundCombo );
 
-    connect( m_soundCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(soundComboChanged()) );
+    connect( m_soundCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KPrSoundEventActionWidget::soundComboChanged );
 
     setEnabled( false );
     updateCombo( "" );

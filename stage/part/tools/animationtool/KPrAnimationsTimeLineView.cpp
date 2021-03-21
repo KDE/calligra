@@ -86,7 +86,7 @@ void KPrAnimationsTimeLineView::setModel(KPrAnimationGroupProxyModel *model)
     connect(m_shapeModel, &QAbstractItemModel::layoutChanged, this, &KPrAnimationsTimeLineView::updateColumnsWidth);
     connect(m_shapeModel, &QAbstractItemModel::layoutChanged, this, &KPrAnimationsTimeLineView::resetData);
     connect(m_shapeModel, &QAbstractItemModel::layoutChanged, this, &KPrAnimationsTimeLineView::layoutChanged);
-    connect(m_shapeModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(update()));
+    connect(m_shapeModel, &KPrShapeAnimations::dataChanged, this, QOverload<>::of(&KPrAnimationsTimeLineView::update));
     //It works only if one item could be selected each time
     connect(m_shapeModel, &QAbstractItemModel::dataChanged, this, &KPrAnimationsTimeLineView::notifyTimeValuesChanged);
     connect(m_shapeModel, &KPrShapeAnimations::timeScaleModified, this, &KPrAnimationsTimeLineView::adjustScale);
@@ -98,7 +98,7 @@ void KPrAnimationsTimeLineView::setModel(KPrAnimationGroupProxyModel *model)
 void KPrAnimationsTimeLineView::resizeEvent(QResizeEvent *event)
 {
     if (m_scrollArea->horizontalScrollBar()) {
-        connect(m_scrollArea->horizontalScrollBar(), SIGNAL(valueChanged(int)), m_header, SLOT(repaint()));
+        connect(m_scrollArea->horizontalScrollBar(), &QScrollBar::valueChanged, m_header, QOverload<>::of(&KPrTimeLineHeader::repaint));
     }
     QWidget::resizeEvent(event);
 }

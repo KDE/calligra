@@ -51,7 +51,7 @@ private Q_SLOTS:
     void updateFavoriteButton();
     void generateNext();
     void generatePrevious();
-    void generatePreview(int item=-1);
+    void generatePreview(int item = -1);
     void browserAction();
 
 

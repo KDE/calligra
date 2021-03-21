@@ -186,7 +186,7 @@ KPrViewModeSlidesSorter::KPrViewModeSlidesSorter(KoPAView *view, KoPACanvasBase 
     QToolButton *duplicateButton = m_slidesSorterItemContextBar->addContextButton(i18n("Duplicate Slide"),QString("edit-copy"));
     QToolButton *deleteButton = m_slidesSorterItemContextBar->addContextButton(i18n("Delete Slide"),QString("edit-delete"));
     QToolButton *startPresentation = m_slidesSorterItemContextBar->addContextButton(i18n("Start Slideshow"),QString("view-presentation"));
-    connect(view->kopaDocument(), SIGNAL(pageRemoved(KoPAPageBase*)), m_slidesSorterItemContextBar, SLOT(update()));
+    connect(view->kopaDocument(), QOverload<KoPAPageBase*, int>::of(&KoPADocument::pageRemoved), m_slidesSorterItemContextBar, &KoViewItemContextBar::update);
 
     //setup signals for item context bar buttons
     connect(duplicateButton, &QAbstractButton::clicked, this, &KPrViewModeSlidesSorter::contextBarDuplicateSlide);
@@ -287,10 +287,10 @@ void KPrViewModeSlidesSorter::activate(KoPAViewMode *previousViewMode)
 
     KPrView *kPrview = dynamic_cast<KPrView *>(m_view);
     if (kPrview) {
-        disconnect(kPrview->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)), kPrview, SLOT(zoomChanged(KoZoomMode::Mode,qreal)));
+        disconnect(kPrview->zoomController(), &KoZoomController::zoomChanged, kPrview, &KPrView::zoomChanged);
         m_view->zoomController()->zoomAction()->setZoomModes(KoZoomMode::ZOOM_CONSTANT);
         loadZoomConfig();
-        disconnect(kPrview->deleteSelectionAction(), SIGNAL(triggered()), kPrview, SLOT(editDeleteSelection()));
+        disconnect(kPrview->deleteSelectionAction(), &QAction::triggered, kPrview, &KPrView::editDeleteSelection);
         connect(kPrview->deleteSelectionAction(), &QAction::triggered, this, &KPrViewModeSlidesSorter::deleteSlide);
     }
     m_view->setActionEnabled(KoPAView::AllActions, false);
@@ -319,8 +319,8 @@ void KPrViewModeSlidesSorter::deactivate()
     KPrView *kPrview = dynamic_cast<KPrView *>(m_view);
     if (kPrview) {
         kPrview->restoreZoomConfig();
-        connect(kPrview->zoomController(), SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)), kPrview, SLOT(zoomChanged(KoZoomMode::Mode,qreal)));
-        connect(kPrview->deleteSelectionAction(), SIGNAL(triggered()), kPrview, SLOT(editDeleteSelection()));
+        connect(kPrview->zoomController(), &KoZoomController::zoomChanged, kPrview, &KPrView::zoomChanged);
+        connect(kPrview->deleteSelectionAction(), &QAction::triggered, kPrview, &KPrView::editDeleteSelection);
         disconnect(kPrview->deleteSelectionAction(), &QAction::triggered, this, &KPrViewModeSlidesSorter::deleteSlide);
     }
     disableEditActions();
@@ -665,7 +665,7 @@ void KPrViewModeSlidesSorter::removeCustomSlideShow()
 
 void KPrViewModeSlidesSorter::updateCustomSlideShowsList()
 {
-    disconnect(m_customSlideShowsList, SIGNAL(currentIndexChanged(int)), this, SLOT(customShowChanged(int)));
+    disconnect(m_customSlideShowsList, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KPrViewModeSlidesSorter::customShowChanged);
 
     QStringList slideShows;
     slideShows << i18n("All slides") << (m_customSlideShowModel->customShowsNamesList());
@@ -675,7 +675,7 @@ void KPrViewModeSlidesSorter::updateCustomSlideShowsList()
     m_customSlideShowsList->setCurrentIndex(index >= 0 ? index : 0);
     customShowChanged(m_customSlideShowsList->currentIndex());
 
-    connect(m_customSlideShowsList, SIGNAL(currentIndexChanged(int)), this, SLOT(customShowChanged(int)));
+    connect(m_customSlideShowsList, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KPrViewModeSlidesSorter::customShowChanged);
 }
 
 void KPrViewModeSlidesSorter::renameCustomSlideShow()
@@ -728,12 +728,12 @@ void KPrViewModeSlidesSorter::manageAddRemoveSlidesButtons()
 
 void KPrViewModeSlidesSorter::setActiveCustomSlideShow(int index)
 {
-    disconnect(m_customSlideShowsList, SIGNAL(currentIndexChanged(int)), this, SLOT(customShowChanged(int)));
+    disconnect(m_customSlideShowsList, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KPrViewModeSlidesSorter::customShowChanged);
 
     m_customSlideShowsList->setCurrentIndex(index >= 0 && index < m_customSlideShowsList->count() ? index : 0);
     customShowChanged(m_customSlideShowsList->currentIndex());
 
-    connect(m_customSlideShowsList, SIGNAL(currentIndexChanged(int)), this, SLOT(customShowChanged(int)));
+    connect(m_customSlideShowsList, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KPrViewModeSlidesSorter::customShowChanged);
 }
 
 void KPrViewModeSlidesSorter::contextBarDuplicateSlide()

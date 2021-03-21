@@ -52,16 +52,16 @@ KPrHtmlExportDialog::KPrHtmlExportDialog(const QList<KoPAPageBase*> &slides, con
     connect(ui.pushbuttonBrowseTemplate, &QAbstractButton::clicked, this, &KPrHtmlExportDialog::browserAction);
 
 //     connect(&preview, SIGNAL(loadFinished(bool)), this, SLOT(renderPreview()));
-    connect(ui.klineedit_title, SIGNAL(editingFinished()), this, SLOT(generatePreview()));
-    connect(ui.klineedit_author, SIGNAL(editingFinished()), this, SLOT(generatePreview()));
+    connect(ui.klineedit_title, &KLineEdit::editingFinished, this, [this]() { generatePreview(); });
+    connect(ui.klineedit_author, &KLineEdit::editingFinished, this, [this]() { generatePreview(); });
     connect(ui.kListBox_slides, &QListWidget::currentRowChanged, this, &KPrHtmlExportDialog::generatePreview);
-    connect(ui.kcombobox, SIGNAL(currentIndexChanged(int)), this, SLOT(generatePreview()));
+    connect(ui.kcombobox, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &KPrHtmlExportDialog::generatePreview);
     connect(ui.pushButton_selectAll, &QAbstractButton::clicked, this, &KPrHtmlExportDialog::checkAllItems);
     connect(ui.pushButton_deselectAll, &QAbstractButton::clicked, this, &KPrHtmlExportDialog::uncheckAllItems);
     connect(ui.toolButton_previous, &QAbstractButton::clicked, this, &KPrHtmlExportDialog::generatePrevious);
     connect(ui.toolButton_next, &QAbstractButton::clicked, this, &KPrHtmlExportDialog::generateNext);
     connect(ui.pushButton_Favorite, &QAbstractButton::clicked, this, &KPrHtmlExportDialog::favoriteAction);
-    connect(ui.kcombobox, SIGNAL(currentIndexChanged(int)), this, SLOT(updateFavoriteButton()));
+    connect(ui.kcombobox, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &KPrHtmlExportDialog::updateFavoriteButton);
 
     this->updateFavoriteButton();
     this->frameToRender = 0;
@@ -165,12 +165,12 @@ void KPrHtmlExportDialog::addSelectedTemplateToFavorite()
         // Update list
         QString name(ui.kcombobox->itemText(ui.kcombobox->currentIndex()));
         // deactivate preview
-        disconnect(ui.kcombobox, SIGNAL(currentIndexChanged(int)), this, SLOT(generatePreview()));
+        disconnect(ui.kcombobox, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &KPrHtmlExportDialog::generatePreview);
         ui.kcombobox->removeItem(ui.kcombobox->currentIndex());
         ui.kcombobox->insertItem(0, name, savePath);
         ui.kcombobox->setCurrentIndex(0);
         //reactivate preview
-        connect( ui.kcombobox, SIGNAL(currentIndexChanged(int)), this, SLOT(generatePreview()));
+        connect( ui.kcombobox, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &KPrHtmlExportDialog::generatePreview);
     }
 }
 

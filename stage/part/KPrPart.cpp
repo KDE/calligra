@@ -30,6 +30,7 @@
 #include <KoShapeManager.h>
 #include "KPrShapeManagerDisplayMasterStrategy.h"
 #include "KPrPageSelectStrategyActive.h"
+#include <KoPAPageBase.h>
 
 #include <kmessagebox.h>
 
@@ -51,8 +52,9 @@ void KPrPart::setDocument(KPrDocument *document)
 
 KoView * KPrPart::createViewInstance(KoDocument *document, QWidget *parent)
 {
-    KPrView *view = new KPrView(this, qobject_cast<KPrDocument*>(document), parent);
-    connect(document, SIGNAL(replaceActivePage(KoPAPageBase*,KoPAPageBase*)), view, SLOT(replaceActivePage(KoPAPageBase*,KoPAPageBase*)));
+    auto prDocument = qobject_cast<KPrDocument*>(document);
+    KPrView *view = new KPrView(this, prDocument, parent);
+    connect(prDocument, &KPrDocument::replaceActivePage, view, &KPrView::replaceActivePage);
     return view;
 }
 

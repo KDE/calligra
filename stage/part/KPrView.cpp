@@ -244,7 +244,7 @@ void KPrView::initActions()
     m_actionViewModeNormal->setChecked(true);
     actionCollection()->setDefaultShortcut(m_actionViewModeNormal, QKeySequence("CTRL+F5"));
     actionCollection()->addAction("view_normal", m_actionViewModeNormal);
-    connect(m_actionViewModeNormal, SIGNAL(triggered()), this, SLOT(showNormal()));
+    connect(m_actionViewModeNormal, &QAction::triggered, this, &KPrView::showNormal);
 
     m_actionViewModeNotes = new QAction(m_notesMode->name(), this);
     m_actionViewModeNotes->setCheckable(true);

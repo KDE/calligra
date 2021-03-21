@@ -72,13 +72,13 @@ KPrPageEffectDocker::KPrPageEffectDocker( QWidget* parent, Qt::WindowFlags flags
     }
     optionLayout->addWidget(m_effectCombo, 0, 0);
 
-    connect( m_effectCombo, SIGNAL(activated(int)),
-             this, SLOT(slotEffectChanged(int)) );
+    connect( m_effectCombo, QOverload<int>::of(&QComboBox::activated),
+             this, &KPrPageEffectDocker::slotEffectChanged );
 
     m_subTypeCombo = new QComboBox( this );
 
-    connect( m_subTypeCombo, SIGNAL(activated(int)),
-             this, SLOT(slotSubTypeChanged(int)) );
+    connect( m_subTypeCombo, QOverload<int>::of(&QComboBox::activated),
+             this, &KPrPageEffectDocker::slotSubTypeChanged );
 
     m_durationSpinBox = new QDoubleSpinBox( this );
     m_durationSpinBox->setRange( 0.1, 60);
@@ -90,8 +90,8 @@ KPrPageEffectDocker::KPrPageEffectDocker( QWidget* parent, Qt::WindowFlags flags
     m_durationSpinBox->setValue( 2.0 );
     optionLayout->addWidget(m_durationSpinBox, 0, 1);
 
-    connect( m_durationSpinBox, SIGNAL(valueChanged(double)),
-             this, SLOT(slotDurationChanged(double)) );
+    connect( m_durationSpinBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+             this, &KPrPageEffectDocker::slotDurationChanged );
 
     m_transitionType = new QComboBox(this);
     m_transitionType->addItem(i18n("Manual"));
@@ -109,10 +109,10 @@ KPrPageEffectDocker::KPrPageEffectDocker( QWidget* parent, Qt::WindowFlags flags
     transitionLayout->addWidget(m_transitionType);
     transitionLayout->addWidget(m_transitionTime);
 
-    connect( m_transitionTime, SIGNAL(valueChanged(double)),
-             this, SLOT(slotTransitionChanged()));
-    connect( m_transitionType, SIGNAL(currentIndexChanged(int)),
-             this, SLOT(slotTransitionChanged()));
+    connect( m_transitionTime, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+             this, &KPrPageEffectDocker::slotTransitionChanged);
+    connect( m_transitionType, QOverload<int>::of(&QComboBox::currentIndexChanged),
+             this, &KPrPageEffectDocker::slotTransitionChanged);
 
     m_applyToAllSlidesButton = new QPushButton(i18n("Apply To All Slides"));
 

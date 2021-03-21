@@ -136,6 +136,9 @@ public Q_SLOTS:
 
     void replaceActivePage(KoPAPageBase *page, KoPAPageBase *newActivePage);
 
+    /// called if the zoom changed
+    void zoomChanged(KoZoomMode::Mode mode, qreal zoom);
+
 protected:
     void initGUI();
     void initActions();
@@ -154,8 +157,6 @@ protected Q_SLOTS:
     void highlightPresentation();
     void blackPresentation();
     void showStatusBar(bool toggled);
-    /// called if the zoom changed
-    void zoomChanged(KoZoomMode::Mode mode, qreal zoom);
 
 private:
     KPrPart *m_part;

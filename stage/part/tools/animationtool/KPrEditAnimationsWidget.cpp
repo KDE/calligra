@@ -113,13 +113,13 @@ KPrEditAnimationsWidget::KPrEditAnimationsWidget(KPrShapeAnimationDocker *docker
     connect(m_timeLineView, &KPrAnimationsTimeLineView::layoutChanged, this, &KPrEditAnimationsWidget::syncCurrentItem);
     connect(m_delayEdit, &QAbstractSpinBox::editingFinished, this, &KPrEditAnimationsWidget::setBeginTime);
     connect(m_durationEdit, &QAbstractSpinBox::editingFinished, this, &KPrEditAnimationsWidget::setDuration);
-    connect(m_triggerEventList, SIGNAL(currentIndexChanged(int)), this, SLOT(setTriggerEvent(int)));
+    connect(m_triggerEventList, QOverload<int>::of(&QComboBox::currentIndexChanged), this, QOverload<int>::of(&KPrEditAnimationsWidget::setTriggerEvent));
     connect(m_animationSelector, &KPrAnimationSelectorWidget::requestPreviewAnimation,
             docker, &KPrShapeAnimationDocker::previewAnimation);
     connect(m_animationSelector, &KPrAnimationSelectorWidget::requestAcceptAnimation,
             this, &KPrEditAnimationsWidget::changeCurrentAnimation);
-    connect(m_timeLineView, SIGNAL(customContextMenuRequested(QPoint)), this,
-            SLOT(showTimeLineCustomContextMenu(QPoint)));
+    connect(m_timeLineView, &KPrAnimationsTimeLineView::customContextMenuRequested,
+            this, &KPrEditAnimationsWidget::showTimeLineCustomContextMenu);
     connect(m_animationSelector, &KPrAnimationSelectorWidget::previousStateChanged, this, &KPrEditAnimationsWidget::previousStateChanged);
     QTimer::singleShot(700, this, &KPrEditAnimationsWidget::initializeView);
 }
@@ -256,7 +256,7 @@ void KPrEditAnimationsWidget::showTimeLineCustomContextMenu(const QPoint &pos)
         menu.addAction(onClickAction);
         menu.addAction(afterAction);
         menu.addAction(withAction);
-        connect(actionGroup, SIGNAL(triggered(QAction*)), this, SLOT(setTriggerEvent(QAction*)));
+        connect(actionGroup, &QActionGroup::triggered, this, QOverload<QAction*>::of(&KPrEditAnimationsWidget::setTriggerEvent));
         menu.exec(m_timeLineView->mapToGlobal(pos));
     }
 }
