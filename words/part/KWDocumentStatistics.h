@@ -24,6 +24,8 @@
 
 #include <QObject>
 
+#include <memory>
+
 class QTimer;
 class QTextDocument;
 class KWDocument;
@@ -78,8 +80,7 @@ Q_SIGNALS:
 private:
     void computeStatistics(const QTextDocument &doc);
     int countCJKChars(const QString &text);
-
-    KWDocumentStatisticsPrivate *d;
+    std::unique_ptr<KWDocumentStatisticsPrivate> d;
 
     Q_DISABLE_COPY(KWDocumentStatistics);
 };

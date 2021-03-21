@@ -69,7 +69,6 @@ KWDocumentStatistics::KWDocumentStatistics(KWDocument *doc)
 
 KWDocumentStatistics::~KWDocumentStatistics()
 {
-    delete(d);
 }
 
 void KWDocumentStatistics::reset()
