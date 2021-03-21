@@ -290,16 +290,16 @@ QList<QPointer<QWidget> > ChartTool::createOptionWidgets()
     titles->setWindowTitle(i18n("Titles"));
     widgets.append(titles);
     connect(titles->ui.showTitle, &QAbstractButton::toggled, this, &ChartTool::setShowTitle);
-    connect(titles->ui.titlePositioning, SIGNAL(currentIndexChanged(int)), this, SLOT(setTitlePositioning(int)));
-    connect(titles->ui.titleResize, SIGNAL(currentIndexChanged(int)), this, SLOT(setTitleResize(int)));
+    connect(titles->ui.titlePositioning, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ChartTool::setTitlePositioning);
+    connect(titles->ui.titleResize, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ChartTool::setTitleResize);
     connect(titles->ui.showSubTitle, &QAbstractButton::toggled, this, &ChartTool::setShowSubTitle);
-    connect(titles->ui.subtitlePositioning, SIGNAL(currentIndexChanged(int)), this, SLOT(setSubTitlePositioning(int)));
-    connect(titles->ui.subtitleResize, SIGNAL(currentIndexChanged(int)), this, SLOT(setSubTitleResize(int)));
+    connect(titles->ui.subtitlePositioning, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ChartTool::setSubTitlePositioning);
+    connect(titles->ui.subtitleResize, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ChartTool::setSubTitleResize);
     connect(titles->ui.showFooter, &QAbstractButton::toggled, this, &ChartTool::setShowFooter);
-    connect(titles->ui.footerPositioning, SIGNAL(currentIndexChanged(int)), this, SLOT(setFooterPositioning(int)));
-    connect(titles->ui.footerResize, SIGNAL(currentIndexChanged(int)), this, SLOT(setFooterResize(int)));
+    connect(titles->ui.footerPositioning, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ChartTool::setFooterPositioning);
+    connect(titles->ui.footerResize, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ChartTool::setFooterResize);
 
-    connect(d->shape, SIGNAL(updateConfigWidget()), titles, SLOT(updateData()));
+    connect(d->shape, &KoChart::ChartShape::updateConfigWidget, titles, QOverload<>::of(&TitlesConfigWidget::updateData));
 
     LegendConfigWidget *legend = new LegendConfigWidget();
     legend->setWindowTitle(i18n("Legend"));
@@ -319,7 +319,7 @@ QList<QPointer<QWidget> > ChartTool::createOptionWidgets()
     connect(legend, &LegendConfigWidget::legendAlignmentChanged,
             this,   &ChartTool::setLegendAlignment);
 
-    connect(d->shape->legend(), SIGNAL(updateConfigWidget()), legend, SLOT(updateData()));
+    connect(d->shape->legend(), &KoChart::Legend::updateConfigWidget, legend, QOverload<>::of(&LegendConfigWidget::updateData));
 
     PlotAreaConfigWidget  *plotarea = new PlotAreaConfigWidget();
     plotarea->setWindowTitle(i18n("Plot Area"));
@@ -411,20 +411,20 @@ QList<QPointer<QWidget> > ChartTool::createOptionWidgets()
 
 
     PieConfigWidget *pie = plotarea->pieConfigWidget();
-    connect(pie, SIGNAL(explodeFactorChanged(DataSet*,int, int)), this, SLOT(setPieExplodeFactor(DataSet*,int, int)));
-    connect(pie, SIGNAL(brushChanged(DataSet*,QColor,int)), this, SLOT(setDataSetBrush(DataSet*,QColor,int)));
-    connect(pie, SIGNAL(penChanged(DataSet*,QColor,int)), this, SLOT(setDataSetPen(DataSet*,QColor,int)));
-    connect(pie, SIGNAL(showCategoryChanged(DataSet*,bool,int)), this, SLOT(setDataSetShowCategory(DataSet*,bool,int)));
-    connect(pie, SIGNAL(showNumberChanged(DataSet*,bool,int)), this, SLOT(setDataSetShowNumber(DataSet*,bool,int)));
-    connect(pie, SIGNAL(showPercentChanged(DataSet*,bool,int)), this, SLOT(setDataSetShowPercent(DataSet*,bool,int)));
+    connect(pie, QOverload<DataSet*,int, int>::of(&PieConfigWidget::explodeFactorChanged), this, &ChartTool::setPieExplodeFactor);
+    connect(pie, QOverload<DataSet*,const QColor &,int>::of(&PieConfigWidget::brushChanged), this, &ChartTool::setDataSetBrush);
+    connect(pie, QOverload<DataSet*,const QColor &,int>::of(&PieConfigWidget::penChanged), this, &ChartTool::setDataSetPen);
+    connect(pie, QOverload<DataSet*,bool,int>::of(&PieConfigWidget::showCategoryChanged), this, &ChartTool::setDataSetShowCategory);
+    connect(pie, QOverload<DataSet*,bool,int>::of(&PieConfigWidget::showNumberChanged), this, &ChartTool::setDataSetShowNumber);
+    connect(pie, QOverload<DataSet*,bool,int>::of(&PieConfigWidget::showPercentChanged), this, &ChartTool::setDataSetShowPercent);
 
     RingConfigWidget *ring = plotarea->ringConfigWidget();
-    connect(ring, SIGNAL(explodeFactorChanged(DataSet*,int, int)), this, SLOT(setPieExplodeFactor(DataSet*,int, int)));
-    connect(ring, SIGNAL(brushChanged(DataSet*,QColor,int)), this, SLOT(setDataSetBrush(DataSet*,QColor,int)));
-    connect(ring, SIGNAL(penChanged(DataSet*,QColor,int)), this, SLOT(setDataSetPen(DataSet*,QColor,int)));
-    connect(ring, SIGNAL(showCategoryChanged(DataSet*,bool,int)), this, SLOT(setDataSetShowCategory(DataSet*,bool,int)));
-    connect(ring, SIGNAL(showNumberChanged(DataSet*,bool,int)), this, SLOT(setDataSetShowNumber(DataSet*,bool,int)));
-    connect(ring, SIGNAL(showPercentChanged(DataSet*,bool,int)), this, SLOT(setDataSetShowPercent(DataSet*,bool,int)));
+    connect(ring, QOverload<DataSet*,int, int>::of(&RingConfigWidget::explodeFactorChanged), this, &ChartTool::setPieExplodeFactor);
+    connect(ring, QOverload<DataSet*,const QColor &,int>::of(&RingConfigWidget::brushChanged), this, &ChartTool::setDataSetBrush);
+    connect(ring, QOverload<DataSet*,const QColor &,int>::of(&RingConfigWidget::penChanged), this, &ChartTool::setDataSetPen);
+    connect(ring, QOverload<DataSet*,bool,int>::of(&RingConfigWidget::showCategoryChanged), this, &ChartTool::setDataSetShowCategory);
+    connect(ring, QOverload<DataSet*,bool,int>::of(&RingConfigWidget::showNumberChanged), this, &ChartTool::setDataSetShowNumber);
+    connect(ring, QOverload<DataSet*,bool,int>::of(&RingConfigWidget::showPercentChanged), this, &ChartTool::setDataSetShowPercent);
 
     axes = plotarea->stockAxesConfigWidget();
     connect(axes, &AxesConfigWidget::axisAdded,
@@ -478,7 +478,7 @@ QList<QPointer<QWidget> > ChartTool::createOptionWidgets()
     connect(rdataset, &RadarDataSetConfigWidget::datasetShowSymbolChanged,
             this, &ChartTool::setDataSetShowSymbol);
 
-    connect(d->shape, SIGNAL(updateConfigWidget()), plotarea, SLOT(updateData()));
+    connect(d->shape, &ChartShape::updateConfigWidget, plotarea, QOverload<>::of(&PlotAreaConfigWidget::updateData));
 
     return widgets;
 }

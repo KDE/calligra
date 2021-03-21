@@ -91,7 +91,7 @@ FilterEffectEditWidget::FilterEffectEditWidget(QWidget *parent)
 
     connect(m_scene, &FilterEffectScene::connectionCreated,
             this, &FilterEffectEditWidget::connectionCreated);
-    connect(m_scene, SIGNAL(selectionChanged()), this, SLOT(sceneSelectionChanged()));
+    connect(m_scene, QOverload<>::of(&FilterEffectScene::selectionChanged), this, &FilterEffectEditWidget::sceneSelectionChanged);
 
     QSet<ConnectionSource::SourceType> inputs;
     inputs << ConnectionSource::SourceGraphic;
@@ -107,8 +107,8 @@ FilterEffectEditWidget::FilterEffectEditWidget(QWidget *parent)
     }
     m_defaultSourceSelector->hide();
     m_defaultSourceSelector->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-    connect(m_defaultSourceSelector, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(defaultSourceChanged(int)));
+    connect(m_defaultSourceSelector, QOverload<int>::of(&KComboBox::currentIndexChanged),
+            this, &FilterEffectEditWidget::defaultSourceChanged);
 }
 
 FilterEffectEditWidget::~FilterEffectEditWidget()

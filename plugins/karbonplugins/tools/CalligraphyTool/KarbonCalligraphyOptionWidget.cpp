@@ -285,8 +285,8 @@ void KarbonCalligraphyOptionWidget::decreaseAngle()
 
 void KarbonCalligraphyOptionWidget::createConnections()
 {
-    connect(m_comboBox, SIGNAL(currentIndexChanged(QString)),
-            SLOT(loadProfile(QString)));
+    connect(m_comboBox, QOverload<const QString &>::of(&KComboBox::currentIndexChanged),
+            this, &KarbonCalligraphyOptionWidget::loadProfile);
 
 
     // propagate changes
@@ -299,26 +299,26 @@ void KarbonCalligraphyOptionWidget::createConnections()
     connect(m_useAngle, &QAbstractButton::toggled,
             this, &KarbonCalligraphyOptionWidget::useAngleChanged);
 
-    connect(m_widthBox, SIGNAL(valueChanged(double)),
-            SIGNAL(widthChanged(double)));
+    connect(m_widthBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+            this, &KarbonCalligraphyOptionWidget::widthChanged);
 
-    connect(m_thinningBox, SIGNAL(valueChanged(double)),
-            SIGNAL(thinningChanged(double)));
+    connect(m_thinningBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+            this, &KarbonCalligraphyOptionWidget::thinningChanged);
 
-    connect(m_angleBox, SIGNAL(valueChanged(int)),
-            SIGNAL(angleChanged(int)));
+    connect(m_angleBox, QOverload<int>::of(&QSpinBox::valueChanged),
+            this, &KarbonCalligraphyOptionWidget::angleChanged);
 
-    connect(m_fixationBox, SIGNAL(valueChanged(double)),
-            SIGNAL(fixationChanged(double)));
+    connect(m_fixationBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+            this, &KarbonCalligraphyOptionWidget::fixationChanged);
 
-    connect(m_capsBox, SIGNAL(valueChanged(double)),
-            SIGNAL(capsChanged(double)));
+    connect(m_capsBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+            this, &KarbonCalligraphyOptionWidget::capsChanged);
 
-    connect(m_massBox, SIGNAL(valueChanged(double)),
-            SIGNAL(massChanged(double)));
+    connect(m_massBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+            this, &KarbonCalligraphyOptionWidget::massChanged);
 
-    connect(m_dragBox, SIGNAL(valueChanged(double)),
-            SIGNAL(dragChanged(double)));
+    connect(m_dragBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+            this, &KarbonCalligraphyOptionWidget::dragChanged);
 
 
     // update profile
@@ -331,30 +331,30 @@ void KarbonCalligraphyOptionWidget::createConnections()
     connect(m_useAngle, &QAbstractButton::toggled,
             this, &KarbonCalligraphyOptionWidget::updateCurrentProfile);
 
-    connect(m_widthBox, SIGNAL(valueChanged(double)),
-            SLOT(updateCurrentProfile()));
+    connect(m_widthBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+            this, &KarbonCalligraphyOptionWidget::updateCurrentProfile);
 
-    connect(m_thinningBox, SIGNAL(valueChanged(double)),
-            SLOT(updateCurrentProfile()));
+    connect(m_thinningBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+            this, &KarbonCalligraphyOptionWidget::updateCurrentProfile);
 
-    connect(m_angleBox, SIGNAL(valueChanged(int)),
-            SLOT(updateCurrentProfile()));
+    connect(m_angleBox, QOverload<int>::of(&QSpinBox::valueChanged),
+            this, &KarbonCalligraphyOptionWidget::updateCurrentProfile);
 
-    connect(m_fixationBox, SIGNAL(valueChanged(double)),
-            SLOT(updateCurrentProfile()));
+    connect(m_fixationBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+            this, &KarbonCalligraphyOptionWidget::updateCurrentProfile);
 
-    connect(m_capsBox, SIGNAL(valueChanged(double)),
-            SLOT(updateCurrentProfile()));
+    connect(m_capsBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+            this, &KarbonCalligraphyOptionWidget::updateCurrentProfile);
 
-    connect(m_massBox, SIGNAL(valueChanged(double)),
-            SLOT(updateCurrentProfile()));
+    connect(m_massBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+            this, &KarbonCalligraphyOptionWidget::updateCurrentProfile);
 
-    connect(m_dragBox, SIGNAL(valueChanged(double)),
-            SLOT(updateCurrentProfile()));
+    connect(m_dragBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+            this, &KarbonCalligraphyOptionWidget::updateCurrentProfile);
 
 
     connect(m_saveButton, &QAbstractButton::clicked, this, &KarbonCalligraphyOptionWidget::saveProfileAs);
-    connect(m_removeButton, SIGNAL(clicked()), SLOT(removeProfile()));
+    connect(m_removeButton, &QToolButton::clicked, this, QOverload<>::of(&KarbonCalligraphyOptionWidget::removeProfile));
 
     // visualization
     connect(m_useAngle, &QAbstractButton::toggled, this, &KarbonCalligraphyOptionWidget::toggleUseAngle);

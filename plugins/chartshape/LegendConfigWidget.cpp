@@ -62,12 +62,12 @@ LegendConfigWidget::LegendConfigWidget()
 
     connect(d->ui.legendTitle, &QLineEdit::textChanged,
             this, &LegendConfigWidget::legendTitleChanged);
-    connect(d->ui.legendOrientation, SIGNAL(activated(int)),
-            this, SLOT(setLegendOrientation(int)));
-    connect(d->ui.legendPosition, SIGNAL(activated(int)),
-            this, SLOT(setLegendPosition(int)));
-    connect(d->ui.legendAlignment, SIGNAL(activated(int)),
-            this, SLOT(setLegendAlignment(int)));
+    connect(d->ui.legendOrientation, QOverload<int>::of(&QComboBox::activated),
+            this, &LegendConfigWidget::setLegendOrientation);
+    connect(d->ui.legendPosition, QOverload<int>::of(&QComboBox::activated),
+            this, &LegendConfigWidget::setLegendPosition);
+    connect(d->ui.legendAlignment, QOverload<int>::of(&QComboBox::activated),
+            this, &LegendConfigWidget::setLegendAlignment);
 
     createActions();
 }

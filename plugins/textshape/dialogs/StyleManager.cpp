@@ -84,9 +84,9 @@ StyleManager::StyleManager(QWidget *parent)
 
     connect(widget.tabs, &QTabWidget::currentChanged, this, &StyleManager::tabChanged);
 
-    connect(widget.paragraphStylePage, &CharacterGeneral::styleChanged, this, &StyleManager::currentParagraphStyleChanged);
+    connect(widget.paragraphStylePage, &ParagraphGeneral::styleChanged, this, &StyleManager::currentParagraphStyleChanged);
     connect(widget.characterStylePage, &CharacterGeneral::styleChanged, this, &StyleManager::currentCharacterStyleChanged);
-    connect(widget.paragraphStylePage, SIGNAL(nameChanged(QString)), this, SLOT(currentParagraphNameChanged(QString)));
+    connect(widget.paragraphStylePage, &ParagraphGeneral::nameChanged, this, &StyleManager::currentParagraphNameChanged);
     connect(widget.characterStylePage, &CharacterGeneral::nameChanged, this, &StyleManager::currentCharacterNameChanged);
 }
 

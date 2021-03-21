@@ -56,15 +56,15 @@ KarbonPatternOptionsWidget::KarbonPatternOptionsWidget(QWidget * parent)
     d->widget.patternWidth->setRange(1, 10000);
     d->widget.patternHeight->setRange(1, 10000);
 
-    connect(d->widget.patternRepeat, SIGNAL(activated(int)), this, SIGNAL(patternChanged()));
-    connect(d->widget.patternRepeat, SIGNAL(activated(int)), this, SLOT(updateControls()));
-    connect(d->widget.referencePoint, SIGNAL(activated(int)), this, SIGNAL(patternChanged()));
-    connect(d->widget.refPointOffsetX, SIGNAL(valueChanged(double)), this, SIGNAL(patternChanged()));
-    connect(d->widget.refPointOffsetY, SIGNAL(valueChanged(double)), this, SIGNAL(patternChanged()));
-    connect(d->widget.tileOffsetX, SIGNAL(valueChanged(double)), this, SIGNAL(patternChanged()));
-    connect(d->widget.tileOffsetY, SIGNAL(valueChanged(double)), this, SIGNAL(patternChanged()));
-    connect(d->widget.patternWidth, SIGNAL(valueChanged(int)), this, SIGNAL(patternChanged()));
-    connect(d->widget.patternHeight, SIGNAL(valueChanged(int)), this, SIGNAL(patternChanged()));
+    connect(d->widget.patternRepeat, QOverload<int>::of(&KComboBox::activated), this, &KarbonPatternOptionsWidget::patternChanged);
+    connect(d->widget.patternRepeat, QOverload<int>::of(&KComboBox::activated), this, &KarbonPatternOptionsWidget::updateControls);
+    connect(d->widget.referencePoint, QOverload<int>::of(&KComboBox::activated), this, &KarbonPatternOptionsWidget::patternChanged);
+    connect(d->widget.refPointOffsetX, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &KarbonPatternOptionsWidget::patternChanged);
+    connect(d->widget.refPointOffsetY, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &KarbonPatternOptionsWidget::patternChanged);
+    connect(d->widget.tileOffsetX, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &KarbonPatternOptionsWidget::patternChanged);
+    connect(d->widget.tileOffsetY, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &KarbonPatternOptionsWidget::patternChanged);
+    connect(d->widget.patternWidth, QOverload<int>::of(&QSpinBox::valueChanged), this, &KarbonPatternOptionsWidget::patternChanged);
+    connect(d->widget.patternHeight, QOverload<int>::of(&QSpinBox::valueChanged), this, &KarbonPatternOptionsWidget::patternChanged);
 }
 
 KarbonPatternOptionsWidget::~KarbonPatternOptionsWidget()

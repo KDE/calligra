@@ -163,7 +163,7 @@ public Q_SLOTS:
      *
      * @param duration the new duration
      */
-    void setDuration(Duration duration);
+    void setDuration(MusicCore::Duration duration);
 
     /**
      * Changes the number of dots of the chord.
@@ -175,7 +175,7 @@ Q_SIGNALS:
     /**
      * This signal is emitted when the duration of this chord changes.
      */
-    void durationChanged(Duration duration);
+    void durationChanged(MusicCore::Duration duration);
     
     /**
      * This signal is emitted when the number of dots of this chord changes.

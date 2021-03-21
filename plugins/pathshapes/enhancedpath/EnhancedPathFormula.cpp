@@ -138,7 +138,6 @@ qreal EnhancedPathFormula::evaluate()
     }
 
     for (int pc = 0; pc < m_codes.count(); pc++) {
-        QVariant ret;   // for the function caller
         Opcode& opcode = m_codes[pc];
         index = opcode.index;
         switch(opcode.type) {

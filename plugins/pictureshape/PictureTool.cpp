@@ -114,11 +114,11 @@ QWidget *PictureTool::createOptionWidget()
     updateControlElements();
 
     connect(m_pictureToolUI->bnImageFile, &QAbstractButton::clicked, this, &PictureTool::changeUrlPressed);
-    connect(m_pictureToolUI->cmbColorMode, SIGNAL(currentIndexChanged(int)), this, SLOT(colorModeChanged(int)));
-    connect(m_pictureToolUI->leftDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(cropEditFieldsChanged()));
-    connect(m_pictureToolUI->rightDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(cropEditFieldsChanged()));
-    connect(m_pictureToolUI->topDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(cropEditFieldsChanged()));
-    connect(m_pictureToolUI->bottomDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(cropEditFieldsChanged()));
+    connect(m_pictureToolUI->cmbColorMode, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &PictureTool::colorModeChanged);
+    connect(m_pictureToolUI->leftDoubleSpinBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &PictureTool::cropEditFieldsChanged);
+    connect(m_pictureToolUI->rightDoubleSpinBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &PictureTool::cropEditFieldsChanged);
+    connect(m_pictureToolUI->topDoubleSpinBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &PictureTool::cropEditFieldsChanged);
+    connect(m_pictureToolUI->bottomDoubleSpinBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &PictureTool::cropEditFieldsChanged);
     connect(m_pictureToolUI->cbAspect, &QAbstractButton::toggled, this, &PictureTool::aspectCheckBoxChanged);
     connect(m_pictureToolUI->bnFill, &QAbstractButton::pressed, this, &PictureTool::fillButtonPressed);
     connect(m_pictureToolUI->cbContour, &QAbstractButton::toggled, this, &PictureTool::contourCheckBoxChanged);

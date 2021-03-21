@@ -53,7 +53,7 @@ ParagraphSettingsDialog::ParagraphSettingsDialog(TextTool *tool, KoTextEditor *e
     initTabs();
 
     // Do this after initTabs so it doesn't cause signals prematurely
-    connect(m_paragraphGeneral, SIGNAL(styleChanged()), this, SLOT(styleChanged()));
+    connect(m_paragraphGeneral, &ParagraphGeneral::styleChanged, this, [this]() { styleChanged(); });
 }
 
 ParagraphSettingsDialog::~ParagraphSettingsDialog()

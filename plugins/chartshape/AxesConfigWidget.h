@@ -61,7 +61,7 @@ public:
     void deleteSubDialogs(ChartType type = LastChartType);
 
 public Q_SLOTS:
-    void updateData(ChartType type, ChartSubtype subtype) override;
+    void updateData(KoChart::ChartType type, KoChart::ChartSubtype subtype) override;
 
     void ui_axisSelectionChanged(int index);
     void ui_axisShowTitleChanged(bool b);
@@ -81,24 +81,24 @@ public Q_SLOTS:
     void ui_axisLabelsFontChanged();
 
 Q_SIGNALS:
-    void axisAdded(AxisDimension, const QString& title);
-    void axisRemoved(Axis *axis);
-    void axisShowTitleChanged(Axis *axis, bool b);
-    void axisShowChanged(Axis *axis, bool b);
-    void axisPositionChanged(Axis *axis, const QString &pos);
-    void axisLabelsPositionChanged(Axis *axis, const QString &pos);
-    void axisShowLabelsChanged(Axis *axis, bool value);
-    void axisShowMajorGridLinesChanged(Axis *axis, bool b);
-    void axisShowMinorGridLinesChanged(Axis *axis, bool b);
-    void axisUseLogarithmicScalingChanged(Axis *axis, bool b);
-    void axisStepWidthChanged(Axis *axis, qreal width);
-    void axisSubStepWidthChanged(Axis *axis, qreal width);
-    void axisUseAutomaticStepWidthChanged(Axis *axis, bool automatic);
-    void axisUseAutomaticSubStepWidthChanged(Axis *axis, bool automatic);
-    void axisLabelsFontChanged(Axis *axis, const QFont& font);
+    void axisAdded(KoChart::AxisDimension, const QString& title);
+    void axisRemoved(KoChart::Axis *axis);
+    void axisShowTitleChanged(KoChart::Axis *axis, bool b);
+    void axisShowChanged(KoChart::Axis *axis, bool b);
+    void axisPositionChanged(KoChart::Axis *axis, const QString &pos);
+    void axisLabelsPositionChanged(KoChart::Axis *axis, const QString &pos);
+    void axisShowLabelsChanged(KoChart::Axis *axis, bool value);
+    void axisShowMajorGridLinesChanged(KoChart::Axis *axis, bool b);
+    void axisShowMinorGridLinesChanged(KoChart::Axis *axis, bool b);
+    void axisUseLogarithmicScalingChanged(KoChart::Axis *axis, bool b);
+    void axisStepWidthChanged(KoChart::Axis *axis, qreal width);
+    void axisSubStepWidthChanged(KoChart::Axis *axis, qreal width);
+    void axisUseAutomaticStepWidthChanged(KoChart::Axis *axis, bool automatic);
+    void axisUseAutomaticSubStepWidthChanged(KoChart::Axis *axis, bool automatic);
+    void axisLabelsFontChanged(KoChart::Axis *axis, const QFont& font);
 
-    void gapBetweenBarsChanged(Axis *axis, int percent);
-    void gapBetweenSetsChanged(Axis *axis, int percent);
+    void gapBetweenBarsChanged(KoChart::Axis *axis, int percent);
+    void gapBetweenSetsChanged(KoChart::Axis *axis, int percent);
 
 private Q_SLOTS:
     void slotGapBetweenBars();

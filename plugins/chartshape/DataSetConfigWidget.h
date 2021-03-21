@@ -62,12 +62,12 @@ public:
 
     /// Delete all open dialogs.
     /// This is called when e.g. the tool is deactivated.
-    void deleteSubDialogs(ChartType type = LastChartType);
+    void deleteSubDialogs(KoChart::ChartType type = LastChartType);
 
     void updateMarkers();
 
 public Q_SLOTS:
-    void updateData(ChartType type, ChartSubtype subtype) override;
+    void updateData(KoChart::ChartType type, KoChart::ChartSubtype subtype) override;
 
     void slotShowFormatErrorBarDialog();
 
@@ -86,21 +86,21 @@ public Q_SLOTS:
     void ui_dataSetErrorBarTypeChanged();
 
 Q_SIGNALS:
-    void dataSetChartTypeChanged(DataSet *dataSet, ChartType type, ChartSubtype subType);
+    void dataSetChartTypeChanged(KoChart::DataSet *dataSet, KoChart::ChartType type, KoChart::ChartSubtype subType);
 
     void showVerticalLinesChanged(bool b);
     void showHorizontalLinesChanged(bool b);
 
-    void datasetPenChanged(DataSet *dataSet, const QColor& color, int section);
-    void datasetBrushChanged(DataSet *dataSet, const QColor& color, int section);
-    void dataSetMarkerChanged(DataSet *dataSet, OdfSymbolType type, OdfMarkerStyle style);
-    void datasetShowCategoryChanged(DataSet *dataSet, bool b, int section);
-    void dataSetShowNumberChanged(DataSet *dataSet, bool b, int section);
-    void datasetShowPercentChanged(DataSet *dataSet, bool b, int section);
-    void datasetShowSymbolChanged(DataSet *dataSet, bool b, int section);
-    void dataSetAxisChanged(DataSet *dataSet, Axis *axis);
+    void datasetPenChanged(KoChart::DataSet *dataSet, const QColor& color, int section);
+    void datasetBrushChanged(KoChart::DataSet *dataSet, const QColor& color, int section);
+    void dataSetMarkerChanged(KoChart::DataSet *dataSet, KoChart::OdfSymbolType type, KoChart::OdfMarkerStyle style);
+    void datasetShowCategoryChanged(KoChart::DataSet *dataSet, bool b, int section);
+    void dataSetShowNumberChanged(KoChart::DataSet *dataSet, bool b, int section);
+    void datasetShowPercentChanged(KoChart::DataSet *dataSet, bool b, int section);
+    void datasetShowSymbolChanged(KoChart::DataSet *dataSet, bool b, int section);
+    void dataSetAxisChanged(KoChart::DataSet *dataSet, KoChart::Axis *axis);
 
-    void axisAdded(AxisDimension, const QString& title);
+    void axisAdded(KoChart::AxisDimension, const QString& title);
 
 private:
     void setupDialogs();

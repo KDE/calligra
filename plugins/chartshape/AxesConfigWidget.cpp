@@ -101,12 +101,12 @@ AxesConfigWidget::Private::Private(AxesConfigWidget *parent)
 
     connect(ui.axisShowTitle, &QAbstractButton::toggled, parent, &AxesConfigWidget::ui_axisShowTitleChanged);
     connect(ui.axisShow, &QAbstractButton::toggled, parent, &AxesConfigWidget::ui_axisShowChanged);
-    connect(ui.axisPosition, SIGNAL(currentIndexChanged(int)), parent, SLOT(ui_axisPositionChanged(int)));
-    connect(ui.axislabelPosition, SIGNAL(currentIndexChanged(int)), parent, SLOT(ui_axisLabelsPositionChanged(int)));
+    connect(ui.axisPosition, QOverload<int>::of(&QComboBox::currentIndexChanged), parent, &AxesConfigWidget::ui_axisPositionChanged);
+    connect(ui.axislabelPosition, QOverload<int>::of(&QComboBox::currentIndexChanged), parent, &AxesConfigWidget::ui_axisLabelsPositionChanged);
     connect(ui.axisShowLabels, &QAbstractButton::toggled, parent, &AxesConfigWidget::ui_axisShowLabelsChanged);
     connect(ui.axisShowMajorGridLines, &QAbstractButton::toggled, parent, &AxesConfigWidget::ui_axisShowMajorGridLinesChanged);
     connect(ui.axisShowMinorGridLines, &QAbstractButton::toggled, parent, &AxesConfigWidget::ui_axisShowMinorGridLinesChanged);
-    connect(ui.axes, SIGNAL(currentIndexChanged(int)),parent, SLOT(ui_axisSelectionChanged(int)));
+    connect(ui.axes, QOverload<int>::of(&QComboBox::currentIndexChanged), parent, &AxesConfigWidget::ui_axisSelectionChanged);
 
     connect(ui.gapBetweenBars, &QAbstractSpinBox::editingFinished, parent, &AxesConfigWidget::slotGapBetweenBars);
     connect(ui.gapBetweenSets, &QAbstractSpinBox::editingFinished, parent, &AxesConfigWidget::slotGapBetweenSets);
@@ -222,12 +222,12 @@ void AxesConfigWidget::setupDialogs()
              this, &AxesConfigWidget::ui_axisScalingButtonClicked);
     connect(d->axisScalingDialog.logarithmicScaling, &QAbstractButton::toggled,
              this, &AxesConfigWidget::ui_axisUseLogarithmicScalingChanged);
-    connect(d->axisScalingDialog.stepWidth, SIGNAL(valueChanged(double)),
-             this, SLOT(ui_axisStepWidthChanged(double)));
+    connect(d->axisScalingDialog.stepWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+             this, &AxesConfigWidget::ui_axisStepWidthChanged);
     connect (d->axisScalingDialog.automaticStepWidth, &QAbstractButton::toggled,
               this, &AxesConfigWidget::ui_axisUseAutomaticStepWidthChanged);
-    connect(d->axisScalingDialog.subStepWidth, SIGNAL(valueChanged(double)),
-             this, SLOT(ui_axisSubStepWidthChanged(double)));
+    connect(d->axisScalingDialog.subStepWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+             this, &AxesConfigWidget::ui_axisSubStepWidthChanged);
     connect (d->axisScalingDialog.automaticSubStepWidth, &QAbstractButton::toggled,
               this, &AxesConfigWidget::ui_axisUseAutomaticSubStepWidthChanged);
 

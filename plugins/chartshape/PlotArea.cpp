@@ -294,8 +294,8 @@ PlotArea::PlotArea(ChartShape *parent)
             this,                   &PlotArea::plotAreaUpdate);
     connect(d->shape->proxyModel(), &QAbstractItemModel::columnsRemoved,
             this,                   &PlotArea::plotAreaUpdate);
-    connect(d->shape->proxyModel(), SIGNAL(dataChanged()),
-            this,                   SLOT(plotAreaUpdate()));
+    connect(d->shape->proxyModel(), QOverload<>::of(&ChartProxyModel::dataChanged),
+            this,                   &PlotArea::plotAreaUpdate);
 }
 
 PlotArea::~PlotArea()

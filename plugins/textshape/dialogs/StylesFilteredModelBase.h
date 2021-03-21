@@ -81,14 +81,14 @@ public:
     void setStylesModel(AbstractStylesModel *sourceModel);
 
 protected Q_SLOTS:
-    void modelAboutToBeReset();
-    void modelReset();
-    void rowsAboutToBeInserted(const QModelIndex &parent, int start, int end);
-    void rowsAboutToBeMoved(const QModelIndex &sourceParent, int sourceStart, int sourceEnd, const QModelIndex &destinationParent, int destinationRow);
-    void rowsAboutToBeRemoved(const QModelIndex &parent, int start, int end);
-    void rowsInserted(const QModelIndex &parent, int start, int end);
-    void rowsMoved(const QModelIndex &sourceParent, int sourceStart, int sourceEnd, const QModelIndex &destinationParent, int destinationRow);
-    void rowsRemoved(const QModelIndex &parent, int start, int end);
+    void slotModelAboutToBeReset();
+    void slotModelReset();
+    void slotRowsAboutToBeInserted(const QModelIndex &parent, int start, int end);
+    void slotRowsAboutToBeMoved(const QModelIndex &sourceParent, int sourceStart, int sourceEnd, const QModelIndex &destinationParent, int destinationRow);
+    void slotRowsAboutToBeRemoved(const QModelIndex &parent, int start, int end);
+    void slotRowsInserted(const QModelIndex &parent, int start, int end);
+    void slotRowsMoved(const QModelIndex &sourceParent, int sourceStart, int sourceEnd, const QModelIndex &destinationParent, int destinationRow);
+    void slotRowsRemoved(const QModelIndex &parent, int start, int end);
 
 protected:
     virtual void createMapping();

@@ -42,7 +42,7 @@ ArtisticTextShapeConfigWidget::ArtisticTextShapeConfigWidget(ArtisticTextTool *t
     widget.fontSize->setRange( 2, 1000 );
 
     connect(widget.fontFamily, &QFontComboBox::currentFontChanged, this, &ArtisticTextShapeConfigWidget::fontFamilyChanged);
-    connect(widget.fontSize, SIGNAL(valueChanged(int)), this, SIGNAL(fontSizeChanged(int)));
+    connect(widget.fontSize, QOverload<int>::of(&QSpinBox::valueChanged), this, &ArtisticTextShapeConfigWidget::fontSizeChanged);
 }
 
 void ArtisticTextShapeConfigWidget::blockChildSignals( bool block )

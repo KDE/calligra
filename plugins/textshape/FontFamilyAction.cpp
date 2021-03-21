@@ -132,7 +132,7 @@ QWidget* KoFontFamilyAction::createWidget(QWidget* parent)
     cb->setCurrentFont( QFont( font().toLower() ) );
     debugTextShape << "\tspit back=" << cb->currentFont().family();
 
-    connect( cb, SIGNAL(currentFontChanged(QFont)), SLOT(_ko_slotFontChanged(QFont)) );
+    connect(cb, &KoFontComboBox::currentFontChanged, this, [this] (const QFont &ft) { d->_ko_slotFontChanged(ft); });
     cb->setMinimumWidth( cb->sizeHint().width() );
     return cb;
 }

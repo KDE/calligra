@@ -59,17 +59,17 @@ CharacterHighlighting::CharacterHighlighting(QWidget* parent)
     widget.strikethroughType->addItems(KoText::underlineTypeList()); //TODO make KoText consistent: either add strikethroughTypeList, or change from underlineTypeList to lineTypeList
     widget.strikethroughLineStyle->addItems(KoText::underlineStyleList()); //TODO idem
 
-    connect(widget.underlineStyle, SIGNAL(activated(int)), this, SLOT(underlineTypeChanged(int)));
-    connect(widget.underlineLineStyle, SIGNAL(activated(int)), this, SLOT(underlineStyleChanged(int)));
+    connect(widget.underlineStyle, QOverload<int>::of(&QComboBox::activated), this, &CharacterHighlighting::underlineTypeChanged);
+    connect(widget.underlineLineStyle, QOverload<int>::of(&QComboBox::activated), this, &CharacterHighlighting::underlineStyleChanged);
     connect(widget.underlineColor, &KColorButton::changed, this, &CharacterHighlighting::underlineColorChanged);
 
-    connect(widget.strikethroughType, SIGNAL(activated(int)), this, SLOT(strikethroughTypeChanged(int)));
-    connect(widget.strikethroughLineStyle, SIGNAL(activated(int)), this, SLOT(strikethroughStyleChanged(int)));
+    connect(widget.strikethroughType, QOverload<int>::of(&QComboBox::activated), this, &CharacterHighlighting::strikethroughTypeChanged);
+    connect(widget.strikethroughLineStyle, QOverload<int>::of(&QComboBox::activated), this, &CharacterHighlighting::strikethroughStyleChanged);
     connect(widget.strikethroughColor, &KColorButton::changed, this, &CharacterHighlighting::strikethroughColorChanged);
 
-    connect(widget.capitalizationList, SIGNAL(activated(int)), this, SLOT(capitalisationChanged(int)));
+    connect(widget.capitalizationList, QOverload<int>::of(&QComboBox::activated), this, &CharacterHighlighting::capitalisationChanged);
 
-    connect(widget.positionList, SIGNAL(activated(int)), this, SLOT(positionChanged(int)));
+    connect(widget.positionList, QOverload<int>::of(&QComboBox::activated), this, &CharacterHighlighting::positionChanged);
 
     connect(m_fontChooser, &KFontChooser::fontSelected, this, &CharacterHighlighting::fontChanged);
     connect(m_fontChooser, &KFontChooser::fontSelected, this, &CharacterHighlighting::charStyleChanged);
@@ -77,8 +77,8 @@ CharacterHighlighting::CharacterHighlighting(QWidget* parent)
     const QIcon clearIcon = koIcon("edit-clear");
     widget.resetTextColor->setIcon(clearIcon);
     widget.resetBackground->setIcon(clearIcon);
-    connect(widget.textColor, SIGNAL(changed(QColor)), this, SLOT(textColorChanged()));
-    connect(widget.backgroundColor, SIGNAL(changed(QColor)), this, SLOT(backgroundColorChanged()));
+    connect(widget.textColor, &KColorButton::changed, this, QOverload<>::of(&CharacterHighlighting::textColorChanged));
+    connect(widget.backgroundColor, &KColorButton::changed, this, QOverload<>::of(&CharacterHighlighting::backgroundColorChanged));
     connect(widget.resetTextColor, &QAbstractButton::clicked, this, &CharacterHighlighting::clearTextColor);
     connect(widget.resetBackground, &QAbstractButton::clicked, this, &CharacterHighlighting::clearBackgroundColor);
     connect(widget.enableText, &QAbstractButton::toggled, this, &CharacterHighlighting::textToggled);

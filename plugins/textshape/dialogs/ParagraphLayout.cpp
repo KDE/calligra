@@ -34,7 +34,7 @@ ParagraphLayout::ParagraphLayout(QWidget *parent)
     connect(widget.keepTogether, &QCheckBox::stateChanged, this, &ParagraphLayout::keepTogetherChanged);
     connect(widget.breakAfter, &QCheckBox::stateChanged, this, &ParagraphLayout::breakAfterChanged);
     connect(widget.breakBefore, &QCheckBox::stateChanged, this, &ParagraphLayout::breakBeforeChanged);
-    connect(widget.threshold, SIGNAL(valueChanged(int)), this, SLOT(thresholdValueChanged()));
+    connect(widget.threshold, QOverload<int>::of(&QSpinBox::valueChanged), this, &ParagraphLayout::thresholdValueChanged);
 }
 
 void ParagraphLayout::slotAlignChanged()

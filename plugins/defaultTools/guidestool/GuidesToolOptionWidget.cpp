@@ -36,8 +36,8 @@ GuidesToolOptionWidget::GuidesToolOptionWidget(QWidget *parent)
 
     widget.position->setUnit(m_unit);
 
-    connect(widget.orientation, SIGNAL(currentIndexChanged(int)),
-             this, SLOT(updateList(int)));
+    connect(widget.orientation, QOverload<int>::of(&QComboBox::currentIndexChanged),
+             this, &GuidesToolOptionWidget::updateList);
     connect(widget.positionList, &QListWidget::currentRowChanged,
              this, &GuidesToolOptionWidget::updatePosition);
     connect(widget.position, &KoUnitDoubleSpinBox::valueChangedPt,

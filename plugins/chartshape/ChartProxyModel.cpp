@@ -181,8 +181,9 @@ void ChartProxyModel::Private::rebuildDataMap()
 void ChartProxyModel::addTable(Table *table)
 {
     QAbstractItemModel *model = table->model();
-    connect(model, SIGNAL(dataChanged(QModelIndex,QModelIndex)),
-            this,  SLOT(dataChanged(QModelIndex,QModelIndex)));
+    
+    connect(model, &QAbstractItemModel::dataChanged,
+            this,  QOverload<const QModelIndex &, const QModelIndex &>::of(&ChartProxyModel::dataChanged));
 }
 
 void ChartProxyModel::removeTable(Table *table)

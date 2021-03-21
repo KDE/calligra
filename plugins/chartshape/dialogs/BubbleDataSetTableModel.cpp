@@ -210,7 +210,7 @@ void DataSetTableModel::setModel(QAbstractItemModel *m)
     }
     chartModel = qobject_cast<ChartProxyModel*>(m);
     Q_ASSERT(chartModel);
-    connect(chartModel, SIGNAL(dataChanged()), this, SLOT(chartModelChanged()));
+    connect(chartModel, QOverload<>::of(&ChartProxyModel::dataChanged), this, &DataSetTableModel::chartModelChanged);
     connect(chartModel, &QAbstractItemModel::modelReset, this, &DataSetTableModel::chartModelChanged);
 }
 

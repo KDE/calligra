@@ -96,18 +96,18 @@ private Q_SLOTS:
     void ui_chartOrientationChanged(int value);
 
 Q_SIGNALS:
-    void chartTypeChanged(ChartType type, ChartSubtype subType);
-    void chartSubTypeChanged(ChartSubtype subType);
+    void chartTypeChanged(KoChart::ChartType type, KoChart::ChartSubtype subType);
+    void chartSubTypeChanged(KoChart::ChartSubtype subType);
 
     void threeDModeToggled(bool threeD);
     void chartOrientationChanged(Qt::Orientation);
 
 
-    void dataSetXDataRegionChanged(DataSet *dataSet, const CellRegion &region);
-    void dataSetYDataRegionChanged(DataSet *dataSet, const CellRegion &region);
-    void dataSetCustomDataRegionChanged(DataSet *dataSet, const CellRegion &region);
-    void dataSetCategoryDataRegionChanged(DataSet *dataSet, const CellRegion &region);
-    void dataSetLabelDataRegionChanged(DataSet *dataSet, const CellRegion &region);
+    void dataSetXDataRegionChanged(KoChart::DataSet *dataSet, const KoChart::CellRegion &region);
+    void dataSetYDataRegionChanged(KoChart::DataSet *dataSet, const KoChart::CellRegion &region);
+    void dataSetCustomDataRegionChanged(KoChart::DataSet *dataSet, const KoChart::CellRegion &region);
+    void dataSetCategoryDataRegionChanged(KoChart::DataSet *dataSet, const KoChart::CellRegion &region);
+    void dataSetLabelDataRegionChanged(KoChart::DataSet *dataSet, const KoChart::CellRegion &region);
 
 private:
     void setupWidgets();

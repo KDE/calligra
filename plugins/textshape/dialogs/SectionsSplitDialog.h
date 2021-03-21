@@ -38,7 +38,7 @@ private Q_SLOTS:
     void beforeListSelection();
     void afterListSelection();
 
-    void okClicked();
+    void slotOkClicked();
 
 private:
     Ui::SectionsSplitDialog m_widget;

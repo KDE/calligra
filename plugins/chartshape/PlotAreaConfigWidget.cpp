@@ -306,7 +306,7 @@ PlotAreaConfigWidget::PlotAreaConfigWidget()
     connect(d->ui.threeDLook, &QAbstractButton::toggled,
             this,             &PlotAreaConfigWidget::setThreeDMode);
 
-    connect(d->ui.chartOrientation, SIGNAL(currentIndexChanged(int)), this, SLOT(ui_chartOrientationChanged(int)));
+    connect(d->ui.chartOrientation, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &PlotAreaConfigWidget::ui_chartOrientationChanged);
 
     setupDialogs();
     createActions();
@@ -715,8 +715,8 @@ void PlotAreaConfigWidget::slotShowTableEditor()
 //                             this, SLOT(ui_dataSetCustomDataRegionChanged(QString)));
                     connect(d->cellRegionDialog->categoryDataRegion, &QLineEdit::editingFinished,
                             this, &PlotAreaConfigWidget::ui_dataSetCategoryDataRegionChanged);
-                    connect(d->cellRegionDialog->dataSets, SIGNAL(currentIndexChanged(int)),
-                            this, SLOT(ui_dataSetSelectionChanged_CellRegionDialog(int)));
+                    connect(d->cellRegionDialog->dataSets, QOverload<int>::of(&QComboBox::currentIndexChanged),
+                            this, &PlotAreaConfigWidget::ui_dataSetSelectionChanged_CellRegionDialog);
                 }
                 d->cellRegionDialog->show();
                 d->cellRegionDialog->raise();
@@ -731,7 +731,7 @@ void PlotAreaConfigWidget::slotShowTableEditor()
                 if (!dlg) {
                     dlg = new PieDataEditor(this);
                     dlg->setModel(chart->internalModel());
-                    connect(dlg, SIGNAL(finished()), dlg, SLOT(hide()));
+                    connect(dlg, QOverload<>::of(&KoDialog::finished), dlg, &KoDialog::hide);
                 }
                 dlg->show();
                 dlg->raise();
@@ -741,7 +741,7 @@ void PlotAreaConfigWidget::slotShowTableEditor()
                 BubbleDataEditor *dlg = findChildren<BubbleDataEditor*>().value(0);
                 if (!dlg) {
                     dlg = new BubbleDataEditor(chart, this);
-                    connect(dlg, SIGNAL(finished()), dlg, SLOT(hide()));
+                    connect(dlg, QOverload<>::of(&KoDialog::finished), dlg, &KoDialog::hide);
                     connect(dlg, &BubbleDataEditor::xDataChanged, this, &PlotAreaConfigWidget::dataSetXDataRegionChanged);
                     connect(dlg, &BubbleDataEditor::yDataChanged, this, &PlotAreaConfigWidget::dataSetYDataRegionChanged);
                     connect(dlg, &BubbleDataEditor::bubbleDataChanged, this, &PlotAreaConfigWidget::dataSetCustomDataRegionChanged);
@@ -754,7 +754,7 @@ void PlotAreaConfigWidget::slotShowTableEditor()
                 ScatterDataEditor *dlg = findChildren<ScatterDataEditor*>().value(0);
                 if (!dlg) {
                     dlg = new ScatterDataEditor(chart, this);
-                    connect(dlg, SIGNAL(finished()), dlg, SLOT(hide()));
+                    connect(dlg, QOverload<>::of(&KoDialog::finished), dlg, &KoDialog::hide);
                     connect(dlg, &ScatterDataEditor::xDataChanged, this, &PlotAreaConfigWidget::dataSetXDataRegionChanged);
                     connect(dlg, &ScatterDataEditor::yDataChanged, this, &PlotAreaConfigWidget::dataSetYDataRegionChanged);
                 }
@@ -766,7 +766,7 @@ void PlotAreaConfigWidget::slotShowTableEditor()
                 StockDataEditor *dlg = findChildren<StockDataEditor*>().value(0);
                 if (!dlg) {
                     dlg = new StockDataEditor(chart, this);
-                    connect(dlg, SIGNAL(finished()), dlg, SLOT(hide()));
+                    connect(dlg, QOverload<>::of(&KoDialog::finished), dlg, &KoDialog::hide);
 //                     connect(dlg, &StockDataEditor::xDataChanged, this, &PlotAreaConfigWidget::dataSetXDataRegionChanged);
 //                     connect(dlg, &StockDataEditor::yDataChanged, this, &PlotAreaConfigWidget::dataSetYDataRegionChanged);
                 }

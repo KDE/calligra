@@ -133,16 +133,16 @@ ComponentTransferEffectConfigWidget::ComponentTransferEffectConfigWidget(QWidget
 
     setLayout(g);
 
-    connect(m_function, SIGNAL(currentIndexChanged(int)), m_stack, SLOT(setCurrentIndex(int)));
-    connect(m_function, SIGNAL(currentIndexChanged(int)), this, SLOT(functionChanged(int)));
+    connect(m_function, QOverload<int>::of(&KComboBox::currentIndexChanged), m_stack, &QStackedWidget::setCurrentIndex);
+    connect(m_function, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &ComponentTransferEffectConfigWidget::functionChanged);
     connect(m_tableValues, &QLineEdit::editingFinished, this, &ComponentTransferEffectConfigWidget::tableValuesChanged);
     connect(m_discreteValues, &QLineEdit::editingFinished, this, &ComponentTransferEffectConfigWidget::discreteValuesChanged);
-    connect(m_slope, SIGNAL(valueChanged(double)), this, SLOT(slopeChanged(double)));
-    connect(m_intercept, SIGNAL(valueChanged(double)), this, SLOT(interceptChanged(double)));
-    connect(m_amplitude, SIGNAL(valueChanged(double)), this, SLOT(amplitudeChanged(double)));
-    connect(m_exponent, SIGNAL(valueChanged(double)), this, SLOT(exponentChanged(double)));
-    connect(m_offset, SIGNAL(valueChanged(double)), this, SLOT(offsetChanged(double)));
-    connect(group, SIGNAL(buttonClicked(int)), this, SLOT(channelSelected(int)));
+    connect(m_slope, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &ComponentTransferEffectConfigWidget::slopeChanged);
+    connect(m_intercept, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &ComponentTransferEffectConfigWidget::interceptChanged);
+    connect(m_amplitude, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &ComponentTransferEffectConfigWidget::amplitudeChanged);
+    connect(m_exponent, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &ComponentTransferEffectConfigWidget::exponentChanged);
+    connect(m_offset, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &ComponentTransferEffectConfigWidget::offsetChanged);
+    connect(group, QOverload<int>::of(&QButtonGroup::buttonClicked), this, &ComponentTransferEffectConfigWidget::channelSelected);
 }
 
 void ComponentTransferEffectConfigWidget::updateControls()

@@ -105,7 +105,7 @@ Thesaurus::Thesaurus()
     editLabel.setBuddy(m_edit);
 
     m_search = new QPushButton(i18n("S&earch"), page);
-    connect(m_search, SIGNAL(clicked()), this, SLOT(slotFindTerm()));
+    connect(m_search, &QPushButton::clicked, this, QOverload<>::of(&Thesaurus::slotFindTerm));
     row1->addWidget(&editLabel, 0);
     row1->addWidget(m_edit, 1);
     row1->addWidget(m_search, 0);
@@ -187,7 +187,7 @@ Thesaurus::Thesaurus()
     m_wnComboBox = new KComboBox(wnWidget);
     m_wnComboBox->setEditable(false);
     wnLayout->addWidget(m_wnComboBox);
-    connect(m_wnComboBox, SIGNAL(activated(int)), this, SLOT(slotFindTerm()));
+    connect(m_wnComboBox, QOverload<int>::of(&QComboBox::activated), this, QOverload<>::of(&Thesaurus::slotFindTerm));
 
     m_resultTextBrowser = new QTextBrowser(wnWidget);
     m_resultTextBrowser->setReadOnly(true);
@@ -196,8 +196,8 @@ Thesaurus::Thesaurus()
 
     // Connect for the history box
     m_edit->setTrapReturnKey(true);        // Do not use Return as default key...
-    connect(m_edit, SIGNAL(returnPressed()), this, SLOT(slotFindTerm()));
-    connect(m_edit, SIGNAL(activated(int)), this, SLOT(slotGotoHistory(int)));
+    connect(m_edit, QOverload<>::of(&KHistoryComboBox::returnPressed), this, QOverload<>::of(&Thesaurus::slotFindTerm));
+    connect(m_edit, QOverload<int>::of(&KHistoryComboBox::activated), this, &Thesaurus::slotGotoHistory);
 
     QHBoxLayout *row2 = new QHBoxLayout( /*m_top_layout*/ );
     topLayout->addLayout(row2);

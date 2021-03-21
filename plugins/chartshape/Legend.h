@@ -79,7 +79,7 @@ Q_SIGNALS:
     void updateConfigWidget();
 
 private Q_SLOTS:
-    void slotChartTypeChanged(ChartType chartType );
+    void slotChartTypeChanged(KoChart::ChartType chartType );
     void slotKdLegendChanged();
 
 private:

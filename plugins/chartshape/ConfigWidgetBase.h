@@ -79,7 +79,7 @@ public:
 
     /// Reimplement if you open any dialogs
     /// This is called from close()
-    virtual void deleteSubDialogs(ChartType type = LastChartType) {Q_UNUSED(type)}
+    virtual void deleteSubDialogs(KoChart::ChartType type = LastChartType) {Q_UNUSED(type)}
 
     void blockSignals(bool block) {
         blockSignals(this, block);
@@ -95,7 +95,7 @@ public:
     ChartShape *chart;
 
 private Q_SLOTS:
-    void removeSubDialogs(ChartType type, ChartType prev = LastChartType) {
+    void removeSubDialogs(KoChart::ChartType type, KoChart::ChartType prev = LastChartType) {
         if (type != prev) {
             deleteSubDialogs();
         }

@@ -52,9 +52,9 @@ public:
 
 Q_SIGNALS:
     void labelChanged();
-    void xDataChanged(DataSet *dataSet, const CellRegion &region);
-    void yDataChanged(DataSet *dataSet, const CellRegion &region);
-    void bubbleDataChanged(DataSet *dataSet, const CellRegion &region);
+    void xDataChanged(KoChart::DataSet *dataSet, const KoChart::CellRegion &region);
+    void yDataChanged(KoChart::DataSet *dataSet, const KoChart::CellRegion &region);
+    void bubbleDataChanged(KoChart::DataSet *dataSet, const KoChart::CellRegion &region);
 
 protected Q_SLOTS:
     void slotInsertColumnBefore();

@@ -50,13 +50,13 @@ CompositeEffectConfigWidget::CompositeEffectConfigWidget(QWidget *parent)
         m_k[i] = new QDoubleSpinBox(m_arithmeticWidget);
         arithmeticLayout->addWidget(new QLabel(QString("k%1").arg(i + 1)), i / 2, (2*i) % 4);
         arithmeticLayout->addWidget(m_k[i], i / 2, (2*i + 1) % 4);
-        connect(m_k[i], SIGNAL(valueChanged(double)), this, SLOT(valueChanged()));
+        connect(m_k[i], QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &CompositeEffectConfigWidget::valueChanged);
     }
     m_arithmeticWidget->setContentsMargins(0, 0, 0, 0);
     g->addWidget(m_arithmeticWidget, 1, 0, 1, 2);
     g->addItem(new QSpacerItem(0, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding), 2, 0);
 
-    connect(m_operation, SIGNAL(currentIndexChanged(int)), this, SLOT(operationChanged(int)));
+    connect(m_operation, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &CompositeEffectConfigWidget::operationChanged);
 }
 
 bool CompositeEffectConfigWidget::editFilterEffect(KoFilterEffect * filterEffect)

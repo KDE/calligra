@@ -131,25 +131,25 @@ void StylesFilteredModelBase::setStylesModel(AbstractStylesModel *sourceModel)
         return;
     }
     if (m_sourceModel) {
-        disconnect(m_sourceModel, SIGNAL(rowsAboutToBeInserted(QModelIndex,int,int)), this, SLOT(rowsAboutToBeInserted(QModelIndex,int,int)));
-        disconnect(m_sourceModel, SIGNAL(rowsAboutToBeMoved(QModelIndex,int,int,QModelIndex,int)), this, SLOT(rowsAboutToBeMoved(QModelIndex,int,int,QModelIndex,int)));
-        disconnect(m_sourceModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)), this, SLOT(rowsAboutToBeRemoved(QModelIndex,int,int)));
-        disconnect(m_sourceModel, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(rowsInserted(QModelIndex,int,int)));
-        disconnect(m_sourceModel, SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)), this, SLOT(rowsMoved(QModelIndex,int,int,QModelIndex,int)));
-        disconnect(m_sourceModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), this, SLOT(rowsRemoved(QModelIndex,int,int)));
-        disconnect(m_sourceModel, SIGNAL(modelAboutToBeReset()), this, SLOT(modelAboutToBeReset()));
-        disconnect(m_sourceModel, SIGNAL(modelReset()), this, SLOT(modelReset()));
+        disconnect(m_sourceModel, &AbstractStylesModel::rowsAboutToBeInserted, this, &StylesFilteredModelBase::slotRowsAboutToBeInserted);
+        disconnect(m_sourceModel, &AbstractStylesModel::rowsAboutToBeMoved, this, &StylesFilteredModelBase::slotRowsAboutToBeMoved);
+        disconnect(m_sourceModel, &AbstractStylesModel::rowsAboutToBeRemoved, this, &StylesFilteredModelBase::slotRowsAboutToBeRemoved);
+        disconnect(m_sourceModel, &AbstractStylesModel::rowsInserted, this, &StylesFilteredModelBase::slotRowsInserted);
+        disconnect(m_sourceModel, &AbstractStylesModel::rowsMoved, this, &StylesFilteredModelBase::slotRowsMoved);
+        disconnect(m_sourceModel, &AbstractStylesModel::rowsRemoved, this, &StylesFilteredModelBase::slotRowsRemoved);
+        disconnect(m_sourceModel, &AbstractStylesModel::modelAboutToBeReset, this, &StylesFilteredModelBase::slotModelAboutToBeReset);
+        disconnect(m_sourceModel, &AbstractStylesModel::modelReset, this, &StylesFilteredModelBase::slotModelReset);
     }
 
     m_sourceModel = sourceModel;
-    connect(m_sourceModel, SIGNAL(rowsAboutToBeInserted(QModelIndex,int,int)), this, SLOT(rowsAboutToBeInserted(QModelIndex,int,int)));
-    connect(m_sourceModel, SIGNAL(rowsAboutToBeMoved(QModelIndex,int,int,QModelIndex,int)), this, SLOT(rowsAboutToBeMoved(QModelIndex,int,int,QModelIndex,int)));
-    connect(m_sourceModel, SIGNAL(rowsAboutToBeRemoved(QModelIndex,int,int)), this, SLOT(rowsAboutToBeRemoved(QModelIndex,int,int)));
-    connect(m_sourceModel, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(rowsInserted(QModelIndex,int,int)));
-    connect(m_sourceModel, SIGNAL(rowsMoved(QModelIndex,int,int,QModelIndex,int)), this, SLOT(rowsMoved(QModelIndex,int,int,QModelIndex,int)));
-    connect(m_sourceModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), this, SLOT(rowsRemoved(QModelIndex,int,int)));
-    connect(m_sourceModel, SIGNAL(modelAboutToBeReset()), this, SLOT(modelAboutToBeReset()));
-    connect(m_sourceModel, SIGNAL(modelReset()), this, SLOT(modelReset()));
+    connect(m_sourceModel, &AbstractStylesModel::rowsAboutToBeInserted, this, &StylesFilteredModelBase::slotRowsAboutToBeInserted);
+    connect(m_sourceModel, &AbstractStylesModel::rowsAboutToBeMoved, this, &StylesFilteredModelBase::slotRowsAboutToBeMoved);
+    connect(m_sourceModel, &AbstractStylesModel::rowsAboutToBeRemoved, this, &StylesFilteredModelBase::slotRowsAboutToBeRemoved);
+    connect(m_sourceModel, &AbstractStylesModel::rowsInserted, this, &StylesFilteredModelBase::slotRowsInserted);
+    connect(m_sourceModel, &AbstractStylesModel::rowsMoved, this, &StylesFilteredModelBase::slotRowsMoved);
+    connect(m_sourceModel, &AbstractStylesModel::rowsRemoved, this, &StylesFilteredModelBase::slotRowsRemoved);
+    connect(m_sourceModel, &AbstractStylesModel::modelAboutToBeReset, this, &StylesFilteredModelBase::slotModelAboutToBeReset);
+    connect(m_sourceModel, &AbstractStylesModel::modelReset, this, &StylesFilteredModelBase::slotModelReset);
 
     beginResetModel();
     createMapping();
@@ -162,18 +162,18 @@ AbstractStylesModel::Type StylesFilteredModelBase::stylesType() const
     return m_sourceModel->stylesType();
 }
 
-void StylesFilteredModelBase::modelAboutToBeReset()
+void StylesFilteredModelBase::slotModelAboutToBeReset()
 {
     beginResetModel();
 }
 
-void StylesFilteredModelBase::modelReset()
+void StylesFilteredModelBase::slotModelReset()
 {
     createMapping();
     endResetModel();
 }
 
-void StylesFilteredModelBase::rowsAboutToBeInserted(const QModelIndex &parent, int start, int end)
+void StylesFilteredModelBase::slotRowsAboutToBeInserted(const QModelIndex &parent, int start, int end)
 {
     Q_UNUSED(parent);
     Q_UNUSED(start);
@@ -181,7 +181,7 @@ void StylesFilteredModelBase::rowsAboutToBeInserted(const QModelIndex &parent, i
     beginResetModel(); //TODO instead of resetting the whole thing, implement proper logic. this will do for a start, there shouldn't be too many styles anyway
 }
 
-void StylesFilteredModelBase::rowsInserted(const QModelIndex &parent, int start, int end)
+void StylesFilteredModelBase::slotRowsInserted(const QModelIndex &parent, int start, int end)
 {
     Q_UNUSED(parent);
     Q_UNUSED(start);
@@ -190,7 +190,7 @@ void StylesFilteredModelBase::rowsInserted(const QModelIndex &parent, int start,
     endResetModel();
 }
 
-void StylesFilteredModelBase::rowsAboutToBeMoved(const QModelIndex &sourceParent, int sourceStart, int sourceEnd, const QModelIndex &destinationParent, int destinationRow)
+void StylesFilteredModelBase::slotRowsAboutToBeMoved(const QModelIndex &sourceParent, int sourceStart, int sourceEnd, const QModelIndex &destinationParent, int destinationRow)
 {
     Q_UNUSED(sourceParent);
     Q_UNUSED(sourceStart);
@@ -200,7 +200,7 @@ void StylesFilteredModelBase::rowsAboutToBeMoved(const QModelIndex &sourceParent
     beginResetModel(); //TODO instead of resetting the whole thing, implement proper logic. this will do for a start, there shouldn't be too many styles anyway
 }
 
-void StylesFilteredModelBase::rowsMoved(const QModelIndex &sourceParent, int sourceStart, int sourceEnd, const QModelIndex &destinationParent, int destinationRow)
+void StylesFilteredModelBase::slotRowsMoved(const QModelIndex &sourceParent, int sourceStart, int sourceEnd, const QModelIndex &destinationParent, int destinationRow)
 {
     Q_UNUSED(sourceParent);
     Q_UNUSED(sourceStart);
@@ -211,7 +211,7 @@ void StylesFilteredModelBase::rowsMoved(const QModelIndex &sourceParent, int sou
     endResetModel();
 }
 
-void StylesFilteredModelBase::rowsAboutToBeRemoved(const QModelIndex &parent, int start, int end)
+void StylesFilteredModelBase::slotRowsAboutToBeRemoved(const QModelIndex &parent, int start, int end)
 {
     Q_UNUSED(parent);
     Q_UNUSED(start);
@@ -219,7 +219,7 @@ void StylesFilteredModelBase::rowsAboutToBeRemoved(const QModelIndex &parent, in
     beginResetModel(); //TODO instead of resetting the whole thing, implement proper logic. this will do for a start, there shouldn't be too many styles anyway
 }
 
-void StylesFilteredModelBase::rowsRemoved(const QModelIndex &parent, int start, int end)
+void StylesFilteredModelBase::slotRowsRemoved(const QModelIndex &parent, int start, int end)
 {
     Q_UNUSED(parent);
     Q_UNUSED(start);

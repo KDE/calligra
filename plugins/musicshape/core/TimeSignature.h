@@ -82,11 +82,11 @@ public Q_SLOTS:
     /**
      * Changes the type of the time signature.
      */
-    void setType(TimeSignatureType type);
+    void setType(MusicCore::TimeSignature::TimeSignatureType type);
 Q_SIGNALS:
     void beatsChanged(int beats);
     void beatChanged(int beat);
-    void typeChanged(TimeSignatureType type);
+    void typeChanged(MusicCore::TimeSignature::TimeSignatureType type);
 private:
     class Private;
     Private * const d;

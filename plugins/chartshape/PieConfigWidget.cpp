@@ -77,14 +77,15 @@ void PieConfigWidget::init()
     setObjectName("PieConfigWidget");
     m_ui.setupUi(this);
 
-    connect(m_ui.dataPoints, SIGNAL(currentIndexChanged(int)), this, SLOT(dataPointSelectionChanged(int)));
-    connect(m_ui.dataPointBrush, SIGNAL(changed(QColor)), this, SLOT(brushChanged(QColor)));
-    connect(m_ui.dataPointPen, SIGNAL(changed(QColor)), this, SLOT(penChanged(QColor)));
-    connect(m_ui.explodeFactor, SIGNAL(valueChanged(int)), this, SLOT(explodeFactorChanged(int)));
-    connect(m_ui.dataPointShowCategory, SIGNAL(toggled(bool)), this, SLOT(showCategoryChanged(bool)));
-    connect(m_ui.dataPointShowNumber, SIGNAL(toggled(bool)), this, SLOT(showNumberChanged(bool)));
-    connect(m_ui.dataPointShowPercent, SIGNAL(toggled(bool)), this, SLOT(showPercentChanged(bool)));
+    connect(m_ui.dataPoints, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &PieConfigWidget::dataPointSelectionChanged);
+    connect(m_ui.dataPointBrush, &KColorButton::changed, this, QOverload<const QColor &>::of(&PieConfigWidget::brushChanged));
+    connect(m_ui.dataPointPen, &KColorButton::changed, this, QOverload<const QColor &>::of(&PieConfigWidget::penChanged));
+    connect(m_ui.explodeFactor, QOverload<int>::of(&QSpinBox::valueChanged), this, QOverload<int>::of(&PieConfigWidget::explodeFactorChanged));
+    connect(m_ui.dataPointShowCategory, &QCheckBox::toggled, this, QOverload<bool>::of(&PieConfigWidget::showCategoryChanged));
+    connect(m_ui.dataPointShowNumber, &QCheckBox::toggled, this, QOverload<bool>::of(&PieConfigWidget::showNumberChanged));
+    connect(m_ui.dataPointShowPercent, &QCheckBox::toggled, this, QOverload<bool>::of(&PieConfigWidget::showPercentChanged));
 }
+
 void PieConfigWidget::open(ChartShape* shape)
 {
     ConfigSubWidgetBase::open(shape);

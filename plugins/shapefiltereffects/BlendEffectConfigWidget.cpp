@@ -44,7 +44,7 @@ BlendEffectConfigWidget::BlendEffectConfigWidget(QWidget *parent)
 
     setLayout(g);
 
-    connect(m_mode, SIGNAL(currentIndexChanged(int)), this, SLOT(modeChanged(int)));
+    connect(m_mode, QOverload<int>::of(&KComboBox::currentIndexChanged), this, &BlendEffectConfigWidget::modeChanged);
 }
 
 bool BlendEffectConfigWidget::editFilterEffect(KoFilterEffect * filterEffect)

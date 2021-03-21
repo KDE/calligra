@@ -288,9 +288,6 @@ private Q_SLOTS:
     /// insert string
     void insertString(const QString &string);
 
-    /// returns the focus to canvas when styles are selected in the optionDocker
-    void returnFocusToCanvas();
-
     void selectFont();
     void shapeAddedToCanvas();
 
@@ -319,6 +316,10 @@ private Q_SLOTS:
     void textDirectionChanged();
 
     void updateActions();
+
+protected Q_SLOTS:
+    /// returns the focus to canvas when styles are selected in the optionDocker
+    void returnFocusToCanvas();
 
 private:
     void repaintCaret();

@@ -56,7 +56,7 @@ StylesCombo::StylesCombo(QWidget *parent)
     view()->viewport()->installEventFilter(this);
 
     StylesDelegate *delegate = new StylesDelegate();
-    connect(delegate, SIGNAL(needsUpdate(QModelIndex)), m_view, SLOT(update(QModelIndex)));
+    connect(delegate, &StylesDelegate::needsUpdate, m_view, QOverload<const QModelIndex &>::of(&QListView::update));
     connect(delegate, &StylesDelegate::styleManagerButtonClicked, this, &StylesCombo::slotShowDia);
     connect(delegate, &StylesDelegate::deleteStyleButtonClicked, this, &StylesCombo::slotDeleteStyle);
     connect(delegate, &StylesDelegate::clickedInItem, this, &StylesCombo::slotItemClicked);
@@ -207,7 +207,7 @@ void StylesCombo::showEditIcon(bool show){
     Q_ASSERT(delegate);
     if (!delegate) { //the following should never get called as we are creating a StylesDelegate on the constructor;
         StylesDelegate *delegate = new StylesDelegate();
-        connect(delegate, SIGNAL(needsUpdate(QModelIndex)), m_view, SLOT(update(QModelIndex)));
+        connect(delegate, &StylesDelegate::needsUpdate, m_view, QOverload<const QModelIndex &>::of(&QListView::update));
         connect(delegate, &StylesDelegate::styleManagerButtonClicked, this, &StylesCombo::slotShowDia);
         connect(delegate, &StylesDelegate::deleteStyleButtonClicked, this, &StylesCombo::slotDeleteStyle);
         connect(delegate, &StylesDelegate::clickedInItem, this, &StylesCombo::slotItemClicked);

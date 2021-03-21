@@ -77,14 +77,14 @@ void RingConfigWidget::init()
     setObjectName("RingConfigWidget");
     m_ui.setupUi(this);
 
-    connect(m_ui.categories, SIGNAL(currentIndexChanged(int)), this, SLOT(categorySelectionChanged(int)));
-    connect(m_ui.dataSets, SIGNAL(currentIndexChanged(int)), this, SLOT(dataSetSelectionChanged(int)));
-    connect(m_ui.dataSetBrush, SIGNAL(changed(QColor)), this, SLOT(brushChanged(QColor)));
-    connect(m_ui.dataSetPen, SIGNAL(changed(QColor)), this, SLOT(penChanged(QColor)));
-    connect(m_ui.explodeFactor, SIGNAL(valueChanged(int)), this, SLOT(explodeFactorChanged(int)));
-    connect(m_ui.dataSetShowCategory, SIGNAL(toggled(bool)), this, SLOT(showCategoryChanged(bool)));
-    connect(m_ui.dataSetShowNumber, SIGNAL(toggled(bool)), this, SLOT(showNumberChanged(bool)));
-    connect(m_ui.dataSetShowPercent, SIGNAL(toggled(bool)), this, SLOT(showPercentChanged(bool)));
+    connect(m_ui.categories,    QOverload<int>::of(&QComboBox::currentIndexChanged), this, &RingConfigWidget::categorySelectionChanged);
+    connect(m_ui.dataSets,      QOverload<int>::of(&QComboBox::currentIndexChanged), this, &RingConfigWidget::dataSetSelectionChanged);
+    connect(m_ui.dataSetPen,    &KColorButton::changed, this, QOverload<const QColor &>::of(&RingConfigWidget::penChanged));
+    connect(m_ui.dataSetBrush,  &KColorButton::changed, this, QOverload<const QColor &>::of(&RingConfigWidget::brushChanged));
+    connect(m_ui.explodeFactor, QOverload<int>::of(&QSpinBox::valueChanged), this, QOverload<int>::of(&RingConfigWidget::explodeFactorChanged));
+    connect(m_ui.dataSetShowCategory,   &QCheckBox::toggled, this, QOverload<bool>::of(&RingConfigWidget::showCategoryChanged));
+    connect(m_ui.dataSetShowNumber,     &QCheckBox::toggled, this, QOverload<bool>::of(&RingConfigWidget::showNumberChanged));
+    connect(m_ui.dataSetShowPercent,    &QCheckBox::toggled, this, QOverload<bool>::of(&RingConfigWidget::showPercentChanged));
 }
 void RingConfigWidget::open(ChartShape* shape)
 {

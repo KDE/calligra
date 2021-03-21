@@ -330,7 +330,6 @@ void VideoData::copyToTemporary(QIODevice &device)
     d->key = VideoData::generateKey(md5.result());
     d->temporaryFile->close();
 
-    QFileInfo fi(*(d->temporaryFile));
     d->dataStoreState = StateSpooled;
 }
 

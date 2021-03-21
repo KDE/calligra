@@ -143,10 +143,10 @@ void ReferencesTool::createActions()
 
     wAction = new QWidgetAction(this);
     wAction->setText(i18n("Insert Labeled Footnote"));
-    QWidget *w = new LabeledWidget(wAction, i18n("Insert with label:"), LabeledWidget::INLINE, false);
+    LabeledWidget *w = new LabeledWidget(wAction, i18n("Insert with label:"), LabeledWidget::INLINE, false);
     wAction->setDefaultWidget(w);
     addAction("insert_labeledfootnote", wAction);
-    connect(w, SIGNAL(triggered(QString)), this, SLOT(insertLabeledFootNote(QString)));
+    connect(w, &LabeledWidget::triggered, this, &ReferencesTool::insertLabeledFootNote);
 
     action = new QAction(i18n("Insert endnote with auto number"),this);
     addAction("insert_autoendnote",action);
@@ -156,7 +156,8 @@ void ReferencesTool::createActions()
     wAction->setText(i18n("Insert Labeled Endnote"));
     w = new LabeledWidget(wAction, i18n("Insert with label:"), LabeledWidget::INLINE, false);
     wAction->setDefaultWidget(w);
-    addAction("insert_labeledendnote", wAction); connect(w, SIGNAL(triggered(QString)), this, SLOT(insertLabeledEndNote(QString)));
+    addAction("insert_labeledendnote", wAction);
+    connect(w, &LabeledWidget::triggered, this, &ReferencesTool::insertLabeledEndNote);
 
     action = new QAction(koIcon("configure"), i18n("Settings..."), this);
     addAction("format_footnotes",action);
@@ -230,15 +231,15 @@ QList<QPointer<QWidget> > ReferencesTool::createOptionWidgets()
 
     m_slw = new SimpleLinksWidget(this, 0);
     // Connect to/with simple table of contents option widget
-    connect(m_stocw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
+    connect(m_stocw, &SimpleTableOfContentsWidget::doneWithFocus, this, &ReferencesTool::returnFocusToCanvas);
 
     // Connect to/with simple citation index option widget
     //connect(scw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
 
     // Connect to/with simple citation index option widget
-    connect(m_sfenw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
+    connect(m_sfenw, &SimpleFootEndNotesWidget::doneWithFocus, this, &ReferencesTool::returnFocusToCanvas);
 
-    connect(m_slw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
+    connect(m_slw, &SimpleLinksWidget::doneWithFocus, this, &ReferencesTool::returnFocusToCanvas);
 
     m_stocw->setWindowTitle(i18nc("as in table of contents, list of pictures, index", "Tables, Lists & Indexes"));
     widgets.append(m_stocw);

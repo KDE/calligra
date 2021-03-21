@@ -31,8 +31,9 @@ CitationInsertionDialog::CitationInsertionDialog(KoTextEditor *editor ,QWidget *
     m_editor(editor)
 {
     dialog.setupUi(this);
-    connect(dialog.buttonBox,&QDialogButtonBox::accepted,this,&CitationInsertionDialog::insert);
-    connect(dialog.existingCites,SIGNAL(currentIndexChanged(QString)),this,SLOT(selectionChangedFromExistingCites()));
+    connect(dialog.buttonBox, &QDialogButtonBox::accepted, this, &CitationInsertionDialog::insert);
+    connect(dialog.existingCites, QOverload<const QString &>::of(&KComboBox::currentIndexChanged),
+            this, &CitationInsertionDialog::selectionChangedFromExistingCites);
 
     QStringList existingCites(i18n("Select"));
     for (KoInlineCite *cite: KoTextDocument(m_editor->document()).inlineTextObjectManager()->citations()) {

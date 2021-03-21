@@ -52,8 +52,8 @@ InsertCharacter::InsertCharacter(QWidget *parent)
     setFloating(true);
 
     connect(close, &QAbstractButton::released, this, &QWidget::hide);
-    connect(insert, SIGNAL(released()), this, SLOT(insertCharacter()));
-    connect(m_charSelector, SIGNAL(charSelected(QChar)), this, SLOT(insertCharacter()));
+    connect(insert, &QPushButton::released, this, QOverload<>::of(&InsertCharacter::insertCharacter));
+    connect(m_charSelector, &KCharSelect::charSelected, this, QOverload<>::of(&InsertCharacter::insertCharacter));
 }
 
 void InsertCharacter::insertCharacter()

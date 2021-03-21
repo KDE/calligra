@@ -76,7 +76,7 @@ Q_SIGNALS:
     void legendShowLinesToggled(bool toggled);
     void legendOrientationChanged(Qt::Orientation orientation);
     void legendAlignmentChanged(Qt::Alignment alignment);
-    void legendPositionChanged(Position position);
+    void legendPositionChanged(KoChart::Position position);
 
 private Q_SLOTS:
     void ui_legendEditFontButtonClicked();

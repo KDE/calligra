@@ -57,9 +57,9 @@ MorphologyEffectConfigWidget::MorphologyEffectConfigWidget(QWidget *parent)
 
     setLayout(g);
 
-    connect(m_operator, SIGNAL(buttonClicked(int)), this, SLOT(operatorChanged(int)));
-    connect(m_radiusX, SIGNAL(valueChanged(double)), this, SLOT(radiusXChanged(double)));
-    connect(m_radiusY, SIGNAL(valueChanged(double)), this, SLOT(radiusYChanged(double)));
+    connect(m_operator, QOverload<int>::of(&QButtonGroup::buttonClicked), this, &MorphologyEffectConfigWidget::operatorChanged);
+    connect(m_radiusX, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &MorphologyEffectConfigWidget::radiusXChanged);
+    connect(m_radiusY, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &MorphologyEffectConfigWidget::radiusYChanged);
 }
 
 bool MorphologyEffectConfigWidget::editFilterEffect(KoFilterEffect * filterEffect)

@@ -39,7 +39,7 @@ BlurEffectConfigWidget::BlurEffectConfigWidget(QWidget *parent)
     g->addWidget(m_stdDeviation, 0, 1);
     setLayout(g);
 
-    connect(m_stdDeviation, SIGNAL(valueChanged(double)), this, SLOT(stdDeviationChanged(double)));
+    connect(m_stdDeviation, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &BlurEffectConfigWidget::stdDeviationChanged);
 }
 
 bool BlurEffectConfigWidget::editFilterEffect(KoFilterEffect * filterEffect)

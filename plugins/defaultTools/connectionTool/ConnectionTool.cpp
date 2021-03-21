@@ -833,8 +833,8 @@ QList<QPointer<QWidget> > ConnectionTool::createOptionWidgets()
             connect(cw, &KoShapeConfigWidgetBase::propertyChanged, this, &ConnectionTool::connectionChanged);
             KoConnectionShapeConfigWidget* cw2 = (KoConnectionShapeConfigWidget*)cw;
             if (cw2) {
-                connect(cw2, SIGNAL(connectionTypeChanged(int)), this, SLOT(getConnectionType(int)));
-                connect(this, SIGNAL(sendConnectionType(int)), cw2, SLOT(setConnectionType(int)));
+                connect(cw2, &KoConnectionShapeConfigWidget::connectionTypeChanged, this, &ConnectionTool::getConnectionType);
+                connect(this, &ConnectionTool::sendConnectionType, cw2, &KoConnectionShapeConfigWidget::setConnectionType);
             }
             m_connectionShapeWidgets.append(cw);
             cw->setWindowTitle(i18n("Connection"));

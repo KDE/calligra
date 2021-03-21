@@ -76,8 +76,8 @@ ParagraphGeneral::ParagraphGeneral(QWidget *parent)
 
     widget.preview->setText(QString("Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."));
 
-    connect(widget.name, SIGNAL(textChanged(QString)), this, SIGNAL(nameChanged(QString)));
-    connect(widget.nextStyle, SIGNAL(currentIndexChanged(int)), this, SIGNAL(styleChanged()));
+    connect(widget.name, &QLineEdit::textChanged, this, QOverload<const QString &>::of(&ParagraphGeneral::nameChanged));
+    connect(widget.nextStyle, QOverload<int>::of(&StylesCombo::currentIndexChanged), this, &ParagraphGeneral::styleChanged);
 
     connect(this, &CharacterGeneral::styleChanged, this, &ParagraphGeneral::setPreviewParagraphStyle);
 }
@@ -85,7 +85,7 @@ ParagraphGeneral::ParagraphGeneral(QWidget *parent)
 void ParagraphGeneral::hideStyleName(bool hide)
 {
     if (hide) {
-        disconnect(widget.name, SIGNAL(textChanged(QString)), this, SIGNAL(nameChanged(QString)));
+        disconnect(widget.name, &QLineEdit::textChanged, this, QOverload<const QString &>::of(&ParagraphGeneral::nameChanged));
         widget.tabs->removeTab(0);
         m_nameHidden = true;
     }
@@ -101,7 +101,7 @@ void ParagraphGeneral::selectName()
 void ParagraphGeneral::setStyle(KoParagraphStyle *style, int level, bool directFormattingMode)
 {
     m_style = style;
-    if (m_style == 0)
+    if (m_style == nullptr)
         return;
 
     CharacterGeneral::setStyle(style, directFormattingMode);

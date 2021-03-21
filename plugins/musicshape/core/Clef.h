@@ -97,7 +97,7 @@ public Q_SLOTS:
      *
      * @param shape the new shape of the clef
      */
-    void setShape(ClefShape shape);
+    void setShape(MusicCore::Clef::ClefShape shape);
 
     /**
      * Changes the line the clef is displayed on. The bottom line is 1, each higher line +1.
@@ -116,7 +116,7 @@ Q_SIGNALS:
     /**
      * This signal is emitted whenever the shape of the clef changes.
      */
-    void shapeChanged(ClefShape shape);
+    void shapeChanged(MusicCore::Clef::ClefShape shape);
     
     /**
      * This signal is emitted whenever the line of the clef changes.

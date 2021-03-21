@@ -79,15 +79,15 @@ SimpleCharacterWidget::SimpleCharacterWidget(TextTool *tool, QWidget *parent)
     QComboBox *family = fontFamilyAction ? qobject_cast<QComboBox*> (fontFamilyAction->requestWidget(this)) : 0;
     if (family) { // kdelibs 4.1 didn't return anything here.
         widget.fontsFrame->addWidget(family,0,0);
-        connect(family, SIGNAL(activated(int)), this, SIGNAL(doneWithFocus()));
-        connect(family, SIGNAL(activated(int)), this, SLOT(fontFamilyActivated(int)));
+        connect(family, QOverload<int>::of(&QComboBox::activated), this, &SimpleCharacterWidget::doneWithFocus);
+        connect(family, QOverload<int>::of(&QComboBox::activated), this, &SimpleCharacterWidget::fontFamilyActivated);
     }
     QWidgetAction *fontSizeAction = qobject_cast<QWidgetAction *>(tool->action("format_fontsize"));
     QComboBox *size = fontSizeAction ? qobject_cast<QComboBox*> (fontSizeAction->requestWidget(this)) : 0;
     if (size) { // kdelibs 4.1 didn't return anything here.
         widget.fontsFrame->addWidget(size,0,1);
-        connect(size, SIGNAL(activated(int)), this, SIGNAL(doneWithFocus()));
-        connect(size, SIGNAL(activated(int)), this, SLOT(fontSizeActivated(int)));
+        connect(size, QOverload<int>::of(&QComboBox::activated), this, &SimpleCharacterWidget::doneWithFocus);
+        connect(size, QOverload<int>::of(&QComboBox::activated), this, &SimpleCharacterWidget::fontSizeActivated);
         QDoubleValidator* validator = new QDoubleValidator(2, 999, 1, size);
         size->setValidator(validator);
     }
@@ -96,7 +96,8 @@ SimpleCharacterWidget::SimpleCharacterWidget(TextTool *tool, QWidget *parent)
 
     m_stylesModel->setStyleThumbnailer(m_thumbnailer);
     widget.characterStyleCombo->setStylesModel(m_sortedStylesModel);
-    connect(widget.characterStyleCombo, SIGNAL(selected(QModelIndex)), this, SLOT(styleSelected(QModelIndex)));
+    connect(widget.characterStyleCombo, QOverload<const QModelIndex&>::of(&StylesCombo::selected),
+            this, QOverload<const QModelIndex&>::of(&SimpleCharacterWidget::styleSelected));
     connect(widget.characterStyleCombo, &StylesCombo::newStyleRequested, this, &SimpleCharacterWidget::newStyleRequested);
     connect(widget.characterStyleCombo, &StylesCombo::newStyleRequested, this, &SimpleCharacterWidget::doneWithFocus);
     connect(widget.characterStyleCombo, &StylesCombo::showStyleManager, this, &SimpleCharacterWidget::slotShowStyleManager);
@@ -121,11 +122,12 @@ void SimpleCharacterWidget::setStyleManager(KoStyleManager *sm)
     }
     m_styleManager = sm;
     //we want to disconnect this before setting the stylemanager. Populating the model apparently selects the first inserted item. We don't want this to actually set a new style.
-    disconnect(widget.characterStyleCombo, SIGNAL(selected(QModelIndex)), this, SLOT(styleSelected(QModelIndex)));
+    disconnect(widget.characterStyleCombo, QOverload<const QModelIndex&>::of(&StylesCombo::selected),
+               this, QOverload<const QModelIndex&>::of(&SimpleCharacterWidget::styleSelected));
     m_stylesModel->setStyleManager(sm);
     m_sortedStylesModel->setStyleManager(sm);
-    connect(widget.characterStyleCombo, SIGNAL(selected(QModelIndex)), this, SLOT(styleSelected(QModelIndex)));
-    connect(m_styleManager, &KoStyleManager::characterStyleApplied, this, &SimpleCharacterWidget::slotCharacterStyleApplied);
+    connect(widget.characterStyleCombo, QOverload<const QModelIndex&>::of(&StylesCombo::selected),
+            this, QOverload<const QModelIndex&>::of(&SimpleCharacterWidget::styleSelected)); connect(m_styleManager, &KoStyleManager::characterStyleApplied, this, &SimpleCharacterWidget::slotCharacterStyleApplied);
 }
 
 void SimpleCharacterWidget::setInitialUsedStyles(QVector<int> list)
@@ -167,12 +169,14 @@ void SimpleCharacterWidget::setCurrentFormat(const QTextCharFormat& format, cons
                 }
             }
         }
-        disconnect(widget.characterStyleCombo, SIGNAL(selected(QModelIndex)), this, SLOT(styleSelected(QModelIndex)));
+        disconnect(widget.characterStyleCombo, QOverload<const QModelIndex&>::of(&StylesCombo::selected),
+                   this, QOverload<const QModelIndex&>::of(&SimpleCharacterWidget::styleSelected));
          //TODO, this is very brittle index 1 is because index 0 is the title. The proper solution to that would be for the "None" style to have a styleId which does not get applied on the text, but can be used in the ui
         widget.characterStyleCombo->setCurrentIndex((useParagraphStyle) ? 1 : m_sortedStylesModel->indexOf(style).row());
         widget.characterStyleCombo->setStyleIsOriginal(unchanged);
         widget.characterStyleCombo->slotUpdatePreview();
-        connect(widget.characterStyleCombo, SIGNAL(selected(QModelIndex)), this, SLOT(styleSelected(QModelIndex)));
+        connect(widget.characterStyleCombo, QOverload<const QModelIndex&>::of(&StylesCombo::selected),
+                this, QOverload<const QModelIndex&>::of(&SimpleCharacterWidget::styleSelected));
     }
 }
 
@@ -223,9 +227,11 @@ void SimpleCharacterWidget::setCurrentBlockFormat(const QTextBlockFormat &format
     m_currentBlockFormat = format;
 
     m_stylesModel->setCurrentParagraphStyle(format.intProperty(KoParagraphStyle::StyleId));
-    disconnect(widget.characterStyleCombo, SIGNAL(selected(QModelIndex)), this, SLOT(styleSelected(QModelIndex)));
+    disconnect(widget.characterStyleCombo, QOverload<const QModelIndex &>::of(&StylesCombo::selected),
+               this, QOverload<const QModelIndex &>::of(&SimpleCharacterWidget::styleSelected));
     widget.characterStyleCombo->slotUpdatePreview();
-    connect(widget.characterStyleCombo, SIGNAL(selected(QModelIndex)), this, SLOT(styleSelected(QModelIndex)));
+    connect(widget.characterStyleCombo, QOverload<const QModelIndex &>::of(&StylesCombo::selected),
+            this, QOverload<const QModelIndex &>::of(&SimpleCharacterWidget::styleSelected));
 }
 
 void SimpleCharacterWidget::styleSelected(int index)

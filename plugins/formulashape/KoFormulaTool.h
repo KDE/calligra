@@ -77,7 +77,7 @@ public:
 
 public Q_SLOTS:
     /// Called when this tool instance is activated and fills m_formulaShape
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(KoToolBase::ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
 
     /// Called when this tool instance is deactivated
     void deactivate() override;

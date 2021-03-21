@@ -59,7 +59,7 @@ FontDia::FontDia(KoTextEditor *editor, QWidget* parent)
     initTabs();
 
     // Do this after initTabs so it doesn't cause signals prematurely
-    connect(m_characterGeneral, SIGNAL(styleChanged()), this, SLOT(styleChanged()));
+    connect(m_characterGeneral, &CharacterGeneral::styleChanged, this, [this]() { styleChanged(); });
 }
 
 void FontDia::initTabs()

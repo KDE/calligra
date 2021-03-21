@@ -80,7 +80,7 @@ FixedDateFormat::FixedDateFormat(DateVariable *variable)
 
     connect(widget.custom, &QCheckBox::stateChanged, this, &FixedDateFormat::customClicked);
     connect(widget.formatList, &QListWidget::itemPressed, this, &FixedDateFormat::listClicked);
-    connect(widget.correction, SIGNAL(valueChanged(int)), this, SLOT(offsetChanged(int)));
+    connect(widget.correction, QOverload<int>::of(&QSpinBox::valueChanged), this, &FixedDateFormat::offsetChanged);
     connect(widget.formatButton, &QAbstractButton::clicked, this, &FixedDateFormat::insertCustomButtonPressed);
     connect(widget.customString, &QLineEdit::textChanged, this, &FixedDateFormat::customTextChanged);
 }

@@ -368,8 +368,8 @@ QList<QPointer<QWidget> > KarbonCalligraphyTool::createOptionWidgets()
     connect(widget, &KarbonCalligraphyOptionWidget::thinningChanged,
             this, &KarbonCalligraphyTool::setThinning);
 
-    connect(widget, SIGNAL(angleChanged(int)),
-            this, SLOT(setAngle(int)));
+    connect(widget, &KarbonCalligraphyOptionWidget::angleChanged,
+            this, QOverload<int>::of(&KarbonCalligraphyTool::setAngle));
 
     connect(widget, &KarbonCalligraphyOptionWidget::fixationChanged,
             this, &KarbonCalligraphyTool::setFixation);

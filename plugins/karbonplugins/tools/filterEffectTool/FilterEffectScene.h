@@ -95,7 +95,7 @@ protected:
     void dropEvent(QGraphicsSceneDragDropEvent * event) override;
 
 private Q_SLOTS:
-    void selectionChanged();
+    void slotSelectionChanged();
 private:
     void createEffectItems(KoFilterEffect *effect);
     void addSceneItem(QGraphicsItem *item);

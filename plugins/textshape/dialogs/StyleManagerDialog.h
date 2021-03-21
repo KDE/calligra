@@ -45,7 +45,7 @@ public Q_SLOTS:
     void setCharacterStyle(KoCharacterStyle *style, bool canDelete = false);
 
 private Q_SLOTS:
-    void applyClicked();
+    void slotApplyClicked();
 
 protected:
     void closeEvent(QCloseEvent *e) override;

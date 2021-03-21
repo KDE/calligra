@@ -127,15 +127,15 @@ public Q_SLOTS:
     void setDataDimensions(int dataDimensions);
     int dataDimensions() const;
 
-    void addDataSet(DataSet *dataSet);
-    void removeDataSet(DataSet *dataSet, bool silent = false);
-    QList<DataSet*> dataSets() const;
+    void addDataSet(KoChart::DataSet *dataSet);
+    void removeDataSet(KoChart::DataSet *dataSet, bool silent = false);
+    QList<KoChart::DataSet*> dataSets() const;
 
     /**
      * Called by DataSet whenever a property that is global to all its data
      * points changes, e.g. its label or its pen
      */
-    void dataSetChanged(DataSet *dataSet);
+    void dataSetChanged(KoChart::DataSet *dataSet);
 
     /**
      * Called by DataSet whenever one or more of its data points changes,
@@ -150,12 +150,12 @@ public Q_SLOTS:
      * @param last Last data point that changed. If -1 it is assumed that
      *             only a single data point changed.
      */
-    void dataSetChanged(DataSet *dataSet, DataRole role, int first = -1, int last = -1);
+    void dataSetChanged(KoChart::DataSet *dataSet, KoChart::KChartModel::DataRole role, int first = -1, int last = -1);
 
     /**
      * Called by DataSet when the total number of data points it has changed.
      */
-    void dataSetSizeChanged(DataSet *dataSet, int newSize);
+    void dataSetSizeChanged(KoChart::DataSet *dataSet, int newSize);
 
 private:
     class Private;

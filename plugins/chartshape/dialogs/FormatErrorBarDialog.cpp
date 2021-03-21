@@ -33,9 +33,12 @@ FormatErrorBarDialog::FormatErrorBarDialog(QWidget *parent)
     connect(widget.posIndicator, &QAbstractButton::toggled, this, &FormatErrorBarDialog::errorIndicatorChanged);
     connect(widget.negIndicator, &QAbstractButton::toggled, this, &FormatErrorBarDialog::errorIndicatorChanged);
     connect(widget.posAndNegIndicator, &QAbstractButton::toggled, this, &FormatErrorBarDialog::errorIndicatorChanged);
-    connect(widget.sameValueForBoth, SIGNAL(toggled(bool)), this, SLOT(setSameErrorValueForBoth(bool)));
-    connect(widget.positiveValue, SIGNAL(valueChanged(double)), this, SLOT(setSameErrorValueForBoth(double)));
-    connect(widget.errorType, SIGNAL(currentIndexChanged(int)), this, SLOT(errorTypeChanged(int)));
+    connect(widget.sameValueForBoth, &QCheckBox::toggled,
+            this, QOverload<bool>::of(&FormatErrorBarDialog::setSameErrorValueForBoth));
+    connect(widget.positiveValue, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+            this, QOverload<double>::of(&FormatErrorBarDialog::setSameErrorValueForBoth));
+    connect(widget.errorType, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &FormatErrorBarDialog::errorTypeChanged);
 }
 
 FormatErrorBarDialog::~FormatErrorBarDialog()

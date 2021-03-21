@@ -59,7 +59,7 @@ public:
     QList<ChartType> chartTypes;
 
 private Q_SLOTS:
-    void removeSubDialogs(ChartType type, ChartType prev = LastChartType);
+    void removeSubDialogs(KoChart::ChartType type, KoChart::ChartType prev = LastChartType);
 };
 
 }  // namespace KoChart

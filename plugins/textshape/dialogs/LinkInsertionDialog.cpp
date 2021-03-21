@@ -217,7 +217,7 @@ void LinkInsertionDialog::sendRequest()
     m_timeoutTimer.start();
     connect(&m_timeoutTimer, &QTimer::timeout, this, &LinkInsertionDialog::fetchTitleTimeout);
     connect(m_reply, &QNetworkReply::finished, this, &LinkInsertionDialog::replyFinished);
-    connect(m_reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(fetchTitleError(QNetworkReply::NetworkError)));
+    connect(m_reply, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error), this, &LinkInsertionDialog::fetchTitleError);
     connect(m_reply, &QNetworkReply::downloadProgress, this, &LinkInsertionDialog::updateTitleDownloadProgress);
 }
 

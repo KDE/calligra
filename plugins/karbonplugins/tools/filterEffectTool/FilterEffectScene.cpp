@@ -118,7 +118,7 @@ FilterEffectScene::FilterEffectScene(QObject *parent)
     m_defaultInputs << "FillPaint" << "StrokePaint";
     m_defaultInputs << "BackgroundImage" << "BackgroundAlpha";
 
-    connect(this, SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
+    connect(this, &FilterEffectScene::selectionChanged, this, &FilterEffectScene::slotSelectionChanged);
 }
 
 FilterEffectScene::~FilterEffectScene()
@@ -257,7 +257,7 @@ void FilterEffectScene::layoutConnections()
     }
 }
 
-void FilterEffectScene::selectionChanged()
+void FilterEffectScene::slotSelectionChanged()
 {
     if (selectedItems().count()) {
         foreach(EffectItemBase* item, m_items) {

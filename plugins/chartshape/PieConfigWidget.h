@@ -59,13 +59,13 @@ public Q_SLOTS:
     void explodeFactorChanged(int percent);
 
 Q_SIGNALS:
-    void penChanged(DataSet *dataSet, const QColor& color, int section);
-    void brushChanged(DataSet *dataSet, const QColor& color, int section);
-    void showCategoryChanged(DataSet *dataSet, bool b, int section);
-    void showNumberChanged(DataSet *dataSet, bool b, int section);
-    void showPercentChanged(DataSet *dataSet, bool b, int section);
-    void showSymbolChanged(DataSet *dataSet, bool b, int section);
-    void explodeFactorChanged(DataSet *dataSet, int section, int percent);
+    void penChanged(KoChart::DataSet *dataSet, const QColor& color, int section);
+    void brushChanged(KoChart::DataSet *dataSet, const QColor& color, int section);
+    void showCategoryChanged(KoChart::DataSet *dataSet, bool b, int section);
+    void showNumberChanged(KoChart::DataSet *dataSet, bool b, int section);
+    void showPercentChanged(KoChart::DataSet *dataSet, bool b, int section);
+    void showSymbolChanged(KoChart::DataSet *dataSet, bool b, int section);
+    void explodeFactorChanged(KoChart::DataSet *dataSet, int section, int percent);
 
 private:
     void init();

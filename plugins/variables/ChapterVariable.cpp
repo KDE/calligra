@@ -230,8 +230,8 @@ QWidget* ChapterVariable::createOptionsWidget()
     levelEdit->setValue(m_level);
     layout->addWidget(levelEdit, 1, 1);
 
-    connect(formatEdit, SIGNAL(currentIndexChanged(int)), this, SLOT(formatChanged(int)));
-    connect(levelEdit, SIGNAL(valueChanged(int)), this, SLOT(levelChanged(int)));
+    connect(formatEdit, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ChapterVariable::formatChanged);
+    connect(levelEdit, QOverload<int>::of(&QSpinBox::valueChanged), this, &ChapterVariable::levelChanged);
 
     return widget;
 }

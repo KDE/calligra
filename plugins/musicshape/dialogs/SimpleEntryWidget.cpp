@@ -62,7 +62,7 @@ SimpleEntryWidget::SimpleEntryWidget(SimpleEntryTool *tool, QWidget *parent)
     widget.importButton->setDefaultAction(tool->action("import"));
     widget.exportButton->setDefaultAction(tool->action("export"));
 
-    connect(widget.voiceList, SIGNAL(currentIndexChanged(int)), this, SIGNAL(voiceChanged(int)));
+    connect(widget.voiceList, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SimpleEntryWidget::voiceChanged);
 }
 
 void SimpleEntryWidget::setVoiceListEnabled(bool enabled)

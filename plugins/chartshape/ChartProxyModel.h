@@ -222,12 +222,12 @@ public Q_SLOTS:
      * they are really in use. That is not necessarily the case if they
      * are in the TableSource.
      */
-    void addTable(Table *table);
+    void addTable(KoChart::Table *table);
 
     /**
      * Called by the TableSource whenever a table is removed from it.
      */
-    void removeTable(Table *table);
+    void removeTable(KoChart::Table *table);
 
     /**
      * Set manual control to @p value

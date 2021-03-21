@@ -128,7 +128,7 @@ public Q_SLOTS:
      *
      * @param symbol the new grouping symbol.
      */
-    void setSymbol(GroupSymbol symbol);
+    void setSymbol(MusicCore::PartGroup::GroupSymbol symbol);
 
     /**
      * Set whether the group should have common bar-lines.
@@ -141,7 +141,7 @@ Q_SIGNALS:
     void lastPartChanged(int index);
     void nameChanged(const QString& name);
     void shortNameChanged(const QString& shortName);
-    void symbolChanged(GroupSymbol symbol);
+    void symbolChanged(MusicCore::PartGroup::GroupSymbol symbol);
     void commonBarLinesChanged(bool commonBarLines);
 private:
     class Private;

@@ -50,7 +50,7 @@ SectionsSplitDialog::SectionsSplitDialog(QWidget *parent, KoTextEditor *editor)
     connect(m_widget.beforeList, &QListWidget::itemSelectionChanged, this, &SectionsSplitDialog::beforeListSelection);
     connect(m_widget.afterList, &QListWidget::itemSelectionChanged, this, &SectionsSplitDialog::afterListSelection);
 
-    connect(this, SIGNAL(okClicked()), this, SLOT(okClicked()));
+    connect(this, &SectionsSplitDialog::okClicked, this, &SectionsSplitDialog::slotOkClicked);
 }
 
 void SectionsSplitDialog::afterListSelection()
@@ -69,7 +69,7 @@ void SectionsSplitDialog::beforeListSelection()
     }
 }
 
-void SectionsSplitDialog::okClicked()
+void SectionsSplitDialog::slotOkClicked()
 {
     if (m_widget.beforeList->selectedItems().size()) {
         m_editor->splitSectionsStartings(m_widget.beforeList->currentRow());

@@ -33,6 +33,11 @@ void ListsSpinBox::setNumberFormat(const KoOdfNumberDefinition &format)
     update();
 }
 
+void ListsSpinBox::setLetterSynchronization (bool value)
+{
+    m_format.setLetterSynchronization(value);
+}
+
 int ListsSpinBox::valueFromText(const QString &text) const
 {
     Q_UNUSED(text);

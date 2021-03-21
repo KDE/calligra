@@ -43,10 +43,11 @@ void TrackedChangeManager::setModel(TrackedChangeModel* model)
     m_model = model;
     widget.treeView->setModel(m_model);
     widget.treeView->reset();
-    connect(widget.treeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(currentChanged(QModelIndex,QModelIndex)));
+    connect(widget.treeView->selectionModel(), &QItemSelectionModel::currentChanged,
+            this, QOverload<const QModelIndex&, const QModelIndex&>::of(&TrackedChangeManager::slotCurrentChanged));
 }
 
-void TrackedChangeManager::currentChanged(const QModelIndex &newIndex, const QModelIndex &previousIndex)
+void TrackedChangeManager::slotCurrentChanged(const QModelIndex &newIndex, const QModelIndex &previousIndex)
 {
     Q_UNUSED(previousIndex);
     emit currentChanged(newIndex);
@@ -56,5 +57,5 @@ void TrackedChangeManager::selectItem(const QModelIndex &newIndex)
 {
     QModelIndex currentIndex = widget.treeView->currentIndex();
     widget.treeView->setCurrentIndex(newIndex);
-    currentChanged(newIndex, currentIndex);
+    slotCurrentChanged(newIndex, currentIndex);
 }

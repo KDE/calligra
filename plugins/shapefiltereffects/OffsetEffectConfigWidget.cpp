@@ -45,8 +45,8 @@ OffsetEffectConfigWidget::OffsetEffectConfigWidget(QWidget *parent)
     g->addWidget(m_offsetY, 0, 3);
     setLayout(g);
 
-    connect(m_offsetX, SIGNAL(valueChanged(double)), this, SLOT(offsetChanged(double)));
-    connect(m_offsetY, SIGNAL(valueChanged(double)), this, SLOT(offsetChanged(double)));
+    connect(m_offsetX, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &OffsetEffectConfigWidget::offsetChanged);
+    connect(m_offsetY, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &OffsetEffectConfigWidget::offsetChanged);
 }
 
 bool OffsetEffectConfigWidget::editFilterEffect(KoFilterEffect * filterEffect)

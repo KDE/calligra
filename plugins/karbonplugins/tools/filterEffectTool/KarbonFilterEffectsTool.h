@@ -61,7 +61,7 @@ private Q_SLOTS:
     void clearFilter();
     void filterChanged();
     void filterSelected(int index);
-    void selectionChanged();
+    void slotSelectionChanged();
     void presetSelected(KoResource *resource);
     void regionXChanged(double x);
     void regionYChanged(double y);

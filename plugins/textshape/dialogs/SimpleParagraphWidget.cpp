@@ -114,7 +114,8 @@ SimpleParagraphWidget::SimpleParagraphWidget(TextTool *tool, QWidget *parent)
 
     m_stylesModel->setStyleThumbnailer(m_thumbnailer);
     widget.paragraphStyleCombo->setStylesModel(m_sortedStylesModel);
-    connect(widget.paragraphStyleCombo, SIGNAL(selected(QModelIndex)), this, SLOT(styleSelected(QModelIndex)));
+    connect(widget.paragraphStyleCombo, QOverload<const QModelIndex&>::of(&StylesCombo::selected),
+            this, QOverload<const QModelIndex&>::of(&SimpleParagraphWidget::styleSelected));
     connect(widget.paragraphStyleCombo, &StylesCombo::newStyleRequested, this, &SimpleParagraphWidget::newStyleRequested);
     connect(widget.paragraphStyleCombo, &StylesCombo::newStyleRequested, this, &SimpleParagraphWidget::doneWithFocus);
     connect(widget.paragraphStyleCombo, &StylesCombo::showStyleManager, this, &SimpleParagraphWidget::slotShowStyleManager);
@@ -448,13 +449,15 @@ void SimpleParagraphWidget::setCurrentFormat(const QTextBlockFormat &format)
             }
         }
         //we are updating the combo's selected item to what is the current format. we do not want this to apply the style as it would mess up the undo stack, the change tracking,...
-        disconnect(widget.paragraphStyleCombo, SIGNAL(selected(QModelIndex)), this, SLOT(styleSelected(QModelIndex)));
+        disconnect(widget.paragraphStyleCombo, QOverload<const QModelIndex&>::of(&StylesCombo::selected),
+                   this, QOverload<const QModelIndex&>::of(&SimpleParagraphWidget::styleSelected));
         m_sortedStylesModel->styleApplied(style);
         widget.paragraphStyleCombo->setCurrentIndex(m_sortedStylesModel->indexOf(style).row());
         widget.paragraphStyleCombo->setStyleIsOriginal(unchanged);
         m_stylesModel->setCurrentParagraphStyle(id);
         widget.paragraphStyleCombo->slotUpdatePreview();
-        connect(widget.paragraphStyleCombo, SIGNAL(selected(QModelIndex)), this, SLOT(styleSelected(QModelIndex)));
+        connect(widget.paragraphStyleCombo, QOverload<const QModelIndex&>::of(&StylesCombo::selected),
+                this, QOverload<const QModelIndex&>::of(&SimpleParagraphWidget::styleSelected));
     }
 }
 

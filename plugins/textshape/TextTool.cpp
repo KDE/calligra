@@ -333,8 +333,8 @@ void TextTool::createActions()
     m_actionFormatFontFamily = new KoFontFamilyAction(this);
     m_actionFormatFontFamily->setText(i18n("Font Family"));
     addAction("format_fontfamily", m_actionFormatFontFamily);
-    connect(m_actionFormatFontFamily, SIGNAL(triggered(QString)),
-            this, SLOT(setFontFamily(QString)));
+    connect(m_actionFormatFontFamily, QOverload<const QString &>::of(&KoFontFamilyAction::triggered),
+            this, &TextTool::setFontFamily);
 
     m_variableMenu = new KActionMenu(i18n("Variable"), this);
     addAction("insert_variable", m_variableMenu);
@@ -2223,7 +2223,7 @@ QList<QPointer<QWidget> > TextTool::createOptionWidgets()
     connect(this, &TextTool::charFormatChanged, scw, &SimpleCharacterWidget::setCurrentFormat);
     connect(this, &TextTool::blockFormatChanged, scw, &SimpleCharacterWidget::setCurrentBlockFormat);
     connect(scw, &SimpleCharacterWidget::doneWithFocus, this, &TextTool::returnFocusToCanvas);
-    connect(scw, SIGNAL(characterStyleSelected(KoCharacterStyle*)), this, SLOT(setStyle(KoCharacterStyle*)));
+    connect(scw, &SimpleCharacterWidget::characterStyleSelected, this, QOverload<KoCharacterStyle*>::of(&TextTool::setStyle));
     connect(scw, &SimpleCharacterWidget::newStyleRequested, this, &TextTool::createStyleFromCurrentCharFormat);
     connect(scw, &SimpleCharacterWidget::showStyleManager, this, &TextTool::showStyleManager);
 
@@ -2233,7 +2233,7 @@ QList<QPointer<QWidget> > TextTool::createOptionWidgets()
     connect(this, &TextTool::blockChanged, spw, &SimpleParagraphWidget::setCurrentBlock);
     connect(this, &TextTool::blockFormatChanged, spw, &SimpleParagraphWidget::setCurrentFormat);
     connect(spw, &SimpleParagraphWidget::doneWithFocus, this, &TextTool::returnFocusToCanvas);
-    connect(spw, SIGNAL(paragraphStyleSelected(KoParagraphStyle*)), this, SLOT(setStyle(KoParagraphStyle*)));
+    connect(spw, &SimpleParagraphWidget::paragraphStyleSelected, this, QOverload<KoParagraphStyle*>::of(&TextTool::setStyle));
     connect(spw, &SimpleParagraphWidget::newStyleRequested, this, &TextTool::createStyleFromCurrentBlockFormat);
     connect(spw, &SimpleParagraphWidget::showStyleManager, this, &TextTool::showStyleManager);
 
@@ -2726,10 +2726,10 @@ void TextTool::canvasResourceChanged(int key, const QVariant &var)
 
 void TextTool::insertSpecialCharacter()
 {
-    if (m_specialCharacterDocker == 0) {
+    if (m_specialCharacterDocker == nullptr) {
         m_specialCharacterDocker = new InsertCharacter(canvas()->canvasWidget());
-        connect(m_specialCharacterDocker, SIGNAL(insertCharacter(QString)),
-                this, SLOT(insertString(QString)));
+        connect(m_specialCharacterDocker, QOverload<const QString &>::of(&InsertCharacter::insertCharacter),
+                this, &TextTool::insertString);
     }
 
     m_specialCharacterDocker->show();

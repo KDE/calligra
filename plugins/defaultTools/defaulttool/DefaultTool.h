@@ -91,7 +91,7 @@ public:
 
 public Q_SLOTS:
     /// Activate the tool and paint selection handles
-    void activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
+    void activate(KoToolBase::ToolActivation toolActivation, const QSet<KoShape*> &shapes) override;
     /// Deactivate the tool and remove selection handles
     void deactivate() override;
 

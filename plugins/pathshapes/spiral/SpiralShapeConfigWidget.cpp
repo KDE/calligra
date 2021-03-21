@@ -36,8 +36,8 @@ SpiralShapeConfigWidget::SpiralShapeConfigWidget()
     widget.clockWise->addItem(i18n("Clockwise"));
     widget.clockWise->addItem(i18n("Anticlockwise"));
 
-    connect(widget.spiralType, SIGNAL(currentIndexChanged(int)), this, SIGNAL(propertyChanged()));
-    connect(widget.clockWise, SIGNAL(currentIndexChanged(int)), this, SIGNAL(propertyChanged()));
+    connect(widget.spiralType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KoShapeConfigWidgetBase::propertyChanged);
+    connect(widget.clockWise, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &KoShapeConfigWidgetBase::propertyChanged);
     connect(widget.fade, &QAbstractSpinBox::editingFinished, this, &KoShapeConfigWidgetBase::propertyChanged);
 }
 

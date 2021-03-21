@@ -44,7 +44,7 @@ Q_SIGNALS:
     void currentChanged(const QModelIndex &newIndex);
 
 private Q_SLOTS:
-    void currentChanged(const QModelIndex &newIndex, const QModelIndex &previousIndex);
+    void slotCurrentChanged(const QModelIndex &newIndex, const QModelIndex &previousIndex);
 
 private:
     Ui::trackedChange widget;

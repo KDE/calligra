@@ -83,8 +83,8 @@ void VideoThumbnailer::frameReady(const Phonon::Experimental::VideoFrame2 &frame
     QImage thumb = frame.qImage().scaled(m_thumbnailSize.width(), m_thumbnailSize.height(), Qt::KeepAspectRatio);
     if (isFrameInteresting(thumb)) {
         m_thumbnailImage = thumb;
-        m_vdata.disconnect(SIGNAL(frameReadySignal(Phonon::Experimental::VideoFrame2)),
-            this, SLOT(frameReady(Phonon::Experimental::VideoFrame2)));
+        disconnect(&m_vdata, &Phonon::Experimental::VideoDataOutput2::frameReadySignal,
+                   this, &VideoThumbnailer::frameReady);
         m_eventLoop.quit();
         return;
     }

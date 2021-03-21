@@ -57,18 +57,18 @@ ParagraphBulletsNumbers::ParagraphBulletsNumbers(QWidget *parent)
     widget.doubleSpinBox_2->setSingleStep(0.05);
     widget.doubleSpinBox_3->setSingleStep(0.05);
 
-    connect(widget.labelFollowedBy,SIGNAL(currentIndexChanged(int)),this,SLOT(labelFollowedByIndexChanged(int)));
+    connect(widget.labelFollowedBy, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ParagraphBulletsNumbers::labelFollowedByIndexChanged);
     connect(widget.listTypes, &QListWidget::currentRowChanged, this, &ParagraphBulletsNumbers::styleChanged);
     connect(widget.customCharacter, &QAbstractButton::clicked, this, &ParagraphBulletsNumbers::customCharButtonPressed);
-    connect(widget.letterSynchronization, SIGNAL(toggled(bool)), widget.startValue, SLOT(setLetterSynchronization(bool)));
+    connect(widget.letterSynchronization, &QCheckBox::toggled, widget.startValue, &ListsSpinBox::setLetterSynchronization);
     connect(widget.prefix, &QLineEdit::textChanged, this, &ParagraphBulletsNumbers::recalcPreview);
     connect(widget.suffix, &QLineEdit::textChanged, this, &ParagraphBulletsNumbers::recalcPreview);
-    connect(widget.depth, SIGNAL(valueChanged(int)), this, SLOT(recalcPreview()));
-    connect(widget.levels, SIGNAL(valueChanged(int)), this, SLOT(recalcPreview()));
-    connect(widget.startValue, SIGNAL(valueChanged(int)), this, SLOT(recalcPreview()));
+    connect(widget.depth, QOverload<int>::of(&QSpinBox::valueChanged), this, &ParagraphBulletsNumbers::recalcPreview);
+    connect(widget.levels, QOverload<int>::of(&QSpinBox::valueChanged), this, &ParagraphBulletsNumbers::recalcPreview);
+    connect(widget.startValue, QOverload<int>::of(&QSpinBox::valueChanged), this, &ParagraphBulletsNumbers::recalcPreview);
     connect(widget.insertImage, &QAbstractButton::clicked, this, &ParagraphBulletsNumbers::selectListImage);
-    connect(widget.imageHeight, SIGNAL(valueChanged(double)), this, SLOT(recalcPreview()));
-    connect(widget.imageWidth, SIGNAL(valueChanged(double)), this, SLOT(recalcPreview()));
+    connect(widget.imageHeight, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &ParagraphBulletsNumbers::recalcPreview);
+    connect(widget.imageWidth, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &ParagraphBulletsNumbers::recalcPreview);
     connect(widget.restartNumbering, &QAbstractButton::clicked, this, &ParagraphBulletsNumbers::recalcPreview);
 }
 

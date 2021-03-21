@@ -32,14 +32,14 @@ StyleManagerDialog::StyleManagerDialog(QWidget *parent)
     setMainWidget(m_styleManagerWidget);
     setWindowTitle(i18n("Style Manager"));
 
-    connect(this, SIGNAL(applyClicked()), this, SLOT(applyClicked()));
+    connect(this, &StyleManagerDialog::applyClicked, this, &StyleManagerDialog::slotApplyClicked);
 }
 
 StyleManagerDialog::~StyleManagerDialog()
 {
 }
 
-void StyleManagerDialog::applyClicked()
+void StyleManagerDialog::slotApplyClicked()
 {
     if (m_styleManagerWidget->checkUniqueStyleName()) {
         m_styleManagerWidget->save();

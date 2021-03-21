@@ -52,7 +52,8 @@ UserVariableOptionsWidget::UserVariableOptionsWidget(UserVariable* userVariable,
     nameEdit->setObjectName(QLatin1String("nameEdit"));
     nameEdit->setMinimumContentsLength(10);
     nameLabel->setBuddy(nameEdit);
-    connect(nameEdit, SIGNAL(currentIndexChanged(QString)), this, SLOT(nameChanged()));
+    connect(nameEdit, QOverload<const QString&>::of(&QComboBox::currentIndexChanged),
+            this, &UserVariableOptionsWidget::nameChanged);
     nameLayout->addWidget(nameEdit);
 
     newButton = new QPushButton(i18n("New"), this);
@@ -82,7 +83,7 @@ UserVariableOptionsWidget::UserVariableOptionsWidget(UserVariable* userVariable,
     typeEdit->addItem(i18n("Formula"), QLatin1String("formula"));
     typeEdit->addItem(i18n("Void"), QLatin1String("void"));
     typeEdit->setCurrentIndex(qMax(0, typeEdit->findData(variableManager()->userType(userVariable->name()))));
-    connect(typeEdit, SIGNAL(currentIndexChanged(QString)), this, SLOT(typeChanged()));
+    connect(typeEdit, QOverload<const QString&>::of(&QComboBox::currentIndexChanged), this, &UserVariableOptionsWidget::typeChanged);
     layout->addWidget(typeEdit, 1, 1);
 
     QLabel *valueLabel = new QLabel(i18n("Value:"), this);

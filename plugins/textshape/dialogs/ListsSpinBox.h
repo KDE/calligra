@@ -35,6 +35,8 @@ public:
     void setNumberFormat(const KoOdfNumberDefinition &format);
     QString textFromValue(int value) const override;
 
+public Q_SLOTS:
+    void setLetterSynchronization(bool value);
 private:
     int valueFromText(const QString &text) const override;
 

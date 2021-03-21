@@ -131,7 +131,7 @@ Q_SIGNALS:
     /**
      * Emitted whenever a table is added to this source.
      */
-    void tableAdded(Table *table);
+    void tableAdded(KoChart::Table *table);
 
     /**
      * Emitted whenever a table is removed from this source
@@ -139,7 +139,7 @@ Q_SIGNALS:
      * Note that right after this signal is emitted, the Table* instance
      * is deleted, thus you can't use it anymore afterwards.
      */
-    void tableRemoved(Table *table);
+    void tableRemoved(KoChart::Table *table);
 
 private Q_SLOTS:
     /**
