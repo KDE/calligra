@@ -61,6 +61,16 @@ public Q_SLOTS:
      */
     void setActiveSheet(Sheet* sheet);
 
+    /**
+     * Adds the \p shape, if \p sheet is active.
+     */
+    void addShape(Sheet *sheet, KoShape *shape);
+
+    /**
+     * Removes the \p shape, if \p sheet is active.
+     */
+    void removeShape(Sheet *sheet, KoShape *shape);
+
 private Q_SLOTS:
     /**
      * Adds \p sheet to the goto sheet actions.
@@ -71,16 +81,6 @@ private Q_SLOTS:
      * Removes \p sheet from the goto sheet actions.
      */
     void removeSheet(Sheet *sheet) override;
-
-    /**
-     * Adds the \p shape, if \p sheet is active.
-     */
-    void addShape(Sheet *sheet, KoShape *shape);
-
-    /**
-     * Removes the \p shape, if \p sheet is active.
-     */
-    void removeShape(Sheet *sheet, KoShape *shape);
 
     /**
      * Activates the associated sheet of the \p action.

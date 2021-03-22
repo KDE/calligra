@@ -52,6 +52,9 @@ public:
     /// Returns true if a template in this group was the last one selected
     bool isSelected();
 
+public Q_SLOTS:
+    void changeAlwaysUseTemplate(KoTemplatesPane* sender, const QString& alwaysUse);
+
 Q_SIGNALS:
     /// Emitted when the always use checkbox is selected
     void alwaysUseChanged(KoTemplatesPane* sender, const QString& alwaysUse);
@@ -62,7 +65,6 @@ protected Q_SLOTS:
     void openFile() override;
     void openFile(const QModelIndex& index) override;
     void alwaysUseClicked();
-    void changeAlwaysUseTemplate(KoTemplatesPane* sender, const QString& alwaysUse);
 
 private:
     KoTemplatesPanePrivate * const d;

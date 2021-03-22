@@ -246,8 +246,8 @@ void KoOpenPane::initTemplates(const QString& templatesResourcePath)
             connect(pane, &KoDetailsPane::openUrl, this, &KoOpenPane::openTemplate);
             connect(pane, &KoTemplatesPane::alwaysUseChanged,
                     this, &KoOpenPane::alwaysUseChanged);
-            connect(this, SIGNAL(alwaysUseChanged(KoTemplatesPane*,QString)),
-                    pane, SLOT(changeAlwaysUseTemplate(KoTemplatesPane*,QString)));
+            connect(this, &KoOpenPane::alwaysUseChanged,
+                    pane, &KoTemplatesPane::changeAlwaysUseTemplate);
             connect(pane, &KoDetailsPane::splitterResized,
                     this, &KoOpenPane::splitterResized);
             connect(this, &KoOpenPane::splitterResized,

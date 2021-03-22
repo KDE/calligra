@@ -106,7 +106,7 @@ QList<QPointer<QWidget> > ReviewTool::createOptionWidgets()
     SimpleSpellCheckingWidget* sscw = new SimpleSpellCheckingWidget(this, 0);
     SimpleAnnotationWidget *saw = new SimpleAnnotationWidget(this, 0);
 
-    connect(saw, SIGNAL(doneWithFocus()), this, SLOT(returnFocusToCanvas()));
+    connect(saw, &SimpleAnnotationWidget::doneWithFocus, this, &ReviewTool::returnFocusToCanvas);
 
     sscw->setWindowTitle(i18n("Spell check"));
     widgets.append(sscw);

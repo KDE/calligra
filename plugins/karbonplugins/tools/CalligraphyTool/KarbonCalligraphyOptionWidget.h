@@ -61,6 +61,8 @@ public Q_SLOTS:
     void decreaseWidth();
     void increaseAngle();
     void decreaseAngle();
+    // Needed for KarbonCalligraphyTool
+    void setUsePathEnabled(bool enabled);
 
 private Q_SLOTS:
     void loadProfile(const QString &name);
@@ -69,7 +71,6 @@ private Q_SLOTS:
     void saveProfileAs();
     void removeProfile();
 
-    void setUsePathEnabled(bool enabled);
 
 private:
     // TODO: maybe make it a hash?? <QString, QVariant>

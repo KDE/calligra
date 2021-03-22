@@ -1996,10 +1996,10 @@ void View::addSheet(Sheet *sheet)
     d->actions->hideSheet->setEnabled(state);
 
     // Connect some signals
-    connect(sheet, SIGNAL(shapeAdded(Sheet*,KoShape*)),
-            d->mapViewModel, SLOT(addShape(Sheet*,KoShape*)));
-    connect(sheet, SIGNAL(shapeRemoved(Sheet*,KoShape*)),
-            d->mapViewModel, SLOT(removeShape(Sheet*,KoShape*)));
+    connect(sheet, &Sheet::shapeAdded,
+            d->mapViewModel, &MapViewModel::addShape);
+    connect(sheet, &Sheet::shapeRemoved,
+            d->mapViewModel, &MapViewModel::removeShape);
 }
 
 void View::removeSheet(Sheet *sheet)

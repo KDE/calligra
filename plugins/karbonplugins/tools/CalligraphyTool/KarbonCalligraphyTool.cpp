@@ -383,8 +383,8 @@ QList<QPointer<QWidget> > KarbonCalligraphyTool::createOptionWidgets()
     connect(widget, &KarbonCalligraphyOptionWidget::dragChanged,
             this, &KarbonCalligraphyTool::setDrag);
 
-    connect(this, SIGNAL(pathSelectedChanged(bool)),
-            widget, SLOT(setUsePathEnabled(bool)));
+    connect(this, &KarbonCalligraphyTool::pathSelectedChanged,
+            widget, &KarbonCalligraphyOptionWidget::setUsePathEnabled);
 
     // add shortcuts
     QAction *action = new QAction(i18n("Calligraphy: increase width"), this);
