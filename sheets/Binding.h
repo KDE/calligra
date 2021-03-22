@@ -27,12 +27,12 @@
 
 #include "sheets_odf_export.h"
 
-class QAbstractItemModel;
-
 namespace Calligra
 {
 namespace Sheets
 {
+
+class BindingModel;
 
 /**
  * Abstracts read-only access to the ValueStorage.
@@ -51,7 +51,7 @@ public:
 
     bool isEmpty() const;
 
-    QAbstractItemModel* model() const;
+    BindingModel* model() const;
 
     const Region& region() const;
     void setRegion(const Region& region);

@@ -79,7 +79,7 @@ class CALLIGRA_SHEETS_ODF_EXPORT Sheet : public KoShapeUserData, public KoShapeB
         public ProtectableObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString sheetName READ sheetName)
+    Q_PROPERTY(QString sheetName READ sheetName WRITE setSheetName NOTIFY nameChanged)
     Q_PROPERTY(bool autoCalc READ isAutoCalculationEnabled WRITE setAutoCalculationEnabled)
     Q_PROPERTY(bool showGrid READ getShowGrid WRITE setShowGrid)
 
@@ -781,6 +781,13 @@ Q_SIGNALS:
      * \param shape the shape
      */
     void shapeRemoved(Sheet *sheet, KoShape *shape);
+
+    /**
+     * Emitted if the sheet name changed.
+     * \param oldName the previous sheet name
+     * \param name the new sheet name
+     */
+    void nameChanged(const QString &oldName, const QString &name);
 
 protected:
     /**

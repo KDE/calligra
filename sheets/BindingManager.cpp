@@ -24,6 +24,7 @@
 #include "Map.h"
 #include "Region.h"
 #include "Sheet.h"
+#include "BindingModel.h"
 
 #include <QAbstractItemModel>
 

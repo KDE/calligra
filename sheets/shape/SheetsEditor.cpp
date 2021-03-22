@@ -92,7 +92,7 @@ void SheetsEditor::sheetAdded(Sheet* sheet)
     QListWidgetItem* item = new QListWidgetItem(sheet->sheetName());
     item->setCheckState(sheet->isHidden() ? Qt::Unchecked : Qt::Checked);
     d->list->addItem(item);
-    connect(sheet, SIGNAL(sig_nameChanged(Sheet*,QString)), this, SLOT(sheetNameChanged(Sheet*,QString)));
+    connect(sheet, &Sheet::nameChanged, this, [this, sheet] (const QString &oldName, const QString &name) { Q_UNUSED(name); sheetNameChanged(sheet, oldName); });
 }
 
 void SheetsEditor::sheetNameChanged(Sheet* sheet, const QString& old_name)

@@ -169,8 +169,8 @@ Sheet::Sheet(Map* map, const QString &sheetName)
     // CellStorage connections
     connect(d->cellStorage, &CellStorage::insertNamedArea,
             d->workbook->namedAreaManager(), &NamedAreaManager::insert);
-    connect(d->cellStorage, SIGNAL(namedAreaRemoved(QString)),
-            d->workbook->namedAreaManager(), SLOT(remove(QString)));
+    connect(d->cellStorage, &CellStorage::namedAreaRemoved,
+            d->workbook->namedAreaManager(), QOverload<const QString &>::of(&NamedAreaManager::remove));
 }
 
 Sheet::Sheet(const Sheet &other)
@@ -1729,6 +1729,8 @@ bool Sheet::setSheetName(const QString& name, bool init)
 
     setObjectName(name);
 //     (dynamic_cast<SheetIface*>(dcopObject()))->sheetNameHasChanged();
+
+    emit nameChanged(old_name, name);
 
     return true;
 }

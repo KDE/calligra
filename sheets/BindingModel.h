@@ -27,6 +27,8 @@
 
 #include <QAbstractTableModel>
 
+#include "sheets_odf_export.h"
+
 namespace Calligra
 {
 namespace Sheets
@@ -36,7 +38,7 @@ class Binding;
 /**
  * A model for a cell range acting as data source.
  */
-class BindingModel : public QAbstractTableModel, public KoChart::ChartModel
+class CALLIGRA_SHEETS_ODF_EXPORT BindingModel : public QAbstractTableModel, public KoChart::ChartModel
 {
     Q_OBJECT
     Q_INTERFACES(KoChart::ChartModel)

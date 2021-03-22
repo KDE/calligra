@@ -700,8 +700,8 @@ void View::initView()
     d->mapViewModel = new MapViewModel(d->doc->map(), d->canvas, this);
     connect(d->mapViewModel, &MapModel::addCommandRequested,
             doc(), &KoDocument::addCommand);
-    connect(d->mapViewModel, SIGNAL(activeSheetChanged(Sheet*)),
-            this, SLOT(setActiveSheet(Sheet*)));
+    connect(d->mapViewModel, &MapViewModel::activeSheetChanged,
+            this, [this](Sheet *sheet) { setActiveSheet(sheet); });
 
     // Setup the selection.
     d->selection = new Selection(d->canvas);
@@ -709,7 +709,7 @@ void View::initView()
     connect(d->selection, &Selection::changed, this, &View::slotScrollChoice);
     connect(d->selection, &Selection::aboutToModify, this, &View::aboutToModify);
     connect(d->selection, &Selection::modified, this, &View::refreshSelection);
-    connect(d->selection, SIGNAL(visibleSheetRequested(Sheet*)), this, SLOT(setActiveSheet(Sheet*)));
+    connect(d->selection, &Selection::visibleSheetRequested, this, [this](Sheet *sheet) { setActiveSheet(sheet); });
     connect(d->selection, &Selection::refreshSheetViews, this, &View::refreshSheetViews);
     connect(d->selection, &Selection::updateAccessedCellRange, this, &View::updateAccessedCellRange);
     connect(this, &View::documentReadWriteToggled,

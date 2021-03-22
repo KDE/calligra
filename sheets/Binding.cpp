@@ -67,7 +67,7 @@ bool Binding::isEmpty() const
     return d->model->region().isEmpty();
 }
 
-QAbstractItemModel* Binding::model() const
+Calligra::Sheets::BindingModel* Binding::model() const
 {
     return d->model;
 }

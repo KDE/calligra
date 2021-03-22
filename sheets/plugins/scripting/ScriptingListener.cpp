@@ -21,6 +21,7 @@
 #include "ScriptingListener.h"
 
 #include <Binding.h>
+#include <BindingModel.h>
 #include <CellStorage.h>
 #include <Sheet.h>
 
@@ -48,7 +49,7 @@ ScriptingCellListener::ScriptingCellListener(Calligra::Sheets::Sheet *sheet, con
 {
     d->sheet = sheet;
     d->cellbinding = new Calligra::Sheets::Binding(Region(area, sheet));
-    connect(d->cellbinding->model(), SIGNAL(changed(Region)), this, SLOT(slotChanged(Region)));
+    connect(d->cellbinding->model(), &BindingModel::changed, this, &ScriptingCellListener::slotChanged);
     sheet->cellStorage()->setBinding(Region(area, sheet), *d->cellbinding);
 }
 
