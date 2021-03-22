@@ -47,11 +47,11 @@ public:
 };
 
 KoTextRange::KoTextRange(const QTextCursor &cursor)
-    : d_ptr(new KoTextRangePrivate)
+    : d(new KoTextRangePrivate)
 {
-    d_ptr->cursor = cursor;
-    d_ptr->cursor.setPosition(cursor.selectionStart());
-    d_ptr->cursor.setKeepPositionOnInsert(true);
+    d->cursor = cursor;
+    d->cursor.setPosition(cursor.selectionStart());
+    d->cursor.setKeepPositionOnInsert(true);
     if (cursor.hasSelection()) {
         setRangeEnd(cursor.selectionEnd());
     }
@@ -65,71 +65,61 @@ KoTextRangePrivate::~KoTextRangePrivate()
 
 KoTextRange::~KoTextRange()
 {
-    if (d_ptr->manager) {
-        d_ptr->manager->remove(this);
+    if (d->manager) {
+        d->manager->remove(this);
     }
-    delete d_ptr;
-    d_ptr = 0;
+    delete d;
+    d = nullptr;
 }
 
 void KoTextRange::setManager(KoTextRangeManager *manager)
 {
-    Q_D(KoTextRange);
     d->manager = manager;
 }
 
 KoTextRangeManager *KoTextRange::manager() const
 {
-    Q_D(const KoTextRange);
     return d->manager;
 }
 
 QTextDocument *KoTextRange::document() const
 {
-    Q_D(const KoTextRange);
     return d->cursor.document();
 }
 
 bool KoTextRange::positionOnlyMode() const
 {
-    Q_D(const KoTextRange);
     return d->positionOnlyMode;
 }
 
 void KoTextRange::setPositionOnlyMode(bool b)
 {
-    Q_D(KoTextRange);
     d->positionOnlyMode = b;
 }
 
 bool KoTextRange::hasRange() const
 {
-    Q_D(const KoTextRange);
     return (!d->positionOnlyMode) && d->cursor.hasSelection();
 }
 
 int KoTextRange::rangeStart() const
 {
-    Q_D(const KoTextRange);
     return d->positionOnlyMode ? d->cursor.position() : d->cursor.selectionStart();
 }
 
 int KoTextRange::rangeEnd() const
 {
-    Q_D(const KoTextRange);
     return d->positionOnlyMode ? d->cursor.position() : d->cursor.selectionEnd();
 }
 
 void KoTextRange::setRangeStart(int position)
 {
-    Q_D(KoTextRange);
     d->positionOnlyMode = true;
     d->cursor.setPosition(position);
 }
 
 void KoTextRange::setRangeEnd(int position)
 {
-    Q_D(KoTextRange);
     d->positionOnlyMode = false;
     d->cursor.setPosition(d->cursor.selectionStart());
     d->cursor.setPosition(position, QTextCursor::KeepAnchor);
@@ -137,32 +127,27 @@ void KoTextRange::setRangeEnd(int position)
 
 QString KoTextRange::text() const
 {
-    Q_D(const KoTextRange);
     return d->positionOnlyMode ? QString() : d->cursor.selectedText();
 }
 
 void KoTextRange::setInlineRdf(KoTextInlineRdf* rdf)
 {
-    Q_D(KoTextRange);
     d->rdf = rdf;
 }
 
 KoTextInlineRdf* KoTextRange::inlineRdf() const
 {
-    Q_D(const KoTextRange);
     return d->rdf;
 }
 
 void KoTextRange::snapshot()
 {
-    Q_D(KoTextRange);
     d->snapAnchor = d->cursor.anchor();
     d->snapPos = d->cursor.position();
 }
 
 void KoTextRange::restore()
 {
-    Q_D(KoTextRange);
     d->cursor.setPosition(d->snapAnchor);
     d->cursor.setPosition(d->snapPos, QTextCursor::KeepAnchor);
 }

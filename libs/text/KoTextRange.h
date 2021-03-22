@@ -117,10 +117,7 @@ public:
     void restore();
 
 protected:
-    KoTextRangePrivate *d_ptr;
-
-private:
-    Q_DECLARE_PRIVATE(KoTextRange)
+    KoTextRangePrivate *d;
 };
 
 KOTEXT_EXPORT QDebug operator<<(QDebug dbg, const KoTextRange *o);
