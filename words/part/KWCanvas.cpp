@@ -146,9 +146,15 @@ void KWCanvas::keyPressEvent(QKeyEvent *e)
 QVariant KWCanvas::inputMethodQuery(Qt::InputMethodQuery query) const
 {
     if (query == Qt::ImMicroFocus) {
+        // We may get a query after canvasController() has been deleted.
+        // See ~KoCanvasControllerWidget()
+        const auto controller = canvasController();
+        if (!controller) {
+            return QVariant();
+        }
         QRectF rect = (m_toolProxy->inputMethodQuery(query, *(viewConverter())).toRectF()).toRect();
         rect = m_viewMode->documentToView(viewConverter()->viewToDocument(rect), viewConverter());
-        QPointF scroll(canvasController()->scrollBarValue());
+        QPointF scroll(controller->scrollBarValue());
         if (canvasWidget()->layoutDirection() == Qt::RightToLeft) {
             scroll.setX(-scroll.x());
         }
