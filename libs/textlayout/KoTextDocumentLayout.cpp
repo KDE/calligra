@@ -57,7 +57,6 @@
 
 extern int qt_defaultDpiY();
 
-
 KoInlineObjectExtent::KoInlineObjectExtent(qreal ascent, qreal descent)
     : m_ascent(ascent),
       m_descent(descent)
@@ -130,6 +129,7 @@ public:
 
     qreal defaultTabSizing;
     qreal y;
+
     bool isLayouting;
     bool layoutScheduled;
     bool continuousLayout;
@@ -568,10 +568,9 @@ void KoTextDocumentLayout::positionAnchorTextRanges(int pos, int length, const Q
     if (!textRangeManager()) {
         return;
     }
-    QHash<int, KoTextRange *> ranges = textRangeManager()->textRangesChangingWithin(effectiveDocument, pos, pos+length, pos, pos+length);
-
+    QHash<int, KoTextRange *> ranges = textRangeManager()->textRangesChangingWithin(effectiveDocument, {&KoAnchorTextRange::staticMetaObject, &KoAnnotation::staticMetaObject}, pos, pos+length, pos, pos+length);
     foreach(KoTextRange *range, ranges) {
-        KoAnchorTextRange *anchorRange = dynamic_cast<KoAnchorTextRange *>(range);
+        KoAnchorTextRange *anchorRange = qobject_cast<KoAnchorTextRange *>(range);
         if (anchorRange) {
             // We need some special treatment for anchors as they need to position their object during
             // layout and not this early
@@ -616,8 +615,8 @@ void KoTextDocumentLayout::positionAnchorTextRanges(int pos, int length, const Q
         }
         KoAnnotation *annotation = qobject_cast<KoAnnotation *>(range);
         if (annotation) {
-            int position = range->rangeStart();
-            QTextBlock block = range->document()->findBlock(position);
+            int position = annotation->rangeStart();
+            QTextBlock block = annotation->document()->findBlock(position);
             QTextLine line = block.layout()->lineForTextPosition(position - block.position());
             QPointF refPos(line.cursorToX(position - block.position()), line.y());
 

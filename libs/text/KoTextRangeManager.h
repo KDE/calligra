@@ -44,6 +44,8 @@ public:
 
     QList<KoTextRange *> textRanges() const;
 
+    QList<KoTextRange *> textRanges(const QTextDocument *doc) const;
+
     /**
      * Insert a new text range into the manager.
      * @param object the text range to be inserted.
@@ -74,9 +76,13 @@ public:
      */
     QHash<int, KoTextRange *> textRangesChangingWithin(const QTextDocument *, int first, int last, int matchFirst, int matchLast) const;
 
+    QHash<int, KoTextRange *> textRangesChangingWithin(const QTextDocument *, QList<const QMetaObject*> types, int first, int last, int matchFirst, int matchLast) const;
+
 private:
-    QSet<KoTextRange *> m_textRanges;
-    QSet<KoTextRange *> m_deletedTextRanges; // kept around for undo purposes
+    
+    class KoTextRangeManagerPrivate;
+    
+    KoTextRangeManagerPrivate *d;
 
     KoBookmarkManager m_bookmarkManager;
     KoAnnotationManager m_annotationManager;
