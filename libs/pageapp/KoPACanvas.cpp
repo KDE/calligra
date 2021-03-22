@@ -172,7 +172,7 @@ void KoPACanvas::updateInputMethodInfo()
 QVariant KoPACanvas::inputMethodQuery(Qt::InputMethodQuery query) const
 {
     if (query == Qt::ImMicroFocus) {
-        // We get a query after canvasController() has been deleted.
+        // We may get a query after canvasController() has been deleted.
         // See ~KoCanvasControllerWidget()
         const auto controller = canvasController();
         if (!controller) {
