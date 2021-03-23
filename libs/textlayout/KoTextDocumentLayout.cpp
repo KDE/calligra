@@ -611,8 +611,10 @@ void KoTextDocumentLayout::positionAnchorTextRanges(int pos, int length, const Q
             static_cast<AnchorStrategy *>(anchor->placementStrategy())->setParagraphRect(d->anchoringParagraphRect);
             static_cast<AnchorStrategy *>(anchor->placementStrategy())->setParagraphContentRect(d->anchoringParagraphContentRect);
             static_cast<AnchorStrategy *>(anchor->placementStrategy())->setLayoutEnvironmentRect(d->anchoringLayoutEnvironmentRect);
+
+            continue;
         }
-        KoAnnotation *annotation = dynamic_cast<KoAnnotation *>(range);
+        KoAnnotation *annotation = qobject_cast<KoAnnotation *>(range);
         if (annotation) {
             int position = range->rangeStart();
             QTextBlock block = range->document()->findBlock(position);
