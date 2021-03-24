@@ -1,85 +1,43 @@
-/* This file is part of the KDE project
- * Copyright (C) 2019 Dan Leinir Turthra Jensen <admin@leinir.dk>
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
+// This file is part of the KDE project
+// SPDX-FileCopyrightText: 2019 Dan Leinir Turthra Jensen <admin@leinir.dk>
+// SPDX-FileCopyrightText: 2021 Carl Schwan <carlschwan@kde.org>
+// SPDX-License-Identifier: GPL-2.0-or-later
 
 import QtQuick 2.11
-import QtQuick.Controls 2.11 as QtControls
+import QtQuick.Controls 2.15 as QQC2
+import QtQuick.Layouts 1.15
 import org.kde.kirigami 2.7 as Kirigami
 import org.calligra 1.0
 
-Item {
+QQC2.ItemDelegate {
     id: component;
-    signal clicked();
     property string filePath;
     property string imageUrl: "image://recentimage/" + component.filePath;
-    property string title;
-    property alias enabled: mouseArea.enabled;
-    width: GridView.view.cellWidth; height: GridView.view.cellHeight
-    Item {
-        anchors {
-            fill: parent;
-            margins: Kirigami.Units.largeSpacing * 2
-        }
-        Rectangle {
-            x: documentImage.x - Kirigami.Units.smallSpacing + (documentImage.width - documentImage.paintedWidth) / 2;
-            y: documentImage.y - Kirigami.Units.smallSpacing + (documentImage.height - documentImage.paintedHeight) / 2;
-            width: documentImage.paintedWidth + Kirigami.Units.smallSpacing * 2;
-            height: documentImage.paintedHeight + Kirigami.Units.smallSpacing * 2;
-            border {
-                color: "silver";
-                width: 1;
-            }
-        }
+    property alias title: lblName.text;
+    implicitWidth: GridView.view.cellWidth;
+    implicitHeight: GridView.view.cellHeight
+    contentItem: ColumnLayout {
         Image {
             id: documentImage;
             source: component.imageUrl;
-            anchors {
-                top: parent.top;
-                left: parent.left;
-                right: parent.right;
-                margins: Kirigami.Units.largeSpacing;
-            }
-            height: parent.width;
             fillMode: Image.PreserveAspectFit;
+            Layout.fillHeight: true
+            Layout.fillWidth: true
             smooth: true;
             asynchronous: true;
-            QtControls.BusyIndicator {
+            QQC2.BusyIndicator {
                 anchors.centerIn: parent
                 width: docList.cellWidth / 3
                 height: width
                 running: parent.status === Image.Loading
             }
         }
-    }
-    QtControls.Label {
-        id: lblName;
-        anchors {
-            left: parent.left;
-            right: parent.right;
-            bottom: parent.bottom;
+        QQC2.Label {
+            id: lblName;
+            horizontalAlignment: Text.AlignHCenter;
+            verticalAlignment: Text.AlignVCenter;
+            elide: Text.ElideRight
+            Layout.fillWidth: true
         }
-        height: font.pixelSize + Kirigami.Units.largeSpacing * 2;
-        horizontalAlignment: Text.AlignHCenter;
-        verticalAlignment: Text.AlignVCenter;
-        text: component.title;
-    }
-    MouseArea {
-        id: mouseArea
-        anchors.fill: parent;
-        onClicked: component.clicked();
     }
 }
