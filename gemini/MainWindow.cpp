@@ -205,8 +205,8 @@ public:
         //toDesktop->setShortcut(Qt::CTRL + Qt::SHIFT + Qt::Key_D);
         //q->addAction(toDesktop);
         //connect(toDesktop, SIGNAL(triggered(bool)), q, SLOT(switchDesktopForced()));
-        connect(toDesktop, &QAction::triggered, q, &MainWindow::switchToDesktop);
-        touchView->engine()->rootContext()->setContextProperty("switchToDesktopAction", toDesktop);
+        //connect(toDesktop, &QAction::triggered, q, &MainWindow::switchToDesktop);
+        //touchView->engine()->rootContext()->setContextProperty("switchToDesktopAction", toDesktop);
     }
 
     void initDesktopView()
@@ -414,45 +414,45 @@ void MainWindow::touchChange()
 
 void MainWindow::switchToDesktop()
 {
-    QElapsedTimer timer;
-    timer.start();
-    qDebug() << "Switching to desktop";
+    //QElapsedTimer timer;
+    //timer.start();
+    //qDebug() << "Switching to desktop";
 
-    if (d->toDesktop)
-        d->toDesktop->setEnabled(false);
+    //if (d->toDesktop)
+    //    d->toDesktop->setEnabled(false);
 
-    ViewModeSynchronisationObject* syncObject = new ViewModeSynchronisationObject;
+    //ViewModeSynchronisationObject* syncObject = new ViewModeSynchronisationObject;
 
-    KoView* view = 0;
-    if (d->desktopView) {
-        view = d->desktopView->rootView();
-    }
+    //KoView* view = 0;
+    //if (d->desktopView) {
+    //    view = d->desktopView->rootView();
+    //}
 
-    if (!view) {
-        return;
-    }
+    //if (!view) {
+    //    return;
+    //}
 
-    //Notify the view we are switching away from that we are about to switch away from it
-    //giving it the possibility to set up the synchronisation object.
-    ViewModeSwitchEvent aboutToSwitchEvent(ViewModeSwitchEvent::AboutToSwitchViewModeEvent, d->touchView, view, syncObject);
-    QApplication::sendEvent(d->touchEventReceiver, &aboutToSwitchEvent);
-    qApp->processEvents();
+    ////Notify the view we are switching away from that we are about to switch away from it
+    ////giving it the possibility to set up the synchronisation object.
+    //ViewModeSwitchEvent aboutToSwitchEvent(ViewModeSwitchEvent::AboutToSwitchViewModeEvent, d->touchView, view, syncObject);
+    //QApplication::sendEvent(d->touchEventReceiver, &aboutToSwitchEvent);
+    //qApp->processEvents();
 
-    if (d->currentTouchPage == "MainPage")
-    {
-        d->touchView->setParent(0);
-        d->touchView->setVisible(false);
-        setCentralWidget(d->desktopView);
-    }
+    //if (d->currentTouchPage == "MainPage")
+    //{
+    //    d->touchView->setParent(0);
+    //    d->touchView->setVisible(false);
+    //    setCentralWidget(d->desktopView);
+    //}
 
-    //Notify the new view that we just switched to it, passing our synchronisation object
-    //so it can use those values to sync with the old view.
-    ViewModeSwitchEvent switchedEvent(ViewModeSwitchEvent::SwitchedToDesktopModeEvent, d->touchView, view, syncObject);
-    QApplication::sendEvent(view, &switchedEvent);
+    ////Notify the new view that we just switched to it, passing our synchronisation object
+    ////so it can use those values to sync with the old view.
+    //ViewModeSwitchEvent switchedEvent(ViewModeSwitchEvent::SwitchedToDesktopModeEvent, d->touchView, view, syncObject);
+    //QApplication::sendEvent(view, &switchedEvent);
 
-    qApp->processEvents();
-    d->toTouch->setEnabled(true);
-    d->switcher->setEnabled(true);
+    //qApp->processEvents();
+    //d->toTouch->setEnabled(true);
+    //d->switcher->setEnabled(true);
 
     //qDebug() << "milliseconds to switch to desktop:" << timer.elapsed();
 }

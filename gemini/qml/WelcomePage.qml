@@ -14,27 +14,31 @@ import "components"
 
 Kirigami.ApplicationItem {
     id: base;
+    visible: true
     onWidthChanged: {
-        Constants.setGridWidth( width / Constants.GridColumns );
+        //Constants.setGridWidth( width / Constants.GridColumns );
         drawer.modal = width < Kirigami.Units.gridUnit * 20;
     }
-    onHeightChanged: Constants.setGridHeight( height / Constants.GridRows );
+    //onHeightChanged: Constants.setGridHeight( height / Constants.GridRows );
     DocumentListModel { id: allDocumentsModel; }
     DocumentListModel { id: textDocumentsModel; filter: DocumentListModel.TextDocumentType; }
     DocumentListModel { id: presentationDocumentsModel; filter: DocumentListModel.PresentationType; }
 
     pageStack.initialPage: welcomePageFilebrowser;
     pageStack.defaultColumnWidth: pageStack.width
-    pageStack.layers.onCurrentItemChanged: pageStack.layers.currentItem !== null ? mainWindow.currentTouchPage = (pageStack.layers.currentItem.pageName !== undefined) ? pageStack.layers.currentItem.pageName : pageStack.layers.currentItem.toString() : ""
-    pageStack.globalToolBar.style: Kirigami.ApplicationHeaderStyle.Auto
+    //pageStack.layers.onCurrentItemChanged: pageStack.layers.currentItem !== null ? mainWindow.currentTouchPage = (pageStack.layers.currentItem.pageName !== undefined) ? pageStack.layers.currentItem.pageName : pageStack.layers.currentItem.toString() : ""
     Component.onCompleted: {
+        console.log("hell", base.visible);
+        base.visible = true;
         if(RecentFileManager.size() > 0) {
             pageStack.replace(welcomePageRecent);
         }
     }
 
+    property bool isViewingDocument: false
+
     function openFile(fileName, alternativeSaveAction) {
-        baseLoadingDialog.visible = true;
+        //baseLoadingDialog.visible = true;
         loadInitiator.fileName = fileName;
         loadInitiator.alternativeSaveAction = alternativeSaveAction;
         loadInitiator.start();
@@ -45,12 +49,38 @@ Kirigami.ApplicationItem {
         property string fileName
         property var alternativeSaveAction
         onTriggered: {
-            pageStack.layers.push(mainPage);
+            let simplifiedFilename;
+            if(fileName.indexOf("://") > 0) {
+                simplifiedFilename = fileName;
+            } else {
+                simplifiedFilename = fileName;
+                if (simplifiedFilename[0] !== "/") {
+                    simplifiedFilename = "/" + simplifiedFilename;
+                }
+                simplifiedFilename = "file://" + simplifiedFilename;
+            }
+
+            // Load file
             Settings.currentFile = "";
             Settings.currentFile = fileName;
-            pageStack.layers.currentItem.openFileReal(fileName);
+
+            let documentPage;
+            if(Settings.currentFileClass === WORDS_MIME_TYPE) {
+                documentPage = pageStack.push(wordPage, {
+                    source: simplifiedFilename,
+                });
+            } else if(Settings.currentFileClass === STAGE_MIME_TYPE) {
+                documentPage = pageStacklayers.push(stagePage, {
+                    source: simplifiedFilename,
+                });
+            } else if(Settings.currentFile !== "") {
+                // TODO show error message to user
+                console.debug("BANG!");
+                return;
+            }
+
             RecentFileManager.addRecent(fileName);
-            mainWindow.setAlternativeSaveAction(alternativeSaveAction);
+            //mainWindow.setAlternativeSaveAction(alternativeSaveAction);
         }
     }
 
@@ -76,6 +106,9 @@ Kirigami.ApplicationItem {
         id: drawer
         // Autohiding behavior
         onModalChanged: drawerOpen = !modal
+        onEnabledChanged: drawerOpen = enabled && !modal
+        enabled: pageStack.depth < 2
+        handleVisible: pageStack.depth < 2
 
         leftPadding: 0
         rightPadding: 0
@@ -187,18 +220,19 @@ Kirigami.ApplicationItem {
         }
     }
 
-    Component { id: mainPage; MainPage { } }
+    Component { id: wordPage; WordsDocumentPage { } }
+    Component { id: stagePage; StageDocumentPage { } }
     Component { id: welcomePageFilebrowser; WelcomePageFilebrowser { } }
     Component { id: welcomePageRecent; WelcomePageRecent { } }
     Component { id: welcomePageStage; WelcomePageStage { } }
     Component { id: welcomePageWords; WelcomePageWords { } }
     Component { id: welcomePageCloud; WelcomePageCloud { } }
 
-    VariantSelector { id: variantSelector; }
-    VariantSelector { id: wordsVariantSelector; selectorType: "words"; }
+    //VariantSelector { id: variantSelector; }
+    //VariantSelector { id: wordsVariantSelector; selectorType: "words"; }
 
     // This component is used to get around the fact that MainPage takes a very long time to initialise in some cases
-    Dialog {
+    /*Dialog {
         id: baseLoadingDialog;
         title: i18n("Loading");
         message: i18n("Please wait...");
@@ -213,5 +247,5 @@ Kirigami.ApplicationItem {
             interval: 500; running: false; repeat: false;
             onTriggered: { parent.visible = false; baseLoadingDialog.progress = -1; }
         }
-    }
+    }*/
 }

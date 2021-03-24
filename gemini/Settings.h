@@ -18,8 +18,6 @@ class Settings : public QObject
     Q_PROPERTY(QString currentFileClass READ currentFileClass NOTIFY currentFileChanged)
     Q_PROPERTY(bool temporaryFile READ isTemporaryFile WRITE setTemporaryFile NOTIFY temporaryFileChanged)
     Q_PROPERTY(QQuickItem* focusItem READ focusItem WRITE setFocusItem NOTIFY focusItemChanged)
-    Q_PROPERTY(QObject* theme READ theme NOTIFY themeChanged)
-    Q_PROPERTY(QString themeID READ themeID WRITE setThemeID NOTIFY themeChanged)
 
 public:
     explicit Settings( QObject* parent = 0);
@@ -37,11 +35,6 @@ public Q_SLOTS:
     QQuickItem *focusItem();
     void setFocusItem(QQuickItem *item);
 
-    QObject* theme() const;
-
-    QString themeID() const;
-    void setThemeID(const QString& id);
-
     int mimeTypeToDocumentClass(QString mimeType) const;
 
 Q_SIGNALS:
@@ -49,7 +42,6 @@ Q_SIGNALS:
     void currentFileChanged();
     void temporaryFileChanged();
     void focusItemChanged();
-    void themeChanged();
     void loadingFinished();
 
 private:

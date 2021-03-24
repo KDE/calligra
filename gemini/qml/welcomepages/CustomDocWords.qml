@@ -21,7 +21,7 @@ Kirigami.Page {
             right: parent.right;
             bottom: parent.bottom;
             margins: Kirigami.Units.largeSpacing
-            bottomMargin: Kirigami.Units.largeSpacing + createDocButton.height;
+            bottomMargin: Kirigami.Units.largeSpacing + createDocButton.height
         }
         Rectangle {
             id: singlePageVisualiser;
@@ -75,8 +75,8 @@ Kirigami.Page {
             }
             property double scale: widthInput.text / heightInput.text;
             property bool landscapeMode: landscapeCheck.checked ? widthInput.text < heightInput.text : heightInput.text < widthInput.text;
-            height: landscapeMode ? ((parent.height/2) - Constants.DefaultMargin) * scale : ((parent.height/2) - Constants.DefaultMargin);
-            width: landscapeMode ? ((parent.width/2)- Constants.DefaultMargin) : ((parent.width/2) - Constants.DefaultMargin) * scale;
+            height: landscapeMode ? ((parent.height/2) - Kirigami.Units.largeSpacing) * scale : ((parent.height/2) - Kirigami.Units.largeSpacing);
+            width: landscapeMode ? ((parent.width/2)- Kirigami.Units.largeSpacing) : ((parent.width/2) - Kirigami.Units.largeSpacing) * scale;
             color: "white";
             border {
                 color: "silver";
@@ -118,8 +118,8 @@ Kirigami.Page {
             }
             property double scale: widthInput.text / heightInput.text;
             property bool landscapeMode: landscapeCheck.checked ? widthInput.text < heightInput.text : heightInput.text < widthInput.text;
-            height: landscapeMode ? ((parent.height/2) - Constants.DefaultMargin) * scale : ((parent.height/2) - Constants.DefaultMargin);
-            width: landscapeMode ? ((parent.width/2)- Constants.DefaultMargin) : ((parent.width/2) - Constants.DefaultMargin) * scale;
+            height: landscapeMode ? ((parent.height/2) - Kirigami.Units.largeSpacing) * scale : ((parent.height/2) - Kirigami.Units.largeSpacing);
+            width: landscapeMode ? ((parent.width/2)- Kirigami.Units.largeSpacing) : ((parent.width/2) - Kirigami.Units.largeSpacing) * scale;
             color: "white";
             border {
                 color: "silver";
@@ -422,7 +422,7 @@ Kirigami.Page {
         anchors {
             right: parent.right;
             bottom: parent.bottom;
-            margins: Constants.DefaultMargin;
+            margins: Kirigami.Units.largeSpacing;
         }
         text: i18n("Create Document");
         onClicked: {

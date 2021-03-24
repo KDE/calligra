@@ -4,12 +4,13 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-import QtQuick 2.0
+import QtQuick 2.15
+import QtQuick.Controls 2.15 as QQC2
+import org.kde.kirigami 2.14 as Kirigami
 import "components"
 import "panels"
 import org.calligra 1.0
 import org.kde.calligra 1.0 as Calligra
-import org.kde.kirigami 2.7 as Kirigami
 
 Kirigami.Page {
     id: base;
@@ -19,28 +20,7 @@ Kirigami.Page {
     leftPadding: 0;
     rightPadding: 0;
     bottomPadding: 0;
-    function openFileReal(fileName) {
-        if(Settings.currentFileClass === WORDS_MIME_TYPE) {
-            viewLoader.sourceComponent = wordsView;
-        } else if(Settings.currentFileClass === STAGE_MIME_TYPE) {
-            viewLoader.sourceComponent = stageView;
-        } else {
-            if(Settings.currentFile !== "") {
-                console.debug("BANG!");
-            }
-        }
-        if(viewLoader.item) {
-            if(fileName.indexOf("://") > 0) {
-                viewLoader.item.source = fileName;
-            } else {
-                if(fileName[0] !== "/") {
-                    fileName = "/" + fileName;
-                }
-                viewLoader.item.source = "file://" + fileName;
-            }
-        }
-    }
-    ToolManager {
+    property var toolManager: ToolManager {
         id: toolManager;
         onCurrentToolChanged: console.debug("Current tool is now " + currentTool.toolId());
     }
@@ -60,134 +40,16 @@ Kirigami.Page {
         // if they're moving through the document
         onCanvasInteractionStarted: closeToolbarMenus(notesButton);
     }
-    Component { id: stageView; StageDocumentPage {} }
-    Component { id: wordsView; WordsDocumentPage {} }
+
     function closeToolbarMenus(sender) {
-        if(sender !== textStyleButton) { textStyleButton.checked = false; }
+        /*if(sender !== textStyleButton) { textStyleButton.checked = false; }
         if(sender !== imageToolsButton) { imageToolsButton.checked = false; }
         if(sender !== optionsButton1) { optionsButton1.checked = false; }
         if(sender !== notesButton) { notesButton.checked = false; }
-        if(sender !== optionsButton2) { optionsButton2.checked = false; }
+        if(sender !== optionsButton2) { optionsButton2.checked = false; }*/
     }
-    Item {
-        id: toolbar;
-        anchors {
-            top: parent.top;
-            left: parent.left;
-            right: parent.right;
-        }
-        opacity: viewLoader.item ? viewLoader.item.toolbarOpacity : 1;
-        Behavior on opacity { NumberAnimation { duration: Kirigami.Units.shortDuration; } }
-        height: Settings.theme.adjustedPixel(86);
-        MouseArea {
-            anchors.fill: parent;
-            // same logic as on canvas interaction - close menus, leave notes menu open
-            onClicked: closeToolbarMenus(notesButton);
-        }
-        Rectangle {
-            anchors.fill: parent;
-            color: Settings.theme.color("components/toolbar/base");
-            opacity: 0.96;
-        }
-        Rectangle {
-            anchors {
-                left: parent.left;
-                right: parent.right;
-                bottom: parent.bottom;
-            }
-            height: 1;
-            color: "black";
-            opacity: 0.1;
-        }
-        Item {
-            id: appButton;
-            height: parent.height;
-            width: Settings.theme.adjustedPixel(110);
-            Rectangle {
-                anchors.fill: parent;
-                color: "#f2b200";
-            }
-            Image {
-                anchors {
-                    left: parent.left;
-                    verticalCenter: parent.verticalCenter;
-                }
-                height: Settings.theme.adjustedPixel(32);
-                width: height;
-                source: Settings.theme.icon("Arrow-Back-FileBrowse-1");
-                sourceSize.width: width > height ? height : width;
-                sourceSize.height: width > height ? height : width;
-            }
-            Image {
-                anchors {
-                    right: parent.right;
-                    rightMargin: Kirigami.Units.largeSpacing;
-                    verticalCenter: parent.verticalCenter;
-                }
-                height: Settings.theme.adjustedPixel(86) - Kirigami.Units.largeSpacing * 2;
-                width: height;
-                source: Settings.theme.icon("Calligra-MockIcon-1");
-                sourceSize.width: width > height ? height : width;
-                sourceSize.height: width > height ? height : width;
-            }
-            MouseArea {
-                anchors.fill: parent;
-                onClicked: {
-                    closeToolbarMenus();
-                    if(viewLoader.item.canvas.document.document.isModified()) {
-                        saveBeforeExitDialog.show();
-                    }
-                    else {
-                        applicationWindow().pageStack.layers.pop();
-                    }
-                }
-            }
-        }
-        Row {
-            anchors {
-                left: appButton.right;
-                leftMargin: 20;
-                verticalCenter: parent.verticalCenter;
-            }
-            height: Settings.theme.adjustedPixel(66);
-            spacing: Settings.theme.adjustedPixel(8);
-            CohereButton {
-                anchors.verticalCenter: parent.verticalCenter;
-                text: "SAVE";
-                textColor: Settings.theme.color("components/toolbar/text");
-                font: Settings.theme.font("toolbar");
-                onClicked: {
-                    closeToolbarMenus();
-                    viewLoader.item.canvas.document.save();
-                }
-            }
-            CohereButton {
-                anchors.verticalCenter: parent.verticalCenter;
-                text: "UNDO";
-                textColor: Settings.theme.color("components/toolbar/text");
-                font: Settings.theme.font("toolbar");
-                enabled: typeof(undoaction) !== "undefined" ? undoaction.enabled : false;
-                onClicked: {
-                    closeToolbarMenus();
-                    undoaction.trigger();
-                }
-            }
-            Button {
-                height: parent.height;
-                width: height * 2;
-                text: "REDO";
-                textColor: Settings.theme.color("components/toolbar/text");
-                font: Settings.theme.font("toolbar");
-                enabled: typeof(redoaction) !== "undefined" ? redoaction.enabled : false;
-                onClicked: {
-                    closeToolbarMenus();
-                    redoaction.trigger();
-                }
-            }
-            Item {
-                height: parent.height;
-                width: Settings.theme.adjustedPixel(8);
-            }
+
+        /*
             CohereButton {
                 anchors.verticalCenter: parent.verticalCenter;
                 text: "DONE"
@@ -500,20 +362,5 @@ Kirigami.Page {
                 }
             }
         }
-    }
-    Dialog {
-        id: saveBeforeExitDialog;
-        title: "Save?";
-        message: "The document was modified. Would you like to save it before closing it?";
-        buttons: [ "Save", "Discard", "Cancel" ]
-        onButtonClicked: {
-            if(button === 0) {
-                viewLoader.item.canvas.document.save();
-            }
-            else if(button === 1) {
-                viewLoader.item.canvas.document.setModified(false);
-                applicationWindow().pageStack.layers.pop();
-            }
-        }
-    }
+    }*/
 }

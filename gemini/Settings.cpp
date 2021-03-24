@@ -14,7 +14,6 @@
 #include <KSharedConfig>
 #include <kconfiggroup.h>
 
-#include "Theme.h"
 #include "PropertyContainer.h"
 // #include <qtquick/CQTextDocumentCanvas.h>
 #include <KoDocumentEntry.h>
@@ -30,15 +29,12 @@ public:
     QString currentFileClass;
     bool temporaryFile;
     QQuickItem *focusItem;
-    Theme* theme;
 };
 
 Settings::Settings( QObject* parent )
     : QObject( parent ), d( new Private )
 {
     QString theme = KSharedConfig::openConfig()->group("General").readEntry<QString>("theme", "default");
-    d->theme = Theme::load(theme, this);
-    connect(d->theme, &Theme::fontCacheRebuilt, this, &Settings::themeChanged);
 }
 
 Settings::~Settings()
@@ -110,34 +106,6 @@ void Settings::setFocusItem(QQuickItem* item)
     if (item != d->focusItem) {
         d->focusItem = item;
         emit focusItemChanged();
-    }
-}
-
-QObject* Settings::theme() const
-{
-    return d->theme;
-}
-
-QString Settings::themeID() const
-{
-    if(d->theme)
-        return d->theme->id();
-
-    return QString();
-}
-
-void Settings::setThemeID(const QString& id)
-{
-    if(!d->theme || id != d->theme->id()) {
-        if(d->theme) {
-            delete d->theme;
-            d->theme = 0;
-        }
-
-        d->theme = Theme::load(id, this);
-        KSharedConfig::openConfig()->group("General").writeEntry<QString>("theme", id);
-
-        emit themeChanged();
     }
 }
 
