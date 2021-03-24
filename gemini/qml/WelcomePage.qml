@@ -204,7 +204,6 @@ Kirigami.ApplicationItem {
     Component { id: welcomePageRecent; WelcomePageRecent { } }
     Component { id: welcomePageStage; WelcomePageStage { } }
     Component { id: welcomePageWords; WelcomePageWords { } }
-    Component { id: welcomePageCustom; WelcomePageCustom { } }
     Component { id: welcomePageCloud; WelcomePageCloud { } }
 
     VariantSelector { id: variantSelector; }
