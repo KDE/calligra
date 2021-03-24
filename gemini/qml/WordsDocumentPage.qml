@@ -111,8 +111,13 @@ MainPage {
 
     Calligra.View {
         id: wordsCanvas;
-        anchors.fill: parent;
         document: wordsDocument;
+        anchors {
+            top: parent.top
+            bottom: parent.bottom
+            horizontalCenter: parent.horizontalCenter
+        }
+        width: controllerFlickable.width
     }
 
     QQC2.ScrollView {
@@ -125,15 +130,9 @@ MainPage {
         Flickable {
             id: controllerFlickable;
             width: Math.min(parent.width, base.width);
-            anchors {
-                top: parent.top;
-                right: parent.right;
-                bottom: controllerFlickable.enabled ? parent.bottom : parent.top;
-                bottomMargin: controllerFlickable.enabled ? 0 : -Kirigami.Units.gridUnit * 5
-                horizontalCenter: parent.horizontalCenter
-            }
             interactive: base.state !== "readermode";
             property int fastVelocity: Kirigami.Units.gridUnit * 50
+            anchors.horizontalCenter: parent.horizontalCenter
             onVerticalVelocityChanged: {
                 if (Math.abs(verticalVelocity) > fastVelocity && !controllerItem.pageChanging) {
                     d.showThings();
@@ -163,42 +162,6 @@ MainPage {
                 }
                 else {
                     controllerFlickable.contentY = Math.min(controllerFlickable.contentHeight - controllerFlickable.height, controllerFlickable.contentY + controllerFlickable.height - (Kirigami.Units.gridUnit * 1.5));
-                }
-            }
-            Image {
-                height: Settings.theme.adjustedPixel(40);
-                width: Settings.theme.adjustedPixel(40);
-                source: Settings.theme.icon("intel-Words-Handle-cursor");
-                opacity: wordsCanvas.hasSelection ? 1 : 0;
-                Behavior on opacity { NumberAnimation { duration: Kirigami.Units.shortDuration; } }
-                x: wordsCanvas.hasSelection ? wordsCanvas.selectionStartPos.x - width / 2 : 0;
-                y: wordsCanvas.hasSelection ? wordsCanvas.selectionStartPos.y - (height - 4) : 0;
-                Rectangle {
-                    anchors {
-                        top: parent.bottom;
-                        horizontalCenter: parent.horizontalCenter;
-                    }
-                    height: wordsCanvas.hasSelection ? wordsCanvas.selectionStartPos.height - 4 : 0;
-                    width: 4;
-                    color: "#009bcd";
-                }
-            }
-            Image {
-                height: Settings.theme.adjustedPixel(40);
-                width: Settings.theme.adjustedPixel(40);
-                source: Settings.theme.icon("intel-Words-Handle-cursor");
-                opacity: wordsCanvas.hasSelection ? 1 : 0;
-                Behavior on opacity { NumberAnimation { duration: Kirigami.Units.shortDuration; } }
-                x: wordsCanvas.hasSelection ? wordsCanvas.selectionEndPos.x - width / 2 : 0;
-                y: wordsCanvas.hasSelection ? wordsCanvas.selectionEndPos.y + (wordsCanvas.selectionEndPos.height - 4) : 0;
-                Rectangle {
-                    anchors {
-                        bottom: parent.top;
-                        horizontalCenter: parent.horizontalCenter;
-                    }
-                    height: wordsCanvas.hasSelection ? wordsCanvas.selectionEndPos.height - 4 : 0;
-                    width: 4;
-                    color: "#009bcd";
                 }
             }
 
@@ -266,8 +229,7 @@ MainPage {
                             else if(mouse.x > width * 3 / 4) {
                                 controllerFlickable.pageDown();
                             }
-                        }
-                        else if( Math.abs(xDiff) > Math.abs(yDiff) ) {
+                        } else if( Math.abs(xDiff) > Math.abs(yDiff) ) {
                             if( oldX > mouseX) {
                                 // left
                                 controllerFlickable.pageDown();
@@ -429,31 +391,27 @@ MainPage {
             text: (wordsDocument === null) ? 0 : wordsDocument.currentIndex + " of " + wordsDocument.indexCount;
         }
     }
-    Item {
+    Rectangle {
         id: zoomLevel;
+        radius: Kirigami.Units.largeSpacing;
+        color: Kirigami.Units.alternateBackgroundColor
+        opacity: 0;
         anchors {
             right: parent.right;
             bottom: (pageNumber.opacity > 0) ? pageNumber.top : parent.bottom;
             margins: Kirigami.Units.largeSpacing;
         }
-        opacity: 0;
         Behavior on opacity { NumberAnimation { duration: Kirigami.Units.shortDuration; } }
-        height: Constants.GridHeight / 2;
-        width: Constants.GridWidth;
-        Rectangle {
-            anchors.fill: parent;
-            radius: Kirigami.Units.largeSpacing;
-            color: Settings.theme.color("components/overlay/base");
-            opacity: 0.7;
-        }
+        height: zoomLabel.implicitHeight + Kirigami.Units.largeSpacing
+        width: Math.max(Kirigami.Units.gridUnit * 4, zoomLabel)
         Timer {
             id: hideZoomLevelTimer;
             repeat: false; running: false; interval: 1000;
             onTriggered: zoomLevel.opacity = 0;
         }
         QQC2.Label {
+            id: zoomLabel
             anchors.centerIn: parent;
-            color: Settings.theme.color("components/overlay/text");
             text: wordsCanvas.zoomAction ? (wordsCanvas.zoomAction.effectiveZoom * 100).toFixed(2) + "%" : "";
             onTextChanged: {
                 zoomLevel.opacity = 1;
@@ -476,6 +434,7 @@ MainPage {
         handleVisible: true
         parent: base.QQC2.overlay
         height: base.height
+        width: contentItem.implicitWidth
         contentItem: QQC2.ScrollView {
             implicitWidth: Kirigami.Units.gridUnit * 15
             ListView {

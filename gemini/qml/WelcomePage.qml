@@ -26,6 +26,7 @@ Kirigami.ApplicationItem {
 
     pageStack.initialPage: welcomePageFilebrowser;
     pageStack.defaultColumnWidth: pageStack.width
+    pageStack.interactive: false
     //pageStack.layers.onCurrentItemChanged: pageStack.layers.currentItem !== null ? mainWindow.currentTouchPage = (pageStack.layers.currentItem.pageName !== undefined) ? pageStack.layers.currentItem.pageName : pageStack.layers.currentItem.toString() : ""
     Component.onCompleted: {
         console.log("hell", base.visible);
