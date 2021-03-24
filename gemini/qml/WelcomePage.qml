@@ -18,6 +18,8 @@
 
 import QtQuick 2.0
 import QtQuick.Controls 1.3
+import QtQuick.Controls 2.15 as QQC2
+import QtQuick.Layouts 1.15
 import org.calligra 1.0
 import org.kde.kirigami 2.1 as Kirigami
 import "welcomepages"
@@ -25,7 +27,10 @@ import "components"
 
 Kirigami.ApplicationItem {
     id: base;
-    onWidthChanged: Constants.setGridWidth( width / Constants.GridColumns );
+    onWidthChanged: {
+        Constants.setGridWidth( width / Constants.GridColumns );
+        drawer.modal = width < Kirigami.Units.gridUnit * 20;
+    }
     onHeightChanged: Constants.setGridHeight( height / Constants.GridRows );
     DocumentListModel { id: allDocumentsModel; }
     DocumentListModel { id: textDocumentsModel; filter: DocumentListModel.TextDocumentType; }
@@ -33,8 +38,8 @@ Kirigami.ApplicationItem {
 
     pageStack.initialPage: welcomePageFilebrowser;
     pageStack.defaultColumnWidth: pageStack.width
-    pageStack.globalToolBar.style: Kirigami.ApplicationHeaderStyle.Auto
     pageStack.layers.onCurrentItemChanged: pageStack.layers.currentItem !== null ? mainWindow.currentTouchPage = (pageStack.layers.currentItem.pageName !== undefined) ? pageStack.layers.currentItem.pageName : pageStack.layers.currentItem.toString() : ""
+    pageStack.globalToolBar.style: Kirigami.ApplicationHeaderStyle.Auto
     Component.onCompleted: {
         if(RecentFileManager.size() > 0) {
             pageStack.replace(welcomePageRecent);
@@ -65,6 +70,7 @@ Kirigami.ApplicationItem {
     contextDrawer: Kirigami.ContextDrawer {
         id: contextDrawer
     }
+
     Connections {
         target: pageStack.layers
         onDepthChanged: {
@@ -78,50 +84,114 @@ Kirigami.ApplicationItem {
             }
         }
     }
+
     globalDrawer: Kirigami.GlobalDrawer {
-        title: "Calligra Gemini"
-        titleIcon: Settings.theme.iconActual("Calligra-MockIcon-1");
-        drawerOpen: true;
-        modal: false;
-        actions: [
-            Kirigami.Action  {
-                text: "OPEN"
-            },
-            Kirigami.Action  {
-                text: "Recent Documents"
-                iconName: "document-open-recent"
-                onTriggered: if(pageStack.currentItem.objectName != "welcomePageRecent") pageStack.replace(welcomePageRecent);
-                checked: pageStack.currentItem !== null && pageStack.currentItem.objectName == "WelcomePageRecent";
-            },
-            Kirigami.Action  {
-                text: "Library"
-                iconName: "folder-documents"
-                onTriggered: if(pageStack.currentItem.objectName != "WelcomePageFilebrowser") pageStack.replace(welcomePageFilebrowser);
-                checked: pageStack.currentItem !== null && pageStack.currentItem.objectName == "WelcomePageFilebrowser";
-            },
-            Kirigami.Action  {
-                text: "Cloud"
-                iconName: "folder-cloud"
-                onTriggered: if(pageStack.currentItem.objectName != "WelcomePageCloud") pageStack.replace(welcomePageCloud);
-                checked: pageStack.currentItem !== null && pageStack.currentItem.objectName == "WelcomePageCloud";
-            },
-            Kirigami.Action  {
-                text: "CREATE NEW"
-            },
-            Kirigami.Action  {
-                text: "Document"
-                iconName: "x-office-document"
-                onTriggered: if(pageStack.currentItem.objectName != "WelcomePageWords") pageStack.replace(welcomePageWords);
-                checked: pageStack.currentItem !== null && pageStack.currentItem.objectName == "WelcomePageWords";
-            },
-            Kirigami.Action  {
-                text: "Presentation"
-                iconName: "x-office-presentation"
-                onTriggered: if(pageStack.currentItem.objectName != "WelcomePageStage") pageStack.replace(welcomePageStage);
-                checked: pageStack.currentItem !== null && pageStack.currentItem.objectName == "WelcomePageStage";
+        id: drawer
+        // Autohiding behavior
+        onModalChanged: drawerOpen = !modal
+
+        leftPadding: 0
+        rightPadding: 0
+        topPadding: 0
+        bottomPadding: 0
+
+        header: Kirigami.AbstractApplicationHeader {
+            topPadding: Kirigami.Units.smallSpacing;
+            bottomPadding: Kirigami.Units.smallSpacing;
+            leftPadding: Kirigami.Units.largeSpacing
+            rightPadding: Kirigami.Units.largeSpacing
+            Kirigami.Heading {
+                level: 1
+                text: i18n("Calligra Gemini")
             }
-        ]
+        }
+
+        component PlaceHeading : Kirigami.Heading {
+            topPadding: Kirigami.Units.largeSpacing
+            leftPadding: Kirigami.Units.largeSpacing
+            Layout.fillWidth: true
+            level: 6
+            opacity: 0.7
+        }
+
+        component PlaceItem : Kirigami.AbstractListItem {
+            id: item
+            property string icon
+            property string filter
+            property string query
+            checkable: true
+            separatorVisible: false
+            Layout.fillWidth: true
+            Keys.onDownPressed: nextItemInFocusChain().forceActiveFocus(Qt.TabFocusReason)
+            Keys.onUpPressed: nextItemInFocusChain(false).forceActiveFocus(Qt.TabFocusReason)
+            Accessible.role: Accessible.MenuItem
+            contentItem: Row {
+                Kirigami.Icon {
+                    source: item.icon
+                    width: height
+                    height: Kirigami.Units.iconSizes.small
+                }
+                QQC2.Label {
+                    leftPadding: Kirigami.Units.smallSpacing
+                    text: item.text
+                }
+            }
+        }
+
+        // Place
+        QQC2.ScrollView {
+            id: scrollView
+            Layout.topMargin: -Kirigami.Units.smallSpacing;
+            Layout.bottomMargin: -Kirigami.Units.smallSpacing;
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+
+            Accessible.role: Accessible.MenuBar
+
+            ColumnLayout {
+                spacing: 1
+                width: scrollView.width
+
+                PlaceHeading {
+                    text: i18n("Open")
+                }
+                PlaceItem {
+                    text: i18n("Recent Documents")
+                    icon: "document-open-recent"
+                    onClicked: if(pageStack.currentItem.objectName != "welcomePageRecent") pageStack.replace(welcomePageRecent);
+                    highlighted: pageStack.currentItem !== null && pageStack.currentItem.objectName == "WelcomePageRecent";
+                }
+                PlaceItem {
+                    text: i18n("Library")
+                    icon: "folder-documents"
+                    onClicked: if(pageStack.currentItem.objectName != "WelcomePageFilebrowser") pageStack.replace(welcomePageFilebrowser);
+                    highlighted: pageStack.currentItem !== null && pageStack.currentItem.objectName == "WelcomePageFilebrowser";
+                }
+                PlaceItem {
+                    text: i18n("Cloud")
+                    icon: "folder-cloud"
+                    onClicked: if(pageStack.currentItem.objectName != "WelcomePageCloud") pageStack.replace(welcomePageCloud);
+                    highlighted: pageStack.currentItem !== null && pageStack.currentItem.objectName == "WelcomePageCloud";
+                }
+                PlaceHeading {
+                    text: i18n("Create new")
+                }
+                PlaceItem {
+                    text: i18n("Document")
+                    icon: "x-office-document"
+                    onClicked: if(pageStack.currentItem.objectName != "WelcomePageWords") pageStack.replace(welcomePageWords);
+                    highlighted: pageStack.currentItem !== null && pageStack.currentItem.objectName == "WelcomePageWords";
+                }
+                PlaceItem {
+                    text: i18n("Presentation")
+                    icon: "x-office-presentation"
+                    onClicked: if(pageStack.currentItem.objectName != "WelcomePageStage") pageStack.replace(welcomePageStage);
+                    highlighted: pageStack.currentItem !== null && pageStack.currentItem.objectName == "WelcomePageStage";
+                }
+            }
+        }
     }
+
     Component { id: mainPage; MainPage { } }
     Component { id: welcomePageFilebrowser; WelcomePageFilebrowser { } }
     Component { id: welcomePageRecent; WelcomePageRecent { } }
@@ -136,8 +206,8 @@ Kirigami.ApplicationItem {
     // This component is used to get around the fact that MainPage takes a very long time to initialise in some cases
     Dialog {
         id: baseLoadingDialog;
-        title: "Loading";
-        message: "Please wait...";
+        title: i18n("Loading");
+        message: i18n("Please wait...");
         textAlign: Text.AlignHCenter;
         modalBackgroundColor: "#ffffff";
         opacity: 1;
