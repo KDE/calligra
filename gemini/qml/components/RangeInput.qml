@@ -17,9 +17,10 @@
  */
 
 import QtQuick 2.0
-import QtQuick.Controls 1.4 as QtControls
+import QtQuick.Controls 2.15 as QQC2
+import QtQuick.Layouts 1.15
 
-Item {
+ColumnLayout {
     id: base;
 
     property bool enabled: true;
@@ -28,8 +29,6 @@ Item {
     property real min: 0;
     property real max: 1000;
     property int decimals: 2;
-
-    height: textField.height + valueSlider.height;
 
     onValueChanged: {
         if (decimals === 0) {
@@ -59,25 +58,16 @@ Item {
         }
     }
 
-    QtControls.TextField {
+    QQC2.TextField {
         id: textField
-        anchors {
-            top: parent.top;
-            left: parent.left;
-            right: parent.right;
-        }
         inputMethodHints: Qt.ImhFormattedNumbersOnly;
         onAccepted: value = (text / (base.max - base.min));
+        Layout.fillWidth: true
     }
-    QtControls.Slider {
+
+    QQC2.Slider {
         id: valueSlider;
-        anchors {
-            top: textField.bottom;
-            left: parent.left;
-            right: parent.right;
-            leftMargin: Constants.DefaultMargin;
-            rightMargin: Constants.DefaultMargin;
-        }
+        Layout.fillWidth: true
         onValueChanged: base.value = base.min + (value * (base.max - base.min));
     }
 }

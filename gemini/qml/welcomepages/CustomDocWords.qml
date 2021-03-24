@@ -17,23 +17,23 @@
  */
 
 import QtQuick 2.0
-import org.kde.kirigami 2.7 as Kirigami
-import QtQuick.Controls 1.4 as QtControls
+import org.kde.kirigami 2.14 as Kirigami
+import QtQuick.Controls 2.15 as QQC2
 import org.calligra 1.0
 import "../components"
 
 Kirigami.Page {
     id: base;
     property string pageName: "CustomDocWords";
-    title: "Create Custom Document"
+    title: i18n("Create Custom Document")
     Item {
         anchors {
             top: parent.top;
             left: parent.horizontalCenter;
             right: parent.right;
             bottom: parent.bottom;
-            margins: Constants.DefaultMargin;
-            bottomMargin: Constants.DefaultMargin * 2 + createDocButton.height;
+            margins: Kirigami.Units.largeSpacing
+            bottomMargin: Kirigami.Units.largeSpacing + createDocButton.height;
         }
         Rectangle {
             id: singlePageVisualiser;
@@ -44,9 +44,11 @@ Kirigami.Page {
             property bool landscapeMode: landscapeCheck.checked ? widthInput.text < heightInput.text : heightInput.text < widthInput.text;
             height: landscapeMode ? (parent.height - Constants.DefaultMargin) * scale : (parent.height - Constants.DefaultMargin);
             width: landscapeMode ? (parent.width - Constants.DefaultMargin) : (parent.width - Constants.DefaultMargin) * scale;
-            color: "white";
+            color: Kirigami.Theme.backgroundColor;
+            Kirigami.Theme.colorSet: Kirigami.Theme.View
+            Kirigami.Theme.inherit: false
             border {
-                color: "silver";
+                color: Kirigami.Theme.alternateBackgroundColor;
                 width: 1;
             }
             Item {
@@ -68,7 +70,7 @@ Kirigami.Page {
                             opacity: 0.5;
                             border {
                                 width: 1;
-                                color: "silver";
+                                color: Kirigami.Theme.textColor;
                             }
                         }
                     }
@@ -171,33 +173,37 @@ Kirigami.Page {
         }
         Column {
             width: parent.width;
-            Label {
+            QQC2.Label {
                 width: parent.width;
-                text: "Unit:"
+                text: i18n("Unit:")
             }
-            QtControls.ComboBox {
+            QQC2.ComboBox {
                 id: unitList;
                 width: parent.width;
-                currentIndex: 6;
                 model: ListModel {
                     id: unitModel;
-                    ListElement { text: "Millimeters (mm)"; unit: "mm"; }
-                    ListElement { text: "Centimeters (cm)"; unit: "cm"; }
-                    ListElement { text: "Decimeters (dm)"; unit: "dm"; }
-                    ListElement { text: "Inches (in)"; unit: "in"; }
-                    ListElement { text: "Pica (pi)"; unit: "pi"; }
-                    ListElement { text: "Cicero (cc)"; unit: "cc"; }
-                    ListElement { text: "Points (pt)"; unit: "pt"; }
+                }
+                textRole: "text"
+                valueRole: "unit"
+                Component.onCompleted: {
+                    unitModel.append({ "text": i18n("Millimeters (mm)"), "unit": "mm" });
+                    unitModel.append({ "text": i18n("Centimeters (cm)"), "unit": "cm" });
+                    unitModel.append({ "text": i18n("Decimeters (dm)"), "unit": "dm" });
+                    unitModel.append({ "text": i18n("Inches (in)"), "unit": "in" });
+                    unitModel.append({ "text": i18n("Pica (pi)"), "unit": "pi" });
+                    unitModel.append({ "text": i18n("Cicero (cc)"), "unit": "cc" });
+                    unitModel.append({ "text": i18n("Points (pt)"), "unit": "pt" });
+                    currentIndex = 6;
                 }
             }
-            Label {
+            QQC2.Label {
                 width: parent.width;
-                text: "Size:"
+                text: i18n("Size:")
             }
-            QtControls.ComboBox {
+            QQC2.ComboBox {
                 id: paperSizeList;
                 width: parent.width;
-                Component.onCompleted: currentIndex = 7;
+                textRole: "text"
                 onCurrentIndexChanged: {
                     if(widthInput !== null) {
                         widthInput.text = paperSizeModel.get(currentIndex).width;
@@ -206,37 +212,40 @@ Kirigami.Page {
                 }
                 model: ListModel {
                     id: paperSizeModel;
-                    ListElement { text: "Custom"; name: "Custom"; width: 210.0; height: 297.0; }
-                    ListElement { text: "Screen"; name: "Screen"; width: 210.0; height: 297.0; }
-                    ListElement { isCategory: true; text: "ISO formats"; }
-                    ListElement { text: "ISO A0"; name: "A0"; width: 841.0; height: 1189.0; }
-                    ListElement { text: "ISO A1"; name: "A1"; width: 594.0; height: 841.0; }
-                    ListElement { text: "ISO A2"; name: "A2"; width: 420.0; height: 594.0; }
-                    ListElement { text: "ISO A3"; name: "A3"; width: 297.0; height: 420.0; }
-                    ListElement { text: "ISO A4"; name: "A4"; width: 210.0; height: 297.0; }
-                    ListElement { text: "ISO A5"; name: "A5"; width: 148.0; height: 210.0; }
-                    ListElement { text: "ISO A6"; name: "A6"; width: 105.0; height: 148.0; }
-                    ListElement { text: "ISO A7"; name: "A7"; width: 74.0; height: 105.0; }
-                    ListElement { text: "ISO A8"; name: "A8"; width: 52.0; height: 74.0; }
-                    ListElement { text: "ISO A9"; name: "A9"; width: 37.0; height: 52.0; }
-                    ListElement { text: "ISO B0"; name: "B0"; width: 1030.0; height: 1456.0; }
-                    ListElement { text: "ISO B1"; name: "B1"; width: 728.0; height: 1030.0; }
-                    ListElement { text: "ISO B2"; name: "B2"; width: 515.0; height: 728.0; }
-                    ListElement { text: "ISO B3"; name: "B3"; width: 364.0; height: 515.0; }
-                    ListElement { text: "ISO B4"; name: "B4"; width: 257.0; height: 364.0; }
-                    ListElement { text: "ISO B5"; name: "B5"; width: 182.0; height: 257.0; }
-                    ListElement { text: "ISO B6"; name: "B6"; width: 128.0; height: 182.0; }
-                    ListElement { text: "ISO B10"; name: "B10"; width: 32.0; height: 45.0; }
-                    ListElement { text: "ISO C5"; name: "C5"; width: 163.0; height: 229.0; }
-                    ListElement { text: "ISO DL"; name: "DL"; width: 110.0; height: 220.0; }
-                    ListElement { isCategory: true; text: "US formats"; }
-                    ListElement { text: "US Letter"; name: "Letter"; width: 215.9; height: 279.4; }
-                    ListElement { text: "US Legal"; name: "Legal"; width: 215.9; height: 355.6; }
-                    ListElement { text: "US Executive"; name: "Executive"; width: 191.0; height: 254.0; }
-                    ListElement { text: "US Folio"; name: "Folio"; width: 210.0; height: 330.0; }
-                    ListElement { text: "US Ledger"; name: "Ledger"; width: 432.0; height: 279.0; }
-                    ListElement { text: "US Tabloid"; name: "Tabloid"; width: 279.0; height: 432.0; }
-                    ListElement { test: "US Common 10"; name: "Comm10"; width: 105.0; height: 241.0; }
+                }
+                Component.onCompleted: {
+                    paperSizeModel.append({ "text": i18n("Custom"), name: "Custom", width: 210.0, height: 297.0 });
+                    paperSizeModel.append({ "text": i18n("Screen"), name: "Screen", width: 210.0, height: 297.0 });
+                    //paperSizeModel.append({ isCategory: true, text: "ISO formats" });
+                    paperSizeModel.append({ "text": i18n("ISO A0"), name: "A0", width: 841.0, height: 1189.0 });
+                    paperSizeModel.append({ "text": i18n("ISO A1"), name: "A1", width: 594.0, height: 841.0 });
+                    paperSizeModel.append({ "text": i18n("ISO A2"), name: "A2", width: 420.0, height: 594.0 });
+                    paperSizeModel.append({ "text": i18n("ISO A3"), name: "A3", width: 297.0, height: 420.0 });
+                    paperSizeModel.append({ "text": i18n("ISO A4"), name: "A4", width: 210.0, height: 297.0 });
+                    paperSizeModel.append({ "text": i18n("ISO A5"), name: "A5", width: 148.0, height: 210.0 });
+                    paperSizeModel.append({ "text": i18n("ISO A6"), name: "A6", width: 105.0, height: 148.0 });
+                    paperSizeModel.append({ "text": i18n("ISO A7"), name: "A7", width: 74.0, height: 105.0 });
+                    paperSizeModel.append({ "text": i18n("ISO A8"), name: "A8", width: 52.0, height: 74.0 });
+                    paperSizeModel.append({ "text": i18n("ISO A9"), name: "A9", width: 37.0, height: 52.0 });
+                    paperSizeModel.append({ "text": i18n("ISO B0"), name: "B0", width: 1030.0, height: 1456.0 });
+                    paperSizeModel.append({ "text": i18n("ISO B1"), name: "B1", width: 728.0, height: 1030.0 });
+                    paperSizeModel.append({ "text": i18n("ISO B2"), name: "B2", width: 515.0, height: 728.0 });
+                    paperSizeModel.append({ "text": i18n("ISO B3"), name: "B3", width: 364.0, height: 515.0 });
+                    paperSizeModel.append({ "text": i18n("ISO B4"), name: "B4", width: 257.0, height: 364.0 });
+                    paperSizeModel.append({ "text": i18n("ISO B5"), name: "B5", width: 182.0, height: 257.0 });
+                    paperSizeModel.append({ "text": i18n("ISO B6"), name: "B6", width: 128.0, height: 182.0 });
+                    paperSizeModel.append({ "text": i18n("ISO B10"), name: "B10", width: 32.0, height: 45.0 });
+                    paperSizeModel.append({ "text": i18n("ISO C5"), name: "C5", width: 163.0, height: 229.0 });
+                    paperSizeModel.append({ "text": i18n("ISO DL"), name: "DL", width: 110.0, height: 220.0 });
+                    //paperSizeModel.append({ isCategory: true, text: "US formats" });
+                    paperSizeModel.append({ "text": i18n("US Letter"), name: "Letter", width: 215.9, height: 279.4 });
+                    paperSizeModel.append({ "text": i18n("US Legal"), name: "Legal", width: 215.9, height: 355.6 });
+                    paperSizeModel.append({ "text": i18n("US Executive"), name: "Executive", width: 191.0, height: 254.0 });
+                    paperSizeModel.append({ "text": i18n("US Folio"), name: "Folio", width: 210.0, height: 330.0 });
+                    paperSizeModel.append({ "text": i18n("US Ledger"), name: "Ledger", width: 432.0, height: 279.0 });
+                    paperSizeModel.append({ "text": i18n("US Tabloid"), name: "Tabloid", width: 279.0, height: 432.0 });
+                    paperSizeModel.append({ "text": i18n("US Common 10"), name: "Comm10", width: 105.0, height: 241.0 });
+                    currentIndex = 7;
                 }
             }
             Item {
@@ -246,7 +255,7 @@ Kirigami.Page {
                 opacity: paperSizeList.currentIndex === 0 ? 1 : 0;
                 Behavior on opacity { NumberAnimation { duration: Kirigami.Units.shortDuration; } }
                 clip: true;
-                QtControls.TextField {
+                QQC2.TextField {
                     id: widthInput;
                     anchors {
                         top: parent.top;
@@ -254,11 +263,11 @@ Kirigami.Page {
                         right: parent.horizontalCenter;
                     }
                     width: parent.width;
-                    placeholderText: landscapeCheck.checked ? "Height" : "Width";
+                    placeholderText: landscapeCheck.checked ? i18n("Height") : i18n("Width");
                     validator: DoubleValidator{ bottom: 1; top: 999999; decimals: 2; }
                     inputMethodHints: Qt.ImhFormattedNumbersOnly;
                 }
-                QtControls.TextField {
+                QQC2.TextField {
                     id: heightInput;
                     anchors {
                         top: parent.top;
@@ -266,19 +275,19 @@ Kirigami.Page {
                         right: parent.right;
                     }
                     width: parent.width;
-                    placeholderText: landscapeCheck.checked ? "Width" : "Height";
+                    placeholderText: landscapeCheck.checked ? i18n("Width") : i18n("Height");
                     validator: DoubleValidator{ bottom: 1; top: 999999; decimals: 2; }
                     inputMethodHints: Qt.ImhFormattedNumbersOnly;
                 }
             }
-            Label {
+            QQC2.Label {
                 width: parent.width;
-                text: "Orientation:";
+                text: i18n("Orientation:")
             }
             Item {
                 height: Constants.GridHeight / 2;
                 width: parent.width;
-                CohereButton {
+                QQC2.Button {
                     id: portraitCheck;
                     anchors {
                         top: parent.top;
@@ -286,14 +295,11 @@ Kirigami.Page {
                         right: parent.horizontalCenter;
                         bottom: parent.bottom;
                     }
-                    text: "Portrait";
-                    textColor: "#5b6573";
-                    textSize: Settings.theme.adjustedPixel(18);
-                    checkedColor: "#D2D4D5";
+                    text: i18n("Portrait");
                     onClicked: portraitCheck.checked = true;
                     checked: true;
                 }
-                CohereButton {
+                QQC2.Button {
                     id: landscapeCheck;
                     anchors {
                         top: parent.top;
@@ -301,22 +307,19 @@ Kirigami.Page {
                         right: parent.right;
                         bottom: parent.bottom;
                     }
-                    text: "Landscape";
-                    textColor: "#5b6573";
-                    textSize: Settings.theme.adjustedPixel(18);
-                    checkedColor: "#D2D4D5";
+                    text: i18n("Landscape");
                     onClicked: portraitCheck.checked = false;
                     checked: !portraitCheck.checked;
                 }
             }
-            Label {
+            QQC2.Label {
                 width: parent.width;
-                text: "Facing pages:";
+                text: i18n("Facing pages:");
             }
             Item {
                 height: Constants.GridHeight / 2;
                 width: parent.width;
-                CohereButton {
+                QQC2.Button {
                     id: nonFacingCheck;
                     anchors {
                         top: parent.top;
@@ -324,14 +327,11 @@ Kirigami.Page {
                         right: parent.horizontalCenter;
                         bottom: parent.bottom;
                     }
-                    text: "Single sided";
-                    textColor: "#5b6573";
-                    textSize: Settings.theme.adjustedPixel(18);
-                    checkedColor: "#D2D4D5";
+                    text: i18n("Single sided");
                     onClicked: nonFacingCheck.checked = true;
                     checked: true;
                 }
-                CohereButton {
+                QQC2.Button {
                     id: facingCheck;
                     anchors {
                         top: parent.top;
@@ -339,31 +339,28 @@ Kirigami.Page {
                         right: parent.right;
                         bottom: parent.bottom;
                     }
-                    text: "Facing";
-                    textColor: "#5b6573";
-                    textSize: Settings.theme.adjustedPixel(18);
-                    checkedColor: "#D2D4D5";
+                    text: i18n("Facing");
                     onClicked: nonFacingCheck.checked = false;
                     checked: !nonFacingCheck.checked;
                 }
             }
-            Label {
+            QQC2.Label {
                 width: parent.width;
-                text: "Columns:";
+                text: i18n("Columns:");
             }
             Row {
                 width: parent.width;
                 RangeInput {
                     id: columnCount;
                     width: parent.width / 2;
-                    placeholder: "Amount";
+                    placeholder: i18n("Amount");
                     min: 1; max: 6; decimals: 0;
                     value: 1;
                 }
                 RangeInput {
                     id: columnSpacing;
                     width: parent.width / 2;
-                    placeholder: "Spacing";
+                    placeholder: i18n("Spacing");
                     min: 0;
                     max: (heightInput.text > widthInput.text ? heightInput.text : widthInput.text) / columnCount.value;
                     decimals: 2;
@@ -385,7 +382,7 @@ Kirigami.Page {
                 RangeInput {
                     id: marginTop;
                     width: parent.width / 3;
-                    placeholder: "Top";
+                    placeholder: i18n("Top");
                     min: 1; max: 999; decimals: 2;
                     value: 20;
                 }
@@ -396,21 +393,21 @@ Kirigami.Page {
                 RangeInput {
                     id: marginLeft;
                     width: parent.width / 3;
-                    placeholder: facingCheck.checked ? "Binding" : "Left";
+                    placeholder: facingCheck.checked ? i18n("Binding") : i18n("Left");
                     min: 1; max: 999; decimals: 2;
                     value: 20;
                 }
                 Label {
                     height: marginLeft.height;
                     width: parent.width / 3;
-                    text: "Margins";
+                    text: i18n("Margins");
                     verticalAlignment: Text.AlignVCenter;
                     horizontalAlignment: Text.AlignHCenter;
                 }
                 RangeInput {
                     id: marginRight;
                     width: parent.width / 3;
-                    placeholder: facingCheck.checked ? "Outside" : "Right";
+                    placeholder: facingCheck.checked ? i18n("Outside") : i18n("Right");
                     min: 1; max: 999; decimals: 2;
                     value: 20;
                 }
@@ -425,21 +422,21 @@ Kirigami.Page {
                 RangeInput {
                     id: marginBottom;
                     width: parent.width / 3;
-                    placeholder: "Bottom";
+                    placeholder: i18n("Bottom");
                     min: 1; max: 999; decimals: 2;
                     value: 20;
                 }
             }
         }
     }
-    QtControls.Button {
+    QQC2.Button {
         id: createDocButton;
         anchors {
             right: parent.right;
             bottom: parent.bottom;
             margins: Constants.DefaultMargin;
         }
-        text: "Create Document";
+        text: i18n("Create Document");
         onClicked: {
             var queryString = "newfile:///";
             queryString += "?mimetype=" + WORDS_MIME_TYPE;
