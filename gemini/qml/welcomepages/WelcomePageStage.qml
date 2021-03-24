@@ -1,30 +1,18 @@
-/* This file is part of the KDE project
- * Copyright (C) 2014 Dan Leinir Turthra Jensen <admin@leinir.dk>
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
+// This file is part of the KDE project
+// SPDX-FileCopyrightText: 2014 Dan Leinir Turthra Jensen <admin@leinir.dk>
+// SPDX-FileCopyrightText: 2021 Carl Schwan <carlschwan@kde.org>
+// SPDX-License-Identifier: GPL-2.0-or-later
 
-import QtQuick 2.0
-import org.kde.kirigami 2.7 as Kirigami
+import QtQuick 2.14
+import org.kde.kirigami 2.14 as Kirigami
+import QtQuick.Controls 2.15 as QQC2
+import QtQuick.Layouts 1.15
 import org.calligra 1.0
-import "../components"
 
 Kirigami.ScrollablePage {
     id: base;
     objectName: "WelcomePageStage";
-    title: "Pick a Presentation Template"
+    title: i18n("Pick a Presentation Template")
     function activateTemplate(templateFile) {
         console.debug(templateFile);
         if(templateFile.slice(-1) === "/" || templateFile === "") {
@@ -54,98 +42,83 @@ Kirigami.ScrollablePage {
 //         ListElement { text: "Luna Rising"; thumbnail: ""; color: "#828C8F"; templateFile: ""; variants: [ ] }
 //         ListElement { text: "Galactic Voyage"; thumbnail: ""; color: "#E8EFF1"; templateFile: ""; variants: [] }
 
+    property bool showClassicModel: true
     actions {
         contextualActions: [
             Kirigami.Action {
-                text: "Classic";
-                onTriggered: { if(!checked) { stageTemplatesRepeater.model = stageTemplatesClassic; } }
-                checked: stageTemplatesRepeater.model === stageTemplatesClassic;
+                text: i18n("Classic");
+                onToggled: base.showClassicModel = checked
+                checked: showClassicModel
+                checkable: true
             },
             Kirigami.Action {
-                text: "Wide";
-                onTriggered: { if(!checked) { stageTemplatesRepeater.model = stageTemplates; } }
-                checked: stageTemplatesRepeater.model === stageTemplates;
+                text: i18n("Wide");
+                onToggled: base.showClassicModel = !checked
+                checked: !showClassicModel
+                checkable: true
             }
         ]
     }
-    Flickable {
-        id: stageFlickable;
-        anchors {
-            fill: parent;
-            margins: Kirigami.Units.largeSpacing;
-            topMargin: Constants.GridHeight * 1.5;
-            bottomMargin: 0;
-        }
-        contentWidth: templatesFlow.width;
-        contentHeight: templatesFlow.height;
-        clip: true;
-        Flow {
-            id: templatesFlow;
-            width: base.width - Kirigami.Units.largeSpacing * 2;
-            spacing: Kirigami.Units.largeSpacing * 3;
-            Repeater {
-                id: stageTemplatesRepeater;
-                model: stageTemplates;
-                Column {
-                    width: (templatesFlow.width / 4) - Kirigami.Units.largeSpacing * 3;
-                    height: width * 0.7;
+
+    GridView {
+        id: docList;
+        cellWidth: Math.floor(width/Math.floor(width/(Kirigami.Units.gridUnit * 14 + Kirigami.Units.largeSpacing * 2)))
+        cellHeight: cellWidth - Kirigami.Units.gridUnit * 6 + Kirigami.Theme.defaultFont.pixelSize
+        model: showClassicModel ? stageTemplatesClassic : stageTemplates
+
+        delegate: QQC2.ItemDelegate {
+            implicitWidth: GridView.view.cellWidth;
+            implicitHeight: GridView.view.cellHeight
+            padding: Kirigami.Units.largeSpacing
+            onClicked: {
+                if (model.variantCount === 0) {
+                    activateTemplate(model.url);
+                } else {
+                    // then there are variants to choose between, let the user see!
+                    variantSelector.model = model.variants;
+                    variantSelector.opacity = 1;
+                }
+            }
+            contentItem: ColumnLayout {
+                Image {
+                    source: model.thumbnail ? model.thumbnail : "";
+                    fillMode: Image.PreserveAspectFit;
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+                    smooth: true;
+                    Rectangle {
+                        anchors.fill: parent;
+                        visible: !model.thumbnail
+                        color: model.thumbnail ? "transparent" : model.color;
+                        border {
+                            width: 1;
+                            color: Kirigami.Theme.textColor
+                        }
+                        opacity: 0.4;
+                    }
+                }
+                Row {
+                    Layout.preferredHeight: Kirigami.Units.largeSpacing * 2;
+                    Layout.alignment: Qt.AlignHCenter
                     spacing: Kirigami.Units.largeSpacing;
-                    Image {
-                        source: model.thumbnail ? model.thumbnail : "";
-                        width: parent.width;
-                        height: parent.height - templateName.height - Kirigami.Units.largeSpacing;
-                        fillMode: Image.PreserveAspectFit;
-                        smooth: true;
+                    property QtObject colorModel: model.variants;
+                    Repeater {
+                        model: parent.colorModel;
                         Rectangle {
-                            anchors.fill: parent;
-                            color: model.thumbnail ? "transparent" : model.color;
-                            border {
-                                width: 1;
-                                color: "#c1cdd1";
-                            }
-                            opacity: 0.6;
-                        }
-                        Row {
-                            anchors {
-                                bottom: parent.bottom;
-                                right: parent.right;
-                                margins: Kirigami.Units.largeSpacing;
-                            }
                             height: Kirigami.Units.largeSpacing * 2;
-                            spacing: Kirigami.Units.largeSpacing;
-                            property QtObject colorModel: model.variants;
-                            Repeater {
-                                model: parent.colorModel;
-                                Rectangle {
-                                    height: Kirigami.Units.largeSpacing * 2;
-                                    width: height;
-                                    radius: Kirigami.Units.largeSpacing;
-                                    color: model.color;
-                                }
-                            }
-                        }
-                        MouseArea {
-                            anchors.fill: parent;
-                            onClicked: {
-                                if(model.variantCount === 0) {
-                                    activateTemplate(model.url);
-                                }
-                                else {
-                                    // then there are variants to choose between, let the user see!
-                                    variantSelector.model = model.variants;
-                                    variantSelector.opacity = 1;
-                                }
-                            }
+                            width: height;
+                            radius: Kirigami.Units.largeSpacing;
+                            color: model.color;
                         }
                     }
-                    Label {
-                        id: templateName;
-                        width: parent.width;
-                        horizontalAlignment: Text.AlignHCenter;
-                        text: model.text;
-                        font: Settings.theme.font("templateLabel");
-                        color: "#5b6573";
-                    }
+                }
+                QQC2.Label {
+                    id: templateName;
+                    horizontalAlignment: Text.AlignHCenter;
+                    verticalAlignment: Text.AlignVCenter;
+                    elide: Text.ElideRight
+                    Layout.fillWidth: true
+                    text: model.text;
                 }
             }
         }
