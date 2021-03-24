@@ -16,8 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-import QtQuick 2.0
-import QtQuick.Controls 1.3
+import QtQuick 2.15
 import QtQuick.Controls 2.15 as QQC2
 import QtQuick.Layouts 1.15
 import org.calligra 1.0
@@ -114,20 +113,17 @@ Kirigami.ApplicationItem {
             opacity: 0.7
         }
 
-        component PlaceItem : Kirigami.AbstractListItem {
+        component PlaceItem : QQC2.ItemDelegate {
             id: item
-            property string icon
-            property string filter
-            property string query
             checkable: true
-            separatorVisible: false
             Layout.fillWidth: true
             Keys.onDownPressed: nextItemInFocusChain().forceActiveFocus(Qt.TabFocusReason)
             Keys.onUpPressed: nextItemInFocusChain(false).forceActiveFocus(Qt.TabFocusReason)
             Accessible.role: Accessible.MenuItem
+            highlighted: checked
             contentItem: Row {
                 Kirigami.Icon {
-                    source: item.icon
+                    source: item.icon.name
                     width: height
                     height: Kirigami.Units.iconSizes.small
                 }
@@ -149,44 +145,55 @@ Kirigami.ApplicationItem {
             Accessible.role: Accessible.MenuBar
 
             ColumnLayout {
+                id: placeColumn
                 spacing: 1
                 width: scrollView.width
+
+                QQC2.ButtonGroup {
+                    id: placeGroup
+                }
 
                 PlaceHeading {
                     text: i18n("Open")
                 }
                 PlaceItem {
+                    id: recentDocumentsItem
                     text: i18n("Recent Documents")
-                    icon: "document-open-recent"
-                    onClicked: if(pageStack.currentItem.objectName != "welcomePageRecent") pageStack.replace(welcomePageRecent);
-                    highlighted: pageStack.currentItem !== null && pageStack.currentItem.objectName == "WelcomePageRecent";
+                    icon.name: "document-open-recent"
+                    onToggled: if(checked) { pageStack.replace(welcomePageRecent) }
+                    QQC2.ButtonGroup.group: placeGroup
+                    checked: true
                 }
                 PlaceItem {
+                    id: libraryItem
                     text: i18n("Library")
-                    icon: "folder-documents"
-                    onClicked: if(pageStack.currentItem.objectName != "WelcomePageFilebrowser") pageStack.replace(welcomePageFilebrowser);
-                    highlighted: pageStack.currentItem !== null && pageStack.currentItem.objectName == "WelcomePageFilebrowser";
+                    icon.name: "folder-documents"
+                    onToggled: if(checked) { pageStack.replace(welcomePageFilebrowser) }
+                    QQC2.ButtonGroup.group: placeGroup
                 }
                 PlaceItem {
+                    id: cloudItem
                     text: i18n("Cloud")
-                    icon: "folder-cloud"
-                    onClicked: if(pageStack.currentItem.objectName != "WelcomePageCloud") pageStack.replace(welcomePageCloud);
-                    highlighted: pageStack.currentItem !== null && pageStack.currentItem.objectName == "WelcomePageCloud";
+                    icon.name: "folder-cloud"
+                    onToggled: if(checked) { pageStack.replace(welcomePageCloud) }
+                    QQC2.ButtonGroup.group: placeGroup
                 }
                 PlaceHeading {
                     text: i18n("Create new")
                 }
                 PlaceItem {
+                    id: documentItem
                     text: i18n("Document")
-                    icon: "x-office-document"
-                    onClicked: if(pageStack.currentItem.objectName != "WelcomePageWords") pageStack.replace(welcomePageWords);
-                    highlighted: pageStack.currentItem !== null && pageStack.currentItem.objectName == "WelcomePageWords";
+                    icon.name: "x-office-document"
+                    onToggled: if(checked) { pageStack.replace(welcomePageWords) }
+                    QQC2.ButtonGroup.group: placeGroup
                 }
                 PlaceItem {
+                    id: presentationItem
                     text: i18n("Presentation")
-                    icon: "x-office-presentation"
-                    onClicked: if(pageStack.currentItem.objectName != "WelcomePageStage") pageStack.replace(welcomePageStage);
-                    highlighted: pageStack.currentItem !== null && pageStack.currentItem.objectName == "WelcomePageStage";
+                    icon.name: "x-office-presentation"
+                    onToggled: if(checked) { pageStack.replace(welcomePageStage) }
+                    QQC2.ButtonGroup.group: placeGroup
                 }
             }
         }
