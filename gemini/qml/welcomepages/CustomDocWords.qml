@@ -17,7 +17,7 @@
  */
 
 import QtQuick 2.0
-import org.kde.kirigami 2.7 as Kirigami
+import org.kde.kirigami 2.14 as Kirigami
 import QtQuick.Controls 1.4 as QtControls
 import org.calligra 1.0
 import "../components"
@@ -32,8 +32,8 @@ Kirigami.Page {
             left: parent.horizontalCenter;
             right: parent.right;
             bottom: parent.bottom;
-            margins: Constants.DefaultMargin;
-            bottomMargin: Constants.DefaultMargin * 2 + createDocButton.height;
+            margins: Kirigami.Units.largeSpacing;
+            bottomMargin: Kirigami.Units.largeSpacing * 2 + createDocButton.height;
         }
         Rectangle {
             id: singlePageVisualiser;
@@ -42,8 +42,8 @@ Kirigami.Page {
             anchors.centerIn: parent;
             property double scale: widthInput.text / heightInput.text;
             property bool landscapeMode: landscapeCheck.checked ? widthInput.text < heightInput.text : heightInput.text < widthInput.text;
-            height: landscapeMode ? (parent.height - Constants.DefaultMargin) * scale : (parent.height - Constants.DefaultMargin);
-            width: landscapeMode ? (parent.width - Constants.DefaultMargin) : (parent.width - Constants.DefaultMargin) * scale;
+            height: landscapeMode ? (parent.height - Kirigami.Units.largeSpacing) * scale : (parent.height - Kirigami.Units.largeSpacing);
+            width: landscapeMode ? (parent.width - Kirigami.Units.largeSpacing) : (parent.width - Kirigami.Units.largeSpacing) * scale;
             color: "white";
             border {
                 color: "silver";
@@ -85,8 +85,8 @@ Kirigami.Page {
             }
             property double scale: widthInput.text / heightInput.text;
             property bool landscapeMode: landscapeCheck.checked ? widthInput.text < heightInput.text : heightInput.text < widthInput.text;
-            height: landscapeMode ? ((parent.height/2) - Constants.DefaultMargin) * scale : ((parent.height/2) - Constants.DefaultMargin);
-            width: landscapeMode ? ((parent.width/2)- Constants.DefaultMargin) : ((parent.width/2) - Constants.DefaultMargin) * scale;
+            height: landscapeMode ? ((parent.height/2) - Kirigami.Units.largeSpacing) * scale : ((parent.height/2) - Kirigami.Units.largeSpacing);
+            width: landscapeMode ? ((parent.width/2)- Kirigami.Units.largeSpacing) : ((parent.width/2) - Kirigami.Units.largeSpacing) * scale;
             color: "white";
             border {
                 color: "silver";
@@ -128,8 +128,8 @@ Kirigami.Page {
             }
             property double scale: widthInput.text / heightInput.text;
             property bool landscapeMode: landscapeCheck.checked ? widthInput.text < heightInput.text : heightInput.text < widthInput.text;
-            height: landscapeMode ? ((parent.height/2) - Constants.DefaultMargin) * scale : ((parent.height/2) - Constants.DefaultMargin);
-            width: landscapeMode ? ((parent.width/2)- Constants.DefaultMargin) : ((parent.width/2) - Constants.DefaultMargin) * scale;
+            height: landscapeMode ? ((parent.height/2) - Kirigami.Units.largeSpacing) * scale : ((parent.height/2) - Kirigami.Units.largeSpacing);
+            width: landscapeMode ? ((parent.width/2)- Kirigami.Units.largeSpacing) : ((parent.width/2) - Kirigami.Units.largeSpacing) * scale;
             color: "white";
             border {
                 color: "silver";
@@ -437,7 +437,7 @@ Kirigami.Page {
         anchors {
             right: parent.right;
             bottom: parent.bottom;
-            margins: Constants.DefaultMargin;
+            margins: Kirigami.Units.largeSpacing;
         }
         text: "Create Document";
         onClicked: {
