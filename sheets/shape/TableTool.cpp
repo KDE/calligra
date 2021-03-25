@@ -58,6 +58,7 @@
 #include <KoTextShapeData.h>
 #include <KoShapePaintingContext.h>
 #include <KoBorder.h>
+#include <KoShapeAnchor.h>
 
 #include "SheetsDebug.h"
 #include "AutoFillStrategy.h"
@@ -192,9 +193,12 @@ void TableTool::Private::setTools()
 
 void TableTool::Private::paintTools(QPainter &painter, const KoViewConverter &viewConverter)
 {
-    painter.translate(shapeRect.topLeft() - tableShape->position());
-
-    QRectF tr = toolRect.translated(-tableShape->position());
+    if (shapeRect != tableShape->boundingRect()) {
+        // The shape has been moved under our feet.
+        // This can happen if anchor properties are changed.
+        setTools();
+    }
+    QRectF tr = toolRect.translated(-shapeRect.topLeft());
     painter.fillRect(tr, qApp->palette().window());
 
     painter.save();
@@ -430,7 +434,6 @@ void TableTool::mouseMoveEvent(KoPointerEvent* event)
         }
         case RowHeader: {
             KoPointerEvent e(event, event->point - d->rowRect.topLeft() + d->tableShape->topLeftOffset());
-            qInfo()<<Q_FUNC_INFO<<event->point<<e.point;
             d->rowHeader.mouseMove(&e);
             break;
         }
