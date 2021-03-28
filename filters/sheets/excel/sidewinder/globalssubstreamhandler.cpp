@@ -565,9 +565,9 @@ void GlobalsSubStreamHandler::handleDateMode(DateModeRecord* record)
     if (!record) return;
 
     if (record->isBase1904())
-        d->workbook->setBaseDate(QDate(1904, 1, 1).startOfDay());
+        d->workbook->setBaseDate(QDateTime(QDate(1904, 1, 1)));
     else
-        d->workbook->setBaseDate(QDate(1899, 12, 30).startOfDay());
+        d->workbook->setBaseDate(QDateTime(QDate(1899, 12, 30)));
 }
 
 void GlobalsSubStreamHandler::handleExternBook(ExternBookRecord* record)

@@ -56,7 +56,7 @@ Workbook::Workbook(KoStore* store)
     d->activeTab = -1;
     d->passwd = 0; // password protection disabled
     d->dggContainer = 0;
-    d->baseDate = QDate(1899, 12, 30).startOfDay();
+    d->baseDate = QDateTime(QDate(1899, 12, 30));
 
     // initialize palette
     static const char *const default_palette[64-8] = { // default palette for all but the first 8 colors

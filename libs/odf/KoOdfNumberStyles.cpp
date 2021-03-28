@@ -208,7 +208,7 @@ QString formatBoolean(const QString &value, const QString &format)
 
 QString formatDate(int value, const QString &format)
 {
-    QDateTime dt = QDate(1899, 12, 30).startOfDay(); // reference date
+    QDateTime dt = QDateTime(QDate(1899, 12, 30)); // reference date
     dt = dt.addDays(value);
     return dt.toString(format);
 }

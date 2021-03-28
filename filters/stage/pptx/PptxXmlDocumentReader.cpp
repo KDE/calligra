@@ -45,6 +45,8 @@
 #include <KoCell.h>
 #include <KoCellStyle.h>
 
+#include <memory>
+
 #define MSOOXML_CURRENT_NS "p"
 #define MSOOXML_CURRENT_CLASS PptxXmlDocumentReader
 #define BIND_READ_CLASS MSOOXML_CURRENT_CLASS
