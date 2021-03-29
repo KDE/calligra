@@ -26,6 +26,7 @@
   <name xml:lang="pt-BR">Calligra Words</name>
   <name xml:lang="ru">Calligra Words</name>
   <name xml:lang="sk">Calligra Words</name>
+  <name xml:lang="sl">Calligra Words</name>
   <name xml:lang="sv">Calligra Words</name>
   <name xml:lang="tr">Calligra Kelime İşlemci</name>
   <name xml:lang="uk">Calligra Words</name>
@@ -57,6 +58,7 @@
   <summary xml:lang="pt-BR">Processador de Texto</summary>
   <summary xml:lang="ru">Текстовый процессор</summary>
   <summary xml:lang="sk">Textový procesor</summary>
+  <summary xml:lang="sl">Urejevalnik besedil</summary>
   <summary xml:lang="sv">Ordbehandlare</summary>
   <summary xml:lang="tr">Kelime İşlemci</summary>
   <summary xml:lang="uk">Текстовий процесор</summary>
@@ -89,6 +91,7 @@
     <p xml:lang="pt">O Words é um processador de texto intuitivo e uma aplicação de publicações no ecrã. Com ele, pode criar documentos informativos e atraentes com prazer e facilidade.</p>
     <p xml:lang="pt-BR">Words é um processador de texto intuitivo e um aplicativo de publicação no desktop. Com ele, você pode criar documentos informativos e atraentes com prazer e facilidade.</p>
     <p xml:lang="sk">Words je intuitívny textový procesor a aplikácia na desktopové publikovanie. Môžete pomocou neho vytvoriť informatívne a atraktívne dokumenty s radosťou a jednoduchosťou.</p>
+    <p xml:lang="sl">Words je intuitiven program za urejanje besedil in za namizno založništvo. Z njim lahko z veseljem in lahkoto ustvarite informativne in privlačne dokumente.</p>
     <p xml:lang="sv">Words är en intuitiv ordbehandlare och skrivbordspubliceringsprogram. Det gör att du kan skapa informativa och attraktiva dokument med nöje och enkelhet.</p>
     <p xml:lang="tr">Kelime İşlemci, sezgisel bir kelime işlemci ve masaüstü yayın uygulamasıdır. Bununla birlikte, zevkli ve kolaylıkla bilgilendirici ve çekici belgeler oluşturabilirsiniz.</p>
     <p xml:lang="uk">Words — інтуїтивно зрозуміла у користування програма для редагування текстів та приготування матеріалів для друку. За її допомогою ви можете створювати інформативні та візуально красиві документи із задоволенням та без напруження.</p>
@@ -119,6 +122,7 @@
     <p xml:lang="pt-BR">Funcionalidades:</p>
     <p xml:lang="ru">Возможности:</p>
     <p xml:lang="sk">Funkcie:</p>
+    <p xml:lang="sl">Možnosti:</p>
     <p xml:lang="sv">Funktioner:</p>
     <p xml:lang="tr">Özellikler:</p>
     <p xml:lang="uk">Можливості:</p>
@@ -149,6 +153,7 @@
       <li xml:lang="pt">Edição baseada em molduras</li>
       <li xml:lang="pt-BR">Edição baseada em molduras</li>
       <li xml:lang="sk">Rámcovo založené editovanie</li>
+      <li xml:lang="sl">Urejanje na podlagi okvirjev</li>
       <li xml:lang="sv">Rambaserad redigering</li>
       <li xml:lang="tr">Çerçeve tabanlı düzenleme</li>
       <li xml:lang="uk">Редагування на основі блоків.</li>
@@ -177,6 +182,7 @@
       <li xml:lang="pt">Permite a incorporação de documentos</li>
       <li xml:lang="pt-BR">Permite a incorporação de documentos</li>
       <li xml:lang="sk">Umožňuje vkladanie dokumentov</li>
+      <li xml:lang="sl">Dovoljuje gnezdenje dokumentov</li>
       <li xml:lang="sv">Tillåter att dokument inbäddas</li>
       <li xml:lang="tr">Belgelerin gömülmesine izin verir</li>
       <li xml:lang="uk">Вбудовування об’єктів до документів.</li>
@@ -205,6 +211,7 @@
       <li xml:lang="pt">Personalização da interface do utilizador</li>
       <li xml:lang="pt-BR">Personalização da interface do usuário</li>
       <li xml:lang="sk">Úprava používateľského rozhrania</li>
+      <li xml:lang="sl">Prilagoditev uporabniškega vmesnika</li>
       <li xml:lang="sv">Anpassning av användargränssnitt</li>
       <li xml:lang="tr">Kullanıcı arayüzü özelleştirmesi</li>
       <li xml:lang="uk">Налаштовуваність інтерфейсу користувача.</li>
@@ -233,6 +240,7 @@
       <li xml:lang="pt">Inclui todas as funcionalidades esperadas de um processador de texto moderno</li>
       <li xml:lang="pt-BR">Inclui todas as funcionalidades esperadas de um processador de texto moderno</li>
       <li xml:lang="sk">Obsahuje všetky funkcie očakávané od moderného textového procesora</li>
+      <li xml:lang="sl">Vsebuje vse možnosti, ki jih pričakujete od modernega urejevalnika besedil</li>
       <li xml:lang="sv">Innehåller alla funktioner som förväntas av en modern ordbehandlare</li>
       <li xml:lang="tr">Modern bir kelime işlemciden beklenen tüm özellikleri sağlar</li>
       <li xml:lang="uk">Повний спектр можливостей сучасної програми для редагування тексту.</li>
@@ -261,6 +269,7 @@
       <li xml:lang="pt">Suporte para o ODT (Texto do Open Document)</li>
       <li xml:lang="pt-BR">Suporte para ODT (Texto Open Document)</li>
       <li xml:lang="sk">Podpora ODT (Open Document Text)</li>
+      <li xml:lang="sl">Podpora ODT (Open Document Text)</li>
       <li xml:lang="sv">Stöd för ODT (Open Document Text)</li>
       <li xml:lang="tr">ODT (Açık Belge Metni) desteği</li>
       <li xml:lang="uk">Підтримка стандартів ODT (Open Document Text).</li>
