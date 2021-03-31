@@ -25,6 +25,8 @@
 #include <QHash>
 #include <QMap>
 
+using PageId = int;
+
 class KWPageManagerPrivate
 {
 public:
@@ -58,10 +60,10 @@ public:
     void insertPage(const Page &page);
 
     // use a sorted map to find page the identifier for page objects based on the page number.
-    QMap<int, int> pageNumbers; // page number to pageId
+    QMap<int, PageId> pageNumbers; // page number to pageId
 
     // use a fast access hash to store the page objects, sorted by their identifier
-    QHash<int, Page> pages; // pageId to page struct
+    QHash<PageId, Page> pages; // pageId to page struct
 
     QMap<int, int> visiblePageNumbers;
 
@@ -71,8 +73,7 @@ public:
     QHash<QString, QString> pageStyleNames; // map display-name to name
     KoInsets padding;
     KWPageStyle defaultPageStyle;
-    QHash<int, qreal> pageOffsets;
-    QHash<int, qreal> pageHeights;
+    QHash<PageId, qreal> pageOffsets;
 };
 
 #endif

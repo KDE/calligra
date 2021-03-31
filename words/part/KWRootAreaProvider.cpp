@@ -523,7 +523,7 @@ void KWRootAreaProvider::doPostLayout(KoTextLayoutRootArea *rootArea, bool isNew
                     cs->setMinimumHeight(newSize.height());
                 }
                 // cause the header/footer's height changed we have to relayout the whole page
-                frameSet()->wordsDocument()->frameLayout()->layoutFramesOnPage(page.pageNumber());
+                frameSet()->wordsDocument()->frameLayout()->layoutFramesOnPage(page, page.pageNumber());
             }
         }
     }

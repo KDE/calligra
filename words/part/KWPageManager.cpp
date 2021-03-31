@@ -27,6 +27,7 @@
 #include <KoShape.h>
 
 #include <WordsDebug.h>
+#include <algorithm>
 
 #define DEBUG_PAGES
 
@@ -167,16 +168,27 @@ KWPageManager::~KWPageManager()
 
 int KWPageManager::pageNumber(const QPointF &point) const
 {
+#if 0
     qreal startOfpage = 0.0;
     int answer = -1;
     QMap<int, int>::const_iterator iter = d->pageNumbers.constBegin();
     for (;iter != d->pageNumbers.constEnd(); ++iter) {
-        const KWPageManagerPrivate::Page page = d->pages[iter.value()];
+        const KWPageManagerPrivate::Page &page = d->pages[iter.value()];
         startOfpage += page.style.pageLayout().height + d->padding.top + d->padding.bottom;
         answer = iter.key();
         if (startOfpage >= point.y())
             break;
     }
+#else
+    int answer = -1;
+    auto targetPoint = std::lower_bound(d->pageNumbers.keyBegin(), d->pageNumbers.keyEnd(), point.y(), [this] (int id, qreal pt) {
+        // id is the key in d->pageNumbers
+        return d->pageOffsets[d->pageNumbers[id]] <= pt;
+    });
+    if (targetPoint != d->pageNumbers.keyBegin())
+        targetPoint--;
+    answer = *targetPoint;
+#endif
     return answer;
 }
 

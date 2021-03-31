@@ -77,7 +77,7 @@ public:
      * Note that a page-spread counts as one page, even though it takes two page numbers.
      * @param pageNumber the number of the page to re-layout.
      */
-    void layoutFramesOnPage(int pageNumber);
+    void layoutFramesOnPage(KWPage page, int pageNumber);
 
     static void proposeShapeMove(const KoShape *shape, QPointF &delta, const KWPage &page);
 
@@ -91,7 +91,10 @@ public:
 
     QList<KoShape *> sequencedShapesOnPage(const QRectF &page) const;
     QList<KoShape *> sequencedShapesOnPage(int pageNumber) const;
+    QList<KoShape *> sequencedShapesOnPage(KWFrameSet *fs, const QRectF &page) const;
+    QList<KoShape *> sequencedShapesOnPage(KWFrameSet *fs, int pageNumber) const;
 
+    KoShape *sequencedShapeOn(KWFrameSet *fs, KWPage page) const;
     KoShape *sequencedShapeOn(KWFrameSet *fs, int pageNumber) const;
     QList<KoShape *> sequencedShapesOn(KWFrameSet *fs, int pageNumber) const;
 
@@ -139,6 +142,7 @@ private:
 
     void setup();
     bool shouldHaveHeaderOrFooter(int pageNumber, bool header, Words::TextFrameSetType *origin);
+    bool shouldHaveHeaderOrFooter(int pageNumber, const KWPageStyle &pageStyle, bool header, Words::TextFrameSetType *origin);
     void cleanFrameSet(KWTextFrameSet *fs);
 
     const KWPageManager *m_pageManager;

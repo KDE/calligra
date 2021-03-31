@@ -91,7 +91,7 @@ public:
     /**
      * List all shapes this frameset has.  In the order that any content will flow through them.
      */
-    const QList<KoShape *> shapes() const {
+    const QList<KoShape *> &shapes() const {
         return m_shapes;
     }
     /**
