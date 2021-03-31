@@ -191,7 +191,7 @@ QList<KoTextLocator*> KoInlineTextObjectManager::textLocators() const
 {
     QList<KoTextLocator*> answers;
     foreach(KoInlineObject *object, m_objects) {
-        KoTextLocator *tl = dynamic_cast<KoTextLocator*>(object);
+        KoTextLocator *tl = qobject_cast<KoTextLocator*>(object);
         if (tl)
             answers.append(tl);
     }
@@ -202,7 +202,7 @@ QList<KoInlineNote*> KoInlineTextObjectManager::endNotes() const
 {
     QList<KoInlineNote*> answers;
     foreach(KoInlineObject* object, m_objects) {
-        KoInlineNote* note = dynamic_cast<KoInlineNote*>(object);
+        KoInlineNote* note = qobject_cast<KoInlineNote*>(object);
         if (note && note->type() == KoInlineNote::Endnote) {
             answers.append(note);
         }
@@ -214,7 +214,7 @@ QMap<QString, KoInlineCite*> KoInlineTextObjectManager::citations(bool duplicate
 {
     QMap<QString, KoInlineCite*> answers;
     foreach(KoInlineObject* object, m_objects) {
-        KoInlineCite* cite = dynamic_cast<KoInlineCite*>(object);
+        KoInlineCite* cite = qobject_cast<KoInlineCite*>(object);
         if (cite && (cite->type() == KoInlineCite::Citation ||
                      (duplicatesEnabled && cite->type() == KoInlineCite::ClonedCitation))) {
             answers.insert(cite->identifier(), cite);
@@ -236,7 +236,7 @@ QList<KoInlineCite*> KoInlineTextObjectManager::citationsSortedByPosition(bool d
             cursor.setPosition(block.position() + pos);
             cursor.setPosition(cursor.position() + 1, QTextCursor::KeepAnchor);
 
-            KoInlineCite *cite = dynamic_cast<KoInlineCite*>(this->inlineTextObject(cursor));
+            KoInlineCite *cite = qobject_cast<KoInlineCite*>(this->inlineTextObject(cursor));
 
             if (cite && (cite->type() == KoInlineCite::Citation ||
                          (duplicatesEnabled && cite->type() == KoInlineCite::ClonedCitation))) {
