@@ -80,7 +80,7 @@ void KWRootAreaProvider::clearPages(int pageNumber)
         return;
     }
 
-    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(frameSet()->document()->documentLayout());
+    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(frameSet()->document()->documentLayout());
     Q_ASSERT(lay);
     int prevPageIndex = pageNumber - 2;
     do {
@@ -105,7 +105,7 @@ void KWRootAreaProvider::clearPages(int pageNumber)
 void KWRootAreaProvider::addDependentProvider(KWRootAreaProviderBase *provider, int pageNumber)
 {
     debugWords;
-    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(provider->frameSet()->document()->documentLayout());
+    KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(provider->frameSet()->document()->documentLayout());
     Q_ASSERT(lay);
     lay->setContinuousLayout(false); // to abort the current layout-loop
     lay->setBlockLayout(true); // to prevent a new layout-loop from being started
@@ -133,7 +133,7 @@ void KWRootAreaProvider::handleDependentProviders(int pageNumber)
         }
         m_dependentProviders.removeAt(i); // this one is handled now
         p.first->setPageDirty(pageNumber);
-        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*>(p.first->frameSet()->document()->documentLayout());
+        KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(p.first->frameSet()->document()->documentLayout());
         Q_ASSERT(lay);
         if (!layouts.contains(lay)) {
             layouts.append(lay);
@@ -216,7 +216,7 @@ KoTextLayoutRootArea* KWRootAreaProvider::provideNext(KoTextDocumentLayout *docu
     // position OtherFrameSet's which are anchored to this page
     if (frameSet()->textFrameSetType() == Words::MainTextFrameSet) {
         foreach(KWFrameSet* fs, kwdoc->frameSets()) {
-            KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
+            KWTextFrameSet *tfs = qobject_cast<KWTextFrameSet*>(fs);
             if (tfs && tfs->textFrameSetType() != Words::OtherTextFrameSet)
                 continue;
             foreach (KWFrame *frame, fs->frames()) {
@@ -244,7 +244,7 @@ KoTextLayoutRootArea* KWRootAreaProvider::provideNext(KoTextDocumentLayout *docu
         }
     } else {
         if (!documentLayout->referencedLayout()) {
-            KoTextDocumentLayout *reflay = dynamic_cast<KoTextDocumentLayout*>(kwdoc->frameLayout()->mainFrameSet()->document()->documentLayout());
+            KoTextDocumentLayout *reflay = qobject_cast<KoTextDocumentLayout*>(kwdoc->frameLayout()->mainFrameSet()->document()->documentLayout());
             documentLayout->setReferencedLayout(reflay);
         }
     }

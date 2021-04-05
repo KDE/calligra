@@ -161,7 +161,7 @@ QList<KoTextLayoutObstruction *> KWRootAreaProviderBase::relevantObstructions(Ko
             continue; // we don't collide with ourselves
         }
 
-        if (KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs)) {
+        if (KWTextFrameSet *tfs = qobject_cast<KWTextFrameSet*>(fs)) {
             if (tfs->textFrameSetType() != Words::OtherTextFrameSet) {
                 continue; // we don't collide with headers, footers and main-text.
             }
