@@ -1320,7 +1320,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         d->bottomSpacing = 0;
         d->blockRects.append(QRectF(d->x, d->y, d->width, 10.0));
     } else {
-        handleBordersAndSpacing(blockData, &block);
+        handleBordersAndSpacing(blockData, &block, pStyle);
     }
 
     // Expand bounding rect so if we have content outside we show it
@@ -1436,7 +1436,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
         }
         confirmFootNotes();
         anyLineAdded = true;
-        maxLineHeight = qMax(maxLineHeight, addLine(line, cursor, blockData));
+        maxLineHeight = qMax(maxLineHeight, addLine(line, cursor, block, pStyle, blockData));
 
         d->neededWidth = qMax(d->neededWidth, line.naturalTextWidth() + d->indent);
 
@@ -1607,14 +1607,10 @@ qreal KoTextLayoutArea::verticalAlignOffset() const
     return d->verticalAlignOffset;
 }
 
-qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBlockData &blockData)
+qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, const QTextBlock &block, const KoParagraphStyle &style, KoTextBlockData &blockData)
 {
-    QTextBlock block = cursor->it.currentBlock();
-    QTextBlockFormat format = block.blockFormat();
-    KoParagraphStyle style(format, block.charFormat());
-
     if (block.textList() && block.layout()->lineCount() == 1) {
-        Qt::Alignment alignment = format.alignment();
+        Qt::Alignment alignment = style.alignment();
         if (d->isRtl && (alignment & Qt::AlignAbsolute) == 0) {
             if (alignment & Qt::AlignLeft) {
                 alignment = Qt::AlignRight;
@@ -1646,13 +1642,13 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
     qreal breakHeight = 0.0;
     qreal ascent = 0.0;
     qreal descent = 0.0;
-    const bool useFontProperties = format.boolProperty(KoParagraphStyle::LineSpacingFromFont);
+    const bool useFontProperties = style.value(KoParagraphStyle::LineSpacingFromFont).toBool();
 
     if (cursor->fragmentIterator.atEnd()) {// no text in parag.
         qreal fontStretch = 1;
         QTextCharFormat charFormat = block.charFormat();
-        if (block.blockFormat().hasProperty(KoParagraphStyle::EndCharStyle)) {
-            QVariant v = block.blockFormat().property(KoParagraphStyle::EndCharStyle);
+        if (style.hasProperty(KoParagraphStyle::EndCharStyle)) {
+            QVariant v = style.value(KoParagraphStyle::EndCharStyle);
             QSharedPointer<KoCharacterStyle> endCharStyle = v.value< QSharedPointer<KoCharacterStyle> >();
             if (!endCharStyle.isNull()) {
                 endCharStyle->applyStyle(charFormat);
@@ -1663,7 +1659,7 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
         if (useFontProperties) {
             //stretch line height to powerpoint size
             fontStretch = PresenterFontStretch;
-        } else if (block.charFormat().hasProperty(KoCharacterStyle::FontYStretch)) {
+        } else if (style.hasProperty(KoCharacterStyle::FontYStretch)) {
             // stretch line height to ms-word size
             fontStretch = charFormat.property(KoCharacterStyle::FontYStretch).toDouble();
         }
@@ -1782,15 +1778,15 @@ qreal KoTextLayoutArea::addLine(QTextLine &line, FrameIterator *cursor, KoTextBl
     // so the line-text stays on the baseline. If the line grows in height then
     // we don't need to do anything.
     if (d->dropCapsNChars <= 0) { // linespacing rules doesn't apply to drop caps
-        qreal fixedLineHeight = format.doubleProperty(KoParagraphStyle::FixedLineHeight);
+        qreal fixedLineHeight = style.value(KoParagraphStyle::FixedLineHeight).toDouble();
         if (fixedLineHeight != 0.0) {
             qreal prevHeight = height;
             height = fixedLineHeight;
             lineAdjust += height - prevHeight;
         } else {
-            qreal lineSpacing = format.doubleProperty(KoParagraphStyle::LineSpacing);
+            qreal lineSpacing = style.value(KoParagraphStyle::LineSpacing).toDouble();
             if (lineSpacing == 0.0) { // unset
-                qreal percent = format.doubleProperty(KoParagraphStyle::PercentLineHeight);
+                qreal percent = style.value(KoParagraphStyle::PercentLineHeight).toDouble();
                 if (percent != 0) {
                     height *= percent / 100.0;
                 }
@@ -1973,7 +1969,7 @@ void KoTextLayoutArea::findFootNotes(const QTextBlock &block, const QTextLine &l
         c1.setPosition(block.position() + pos);
         c1.setPosition(c1.position() + 1, QTextCursor::KeepAnchor);
 
-        KoInlineNote *note = dynamic_cast<KoInlineNote*>(d->documentLayout->inlineTextObjectManager()->inlineTextObject(c1));
+        KoInlineNote *note = qobject_cast<KoInlineNote*>(d->documentLayout->inlineTextObjectManager()->inlineTextObject(c1));
         if (note && note->type() == KoInlineNote::Footnote) {
             preregisterFootNote(note, bottomOfText);
         }
@@ -2061,10 +2057,9 @@ void KoTextLayoutArea::clearPreregisteredFootNotes()
     }
 }
 
-void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData &blockData, QTextBlock *block)
+void KoTextLayoutArea::handleBordersAndSpacing(KoTextBlockData &blockData, QTextBlock *block, const KoParagraphStyle &formatStyle)
 {
     QTextBlockFormat format = block->blockFormat();
-    KoParagraphStyle formatStyle(format, block->charFormat());
 
     // The AddParaTableSpacingAtStart config-item is used to be able to optionally prevent that
     // defined fo:margin-top are applied to the first paragraph. If true then the fo:margin-top

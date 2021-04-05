@@ -212,7 +212,7 @@ private:
     bool presentationListTabWorkaround(qreal indent, qreal labelBoxWidth, qreal presentationListTabValue);
 
     /// Returns vertical height of line
-    qreal addLine(QTextLine &line, FrameIterator *cursor, KoTextBlockData &blockData);
+    qreal addLine(QTextLine &line, FrameIterator *cursor, const QTextBlock &currentBlock, const KoParagraphStyle &currentStyle, KoTextBlockData &blockData);
 
     /// looks for footnotes and preregisters them
     void findFootNotes(const QTextBlock &block, const QTextLine &line, qreal bottomOfText);
@@ -233,7 +233,7 @@ private:
 
     void decorateListLabel(QPainter *painter, const KoTextBlockData &blockData, const QTextLine &listLabelLine, const QTextBlock &listItem);
 
-    void handleBordersAndSpacing(KoTextBlockData &blockData, QTextBlock *block);
+    void handleBordersAndSpacing(KoTextBlockData &blockData, QTextBlock *block, const KoParagraphStyle &currentStyle);
 
     void decorateParagraphSections(QPainter* painter, QTextBlock& block);
 

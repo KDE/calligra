@@ -77,7 +77,7 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
 
     if (!fixed) {
         //if this is the first item then find if the list has to be continued from any other list
-        KoList *listContinued = 0;
+        KoList *listContinued = nullptr;
         if (m_textList->itemNumber(block) == 0 && KoTextDocument(m_textList->document()).list(m_textList) && (listContinued = KoTextDocument(m_textList->document()).list(m_textList)->listContinuedFrom())) {
             //find the previous list of the same level
             QTextList *previousTextList = listContinued->textLists().at(level - 1).data();
@@ -120,13 +120,12 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
         int tmpDisplayLevel = displayLevel;
         bool counterResetRequired = true;
         for (QTextBlock b = block.previous(); tmpDisplayLevel > 1 && b.isValid(); b = b.previous()) {
-            if (b.textList() == 0)
+            QTextList *blockList = b.textList();
+            if (blockList == nullptr)
                 continue;
-            QTextListFormat lf = b.textList()->format();
+            QTextListFormat lf = blockList->format();
             if (lf.property(KoListStyle::StyleId) != format.property(KoListStyle::StyleId))
                continue; // uninteresting for us
-            if (isOutline != bool(b.blockFormat().intProperty(KoParagraphStyle::OutlineLevel)))
-                continue; // also uninteresting cause the one is an outline-listitem while the other is not
 
             if (! KoListStyle::isNumberingStyle(static_cast<KoListStyle::LabelType>(lf.style()))) {
                 continue;
@@ -135,6 +134,9 @@ void ListItemsHelper::recalculateBlock(QTextBlock &block)
             if (b.blockFormat().boolProperty(KoParagraphStyle::UnnumberedListItem)) {
                 continue; //unnumbered listItems are irrelevant
             }
+
+            if (isOutline != bool(b.blockFormat().intProperty(KoParagraphStyle::OutlineLevel)))
+                continue; // also uninteresting cause the one is an outline-listitem while the other is not
 
             const int otherLevel  = lf.intProperty(KoListStyle::Level);
             if (isOutline && checkLevel == otherLevel) {

@@ -125,7 +125,7 @@ bool RunAroundHelper::fit(const bool resetHorizontalPosition, bool isRightToLeft
     }
 
     line.setLineWidth(m_textWidth);
-    line.setPosition(QPointF(lineRectPart.x(), lineRectPart.y()));
+    line.setPosition(lineRectPart.topLeft());
     checkEndOfLine(lineRectPart, maxNaturalTextWidth);
     return true;
 }
