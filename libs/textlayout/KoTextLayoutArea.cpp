@@ -1090,6 +1090,7 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     //========
     // Tabs
     //========
+    // TODO this conversion is quite expensive to do, and doing it for each block is a performance nightmare.
     const QVector<KoText::Tab> tabs = pStyle.tabPositions();
 
     // Handle tabs relative to startMargin
@@ -1097,7 +1098,6 @@ bool KoTextLayoutArea::layoutBlock(FrameIterator *cursor)
     if (!d->documentLayout->relativeTabs(block)) {
         tabOffset -= startMargin;
     }
-
     // Make a list of tabs that Qt can use
     QList<QTextOption::Tab> qTabs;
     // Note: Converting to Qt tabs is needed as long as we use Qt for layout, but we
