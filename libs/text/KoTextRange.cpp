@@ -33,6 +33,8 @@ public:
         , id(-1)
         , rdf(0)
         , positionOnlyMode(true)
+        , initialStartPosition(-1)
+        , initialEndPosition(-1)
     {
     }
     virtual ~KoTextRangePrivate();
@@ -44,16 +46,46 @@ public:
     bool positionOnlyMode;
     int snapAnchor;
     int snapPos;
+    QTextDocument *document;
+    int initialStartPosition;
+    int initialEndPosition;
 };
 
 KoTextRange::KoTextRange(const QTextCursor &cursor)
     : d(new KoTextRangePrivate)
 {
+    d->document = cursor.document();
     d->cursor = cursor;
     d->cursor.setPosition(cursor.selectionStart());
     d->cursor.setKeepPositionOnInsert(true);
     if (cursor.hasSelection()) {
         setRangeEnd(cursor.selectionEnd());
+    }
+}
+
+KoTextRange::KoTextRange(QTextDocument *document, int position)
+    : d(new KoTextRangePrivate)
+{
+    d->document = document;
+    d->initialStartPosition = position;
+    d->initialEndPosition = position;
+}
+
+bool KoTextRange::isFinalized() const
+{
+    return !d->cursor.isNull();
+}
+
+void KoTextRange::finalizePosition()
+{
+    if (!d->cursor.isNull())
+        return;
+
+    d->cursor = QTextCursor(d->document);
+    d->cursor.setPosition(d->initialStartPosition);
+    d->cursor.setKeepPositionOnInsert(true);
+    if (d->initialEndPosition != d->initialStartPosition) {
+        setRangeEnd(d->initialEndPosition);
     }
 }
 
@@ -84,7 +116,7 @@ KoTextRangeManager *KoTextRange::manager() const
 
 QTextDocument *KoTextRange::document() const
 {
-    return d->cursor.document();
+    return d->document;
 }
 
 bool KoTextRange::positionOnlyMode() const
@@ -121,8 +153,12 @@ void KoTextRange::setRangeStart(int position)
 void KoTextRange::setRangeEnd(int position)
 {
     d->positionOnlyMode = false;
-    d->cursor.setPosition(d->cursor.selectionStart());
-    d->cursor.setPosition(position, QTextCursor::KeepAnchor);
+    if (d->cursor.isNull()) {
+        d->initialEndPosition = position;
+    } else {
+        d->cursor.setPosition(d->cursor.selectionStart());
+        d->cursor.setPosition(position, QTextCursor::KeepAnchor);
+    }
 }
 
 QString KoTextRange::text() const

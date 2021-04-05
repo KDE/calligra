@@ -48,6 +48,13 @@ KoAnchorTextRange::KoAnchorTextRange(KoShapeAnchor *parent, const QTextCursor &c
     parent->setTextLocation(this);
 }
 
+KoAnchorTextRange::KoAnchorTextRange(KoShapeAnchor *parent, QTextDocument *document, int position)
+    : KoTextRange(document, position)
+    , d_ptr(new KoAnchorTextRangePrivate(parent))
+{
+    Q_ASSERT(parent);
+    parent->setTextLocation(this);
+}
 KoAnchorTextRange::~KoAnchorTextRange()
 {
 }

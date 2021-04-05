@@ -48,6 +48,7 @@ public:
      * @param document the text document where this bookmark is located
      */
     explicit KoBookmark(const QTextCursor &);
+    explicit KoBookmark(QTextDocument *document, int position);
 
     ~KoBookmark() override;
 

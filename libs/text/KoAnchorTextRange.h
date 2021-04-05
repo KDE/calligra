@@ -62,6 +62,7 @@ public:
      * @param cursor the cursor.
      */
     KoAnchorTextRange(KoShapeAnchor *parent, const QTextCursor &cursor);
+    KoAnchorTextRange(KoShapeAnchor *parent, QTextDocument *document, int position);
     ~KoAnchorTextRange() override;
 
     /// returns the parent anchor

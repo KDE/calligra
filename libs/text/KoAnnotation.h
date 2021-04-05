@@ -54,6 +54,8 @@ public:
      */
     explicit KoAnnotation(const QTextCursor &);
 
+    explicit KoAnnotation(QTextDocument *document, int position);
+
     ~KoAnnotation() override;
 
     /// reimplemented from super

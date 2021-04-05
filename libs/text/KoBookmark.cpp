@@ -53,6 +53,12 @@ KoBookmark::KoBookmark(const QTextCursor &cursor)
 {
 }
 
+KoBookmark::KoBookmark(QTextDocument *document, int position)
+    : KoTextRange(document, position),
+      d(new Private(document))
+{
+}
+
 KoBookmark::~KoBookmark()
 {
     delete d;

@@ -153,7 +153,7 @@ public:
     /// level is between 1 and 10
     void setCurrentList(KoList *currentList, int level);
     /// level is between 1 and 10
-    KoList *previousList(int level);
+    KoList *previousList(int level) const;
 
     explicit Private(KoShapeLoadingContext &context, KoShape *s)
         : context(context),
@@ -207,7 +207,7 @@ void KoTextLoader::Private::setCurrentList(KoList *currentList, int level)
     m_previousList[level - 1] = currentList;
 }
 
-KoList *KoTextLoader::Private::previousList(int level)
+KoList *KoTextLoader::Private::previousList(int level) const
 {
     Q_ASSERT(level > 0 && level <= 10);
 
@@ -435,6 +435,10 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, L
     if (!rootCallChecker) {
         // Allow to move end bounds of sections with inserting text
         KoTextDocument(cursor.block().document()).sectionModel()->allowMovingEndBound();
+
+        // Finalize the KoTextRange objects
+        KoTextRangeManager *textRangeManager = KoTextDocument(cursor.block().document()).textRangeManager();
+        textRangeManager->finalizeTextRanges();
     }
 }
 
@@ -1053,14 +1057,8 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                     bookmark->setRangeEnd(cursor.position());
                 }
             } else {
-                KoBookmark *bookmark = new KoBookmark(cursor);
-                bookmark->setManager(textRangeManager);
-                if (textRangeManager && bookmark->loadOdf(ts, d->context)) {
-                    textRangeManager->insert(bookmark);
-                }
-                else {
+                if (!textRangeManager || !textRangeManager->createAndLoadOdf<KoBookmark>(cursor, ts, d->context)) {
                     warnText << "Could not load bookmark";
-                    delete bookmark;
                 }
             }
         } else if (isTextNS && localName == "bookmark-ref") {
@@ -1096,11 +1094,8 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
             } else {
                 // if the tag is "annotation" then create a KoAnnotation
                 // and an annotation shape and call loadOdf() in them.
-                KoAnnotation *annotation = new KoAnnotation(cursor);
-                annotation->setManager(textRangeManager);
-                if (textRangeManager && annotation->loadOdf(ts, d->context)) {
-                    textRangeManager->insert(annotation);
-
+                KoAnnotation *annotation;
+                if (textRangeManager && (annotation = textRangeManager->createAndLoadOdf<KoAnnotation>(cursor, ts, d->context))) {
                     KoShape *shape = KoShapeRegistry::instance()->createShapeFromOdf(ts, d->context);
                     // Don't show it before it's being laid out.
                     //
@@ -1114,7 +1109,6 @@ void KoTextLoader::loadSpan(const KoXmlElement &element, QTextCursor &cursor, bo
                 }
                 else {
                     warnText << "Could not load annotation";
-                    delete annotation;
                 }
             }
         }
@@ -1491,7 +1485,7 @@ KoShape *KoTextLoader::loadShape(const KoXmlElement &element, QTextCursor &curso
             textObjectManager->insertInlineObject(cursor, anchorObject);
         }
     } else { // KoShapeAnchor::AnchorToCharacter or KoShapeAnchor::AnchorParagraph
-        KoAnchorTextRange *anchorRange = new KoAnchorTextRange(anchor, cursor);
+        KoAnchorTextRange *anchorRange = new KoAnchorTextRange(anchor, cursor.document(), cursor.position());
 
         KoTextRangeManager *textRangeManager = KoTextDocument(cursor.block().document()).textRangeManager();
 

@@ -29,6 +29,7 @@
 #include <QMetaType>
 #include <QHash>
 #include <QSet>
+#include <QTextCursor>
 
 
 /**
@@ -45,6 +46,8 @@ public:
     QList<KoTextRange *> textRanges() const;
 
     QList<KoTextRange *> textRanges(const QTextDocument *doc) const;
+
+    void finalizeTextRanges();
 
     /**
      * Insert a new text range into the manager.
@@ -77,6 +80,18 @@ public:
     QHash<int, KoTextRange *> textRangesChangingWithin(const QTextDocument *, int first, int last, int matchFirst, int matchLast) const;
 
     QHash<int, KoTextRange *> textRangesChangingWithin(const QTextDocument *, QList<const QMetaObject*> types, int first, int last, int matchFirst, int matchLast) const;
+
+    template <class T>
+    T *createAndLoadOdf(const QTextCursor &cursor, const KoXmlElement &element, KoShapeLoadingContext &context) {
+        T *object = new T(cursor.document(), cursor.position());
+        object->setManager(this);
+        if (!object->loadOdf(element, context)) {
+            delete(object);
+            return nullptr;
+        }
+        insert(object);
+        return object;
+    }
 
 private:
     

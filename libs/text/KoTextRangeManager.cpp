@@ -68,8 +68,11 @@ class KoTextRangeManager::KoTextRangeManagerPrivate {
 public:
     QHash<const QTextDocument *, QSet<KoTextRange *>> m_textRanges;
     QHash<const QTextDocument *, QSet<KoTextRange *>> m_deletedTextRanges; // kept around for undo purposes
-    
+
     QHash<const QTextDocument *, QHash<const QMetaObject*, KoTextRangeManagerIndex>> indexes;
+
+
+    QHash<const QTextDocument *, QList<KoTextRange *>> unfinalizedRanges;
     
     void addDocument(const QTextDocument * doc) {
         // Should we connect to the QTextDocument::cursorPositionChanged signal to make sure
@@ -80,6 +83,7 @@ public:
             m_textRanges.insert(doc, {});
             m_deletedTextRanges.insert(doc, {});
             indexes.insert(doc, {});
+            unfinalizedRanges.insert(doc, {});
         }
     }
 };
@@ -99,6 +103,17 @@ QList < KoTextRange * > KoTextRangeManager::textRanges (const QTextDocument * do
      return d->m_textRanges.value(doc).values();
 }
 
+void KoTextRangeManager::finalizeTextRanges()
+{
+    for (auto &ranges : d->unfinalizedRanges.values()) {
+        for (KoTextRange *range : ranges) {
+            range->finalizePosition();
+            insert(range);
+        }
+    }
+    d->unfinalizedRanges.clear();
+}
+
 void KoTextRangeManager::insert(KoTextRange *textRange)
 {
     if (!textRange) {
@@ -107,6 +122,11 @@ void KoTextRangeManager::insert(KoTextRange *textRange)
 
     auto doc = textRange->document();
     d->addDocument(doc);
+
+    if (!textRange->isFinalized()) {
+        d->unfinalizedRanges[doc].append(textRange);
+        return;
+    }
 
     QSet<KoTextRange*> &docTextRanges = d->m_textRanges[doc];
     QSet<KoTextRange*> &docDeletedTextRanges = d->m_deletedTextRanges[doc];

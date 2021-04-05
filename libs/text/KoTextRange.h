@@ -50,7 +50,11 @@ public:
      * constructor
      */
     explicit KoTextRange(const QTextCursor &cursor);
+    explicit KoTextRange(QTextDocument *document, int position);
     ~KoTextRange() override;
+
+    bool isFinalized() const;
+    void finalizePosition();
 
     /**
      * Will be called by the manager when this variable is added.

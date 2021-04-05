@@ -58,6 +58,12 @@ KoAnnotation::KoAnnotation(const QTextCursor &cursor)
 {
 }
 
+KoAnnotation::KoAnnotation(QTextDocument *document, int position)
+    : KoTextRange(document, position),
+      d(new Private(document))
+{
+}
+
 KoAnnotation::~KoAnnotation()
 {
     delete d;

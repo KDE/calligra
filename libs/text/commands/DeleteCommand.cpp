@@ -437,8 +437,8 @@ void DeleteCommand::doDelete()
     );
 
     foreach (KoTextRange *range, m_rangesToRemove) {
-        KoAnchorTextRange *anchorRange = dynamic_cast<KoAnchorTextRange *>(range);
-        KoAnnotation *annotation = dynamic_cast<KoAnnotation *>(range);
+        KoAnchorTextRange *anchorRange = qobject_cast<KoAnchorTextRange *>(range);
+        KoAnnotation *annotation = qobject_cast<KoAnnotation *>(range);
         if (anchorRange) {
             // we should only delete the anchor if the selection is covering it... not if the selection is
             // just adjacent to the anchor. This is more in line with what other wordprocessors do
