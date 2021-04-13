@@ -38,6 +38,7 @@
 #include "OdfTextTrackStyles.h"
 #include "KoTextRangeManager.h"
 #include "KoInlineTextObjectManager.h"
+#include "KoTextDocumentOutline.h"
 #include "KoList.h"
 #include "KoOdfLineNumberingConfiguration.h"
 #include "changetracker/KoChangeTracker.h"
@@ -53,6 +54,7 @@ const QUrl KoTextDocument::StyleManagerURL = QUrl("kotext://stylemanager");
 const QUrl KoTextDocument::ListsURL = QUrl("kotext://lists");
 const QUrl KoTextDocument::InlineObjectTextManagerURL = QUrl("kotext://inlineObjectTextManager");
 const QUrl KoTextDocument::TextRangeManagerURL = QUrl("kotext://textRangeManager");
+const QUrl KoTextDocument::OutlineURL = QUrl("kotext://outline");
 const QUrl KoTextDocument::UndoStackURL = QUrl("kotext://undoStack");
 const QUrl KoTextDocument::ChangeTrackerURL = QUrl("kotext://changetracker");
 const QUrl KoTextDocument::TextEditorURL = QUrl("kotext://textEditor");
@@ -317,6 +319,18 @@ KoInlineTextObjectManager *KoTextDocument::inlineTextObjectManager() const
     QVariant resource = m_document->resource(KoTextDocument::InlineTextManager,
             InlineObjectTextManagerURL);
     return resource.value<KoInlineTextObjectManager *>();
+}
+
+void KoTextDocument::setOutline(KoTextDocumentOutline *outline)
+{
+    auto v = QVariant::fromValue(outline);
+    m_document->addResource(KoTextDocument::Outline, OutlineURL, v);
+}
+
+KoTextDocumentOutline *KoTextDocument::outline() const
+{
+    QVariant resource = m_document->resource(KoTextDocument::Outline, OutlineURL);
+    return resource.value<KoTextDocumentOutline*>();
 }
 
 KoTextRangeManager *KoTextDocument::textRangeManager() const

@@ -82,7 +82,8 @@ enum DocumentResource {
     PageProvider,            ///< The KoPageProvider
     /** The KoDocumentRdf for the document,
         this will be a KoDocumentRdfBase when Soprano support is not compiled in. */
-    DocumentRdf
+    DocumentRdf,
+    Outline                 ///< The KoTextDocumentOutline
 
 };
 

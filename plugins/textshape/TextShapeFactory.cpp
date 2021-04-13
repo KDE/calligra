@@ -38,7 +38,6 @@
 
 #include <klocalizedstring.h>
 #include <kundo2stack.h>
-#include <QTextCursor>
 
 TextShapeFactory::TextShapeFactory()
         : KoShapeFactoryBase(TextShape_SHAPEID, i18n("Text"))
@@ -62,12 +61,12 @@ TextShapeFactory::TextShapeFactory()
 
 KoShape *TextShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
-    KoInlineTextObjectManager *manager = 0;
-    KoTextRangeManager *locationManager = 0;
+    KoInlineTextObjectManager *inlineManager = nullptr;
+    KoTextRangeManager *locationManager = nullptr;
     if (documentResources && documentResources->hasResource(KoText::InlineTextObjectManager)) {
         QVariant variant = documentResources->resource(KoText::InlineTextObjectManager);
         if (variant.isValid()) {
-            manager = variant.value<KoInlineTextObjectManager *>();
+            inlineManager = variant.value<KoInlineTextObjectManager *>();
         }
     }
     if (documentResources && documentResources->hasResource(KoText::TextRangeManager)) {
@@ -76,13 +75,13 @@ KoShape *TextShapeFactory::createDefaultShape(KoDocumentResourceManager *documen
             locationManager = variant.value<KoTextRangeManager *>();
         }
     }
-    if (!manager) {
-        manager = new KoInlineTextObjectManager();
+    if (!inlineManager) {
+        inlineManager = new KoInlineTextObjectManager();
     }
     if (!locationManager) {
         locationManager = new KoTextRangeManager();
     }
-    TextShape *text = new TextShape(manager, locationManager);
+    TextShape *text = new TextShape(inlineManager, locationManager);
     if (documentResources) {
         KoTextDocument document(text->textShapeData()->document());
 

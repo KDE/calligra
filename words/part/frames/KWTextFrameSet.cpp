@@ -165,6 +165,7 @@ void KWTextFrameSet::setupDocument()
     m_document->setUseDesignMetrics(true);
 
     KoTextDocument doc(m_document);
+    doc.setOutline(m_wordsDocument->outline());
     doc.setInlineTextObjectManager(m_wordsDocument->inlineTextObjectManager());
     doc.setTextRangeManager(m_wordsDocument->textRangeManager());
     KoStyleManager *styleManager = m_wordsDocument->resourceManager()->resource(KoText::StyleManager).value<KoStyleManager*>();

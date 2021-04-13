@@ -494,6 +494,12 @@ KoTextRangeManager *KWDocument::textRangeManager() const
     return var.value<KoTextRangeManager*>();
 }
 
+KoTextDocumentOutline *KWDocument::outline() const
+{
+    QVariant var = resourceManager()->resource(KoText::Outline);
+    return var.value<KoTextDocumentOutline*>();
+}
+
 QString KWDocument::uniqueFrameSetName(const QString &suggestion)
 {
     // make up a new name for the frameset, use "[base] [digits]" as template.

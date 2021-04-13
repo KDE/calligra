@@ -40,6 +40,7 @@ class KoOdfLineNumberingConfiguration;
 class KoChangeTracker;
 class KoShapeController;
 class KoSectionModel;
+class KoTextDocumentOutline;
 
 class QTextCharFormat;
 
@@ -141,6 +142,12 @@ public:
     /// Set the KoInlineTextObjectManager
     void setInlineTextObjectManager(KoInlineTextObjectManager *manager);
 
+    /// @return the object storing the outline of the document
+    KoTextDocumentOutline *outline() const;
+
+    /// Set the KoTextDocumentOutline for the document
+    void setOutline(KoTextDocumentOutline *);
+
     /// @return section model for the document
     KoSectionModel *sectionModel();
 
@@ -237,7 +244,8 @@ public:
         FrameCharFormat,
         FrameBlockFormat,
         ShapeController,
-        SectionModel
+        SectionModel,
+        Outline
     };
 
     static const QUrl StyleManagerURL;

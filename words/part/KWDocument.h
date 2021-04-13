@@ -46,6 +46,7 @@ class KWFrameSet;
 class KWFrame;
 class KWDocumentStatistics;
 class KoInlineTextObjectManager;
+class KoTextDocumentOutline;
 class KoTextRangeManager;
 class KoShapeConfigFactoryBase;
 class KoUpdater;
@@ -176,6 +177,9 @@ public:
 
     /// return the textRangeManager for this document.
     KoTextRangeManager *textRangeManager() const;
+
+    /// return the outline for this document
+    KoTextDocumentOutline *outline() const;
 
     KWApplicationConfig &config() {
         return m_config;

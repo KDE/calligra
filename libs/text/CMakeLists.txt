@@ -128,7 +128,7 @@ set(kotext_LIB_SRCS
     KoTextCommandBase.cpp
 
     TextDebug.cpp
-)
+        KoTextDocumentOutline.cpp KoTextDocumentOutline.h)
 
 if( SHOULD_BUILD_FEATURE_RDF )
     set(kotext_LIB_SRCS ${kotext_LIB_SRCS}
