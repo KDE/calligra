@@ -433,9 +433,13 @@ void StyleStorage::insert(const QRect& rect, const SharedSubStyle& subStyle, boo
 void StyleStorage::insert(const Region& region, const Style& style)
 {
     d->ensureLoaded();
-    if (style.isEmpty())
-        return;
-    foreach(const SharedSubStyle& subStyle, style.subStyles()) {
+    auto subs = style.subStyles();
+    if (style.isEmpty()) {  // empty styles have no substyle, but we need the default one, so let's tweak it
+      Style st;
+      st.setDefault();
+      subs = style.subStyles();
+    }
+    foreach(const SharedSubStyle& subStyle, subs) {
         Region::ConstIterator end(region.constEnd());
         for (Region::ConstIterator it(region.constBegin()); it != end; ++it) {
             // insert substyle
