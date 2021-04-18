@@ -21,6 +21,7 @@
 #include "KWDocument.h"
 
 #include "frames/KWTextFrameSet.h"
+#include "KoTextDocumentLayout.h"
 
 #include <QPointer>
 #include <QTextDocument>
@@ -62,6 +63,11 @@ KWDocumentStatistics::KWDocumentStatistics(KWDocument *doc)
         if (tfs)
             connect(tfs->document(), &QTextDocument::contentsChanged, d->timer, QOverload<>::of(&QTimer::start));
     });
+    // Since a document can exist without a main frameset, we need a quick check for that
+    if (d->document->mainFrameSet()) {
+        connect(static_cast<KoTextDocumentLayout*>(d->document->mainFrameSet()->document()->documentLayout()),
+                &KoTextDocumentLayout::finishedLayout, d->timer, QOverload<>::of(&QTimer::start));
+    }
     
     // Initialize values
     reset();
