@@ -57,18 +57,25 @@ KWDocumentStatistics::KWDocumentStatistics(KWDocument *doc)
     d->timer->setSingleShot(true);
     connect(d->timer, &QTimer::timeout, this, &KWDocumentStatistics::updateData);
 
-    // We will have to connect to each frame set when it is created
-    connect(d->document->frameLayout(), &KWFrameLayout::newFrameSet, this, [this](KWFrameSet *fs) {
+    auto newFrame = [this](KWFrameSet *fs) {
         KWTextFrameSet *tfs = qobject_cast<KWTextFrameSet*>(fs);
-        if (tfs)
-            connect(tfs->document(), &QTextDocument::contentsChanged, d->timer, QOverload<>::of(&QTimer::start));
+        if (tfs) {
+            connect(tfs->document(), &QTextDocument::contentsChanged, d->timer, QOverload<>::of(&QTimer::start), Qt::UniqueConnection);
+            KoTextDocumentLayout *lay = qobject_cast<KoTextDocumentLayout*>(tfs->document()->documentLayout());
+            if (lay) {
+                connect(lay, &KoTextDocumentLayout::finishedLayout, d->timer, QOverload<>::of(&QTimer::start), Qt::UniqueConnection);
+            }
+        }
+    };
+    // We will have to connect to each frame set when it is created
+    connect(d->document->frameLayout(), &KWFrameLayout::newFrameSet, this, newFrame);
+    // This ensures that even if the document is entirely reset, we still pick up the main frame set
+    connect(d->document, &KWDocument::pageSetupChanged, this, [this, newFrame](){
+        if (d->document->mainFrameSet()) {
+            newFrame(d->document->mainFrameSet());
+        }
     });
-    // Since a document can exist without a main frameset, we need a quick check for that
-    if (d->document->mainFrameSet()) {
-        connect(static_cast<KoTextDocumentLayout*>(d->document->mainFrameSet()->document()->documentLayout()),
-                &KoTextDocumentLayout::finishedLayout, d->timer, QOverload<>::of(&QTimer::start));
-    }
-    
+
     // Initialize values
     reset();
 }
