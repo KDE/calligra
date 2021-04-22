@@ -165,6 +165,7 @@ public:
         touchView = new QQuickWidget();
         shouldAcceptTouchEvents(touchView);
         QmlGlobalEngine::instance()->setEngine(touchView->engine());
+        touchView->engine()->rootContext()->setContextObject(new KLocalizedContext(touchView));
         touchView->engine()->addImageProvider(QLatin1String("recentimage"), new RecentImageImageProvider);
         touchView->engine()->rootContext()->setContextProperty("mainWindow", parent);
 
