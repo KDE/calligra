@@ -1,6 +1,6 @@
 /* This file is part of the Calligra project
-   Copyright (C) 2003 Werner Trobin <trobin@kde.org>
-   Copyright (C) 2003 David Faure <faure@kde.org>
+   SPDX-FileCopyrightText: 2003 Werner Trobin <trobin@kde.org>
+   SPDX-FileCopyrightText: 2003 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the Library GNU General Public

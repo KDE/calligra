@@ -1,8 +1,8 @@
 /* This file is part of the KDE project
  *
  * Based on writerperfect code, major Contributor(s):
- * Copyright (C) 2006 Ariya Hidayat (ariya@kde.org)
- * Copyright (C) 2006-2007 Fridrich Strba (fridrich.strba@bluewin.ch)
+ * SPDX-FileCopyrightText: 2006 Ariya Hidayat (ariya@kde.org)
+ * SPDX-FileCopyrightText: 2006-2007 Fridrich Strba (fridrich.strba@bluewin.ch)
  *
  * For minor contributions see the writerperfect git repository.
  *

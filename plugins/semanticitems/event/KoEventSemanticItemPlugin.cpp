@@ -1,7 +1,7 @@
 /* This file is part of the Calligra project, made with-in the KDE community
 
-   Copyright (C) 2010 KO GmbH <ben.martin@kogmbh.com>
-   Copyright (C) 2013 Friedrich W. H. Kossebau <kossebau@kde.org>
+   SPDX-FileCopyrightText: 2010 KO GmbH <ben.martin@kogmbh.com>
+   SPDX-FileCopyrightText: 2013 Friedrich W. H. Kossebau <kossebau@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public

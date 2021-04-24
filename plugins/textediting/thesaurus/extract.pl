@@ -1,21 +1,9 @@
 #!/usr/bin/perl -w
 # $Id$
 # This file is part of the KDE project
-# Copyright (C) 2001 Daniel Naber <daniel.naber@t-online.de>
+# SPDX-FileCopyrightText: 2001 Daniel Naber <daniel.naber@t-online.de>
 
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version 2
-# of the License, or (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+# SPDX-License-Identifier: GPL-2.0-or-later
 
 # Extract information from WordNet data files - only useful for development.
 # cat together all of WordNet's data.* files and call this script. As a second
@@ -106,7 +94,7 @@ print <<__EOF;
   11 documentation, including modifications that you make for internal  
   12 use or for distribution.  
   13   
-  14 WordNet 1.7 Copyright 2001 by Princeton University.  All rights reserved.  
+  14 WordNet 1.7 SPDX-FileCopyrightText: 2001 Princeton University. All rights reserved.
   15   
   16 THIS SOFTWARE AND DATABASE IS PROVIDED "AS IS" AND PRINCETON  
   17 UNIVERSITY MAKES NO REPRESENTATIONS OR WARRANTIES, EXPRESS OR  

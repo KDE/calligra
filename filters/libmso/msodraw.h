@@ -1,5 +1,5 @@
 /* This file is part of the Calligra project
-   Copyright (C) 2010, 2011 Matus Uzak <matus.uzak@ixonos.com>
+   SPDX-FileCopyrightText: 2010, 2011 Matus Uzak <matus.uzak@ixonos.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the Library GNU General Public

@@ -6,7 +6,7 @@
 #  OPENEXR_LIBRARIES - Libraries needed to use OpenEXR
 #  OPENEXR_DEFINITIONS - definitions required to use OpenEXR
 
-# Copyright (c) 2006, Alexander Neundorf, <neundorf@kde.org>
+# SPDX-FileCopyrightText: 2006 Alexander Neundorf <neundorf@kde.org>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.

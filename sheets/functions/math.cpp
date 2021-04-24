@@ -1,26 +1,11 @@
-/* This file is part of the KDE project
-   Copyright (C) 1998-2002 The KSpread Team <calligra-devel@kde.org>
-   Copyright (C) 2005 Tomas Mecir <mecirt@gmail.com>
-   Copyright 2007 Sascha Pfau <MrPeacock@gmail.com>
-   Copyright (C) 2010 Carlos Licea <carlos@kdab.com>
-   Copyright (C) 2010 Nokia Corporation and/or its subsidiary(-ies).
-     Contact: Suresh Chande suresh.chande@nokia.com
-
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; only
-   version 2 of the License.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.
-*/
+// This file is part of the KDE project
+// SPDX-FileCopyrightText: 1998-2002 The KSpread Team <calligra-devel@kde.org>
+// SPDX-FileCopyrightText: 2005 Tomas Mecir <mecirt@gmail.com>
+// SPDX-FileCopyrightText: 2007 Sascha Pfau <MrPeacock@gmail.com>
+// SPDX-FileCopyrightText: 2010 Carlos Licea <carlos@kdab.com>
+// SPDX-FileCopyrightText: 2010 Nokia Corporation and /or its subsidiary(-ies).
+// Contact: Suresh Chande suresh.chande@nokia.com
+// SPDX-License-Identifier: LGPL-2.0-only
 
 // built-in math functions
 #include "MathModule.h"

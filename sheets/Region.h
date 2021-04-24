@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
-   Copyright 2010 Marijn Kruisselbrink <mkruisselbrink@kde.org>
-   Copyright 2005-2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+   SPDX-FileCopyrightText: 2010 Marijn Kruisselbrink <mkruisselbrink@kde.org>
+   SPDX-FileCopyrightText: 2005-2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU Library General Public License as published by

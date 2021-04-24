@@ -1,7 +1,7 @@
 /*
 ** Header file for inclusion with words_xml2latex.c
 **
-** Copyright (C) 2000 Robert JACOLIN
+** SPDX-FileCopyrightText: 2000 Robert JACOLIN
 **
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public

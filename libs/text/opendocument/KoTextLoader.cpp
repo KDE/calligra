@@ -1,35 +1,22 @@
 /* This file is part of the KDE project
- * Copyright (C) 2001-2006 David Faure <faure@kde.org>
- * Copyright (C) 2007,2009,2011 Thomas Zander <zander@kde.org>
- * Copyright (C) 2007 Sebastian Sauer <mail@dipe.org>
- * Copyright (C) 2007,2011 Pierre Ducroquet <pinaraf@pinaraf.info>
- * Copyright (C) 2007-2011 Thorsten Zachmann <zachmann@kde.org>
- * Copyright (C) 2008 Girish Ramakrishnan <girish@forwardbias.in>
- * Copyright (C) 2009-2012 KO GmbH <cbo@kogmbh.com>
- * Copyright (C) 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
- * Copyright (C) 2010 KO GmbH <ben.martin@kogmbh.com>
- * Copyright (C) 2011 Pavol Korinek <pavol.korinek@ixonos.com>
- * Copyright (C) 2011 Lukáš Tvrdý <lukas.tvrdy@ixonos.com>
- * Copyright (C) 2011 Boudewijn Rempt <boud@kogmbh.com>
- * Copyright (C) 2011-2012 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
- * Copyright (C) 2012 Inge Wallin <inge@lysator.liu.se>
- * Copyright (C) 2009-2012 C. Boemann <cbo@boemann.dk>
- * Copyright (C) 2014-2015 Denis Kuplyakov <dener.kup@gmail.com>
+ * SPDX-FileCopyrightText: 2001-2006 David Faure <faure@kde.org>
+ * SPDX-FileCopyrightText: 2007, 2009, 2011 Thomas Zander <zander@kde.org>
+ * SPDX-FileCopyrightText: 2007 Sebastian Sauer <mail@dipe.org>
+ * SPDX-FileCopyrightText: 2007, 2011 Pierre Ducroquet <pinaraf@pinaraf.info>
+ * SPDX-FileCopyrightText: 2007-2011 Thorsten Zachmann <zachmann@kde.org>
+ * SPDX-FileCopyrightText: 2008 Girish Ramakrishnan <girish@forwardbias.in>
+ * SPDX-FileCopyrightText: 2009-2012 KO GmbH <cbo@kogmbh.com>
+ * SPDX-FileCopyrightText: 2009 Pierre Stirnweiss <pstirnweiss@googlemail.com>
+ * SPDX-FileCopyrightText: 2010 KO GmbH <ben.martin@kogmbh.com>
+ * SPDX-FileCopyrightText: 2011 Pavol Korinek <pavol.korinek@ixonos.com>
+ * SPDX-FileCopyrightText: 2011 Lukáš Tvrdý <lukas.tvrdy@ixonos.com>
+ * SPDX-FileCopyrightText: 2011 Boudewijn Rempt <boud@kogmbh.com>
+ * SPDX-FileCopyrightText: 2011-2012 Gopalakrishna Bhat A <gopalakbhat@gmail.com>
+ * SPDX-FileCopyrightText: 2012 Inge Wallin <inge@lysator.liu.se>
+ * SPDX-FileCopyrightText: 2009-2012 C. Boemann <cbo@boemann.dk>
+ * SPDX-FileCopyrightText: 2014-2015 Denis Kuplyakov <dener.kup@gmail.com>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public License
- * along with this library; see the file COPYING.LIB.  If not, write to
- * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #include "KoTextLoader.h"
 

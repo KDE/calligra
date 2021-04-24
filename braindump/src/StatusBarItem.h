@@ -1,7 +1,7 @@
 /*
- *  Copyright (c) 1998, 1999 Torben Weis <weis@kde.org>
- *  Copyright (c) 2007 Thomas Zander <zander@kde.org>
- *  Copyright (c) 2009 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 1998, 1999 Torben Weis <weis@kde.org>
+ *  SPDX-FileCopyrightText: 2007 Thomas Zander <zander@kde.org>
+ *  SPDX-FileCopyrightText: 2009 Cyrille Berger <cberger@cberger.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public

@@ -1,5 +1,5 @@
 /* This file is part of the wvWare 2 project
-   Copyright (C) 2002-2003 Werner Trobin <trobin@kde.org>
+   SPDX-FileCopyrightText: 2002-2003 Werner Trobin <trobin@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public

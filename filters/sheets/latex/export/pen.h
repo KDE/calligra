@@ -2,7 +2,7 @@
 /*
 ** Header file for inclusion with kspread_xml2latex.c
 **
-** Copyright (C) 2003 Robert JACOLIN
+** SPDX-FileCopyrightText: 2003 Robert JACOLIN
 **
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public

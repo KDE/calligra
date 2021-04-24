@@ -1,6 +1,6 @@
 /* This file is part of the KDE libraries
-   Copyright (c) 1999 Waldo Bastian <bastian@kde.org>
-   Copyright (c) 2001-2003 Werner Trobin <trobin@kde.org>
+   SPDX-FileCopyrightText: 1999 Waldo Bastian <bastian@kde.org>
+   SPDX-FileCopyrightText: 2001-2003 Werner Trobin <trobin@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public

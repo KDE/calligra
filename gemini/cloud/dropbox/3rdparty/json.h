@@ -1,7 +1,7 @@
 /*
 
-    Copyright 2010 Eeli Reilin <eeli@nilier.org>
-    Copyright 2010 Mikko Ahonen <mikko.j.ahonen@jyu.fi>
+    SPDX-FileCopyrightText: 2010 Eeli Reilin <eeli@nilier.org>
+    SPDX-FileCopyrightText: 2010 Mikko Ahonen <mikko.j.ahonen@jyu.fi>
 
     This package is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

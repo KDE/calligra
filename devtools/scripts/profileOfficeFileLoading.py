@@ -6,7 +6,7 @@
 # The script outputs an csv file that contains the times various functions took
 # for each file in directory $dir. The directory $dir is scanned recursively.
 #
-# Copyright 2010 Jos van den Oever <jos@vandenoever.info>
+# SPDX-FileCopyrightText: 2010 Jos van den Oever <jos@vandenoever.info>
 
 import sys, os, tempfile, time, signal, subprocess, re, lxml.etree, zipfile
 

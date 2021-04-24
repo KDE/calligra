@@ -1,29 +1,14 @@
-/* This file is part of the KDE project
-   Copyright (C) 2007 Sascha Pfau <MrPeacock@gmail.com>
-   Copyright (C) 2002,2006 Ariya Hidayat <ariya@kde.org>
-   Copyright (C) 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
-   Copyright (C) 2005 Tomas Mecir <mecirt@gmail.com>
-   Copyright (C) 2002 Norbert Andres <nandres@web.de>
-   Copyright (C) 1999-2000 Laurent Montel <montel@kde.org>
-   Copyright (C) 1999-2000 Laurent Montel <montel@kde.org>
-   Copyright (C) 1999-2000 Jonathan Singer <jsinger@genome.wi.mit.edu>
-   Copyright (C) 1998-1999 Torben Weis <weis@kde.org>
-
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; only
-   version 2 of the License.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.
-*/
+// This file is part of the KDE project
+// SPDX-FileCopyrightText: 2007 Sascha Pfau <MrPeacock@gmail.com>
+// SPDX-FileCopyrightText: 2002, 2006 Ariya Hidayat <ariya@kde.org>
+// SPDX-FileCopyrightText: 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+// SPDX-FileCopyrightText: 2005 Tomas Mecir <mecirt@gmail.com>
+// SPDX-FileCopyrightText: 2002 Norbert Andres <nandres@web.de>
+// SPDX-FileCopyrightText: 1999-2000 Laurent Montel <montel@kde.org>
+// SPDX-FileCopyrightText: 1999-2000 Laurent Montel <montel@kde.org>
+// SPDX-FileCopyrightText: 1999-2000 Jonathan Singer <jsinger@genome.wi.mit.edu>
+// SPDX-FileCopyrightText: 1998-1999 Torben Weis <weis@kde.org>
+// SPDX-License-Identifier: LGPL-2.0-only
 
 // built-in financial functions
 

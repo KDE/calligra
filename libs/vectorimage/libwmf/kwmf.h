@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2000, S.R.Haque <shaheedhaque@hotmail.com>.
+    SPDX-FileCopyrightText: 2000 S.R.Haque <shaheedhaque@hotmail.com>.
     This file is part of the KDE project
 
     This library is free software; you can redistribute it and/or

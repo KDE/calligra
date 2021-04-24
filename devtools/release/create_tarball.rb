@@ -4,16 +4,16 @@
 # Ruby script for generating tarball releases of the Calligra repository
 # This script can create signed tarballs with source code, translations and documentation
 #
-# (c) 2017 Dag Andersen <danders@get2net.dk>
-# (c) 2016 Dag Andersen <danders@get2net.dk>
+# SPDX-FileCopyrightText: 2017 Dag Andersen <danders@get2net.dk>
+# SPDX-FileCopyrightText: 2016 Dag Andersen <danders@get2net.dk>
 #
 # Parts of this script is from create_tarball_kf5.rb, copyright by:
-# (c) 2005 Mark Kretschmann <markey@web.de>
-# (c) 2006-2008 Tom Albers <tomalbers@kde.nl>
-# (c) 2007 Angelo Naselli <anaselli@linux.it> (command line parameters)
+# SPDX-FileCopyrightText: 2005 Mark Kretschmann <markey@web.de>
+# SPDX-FileCopyrightText: 2006-2008 Tom Albers <tomalbers@kde.nl>
+# SPDX-FileCopyrightText: 2007 Angelo Naselli <anaselli@linux.it> (command line parameters)
 # Some parts of this code taken from cvs2dist
 #
-# License: GNU General Public License V2
+SPDX-License-Identifier: GPL-2.0-only
 
 require 'optparse'
 require 'ostruct'

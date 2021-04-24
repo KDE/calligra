@@ -17,8 +17,8 @@
 # MACRO_ENSURE_VERSION( "2.5.31" "flex 2.5.4a" VERSION_OK)
 # which means 2.5.31 is required and "flex 2.5.4a" is what was found on the system
 
-# Copyright (c) 2006, David Faure, <faure@kde.org>
-# Copyright (c) 2007, Will Stephenson <wstephenson@kde.org>
+# SPDX-FileCopyrightText: 2006 David Faure <faure@kde.org>
+# SPDX-FileCopyrightText: 2007 Will Stephenson <wstephenson@kde.org>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -33,7 +33,7 @@
 #
 # This macro will break silently if any of x,y,z are greater than 100.
 #
-# Copyright (c) 2007, Will Stephenson <wstephenson@kde.org>
+# SPDX-FileCopyrightText: 2007 Will Stephenson <wstephenson@kde.org>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -44,8 +44,8 @@
 #
 # This macro will break silently if any of x,y,z are greater than 100.
 #
-# Copyright (c) 2006, David Faure, <faure@kde.org>
-# Copyright (c) 2007, Will Stephenson <wstephenson@kde.org>
+# SPDX-FileCopyrightText: 2006 David Faure <faure@kde.org>
+# SPDX-FileCopyrightText: 2007 Will Stephenson <wstephenson@kde.org>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
@@ -53,7 +53,7 @@
 # CHECK_RANGE_INCLUSIVE_LOWER
 # Helper macro to check whether x <= y < z
 #
-# Copyright (c) 2007, Will Stephenson <wstephenson@kde.org>
+# SPDX-FileCopyrightText: 2007 Will Stephenson <wstephenson@kde.org>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.

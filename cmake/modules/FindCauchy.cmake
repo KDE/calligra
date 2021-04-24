@@ -6,7 +6,7 @@
 #  CAUCHY_INCLUDE_DIR - the cauchy include directory
 #  M2MML_LIBRARY - the M2MML library
 
-# Copyright (c) 2011, Cyrille Berger <cberger@cberger.net>
+# SPDX-FileCopyrightText: 2011 Cyrille Berger <cberger@cberger.net>
 # Redistribution and use is allowed according to the terms of the BSD license.
 
 find_path(CAUCHY_INCLUDE_DIR m2mml.h

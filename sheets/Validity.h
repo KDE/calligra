@@ -1,34 +1,21 @@
 /* This file is part of the KDE project
-   Copyright 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
-   Copyright 2004 Tomas Mecir <mecirt@gmail.com>
-   Copyright 1999-2002,2004 Laurent Montel <montel@kde.org>
-   Copyright 2002,2004 Ariya Hidayat <ariya@kde.org>
-   Copyright 2002-2003 Norbert Andres <nandres@web.de>
-   Copyright 2003 Stefan Hetzl <shetzl@chello.at>
-   Copyright 2001-2002 Philipp Mueller <philipp.mueller@gmx.de>
-   Copyright 2002 Harri Porten <porten@kde.org>
-   Copyright 2002 John Dailey <dailey@vt.edu>
-   Copyright 1999-2001 David Faure <faure@kde.org>
-   Copyright 2000-2001 Werner Trobin <trobin@kde.org>
-   Copyright 2000 Simon Hausmann <hausmann@kde.org
-   Copyright 1998-1999 Torben Weis <weis@kde.org>
-   Copyright 1999 Michael Reiher <michael.reiher@gmx.de>
-   Copyright 1999 Reginald Stadlbauer <reggie@kde.org>
+   SPDX-FileCopyrightText: 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+   SPDX-FileCopyrightText: 2004 Tomas Mecir <mecirt@gmail.com>
+   SPDX-FileCopyrightText: 1999-2002, 2004 Laurent Montel <montel@kde.org>
+   SPDX-FileCopyrightText: 2002, 2004 Ariya Hidayat <ariya@kde.org>
+   SPDX-FileCopyrightText: 2002-2003 Norbert Andres <nandres@web.de>
+   SPDX-FileCopyrightText: 2003 Stefan Hetzl <shetzl@chello.at>
+   SPDX-FileCopyrightText: 2001-2002 Philipp Mueller <philipp.mueller@gmx.de>
+   SPDX-FileCopyrightText: 2002 Harri Porten <porten@kde.org>
+   SPDX-FileCopyrightText: 2002 John Dailey <dailey@vt.edu>
+   SPDX-FileCopyrightText: 1999-2001 David Faure <faure@kde.org>
+   SPDX-FileCopyrightText: 2000-2001 Werner Trobin <trobin@kde.org>
+   SPDX-FileCopyrightText: 2000 Simon Hausmann <hausmann@kde.org
+   SPDX-FileCopyrightText: 1998-1999 Torben Weis <weis@kde.org>
+   SPDX-FileCopyrightText: 1999 Michael Reiher <michael.reiher@gmx.de>
+   SPDX-FileCopyrightText: 1999 Reginald Stadlbauer <reggie@kde.org>
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
 #ifndef CALLIGRA_SHEETS_VALIDITY

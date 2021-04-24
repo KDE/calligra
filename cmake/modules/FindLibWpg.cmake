@@ -6,7 +6,7 @@
 #  LIBWPG_LIBRARIES   - the libraries needed to use LibWpg
 #  LIBWPG_DEFINITIONS - Compiler switches required for using LibWpg
 #
-# Copyright (C) 2007 Ariya Hidayat <ariya@kde.org>
+# SPDX-FileCopyrightText: 2007 Ariya Hidayat <ariya@kde.org>
 # Redistribution and use is allowed according to the terms of the BSD license.
 
 include(LibFindMacros)

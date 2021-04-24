@@ -1,6 +1,6 @@
 /* This file is part of the wvWare 2 project
-   Copyright (C) 2002-2003 Werner Trobin <trobin@kde.org>
-   Copyright (C) 2010, 2011 Matus Uzak <matus.uzak@ixonos.com>
+   SPDX-FileCopyrightText: 2002-2003 Werner Trobin <trobin@kde.org>
+   SPDX-FileCopyrightText: 2010, 2011 Matus Uzak <matus.uzak@ixonos.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public

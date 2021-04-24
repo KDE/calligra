@@ -13,7 +13,7 @@ use URI::Escape;
 # To download 20 presentations about pears do:
 #    downloadMSOfficeDocuments.pl 20 pear ppt
 #
-# Copyright 2009 Jos van den Oever <jos@vandenoever.info>
+# SPDX-FileCopyrightText: 2009 Jos van den Oever <jos@vandenoever.info>
 
 if ($#ARGV != 2 || $ARGV[0] !~ m/^\d+$/ || $ARGV[1] !~ m/^\w+$/) {
 	die "Usage: $0 number term type\n";

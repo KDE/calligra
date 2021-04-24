@@ -6,7 +6,7 @@
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 #
-# Copyright (C) 2010 KO GmbH <jos.van.den.oever@kogmbh.com>
+# SPDX-FileCopyrightText: 2010 KO GmbH <jos.van.den.oever@kogmbh.com>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.

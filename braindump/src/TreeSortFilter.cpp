@@ -1,5 +1,5 @@
 /*
-    Copyright (c) 2006 Frans Englich <frans.englich@telia.com>
+    SPDX-FileCopyrightText: 2006 Frans Englich <frans.englich@telia.com>
 
     This file is part of the KDE project
 

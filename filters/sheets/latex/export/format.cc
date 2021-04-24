@@ -1,7 +1,7 @@
 /*
 ** A program to convert the XML rendered by Words into LATEX.
 **
-** Copyright (C) 2002, 2003 Robert JACOLIN
+** SPDX-FileCopyrightText: 2002, 2003 Robert JACOLIN
 **
 ** This library is free software; you can redistribute it and/or
 ** modify it under the terms of the GNU Library General Public

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * Copyright ( C ) 2007 Thorsten Zachmann <zachmann@kde.org>
- * Copyright (C) 2009 Fredy Yanardi <fyanardi@gmail.com>
+ * SPDX-FileCopyrightText: 2009 Fredy Yanardi <fyanardi@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public

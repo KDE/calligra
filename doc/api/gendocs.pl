@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# Copyright (C) 2006 Thomas Zander <zander@kde.org>
+# SPDX-FileCopyrightText: 2006 Thomas Zander <zander@kde.org>
 # this script generates dox based on the availability of a Mainpage.dox file.
 # whereever there is one, doxygen is started.
 

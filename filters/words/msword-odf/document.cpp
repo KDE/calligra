@@ -1,10 +1,10 @@
 /* This file is part of the Calligra project
-   Copyright (C) 2002 Werner Trobin <trobin@kde.org>
-   Copyright (C) 2002 David Faure <faure@kde.org>
-   Copyright (C) 2008 Benjamin Cail <cricketc@gmail.com>
-   Copyright (C) 2009 Inge Wallin   <inge@lysator.liu.se>
-   Copyright (C) 2010 Boudewijn Rempt <boud@kogmbh.com>
-   Copyright (C) 2010, 2011 Matus Uzak <matus.uzak@ixonos.com>
+   SPDX-FileCopyrightText: 2002 Werner Trobin <trobin@kde.org>
+   SPDX-FileCopyrightText: 2002 David Faure <faure@kde.org>
+   SPDX-FileCopyrightText: 2008 Benjamin Cail <cricketc@gmail.com>
+   SPDX-FileCopyrightText: 2009 Inge Wallin <inge@lysator.liu.se>
+   SPDX-FileCopyrightText: 2010 Boudewijn Rempt <boud@kogmbh.com>
+   SPDX-FileCopyrightText: 2010, 2011 Matus Uzak <matus.uzak@ixonos.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the Library GNU General Public

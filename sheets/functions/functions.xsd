@@ -11,7 +11,7 @@
     <xsd:annotation>
         <xsd:documentation>
 
-            Copyright (c) 2006 Stefan Nikolaus &lt;stefan.nikolaus@kdemail.net&gt;
+            SPDX-FileCopyrightText: 2006 Stefan Nikolaus &lt;stefan.nikolaus@kdemail.net&gt;
 
             Permission to use, copy, modify and distribute this XML schema
             and its accompanying documentation for any purpose and without fee

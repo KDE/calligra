@@ -1,7 +1,7 @@
 /*
 * This file is part of the KDE project
 *
-* Copyright (C) 2009 Nokia Corporation and/or its subsidiary(-ies).
+* SPDX-FileCopyrightText: 2009 Nokia Corporation and /or its subsidiary(-ies).
 *
 * Contact: Amit Aggarwal <amit.5.aggarwal@nokia.com>
 *

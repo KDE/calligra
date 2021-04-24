@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2005-2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+   SPDX-FileCopyrightText: 2005-2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
              2006 Fredrik Edemar <f_edemar@linux.se>
              2005-2006 Raphael Langerhorst <raphael.langerhorst@kdemail.net>
              2004 Tomas Mecir <mecirt@gmail.com>
@@ -11,20 +11,7 @@
              1999, 2000 Torben Weis <weis@kde.org>
              1999 Stephan Kulow <coolo@kde.org>
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+   SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
 #ifndef CALLIGRA_SHEETS_FORMAT

@@ -1,43 +1,31 @@
 /*
  * This file is part of Office 2007 Filters for Calligra
- * Copyright (C) 2002 Laurent Montel <lmontel@mandrakesoft.com>
- * Copyright (c) 2003 Lukas Tinkl <lukas@kde.org>
- * Copyright (C) 2003 David Faure <faure@kde.org>
- * Copyright (C) 2009-2010 Nokia Corporation and/or its subsidiary(-ies).
+ * SPDX-FileCopyrightText: 2002 Laurent Montel <lmontel@mandrakesoft.com>
+ * SPDX-FileCopyrightText: 2003 Lukas Tinkl <lukas@kde.org>
+ * SPDX-FileCopyrightText: 2003 David Faure <faure@kde.org>
+ * SPDX-FileCopyrightText: 2009-2010 Nokia Corporation and /or its subsidiary(-ies).
  * Contact: Suresh Chande suresh.chande@nokia.com
- * Copyright (C) 2011 Matus Uzak <matus.uzak@ixonos.com>
- * Copyright 2014 Inge Wallin <inge@lysator.liu.se>
+ * SPDX-FileCopyrightText: 2011 Matus Uzak <matus.uzak@ixonos.com>
+ * SPDX-FileCopyrightText: 2014 Inge Wallin <inge@lysator.liu.se>
  *
  * Utils::columnName() based on Cell::columnName() from calligra/kspread/Utils.cpp:
- * Copyright 2006-2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
- * Copyright 2004 Tomas Mecir <mecirt@gmail.com>
- * Copyright 1999-2002,2004 Laurent Montel <montel@kde.org>
- * Copyright 2002,2004 Ariya Hidayat <ariya@kde.org>
- * Copyright 2002-2003 Norbert Andres <nandres@web.de>
- * Copyright 2003 Stefan Hetzl <shetzl@chello.at>
- * Copyright 2001-2002 Philipp Mueller <philipp.mueller@gmx.de>
- * Copyright 2002 Harri Porten <porten@kde.org>
- * Copyright 2002 John Dailey <dailey@vt.edu>
- * Copyright 1999-2001 David Faure <faure@kde.org>
- * Copyright 2000-2001 Werner Trobin <trobin@kde.org>
- * Copyright 2000 Simon Hausmann <hausmann@kde.org
- * Copyright 1998-1999 Torben Weis <weis@kde.org>
- * Copyright 1999 Michael Reiher <michael.reiher@gmx.de>
- * Copyright 1999 Reginald Stadlbauer <reggie@kde.org>
+ * SPDX-FileCopyrightText: 2006-2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+ * SPDX-FileCopyrightText: 2004 Tomas Mecir <mecirt@gmail.com>
+ * SPDX-FileCopyrightText: 1999-2002, 2004 Laurent Montel <montel@kde.org>
+ * SPDX-FileCopyrightText: 2002, 2004 Ariya Hidayat <ariya@kde.org>
+ * SPDX-FileCopyrightText: 2002-2003 Norbert Andres <nandres@web.de>
+ * SPDX-FileCopyrightText: 2003 Stefan Hetzl <shetzl@chello.at>
+ * SPDX-FileCopyrightText: 2001-2002 Philipp Mueller <philipp.mueller@gmx.de>
+ * SPDX-FileCopyrightText: 2002 Harri Porten <porten@kde.org>
+ * SPDX-FileCopyrightText: 2002 John Dailey <dailey@vt.edu>
+ * SPDX-FileCopyrightText: 1999-2001 David Faure <faure@kde.org>
+ * SPDX-FileCopyrightText: 2000-2001 Werner Trobin <trobin@kde.org>
+ * SPDX-FileCopyrightText: 2000 Simon Hausmann <hausmann@kde.org
+ * SPDX-FileCopyrightText: 1998-1999 Torben Weis <weis@kde.org>
+ * SPDX-FileCopyrightText: 1999 Michael Reiher <michael.reiher@gmx.de>
+ * SPDX-FileCopyrightText: 1999 Reginald Stadlbauer <reggie@kde.org>
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public License
- * version 2.1 as published by the Free Software Foundation.
- *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA
+ * SPDX-License-Identifier: LGPL-2.1-only
  *
  */
 

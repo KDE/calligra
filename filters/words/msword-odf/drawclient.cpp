@@ -1,5 +1,5 @@
 /*
-   Copyright (C) 2011 Matus Hanzes <matus.hanzes@ixonos.com>
+   SPDX-FileCopyrightText: 2011 Matus Hanzes <matus.hanzes@ixonos.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the Library GNU General Public

@@ -5,7 +5,7 @@
 #  LIBODFGEN_INCLUDE_DIRS - include directory, e.g. /usr/include
 #  LIBODFGEN_LIBRARIES   - the libraries needed to use LibOdfGen
 #
-# Copyright (C) 2013 Yue Liu <yue.liu@mail.com>
+# SPDX-FileCopyrightText: 2013 Yue Liu <yue.liu@mail.com>
 # Redistribution and use is allowed according to the terms of the BSD license.
 
 include(LibFindMacros)

@@ -154,7 +154,7 @@ License.
 </para>
 
 <para>
-Program copyright 1998-2000 by Reginald Stadlbauer
+Program SPDX-FileCopyrightText: 1998-2000 Reginald Stadlbauer
 <email>reggie@kde.org</email>
 </para>
 
@@ -210,7 +210,7 @@ Percy Leonhardt <email>percy@eris23.de</email>
 </itemizedlist>
 
 <para>
-Documentation based on the work copyright 1999-2000 by &Krishna.Tateneni;
+Documentation based on the work SPDX-FileCopyrightText: 1999-2000 by &Krishna.Tateneni;
 .  Portions are copyright 2000-2002 &Neil.Lucock; &Neil.Lucock.mail;
 and 2005 &Anne-Marie.Mahfouf; &Anne-Marie.Mahfouf.mail;
 </para>

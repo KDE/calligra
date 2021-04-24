@@ -18,7 +18,7 @@
  *
  *  GNU Lesser General Public License Version 2.1
  *  =============================================
- *  Copyright 2000 by Sun Microsystems, Inc.
+ *  SPDX-FileCopyrightText: 2000 Sun Microsystems Inc.
  *  901 San Antonio Road, Palo Alto, CA 94303, USA
  *
  *  This library is free software; you can redistribute it and/or

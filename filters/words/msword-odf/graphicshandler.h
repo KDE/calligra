@@ -1,9 +1,9 @@
 /* This file is part of the Calligra project
-   Copyright (C) 2003 Werner Trobin <trobin@kde.org>
-   Copyright (C) 2003 David Faure <faure@kde.org>
-   Copyright (C) 2010 KO GmbH <jos.van.den.oever@kogmbh.com>
-   Copyright (C) 2010, 2011 Matus Uzak <matus.uzak@ixonos.com>
-   Copyright (C) 2010, 2011 Matus Hanzes <matus.hanzes@ixonos.com>
+   SPDX-FileCopyrightText: 2003 Werner Trobin <trobin@kde.org>
+   SPDX-FileCopyrightText: 2003 David Faure <faure@kde.org>
+   SPDX-FileCopyrightText: 2010 KO GmbH <jos.van.den.oever@kogmbh.com>
+   SPDX-FileCopyrightText: 2010, 2011 Matus Uzak <matus.uzak@ixonos.com>
+   SPDX-FileCopyrightText: 2010, 2011 Matus Hanzes <matus.hanzes@ixonos.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the Library GNU General Public

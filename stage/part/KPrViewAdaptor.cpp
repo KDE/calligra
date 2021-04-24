@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2008 James Hogan <james@albanarts.com>
+    SPDX-FileCopyrightText: 2008 James Hogan <james@albanarts.com>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public

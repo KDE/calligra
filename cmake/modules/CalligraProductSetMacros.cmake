@@ -1,4 +1,4 @@
-# Copyright (c) 2013-2014 Friedrich W. H. Kossebau <kossebau@kde.org>
+# SPDX-FileCopyrightText: 2013-2014 Friedrich W. H. Kossebau <kossebau@kde.org>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
