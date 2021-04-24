@@ -12,7 +12,7 @@ include_directories( ${PIGMENT_INCLUDES}  ${Boost_INCLUDE_DIR})
 
 set(FILE_OPENEXR_SOURCES)
 set(LINK_OPENEXR_LIB)
-if(OPENEXR_FOUND)
+if(OpenEXR_FOUND)
     include_directories(${OPENEXR_INCLUDE_DIR})
     set(LINK_OPENEXR_LIB ${OPENEXR_LIBRARIES})
     add_definitions(${OPENEXR_DEFINITIONS})

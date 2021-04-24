@@ -363,8 +363,13 @@ endif ()
 ## Check for OpenEXR
 ##
 
-macro_optional_find_package(OpenEXR)
-macro_bool_to_01(OPENEXR_FOUND HAVE_OPENEXR)
+macro_optional_find_package(OpenEXR 3.0 CONFIG QUIET)
+if(TARGET OpenEXR::OpenEXR)
+    set(OPENEXR_LIBRARIES OpenEXR::OpenEXR)
+else()
+    macro_optional_find_package(OpenEXR)
+endif()
+macro_bool_to_01(OpenEXR_FOUND HAVE_OPENEXR)
 
 ##
 ## Test for GNU Scientific Library

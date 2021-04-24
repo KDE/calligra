@@ -12,7 +12,7 @@ include_directories( ../colorspaces/cmyk_u16
     ../colorprofiles
     ..
 )
-if(OPENEXR_FOUND)
+if(OpenEXR_FOUND)
     include_directories(${OPENEXR_INCLUDE_DIR})
 endif()
 include_directories( ${PIGMENT_INCLUDES} ${LCMS2_INCLUDE_DIR} )
