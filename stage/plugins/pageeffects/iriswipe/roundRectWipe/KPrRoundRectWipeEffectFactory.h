@@ -1,8 +1,6 @@
-/* This file is part of the KDE project
-   SPDX-FileCopyrightText: 2008 Carlos Licea <carlos.licea@kdemail.net>
-
-   SPDX-License-Identifier: LGPL-2.0-or-later
-*/
+// This file is part of the KDE project
+// SPDX-FileCopyrightText: 2008 Carlos Licea <carlos.licea@kdemail.net>
+// SPDX-License-Identifier: LGPL-2.0-or-later
 
 #ifndef KPRROUNDRECTWIPEEFFECTFACTORY_H
 #define KPRROUNDRECTWIPEEFFECTFACTORY_H

@@ -1,8 +1,5 @@
-/**
- * SPDX-FileCopyrightText: 2008, 2011 Brad Hards <bradh@frogmouth.net>
- *
- * SPDX-License-Identifier: BSD-2-Clause
- */
+// SPDX-FileCopyrightText: 2008, 2011 Brad Hards <bradh@frogmouth.net>
+// SPDX-License-Identifier: BSD-2-Clause
 
 #include "controlword.h"
 

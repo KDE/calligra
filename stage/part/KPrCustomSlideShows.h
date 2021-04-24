@@ -1,9 +1,8 @@
-/* This file is part of the KDE project
-   SPDX-FileCopyrightText: 2007-2008 Carlos Licea <carlos.licea@kdemail.org>
-   SPDX-FileCopyrightText: 2008 Thorsten Zachmann <zachmann@kde.org>
+// This file is part of the KDE project
+// SPDX-FileCopyrightText: 2007-2008 Carlos Licea <carlos.licea@kdemail.org>
+// SPDX-FileCopyrightText: 2008 Thorsten Zachmann <zachmann@kde.org>
+// SPDX-License-Identifier: LGPL-2.0-or-later
 
-   SPDX-License-Identifier: LGPL-2.0-or-later
-*/
 #ifndef KPRCUSTOMSLIDESHOWS_H
 #define KPRCUSTOMSLIDESHOWS_H
 

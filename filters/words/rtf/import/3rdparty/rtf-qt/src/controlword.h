@@ -1,8 +1,7 @@
-/**
- * SPDX-FileCopyrightText: 2008 Brad Hards <bradh@frogmouth.net>
- *
- * SPDX-License-Identifier: BSD-2-Clause
- */
+// SPDX-FileCopyrightText: 2008 Brad Hards <bradh@frogmouth.net>
+// SPDX-License-Identifier: BSD-2-Clause
+
+#pragma once
 
 #include <QString>
 #include "rtfreader_export.h"
