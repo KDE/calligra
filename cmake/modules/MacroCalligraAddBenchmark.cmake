@@ -41,7 +41,7 @@ macro (CALLIGRA_ADD_BENCHMARK _test_NAME)
         endif()
     endforeach(_filename)
 
-    get_target_property( loc ${_test_NAME} LOCATION )
+    set(loc $<TARGET_FILE:${_test_NAME}>)
     if(WIN32)
       if(MSVC_IDE)
         string(REGEX REPLACE "\\$\\(.*\\)" "\${CTEST_CONFIGURATION_TYPE}" loc "${loc}")

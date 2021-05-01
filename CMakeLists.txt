@@ -4,24 +4,9 @@ project(calligra)
 
 message(STATUS "Using CMake version: ${CMAKE_VERSION}")
 
-if (POLICY CMP0002)
-    cmake_policy(SET CMP0002 OLD)
-endif()
-if (POLICY CMP0017)
-    cmake_policy(SET CMP0017 NEW)
-endif ()
 if (POLICY CMP0022)
     cmake_policy(SET CMP0022 OLD)
 endif ()
-if (POLICY CMP0026)
-    cmake_policy(SET CMP0026 OLD)
-endif()
-if (POLICY CMP0046)
-    cmake_policy(SET CMP0046 OLD)
-endif ()
-if (POLICY CMP0059)
-    cmake_policy(SET CMP0059 OLD)
-endif()
 if (POLICY CMP0063)
     cmake_policy(SET CMP0063 NEW)
 endif()
@@ -105,11 +90,7 @@ endif()
 message(STATUS "Release build: ${RELEASE_BUILD}")
 
 # use CPP-11
-if (CMAKE_VERSION VERSION_LESS "3.1")
-    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-else ()
-    set (CMAKE_CXX_STANDARD 11)
-endif ()
+set (CMAKE_CXX_STANDARD 11)
 
 ############
 #############
