@@ -425,7 +425,8 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, L
 
         // Finalize the KoTextRange objects
         KoTextRangeManager *textRangeManager = KoTextDocument(cursor.block().document()).textRangeManager();
-        textRangeManager->finalizeTextRanges();
+        if (textRangeManager)
+            textRangeManager->finalizeTextRanges();
     }
 }
 
