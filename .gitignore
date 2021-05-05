@@ -28,3 +28,8 @@ GPATH
 GRTAGS
 GSYMS
 BROWSE
+/.clang-format
+/compile_commands.json
+.clangd
+.cache
+/cmake-build*
