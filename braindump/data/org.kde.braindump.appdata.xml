@@ -34,7 +34,7 @@
   <name xml:lang="tr">Braindump</name>
   <name xml:lang="uk">Braindump</name>
   <name xml:lang="x-test">xxBraindumpxx</name>
-  <name xml:lang="zh-CN">脑图</name>
+  <name xml:lang="zh-CN">Braindump</name>
   <summary>Notes and ideas gathering</summary>
   <summary xml:lang="bs">Sakupljanje poruka i ideja</summary>
   <summary xml:lang="ca">Notes i recull d'idees</summary>
@@ -63,7 +63,7 @@
   <summary xml:lang="tr">Notları ve fikirleri Toplama</summary>
   <summary xml:lang="uk">Програма для впорядковування нотаток та ідей</summary>
   <summary xml:lang="x-test">xxNotes and ideas gatheringxx</summary>
-  <summary xml:lang="zh-CN">笔记和想法收集</summary>
+  <summary xml:lang="zh-CN">笔记和思路速记工具</summary>
   <description>
     <p>
       Braindump is a tool to dump and organize the content of your brain (ideas, drawings, images, texts…) to your computer.
@@ -94,7 +94,7 @@
     <p xml:lang="tr">Braindump, aklınızdaki içerikleri (fikirler, çizimler, resimler, metinler...) bilgisayarına dökmenize ve organize etmenize yardımcı olan bir araçtır. Metin, resim, çizelge, çizimler, vb. ekleyebileceğiniz sonsuz tuval olan beyaz tahtalar oluşturul düzenlemenize izin vererek çalışır.</p>
     <p xml:lang="uk">Braindump — програма для запису та упорядкування ваших думок (ідей, креслень, зображень, фрагментів тексту…) за допомогою вашого комп’ютера. У цій програмі ви можете створювати та редагувати так звані «дошки» — нескінченні полотна, на які можна додавати фрагменти тексту, зображення, діаграми, креслення тощо.</p>
     <p xml:lang="x-test">xxBraindump is a tool to dump and organize the content of your brain (ideas, drawings, images, texts…) to your computer. It works by allowing to create and edit whiteboards, which are infinite canvas on which you can add texts, images, charts, drawings, etc.xx</p>
-    <p xml:lang="zh-CN">脑图是一个在计算机中记录和组织大脑内容的工具。可以创建和编辑白板，有无限的大小，可以添加文字、图片、图表和绘画等。</p>
+    <p xml:lang="zh-CN">Braindump 是一款用于快速记录和组织思路和信息的工具。您可以创建和编辑白板，在无限大小的画布中随意添加文字、图像、图表、绘图等。</p>
   </description>
   <url type="homepage">http://www.calligra.org/braindump/</url>
   <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=braindump</url>

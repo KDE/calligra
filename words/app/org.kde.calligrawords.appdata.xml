@@ -63,7 +63,7 @@
   <summary xml:lang="tr">Kelime İşlemci</summary>
   <summary xml:lang="uk">Текстовий процесор</summary>
   <summary xml:lang="x-test">xxWord Processorxx</summary>
-  <summary xml:lang="zh-CN">文字处理器</summary>
+  <summary xml:lang="zh-CN">文字处理与排版软件</summary>
   <description>
     <p>
       Words is an intuitive word processor and desktop publisher application.
@@ -96,6 +96,7 @@
     <p xml:lang="tr">Kelime İşlemci, sezgisel bir kelime işlemci ve masaüstü yayın uygulamasıdır. Bununla birlikte, zevkli ve kolaylıkla bilgilendirici ve çekici belgeler oluşturabilirsiniz.</p>
     <p xml:lang="uk">Words — інтуїтивно зрозуміла у користування програма для редагування текстів та приготування матеріалів для друку. За її допомогою ви можете створювати інформативні та візуально красиві документи із задоволенням та без напруження.</p>
     <p xml:lang="x-test">xxWords is an intuitive word processor and desktop publisher application. With it, you can create informative and attractive documents with pleasure and ease.xx</p>
+    <p xml:lang="zh-CN">Calligra Word 是一款直观易用的文字处理和桌面出版应用程序。您可以用它轻松创建内容丰富和版式美观的文档。</p>
     <p>Features:</p>
     <p xml:lang="bs">Svojstva:</p>
     <p xml:lang="ca">Característiques:</p>
@@ -127,7 +128,7 @@
     <p xml:lang="tr">Özellikler:</p>
     <p xml:lang="uk">Можливості:</p>
     <p xml:lang="x-test">xxFeatures:xx</p>
-    <p xml:lang="zh-CN">功能：</p>
+    <p xml:lang="zh-CN">程序功能：</p>
     <ul>
       <li>Frame-based editing</li>
       <li xml:lang="bs">Uređivanje bazirano na okvirima</li>
@@ -158,6 +159,7 @@
       <li xml:lang="tr">Çerçeve tabanlı düzenleme</li>
       <li xml:lang="uk">Редагування на основі блоків.</li>
       <li xml:lang="x-test">xxFrame-based editingxx</li>
+      <li xml:lang="zh-CN">基于框架的排版编辑</li>
       <li>Allows embedding of Documents</li>
       <li xml:lang="bs">Dopušta ugradnju dokumenata</li>
       <li xml:lang="ca">Permet incrustar documents</li>
@@ -187,6 +189,7 @@
       <li xml:lang="tr">Belgelerin gömülmesine izin verir</li>
       <li xml:lang="uk">Вбудовування об’єктів до документів.</li>
       <li xml:lang="x-test">xxAllows embedding of Documentsxx</li>
+      <li xml:lang="zh-CN">允许在文档中嵌入内容</li>
       <li>Customization of user interface</li>
       <li xml:lang="bs">Prilagođenje korisničkog interfejsa</li>
       <li xml:lang="ca">Personalització de la interfície d'usuari</li>
@@ -216,6 +219,7 @@
       <li xml:lang="tr">Kullanıcı arayüzü özelleştirmesi</li>
       <li xml:lang="uk">Налаштовуваність інтерфейсу користувача.</li>
       <li xml:lang="x-test">xxCustomization of user interfacexx</li>
+      <li xml:lang="zh-CN">可自定义用户界面</li>
       <li>Includes all features expected from a modern word processor</li>
       <li xml:lang="bs">Uključuje sve osobine koje se očekuju od modernog programa za obradu teksta</li>
       <li xml:lang="ca">Inclou totes les funcionalitats esperades d'un processador de textos modern</li>
@@ -245,6 +249,7 @@
       <li xml:lang="tr">Modern bir kelime işlemciden beklenen tüm özellikleri sağlar</li>
       <li xml:lang="uk">Повний спектр можливостей сучасної програми для редагування тексту.</li>
       <li xml:lang="x-test">xxIncludes all features expected from a modern word processorxx</li>
+      <li xml:lang="zh-CN">包含当代文字处理工具所必备的全部功能</li>
       <li>ODT (Open Document Text) support</li>
       <li xml:lang="bs">ODT (Open Document Text) podrška</li>
       <li xml:lang="ca">Admet ODT (Open Document Text)</li>
@@ -274,6 +279,7 @@
       <li xml:lang="tr">ODT (Açık Belge Metni) desteği</li>
       <li xml:lang="uk">Підтримка стандартів ODT (Open Document Text).</li>
       <li xml:lang="x-test">xxODT (Open Document Text) supportxx</li>
+      <li xml:lang="zh-CN">ODT (OpenDocument 文字) 格式支持</li>
     </ul>
   </description>
   <url type="homepage">https://www.calligra.org/words/</url>
