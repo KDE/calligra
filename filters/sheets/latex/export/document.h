@@ -36,7 +36,6 @@ class Document : public XmlParser, Config
     QFile       _file;
     QTextStream _out;
     QString     _filename;
-    const KoStore*    _in;
 
     //FileHeader  _header;
     Spreadsheet _document;

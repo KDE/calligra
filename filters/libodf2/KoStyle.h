@@ -48,7 +48,6 @@ protected:
 private:
     KoGenStyles::InsertionFlags insertionFlags() const;
 
-    bool m_autoStyle;
     QString m_name;
     bool m_autoStyleInStylesDotXml;
 };

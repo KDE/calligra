@@ -34,9 +34,6 @@ public:
 
 protected:
     void next(int currentTime) override;
-
-private:
-    bool m_visible;
 };
 
 #endif /* KPRANIMTRANSITIONFILTER_H */

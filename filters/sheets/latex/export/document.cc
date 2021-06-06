@@ -26,7 +26,7 @@
 #include "LatexDebug.h"
 
 Document::Document(const KoStore* in, QString fileOut):
-        XmlParser(in), _file(fileOut), _in(in)
+        XmlParser(in), _file(fileOut)
 {
     //debugLatex << fileIn;
     debugLatex << fileOut;

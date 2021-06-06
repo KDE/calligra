@@ -45,7 +45,6 @@ protected:
 
 private:
     QList<KPrAnimationStep *> m_animations;
-    KPrAnimationStep *m_animationStep;
 };
 
 #endif /* KPRANIMATIONLOADER_H */

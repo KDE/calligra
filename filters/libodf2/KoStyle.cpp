@@ -10,7 +10,7 @@
 
 
 KoStyle::KoStyle()
-: m_autoStyle(false), m_autoStyleInStylesDotXml(false)
+: m_autoStyleInStylesDotXml(false)
 {
 }
 
