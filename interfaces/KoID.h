@@ -50,8 +50,14 @@ public:
 
     KoID(const KoID &rhs)
     {
+        operator=(rhs);
+    }
+
+    KoID &operator=(const KoID &rhs)
+    {
         m_id = rhs.m_id;
         m_name = rhs.name();
+        return *this;
     }
 
     QString id() const {

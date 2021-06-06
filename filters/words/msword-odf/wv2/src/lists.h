@@ -195,8 +195,6 @@ namespace wvWare
         ListType type() const { return m_type; };
 
     private:
-        ListInfo& operator=( const ListInfo& rhs );
-
         U16 m_linkedIstd;
         bool m_restartingCounter;
         std::pair<S32, bool> m_startAt;
