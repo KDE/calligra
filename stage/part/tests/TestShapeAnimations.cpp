@@ -20,7 +20,6 @@
 
 #include "TestShapeAnimations.h"
 
-#include "MockAnimation.h"
 #include <KPrShapeAnimations.h>
 #include <MockShapes.h>
 #include "../animations/KPrShapeAnimation.h"
