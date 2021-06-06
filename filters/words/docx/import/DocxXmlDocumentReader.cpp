@@ -1358,7 +1358,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::readBorderElement(BorderSide b
     createBorderStyle(sz, color, val, borderSide, sourceBorder);
     TRY_READ_ATTR(space)
     if (!space.isEmpty()) {
-        int sp;
+        int sp = 0;
         STRING_TO_INT(space, sp, QString("w:%1@space").arg(borderSideName));
         sourcePadding.insertMulti(borderSide, sp);
     }
@@ -5142,7 +5142,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_w()
     const QXmlStreamAttributes attrs(attributes());
     READ_ATTR(val)
     if (!val.isEmpty()) {
-        int wNumber;
+        int wNumber = 0;
         STRING_TO_INT(val, wNumber, "w@val")
         m_currentTextStyleProperties->setTextScale(wNumber);
     }

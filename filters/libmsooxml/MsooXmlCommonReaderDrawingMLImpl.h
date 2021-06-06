@@ -3145,7 +3145,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     // Following settings are only applied if defined so they don't overwrite defaults
     // previous defined either in the slideLayout, SlideMaster or the defaultStyles.
     if (!marL.isEmpty()) {
-        qreal marLeft;
+        qreal marLeft = 0;
         STRING_TO_QREAL(marL, marLeft, "attr:marL")
         marLeft = EMU_TO_POINT(marLeft);
         m_currentParagraphStyle.addPropertyPt("fo:margin-left", marLeft);
@@ -3153,7 +3153,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
         m_listStylePropertiesAltered = true;
     }
     if (!indent.isEmpty()) {
-        qreal firstInd;
+        qreal firstInd = 0;
         STRING_TO_QREAL(indent, firstInd, "attr:indent")
         firstInd = EMU_TO_POINT(firstInd);
         m_currentParagraphStyle.addPropertyPt("fo:text-indent", firstInd);
@@ -3162,12 +3162,12 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_DrawingML_pPr()
     }
 
     if (!marR.isEmpty()) {
-        qreal marRight;
+        qreal marRight = 0;
         STRING_TO_QREAL(marR, marRight, "attr:marR")
         m_currentParagraphStyle.addPropertyPt("fo:margin-right", EMU_TO_POINT(marRight));
     }
     if (!defTabSz.isEmpty()) {
-        qreal tabSize;
+        qreal tabSize = 0;
         STRING_TO_QREAL(defTabSz, tabSize, "attr:defTabSz")
         m_currentParagraphStyle.addPropertyPt("style:tab-stop-distance", EMU_TO_POINT(tabSize));
     }
@@ -4445,7 +4445,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_latin()
 
     TRY_READ_ATTR_WITHOUT_NS(pitchFamily)
     if (!pitchFamily.isEmpty()) {
-        int pitchFamilyInt;
+        int pitchFamilyInt = 0;
         STRING_TO_INT(pitchFamily, pitchFamilyInt, "latin@pitchFamily")
         QFont::StyleHint h = QFont::AnyStyle;
         const int hv = pitchFamilyInt % 0x10;
@@ -5064,26 +5064,26 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::lvlHelper(const QString& level
     // Following settings are only applied if defined so they don't overwrite
     // defaults defined in {slideLayout, slideMaster, defaultStyles}.
     if (!marL.isEmpty()) {
-        qreal marLeft;
+        qreal marLeft = 0;
         STRING_TO_QREAL(marL, marLeft, "attr:marL")
         marLeft = EMU_TO_POINT(marLeft);
         m_currentParagraphStyle.addPropertyPt("fo:margin-left", marLeft);
         m_currentBulletProperties.setMargin(marLeft);
     }
     if (!indent.isEmpty()) {
-        qreal firstInd;
+        qreal firstInd = 0;
         STRING_TO_QREAL(indent, firstInd, "attr:indent")
         firstInd = EMU_TO_POINT(firstInd);
         m_currentParagraphStyle.addPropertyPt("fo:text-indent", firstInd);
         m_currentBulletProperties.setIndent(firstInd);
     }
     if (!marR.isEmpty()) {
-        qreal marRight;
+        qreal marRight = 0;
         STRING_TO_QREAL(marR, marRight, "attr:marR")
         m_currentParagraphStyle.addPropertyPt("fo:margin-right", EMU_TO_POINT(marRight));
     }
     if (!defTabSz.isEmpty()) {
-        qreal tabSize;
+        qreal tabSize = 0;
         STRING_TO_QREAL(defTabSz, tabSize, "attr:defTabSz")
         m_currentParagraphStyle.addPropertyPt("style:tab-stop-distance", EMU_TO_POINT(tabSize));
     }
