@@ -53,7 +53,7 @@ public:
 
     /// Set duration (without time delay)
     virtual void setDuration(int value);
-    virtual void init(KPrAnimationCache *animationCache, int step) = 0;
+    using KPrAnimationData::init;
     int animationDuration() const;
     virtual bool saveAttribute(KoPASavingContext &paContext) const;
 protected:

@@ -33,8 +33,7 @@ public:
     KPrAnimationStep();
     ~KPrAnimationStep() override;
 
-    // Do not mark this 'override', sub-classing will fail
-    virtual void init(KPrAnimationCache *animationCache, int step); //NOLINT
+    void init(KPrAnimationCache *animationCache, int step) override;
 
     virtual bool saveOdf(KoPASavingContext & paContext) const;
     virtual void deactivate();
