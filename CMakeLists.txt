@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.2)
+cmake_minimum_required(VERSION 3.16)
 
 project(calligra)
 
@@ -35,7 +35,7 @@ set(CALLIGRA_VERSION_RELEASE 89)     # 89 for Alpha, increase for next test rele
 set(CALLIGRA_ALPHA 1) # uncomment only for Alpha
 # set(CALLIGRA_BETA 1) # uncomment only for Beta
 #set(CALLIGRA_RC 1) # uncomment only for RC
-set(CALLIGRA_YEAR 2020) # update every year
+set(CALLIGRA_YEAR 2021) # update every year
 
 if(NOT DEFINED CALLIGRA_ALPHA AND NOT DEFINED CALLIGRA_BETA AND NOT DEFINED CALLIGRA_RC)
     set(CALLIGRA_STABLE 1) # do not edit
@@ -88,9 +88,6 @@ if(NOT DEFINED RELEASE_BUILD)
     endif()
 endif()
 message(STATUS "Release build: ${RELEASE_BUILD}")
-
-# use CPP-11
-set (CMAKE_CXX_STANDARD 11)
 
 ############
 #############
@@ -148,8 +145,10 @@ calligra_set_productset(${PRODUCTSET})
 ## Look for ECM, Qt, KF5 ##
 ###########################
 ##########################
+set(REQUIRED_KF5_VERSION "5.76.0")
+set(REQUIRED_QT_VERSION "5.12.0")
 
-find_package(ECM 5.19 REQUIRED NO_MODULE)
+find_package(ECM ${REQUIRED_KF5_VERSION} REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 
 # ECM KDE macros (include first, to have their policies and settings effect all other macros)
@@ -178,9 +177,6 @@ include(MacroBoolTo01)
 include(MacroOptionalFindPackage)
 include(MacroEnsureVersion)
 include(MacroDesktopToJson)
-
-
-set(REQUIRED_KF5_VERSION "5.30.0")
 
 find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED
     COMPONENTS
@@ -223,8 +219,6 @@ set_package_properties(KF5Activities PROPERTIES
 if(KF5Activities_FOUND)
     set(HAVE_KACTIVITIES TRUE)
 endif()
-
-set(REQUIRED_QT_VERSION "5.6.0")
 
 find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED
     COMPONENTS
@@ -599,8 +593,8 @@ if(NOT WIN32 AND NOT APPLE)
 	)
 endif()
 
-if(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND)
-    set(FONTCONFIG_INCLUDE_DIR "")
+if(NOT Fontconfig_FOUND OR NOT FREETYPE_FOUND)
+    set(Fontconfig_INCLUDE_DIRS "")
     set(FREETYPE_INCLUDE_DIRS "")
 else()
     add_definitions( -DSHOULD_BUILD_FONT_CONVERSION )
