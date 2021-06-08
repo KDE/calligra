@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.16)
 
 project(calligra)
 
@@ -168,6 +168,8 @@ calligra_set_productset(${PRODUCTSET})
 ## Look for ECM, Qt, KF5 ##
 ###########################
 ##########################
+set(REQUIRED_KF5_VERSION "5.7.0")
+set(REQUIRED_QT_VERSION "5.3.0")
 
 find_package(ECM 5.19 REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
@@ -198,9 +200,6 @@ include(MacroBoolTo01)
 include(MacroOptionalFindPackage)
 include(MacroEnsureVersion)
 include(MacroDesktopToJson)
-
-
-set(REQUIRED_KF5_VERSION "5.7.0")
 
 find_package(KF5 ${REQUIRED_KF5_VERSION} REQUIRED
     COMPONENTS
@@ -250,9 +249,6 @@ endif()
 if(${KF5_VERSION} VERSION_LESS "5.16.0")
     set(CALLIGRA_OLD_PLUGIN_METADATA TRUE)
 endif()
-
-
-set(REQUIRED_QT_VERSION "5.3.0")
 
 find_package(Qt5 ${REQUIRED_QT_VERSION} REQUIRED
     COMPONENTS
@@ -641,8 +637,8 @@ if(NOT WIN32 AND NOT APPLE)
 	)
 endif()
 
-if(NOT FONTCONFIG_FOUND OR NOT FREETYPE_FOUND)
-    set(FONTCONFIG_INCLUDE_DIR "")
+if(NOT Fontconfig_FOUND OR NOT FREETYPE_FOUND)
+    set(Fontconfig_INCLUDE_DIRS "")
     set(FREETYPE_INCLUDE_DIRS "")
 else()
     add_definitions( -DSHOULD_BUILD_FONT_CONVERSION )
