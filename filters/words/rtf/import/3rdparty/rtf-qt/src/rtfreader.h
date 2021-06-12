@@ -130,11 +130,7 @@ namespace RtfReader
     // The destination stack
     QStack<Destination*> m_destinationStack;
 
-    bool m_nextSymbolMightBeDestination;
-
     QStack<RtfGroupState> m_stateStack;
-
-    bool m_nextSymbolIsIgnorable;
 
     // debug things
     QString m_debugIndent;

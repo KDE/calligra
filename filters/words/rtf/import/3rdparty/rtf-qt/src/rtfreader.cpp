@@ -224,7 +224,8 @@ namespace RtfReader
 	m_debugIndent = QString( '\t' );
 	// Parse RTF document
 	bool atEndOfFile = false;
-	m_nextSymbolMightBeDestination = false;
+	bool nextSymbolMightBeDestination = false;
+	bool nextSymbolIsIgnorable = false;
 
 	RtfReader::ControlWord controlWord("");
 
@@ -236,7 +237,7 @@ namespace RtfReader
 		// Store the current state on the stack
 		RtfGroupState state;
 		m_stateStack.push( state );
-		m_nextSymbolMightBeDestination = true;
+		nextSymbolMightBeDestination = true;
 		m_output->startGroup();
                 // qCDebug(lcRtf) << m_debugIndent << "opengroup";
 		m_debugIndent.append("\t");
@@ -267,7 +268,7 @@ namespace RtfReader
 		    destStackElementNames << m_destinationStack.at(i)->name();
 		}
                 // qCDebug(lcRtf) << m_debugIndent << "destinationStack after CloseGroup: (" << destStackElementNames << ")";
-		m_nextSymbolMightBeDestination = true;
+		nextSymbolMightBeDestination = true;
 		break;
 	    }
 	    case Control:
@@ -277,22 +278,22 @@ namespace RtfReader
 		}
                 // qCDebug(lcRtf) << m_debugIndent << "got controlWord: " << token.name;
                 // qCDebug(lcRtf) << m_debugIndent << "isDestination:" << controlWord.isDestination();
-                // qCDebug(lcRtf) << m_debugIndent << "isIgnorable:" << m_nextSymbolIsIgnorable;
-		if ( m_nextSymbolMightBeDestination && controlWord.isSupportedDestination() ) {
-		    m_nextSymbolMightBeDestination = false;
-		    m_nextSymbolIsIgnorable = false;
+                // qCDebug(lcRtf) << m_debugIndent << "isIgnorable:" << nextSymbolIsIgnorable;
+		if ( nextSymbolMightBeDestination && controlWord.isSupportedDestination() ) {
+		    nextSymbolMightBeDestination = false;
+		    nextSymbolIsIgnorable = false;
 		    changeDestination( token.name );
-		} else if ( m_nextSymbolMightBeDestination && m_nextSymbolIsIgnorable ) {
+		} else if ( nextSymbolMightBeDestination && nextSymbolIsIgnorable ) {
 		    // This is a control word we don't understand
-		    m_nextSymbolMightBeDestination = false;
-		    m_nextSymbolIsIgnorable = false;
+		    nextSymbolMightBeDestination = false;
+		    nextSymbolIsIgnorable = false;
                     qCDebug(lcRtf) << "ignorable destination word:" << token.name;
 		    changeDestination( "ignorable" );
 		} else {
-		    m_nextSymbolMightBeDestination = false;
+		    nextSymbolMightBeDestination = false;
 		    if ( token.name ==  "*" ) {
-			m_nextSymbolMightBeDestination = true;
-			m_nextSymbolIsIgnorable = true;
+			nextSymbolMightBeDestination = true;
+			nextSymbolIsIgnorable = true;
 		    }
 		    m_destinationStack.top()->handleControlWord( token.name, token.hasParameter, token.parameter.toInt() );
 		}
