@@ -233,6 +233,9 @@ namespace RtfReader
 	    Token token = m_tokenizer->fetchToken();
 	    // token.dump();
 	    switch ( token.type ) {
+	    case Invalid:
+		atEndOfFile = true;
+	        break;
 	    case OpenGroup: {
 		// Store the current state on the stack
 		RtfGroupState state;

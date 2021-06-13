@@ -9,7 +9,7 @@
 #include "rtfreader_export.h"
 namespace RtfReader
 {
-    enum TokenType { OpenGroup, CloseGroup, Control, Plain, Binary };
+    enum TokenType { OpenGroup, CloseGroup, Control, Plain, Binary, Invalid };
 
     /**
       RTF token

@@ -91,6 +91,7 @@ namespace RtfReader
 
     Token Tokenizer::fetchToken() {
         Token token;
+        token.type = Invalid;
         token.hasParameter = false;
         char c;
         while ( m_inputDevice->getChar( &c ) ) {
