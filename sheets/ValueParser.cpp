@@ -11,7 +11,6 @@
 
 #include "CalculationSettings.h"
 #include "Localization.h"
-#include "Style.h"
 #include "Value.h"
 
 using namespace Calligra::Sheets;

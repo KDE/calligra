@@ -39,7 +39,6 @@
 #include "CellStorage.h"
 #include "Condition.h"
 #include "Formula.h"
-#include "Global.h"
 #include "Localization.h"
 #include "LoadingInfo.h"
 #include "Map.h"

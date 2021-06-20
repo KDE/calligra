@@ -21,7 +21,6 @@
 
 #include "Cell.h"
 #include "Style.h"
-#include "Global.h"
 #include "ProtectableObject.h"
 #include "calligra_sheets_limits.h"
 

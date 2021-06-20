@@ -18,7 +18,6 @@
 
 #include "SheetsDebug.h"
 #include "CellStorage.h"
-#include "Global.h"
 #include "Map.h"
 #include "Region.h"
 #include "RowFormatStorage.h"

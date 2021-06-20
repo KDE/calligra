@@ -7,7 +7,6 @@
 #define CALLIGRA_SHEETS_DATA_MANIPULATORS
 
 #include "AbstractRegionCommand.h"
-#include "Global.h"
 #include "Style.h"
 #include "Value.h"
 

@@ -76,7 +76,6 @@
 #include "SheetsDebug.h"
 #include "CellStorage.h"
 #include "Doc.h"
-#include "Global.h"
 #include "HeaderWidgets.h"
 #include "Localization.h"
 #include "Map.h"

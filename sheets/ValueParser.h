@@ -11,7 +11,6 @@
 
 #include <QDateTime>
 
-#include "Format.h"
 #include "Number.h"
 
 #include "sheets_odf_export.h"

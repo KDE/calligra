@@ -31,7 +31,6 @@
 
 // Sheets
 #include "SheetsDebug.h"
-#include <Global.h>
 #include "calligra_sheets_limits.h"
 #include <Localization.h>
 #include <Map.h>

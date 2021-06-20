@@ -79,7 +79,6 @@
 #include "CellStorage.h"
 #include "Damages.h"
 #include "Doc.h"
-#include "Global.h"
 #include "HeaderItems.h"
 #include "Localization.h"
 #include "Map.h"

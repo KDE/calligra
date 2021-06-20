@@ -16,6 +16,7 @@
 
 // Sheets
 #include "CellToolBase.h"
+#include "Global.h"
 
 // dialogs
 #include "dialogs/FindDialog.h"

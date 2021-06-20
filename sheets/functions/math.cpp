@@ -23,9 +23,8 @@
 
 // needed for SUBTOTAL:
 #include "Cell.h"
-#include "Sheet.h"
-#include "RowColumnFormat.h"
 #include "RowFormatStorage.h"
+#include "Sheet.h"
 
 // needed by MDETERM and MINVERSE
 // Don't show this warning: it's an issue in eigen

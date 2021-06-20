@@ -27,7 +27,6 @@
 
 #include "sheets_common_export.h"
 
-#include "Global.h"
 #include "CanvasBase.h"
 
 class QEvent;

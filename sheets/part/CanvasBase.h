@@ -20,12 +20,14 @@
 #define CALLIGRA_SHEETS_CANVASBASE
 
 #include <QList>
+#include <QRect>
 #include <QSizeF>
+#include <QVariant>
 #include <KoCanvasBase.h>
 
 #include "sheets_common_export.h"
-#include "../Global.h"
 
+class QEvent;
 class QFocusEvent;
 class QKeyEvent;
 class QInputMethodEvent;

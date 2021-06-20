@@ -6,7 +6,6 @@
 
 #include "BenchmarkHelper.h"
 #include "Cluster.h"
-#include "Global.h"
 
 #include <QTest>
 

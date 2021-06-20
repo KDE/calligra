@@ -9,7 +9,6 @@
 #include "Cell.h"
 #include "Region.h"
 #include "Sheet.h"
-#include "Util.h"
 #include "Value.h"
 #include "Map.h"
 #include "CalculationSettings.h"

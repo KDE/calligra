@@ -10,7 +10,6 @@
 
 #include <QDateTime>
 
-#include "Global.h"
 #include "Number.h"
 #include "Style.h"
 

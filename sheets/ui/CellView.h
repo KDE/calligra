@@ -23,7 +23,6 @@
 #include <QExplicitlySharedDataPointer>
 
 // Sheets
-#include "Global.h"
 #include "Style.h"
 #include "sheets_common_export.h"
 

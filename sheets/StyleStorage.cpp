@@ -17,7 +17,6 @@
 #include <QMutexLocker>
 #endif
 
-#include "Global.h"
 #include "Map.h"
 #include "RTree.h"
 #include "Style.h"

@@ -25,7 +25,6 @@
 #include <KoUnitDoubleSpinBox.h>
 
 // Sheets
-#include <Global.h>
 #include <Localization.h>
 #include "Map.h"
 #include "RowColumnFormat.h"

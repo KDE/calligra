@@ -18,7 +18,6 @@
 
 #include "SheetsDebug.h"
 #include "Currency.h"
-#include "Global.h"
 #include "StyleManager.h"
 #include "Util.h"
 

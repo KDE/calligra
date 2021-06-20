@@ -23,14 +23,12 @@
 #include "FunctionModuleRegistry.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
-#include "Map.h"
 #include "Sheet.h"
 #include "Region.h"
 #include "Cell.h"
 #include "Formula.h"
 #include "CellStorage.h"
 
-#include <KoDocument.h>
 #include <KoPart.h>
 #include <KoApplication.h>
 

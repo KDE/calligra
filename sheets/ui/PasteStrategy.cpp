@@ -9,7 +9,6 @@
 #include <QApplication>
 #include <QClipboard>
 
-#include "Global.h"
 #include "commands/PasteCommand.h"
 #include "Selection.h"
 #include "Sheet.h"

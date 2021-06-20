@@ -10,7 +10,6 @@
 #include "ValueFormatter.h"
 
 #include "CalculationSettings.h"
-#include "Cell.h"
 #include "Localization.h"
 #include "ValueConverter.h"
 #include "SheetsDebug.h"

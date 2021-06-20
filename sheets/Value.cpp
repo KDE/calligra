@@ -5,7 +5,6 @@
 
 #include "Value.h"
 #include "CalculationSettings.h"
-#include "CellStorage.h"
 #include "ValueStorage.h"
 #include "SheetsDebug.h"
 

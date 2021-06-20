@@ -25,7 +25,6 @@
 #include <KoDocument.h>
 #include <KoXmlReader.h>
 
-#include "../Global.h"
 #include "../DocBase.h"
 
 #include "sheets_common_export.h"
