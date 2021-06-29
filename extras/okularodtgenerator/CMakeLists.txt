@@ -28,7 +28,6 @@ install(TARGETS kookularGenerator_odt  ${INSTALL_TARGETS_DEFAULT_ARGS})
 ## odt generator plugin
 
 kcoreaddons_add_plugin(okularGenerator_odt_calligra
-    JSON libokularGenerator_odt.json
     INSTALL_NAMESPACE "okular/generators"
     SOURCES OkularOdtGeneratorPlugin.cpp
 )

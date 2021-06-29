@@ -29,7 +29,6 @@ endif()
 
 if(SHOULD_BUILD_OKULAR_GENERATOR_PPT)
     kcoreaddons_add_plugin(okularGenerator_powerpoint_calligra
-        JSON libokularGenerator_ppt.json
         INSTALL_NAMESPACE "okular/generators"
         SOURCES OkularPptGeneratorPlugin.cpp
     )

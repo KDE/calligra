@@ -28,7 +28,6 @@ endif()
 
 if(SHOULD_BUILD_OKULAR_GENERATOR_WORDPERFECT)
     kcoreaddons_add_plugin(okularGenerator_wpd_calligra
-        JSON libokularGenerator_wpd.json
         INSTALL_NAMESPACE "okular/generators"
         SOURCES OkularWpdGeneratorPlugin.cpp
     )

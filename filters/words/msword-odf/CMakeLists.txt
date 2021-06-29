@@ -32,7 +32,6 @@ endif()
 
 if(SHOULD_BUILD_OKULAR_GENERATOR_DOC)
     kcoreaddons_add_plugin(okularGenerator_doc_calligra
-        JSON libokularGenerator_doc.json
         INSTALL_NAMESPACE "okular/generators"
         SOURCES OkularDocGeneratorPlugin.cpp
     )

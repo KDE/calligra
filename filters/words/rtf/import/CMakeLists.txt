@@ -17,7 +17,6 @@ endif()
 
 if(SHOULD_BUILD_OKULAR_GENERATOR_RTF)
     kcoreaddons_add_plugin(okularGenerator_rtf_calligra
-        JSON libokularGenerator_rtf.json
         INSTALL_NAMESPACE "okular/generators"
         SOURCES OkularRtfGeneratorPlugin.cpp
     )

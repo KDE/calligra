@@ -41,7 +41,6 @@ endif()
 
 if(SHOULD_BUILD_OKULAR_GENERATOR_PPTX)
     kcoreaddons_add_plugin(okularGenerator_pptx_calligra
-        JSON libokularGenerator_pptx.json
         INSTALL_NAMESPACE "okular/generators"
         SOURCES OkularPptxGeneratorPlugin.cpp
     )

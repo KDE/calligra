@@ -27,7 +27,6 @@ install(TARGETS kookularGenerator_odp  ${INSTALL_TARGETS_DEFAULT_ARGS})
 ## odp generator plugin
 
 kcoreaddons_add_plugin(okularGenerator_odp_calligra
-    JSON libokularGenerator_odp.json
     INSTALL_NAMESPACE "okular/generators"
     SOURCES OkularOdpGeneratorPlugin.cpp
 )
