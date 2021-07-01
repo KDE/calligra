@@ -49,7 +49,7 @@ Developer and User mailing list: [calligra-devel@kde.org](mailto:calligra-devel@
 
 Subscribing and list information: https://mail.kde.org/mailman/listinfo/calligra-devel
 
-IRC channel for developers: #calligra on irc.freenode.org
+IRC channel for developers: [#calligra on Libera Chat](irc://irc.libera.chat/calligra)
 
 Calligra Suite forums: http://forum.kde.org/calligra
 
