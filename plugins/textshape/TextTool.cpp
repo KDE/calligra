@@ -1694,9 +1694,18 @@ void TextTool::keyPressEvent(QKeyEvent *event)
             event->ignore();
             return;
         } else if ((event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return)) {
-            m_prevCursorPosition = textEditor->position();
-            textEditor->newLine();
-            updateActions();
+            // enter on numbered, empty parag, removes numbering.
+            auto currentBlock = textEditor->constCursor().block();
+            if (currentBlock.text().isEmpty() && currentBlock.textList()) {
+                KoListLevelProperties llp;
+                llp.setLabelType(KoListStyle::None);
+                llp.setLevel(0);
+                textEditor->setListProperties(llp);
+            } else {
+                m_prevCursorPosition = textEditor->position();
+                textEditor->newLine();
+                updateActions();
+            }
             editingPluginEvents();
         } else if ((event->key() == Qt::Key_Tab || !(event->text().length() == 1 && !event->text().at(0).isPrint()))) { // insert the text
             m_prevCursorPosition = textEditor->position();
