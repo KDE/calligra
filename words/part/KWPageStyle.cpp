@@ -48,7 +48,7 @@ KWPageStyle::KWPageStyle(const QString &name, const QString &displayname)
     : d (new KWPageStylePrivate())
 {
     d->name = name;
-    if (!displayname.isEmpty() && displayname != name)
+    if (!displayname.isEmpty())
         d->displayName = displayname;
 }
 

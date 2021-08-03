@@ -146,6 +146,7 @@ KWStatusBar::KWStatusBar(QStatusBar *statusBar, KWView *view)
     m_pageStyleLabel->setFixedWidth(psfm.width(I18N_NOOP("Standard")) * 2.5);
     m_pageStyleLabel->m_button->setMinimumHeight(psfm.height());
     m_pageStyleLabel->m_label->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    m_pageStyleLabel->setToolTip(i18n("Change the page style"));
     m_statusbar->addWidget(m_pageStyleLabel);
     connect(m_pageStyleLabel->m_button, &QToolButton::clicked, this, [this]() { showPageStyle(); });
     connect(document, &KWDocument::pageSetupChanged, this, &KWStatusBar::updatePageStyle);
@@ -275,9 +276,13 @@ void KWStatusBar::gotoPage(int pagenumber)
 void KWStatusBar::updatePageStyle()
 {
     KWPage page = m_currentView ? m_currentView->currentPage() : KWPage();
-    QString name = (page.isValid() && page.pageStyle().isValid() 
-		    ? page.pageStyle().displayName()
-		    : QString());
+    QString name;
+    if (page.isValid() && page.pageStyle().isValid()) {
+        if (!page.pageStyle().displayName().isEmpty())
+            name = page.pageStyle().displayName();
+        else
+            name = page.pageStyle().name();
+    }
     m_pageStyleLabel->m_label->setText(name);
     m_pageStyleLabel->m_button->setText(name);
 }
