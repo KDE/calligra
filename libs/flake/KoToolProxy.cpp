@@ -651,8 +651,7 @@ void KoToolProxy::processEvent(QEvent *e)
         QKeyEvent *kev = static_cast<QKeyEvent *>(e);
         if (d->activeTool
                 && d->activeTool->isInTextMode()
-                && (kev->modifiers()==Qt::NoModifier ||
-                    kev->modifiers()==Qt::ShiftModifier)) {
+                && kev->modifiers()==Qt::NoModifier) {
             e->accept();
         }
         shortcutOverrideEvent(kev);
