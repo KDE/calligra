@@ -338,9 +338,9 @@ endif ()
 ## Check for OpenEXR
 ##
 
-macro_optional_find_package(OpenEXR 3.0 CONFIG QUIET)
-if(TARGET OpenEXR::OpenEXR)
-    set(OPENEXR_LIBRARIES OpenEXR::OpenEXR)
+macro_optional_find_package(Imath 3.0 CONFIG QUIET)
+if(TARGET Imath::Imath)
+    set(OPENEXR_LIBRARIES Imath::Imath)
 else()
     macro_optional_find_package(OpenEXR)
 endif()
