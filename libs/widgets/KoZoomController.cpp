@@ -235,8 +235,10 @@ void KoZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom, qreal resoluti
     }
 
     // now that we have the final offset, let's emit some signals
-    //d->canvasController->proxyObject->emitCanvasOffsetXChanged(d->canvasController->canvasOffsetX());
-    //d->canvasController->proxyObject->emitCanvasOffsetYChanged(d->canvasController->canvasOffsetY());
+    if (mode != KoZoomMode::ZOOM_TEXT) {
+        d->canvasController->proxyObject->emitCanvasOffsetXChanged(d->canvasController->canvasOffsetX());
+        d->canvasController->proxyObject->emitCanvasOffsetYChanged(d->canvasController->canvasOffsetY());
+    }
     emit zoomChanged(mode, d->action->effectiveZoom());
 }
 
