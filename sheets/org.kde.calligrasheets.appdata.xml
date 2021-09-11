@@ -54,6 +54,7 @@
   <summary xml:lang="pl">Arkusz kalkulacyjny</summary>
   <summary xml:lang="pt">Folha de Cálculo</summary>
   <summary xml:lang="pt-BR">Planilha</summary>
+  <summary xml:lang="ru">Электронная таблица</summary>
   <summary xml:lang="sk">Zošit</summary>
   <summary xml:lang="sl">Preglednica</summary>
   <summary xml:lang="sv">Kalkylark</summary>
@@ -85,6 +86,7 @@
     <p xml:lang="pl">Arkusze Calligra jest pełnowartościowym narzędziem arkusza kalkulacyjnego i obliczeń. Użyj go do szybkiego tworzenia i obliczania rozmaitych biznesowych arkuszy kalkulacyjnych, takich jak przychód i rozchód, godziny pracy pracowników, itp.</p>
     <p xml:lang="pt">O Calligra Sheets é uma folha de cálculo poderosa. Use-o para criar e calcular rapidamente várias folhas de cálculo relacionadas com o negócio, como receitas e despesas, horas de trabalho de empregados, etc.</p>
     <p xml:lang="pt-BR">Calligra Sheets é uma planilha de cálculo poderosa. Use-o para criar e calcular rapidamente várias planilhas relacionadas com negócios, como receitas e despesas, horas de trabalho de empregados, etc.</p>
+    <p xml:lang="ru">Calligra Sheets — это полнофункциональный инструмент для расчётов и работы с электронными таблицами. Используйте его для быстрого создания и расчёта различных электронных таблиц, связанных с бизнесом, таких как доходы и расходы, часы работы сотрудников и так далее.</p>
     <p xml:lang="sk">Calligra Sheets je plnohodnotný tabuľkový a výpočtový nástroj. Použite ho na rýchle vytvorenie a výpočet rôznych obchodných tabuliek, ako príjmy a výdavky, pracovné hodiny zamestnancov, atď.</p>
     <p xml:lang="sl">Calligra Sheets je orodje z mnogo možnostmi izračuna in urejanja preglednic. Uporabno je za hitro ustvarjanje in izračun različnih poslovnih preglednic, kot so kot prihodki in odhodki, delovni čas zaposlenih itd.</p>
     <p xml:lang="sv">Calligra Sheets är ett fullfjädrat beräknings- och kalkylarksverktyg. Använd det för att snabbt skapa och beräkna diverse affärsrelaterade kalkylark, såsom inkomster och utgifter, anställdas arbetstimmar, etc.</p>
@@ -144,6 +146,7 @@
       <li xml:lang="pl">Używa kształtów do robienia notatek i map umysłu</li>
       <li xml:lang="pt">Usar formas para tirar notas ou mapas mentais</li>
       <li xml:lang="pt-BR">Usa formas para fazer anotações ou mapas mentais</li>
+      <li xml:lang="ru">Использование форм для создания заметок или диаграмм связей</li>
       <li xml:lang="sk">Použite tvary na vytváranie poznámok alebo myšlienkových máp</li>
       <li xml:lang="sl">Uporablja oblike za zbiranje opomb ali miselnih vzorcev</li>
       <li xml:lang="sv">Använd former för att göra anteckningar eller tankekartor</li>
@@ -171,6 +174,7 @@
       <li xml:lang="pl">Szeroki wybór uprzednio stworzonych szablonów</li>
       <li xml:lang="pt">Gama alargada de modelos predefinidos</li>
       <li xml:lang="pt-BR">Grande variedade de modelos predefinidos</li>
+      <li xml:lang="ru">Большой диапазон предустановленных шаблонов</li>
       <li xml:lang="sk">Veľký rozsah preddefinovaných šablón</li>
       <li xml:lang="sl">Velik nabor vnaprej določenih predlog</li>
       <li xml:lang="sv">Stort antal fördefinierade mallar</li>
@@ -198,6 +202,7 @@
       <li xml:lang="pl">Przydatny i wyczerpujący spis równań</li>
       <li xml:lang="pt">Lista de fórmulas poderosa e compreensiva</li>
       <li xml:lang="pt-BR">Lista de fórmulas poderosa e compreensiva</li>
+      <li xml:lang="ru">Мощный и полный список формул</li>
       <li xml:lang="sk">Silný a úplný zoznam vzorcov</li>
       <li xml:lang="sl">Zmogljiv in široko obsegajoč seznam formul</li>
       <li xml:lang="sv">Kraftfull och omfattande formellista</li>
@@ -225,6 +230,7 @@
       <li xml:lang="pl">Praca w znajomym środowisku</li>
       <li xml:lang="pt">Funciona num ambiente familiar</li>
       <li xml:lang="pt-BR">Funciona em um ambiente familiar</li>
+      <li xml:lang="ru">Работа в знакомом окружении</li>
       <li xml:lang="sk">Práca v známom prostredí</li>
       <li xml:lang="sl">Delo v že znanem okolju</li>
       <li xml:lang="sv">Arbeta i en välbekant omgivning</li>
