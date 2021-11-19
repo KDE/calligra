@@ -152,11 +152,11 @@ if( SHOULD_BUILD_FEATURE_RDF )
 endif()
 
 if( FONTCONFIG_FOUND )
-    target_link_libraries(kotext PRIVATE Fontconfig::Fontconfig)
+    target_link_libraries(kotext PRIVATE ${FONTCONFIG_LIBRARIES})
 endif()
 
 if( FREETYPE_FOUND )
-    target_link_libraries(kotext PRIVATE Freetype::Freetype)
+    target_link_libraries(kotext PRIVATE ${FREETYPE_LIBRARIES})
 endif()
 
 
