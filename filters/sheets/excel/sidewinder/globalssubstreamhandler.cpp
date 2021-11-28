@@ -7,6 +7,8 @@
  */
 #include "globalssubstreamhandler.h"
 
+#include <QDateTime>
+
 #include <map>
 #include <vector>
 

@@ -89,10 +89,10 @@ void FilterPopup::Private::initGUI(FilterPopup* parent, const Cell& cell, const 
     scrollLayout->setSpacing(0);
 
     const int fieldNumber = j - (isRowFilter ? range.left() : range.top());
-    const QHash<QString, Filter::Comparison> conditions = database->filter().conditions(fieldNumber);
+    const QHash<QString, AbstractCondition::Comparison> conditions = database->filter().conditions(fieldNumber);
     const bool defaultCheckState = conditions.isEmpty() ? true
-                                   : !(conditions[conditions.keys()[0]] == Filter::Match ||
-                                       conditions[conditions.keys()[0]] == Filter::Empty);
+                                   : !(conditions[conditions.keys()[0]] == AbstractCondition::Match ||
+                                       conditions[conditions.keys()[0]] == AbstractCondition::Empty);
     QList<QString> sortedItems = items.toList();
     std::sort(sortedItems.begin(), sortedItems.end());
     bool isAll = true;
@@ -148,7 +148,7 @@ void FilterPopup::updateFilter(Filter* filter) const
     else if (d->notEmptyCheckbox->isChecked()) {
         // emptyCheckbox is not checked, because allCheckbox is not.
         filter->removeConditions(d->fieldNumber);
-        filter->addCondition(Filter::AndComposition, d->fieldNumber, Filter::NotMatch, "");
+        filter->addCondition(Filter::AndComposition, d->fieldNumber, AbstractCondition::NotMatch, "");
     } else {
         filter->removeConditions(d->fieldNumber);
         QList<QString> matchList;
@@ -164,11 +164,11 @@ void FilterPopup::updateFilter(Filter* filter) const
                 notMatchList.append(checkbox->text());
         }
         // be lazy; choose the comparison causing least effort
-        const Filter::Comparison comparison = (matchList.count() < notMatchList.count())
-                                              ? Filter::Match : Filter::NotMatch;
-        const Filter::Composition composition = (comparison == Filter::Match)
+        const AbstractCondition::Comparison comparison = (matchList.count() < notMatchList.count())
+                                              ? AbstractCondition::Match : AbstractCondition::NotMatch;
+        const Filter::Composition composition = (comparison == AbstractCondition::Match)
                                                 ? Filter::OrComposition : Filter::AndComposition;
-        const QList<QString> values = (comparison == Filter::Match) ? matchList : notMatchList;
+        const QList<QString> values = (comparison == AbstractCondition::Match) ? matchList : notMatchList;
         debugSheets << "adding conditions for fieldNumber" << d->fieldNumber;
         Filter subFilter;
         for (int i = 0; i < values.count(); ++i)

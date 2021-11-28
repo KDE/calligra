@@ -10,12 +10,8 @@
 #include <QSharedDataPointer>
 #include <QVariant>
 
-#include <KoXmlReader.h>
-
 #include "sheets_odf_export.h"
 
-
-class KoXmlWriter;
 
 namespace Calligra
 {
@@ -68,10 +64,22 @@ public:
      */
     void setName(const QString& name);
 
+    bool isSelection() const;
+    void setIsSelection(bool sel);
+    bool onUpdateKeepStyles() const;
+    bool onUpdateKeepSize() const;
+    bool hasPersistentData() const;
+    void setOnUpdateKeepStyles(bool val);
+    void setOnUpdateKeepSize(bool val);
+    void setHasPersistentData(bool val);
+    int refreshDelay() const;
+    void setRefreshDelay(int delay);
+
     /**
      * \return the database's orientation
      */
     Qt::Orientation orientation() const;
+    void setOrientation(Qt::Orientation o);
 
     /**
      * \return \c true if the range contains a header column/row
@@ -106,9 +114,6 @@ public:
 
     const Filter& filter() const;
     void setFilter(const Filter& filter);
-
-    bool loadOdf(const KoXmlElement& element, const Map* map);
-    void saveOdf(KoXmlWriter& xmlWriter) const;
 
     void operator=(const Database& other);
     bool operator==(const Database& other) const;

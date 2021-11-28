@@ -9,6 +9,8 @@
 #include "sheet.h"
 #include "excel.h"
 
+#include <QDateTime>
+
 #include <iostream>
 #include <vector>
 

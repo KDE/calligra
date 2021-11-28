@@ -10,12 +10,12 @@
 #include "AbstractRegionCommand.h"
 
 #include "database/Database.h"
+#include "database/Filter.h"
 
 namespace Calligra
 {
 namespace Sheets
 {
-class Filter;
 
 /**
  * \ingroup Commands
@@ -42,7 +42,7 @@ public:
 
 private:
     Database m_database;
-    Filter* m_oldFilter;
+    Filter m_oldFilter;
     QHash<int, bool> m_undoData;
 };
 

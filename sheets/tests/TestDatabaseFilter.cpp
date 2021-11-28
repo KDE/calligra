@@ -28,9 +28,9 @@ void DatabaseFilterTest::testSimpleEquals()
 {
     Filter a;
     Filter b;
-    a.addCondition(Filter::AndComposition, 0, Filter::Match, "test");
+    a.addCondition(Filter::AndComposition, 0, AbstractCondition::Match, "test");
     QVERIFY(a != b);
-    b.addCondition(Filter::AndComposition, 0, Filter::Match, "test");
+    b.addCondition(Filter::AndComposition, 0, AbstractCondition::Match, "test");
     QVERIFY(a == b);
 }
 
@@ -38,8 +38,8 @@ void DatabaseFilterTest::testNotEquals1()
 {
     Filter a;
     Filter b;
-    a.addCondition(Filter::AndComposition, 0, Filter::Match, "test");
-    b.addCondition(Filter::AndComposition, 0, Filter::Match, "test2");
+    a.addCondition(Filter::AndComposition, 0, AbstractCondition::Match, "test");
+    b.addCondition(Filter::AndComposition, 0, AbstractCondition::Match, "test2");
     QVERIFY(a != b);
 }
 
@@ -47,8 +47,8 @@ void DatabaseFilterTest::testNotEquals2()
 {
     Filter a;
     Filter b;
-    a.addCondition(Filter::AndComposition, 0, Filter::Match, "test");
-    b.addCondition(Filter::AndComposition, 0, Filter::NotMatch, "test");
+    a.addCondition(Filter::AndComposition, 0, AbstractCondition::Match, "test");
+    b.addCondition(Filter::AndComposition, 0, AbstractCondition::NotMatch, "test");
     QVERIFY(a != b);
 }
 
@@ -56,10 +56,10 @@ void DatabaseFilterTest::testAndEquals()
 {
     Filter a;
     Filter b;
-    a.addCondition(Filter::AndComposition, 0, Filter::Match, "test");
-    b.addCondition(Filter::AndComposition, 0, Filter::Match, "test");
-    a.addCondition(Filter::AndComposition, 0, Filter::Match, "test2");
-    b.addCondition(Filter::AndComposition, 0, Filter::Match, "test2");
+    a.addCondition(Filter::AndComposition, 0, AbstractCondition::Match, "test");
+    b.addCondition(Filter::AndComposition, 0, AbstractCondition::Match, "test");
+    a.addCondition(Filter::AndComposition, 0, AbstractCondition::Match, "test2");
+    b.addCondition(Filter::AndComposition, 0, AbstractCondition::Match, "test2");
     QVERIFY(a == b);
 }
 
@@ -67,10 +67,10 @@ void DatabaseFilterTest::testOrEquals()
 {
     Filter a;
     Filter b;
-    a.addCondition(Filter::OrComposition, 0, Filter::Match, "test");
-    b.addCondition(Filter::OrComposition, 0, Filter::Match, "test");
-    a.addCondition(Filter::OrComposition, 0, Filter::Match, "test2");
-    b.addCondition(Filter::OrComposition, 0, Filter::Match, "test2");
+    a.addCondition(Filter::OrComposition, 0, AbstractCondition::Match, "test");
+    b.addCondition(Filter::OrComposition, 0, AbstractCondition::Match, "test");
+    a.addCondition(Filter::OrComposition, 0, AbstractCondition::Match, "test2");
+    b.addCondition(Filter::OrComposition, 0, AbstractCondition::Match, "test2");
     QVERIFY(a == b);
 }
 

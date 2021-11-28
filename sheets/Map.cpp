@@ -109,7 +109,7 @@ Map::Map(DocBase* doc, int syntaxVersion)
     d->readwrite = true;
 
     d->bindingManager = new BindingManager(this);
-    d->databaseManager = new DatabaseManager(this);
+    d->databaseManager = new DatabaseManager();
     d->dependencyManager = new DependencyManager(this);
     d->namedAreaManager = new NamedAreaManager(this);
     d->recalcManager = new RecalcManager(this);

@@ -12,6 +12,7 @@
 
 #include <QString>
 #include <QDate>
+#include <QDir>
 #include <QBuffer>
 #include <QFontMetricsF>
 #include <QPair>

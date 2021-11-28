@@ -63,7 +63,7 @@ void ApplyFilterCommand::redo()
 void ApplyFilterCommand::undo()
 {
     Database database = m_database;
-    database.setFilter(*m_oldFilter);
+    database.setFilter(m_oldFilter);
 
     Sheet* const sheet = database.range().lastSheet();
     const QRect range = database.range().lastRange();
@@ -92,5 +92,5 @@ void ApplyFilterCommand::setDatabase(const Database& database)
 
 void ApplyFilterCommand::setOldFilter(const Filter& filter)
 {
-    m_oldFilter = new Filter(filter);
+    m_oldFilter = filter;
 }

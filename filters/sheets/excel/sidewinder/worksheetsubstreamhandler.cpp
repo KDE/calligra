@@ -1127,25 +1127,25 @@ void WorksheetSubStreamHandler::handleAutoFilterRecord(Swinder::AutoFilterRecord
                 Calligra::Sheets::Filter::OrComposition;
 
         for (int i = 0; i < 2; i++) {
-            Calligra::Sheets::Filter::Comparison compar = Calligra::Sheets::Filter::Match;
+            Calligra::Sheets::AbstractCondition::Comparison compar = Calligra::Sheets::AbstractCondition::Match;
             switch (record->operation(i)) {
                 case AutoFilterRecord::Less:
-                    compar = Calligra::Sheets::Filter::Less;
+                    compar = Calligra::Sheets::AbstractCondition::Less;
                     break;
                 case AutoFilterRecord::Equal:
-                    compar = Calligra::Sheets::Filter::Match;
+                    compar = Calligra::Sheets::AbstractCondition::Match;
                     break;
                 case AutoFilterRecord::LEqual:
-                    compar = Calligra::Sheets::Filter::LessOrEqual;
+                    compar = Calligra::Sheets::AbstractCondition::LessOrEqual;
                     break;
                 case AutoFilterRecord::Greater:
-                    compar = Calligra::Sheets::Filter::Greater;
+                    compar = Calligra::Sheets::AbstractCondition::Greater;
                     break;
                 case AutoFilterRecord::NotEqual:
-                    compar = Calligra::Sheets::Filter::NotMatch;
+                    compar = Calligra::Sheets::AbstractCondition::NotMatch;
                     break;
                 case AutoFilterRecord::GEqual:
-                    compar = Calligra::Sheets::Filter::GreaterOrEqual;
+                    compar = Calligra::Sheets::AbstractCondition::GreaterOrEqual;
                     break;
             }
 
@@ -1170,10 +1170,10 @@ void WorksheetSubStreamHandler::handleAutoFilterRecord(Swinder::AutoFilterRecord
                     // TODO
                     break;
                 case AutoFilterRecord::Blanks:
-                    filter.addCondition(compos, fieldNumber, Calligra::Sheets::Filter::Match, "");
+                    filter.addCondition(compos, fieldNumber, Calligra::Sheets::AbstractCondition::Match, "");
                     break;
                 case AutoFilterRecord::NonBlanks:
-                    filter.addCondition(compos, fieldNumber, Calligra::Sheets::Filter::NotMatch, "");
+                    filter.addCondition(compos, fieldNumber, Calligra::Sheets::AbstractCondition::NotMatch, "");
                     break;
                 case AutoFilterRecord::UndefinedType:
                 default:

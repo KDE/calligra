@@ -48,21 +48,14 @@
 #include <KoShapeAnchor.h>
 
 #include "SheetsDebug.h"
-#include "AutoFillStrategy.h"
 #include "Cell.h"
 #include "calligra_sheets_limits.h"
 #include "Map.h"
-#include "MergeStrategy.h"
 #include "Selection.h"
-#include "SelectionStrategy.h"
 #include "Sheet.h"
-#include "DragAndDropStrategy.h"
-#include "PasteStrategy.h"
-#include "HyperlinkStrategy.h"
 #include "CellView.h"
 #include "Database.h"
 #include "SheetView.h"
-#include "FilterPopup.h"
 #include "RowColumnFormat.h"
 #include "RowFormatStorage.h"
 

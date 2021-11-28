@@ -31,6 +31,9 @@
 #include "OdfLoadingContext.h"
 #include "OdfSavingContext.h"
 
+#include "database/Database.h"
+#include "database/Filter.h"
+
 namespace Calligra {
 namespace Sheets {
 
@@ -38,6 +41,8 @@ class CalculationSettings;
 class NamedAreaManager;
 class Conditions;
 class Conditional;
+class Map;
+class Sheet;
 
 namespace Odf {
 
@@ -51,6 +56,14 @@ namespace Odf {
     bool saveMap(Map *map, KoXmlWriter & xmlWriter, KoShapeSavingContext & savingContext);
     void loadNamedAreas(NamedAreaManager *manager, const KoXmlElement& body);
     void saveNamedAreas(const NamedAreaManager *manager, KoXmlWriter& xmlWriter);
+    bool loadDatabaseRanges(Map *map, const KoXmlElement& body);
+    void saveDatabaseRanges(Map *map, KoXmlWriter& xmlWriter);
+    Database loadDatabase(const KoXmlElement& element, const Map* map, bool *ok);
+    void saveDatabase(const Database &database, KoXmlWriter& xmlWriter);
+    void saveDatabaseFilter(const Filter &filter, KoXmlWriter& xmlWriter);
+    Filter loadDatabaseFilter(const KoXmlElement& element, const Map* map, bool *ok);
+    void saveDatabaseCondition(AbstractCondition *condition, KoXmlWriter& xmlWriter);
+    AbstractCondition *loadDatabaseCondition(const KoXmlElement& element);
 
     // SheetsOdfSheet
     bool loadSheet(Sheet *sheet, const KoXmlElement& sheetElement, OdfLoadingContext& tableContext, const Styles& autoStyles, const QHash<QString, Conditions>& conditionalStyles);

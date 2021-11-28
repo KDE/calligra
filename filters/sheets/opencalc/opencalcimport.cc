@@ -30,7 +30,6 @@
 #include <sheets/Cell.h>
 #include <sheets/CellStorage.h>
 #include <sheets/Condition.h>
-#include <sheets/part/Doc.h>
 #include <sheets/Global.h>
 #include <sheets/HeaderFooter.h>
 #include <sheets/Map.h>
@@ -45,6 +44,8 @@
 #include <sheets/Validity.h>
 #include <sheets/Value.h>
 #include <sheets/ValueParser.h>
+
+#include <sheets/part/Doc.h>
 
 #define SECSPERDAY (24 * 60 * 60)
 

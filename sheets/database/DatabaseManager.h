@@ -9,17 +9,12 @@
 
 #include <QObject>
 
-#include <KoXmlReader.h>
-
 #include "sheets_odf_export.h"
-
-class KoXmlWriter;
 
 namespace Calligra
 {
 namespace Sheets
 {
-class Map;
 
 class CALLIGRA_SHEETS_ODF_EXPORT DatabaseManager : public QObject
 {
@@ -29,7 +24,7 @@ public:
     /**
      * Constructor.
      */
-    explicit DatabaseManager(const Map *map);
+    explicit DatabaseManager();
 
     /**
      * Destructor.
@@ -40,18 +35,6 @@ public:
      * Creates a unique database name.
      */
     QString createUniqueName() const;
-
-    /**
-     * Loads databases.
-     * \ingroup OpenDocument
-     */
-    bool loadOdf(const KoXmlElement& element);
-
-    /**
-     * Saves databases.
-     * \ingroup OpenDocument
-     */
-    void saveOdf(KoXmlWriter& xmlWriter) const;
 
 private:
     class Private;
