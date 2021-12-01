@@ -109,7 +109,7 @@ public:
     void addCondition(Conditional cond);
 
     /**
-     * Returns an optional default style, which is returned by testConditons if none of
+     * Returns an optional default style, which is returned by testConditions if none of
      * the conditions matches.
      */
     Style defaultStyle() const;

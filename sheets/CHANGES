@@ -234,8 +234,8 @@ since 1.3 beta1
 - new templates: Balance Sheet, Price Quotation, Packing Slip
 
 
-since 1.2 relase ( 'til 1.3 beta 1 :-)
-======================================
+since 1.2 release ( 'til 1.3 beta 1 :-)
+=======================================
 
 - real more than one currency support
 - new date and time formats
@@ -388,10 +388,10 @@ Until beta2:
 ------------
 
 - bug fixes
-- perfomance enhancements
+- performance enhancements
 - print functions:
     - added option for print grid, comment indicator and formula indicator
-    - added print range definiton
+    - added print range definition
     - added repeat columns & rows on printout
     - added "<pages>" macro in header/footer
 - paper layout now a property of sheet (not the whole workbook)
@@ -410,7 +410,7 @@ Until beta2:
 - support for inserting data from SQL databases
 - implemented "Goal Seek"
 - implemented new shortcuts for cell formatting
-- implemented "Insert from text file" and "Insert formated clipboard data"
+- implemented "Insert from text file" and "Insert formatted clipboard data"
 - Added "Text to Column"
 - improved Data Consolidate, with more choices: Sum, Average, Count,
   Min, Max, Product, Standard Deviation, Variance.
@@ -424,7 +424,7 @@ Until beta2:
 - added support with templates
 - added support for changing row/col and table of named areas
 - Multiple views work for spreadsheets (can change tables, select different
-  parts of the sheet independantly in each open view or embedded object)
+  parts of the sheet independently in each open view or embedded object)
 - DCOP interface for a table has changed.  Many of the operations have been
   moved to the 'view' class.  Current DCOP scripts will need to be updated
 - Zoom

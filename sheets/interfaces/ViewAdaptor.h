@@ -206,9 +206,9 @@ public Q_SLOTS: // METHODS
     /** Remove border. */
     virtual void removeBorder();
 
-    /** Increase the indention. */
+    /** Increase the indentation. */
     virtual void increaseIndent();
-    /** Decrease the indention. */
+    /** Decrease the indentation. */
     virtual void decreaseIndent();
     /** Increase the precision. */
     virtual void increasePrecision();

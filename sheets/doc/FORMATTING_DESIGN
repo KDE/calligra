@@ -12,7 +12,7 @@ about Calligra Sheets design.
 
 NOTE: when I say 'pointer' in this description, I'm thinking of some shared
 object kind of class with a reference count -- not a literal pointer
-that we would have to remeber to delete...
+that we would have to remember to delete...
 
 
 

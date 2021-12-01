@@ -283,7 +283,7 @@ QRect StyleStorage::usedArea() const
     return QRect(QPoint(1, 1), d->usedArea.boundingRect().bottomRight());
 }
 
-// craete default styles in the style tables - used in Odf saving
+// create default styles in the style tables - used in Odf saving
 void StyleStorage::saveCreateDefaultStyles(int& maxCols, int& maxRows, QMap<int, Style> &columnDefaultStyles, QMap<int, Style> &rowDefaultStyles) const
 {
     d->ensureLoaded();

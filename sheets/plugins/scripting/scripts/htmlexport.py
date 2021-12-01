@@ -419,7 +419,7 @@ class Dialog:
             if hasattr(self,"openwidget"):
                 self.exporter.reader.setFile( self.openwidget.selectedFile() )
 
-            # set writter
+            # set writer
             if hasattr(self,"savewidget"):
                 savefilename = str( self.savewidget.selectedFile() )
                 if os.path.isfile(savefilename):

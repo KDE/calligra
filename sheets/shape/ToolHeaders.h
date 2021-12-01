@@ -78,7 +78,7 @@ protected:
     QString unitSymbol();
     qreal resizeAreaSize() const;
     qreal scrollOffset() const;
-    /// returns lowest column or 0 if not beween columns
+    /// returns lowest column or 0 if not between columns
     int betweenColumns(qreal pos) const;
 
 protected:
@@ -187,7 +187,7 @@ protected:
     QString unitSymbol();
     qreal resizeAreaSize() const;
     qreal scrollOffset() const;
-    /// returns lowest row or 0 if not beween rows
+    /// returns lowest row or 0 if not between rows
     int betweenRows(qreal pos) const;
 
 protected:

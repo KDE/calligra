@@ -276,7 +276,7 @@ not partial text. For example, if the text is "Visit the website" where only
 the string "website" is a hyperlink to an URL, in Calligra Sheets the whole string
 "Visit the website" becomes the link. Consequently, if the text contains
 two or more links, only the first link will be used.
-(I will fixe when we convert it to kotext)
+(I will fix when we convert it to kotext)
 
 ===========================================================
   IN PROGRESS

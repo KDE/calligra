@@ -248,7 +248,7 @@
 <!--    Describes the contents of the cell.
         For instance, <text>My string</text> or
 	<text>=A4+B5</text>
-        Date data is stored in a locale independant way -
+        Date data is stored in a locale independent way -
           <text>yyyy/mm/dd</text>
 
         The dataType attribute may be any of "Str", "Bool" "Num", "Date",
@@ -336,12 +336,12 @@
 
 <!ELEMENT inputtitle (#PCDATA)>
 
-<!--   Describes conditional cell attribut format.
+<!--   Describes conditional cell attribute format.
 -->
 <!ELEMENT condition  (first | second | third)>
 
 
-<!--	Describes first conditon format.
+<!--	Describes first condition format.
 
 		Attributes:
 

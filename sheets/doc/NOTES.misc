@@ -9,7 +9,7 @@ well Excel behaves.
 1. UNDERSTAND that putting a spread->recalc() or spread->recalc(true) in
 your code is an abosolute NO-NO! Complex spreadsheets with possible
 heavy mathematical calculations via dll/so add-ins as well as real
-time feeds will not be managable if you do not painstakingly check
+time feeds will not be manageable if you do not painstakingly check
 whether spread->getAutoCalc() is true.
 
 

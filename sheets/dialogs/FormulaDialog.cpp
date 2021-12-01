@@ -645,7 +645,7 @@ void FormulaDialog::slotDoubleClicked(QModelIndex item)
 
 void FormulaDialog::slotIndexSelected(const QModelIndex& index)
 {
-    // This slot is only called when single-click to activate is uesd in the listbox, when the mouse moves over a item; to prevent
+    // This slot is only called when single-click to activate is used in the listbox, when the mouse moves over a item; to prevent
     // the active selection to change after the user activated one, slotSelected is only called when the current tab is the Help tab,
     // and not when the parameters tab is active
     if (m_tabwidget->currentIndex() != 0) return;

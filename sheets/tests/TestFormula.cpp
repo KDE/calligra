@@ -267,7 +267,7 @@ void TestFormula::testBinary()
 
 void TestFormula::testOperators()
 {
-    // no parentheses, checking operator precendences
+    // no parentheses, checking operator precedences
     CHECK_EVAL("14+3*77", Value(245));
     CHECK_EVAL("14-3*77", Value(-217));
     CHECK_EVAL("26*4+81", Value(185));

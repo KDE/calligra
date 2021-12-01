@@ -400,7 +400,7 @@ bool ColumnFormat::load(const KoXmlElement & col, int xshift, Paste::Mode mode)
     Q_ASSERT(d->sheet);
     bool ok;
     if (col.hasAttribute("width")) {
-        if (d->sheet->map()->syntaxVersion() < 1) //combatibility to old format - was in millimeter
+        if (d->sheet->map()->syntaxVersion() < 1) //compatibility to old format - was in millimeter
             d->width = qRound(MM_TO_POINT(col.attribute("width").toDouble(&ok)));
         else
             d->width = col.attribute("width").toDouble(&ok);
