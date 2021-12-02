@@ -826,7 +826,7 @@ KWFrame *KWFrameLayout::createCopyFrame(KWFrameSet *fs, const KWPage &page)
     debugWords << "frameSet=" << fs << "pageNumber=" << page.pageNumber() << "shapeCount=" << fs->shapeCount();
     if (fs->shapeCount() == 0) { // special case for the headers. Just return a new textframe.
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
-        Q_ASSERT(tfs); // an empty, non-text frameset asking for a copy? Thats a bug.
+        Q_ASSERT(tfs); // an empty, non-text frameset asking for a copy? That's a bug.
         KoShape *shape = createTextShape(page);
         shape->setPosition(QPointF(10.0, page.offsetInDocument()+10.0));
         shape->setSize(QSize(20, 10));

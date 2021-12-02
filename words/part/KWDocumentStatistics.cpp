@@ -136,7 +136,7 @@ void KWDocumentStatistics::connectNotify(const QMetaMethod& signal)
     // Otherwise, in the following scenario, stats will be blank:
     // - fill-in document
     // - display statistics
-    //   => this instanciates a statistics widget of some sort that listen to refreshed
+    //   => this instantiates a statistics widget of some sort that listen to refreshed
     //   => no data ever come
     // We should probably add a fast-track refresh too
     if (signal == QMetaMethod::fromSignal(&KWDocumentStatistics::refreshed)) {

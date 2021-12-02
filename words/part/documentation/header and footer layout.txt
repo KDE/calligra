@@ -1,4 +1,4 @@
-If the text is less than it tkaes to fill the min-height minus bottom-margin, then the header occupies the space anyway like this:
+If the text is less than it takes to fill the min-height minus bottom-margin, then the header occupies the space anyway like this:
 
             ----------------------------                |-------------------------------|
             |                                           |HEADER TEXT                    |

@@ -66,7 +66,7 @@ public:
     /**
      * @brief Return the page that match the give index in the list
      *
-     / @param index the index of the slide to be retrived
+     / @param index the index of the slide to be retrieved
      * @return a Page in the document if it was found or a null pointer if not.
      */
     KoPAPageBase* pageByIndex(const QModelIndex &index) const;

@@ -67,7 +67,7 @@ public:
     /**
      * @brief Ask if a name is in use and return the object
      * 
-     * @param name the name of the custom SlideShow to be retrived
+     * @param name the name of the custom SlideShow to be retrieved
      * @return a List of the Pages in the SlideShow if it was found
      *         a blank list if the SlideShow name was not found
      */
@@ -77,7 +77,7 @@ public:
      * @brief Return the object that match the give index in the list with the given name
      *
      * @param name the name of the custom SlideShow
-     / @param index the index of the slide to be retrived from the custom SlideShow
+     / @param index the index of the slide to be retrieved from the custom SlideShow
      * @return a Page in the SlideShow if it was found or a null pointer if not.
      */
     KoPAPageBase* pageByIndex(const QString &name, int index) const;

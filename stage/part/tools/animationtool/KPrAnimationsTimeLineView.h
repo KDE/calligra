@@ -109,7 +109,7 @@ public Q_SLOTS:
 
     void resetData();
 
-    /// Change the scale if an item has exceded the scale limit
+    /// Change the scale if an item has exceeded the scale limit
     /// or the items are too short for the current scale
     void adjustScale();
 
