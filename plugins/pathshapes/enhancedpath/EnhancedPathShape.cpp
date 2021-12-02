@@ -427,8 +427,8 @@ void EnhancedPathShape::saveOdf(KoShapeSavingContext &context) const
             // OO/LO callouts are marked by eg: draw:type="round-rectangular-callout"
             // so this can be used to distinguish callouts from proper path shapes.
             // Also there was a bug in stencil database.odg that giave the same problem.
-            // Handling this should not be neccessary anymore as callouts are treated in a separate class,
-            // and the database.odg has been fixe, but we keep it to be able to read old calligra documents.
+            // Handling this should not be necessary anymore as callouts are treated in a separate class,
+            // and the database.odg has been fixed, but we keep it to be able to read old calligra documents.
             QTransform offset(context.shapeOffset(this));
             QTransform newOffset(offset);
             newOffset.translate(-diff.x(), -diff.y());

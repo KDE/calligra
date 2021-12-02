@@ -91,7 +91,7 @@ void TestLoadAndSave::identifierElement_data()
     // See section 2.4.6 Collapsing Whitespace in Input
     addRow( "<mi> a b c </mi>",
             "<mi>a b c</mi>" );
-    // Since newline is hardcoded in KoXmlWriter and it's sematically equivalent, add it to expected result
+    // Since newline is hardcoded in KoXmlWriter and it's semantically equivalent, add it to expected result
     addRow( "<mi> x <mglyph fontfamily=\"testfont\" index=\"99\" alt=\"c\"/> d </mi>",
             "<mi>x \n <mglyph fontfamily=\"testfont\" index=\"99\" alt=\"c\"/> d</mi>" );
     addRow( "<mi> x  y    z   </mi>",

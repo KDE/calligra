@@ -50,14 +50,14 @@ Switch to the Calligraphy tool by clicking on its button in the tools docker. In
 
 Following an Existing Path
 ==========================
-When checking the "Follow selected path" option the stroke will follow the outline of the currently selected path, instead of following the mouse or tablet position. This way you can use the calligraphy tool to draw poligons, stars, etc. Or you can fist use the path tool to create a precise guide path, and than use the calligraphy tool on the created path.
+When checking the "Follow selected path" option the stroke will follow the outline of the currently selected path, instead of following the mouse or tablet position. This way you can use the calligraphy tool to draw polygons, stars, etc. Or you can fist use the path tool to create a precise guide path, and than use the calligraphy tool on the created path.
   <image2 (example of following a flower path)>
 
 Width & Thinning
 ================
 This pair of options control the width of your pen.
 Since pen width is changed often, you can adjust it without going to the docker, using the left and right arrow keys. The best thing about these keys is that they work while you're drawing, so you can change the width of your pen gradually in the middle of the stroke.
-  <image3 (stroke of differend widths)>
+  <image3 (stroke of different widths)>
 Pen width may also depend on the velocity, as controlled by the thinning parameter. This parameter can take values from -1 to 1; zero means the width is independent of velocity, positive values make faster strokes thinner, negative values make faster strokes broader. Here are a few examples, the two left strokes having positive thinning, and the right two negative thinning, all strokes are drawn with the same width.
   <image4 (examples of positive and negative thinning)>
 For fun, set the thinning to 1 (maximum) and draw with jerky movements to get strangely naturalistic, neuron-like shapes:
@@ -101,7 +101,7 @@ And here are some complete lettering examples (taken from the original Inkscape 
 
 Profiles
 ========
-Karbon allows you to easily load and save predifined and custom sets of options, called profiles. The combo box in the top of the "Tool options" docker allows you to choose the profile. To save a profile just click on the "Save profile as..." button (if the details are hidden first press "Show details >>") after which you will be asked to enter a name for the new profile.
+Karbon allows you to easily load and save predefined and custom sets of options, called profiles. The combo box in the top of the "Tool options" docker allows you to choose the profile. To save a profile just click on the "Save profile as..." button (if the details are hidden first press "Show details >>") after which you will be asked to enter a name for the new profile.
 
 Conclusion
 ==========

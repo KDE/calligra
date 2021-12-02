@@ -74,7 +74,7 @@ public:
     void appendPoint(const QPointF &p1, qreal angle, qreal width);
     void appendPointToPath(const KarbonCalligraphicPoint &p);
 
-    // returns the bounding rect of whan needs to be repainted
+    // returns the bounding rect when it needs to be repainted
     // after new points are added
     const QRectF lastPieceBoundingRect();
 

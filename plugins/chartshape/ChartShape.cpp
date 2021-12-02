@@ -618,7 +618,7 @@ void ChartShape::setChartSubType(ChartSubtype subType, bool reset)
     d->plotArea->setChartSubType(subType);
     if (reset && chartType() == StockChartType && prev != subType && d->internalModel  && d->usesInternalModelOnly) {
         // HACK to get reasonable behaviour in most cases
-        // Stock charts are special because subtypes interpretes data differently from another:
+        // Stock charts are special because subtypes interprets data differently from another:
         // - HighLowCloseChartSubtype assumes High = row 0, Low = row 1 and Close = row 2
         // - The other types assumes Open = row 0,  High = row 1, Low = row 2 and Close = row 3
         // This makes switching between them a bit unintuitive.

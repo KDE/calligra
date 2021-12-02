@@ -186,7 +186,7 @@ possible positions inside an (inferred) row element are shown as '*'.
   *sqrt(*¤a¤*¤+¤*¤b¤*)*
 
 Since the formula is always embedded into an implicit FormulaElemnt,
-the representaiton of this tree inside the formula shape is (with the
+the representation of this tree inside the formula shape is (with the
 same positions as above marked):
 
 <formula>*

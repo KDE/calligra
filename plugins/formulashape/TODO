@@ -13,7 +13,7 @@
 ** implement rendering in all token elements
 * UI/Tool
 ** Implement the new tool widget
-** Implement insertText completly -> some stuff is still missing for glyph elements
+** Implement insertText completely -> some stuff is still missing for glyph elements
 
 mid term ( potential prerelease ) goals:
 - create template files - decide what kind of templates should be in place

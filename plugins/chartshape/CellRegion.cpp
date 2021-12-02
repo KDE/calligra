@@ -400,7 +400,7 @@ CellRegion::CellRegion(TableSource *source, const QString& regions)
 //           // Check if region string is valid (e.g. not empty)
 //           if (regEx.indexIn(region) >= 0) {
 //               // It is possible for a cell-range-address as defined in ODF to contain
-//               // refernces to cells of more than one sheet. This, however, we ignore
+//               // references to cells of more than one sheet. This, however, we ignore
 //               // here. We do not support more than one table in a cell region.
 //               // Also we do not support regions spanned over different sheets. For us
 //               // everything is either on no sheet or on the same sheet.

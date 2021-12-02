@@ -168,7 +168,7 @@ QString BgSpellCheck::fetchMoreText()
 
 void BgSpellCheck::foundMisspelling(const QString &word, int start)
 {
-    // debugSpellCheck << "Mispelling: " << word << " : " << start;
+    // debugSpellCheck << "Misspelling: " << word << " : " << start;
     emit misspelledWord(word, m_currentPosition + start, true);
     BackgroundChecker::continueChecking();
 }

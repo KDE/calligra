@@ -119,7 +119,7 @@ private:
     bool m_autoNumbering; //use autonumbering for numbered paragraphs
     bool m_superscriptAppendix; // replace 1st with 1 and a superscript "st"
     bool m_capitalizeWeekDays;
-    bool m_autoFormatBulletList; // use list formatting for bulletted paragraphs.
+    bool m_autoFormatBulletList; // use list formatting for bulleted paragraphs.
     bool m_advancedAutocorrect; // autocorrection from a list of entries
 
     bool m_replaceDoubleQuotes;  // replace double quotes with typographical quotes
