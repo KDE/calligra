@@ -1254,7 +1254,7 @@ void KoPAView::replaceCentralWidget(QWidget *newWidget)
 {
     // hide standard central widget
     d->insideWidget->hide();
-    // If there is already a custom central widget, it's hided and removed from the layout
+    // If there is already a custom central widget, it's hidden and removed from the layout
     hideCustomCentralWidget();
     // layout and show new custom widget
     d->tabBarLayout->addWidget(newWidget, 2, 1);

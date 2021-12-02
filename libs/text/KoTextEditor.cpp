@@ -248,7 +248,7 @@ void KoTextEditor::registerTrackedChange(QTextCursor &selection, KoGenChange::Ty
 {
     KoChangeTracker *changeTracker = KoTextDocument(d->document).changeTracker();
     if (!changeTracker || !changeTracker->recordChanges()) {
-        // clear the ChangeTrackerId from the passed in selection, without recursively registring
+        // clear the ChangeTrackerId from the passed in selection, without recursively registering
         // change tracking again  ;)
         int start = qMin(selection.position(), selection.anchor());
         int end = qMax(selection.position(), selection.anchor());

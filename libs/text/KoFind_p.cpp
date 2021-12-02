@@ -184,7 +184,7 @@ void KoFindPrivate::parseSettingsAndFind()
                 qSwap(selectionStart, selectionEnd);
             }
             // TODO the SelectedTextPosition and SelectedTextAnchor are not highlighted yet
-            // it would be cool to have the highlighted ligher when searching in selected text
+            // it would be cool to have the highlighted lighter when searching in selected text
             provider->setResource(KoText::SelectedTextPosition, selectionStart);
             provider->setResource(KoText::SelectedTextAnchor, selectionEnd);
             if ((options & KFind::FindBackwards) != 0) {

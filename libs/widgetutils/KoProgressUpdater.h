@@ -47,8 +47,9 @@ class QTime;
  * main thread. The other objects can be created in whatever thread
  * one wants.
  *
- * Also to prevent jumps in the progress-calculation and -display it is recommed
- * to first create all the subtasks and then start to use setProgress on them.
+ * Also to prevent jumps in the progress-calculation and -display it is
+ * recommended to first create all the subtasks and then start to use
+ * setProgress on them.
  */
 class KOWIDGETUTILS_EXPORT KoProgressUpdater : public QObject
 {

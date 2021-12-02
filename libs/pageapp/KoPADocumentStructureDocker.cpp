@@ -264,7 +264,7 @@ void KoPADocumentStructureDocker::itemClicked(const QModelIndex &index)
                 // separate selected layers and selected shapes
                 extractSelectedLayersAndShapes(selectedPages, selectedLayers, selectedShapes);
 
-                // XXX: Do stuff withthe selected pages!
+                // XXX: Do stuff with the selected pages!
 
                 foreach (KoShape* shape, selection->selectedShapes()) {
                     shape->update();

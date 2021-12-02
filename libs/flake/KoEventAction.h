@@ -79,7 +79,7 @@ public:
     /**
      * Finish the action
      *
-     * If the action takes some time to finish it can bs stoped with
+     * If the action takes some time to finish it can bs stopped with
      * this method before its end.
      */
     virtual void finish() {}

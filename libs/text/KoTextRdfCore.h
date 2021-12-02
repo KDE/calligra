@@ -81,7 +81,7 @@ QList<Soprano::Statement> KOTEXT_EXPORT loadList(QSharedPointer<Soprano::Model> 
  * other nodes used in the internal structure of the Rdf list are
  * just random bnodes as shown below. If you have a previous,
  * existing list then this method will remove those nodes first so
- * that the Rdf model does not grow with disgarded list nodes over
+ * that the Rdf model does not grow with discarded list nodes over
  * time.
  *
  * The old list nodes are removed if they exist, and a new list is

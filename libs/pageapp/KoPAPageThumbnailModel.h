@@ -16,7 +16,7 @@ class KoPAView;
 class KoPAPageBase;
 
 /**
- * Model class for the page thumbnails widget. This class is intented as a simple model to
+ * Model class for the page thumbnails widget. This class is intended as a simple model to
  * create a list view of available pages. Example usage is widget for choosing master page
  * and slide/page sorter widget.
  *

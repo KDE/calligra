@@ -12,7 +12,7 @@
 /**
  * @short A custom title bar for dock widgets.
  *
- * Allow customization such as collapsable, or hidding text.
+ * Allow customization such as collapsable, or hiding text.
  * 
  * @see KoDockWidgetTitleBarButton
  */

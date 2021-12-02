@@ -9,7 +9,7 @@ Various details can also be found here;
 
 
 At this point in time (early 2010) all of the libraries in here are not
-guarenteed to have binary or source compatibility between releases.
+guaranteed to have binary or source compatibility between releases.
 However there is a strong push to make a subset of libraries become
 more used outside of Calligra and thus they need to be backwards compatible
 between releases. Which in effect means that we are working towards them
@@ -65,7 +65,7 @@ This allows you to see that any class that starts with 'Ko' is from the Calligra
 Note that this implies that the naming prefix 'Ko' is restricted to the libs, classes
 outside the libs are not allowed to use it.
 
-Futher names are
+Further names are
 KW for Words classes
 KoPA for the libs/kopageapp library
 KPr for KPresenter

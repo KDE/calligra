@@ -455,7 +455,7 @@ private:
      * m will be replaced with the same m_model->createBlankNode()
      * value. After calling this method, you can add all the
      * statements to 'm' and be assured that no bnodes in 'm' are
-     * going to accidentially be the same as a bnode in m_model.
+     * going to accidentally be the same as a bnode in m_model.
      */
     void freshenBNodes(QSharedPointer<Soprano::Model> m);
 

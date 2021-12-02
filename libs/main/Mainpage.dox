@@ -89,7 +89,7 @@ created from specific application data, and koQueryTrader klopens the
 library containing this component. The very same mechanism is used to
 1) embed other components inside the app, 2) create any kind of
 calligra document, e.g. in koshell. All the Calligra applications are in
-fact very small wrappers that simply dlopen their own compnent - with
+fact very small wrappers that simply dlopen their own component - with
 the code in calligracore, which can also dlopen ANY component.
 
 

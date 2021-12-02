@@ -111,7 +111,7 @@ void RdfTest::testCreateMarkers()
     qDebug()<<position<<position2;
     QCOMPARE(position, position2);
 
-    // check that the id is like we expext
+    // check that the id is as we expect
     QCOMPARE(rdfDoc.findXmlId(&editor), newId);
 }
 

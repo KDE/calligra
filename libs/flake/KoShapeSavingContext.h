@@ -108,7 +108,7 @@ public:
     /**
      * @brief Check if an option is set
      *
-     * @return ture if the option is set, false otherwise
+     * @return true if the option is set, false otherwise
      */
     bool isSet(ShapeSavingOption option) const;
 

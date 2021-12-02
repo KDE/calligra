@@ -313,7 +313,7 @@ void TestSnapStrategy::testBoundingBoxSnap()
 }
 void TestSnapStrategy::testLineGuideSnap()
 {
-    //Testing so the snap does not work without horizontal and vertial lines
+    //Testing so the snap does not work without horizontal and vertical lines
     LineGuideSnapStrategy toTest;
     const QPointF paramMousePos;
     MockShapeController fakeShapeControllerBase;

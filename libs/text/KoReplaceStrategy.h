@@ -21,16 +21,16 @@ public:
     explicit KoReplaceStrategy(QWidget *parent);
     ~KoReplaceStrategy() override;
 
-    /// reimplmented
+    /// reimplemented
     KFindDialog *dialog() const override;
 
-    /// reimplmented
+    /// reimplemented
     void reset() override;
 
-    /// reimplmented
+    /// reimplemented
     void displayFinalDialog() override;
 
-    /// reimplmented
+    /// reimplemented
     bool foundMatch(QTextCursor &cursor, FindDirection *findDirection) override;
 
 private:

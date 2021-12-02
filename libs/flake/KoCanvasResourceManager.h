@@ -51,7 +51,7 @@ public:
      * This enum holds identifiers to the resources that can be stored in here.
      */
     enum CanvasResource {
-        ForegroundColor,    ///< The active forground color selected for this canvas.
+        ForegroundColor,    ///< The active foreground color selected for this canvas.
         BackgroundColor,    ///< The active background color selected for this canvas.
         ActiveStroke,       ///< The active stroke selected for this canvas
         PageSize,           ///< The size of the (current) page in postscript points.
@@ -158,56 +158,56 @@ public:
 
     /**
      * Return the resource determined by param key as a boolean.
-     * @param key the indentifying key for the resource
+     * @param key the identifying key for the resource
      * @see KoCanvasResourceManager::CanvasResource
      */
     bool boolResource(int key) const;
 
     /**
      * Return the resource determined by param key as an integer.
-     * @param key the indentifying key for the resource
+     * @param key the identifying key for the resource
      * @see KoCanvasResourceManager::CanvasResource
      */
     int intResource(int key) const;
 
     /**
      * Return the resource determined by param key as a KoColor.
-     * @param key the indentifying key for the resource
+     * @param key the identifying key for the resource
      * @see KoCanvasResourceManager::CanvasResource
      */
     KoColor koColorResource(int key) const;
 
     /**
      * Return the resource determined by param key as a pointer to a KoShape.
-     * @param key the indentifying key for the resource
+     * @param key the identifying key for the resource
      * @see KoCanvasResourceManager::CanvasResource
      */
     KoShape *koShapeResource(int key) const;
 
     /**
      * Return the resource determined by param key as a QString .
-     * @param key the indentifying key for the resource
+     * @param key the identifying key for the resource
      * @see KoCanvasResourceManager::CanvasResource
      */
     QString stringResource(int key) const;
 
     /**
      * Return the resource determined by param key as a QSizeF.
-     * @param key the indentifying key for the resource
+     * @param key the identifying key for the resource
      * @see KoCanvasResourceManager::CanvasResource
      */
     QSizeF sizeResource(int key) const;
 
     /**
      * Return the resource determined by param key as a KoUnit.
-     * @param key the indentifying key for the resource
+     * @param key the identifying key for the resource
      * @see KoCanvasResourceManager::CanvasResource
      */
     KoUnit unitResource(int key) const;
 
     /**
      * Returns true if there is a resource set with the requested key.
-     * @param key the indentifying key for the resource
+     * @param key the identifying key for the resource
      * @see KoCanvasResourceManager::CanvasResource
      */
     bool hasResource(int key) const;
@@ -224,7 +224,7 @@ Q_SIGNALS:
     /**
      * This signal is emitted every time a resource is set that is either
      * new or different from the previous set value.
-     * @param key the indentifying key for the resource
+     * @param key the identifying key for the resource
      * @param value the variants new value.
      * @see KoCanvasResourceManager::CanvasResource
      */

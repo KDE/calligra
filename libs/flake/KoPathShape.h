@@ -238,7 +238,7 @@ public:
     /**
      * @brief Returns the segment specified by a path point index
      *
-     * A semgent is defined by the point index of the first point in the segment.
+     * A segment is defined by the point index of the first point in the segment.
      * A segment contains the defined point and its following point. If the subpath is
      * closed and the and the pointIndex point to the last point in the subpath, the
      * following point is the first point in the subpath.
@@ -382,7 +382,7 @@ public:
     /**
      * @brief Removes subpath from the path
      * @param subpathIndex the index of the subpath to remove
-     * @return the removed subpath on succes, 0 otherwise.
+     * @return the removed subpath on success, 0 otherwise.
      */
     KoSubpath *removeSubpath(int subpathIndex);
 
@@ -468,7 +468,7 @@ protected:
      * @param sweepAngle the length of the angle
      * TODO add param to have angle of the ellipse
      * @param offset to the first point in the arc
-     * @param curvePoints a array which take the cuve points, pass a 'QPointF curvePoins[12]';
+     * @param curvePoints a array which take the curve points, pass a 'QPointF curvePoins[12]';
      *
      * @return number of points created by the curve
      */

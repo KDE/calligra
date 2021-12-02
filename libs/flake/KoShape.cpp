@@ -1835,7 +1835,7 @@ void KoShape::loadOdfGluePoints(const KoXmlElement &element, KoShapeLoadingConte
         QString xStr = child.attributeNS(KoXmlNS::svg, "x", QString()).simplified();
         QString yStr = child.attributeNS(KoXmlNS::svg, "y", QString()).simplified();
         if(xStr.isEmpty() || yStr.isEmpty()) {
-            warnFlake << "glue-point with invald position";
+            warnFlake << "glue-point with invalid position";
             continue;
         }
 
@@ -1848,7 +1848,7 @@ void KoShape::loadOdfGluePoints(const KoXmlElement &element, KoShapeLoadingConte
             KoOdfWorkaround::fixGluePointPosition(yStr, context);
 #endif
             if(!xStr.endsWith('%') || !yStr.endsWith('%')) {
-                warnFlake << "glue-point with invald position";
+                warnFlake << "glue-point with invalid position";
                 continue;
             }
             // x and y are relative to drawing object center
@@ -2231,7 +2231,7 @@ void KoShape::saveOdfClipContour(KoShapeSavingContext &context, const QSizeF &or
 
     debugFlake << "shape saves contour-polygon";
     if (d->clipPath && !d->clipPath->clipPathShapes().isEmpty()) {
-        // This will loose data as odf can only save one set of contour wheras
+        // This will loose data as odf can only save one set of contour whereas
         // svg loading and at least karbon editing can produce more than one
         // TODO, FIXME see if we can save more than one clipshape to odf
         d->clipPath->clipPathShapes().constFirst()->saveContourOdf(context, originalSize);

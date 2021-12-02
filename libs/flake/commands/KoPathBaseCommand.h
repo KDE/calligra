@@ -30,7 +30,7 @@ public:
 
 protected:
     /**
-     * Shedules repainting of all shapes control point rects.
+     * Schedules repainting of all shapes control point rects.
      * @param normalizeShapes controls if paths are normalized before painting
      */
     void repaint(bool normalizeShapes);

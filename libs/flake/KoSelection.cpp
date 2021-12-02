@@ -266,7 +266,7 @@ const QList<KoShape*> KoSelection::selectedShapes(KoFlake::SelectionType strip) 
         KoShapeContainer *container = shape->parent();
         if (strip != KoFlake::TopLevelSelection && dynamic_cast<KoShapeGroup*>(shape))
             // since a KoShapeGroup
-            // guarentees all its children are selected at the same time as itself
+            // guarantees all its children are selected at the same time as itself
             // is selected we will only return its children.
             continue;
         bool add = true;

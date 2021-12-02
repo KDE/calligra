@@ -63,7 +63,7 @@ void KoSubpathJoinCommand::redo()
     KoPathPoint * point1 = pathShape->pointByIndex(m_pointData1.pointIndex);
     KoPathPoint * point2 = pathShape->pointByIndex(m_pointData2.pointIndex);
 
-    // if the endpoint is has a control point create a contol point for the new segment to be
+    // if the endpoint is has a control point create a control point for the new segment to be
     // at the symmetric position to the exiting one
     if (m_reverse & ReverseFirst || closeSubpath) {
         if (point1->activeControlPoint2())

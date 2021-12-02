@@ -35,7 +35,7 @@
 #define FRAME_SPACING 10.0
 
 // NOTE: The first area seems to layout a line (or block) even when none has been added,
-// which means it must be taken into considderation when using hitTest() to find a table.
+// which means it must be taken into consideration when using hitTest() to find a table.
 // TODO: The offset needed are based on guesswork and experiments, so needs investigation.
 #define TABLE_OFFSET 10.
 #define BLOCK_HEIGHT 13.2
