@@ -678,7 +678,7 @@ APPLIXWORDImport::replaceSpecial(QString &textstr)
     textstr.replace('>', "&gt;");
 
 
-    // 2. Replace part for this characters: applixwear qoutes
+    // 2. Replace part for this characters: applixwear quotes
     bool ok = true;
     int pos = 0;
     do {

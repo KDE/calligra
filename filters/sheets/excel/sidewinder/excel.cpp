@@ -2091,7 +2091,7 @@ void BkHimRecord::setData( unsigned size, const unsigned char* data, const unsig
         memcpy(newHeaderChar + currentHeaderOffset, reinterpret_cast<const char*>(&bitsPerPixel), 2);
         currentHeaderOffset += 2;
 
-        //compresion type, for this case always 0
+        //compression type, for this case always 0
         currentHeaderOffset += 4;
 
         //size of image bits

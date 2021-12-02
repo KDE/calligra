@@ -31,7 +31,7 @@ namespace wvWare
     class UString;
 
     /**
-     * AssociatedStrings provides a confortable way to access Word's STTBFASSOC,
+     * AssociatedStrings provides a comfortable way to access Word's STTBFASSOC,
      * the table of associated strings. This table holds information about the
      * author of the document, the tile, keywords, and so on.
      */

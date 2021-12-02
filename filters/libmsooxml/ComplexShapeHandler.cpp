@@ -145,7 +145,7 @@ QString ComplexShapeHandler::createEquation(QString& function)
         first = getArgument(function, true);
         second = getArgument(function, true);
         // Converting to ooxml units, since sin/cos/tan functions assume that
-        // they will get thier inputs in those units
+        // they will get their inputs in those units
         return QString("atan2(%1,%2)*3437746.771").arg(second).arg(first);
     }
     else if (operation == "cos") {

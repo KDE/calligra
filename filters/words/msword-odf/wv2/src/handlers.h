@@ -324,7 +324,7 @@ namespace wvWare {
                                     FieldSeparator = 20, FieldEnd = 21, FieldEscapeChar = 92 };
 
         /**
-         * special characters that were dfined in parser9x.h  (fSpec = 1) but that weren't used.
+         * special characters that were defined in parser9x.h  (fSpec = 1) but that weren't used.
          */
         enum UnusedSpecialCharacter {FootnoteSeparator = 3, FootnodeContinuation = 4, HandAnnotationPic = 7,
                                  AbbrevDate = 10, MergeHelper = 41};

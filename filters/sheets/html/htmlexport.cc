@@ -60,7 +60,7 @@ HTMLExport::~HTMLExport()
     delete m_dialog;
 }
 
-// HTML enitities, AFAIK we don't need to escape " to &quot; (dnaber):
+// HTML entities, AFAIK we don't need to escape " to &quot; (dnaber):
 const QString strAmp("&amp;");
 const QString nbsp("&nbsp;");
 const QString strLt("&lt;");

@@ -1060,7 +1060,7 @@ void Filterkpr2odf::appendPoly(KoXmlWriter* content, const KoXmlElement& objectE
             tmpX = (int)(point.attribute("point_x", "0").toDouble() * 10000);
             tmpY = (int)(point.attribute("point_y", "0").toDouble() * 10000);
             //For some reason the last point is saved twice for some polygons, so we need to ignore the last one of them if they are equal
-            //this fix assumes that the last child of the POINTS tag is a Point, seems to work but it's not garanteed
+            //this fix assumes that the last child of the POINTS tag is a Point, seems to work but it's not guaranteed
             if (tmpX == previousX && tmpY == previousY && point.nextSibling().isNull()) {
                 break;
             }

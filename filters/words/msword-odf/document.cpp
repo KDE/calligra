@@ -548,7 +548,7 @@ void Document::slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> sep
         m_pageLayoutStyle_list.prepend(pageLayoutStyle);
     }
 
-    //yeah, we can omitt creation of a new master-page
+    //yeah, we can omit creation of a new master-page
     if (m_omittMasterPage || m_useLastMasterPage) {
         return;
     }
@@ -1128,7 +1128,7 @@ void Document::setPageLayoutStyle(KoGenStyle* pageLayoutStyle,
     //applied: 0 - all pages, 1 - first page only, 2 - all but first.
 
     //NOTE: 3 - whole document, not mentioned in the "Word Binary File Format
-    //(.doc) Structure Specification", but mentiond in word97_generated.h
+    //(.doc) Structure Specification", but mentioned in word97_generated.h
     if ( (sep->pgbApplyTo == 0) ||
         ((sep->pgbApplyTo == 1) && firstPage) ||
         ((sep->pgbApplyTo == 2) && !firstPage))

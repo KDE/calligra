@@ -39,7 +39,7 @@ class Value
     DataType m_type;
 
     bool m_isUnlinkedFormat; ///< false=data uses the number formatting of the referenced data, true=data uses the custom formatting specified via m_numberFormat.
-    unsigned m_numberFormat; ///< specifies the numnber format to use for the data.
+    unsigned m_numberFormat; ///< specifies the number format to use for the data.
     QString m_formula; ///< the optional formula. could be for example "[Sheet1.$D$2:$F$2]"
 
     Value(DataId dataId, DataType type,

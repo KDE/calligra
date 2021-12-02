@@ -101,7 +101,7 @@ private:
     void setDateStyleName(const QString &name);
 
     /**
-     * @brief dateStyleName - Retrun the date style name .
+     * @brief dateStyleName - Return the date style name.
      * @param name  name of the style
      */
     QString getDateStyleName() const;

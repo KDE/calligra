@@ -2944,7 +2944,7 @@ struct CHP : public Shared {
     U8 idct;
 
     /**
-     * Identifier of Characte type
+     * Identifier of Character type
      * 0 -> shared chars get non-FE props
      * 1 -> shared chars get FE props
      * (see Appendix C)
@@ -4193,7 +4193,7 @@ struct DOP {
     U16 fGramAllDone:1;
 
     /**
-     * No grammer errors exist in doc
+     * No grammar errors exist in doc
      */
     U16 fGramAllClean:1;
 

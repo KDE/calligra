@@ -434,7 +434,7 @@ KoFilter::ConversionStatus ExportEpub2::extractCoverImage(KoStore *odfStore, Epu
         return KoFilter::OK;
     }
 
-    // Extact cover data.
+    // Extract cover data.
     QByteArray coverData;
     if (!odfStore->extractFile(coverPath, coverData)) {
         debugEpub << "Can not to extract file" + coverPath;

@@ -338,7 +338,7 @@ void Leader::updateMaxCells(KSpreadSheet *spreadSheet)
 
     // Go through all the SpreadSheet to find out the minimum rectangle of cells
     // Maybe we should have something which does that in the KSpreadSheet class,
-    // it would be easy to keep track of this each time a new Cellis instanciated.
+    // it would be easy to keep track of this each time a new Cellis instantiated.
     for (int row = 1; row < maxRow; ++row) {
         bool usedColumn = false;
         for (int column = 1; column < maxColumn; ++column) {

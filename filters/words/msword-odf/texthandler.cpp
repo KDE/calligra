@@ -2260,7 +2260,7 @@ void WordsTextHandler::closeList()
     //TODO: should probably test this more, to make sure it does work this way
     //for level 0, we need to close the last item and the list
     //for level 1, we need to close the last item and the list, and the last item and the list
-    //for level 2, we need to close the last item and the list, and the last item adn the list, and again
+    //for level 2, we need to close the last item and the list, and the last item and the list, and again
     for (int i = 0; i <= m_currentListLevel; i++) {
         writer->endElement(); //text:list-item
         writer->endElement(); //text:list
