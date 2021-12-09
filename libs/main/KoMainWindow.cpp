@@ -925,8 +925,9 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
         if (!suggestedFilename.isEmpty()) {  // ".kra" looks strange for a name
             int c = suggestedFilename.lastIndexOf('.');
 
-            const QString ext = mime.preferredSuffix();
+            QString ext = mime.preferredSuffix();
             if (!ext.isEmpty()) {
+                ext.prepend('.');
                 if (c < 0)
                     suggestedFilename += ext;
                 else
@@ -1002,6 +1003,7 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
                 int dot = fileName.lastIndexOf('.');
                 QString ext = mime.preferredSuffix();
                 if (!ext.isEmpty()) {
+                    ext.prepend('.');
                     if (dot < 0) fileName += ext;
                     else fileName = fileName.left(dot) + ext;
                 } else { // current filename extension wrong anyway
