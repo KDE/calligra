@@ -473,7 +473,7 @@ endif()
 ##
 ## Test for lcms
 ##
-macro_optional_find_package(LCMS2)
+macro_optional_find_package(LCMS2 2.4)
 set_package_properties(LCMS2 PROPERTIES
     DESCRIPTION "LittleCMS, a color management engine"
     URL "http://www.littlecms.com"
@@ -481,10 +481,6 @@ set_package_properties(LCMS2 PROPERTIES
     TYPE OPTIONAL
     )
 if(LCMS2_FOUND)
-    if(NOT ${LCMS2_VERSION} VERSION_LESS 2040 )
-	set(HAVE_LCMS24 TRUE)
-    endif()
-    set(HAVE_REQUIRED_LCMS_VERSION TRUE)
     set(HAVE_LCMS2 TRUE)
 endif()
 
