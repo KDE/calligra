@@ -26,9 +26,7 @@
 #include <PDFDoc.h>
 #include <GlobalParams.h>
 
-#ifndef HAVE_POPPLER_PRE_0_83
 #include <memory>
-#endif
 
 K_PLUGIN_FACTORY_WITH_JSON(PdfImportFactory, "calligra_filter_pdf2svg.json",
                            registerPlugin<PdfImport>();)
@@ -52,33 +50,19 @@ KoFilter::ConversionStatus PdfImport::convert(const QByteArray& from, const QByt
     }
 
     // read config file
-#ifdef HAVE_POPPLER_PRE_0_83
-    globalParams = new GlobalParams();
-#else
     globalParams = std::unique_ptr<GlobalParams>(new GlobalParams);
-#endif
     if (! globalParams)
         return KoFilter::NotImplemented;
 
     GooString * fname = new GooString(QFile::encodeName(m_chain->inputFile()).data());
     PDFDoc * pdfDoc = new PDFDoc(fname, 0, 0, 0);
     if (! pdfDoc) {
-#ifdef HAVE_POPPLER_PRE_0_83
-        delete globalParams;
-        globalParams = nullptr;
-#else
         globalParams.reset();
-#endif
         return KoFilter::StupidError;
     }
 
     if (! pdfDoc->isOk()) {
-#ifdef HAVE_POPPLER_PRE_0_83
-        delete globalParams;
-        globalParams = nullptr;
-#else
         globalParams.reset();
-#endif
         delete pdfDoc;
         return KoFilter::StupidError;
     }
@@ -105,12 +89,7 @@ KoFilter::ConversionStatus PdfImport::convert(const QByteArray& from, const QByt
 
     delete dev;
     delete pdfDoc;
-#ifdef HAVE_POPPLER_PRE_0_83
-    delete globalParams;
-    globalParams = nullptr;
-#else
     globalParams.reset();
-#endif
 
     return KoFilter::OK;
 }

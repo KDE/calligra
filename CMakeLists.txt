@@ -704,7 +704,7 @@ set_package_properties(LibEtonyek PROPERTIES
 ##
 ## Test for qt-poppler
 ##
-macro_optional_find_package(Poppler COMPONENTS Qt5)
+macro_optional_find_package(Poppler 0.83.0 COMPONENTS Qt5)
 set_package_properties(Poppler PROPERTIES
     DESCRIPTION "A PDF rendering library"
     URL "http://poppler.freedesktop.org"

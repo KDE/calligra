@@ -160,11 +160,7 @@ void SvgOutputDev::eoFill(GfxState *state)
     *d->body << "/>" << endl;
 }
 
-#ifdef HAVE_POPPLER_PRE_0_83
-QString SvgOutputDev::convertPath(GfxPath *path)
-#else
 QString SvgOutputDev::convertPath(const GfxPath *path)
-#endif
 {
     if (! path)
         return QString();
@@ -172,11 +168,7 @@ QString SvgOutputDev::convertPath(const GfxPath *path)
     QString output;
 
     for (int i = 0; i < path->getNumSubpaths(); ++i) {
-#ifdef HAVE_POPPLER_PRE_0_83
-        GfxSubpath * subpath = path->getSubpath(i);
-#else
         const GfxSubpath * subpath = path->getSubpath(i);
-#endif
         if (subpath->getNumPoints() > 0) {
             output += QString("M%1 %2").arg(subpath->getX(0)).arg(subpath->getY(0));
             int j = 1;
@@ -383,11 +375,7 @@ QString SvgOutputDev::printStroke()
     return stroke;
 }
 
-#ifdef HAVE_POPPLER_PRE_0_64
-void SvgOutputDev::drawString(GfxState * state, GooString * s)
-#else
 void SvgOutputDev::drawString(GfxState * state, const GooString * s)
-#endif
 {
     int render = state->getRender();
     // check for invisible text -- this is used by Acrobat Capture
@@ -402,22 +390,10 @@ void SvgOutputDev::drawString(GfxState * state, const GooString * s)
 
     QString str;
 
-#ifdef HAVE_POPPLER_PRE_0_64
-    char * p = s->getCString();
-#else
-    #ifdef HAVE_POPPLER_PRE_0_72
-        const char * p = s->getCString();
-    #else
-        const char * p = s->c_str();
-    #endif
-#endif
+    const char * p = s->c_str();
     int len = s->getLength();
     CharCode code;
-#ifdef HAVE_POPPLER_PRE_0_82
-    Unicode *u = nullptr;
-#else
     const Unicode *u = nullptr;
-#endif
     int uLen;
     double dx, dy, originX, originY;
     while (len > 0) {
@@ -463,18 +439,10 @@ void SvgOutputDev::drawString(GfxState * state, const GooString * s)
     *d->body << " y=\"" << y << "px\"";
 
     if (font && font->getFamily()) {
-#ifdef HAVE_POPPLER_PRE_0_72
-        *d->body << " font-family=\"" << QString::fromLatin1(font->getFamily()->getCString()) << "\"";
-#else
         *d->body << " font-family=\"" << QString::fromLatin1(font->getFamily()->c_str()) << "\"";
-#endif
         //debugPdf << "font family:" << QString::fromLatin1( font->getFamily()->getCString() );
     } else if (font && font->getName()) {
-#ifdef HAVE_POPPLER_PRE_0_72
-        *d->body << " font-family=\"" << QString::fromLatin1(font->getName()->getCString()) << "\"";
-#else
         *d->body << " font-family=\"" << QString::fromLatin1(font->getName()->c_str()) << "\"";
-#endif
         //debugPdf << "font name:" << QString::fromLatin1( font->getName()->getCString() );
     }
     *d->body << " font-size=\"" << qMax(state->getFontSize(), state->getTransformedFontSize()) << "px\"";
@@ -494,15 +462,9 @@ void SvgOutputDev::drawString(GfxState * state, const GooString * s)
     *d->body << "</text>" << endl;
 }
 
-#ifdef HAVE_POPPLER_PRE_0_82
-void SvgOutputDev::drawImage(GfxState *state, Object *ref, Stream *str,
-                             int width, int height, GfxImageColorMap *colorMap,
-                             bool interpolate, int *maskColors, bool inlineImg)
-#else
 void SvgOutputDev::drawImage(GfxState *state, Object *ref, Stream *str,
                              int width, int height, GfxImageColorMap *colorMap,
                              bool interpolate, const int *maskColors, bool inlineImg)
-#endif
 {
     Q_UNUSED(ref)
     Q_UNUSED(interpolate)
