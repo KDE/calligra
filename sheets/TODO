@@ -483,6 +483,8 @@ Not yet sorted (will be entered into categories above)
 - interface for mail merge
 - for formulas: fit precision so the result fits in the cell or resize the cell
 
+- need to improve copypaste between sheets and oocalc (or other apps) - drag and drop from sheets to oocalc sort of works (as CSV), the opposite is funky, only copies one value and retains old selection's shape
+
 - changing text angle should resize the cell height automatically
 - support for format strings (dd/mm/yyyy)
 - more font attributes (outline, shadow,...) + attributes for parts of the text

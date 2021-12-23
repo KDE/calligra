@@ -97,7 +97,9 @@ public:
 
 
 Map::Map(DocBase* doc, int syntaxVersion)
-        : QObject(doc),
+        :
+        MapBase(),
+        QObject(doc),
         d(new Private)
 {
     setObjectName(QLatin1String("Map")); // necessary for D-Bus
@@ -359,86 +361,6 @@ void Map::moveSheet(const QString & _from, const QString & _to, bool _before)
     }
 }
 
-QDomElement Map::save(QDomDocument& doc)
-{
-    QDomElement spread = doc.documentElement();
-
-    QDomElement locale = static_cast<Localization*>(d->calculationSettings->locale())->save(doc);
-    spread.appendChild(locale);
-
-    QDomElement areaname = d->namedAreaManager->saveXML(doc);
-    spread.appendChild(areaname);
-
-    QDomElement defaults = doc.createElement("defaults");
-    defaults.setAttribute("row-height", QString::number(d->defaultRowFormat->height()));
-    defaults.setAttribute("col-width", QString::number(d->defaultColumnFormat->width()));
-    spread.appendChild(defaults);
-
-    QDomElement s = d->styleManager->save(doc);
-    spread.appendChild(s);
-
-    QDomElement mymap = doc.createElement("map");
-
-    QByteArray password;
-    this->password(password);
-    if (!password.isNull()) {
-        if (password.size() > 0) {
-            QByteArray str = KCodecs::base64Encode(password);
-            mymap.setAttribute("protected", QString(str.data()));
-        } else {
-            mymap.setAttribute("protected", "");
-        }
-    }
-
-    foreach(Sheet* sheet, d->lstSheets) {
-        QDomElement e = sheet->saveXML(doc);
-        if (e.isNull())
-            return e;
-        mymap.appendChild(e);
-    }
-    return mymap;
-}
-
-bool Map::loadXML(const KoXmlElement& mymap)
-{
-    d->isLoading = true;
-    loadingInfo()->setFileFormat(LoadingInfo::NativeFormat);
-    const QString activeSheet = mymap.attribute("activeTable");
-    const QPoint marker(mymap.attribute("markerColumn").toInt(), mymap.attribute("markerRow").toInt());
-    loadingInfo()->setCursorPosition(findSheet(activeSheet), marker);
-    const QPointF offset(mymap.attribute("xOffset").toDouble(), mymap.attribute("yOffset").toDouble());
-    loadingInfo()->setScrollingOffset(findSheet(activeSheet), offset);
-
-    KoXmlNode n = mymap.firstChild();
-    if (n.isNull()) {
-        // We need at least one sheet !
-        doc()->setErrorMessage(i18n("This document has no sheets (tables)."));
-        d->isLoading = false;
-        return false;
-    }
-    while (!n.isNull()) {
-        KoXmlElement e = n.toElement();
-        if (!e.isNull() && e.tagName() == "table") {
-            Sheet *t = addNewSheet();
-            if (!t->loadXML(e)) {
-                d->isLoading = false;
-                return false;
-            }
-        }
-        n = n.nextSibling();
-    }
-
-    loadXmlProtection(mymap);
-
-    if (!activeSheet.isEmpty()) {
-        // Used by View's constructor
-        loadingInfo()->setInitialActiveSheet(findSheet(activeSheet));
-    }
-
-    d->isLoading = false;
-    return true;
-}
-
 Sheet* Map::findSheet(const QString & _name) const
 {
     foreach(Sheet* sheet, d->lstSheets) {
@@ -599,6 +521,96 @@ void Map::addStringCompletion(const QString &stringCompletion)
         d->listCompletion.addItem(stringCompletion);
     }
 }
+
+Region & regionFromName(const QString& expression, Sheet* sheet = 0)
+{
+    Region res;
+
+    if (string.isEmpty()) return res;
+
+    // FIXME Stefan: Does not respect quoted names!
+    QStringList substrings = string.split(';');
+    QStringList::ConstIterator end = substrings.constEnd();
+    for (QStringList::ConstIterator it = substrings.constBegin(); it != end; ++it) {
+        QString sRegion = *it;
+
+        // check for a named area first
+        const Region namedAreaRegion = map->namedAreaManager()->namedArea(sRegion);
+        if (namedAreaRegion.isValid()) 
+            res.add(namedAreaRegion, sheet);
+            continue;
+        }
+
+        // Single cell or cell range
+        int delimiterPos = sRegion.indexOf(':');
+        if (delimiterPos > -1) {
+            // range
+            QString sUL = sRegion.left(delimiterPos);
+            QString sLR = sRegion.mid(delimiterPos + 1);
+
+            Sheet* firstSheet = filterSheetName(sUL);
+            Sheet* lastSheet = filterSheetName(sLR);
+            // TODO: lastSheet is silently ignored if it is different from firstSheet
+
+            // Still has the sheet name separator?
+            if (sUL.contains('!') || sLR.contains('!'))
+                return res;
+
+            if (!firstSheet)
+                firstSheet = fallbackSheet;
+            if (!lastSheet)
+                lastSheet = fallbackSheet;
+
+            // TODO: shouldn't use Region::Point, the cell name needs to be moved elsewhere
+            Region::Point ul(sUL);
+            Region::Point lr(sLR);
+
+            if (ul.isValid() && lr.isValid()) {
+                QRect range = QRect(ul.pos(), lr.pos());
+                res.add(range, firstSheet);
+            } else if (ul.isValid()) {
+                res.add(ul.pos(), firstSheet);
+            } else { // lr.isValid()
+                res.add(lr.pos(), firstSheet);
+            }
+        } else {
+            // single cell
+            Sheet* sheet = map ? filterSheetName(sRegion) : 0;
+            // Still has the sheet name separator?
+            if (sRegion.contains('!'))
+                return res;
+            if (!sheet)
+                sheet = fallbackSheet;
+            Region::Point pt(sRegion);
+            res.add(pt.pos(), sheet);
+        }
+    }
+
+    return res;
+}
+
+// get sheet name from a cell range string
+Sheet* Map::filterSheetName(QString& sRegion)
+{
+    Sheet* sheet = 0;
+    int delimiterPos = sRegion.lastIndexOf('!');
+    if (delimiterPos < 0)
+        delimiterPos = sRegion.lastIndexOf('.');
+    if (delimiterPos > -1) {
+        QString sheetName = sRegion.left(delimiterPos);
+        sheet = findSheet(sheetName);
+        // try again without apostrophes
+        while(!sheet && sheetName.count() > 2 && sheetName[0] == '\'' && sheetName[sheetName.count()-1] == '\'') {
+            sheetName = sheetName.mid(1, sheetName.count() - 2);
+            sheet = findSheet(sheetName);
+        }
+        // remove the sheet name, incl. '!', from the string
+        if (sheet)
+            sRegion = sRegion.right(sRegion.length() - delimiterPos - 1);
+    }
+    return sheet;
+}
+
 
 void Map::addDamage(Damage* damage)
 {

@@ -78,6 +78,7 @@
 #include "View.h"
 #include "SheetAccessModel.h"
 #include "BindingModel.h"
+#include "ksp/SheetsKsp.h"
 
 // D-Bus
 #ifndef QT_NO_DBUS
@@ -107,7 +108,6 @@ public:
     // document properties
     bool configLoadFromFile       : 1;
     QStringList spellListIgnoreAll;
-    SavedDocParts savedDocParts;
     SheetAccessModel *sheetAccessModel;
     KoDocumentResourceManager *resourceManager;
 };
@@ -212,47 +212,7 @@ QDomDocument Doc::saveXML()
         emit closeEditor(true);
     }
 
-    QDomDocument doc = KoDocument::createDomDocument("tables", "spreadsheet", CURRENT_DTD_VERSION);
-    QDomElement spread = doc.documentElement();
-    spread.setAttribute("editor", "Calligra Sheets");
-    spread.setAttribute("mime", "application/x-kspread");
-    spread.setAttribute("syntaxVersion", QString::number(CURRENT_SYNTAX_VERSION));
-
-    if (!d->spellListIgnoreAll.isEmpty()) {
-        QDomElement spellCheckIgnore = doc.createElement("SPELLCHECKIGNORELIST");
-        spread.appendChild(spellCheckIgnore);
-        for (QStringList::ConstIterator it = d->spellListIgnoreAll.constBegin(); it != d->spellListIgnoreAll.constEnd(); ++it) {
-            QDomElement spellElem = doc.createElement("SPELLCHECKIGNOREWORD");
-            spellCheckIgnore.appendChild(spellElem);
-            spellElem.setAttribute("word", *it);
-        }
-    }
-
-    SavedDocParts::const_iterator iter = d->savedDocParts.constBegin();
-    SavedDocParts::const_iterator end  = d->savedDocParts.constEnd();
-    while (iter != end) {
-        // save data we loaded in the beginning and which has no owner back to file
-        spread.appendChild(iter.value().documentElement());
-        ++iter;
-    }
-
-    QDomElement e = map()->save(doc);
-/*FIXME
-        // Save visual info for the first view, such as active sheet and active cell
-        // It looks like a hack, but reopening a document creates only one view anyway (David)
-        View *const view = static_cast<View*>(views().first());
-        Canvas *const canvas = view->canvasWidget();
-        e.setAttribute("activeTable",  canvas->activeSheet()->sheetName());
-        e.setAttribute("markerColumn", QString::number(view->selection()->marker().x()));
-        e.setAttribute("markerRow",    QString::number(view->selection()->marker().y()));
-        e.setAttribute("xOffset",      QString::number(canvas->xOffset()));
-        e.setAttribute("yOffset",      QString::number(canvas->yOffset()));
-*/
-    spread.appendChild(e);
-
-    setModified(false);
-
-    return doc;
+    return DocBase::saveXML();
 }
 
 bool Doc::loadChildren(KoStore* _store)
@@ -260,196 +220,6 @@ bool Doc::loadChildren(KoStore* _store)
     return map()->loadChildren(_store);
 }
 
-
-bool Doc::loadXML(const KoXmlDocument& doc, KoStore*)
-{
-    QPointer<KoUpdater> updater;
-    if (progressUpdater()) {
-        updater = progressUpdater()->startSubtask(1, "KSpread::Doc::loadXML");
-        updater->setProgress(0);
-    }
-
-    d->spellListIgnoreAll.clear();
-    // <spreadsheet>
-    KoXmlElement spread = doc.documentElement();
-
-    if (spread.attribute("mime") != "application/x-kspread" && spread.attribute("mime") != "application/vnd.kde.kspread") {
-        setErrorMessage(i18n("Invalid document. Expected mimetype application/x-kspread or application/vnd.kde.kspread, got %1" , spread.attribute("mime")));
-        return false;
-    }
-
-    bool ok = false;
-    int version = spread.attribute("syntaxVersion").toInt(&ok);
-    map()->setSyntaxVersion(ok ? version : 0);
-    if (map()->syntaxVersion() > CURRENT_SYNTAX_VERSION) {
-        int ret = KMessageBox::warningContinueCancel(
-                      0, i18n("This document was created with a newer version of Calligra Sheets (syntax version: %1)\n"
-                              "When you open it with this version of Calligra Sheets, some information may be lost.", map()->syntaxVersion()),
-                      i18n("File Format Mismatch"), KStandardGuiItem::cont());
-        if (ret == KMessageBox::Cancel) {
-            setErrorMessage("USER_CANCELED");
-            return false;
-        }
-    }
-
-    // <locale>
-    KoXmlElement loc = spread.namedItem("locale").toElement();
-    if (!loc.isNull())
-        static_cast<Localization*>(map()->calculationSettings()->locale())->load(loc);
-
-    if (updater) updater->setProgress(5);
-
-    KoXmlElement defaults = spread.namedItem("defaults").toElement();
-    if (!defaults.isNull()) {
-        double dim = defaults.attribute("row-height").toDouble(&ok);
-        if (!ok)
-            return false;
-        map()->setDefaultRowHeight(dim);
-
-        dim = defaults.attribute("col-width").toDouble(&ok);
-
-        if (!ok)
-            return false;
-
-        map()->setDefaultColumnWidth(dim);
-    }
-
-    KoXmlElement ignoreAll = spread.namedItem("SPELLCHECKIGNORELIST").toElement();
-    if (!ignoreAll.isNull()) {
-        KoXmlElement spellWord = spread.namedItem("SPELLCHECKIGNORELIST").toElement();
-
-        spellWord = spellWord.firstChild().toElement();
-        while (!spellWord.isNull()) {
-            if (spellWord.tagName() == "SPELLCHECKIGNOREWORD") {
-                d->spellListIgnoreAll.append(spellWord.attribute("word"));
-            }
-            spellWord = spellWord.nextSibling().toElement();
-        }
-    }
-
-    if (updater) updater->setProgress(40);
-    // In case of reload (e.g. from konqueror)
-    qDeleteAll(map()->sheetList());
-    map()->sheetList().clear();
-
-    KoXmlElement styles = spread.namedItem("styles").toElement();
-    if (!styles.isNull()) {
-        if (!map()->styleManager()->loadXML(styles)) {
-            setErrorMessage(i18n("Styles cannot be loaded."));
-            return false;
-        }
-    }
-
-    // <map>
-    KoXmlElement mymap = spread.namedItem("map").toElement();
-    if (mymap.isNull()) {
-        setErrorMessage(i18n("Invalid document. No map tag."));
-        return false;
-    }
-    if (!map()->loadXML(mymap)) {
-        return false;
-    }
-
-    // named areas
-    const KoXmlElement areaname = spread.namedItem("areaname").toElement();
-    if (!areaname.isNull())
-        map()->namedAreaManager()->loadXML(areaname);
-
-    //Backwards compatibility with older versions for paper layout
-    if (map()->syntaxVersion() < 1) {
-        KoXmlElement paper = spread.namedItem("paper").toElement();
-        if (!paper.isNull()) {
-            loadPaper(paper);
-        }
-    }
-
-    if (updater) updater->setProgress(85);
-
-    KoXmlElement element(spread.firstChild().toElement());
-    while (!element.isNull()) {
-        QString tagName(element.tagName());
-
-        if (tagName != "locale" && tagName != "map" && tagName != "styles"
-                && tagName != "SPELLCHECKIGNORELIST" && tagName != "areaname"
-                && tagName != "paper") {
-            // belongs to a plugin, load it and save it for later use
-            QDomDocument doc;
-            KoXml::asQDomElement(doc, element);
-            d->savedDocParts[ tagName ] = doc;
-        }
-
-        element = element.nextSibling().toElement();
-    }
-
-    if (updater) updater->setProgress(90);
-    initConfig();
-    if (updater) updater->setProgress(100);
-
-    return true;
-}
-
-void Doc::loadPaper(KoXmlElement const & paper)
-{
-    KoPageLayout pageLayout;
-    pageLayout.format = KoPageFormat::formatFromString(paper.attribute("format"));
-    pageLayout.orientation = (paper.attribute("orientation")  == "Portrait")
-                             ? KoPageFormat::Portrait : KoPageFormat::Landscape;
-
-    // <borders>
-    KoXmlElement borders = paper.namedItem("borders").toElement();
-    if (!borders.isNull()) {
-        pageLayout.leftMargin   = MM_TO_POINT(borders.attribute("left").toFloat());
-        pageLayout.rightMargin  = MM_TO_POINT(borders.attribute("right").toFloat());
-        pageLayout.topMargin    = MM_TO_POINT(borders.attribute("top").toFloat());
-        pageLayout.bottomMargin = MM_TO_POINT(borders.attribute("bottom").toFloat());
-    }
-
-    //apply to all sheet
-    foreach(Sheet* sheet, map()->sheetList()) {
-        sheet->printSettings()->setPageLayout(pageLayout);
-    }
-
-    QString hleft, hright, hcenter;
-    QString fleft, fright, fcenter;
-    // <head>
-    KoXmlElement head = paper.namedItem("head").toElement();
-    if (!head.isNull()) {
-        KoXmlElement left = head.namedItem("left").toElement();
-        if (!left.isNull())
-            hleft = left.text();
-        KoXmlElement center = head.namedItem("center").toElement();
-        if (!center.isNull())
-            hcenter = center.text();
-        KoXmlElement right = head.namedItem("right").toElement();
-        if (!right.isNull())
-            hright = right.text();
-    }
-    // <foot>
-    KoXmlElement foot = paper.namedItem("foot").toElement();
-    if (!foot.isNull()) {
-        KoXmlElement left = foot.namedItem("left").toElement();
-        if (!left.isNull())
-            fleft = left.text();
-        KoXmlElement center = foot.namedItem("center").toElement();
-        if (!center.isNull())
-            fcenter = center.text();
-        KoXmlElement right = foot.namedItem("right").toElement();
-        if (!right.isNull())
-            fright = right.text();
-    }
-    //The macro "<sheet>" formerly was typed as "<table>"
-    hleft.replace("<table>", "<sheet>");
-    hcenter.replace("<table>", "<sheet>");
-    hright.replace("<table>", "<sheet>");
-    fleft.replace("<table>", "<sheet>");
-    fcenter.replace("<table>", "<sheet>");
-    fright.replace("<table>", "<sheet>");
-
-    foreach(Sheet* sheet, map()->sheetList()) {
-        sheet->print()->headerFooter()->setHeadFootLine(hleft, hcenter, hright,
-                fleft, fcenter, fright);
-    }
-}
 
 bool Doc::completeLoading(KoStore* store)
 {
@@ -462,16 +232,6 @@ bool Doc::completeLoading(KoStore* store)
     return ok;
 }
 
-
-bool Doc::docData(QString const & xmlTag, QDomDocument & data)
-{
-    SavedDocParts::iterator iter = d->savedDocParts.find(xmlTag);
-    if (iter == d->savedDocParts.end())
-        return false;
-    data = iter.value();
-    d->savedDocParts.erase(iter);
-    return true;
-}
 
 void Doc::addIgnoreWordAllList(const QStringList & _lst)
 {

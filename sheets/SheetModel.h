@@ -9,7 +9,7 @@
 
 #include <QAbstractTableModel>
 
-#include "sheets_odf_export.h"
+#include "sheets_export.h"
 
 class QItemSelectionRange;
 

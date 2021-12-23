@@ -13,7 +13,7 @@
 #include <QObject>
 
 #include "Global.h"
-#include "sheets_odf_export.h"
+#include "sheets_export.h"
 
 namespace Calligra
 {

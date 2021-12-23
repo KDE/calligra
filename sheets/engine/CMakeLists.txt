@@ -1,0 +1,54 @@
+
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}/../
+    ${CMAKE_CURRENT_BINARY_DIR}/../
+)
+
+set (calligrasheetsengine_LIB_SRCS
+    CellBase.cpp
+    MapBase.cpp
+    Number.cpp
+    Util.cpp
+    Localization.cpp
+    Region.cpp
+    SheetBase.cpp
+    SheetsDebug.cpp
+    Value.cpp
+)
+
+add_library(calligrasheetsengine SHARED ${calligrasheetsengine_LIB_SRCS})
+
+generate_export_header(calligrasheetsengine
+    EXPORT_FILE_NAME sheets_engine_generated_export.h
+    BASE_NAME CALLIGRA_SHEETS_ENGINE
+)
+if (SHOULD_BUILD_DEVEL_HEADERS)
+
+install( FILES
+    sheets_engine_export.h
+    ${CMAKE_CURRENT_BINARY_DIR}/sheets_engine_generated_export.h
+
+    calligra_sheets_limits.h
+
+    CellBase.h
+    MapBase.h
+    Number.h
+    Region.h
+    RTree.h
+    SheetBase.h
+    Value.h
+DESTINATION ${INCLUDE_INSTALL_DIR}/sheets COMPONENT Devel)
+
+endif()
+
+target_link_libraries(calligrasheetsengine
+    PUBLIC
+        Qt5::Core
+        KF5::KDELibs4Support
+)
+
+set_target_properties(calligrasheetsengine PROPERTIES
+    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
+)
+install(TARGETS calligrasheetsengine ${INSTALL_TARGETS_DEFAULT_ARGS})
+

@@ -36,7 +36,7 @@
 #include <KoGenStyles.h>
 #include <styles/KoCharacterStyle.h>
 
-#include <sheets/Util.h>
+#include <sheets/Cell.h>
 
 #include <QBrush>
 #include <QRegExp>
@@ -349,7 +349,7 @@ void XlsxXmlWorksheetReader::showWarningAboutWorksheetSize()
 
 inline static QString encodeLabelText(int col, int row)
 {
-    return Calligra::Sheets::Util::encodeColumnLabelText(col) + QString::number(row);
+    return Calligra::Sheets::Cell::columnName(col) + QString::number(row);
 }
 
 void XlsxXmlWorksheetReader::saveAnnotation(int col, int row)
@@ -1559,7 +1559,7 @@ KoFilter::ConversionStatus XlsxXmlWorksheetReader::read_f()
         BREAK_IF_END_OF(CURRENT_EL)
         if (isCharacters()) {
             delete cell->formula;
-            cell->formula = new FormulaImpl(Calligra::Sheets::MSOOXML::convertFormula(text().toString()));
+            cell->formula = new FormulaImpl(Calligra::Sheets::Odf::convertMSOOXMLFormula(text().toString()));
         }
     }
 

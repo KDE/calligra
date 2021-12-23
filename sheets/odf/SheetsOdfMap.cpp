@@ -33,6 +33,8 @@
 #include "Validity.h"
 #include "database/DatabaseManager.h"
 
+#include <QHash>
+
 #include <KoCharacterStyle.h>
 #include <KoDocumentResourceManager.h>
 #include <KoGenStyles.h>
@@ -53,6 +55,7 @@ namespace Sheets {
 
 namespace Odf {
     void fixupStyle(KoCharacterStyle* style);
+    QHash<QString, KoXmlElement> preloadValidities(const KoXmlElement& body);
 }
 
 void Odf::fixupStyle(KoCharacterStyle* style)
@@ -761,6 +764,31 @@ AbstractCondition *Odf::loadDatabaseCondition(const KoXmlElement& element) {
 
     return nullptr;
 }
+
+
+
+// static
+QHash<QString, KoXmlElement> Odf::preloadValidities(const KoXmlElement& body)
+{
+    QHash<QString, KoXmlElement> validities;
+    KoXmlNode validation = KoXml::namedItemNS(body, KoXmlNS::table, "content-validations");
+    debugSheets << "validation.isNull?" << validation.isNull();
+    if (!validation.isNull()) {
+        KoXmlElement element;
+        forEachElement(element, validation) {
+            if (element.tagName() ==  "content-validation" && element.namespaceURI() == KoXmlNS::table) {
+                const QString name = element.attributeNS(KoXmlNS::table, "name", QString());
+                validities.insert(name, element);
+                debugSheets << " validation found:" << name;
+            } else {
+                debugSheets << " Tag not recognized:" << element.tagName();
+            }
+        }
+    }
+    return validities;
+}
+
+
 
 
 }  // Sheets

@@ -256,5 +256,6 @@ void Odf::loadValidationCondition(Validity *validity, QString &valExpression, co
 }
 
 
+
 }  // Sheets
 }  // Calligra

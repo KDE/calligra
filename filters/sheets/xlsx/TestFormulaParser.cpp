@@ -75,7 +75,7 @@ void TestFormulaParser::testConvertFormula()
     QFETCH(QString, xlsx);
     QFETCH(QString, odf);
 
-    QCOMPARE(Calligra::Sheets::MSOOXML::convertFormula(xlsx), odf);
+    QCOMPARE(Calligra::Sheets::Odf::convertMSOOXMLFormula(xlsx), odf);
 }
 
 void TestFormulaParser::testSharedFormulaReferences()

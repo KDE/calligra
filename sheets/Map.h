@@ -13,9 +13,12 @@
 #include <QString>
 #include <QStringList>
 
-#include "ProtectableObject.h"
+#include "engine/MapBase.h"
 
-#include "sheets_odf_export.h"
+#include "ProtectableObject.h"
+#include "Region.h"
+
+#include "sheets_export.h"
 
 #include <KoDataCenterBase.h>
 #include <KoXmlReader.h>
@@ -60,7 +63,7 @@ class ValueCalc;
  * The "embedded document".
  * The Map holds all the document data.
  */
-class CALLIGRA_SHEETS_ODF_EXPORT Map : public QObject, public KoDataCenterBase, public ProtectableObject
+class CALLIGRA_SHEETS_ODF_EXPORT Map : public MapBase, public QObject, public KoDataCenterBase, public ProtectableObject
 {
     Q_OBJECT
 public:
@@ -178,16 +181,6 @@ public:
      */
     void setDefaultRowHeight(double height);
 
-    /**
-     * \ingroup NativeFormat
-     */
-    bool loadXML(const KoXmlElement& mymap);
-
-    /**
-     * \ingroup NativeFormat
-     */
-    QDomElement save(QDomDocument& doc);
-
 
     bool loadChildren(KoStore* _store);
 
@@ -267,13 +260,11 @@ public:
     int increaseLoadedRowsCounter(int i = 1);
 
     /**
-     * \ingroup NativeFormat
      * \return true if the document is currently loading.
      */
     bool isLoading() const;
 
     /**
-     * \ingroup NativeFormat
      * \param l whether the document is currently loading
      */
     void setLoading(bool l);
@@ -291,14 +282,12 @@ public:
     void setSyntaxVersion(int version);
 
     /**
-     * \ingroup NativeFormat
      * Creates the loading info, if it does not exist yet.
      * \return the loading info
      */
     LoadingInfo* loadingInfo() const;
 
     /**
-     * \ingroup NativeFormat
      * Deletes the loading info. Called after loading is complete.
      */
     void deleteLoadingInfo();
@@ -313,6 +302,20 @@ public:
      * complete user inputs.
      */
     void addStringCompletion(const QString &string);
+
+    /**
+     * Creates a region consisting of the region defined in @p expression .
+     * @param expression a string representing the region (e.g. "A1:B3")
+     * @param sheet the fallback sheet, if \p expression does not contain one
+     */
+    Region & regionFromName(const QString& expression, Sheet* sheet = 0);
+
+    /**
+     * @param sRegion will be modified, if a valid sheet was found. The sheetname
+     * will be removed
+     * @return sheet named in the @p sRegion or null
+     */
+    Sheet* filterSheetName(QString& sRegion);
 
     /**
      * \ingroup Damages

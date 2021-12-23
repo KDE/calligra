@@ -63,11 +63,6 @@ public:
      */
     bool showPasswordDialog(QWidget* parent, Mode mode, const QString& title);
 
-    /**
-     * \ingroup NativeFormat
-     */
-    void loadXmlProtection(const KoXmlElement& element);
-
 private:
     // disable assignment operator
     void operator=(const ProtectableObject&);

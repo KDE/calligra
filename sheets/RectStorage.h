@@ -18,7 +18,7 @@
 #include <QMutexLocker>
 #endif
 
-#include "sheets_odf_export.h"
+#include "sheets_export.h"
 
 #include "Map.h"
 #include "Region.h"

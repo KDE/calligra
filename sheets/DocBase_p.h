@@ -22,8 +22,6 @@
 
 static const int CURRENT_SYNTAX_VERSION = 1;
 
-typedef QMap<QString, QDomDocument> SavedDocParts;
-
 namespace Calligra {
 namespace Sheets {
 class Map;
@@ -39,7 +37,6 @@ public:
     // document properties
     bool configLoadFromFile       : 1;
     QStringList spellListIgnoreAll;
-    SavedDocParts savedDocParts;
     SheetAccessModel *sheetAccessModel;
     KoDocumentResourceManager *resourceManager;
 };

@@ -70,23 +70,11 @@ public:
     bool completeSaving(KoStore* _store) override;
 
 
-    /**
-     * \ingroup NativeFormat
-     * Main saving method.
-     */
     QDomDocument saveXML() override;
-
-    /**
-     * \ingroup NativeFormat
-     * Main loading method.
-     */
-    bool loadXML(const KoXmlDocument& doc, KoStore *store) override;
 
     int supportedSpecialFormats() const override;
 
     virtual bool loadChildren(KoStore* _store);
-
-    bool docData(QString const & xmlTag, QDomDocument & data);
 
     // reimplemented; paints the thumbnail
     void paintContent(QPainter & painter, const QRect & rect) override;

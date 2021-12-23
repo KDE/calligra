@@ -28,7 +28,7 @@
 #include <QString>
 
 #include "SheetsDebug.h"
-#include "sheets_odf_export.h"
+#include "sheets_engine_export.h"
 
 inline uint qHash(const QPoint& point)
 {
@@ -39,9 +39,9 @@ namespace Calligra
 {
 namespace Sheets
 {
-class Cell;
-class Map;
-class Sheet;
+class CellBase;
+class MapBase;
+class SheetBase;
 
 /**
  * \class Region
@@ -49,7 +49,7 @@ class Sheet;
  * \author Stefan Nikolaus <stefan.nikolaus@kdemail.net>
  * \since 1.5
  */
-class CALLIGRA_SHEETS_ODF_EXPORT Region
+class CALLIGRA_SHEETS_ENGINE_EXPORT Region
 {
 public:
     class Element;
@@ -68,7 +68,7 @@ public:
      * @param point the point's location
      * @param sheet the sheet the point belongs to
      */
-    explicit Region(const QPoint& point, Sheet* sheet = 0);
+    explicit Region(const QPoint& point, SheetBase* sheet = 0);
 
     /**
      * Constructor.
@@ -76,16 +76,7 @@ public:
      * @param range the range's location
      * @param sheet the sheet the range belongs to
      */
-    explicit Region(const QRect& range, Sheet* sheet = 0);
-
-    /**
-     * Constructor.
-     * Creates a region consisting of the region defined in @p expression .
-     * @param expression a string representing the region (e.g. "A1:B3")
-     * @param map used to determine the sheet, if it's named in the string
-     * @param sheet the fallback sheet, if \p expression does not contain one
-     */
-    explicit Region(const QString& expression, const Map* map = 0, Sheet* sheet = 0);
+    explicit Region(const QRect& range, SheetBase* sheet = 0);
 
     /**
      * Copy Constructor.
@@ -101,7 +92,7 @@ public:
      * @param row the row of the point
      * @param sheet the sheet the point belongs to
      */
-    Region(int col, int row, Sheet* sheet = 0);
+    Region(int col, int row, SheetBase* sheet = 0);
 
     /**
      * Constructor.
@@ -112,7 +103,7 @@ public:
      * @param height the height of the range
      * @param sheet the sheet the range belongs to
      */
-    Region(int col, int row, int width, int height, Sheet* sheet = 0);
+    Region(int col, int row, int width, int height, SheetBase* sheet = 0);
 
     /**
      * Destructor.
@@ -129,15 +120,7 @@ public:
      * @param originSheet The name is created relative to this sheet.
      * @return the name of the region (e.g. "A1:A2")
      */
-    QString name(Sheet* originSheet = 0) const;
-
-    /**
-     * @param sRegion will be modified, if a valid sheet was found. The sheetname
-     * will be removed
-     * @return sheet named in the @p sRegion or null
-     */
-    Sheet* filterSheetName(QString& sRegion);
-
+    QString name(SheetBase* originSheet = 0) const;
 
 
     /**
@@ -219,7 +202,7 @@ public:
      * @param sheet the sheet the point belongs to
      * @return @c true, if the region contains the point @p point
      */
-    bool contains(const QPoint& point, Sheet* sheet = 0) const;
+    bool contains(const QPoint& point, SheetBase* sheet = 0) const;
 
 
 
@@ -229,21 +212,21 @@ public:
      * @param point the point's location
      * @param sheet the sheet the point belongs to
      */
-    Element* add(const QPoint& point, Sheet* sheet = 0);
+    Element* add(const QPoint& point, SheetBase* sheet = 0);
 
     /**
      * Adds the range @p range to this region.
      * @param range the range's location
      * @param sheet the sheet the range belongs to
      */
-    Element* add(const QRect& range, Sheet* sheet = 0);
+    Element* add(const QRect& range, SheetBase* sheet = 0);
 
     /**
      * Adds the region @p region to this region.
      * @param region the region to be added
      * @param sheet the fallback sheet used, if an element has no sheet set
      */
-    Element* add(const Region& region, Sheet* sheet = 0);
+    Element* add(const Region& region, SheetBase* sheet = 0);
 
     /* TODO Stefan #3: Improve! */
     /**
@@ -251,14 +234,14 @@ public:
      * @param point the point's location
      * @param sheet the sheet the point belongs to
      */
-    void sub(const QPoint& point, Sheet* sheet);
+    void sub(const QPoint& point, SheetBase* sheet);
 
     /**
      * Subtracts the range @p range from this region.
      * @param range the range's location
      * @param sheet the sheet the range belongs to
      */
-    void sub(const QRect& range, Sheet* sheet);
+    void sub(const QRect& range, SheetBase* sheet);
 
     /**
      * Subtracts the region @p region from this region.
@@ -282,7 +265,7 @@ public:
      * @param point the point's location
      * @param sheet the sheet the point belongs to
      */
-    virtual Element* eor(const QPoint& point, Sheet* sheet = 0);
+    virtual Element* eor(const QPoint& point, SheetBase* sheet = 0);
 
     /**
      * Deletes all elements of the region. The result is an empty region.
@@ -292,8 +275,8 @@ public:
 
     QRect firstRange() const;
     QRect lastRange() const;
-    Sheet* firstSheet() const;
-    Sheet* lastSheet() const;
+    SheetBase* firstSheet() const;
+    SheetBase* lastSheet() const;
 
     QRect boundingRect() const;
 
@@ -320,12 +303,12 @@ public:
     /**
      * @return the map to which this region belongs.
      */
-    const Map* map() const;
+    const MapBase* map() const;
 
     /**
      * Sets the map to which this region belongs.
      */
-    void setMap(const Map*);
+    void setMap(const MapBase*);
 
 
     typedef QList<Element*>::Iterator      Iterator;
@@ -352,7 +335,7 @@ protected:
      * @return the added point, a null pointer, if @p point is not
      * valid or the element containing @p point
      */
-    Element* insert(int index, const QPoint& point, Sheet* sheet, bool multi = true);
+    Element* insert(int index, const QPoint& point, SheetBase* sheet, bool multi = true);
 
     /**
      * @param index the index of the element in whose front the new range
@@ -363,7 +346,7 @@ protected:
      * @return the added range, a null pointer, if @p range is not
      * valid or the element containing @p range
      */
-    Element* insert(int index, const QRect& range, Sheet* sheet, bool multi = true);
+    Element* insert(int index, const QRect& range, SheetBase* sheet, bool multi = true);
 
     /**
      * @internal used to create derived Points
@@ -418,7 +401,7 @@ private:
  * vtable: 4 bytes
  * sum: 8 bytes
  */
-class CALLIGRA_SHEETS_ODF_EXPORT Region::Element
+class CALLIGRA_SHEETS_ENGINE_EXPORT Region::Element
 {
 public:
     enum Type { Undefined, Point, Range };
@@ -449,7 +432,7 @@ public:
         return false;
     }
 
-    virtual QString name(Sheet* = 0) const {
+    virtual QString name(SheetBase* = 0) const {
         return QString("");
     }
     virtual QRect rect() const {
@@ -475,10 +458,10 @@ public:
         return false;
     }
 
-    Sheet* sheet() const {
+    SheetBase* sheet() const {
         return m_sheet;
     }
-    void setSheet(Sheet* sheet) {
+    void setSheet(SheetBase* sheet) {
         m_sheet = sheet;
     }
 
@@ -487,7 +470,7 @@ protected:
         Elaborate, if this pointer could be avoided by QDict or whatever in
         Region.
     */
-    Sheet* m_sheet;
+    SheetBase* m_sheet;
 };
 
 
@@ -505,7 +488,7 @@ protected:
  * m_point: 8 bytes
  * sum: 16 bytes
  */
-class CALLIGRA_SHEETS_ODF_EXPORT Region::Point : public Region::Element
+class CALLIGRA_SHEETS_ENGINE_EXPORT Region::Point : public Region::Element
 {
 public:
     Point() : Element(), m_point() {}
@@ -533,7 +516,7 @@ public:
     bool contains(const QPoint&) const override;
     bool contains(const QRect&) const override;
 
-    QString name(Sheet* originSheet = 0) const override;
+    QString name(SheetBase* originSheet = 0) const override;
 
     QRect rect() const override {
         return QRect(m_point, m_point);
@@ -561,7 +544,7 @@ public:
     QPoint pos() const {
         return m_point;
     }
-    Cell cell() const;
+    CellBase cell() const;
 
     bool operator==(const Point& other) const {
         return ((m_point == other.m_point) && (m_sheet == other.m_sheet));
@@ -588,7 +571,7 @@ private:
  * m_range: 16 bytes
  * sum: 24 bytes
  */
-class CALLIGRA_SHEETS_ODF_EXPORT Region::Range : public Region::Element
+class CALLIGRA_SHEETS_ENGINE_EXPORT Region::Range : public Region::Element
 {
 public:
     Range(const QRect&);
@@ -609,7 +592,7 @@ public:
     bool contains(const QPoint&) const override;
     bool contains(const QRect&) const override;
 
-    QString name(Sheet* originSheet = 0) const override;
+    QString name(SheetBase* originSheet = 0) const override;
 
     QRect rect() const override {
         return m_range;

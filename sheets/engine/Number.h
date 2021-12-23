@@ -5,7 +5,7 @@
 #ifndef CALLIGRA_SHEETS_NUMBER_H
 #define CALLIGRA_SHEETS_NUMBER_H
 
-#include "sheets_odf_export.h"
+#include "sheets_engine_export.h"
 
 // #define CALLIGRA_SHEETS_HIGH_PRECISION_SUPPORT
 
@@ -76,7 +76,7 @@ The class will be able to format itself into a string, using provided locale set
 Out-of-class methods for computations are provided
 */
 
-class CALLIGRA_SHEETS_ODF_EXPORT Number
+class CALLIGRA_SHEETS_ENGINE_EXPORT Number
 {
 public:
     enum Type {
@@ -175,7 +175,7 @@ private:
 
 // conversion to double ... when we add the option to #define the Number class as double, this routine should be kept in place, and it should simply return its parameter
 // usage of this function should eventually be removed, because places that use it are not ready for high precision support
-CALLIGRA_SHEETS_ODF_EXPORT long double numToDouble(Number n);
+CALLIGRA_SHEETS_ENGINE_EXPORT long double numToDouble(Number n);
 
 // external operators, so that we can do things like 4+a without having to create temporary objects
 // not provided for complex numbers, as we won't be using them often like that

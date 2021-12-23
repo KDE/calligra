@@ -6,7 +6,7 @@
 #ifndef CALLIGRA_SHEETS_DAMAGES
 #define CALLIGRA_SHEETS_DAMAGES
 
-#include "sheets_odf_export.h"
+#include "sheets_export.h"
 
 #include <QDebug>
 

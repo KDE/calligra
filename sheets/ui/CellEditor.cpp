@@ -797,7 +797,7 @@ void CellEditor::permuteFixation()
     Map *const map = d->selection->activeSheet()->map();
     QString regionName = token.text();
     // Filter sheet; truncates regionName; range without sheet name resides.
-    Sheet *const sheet = Region(QString(), map).filterSheetName(regionName);
+    Sheet *const sheet = map->filterSheetName(regionName);
     const Region region(regionName, map, 0);
     // TODO Stefan: Skip named areas.
     if (!region.isValid()) {

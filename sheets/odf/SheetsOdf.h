@@ -71,6 +71,32 @@ namespace Odf {
     CALLIGRA_SHEETS_ODF_EXPORT void loadRegion(const QChar *&data, const QChar *&end, QChar *&out);
     CALLIGRA_SHEETS_ODF_EXPORT QString saveRegion(const QString& expression);
     CALLIGRA_SHEETS_ODF_EXPORT QString saveRegion(Region *region);
+
+
+/**
+ * Converts an OpenDocument representation of a formula to a localized formula.
+ * @param expression_ The expression to convert from OpenDocument format.
+ * @param locale The locale to which the expression should be converted.
+ * @param namespacePrefix The namespace prefix.
+ * \note Use Odf::loadRegion() for plain cell references.
+ */
+    CALLIGRA_SHEETS_ODF_EXPORT QString decodeFormula(const QString& expression_, const KLocale *locale = 0, const QString &namespacePrefix = QString());
+
+/**
+ * Converts a localized formula to an OpenDocument representation of a formula.
+ * @param expr The expression to convert to OpenDocument format.
+ * @param locale The locale from which the expression should be converted.
+ * \note Use Odf::saveRegion() for plain cell references.
+ */
+    CALLIGRA_SHEETS_ODF_EXPORT QString encodeFormula(const QString& expr, const KLocale* locale = 0);
+
+    // These are used in filters.
+    CALLIGRA_SHEETS_ODF_EXPORT QString convertRefToRange(const QString & sheet, const QRect & rect);
+    CALLIGRA_SHEETS_ODF_EXPORT QString convertRefToBase(const QString & sheet, const QRect & rect);
+    CALLIGRA_SHEETS_ODF_EXPORT QString convertRangeToRef(const QString & sheetName, const QRect & _area);
+
+    // used in cell loading and filters
+    CALLIGRA_SHEETS_ODF_EXPORT QString convertMSOOXMLFormula(const QString& formula);
 }
 
 }  // namespace Sheets

@@ -61,11 +61,6 @@ public:
     void regionChanged(const Region& region);
     void updateAllNamedAreas();
 
-    /// \ingroup NativeFormat
-    void loadXML(const KoXmlElement& element);
-    /// \ingroup NativeFormat
-    QDomElement saveXML(QDomDocument& doc) const;
-
 public Q_SLOTS:
     /**
      * Adds a named area.

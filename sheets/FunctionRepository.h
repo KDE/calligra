@@ -9,7 +9,7 @@
 #include <QSharedPointer>
 #include <QStringList>
 
-#include "sheets_odf_export.h"
+#include "sheets_export.h"
 
 namespace Calligra
 {

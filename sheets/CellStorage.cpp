@@ -16,9 +16,6 @@
 #include <QWriteLocker>
 #endif
 
-// Calligra
-#include <KoXmlWriter.h>
-
 // Sheets
 #include "BindingStorage.h"
 #include "ConditionsStorage.h"

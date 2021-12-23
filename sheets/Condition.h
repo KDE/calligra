@@ -17,9 +17,7 @@
 
 #include <KoXmlReader.h>
 
-class QDomDocument;
 class QString;
-class KoGenStyle;
 
 namespace Calligra
 {
@@ -119,20 +117,6 @@ public:
      * the conditions matches.
      */
     void setDefaultStyle(const Style& style);
-
-    /**
-     * \ingroup NativeFormat
-     * Takes a parsed DOM element and recreates the conditions structure out of
-     * it
-     */
-    void loadConditions(const KoXmlElement &element, const ValueParser *parser);
-
-    /**
-     * \ingroup NativeFormat
-     * Saves the conditions to a DOM tree structure.
-     * \return the DOM element for the conditions.
-     */
-    QDomElement saveConditions(QDomDocument &doc, ValueConverter *converter) const;
 
     /// \note implementation to make QMap happy (which is needed by RectStorage)
     bool operator<(const Conditions& conditions) const {

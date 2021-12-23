@@ -41,11 +41,6 @@
  */
 
 /**
- * \defgroup NativeFormat Old native file format
- * Classes and methods related to the Sheets's old native file format loading/saving.
- */
-
-/**
  * \defgroup Painting Painting System
  * Classes and methods related to the painting of cells and objects.
  * \ref painting

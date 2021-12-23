@@ -20,7 +20,7 @@
 
 #include <KoDocument.h>
 
-#include "sheets_odf_export.h"
+#include "sheets_common_export.h"
 
 class KoDocumentResourceManager;
 class KoPart;
@@ -35,7 +35,7 @@ class Map;
 class Sheet;
 class SheetAccessModel;
 
-class CALLIGRA_SHEETS_ODF_EXPORT DocBase : public KoDocument
+class CALLIGRA_SHEETS_COMMON_EXPORT DocBase : public KoDocument
 {
     Q_OBJECT
 public:
@@ -104,12 +104,13 @@ public:
      * @see Map::loadOdf
      */
     bool loadOdf(KoOdfReadStore & odfStore) override;
+    bool loadXML(const KoXmlDocument& doc, KoStore *store) override;
+    QDomDocument saveXML() override;
 protected:
     class Private;
     Private * const d;
 
     void paintContent(QPainter & painter, const QRect & rect) override;
-    bool loadXML(const KoXmlDocument& doc, KoStore *store) override;
 
 private:
     Q_DISABLE_COPY(DocBase)

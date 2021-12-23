@@ -12,7 +12,7 @@
 
 #include <KoXmlReader.h>
 
-#include "sheets_odf_export.h"
+#include "sheets_export.h"
 #include "Global.h"
 #include "Style.h"
 
@@ -38,9 +38,6 @@ public:
     ~RowFormat();
 
     void setSheet(Sheet* sheet);
-
-    QDomElement save(QDomDocument&, int yshift = 0) const;
-    bool load(const KoXmlElement& row, int yshift = 0, Paste::Mode mode = Paste::Normal);
 
     /**
      * \return the row's height
@@ -122,9 +119,6 @@ public:
     ~ColumnFormat();
 
     void setSheet(Sheet* sheet);
-
-    QDomElement save(QDomDocument&, int xshift = 0) const;
-    bool load(const KoXmlElement& row, int xshift = 0, Paste::Mode mode = Paste::Normal);
 
     /**
      * \return the column's width

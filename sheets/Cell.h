@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    SPDX-FileCopyrightText: 2010 Marijn Kruisselbrink <mkruisselbrink@kde.org>
    SPDX-FileCopyrightText: 2006-2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
-   SPDX-FileCopyrightText: 2004 Tomas Mecir <mecirt@gmail.com>
+   SPDX-FileCopyrightText: 2004, 2021 Tomas Mecir <mecirt@gmail.com>
    SPDX-FileCopyrightText: 1999-2002, 2004 Laurent Montel <montel@kde.org>
    SPDX-FileCopyrightText: 2002, 2004 Ariya Hidayat <ariya@kde.org>
    SPDX-FileCopyrightText: 2002-2003 Norbert Andres <nandres@web.de>
@@ -26,11 +26,11 @@
 #include <QSharedPointer>
 #include <QTextDocument>
 
+#include "engine/CellBase.h"
+
 #include "Global.h"
 #include "Style.h"
 
-class QDomElement;
-class QDomDocument;
 class QRect;
 class QPoint;
 class QDate;
@@ -56,7 +56,7 @@ class CellTest;
  * storages in CellStorage. It provides methods to alter and retrieve this data
  * and methods related to loading and saving the contents.
  */
-class CALLIGRA_SHEETS_ODF_EXPORT Cell
+class CALLIGRA_SHEETS_ODF_EXPORT Cell : public CellBase
 {
 public:
     /**
@@ -165,12 +165,6 @@ public:
      * of the cell, i.e. with the name of the sheet.
      */
     static QString fullName(const Sheet *s, int col, int row);
-
-    /**
-     * Given the column number, this static function returns the corresponding
-     * column name, i.e. the first column is "A", the second is "B", and so on.
-     */
-    static QString columnName(uint column);
 
     /**
      * \return the output text, e.g. the result of a formula
@@ -306,39 +300,6 @@ public:
      * \see setUserInput, setValue
      */
     void parseUserInput(const QString& text);
-
-    /**
-     * \ingroup NativeFormat
-     */
-    bool load(const KoXmlElement& cell,
-              int _xshift, int _yshift,
-              Paste::Mode pm = Paste::Normal,
-              Paste::Operation op = Paste::OverWrite,
-              bool paste = false);
-
-    /**
-     * \ingroup NativeFormat
-     * Save this cell.
-     * @param doc document to save cell in
-     * @param xOffset x offset
-     * @param yOffset y offset
-     * @param era set this to true if you want to encode relative references as absolutely (they will be switched
-     *            back to relative references during decoding) - is used for cutting to clipboard
-     *            Usually this is false, to only store the properties explicitly set.
-     */
-    QDomElement save(QDomDocument& doc, int xOffset = 0, int yOffset = 0, bool era = false);
-
-    /**
-     * \ingroup NativeFormat
-     * Decodes a string into a time value.
-     */
-    QTime toTime(const KoXmlElement &element);
-
-    /**
-     * \ingroup NativeFormat
-     * Decodes a string into a date value.
-     */
-    QDate toDate(const KoXmlElement &element);
 
     /**
      * Copies the format from \p cell .
@@ -565,16 +526,6 @@ private:
 
     class Private;
     QSharedDataPointer<Private> d;
-
-    /**
-     * \ingroup NativeFormat
-     */
-    bool loadCellData(const KoXmlElement &text, Paste::Operation op, const QString &dataType = QString());
-
-    /**
-     * \ingroup NativeFormat
-     */
-    bool saveCellResult(QDomDocument& doc, QDomElement& result, QString str);
 };
 
 inline uint qHash(const Cell& cell)

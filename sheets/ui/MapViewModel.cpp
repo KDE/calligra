@@ -12,8 +12,6 @@
 
 #include "commands/SheetCommands.h"
 
-#include "interfaces/ReadWriteTableModel.h"
-
 #include <KoCanvasBase.h>
 #include <KoShapeManager.h>
 #include <KoShape.h>

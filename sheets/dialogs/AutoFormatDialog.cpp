@@ -174,7 +174,7 @@ bool AutoFormatDialog::Private::parseXML(const KoXmlDocument& doc)
         if (e.tagName() == "cell") {
             Style style;
             KoXmlElement tmpElement(e.namedItem("format").toElement());
-            if (!style.loadXML(tmpElement))
+            if (!Ksp::loadStyle (&style, tmpElement))
                 return false;
 
             int row = e.attribute("row").toInt();
@@ -188,3 +188,4 @@ bool AutoFormatDialog::Private::parseXML(const KoXmlDocument& doc)
     }
     return true;
 }
+

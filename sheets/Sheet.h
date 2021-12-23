@@ -19,6 +19,8 @@
 #include <KoShapeBasedDocumentBase.h>
 #include <KoShapeUserData.h>
 
+#include "engine/SheetBase.h"
+
 #include "Cell.h"
 #include "Style.h"
 #include "ProtectableObject.h"
@@ -61,7 +63,7 @@ class SheetTest;
 /**
  * A sheet contains several cells.
  */
-class CALLIGRA_SHEETS_ODF_EXPORT Sheet : public KoShapeUserData, public KoShapeBasedDocumentBase,
+class CALLIGRA_SHEETS_ODF_EXPORT Sheet : public SheetBase, public KoShapeUserData, public KoShapeBasedDocumentBase,
         public ProtectableObject
 {
     Q_OBJECT
@@ -300,32 +302,6 @@ public:
 
     //
     //END Methods related to sheet properties
-    //
-    //////////////////////////////////////////////////////////////////////////
-    //
-    //BEGIN Methods related to old KSpread file format
-    //
-
-    /**
-     * \ingroup NativeFormat
-     * Saves the sheet and all it's children in XML format
-     */
-    QDomElement saveXML(QDomDocument&);
-
-    /**
-     * \ingroup NativeFormat
-     * Loads the sheet and all it's children in XML format
-     */
-    bool loadXML(const KoXmlElement&);
-
-    /**
-     * \ingroup NativeFormat
-     * Loads a children
-     */
-    bool loadChildren(KoStore* _store);
-
-    //
-    //END Methods related to old KSpread file format
     //
     //////////////////////////////////////////////////////////////////////////
     //
@@ -806,15 +782,6 @@ protected:
                                     bool isRowFixed);
 
 private:
-    /**
-     * \ingroup NativeFormat
-     */
-    void convertObscuringBorders();
-
-    /**
-     * \ingroup NativeFormat
-     */
-    void checkContentDirection(QString const & name);
 
     // disable assignment operator
     void operator=(const Sheet& other);

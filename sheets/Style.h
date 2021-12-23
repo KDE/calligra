@@ -13,8 +13,6 @@
 #include <QSharedDataPointer>
 #include <QTextCharFormat>
 
-#include <KoXmlReader.h>
-
 #include "Currency.h"
 #include "Format.h"
 #include "Global.h"
@@ -160,10 +158,6 @@ public:
 
     QString parentName() const;
     void setParentName(const QString& name);
-
-
-    bool loadXML(KoXmlElement& format, Paste::Mode pm = Paste::Normal);
-    void saveXML(QDomDocument& doc, QDomElement& format, const StyleManager* styleManager) const;
 
     void clearAttribute(Key key);
     bool hasAttribute(Key key) const;
@@ -331,9 +325,6 @@ public:
 
     void setName(QString const & name);
     QString const & name() const;
-
-    bool loadXML(KoXmlElement const & style, QString const & name);
-    void save(QDomDocument & doc, QDomElement & styles, const StyleManager* styleManager);
 
     //bool operator==(const CustomStyle& other) const;
     //inline bool operator!=(const CustomStyle& other) const {

@@ -7,13 +7,9 @@
 #ifndef CALLIGRA_SHEETS_STYLE_MANAGER
 #define CALLIGRA_SHEETS_STYLE_MANAGER
 
-#include <KoXmlReader.h>
-
-#include "sheets_odf_export.h"
+#include "sheets_export.h"
 #include <Style.h>
 
-class QDomElement;
-class QDomDocument;
 class QStringList;
 
 namespace Calligra
@@ -38,9 +34,6 @@ class CALLIGRA_SHEETS_ODF_EXPORT StyleManager
 public:
     StyleManager();
     ~StyleManager();
-
-    QDomElement save(QDomDocument & doc);
-    bool loadXML(KoXmlElement const & styles);
 
     CustomStyle * defaultStyle() const {
         return m_defaultStyle;

@@ -14,7 +14,7 @@
 #include "Number.h"
 #include "Value.h"
 
-#include "sheets_odf_export.h"
+#include "sheets_export.h"
 
 #ifdef max
 # undef max

@@ -8,8 +8,6 @@
 #include "StyleManager.h"
 
 #include <QBrush>
-#include <QDomDocument>
-#include <QDomElement>
 #include <QPen>
 #include <QStringList>
 
@@ -32,77 +30,6 @@ StyleManager::~StyleManager()
 {
     delete m_defaultStyle;
     qDeleteAll(m_styles);
-}
-
-QDomElement StyleManager::save(QDomDocument & doc)
-{
-    QDomElement styles = doc.createElement("styles");
-
-    m_defaultStyle->save(doc, styles, this);
-
-    CustomStyles::ConstIterator iter = m_styles.constBegin();
-    CustomStyles::ConstIterator end  = m_styles.constEnd();
-
-    while (iter != end) {
-        CustomStyle * styleData = iter.value();
-
-        styleData->save(doc, styles, this);
-
-        ++iter;
-    }
-
-    return styles;
-}
-
-bool StyleManager::loadXML(KoXmlElement const & styles)
-{
-    bool ok = true;
-    KoXmlElement e = styles.firstChild().toElement();
-    while (!e.isNull()) {
-        QString name;
-        if (e.hasAttribute("name"))
-            name = e.attribute("name");
-        Style::StyleType type = (Style::StyleType)(e.attribute("type").toInt(&ok));
-        if (!ok)
-            return false;
-
-        if (name == "Default" && type == Style::BUILTIN) {
-            if (!m_defaultStyle->loadXML(e, name))
-                return false;
-            m_defaultStyle->setType(Style::BUILTIN);
-        } else if (!name.isNull()) {
-            CustomStyle* style = 0;
-            if (e.hasAttribute("parent") && e.attribute("parent") == "Default")
-                style = new CustomStyle(name, m_defaultStyle);
-            else
-                style = new CustomStyle(name);
-
-            if (!style->loadXML(e, name)) {
-                delete style;
-                return false;
-            }
-
-            if (style->type() == Style::AUTO)
-                style->setType(Style::CUSTOM);
-            insertStyle(style);
-            debugSheetsODF << "Style" << name << ":" << style;
-        }
-
-        e = e.nextSibling().toElement();
-    }
-
-    // reparent all styles
-    const QStringList names = styleNames();
-    QStringList::ConstIterator it;
-    for (it = names.begin(); it != names.end(); ++it) {
-        if (*it != "Default") {
-            CustomStyle * styleData = style(*it);
-            if (styleData && !styleData->parentName().isNull() && m_styles.value(styleData->parentName()))
-                styleData->setParentName(m_styles.value(styleData->parentName())->name());
-        }
-    }
-
-    return true;
 }
 
 void StyleManager::resetDefaultStyle()

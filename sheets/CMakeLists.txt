@@ -16,6 +16,9 @@ include_directories( ${CMAKE_SOURCE_DIR}/interfaces
                     ${Boost_INCLUDE_DIR}
                     ${EIGEN3_INCLUDE_DIR} )
 
+add_subdirectory( engine )
+add_subdirectory( core )
+
 # have their own translation domain
 ### TODO: The tableshape needs a rewrite,
 ### it has been obsoleted by the implementation of texttables
@@ -169,6 +172,16 @@ set (odf_DIR_SRCS
     odf/GenValidationStyle.cpp
     )
 
+set (ksp_DIR_SRCS
+    ksp/SheetsKspCell.cpp
+    ksp/SheetsKspConditions.cpp
+    ksp/SheetsKspDoc.cpp
+    ksp/SheetsKspMap.cpp
+    ksp/SheetsKspSheet.cpp
+    ksp/SheetsKspStyle.cpp
+    ksp/SheetsKspValidity.cpp
+)
+
 set (part_DIR_SRCS
     part/CanvasBase.cpp
     part/Canvas.cpp
@@ -252,7 +265,6 @@ set (calligrasheetscommon_LIB_SRCS
 endif()
 
 set (calligrasheetsodf_LIB_SRCS
-    SheetsDebug.cpp
 
     part/Digest.cpp
     ApplicationSettings.cpp
@@ -273,15 +285,12 @@ set (calligrasheetsodf_LIB_SRCS
     Format.cpp
     Formula.cpp
     HeaderFooter.cpp
-    Localization.cpp
     Map.cpp
     NamedAreaManager.cpp
-    Number.cpp
     PrintSettings.cpp
     ProtectableObject.cpp
     RecalcManager.cpp
     RectStorage.cpp
-    Region.cpp
     RowColumnFormat.cpp
     RowFormatStorage.cpp
     RowRepeatStorage.cpp
@@ -292,10 +301,8 @@ set (calligrasheetsodf_LIB_SRCS
     Style.cpp
     StyleManager.cpp
     StyleStorage.cpp
-    Util.cpp
     Validity.cpp
     ValidityStorage.cpp
-    Value.cpp
     ValueCalc.cpp
     ValueConverter.cpp
     ValueFormatter.cpp
@@ -307,6 +314,7 @@ set (calligrasheetsodf_LIB_SRCS
     database/Filter.cpp
 
     ${odf_DIR_SRCS}
+    ${ksp_DIR_SRCS}
 
     # TODO: move the formula evaluation out of Formula.cpp so these files can move out of libcalligrasheetsodf
     Function.cpp
@@ -322,13 +330,11 @@ set (calligrasheetsodf_LIB_SRCS
 
 
 add_library(calligrasheetsodf SHARED ${calligrasheetsodf_LIB_SRCS})
-generate_export_header(calligrasheetsodf
-    EXPORT_FILE_NAME sheets_odf_generated_export.h
-    BASE_NAME CALLIGRA_SHEETS_ODF
-)
 
 target_link_libraries(calligrasheetsodf
     PUBLIC
+        calligrasheetsengine
+        calligrasheetscore
         komain
         KF5::KDELibs4Support
     PRIVATE
@@ -351,6 +357,8 @@ generate_export_header(calligrasheetscommon
 target_link_libraries(calligrasheetscommon
     PUBLIC
         komain
+        calligrasheetsengine
+        calligrasheetscore
         calligrasheetsodf
     PRIVATE
         koplugin
@@ -378,7 +386,12 @@ add_library(calligrasheetspart MODULE ${calligrasheetspart_PART_SRCS})
 
 calligra_part_desktop_to_json(calligrasheetspart sheetspart.desktop)
 
-target_link_libraries(calligrasheetspart calligrasheetscommon )
+target_link_libraries(calligrasheetspart 
+    PUBLIC
+        calligrasheetsengine
+        calligrasheetscore
+        calligrasheetscommon
+)
 
 install(TARGETS calligrasheetspart  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/parts)
 
@@ -400,7 +413,6 @@ install( FILES
     sheets_common_export.h
     ${CMAKE_CURRENT_BINARY_DIR}/sheets_common_generated_export.h
 
-    calligra_sheets_limits.h
 
     Cell.h
     CellStorage.h
@@ -410,19 +422,15 @@ install( FILES
     Format.h
     Global.h
     Map.h
-    Number.h
     odf/OdfLoadingContext.h
     PointStorage.h
     PrintSettings.h
     ProtectableObject.h
     RectStorage.h
-    Region.h
     RowColumnFormat.h
     RowFormatStorage.h
-    RTree.h
     Sheet.h
     Style.h
-    Value.h
     ValueCalc.h
     ValueConverter.h
     ValueStorage.h

@@ -30,34 +30,18 @@
 // Local
 #include "CellTool.h"
 
-#include <QPainter>
-
 #include <KLocalizedString>
 
-#include <KoCanvasBase.h>
 #include <KoCanvasController.h>
-#include <KoPointerEvent.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoViewConverter.h>
 
-#include "SheetsDebug.h"
-#include "Cell.h"
-#include "Canvas.h"
+#include "CanvasBase.h"
 #include "Doc.h"
 #include "calligra_sheets_limits.h"
-#include "PrintSettings.h"
-#include "Sheet.h"
-#include "StyleManager.h"
-#include "Util.h"
-#include "View.h"
 
-#include "commands/AutoFillCommand.h"
 #include "commands/DefinePrintRangeCommand.h"
-
-#include "ui/CellView.h"
-#include "ui/Selection.h"
-#include "ui/SheetView.h"
 
 using namespace Calligra::Sheets;
 

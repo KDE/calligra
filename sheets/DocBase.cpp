@@ -30,6 +30,7 @@
 
 #include "ElapsedTime_p.h"
 #include "odf/SheetsOdf.h"
+#include "ksp/SheetsKsp.h"
 
 #include "part/View.h" // TODO: get rid of this dependency
 
@@ -130,8 +131,13 @@ void DocBase::paintContent(QPainter &, const QRect &)
 {
 }
 
-bool DocBase::loadXML(const KoXmlDocument &, KoStore *)
+bool DocBase::loadXML(const KoXmlDocument &doc, KoStore *)
 {
-    return false;
+    return Ksp::loadDoc (this, doc);
+}
+
+QDomDocument DocBase::saveXML()
+{
+    return Ksp::saveDoc(this);
 }
 

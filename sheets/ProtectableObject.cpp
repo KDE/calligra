@@ -81,12 +81,4 @@ bool ProtectableObject::showPasswordDialog(QWidget* parent, Mode mode, const QSt
     return true;
 }
 
-void ProtectableObject::loadXmlProtection(const KoXmlElement& element)
-{
-    if (element.hasAttribute("protected")) {
-        const QString passwd = element.attribute("protected");
-        QByteArray str(passwd.toUtf8());
-        m_password = KCodecs::base64Decode(str);
-    }
-}
 

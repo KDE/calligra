@@ -35,7 +35,7 @@ class ValueStorage;
  *
  * Value uses implicit data sharing to reduce memory usage.
  */
-class CALLIGRA_SHEETS_ODF_EXPORT Value
+class CALLIGRA_SHEETS_ENGINE_EXPORT Value
 {
 
 public:
@@ -511,14 +511,14 @@ Q_DECLARE_TYPEINFO(Calligra::Sheets::Value, Q_MOVABLE_TYPE);
   QTextStream support
 ****************************************************************************/
 
-CALLIGRA_SHEETS_ODF_EXPORT QTextStream& operator<<(QTextStream& ts, Calligra::Sheets::Value::Type type);
-CALLIGRA_SHEETS_ODF_EXPORT QTextStream& operator<<(QTextStream& ts, Calligra::Sheets::Value value);
+CALLIGRA_SHEETS_ENGINE_EXPORT QTextStream& operator<<(QTextStream& ts, Calligra::Sheets::Value::Type type);
+CALLIGRA_SHEETS_ENGINE_EXPORT QTextStream& operator<<(QTextStream& ts, Calligra::Sheets::Value value);
 
 /***************************************************************************
   QDebug support
 ****************************************************************************/
 
-CALLIGRA_SHEETS_ODF_EXPORT QDebug operator<<(QDebug str, const Calligra::Sheets::Value& v);
+CALLIGRA_SHEETS_ENGINE_EXPORT QDebug operator<<(QDebug str, const Calligra::Sheets::Value& v);
 QDebug operator<<(QDebug stream, const Calligra::Sheets::Value::Format& f);
 
 #endif // CALLIGRA_SHEETS_VALUE_H

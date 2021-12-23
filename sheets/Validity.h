@@ -30,11 +30,10 @@
 #include <QVariant>
 
 // Sheets
-#include "sheets_odf_export.h"
+#include "sheets_export.h"
 #include "Condition.h"
 
 #include "KoXmlReaderForward.h"
-
 namespace Calligra
 {
 namespace Sheets
@@ -99,18 +98,6 @@ public:
      */
     bool testValidity(const Cell* cell) const;
 
-    /**
-     * \ingroup NativeFormat
-     * Loads validity checks.
-     */
-    bool loadXML(Cell* const cell, const KoXmlElement& validityElement);
-
-    /**
-     * \ingroup NativeFormat
-     * Saves validity checks.
-     */
-    QDomElement saveXML(QDomDocument& doc, const ValueConverter *converter) const;
-
     Action action() const;
     bool allowEmptyCell() const;
     Conditional::Type condition() const;
@@ -154,8 +141,6 @@ public:
     inline bool operator!=(const Validity& other) const {
         return !operator==(other);
     }
-
-    static QHash<QString, KoXmlElement> preloadValidities(const KoXmlElement& body);
 
 private:
     class Private;
