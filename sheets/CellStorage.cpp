@@ -7,7 +7,6 @@
 
 // Local
 #include "CellStorage.h"
-#include "CellStorage_p.h"
 
 // Qt
 #ifdef CALLIGRA_SHEETS_MT
@@ -16,21 +15,23 @@
 #include <QWriteLocker>
 #endif
 
-// Sheets
+// Sheets - storages
 #include "BindingStorage.h"
 #include "ConditionsStorage.h"
-#include "Damages.h"
-#include "DependencyManager.h"
 #include "FormulaStorage.h"
-#include "Map.h"
-#include "ModelSupport.h"
-#include "RecalcManager.h"
 #include "RectStorage.h"
 #include "RowRepeatStorage.h"
-#include "Sheet.h"
 #include "StyleStorage.h"
 #include "ValidityStorage.h"
 #include "ValueStorage.h"
+
+// Sheets - rest
+#include "Damages.h"
+#include "DependencyManager.h"
+#include "Map.h"
+#include "ModelSupport.h"
+#include "RecalcManager.h"
+#include "Sheet.h"
 
 // commands
 #include "commands/PointStorageUndoCommand.h"
@@ -67,7 +68,7 @@ public:
             , valueStorage(new ValueStorage())
             , richTextStorage(new RichTextStorage())
             , rowRepeatStorage(new RowRepeatStorage())
-            , undoData(0)
+            , undoEnabled(false)
 #ifdef CALLIGRA_SHEETS_MT
             , bigUglyLock(QReadWriteLock::Recursive)
 #endif
@@ -90,7 +91,7 @@ public:
             , valueStorage(new ValueStorage(*other.valueStorage))
             , richTextStorage(new RichTextStorage(*other.richTextStorage))
             , rowRepeatStorage(new RowRepeatStorage(*other.rowRepeatStorage))
-            , undoData(0)
+            , undoEnabled(false)
 #ifdef CALLIGRA_SHEETS_MT
             , bigUglyLock(QReadWriteLock::Recursive)
 #endif
@@ -132,7 +133,8 @@ public:
     ValueStorage*           valueStorage;
     RichTextStorage*        richTextStorage;
     RowRepeatStorage*       rowRepeatStorage;
-    CellStorageUndoData*    undoData;
+
+    bool undoEnabled;
 
 #ifdef CALLIGRA_SHEETS_MT
     QReadWriteLock bigUglyLock;
@@ -141,75 +143,75 @@ public:
 
 void CellStorage::Private::createCommand(KUndo2Command *parent) const
 {
-    if (!undoData->bindings.isEmpty()) {
+    if (!bindingStorage->undoData().isEmpty()) {
         RectStorageUndoCommand<Binding> *const command
         = new RectStorageUndoCommand<Binding>(sheet->model(), SourceRangeRole, parent);
-        command->add(undoData->bindings);
+        command->add(bindingStorage->undoData());
     }
-    if (!undoData->comments.isEmpty()) {
+    if (!commentStorage->undoData().isEmpty()) {
         RectStorageUndoCommand<QString> *const command
         = new RectStorageUndoCommand<QString>(sheet->model(), CommentRole, parent);
-        command->add(undoData->comments);
+        command->add(commentStorage->undoData());
     }
-    if (!undoData->conditions.isEmpty()) {
+    if (!conditionsStorage->undoData().isEmpty()) {
         RectStorageUndoCommand<Conditions> *const command
         = new RectStorageUndoCommand<Conditions>(sheet->model(), ConditionRole, parent);
-        command->add(undoData->conditions);
+        command->add(conditionsStorage->undoData());
     }
-    if (!undoData->databases.isEmpty()) {
+    if (!databaseStorage->undoData().isEmpty()) {
         RectStorageUndoCommand<Database> *const command
         = new RectStorageUndoCommand<Database>(sheet->model(), TargetRangeRole, parent);
-        command->add(undoData->databases);
+        command->add(databaseStorage->undoData());
     }
-    if (!undoData->formulas.isEmpty()) {
+    if (!formulaStorage->undoData().isEmpty()) {
         PointStorageUndoCommand<Formula> *const command
         = new PointStorageUndoCommand<Formula>(sheet->model(), FormulaRole, parent);
-        command->add(undoData->formulas);
+        command->add(formulaStorage->undoData());
     }
-    if (!undoData->fusions.isEmpty()) {
+    if (!fusionStorage->undoData().isEmpty()) {
         RectStorageUndoCommand<bool> *const command
         = new RectStorageUndoCommand<bool>(sheet->model(), FusionedRangeRole, parent);
-        command->add(undoData->fusions);
+        command->add(fusionStorage->undoData());
     }
-    if (!undoData->links.isEmpty()) {
+    if (!linkStorage->undoData().isEmpty()) {
         PointStorageUndoCommand<QString> *const command
         = new PointStorageUndoCommand<QString>(sheet->model(), LinkRole, parent);
-        command->add(undoData->links);
+        command->add(linkStorage->undoData());
     }
-    if (!undoData->matrices.isEmpty()) {
+    if (!matrixStorage->undoData().isEmpty()) {
         RectStorageUndoCommand<bool> *const command
         = new RectStorageUndoCommand<bool>(sheet->model(), LockedRangeRole, parent);
-        command->add(undoData->matrices);
+        command->add(matrixStorage->undoData());
     }
-    if (!undoData->namedAreas.isEmpty()) {
+    if (!namedAreaStorage->undoData().isEmpty()) {
         RectStorageUndoCommand<QString> *const command
         = new RectStorageUndoCommand<QString>(sheet->model(), NamedAreaRole, parent);
-        command->add(undoData->namedAreas);
+        command->add(namedAreaStorage->undoData());
     }
-    if (!undoData->richTexts.isEmpty()) {
+    if (!richTextStorage->undoData().isEmpty()) {
         PointStorageUndoCommand<QSharedPointer<QTextDocument> > *const command
         = new PointStorageUndoCommand<QSharedPointer<QTextDocument> >(sheet->model(), RichTextRole, parent);
-        command->add(undoData->richTexts);
+        command->add(richTextStorage->undoData());
     }
-    if (!undoData->styles.isEmpty()) {
+    if (!styleStorage->undoData().isEmpty()) {
         StyleStorageUndoCommand *const command
         = new StyleStorageUndoCommand(styleStorage, parent);
-        command->add(undoData->styles);
+        command->add(styleStorage->undoData());
     }
-    if (!undoData->userInputs.isEmpty()) {
+    if (!userInputStorage->undoData().isEmpty()) {
         PointStorageUndoCommand<QString> *const command
         = new PointStorageUndoCommand<QString>(sheet->model(), UserInputRole, parent);
-        command->add(undoData->userInputs);
+        command->add(userInputStorage->undoData());
     }
-    if (!undoData->validities.isEmpty()) {
+    if (!validityStorage->undoData().isEmpty()) {
         RectStorageUndoCommand<Validity> *const command
         = new RectStorageUndoCommand<Validity>(sheet->model(), ValidityRole, parent);
-        command->add(undoData->validities);
+        command->add(validityStorage->undoData());
     }
-    if (!undoData->values.isEmpty()) {
+    if (!valueStorage->undoData().isEmpty()) {
         PointStorageUndoCommand<Value> *const command
         = new PointStorageUndoCommand<Value>(sheet->model(), ValueRole, parent);
-        command->add(undoData->values);
+        command->add(valueStorage->undoData());
     }
 }
 
@@ -248,17 +250,11 @@ void CellStorage::take(int col, int row)
     QWriteLocker(&d->bigUglyLock);
 #endif
 
-    Formula oldFormula;
-    QString oldLink;
-    QString oldUserInput;
-    Value oldValue;
-    QSharedPointer<QTextDocument> oldRichText;
-
-    oldFormula = d->formulaStorage->take(col, row);
-    oldLink = d->linkStorage->take(col, row);
-    oldUserInput = d->userInputStorage->take(col, row);
-    oldValue = d->valueStorage->take(col, row);
-    oldRichText = d->richTextStorage->take(col, row);
+    d->formulaStorage->take(col, row);
+    d->linkStorage->take(col, row);
+    d->userInputStorage->take(col, row);
+    d->valueStorage->take(col, row);
+    d->richTextStorage->take(col, row);
 
     if (!d->sheet->map()->isLoading()) {
         // Trigger a recalculation of the consuming cells.
@@ -273,15 +269,6 @@ void CellStorage::take(int col, int row)
     if (!v.isEmpty())
         d->sheet->map()->addDamage(new CellDamage(Cell(d->sheet, prevCol, row), CellDamage::Appearance));
 
-
-    // recording undo?
-    if (d->undoData) {
-        d->undoData->formulas   << qMakePair(QPoint(col, row), oldFormula);
-        d->undoData->links      << qMakePair(QPoint(col, row), oldLink);
-        d->undoData->userInputs << qMakePair(QPoint(col, row), oldUserInput);
-        d->undoData->values     << qMakePair(QPoint(col, row), oldValue);
-        d->undoData->richTexts  << qMakePair(QPoint(col, row), oldRichText);
-    }
 }
 
 Binding CellStorage::binding(int column, int row) const
@@ -297,10 +284,6 @@ void CellStorage::setBinding(const Region& region, const Binding& binding)
 #ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
-    // recording undo?
-    if (d->undoData)
-        d->undoData->bindings << d->bindingStorage->undoData(region);
-
     d->bindingStorage->insert(region, binding);
 }
 
@@ -309,10 +292,6 @@ void CellStorage::removeBinding(const Region& region, const Binding& binding)
 #ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
-    // recording undo?
-    if (d->undoData) {
-        d->undoData->bindings << d->bindingStorage->undoData(region);
-    }
     d->bindingStorage->remove(region, binding);
 }
 
@@ -329,10 +308,6 @@ void CellStorage::setComment(const Region& region, const QString& comment)
 #ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
-    // recording undo?
-    if (d->undoData)
-        d->undoData->comments << d->commentStorage->undoData(region);
-
     d->commentStorage->insert(region, comment);
     if (!d->sheet->map()->isLoading()) {
         foreach (const QRect& r, region.rects()) {
@@ -355,10 +330,6 @@ void CellStorage::setConditions(const Region& region, Conditions conditions)
 #ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
-    // recording undo?
-    if (d->undoData)
-        d->undoData->conditions << d->conditionsStorage->undoData(region);
-
     d->conditionsStorage->insert(region, conditions);
     if (!d->sheet->map()->isLoading()) {
         foreach (const QRect& r, region.rects()) {
@@ -397,10 +368,6 @@ void CellStorage::setDatabase(const Region& region, const Database& database)
 #ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
-    // recording undo?
-    if (d->undoData)
-        d->undoData->databases << d->databaseStorage->undoData(region);
-
     d->databaseStorage->insert(region, database);
 }
 
@@ -430,15 +397,6 @@ void CellStorage::setFormula(int column, int row, const Formula& formula)
             d->sheet->map()->addDamage(new CellDamage(Cell(d->sheet, column, row), CellDamage::Formula | CellDamage::Value));
             d->rowRepeatStorage->setRowRepeat(row, 1);
         }
-        // recording undo?
-        if (d->undoData) {
-            d->undoData->formulas << qMakePair(QPoint(column, row), old);
-            // Also store the old value, if there wasn't a formula before,
-            // because the new value is calculated later by the damage
-            // processing and is not recorded for undoing.
-            if (old == Formula())
-                d->undoData->values << qMakePair(QPoint(column, row), value(column, row));
-        }
     }
 }
 
@@ -455,15 +413,11 @@ void CellStorage::setLink(int column, int row, const QString& link)
 #ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
-    QString old;
     if (link.isEmpty())
-        old = d->linkStorage->take(column, row);
+        d->linkStorage->take(column, row);
     else
-        old = d->linkStorage->insert(column, row, link);
+        d->linkStorage->insert(column, row, link);
 
-    // recording undo?
-    if (d->undoData && link != old)
-        d->undoData->links << qMakePair(QPoint(column, row), old);
     if (!d->sheet->map()->isLoading())
         d->rowRepeatStorage->setRowRepeat(row, 1);
 }
@@ -494,10 +448,6 @@ void CellStorage::setNamedArea(const Region& region, const QString& namedArea)
 #ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
-    // recording undo?
-    if (d->undoData)
-        d->undoData->namedAreas << d->namedAreaStorage->undoData(region);
-
     d->namedAreaStorage->insert(region, namedArea);
 }
 
@@ -506,10 +456,6 @@ void CellStorage::removeNamedArea(const Region& region, const QString& namedArea
 #ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
-    // recording undo?
-    if (d->undoData)
-        d->undoData->namedAreas << d->namedAreaStorage->undoData(region);
-
     d->namedAreaStorage->remove(region, namedArea);
 }
 
@@ -540,10 +486,6 @@ void CellStorage::setStyle(const Region& region, const Style& style)
 #ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
-    // recording undo?
-    if (d->undoData)
-        d->undoData->styles << d->styleStorage->undoData(region);
-
     d->styleStorage->insert(region, style);
     if (!d->sheet->map()->isLoading()) {
         foreach (const QRect& r, region.rects()) {
@@ -578,15 +520,11 @@ void CellStorage::setUserInput(int column, int row, const QString& userInput)
 #ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
-    QString old;
     if (userInput.isEmpty())
-        old = d->userInputStorage->take(column, row);
+        d->userInputStorage->take(column, row);
     else
-        old = d->userInputStorage->insert(column, row, userInput);
+        d->userInputStorage->insert(column, row, userInput);
 
-    // recording undo?
-    if (d->undoData && userInput != old)
-        d->undoData->userInputs << qMakePair(QPoint(column, row), old);
     if (!d->sheet->map()->isLoading())
         d->rowRepeatStorage->setRowRepeat(row, 1);
 }
@@ -604,15 +542,10 @@ void CellStorage::setRichText(int column, int row, QSharedPointer<QTextDocument>
 #ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
-    QSharedPointer<QTextDocument> old;
     if (text.isNull())
-        old = d->richTextStorage->take(column, row);
+        d->richTextStorage->take(column, row);
     else
-        old = d->richTextStorage->insert(column, row, text);
-
-    // recording undo?
-    if (d->undoData && text != old)
-        d->undoData->richTexts << qMakePair(QPoint(column, row), old);
+        d->richTextStorage->insert(column, row, text);
 }
 
 Validity CellStorage::validity(int column, int row) const
@@ -628,10 +561,6 @@ void CellStorage::setValidity(const Region& region, Validity validity)
 #ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
-    // recording undo?
-    if (d->undoData)
-        d->undoData->validities << d->validityStorage->undoData(region);
-
     d->validityStorage->insert(region, validity);
     if (!d->sheet->map()->isLoading()) {
         foreach (const QRect& r, region.rects()) {
@@ -689,9 +618,6 @@ void CellStorage::setValue(int column, int row, const Value& value)
                 d->sheet->map()->addDamage(new CellDamage(Cell(d->sheet, prevCol, row), CellDamage::Appearance));
             d->rowRepeatStorage->setRowRepeat(row, 1);
         }
-        // recording undo?
-        if (d->undoData)
-            d->undoData->values << qMakePair(QPoint(column, row), old);
     }
 }
 
@@ -896,9 +822,6 @@ void CellStorage::unlockCells(int column, int row)
                 setValue(c, r, Value());
         }
     }
-    // recording undo?
-    if (d->undoData)
-        d->undoData->matrices << pair;
 }
 
 QRect CellStorage::lockedCells(int column, int row) const
@@ -935,37 +858,20 @@ void CellStorage::insertColumns(int position, int number)
     // Trigger an update of the bindings and the named areas.
     d->sheet->map()->addDamage(new CellDamage(d->sheet, invalidRegion, CellDamage::Binding | CellDamage::NamedArea));
 
-    QList< QPair<QRectF, Binding> > bindings = d->bindingStorage->insertColumns(position, number);
-    QList< QPair<QRectF, QString> > comments = d->commentStorage->insertColumns(position, number);
-    QList< QPair<QRectF, Conditions> > conditions = d->conditionsStorage->insertColumns(position, number);
-    QList< QPair<QRectF, Database> > databases = d->databaseStorage->insertColumns(position, number);
-    QVector< QPair<QPoint, Formula> > formulas = d->formulaStorage->insertColumns(position, number);
-    QList< QPair<QRectF, bool> > fusions = d->fusionStorage->insertColumns(position, number);
-    QVector< QPair<QPoint, QString> > links = d->linkStorage->insertColumns(position, number);
-    QList< QPair<QRectF, bool> > matrices = d->matrixStorage->insertColumns(position, number);
-    QList< QPair<QRectF, QString> > namedAreas = d->namedAreaStorage->insertColumns(position, number);
-    QList< QPair<QRectF, SharedSubStyle> > styles = d->styleStorage->insertColumns(position, number);
-    QVector< QPair<QPoint, QString> > userInputs = d->userInputStorage->insertColumns(position, number);
-    QVector< QPair<QPoint, QSharedPointer<QTextDocument> > > richTexts = d->richTextStorage->insertColumns(position, number);
-    QList< QPair<QRectF, Validity> > validities = d->validityStorage->insertColumns(position, number);
-    QVector< QPair<QPoint, Value> > values = d->valueStorage->insertColumns(position, number);
-    // recording undo?
-    if (d->undoData) {
-        d->undoData->bindings   << bindings;
-        d->undoData->comments   << comments;
-        d->undoData->conditions << conditions;
-        d->undoData->databases  << databases;
-        d->undoData->formulas   << formulas;
-        d->undoData->fusions    << fusions;
-        d->undoData->links      << links;
-        d->undoData->matrices   << matrices;
-        d->undoData->namedAreas << namedAreas;
-        d->undoData->styles     << styles;
-        d->undoData->userInputs << userInputs;
-        d->undoData->validities << validities;
-        d->undoData->values     << values;
-        d->undoData->richTexts  << richTexts;
-    }
+    d->bindingStorage->insertColumns(position, number);
+    d->commentStorage->insertColumns(position, number);
+    d->conditionsStorage->insertColumns(position, number);
+    d->databaseStorage->insertColumns(position, number);
+    d->formulaStorage->insertColumns(position, number);
+    d->fusionStorage->insertColumns(position, number);
+    d->linkStorage->insertColumns(position, number);
+    d->matrixStorage->insertColumns(position, number);
+    d->namedAreaStorage->insertColumns(position, number);
+    d->styleStorage->insertColumns(position, number);
+    d->userInputStorage->insertColumns(position, number);
+    d->richTextStorage->insertColumns(position, number);
+    d->validityStorage->insertColumns(position, number);
+    d->valueStorage->insertColumns(position, number);
 
     // Trigger a dependency update of the cells, which have a formula. (new positions)
     subStorage = d->formulaStorage->subStorage(invalidRegion);
@@ -995,37 +901,20 @@ void CellStorage::removeColumns(int position, int number)
     const Region region(QRect(QPoint(position - 1, 1), QPoint(KS_colMax, KS_rowMax)), d->sheet);
     d->sheet->map()->addDamage(new CellDamage(d->sheet, region, CellDamage::Binding | CellDamage::NamedArea));
 
-    QList< QPair<QRectF, Binding> > bindings = d->bindingStorage->removeColumns(position, number);
-    QList< QPair<QRectF, QString> > comments = d->commentStorage->removeColumns(position, number);
-    QList< QPair<QRectF, Conditions> > conditions = d->conditionsStorage->removeColumns(position, number);
-    QList< QPair<QRectF, Database> > databases = d->databaseStorage->removeColumns(position, number);
-    QVector< QPair<QPoint, Formula> > formulas = d->formulaStorage->removeColumns(position, number);
-    QList< QPair<QRectF, bool> > fusions = d->fusionStorage->removeColumns(position, number);
-    QVector< QPair<QPoint, QString> > links = d->linkStorage->removeColumns(position, number);
-    QList< QPair<QRectF, bool> > matrices = d->matrixStorage->removeColumns(position, number);
-    QList< QPair<QRectF, QString> > namedAreas = d->namedAreaStorage->removeColumns(position, number);
-    QList< QPair<QRectF, SharedSubStyle> > styles = d->styleStorage->removeColumns(position, number);
-    QVector< QPair<QPoint, QString> > userInputs = d->userInputStorage->removeColumns(position, number);
-    QList< QPair<QRectF, Validity> > validities = d->validityStorage->removeColumns(position, number);
-    QVector< QPair<QPoint, Value> > values = d->valueStorage->removeColumns(position, number);
-    QVector< QPair<QPoint, QSharedPointer<QTextDocument> > > richTexts = d->richTextStorage->removeColumns(position, number);
-    // recording undo?
-    if (d->undoData) {
-        d->undoData->bindings   << bindings;
-        d->undoData->comments   << comments;
-        d->undoData->conditions << conditions;
-        d->undoData->databases  << databases;
-        d->undoData->formulas   << formulas;
-        d->undoData->fusions    << fusions;
-        d->undoData->links      << links;
-        d->undoData->matrices   << matrices;
-        d->undoData->namedAreas << namedAreas;
-        d->undoData->styles     << styles;
-        d->undoData->userInputs << userInputs;
-        d->undoData->validities << validities;
-        d->undoData->values     << values;
-        d->undoData->richTexts  << richTexts;
-    }
+    d->bindingStorage->removeColumns(position, number);
+    d->commentStorage->removeColumns(position, number);
+    d->conditionsStorage->removeColumns(position, number);
+    d->databaseStorage->removeColumns(position, number);
+    d->formulaStorage->removeColumns(position, number);
+    d->fusionStorage->removeColumns(position, number);
+    d->linkStorage->removeColumns(position, number);
+    d->matrixStorage->removeColumns(position, number);
+    d->namedAreaStorage->removeColumns(position, number);
+    d->styleStorage->removeColumns(position, number);
+    d->userInputStorage->removeColumns(position, number);
+    d->validityStorage->removeColumns(position, number);
+    d->valueStorage->removeColumns(position, number);
+    d->richTextStorage->removeColumns(position, number);
 
     // Trigger a dependency update of the cells, which have a formula. (new positions)
     subStorage = d->formulaStorage->subStorage(invalidRegion);
@@ -1054,37 +943,20 @@ void CellStorage::insertRows(int position, int number)
     // Trigger an update of the bindings and the named areas.
     d->sheet->map()->addDamage(new CellDamage(d->sheet, invalidRegion, CellDamage::Binding | CellDamage::NamedArea));
 
-    QList< QPair<QRectF, Binding> > bindings = d->bindingStorage->insertRows(position, number);
-    QList< QPair<QRectF, QString> > comments = d->commentStorage->insertRows(position, number);
-    QList< QPair<QRectF, Conditions> > conditions = d->conditionsStorage->insertRows(position, number);
-    QList< QPair<QRectF, Database> > databases = d->databaseStorage->insertRows(position, number);
-    QVector< QPair<QPoint, Formula> > formulas = d->formulaStorage->insertRows(position, number);
-    QList< QPair<QRectF, bool> > fusions = d->fusionStorage->insertRows(position, number);
-    QVector< QPair<QPoint, QString> > links = d->linkStorage->insertRows(position, number);
-    QList< QPair<QRectF, bool> > matrices = d->matrixStorage->insertRows(position, number);
-    QList< QPair<QRectF, QString> > namedAreas = d->namedAreaStorage->insertRows(position, number);
-    QList< QPair<QRectF, SharedSubStyle> > styles = d->styleStorage->insertRows(position, number);
-    QVector< QPair<QPoint, QString> > userInputs = d->userInputStorage->insertRows(position, number);
-    QList< QPair<QRectF, Validity> > validities = d->validityStorage->insertRows(position, number);
-    QVector< QPair<QPoint, Value> > values = d->valueStorage->insertRows(position, number);
-    QVector< QPair<QPoint, QSharedPointer<QTextDocument> > > richTexts = d->richTextStorage->insertRows(position, number);
-    // recording undo?
-    if (d->undoData) {
-        d->undoData->bindings   << bindings;
-        d->undoData->comments   << comments;
-        d->undoData->conditions << conditions;
-        d->undoData->databases  << databases;
-        d->undoData->formulas   << formulas;
-        d->undoData->fusions    << fusions;
-        d->undoData->links      << links;
-        d->undoData->matrices   << matrices;
-        d->undoData->namedAreas << namedAreas;
-        d->undoData->styles     << styles;
-        d->undoData->userInputs << userInputs;
-        d->undoData->validities << validities;
-        d->undoData->values     << values;
-        d->undoData->richTexts  << richTexts;
-    }
+    d->bindingStorage->insertRows(position, number);
+    d->commentStorage->insertRows(position, number);
+    d->conditionsStorage->insertRows(position, number);
+    d->databaseStorage->insertRows(position, number);
+    d->formulaStorage->insertRows(position, number);
+    d->fusionStorage->insertRows(position, number);
+    d->linkStorage->insertRows(position, number);
+    d->matrixStorage->insertRows(position, number);
+    d->namedAreaStorage->insertRows(position, number);
+    d->styleStorage->insertRows(position, number);
+    d->userInputStorage->insertRows(position, number);
+    d->validityStorage->insertRows(position, number);
+    d->valueStorage->insertRows(position, number);
+    d->richTextStorage->insertRows(position, number);
 
     // Trigger a dependency update of the cells, which have a formula. (new positions)
     subStorage = d->formulaStorage->subStorage(invalidRegion);
@@ -1116,37 +988,20 @@ void CellStorage::removeRows(int position, int number)
     const Region region(QRect(QPoint(1, position - 1), QPoint(KS_colMax, KS_rowMax)), d->sheet);
     d->sheet->map()->addDamage(new CellDamage(d->sheet, region, CellDamage::Binding | CellDamage::NamedArea));
 
-    QList< QPair<QRectF, Binding> > bindings = d->bindingStorage->removeRows(position, number);
-    QList< QPair<QRectF, QString> > comments = d->commentStorage->removeRows(position, number);
-    QList< QPair<QRectF, Conditions> > conditions = d->conditionsStorage->removeRows(position, number);
-    QList< QPair<QRectF, Database> > databases = d->databaseStorage->removeRows(position, number);
-    QVector< QPair<QPoint, Formula> > formulas = d->formulaStorage->removeRows(position, number);
-    QList< QPair<QRectF, bool> > fusions = d->fusionStorage->removeRows(position, number);
-    QVector< QPair<QPoint, QString> > links = d->linkStorage->removeRows(position, number);
-    QList< QPair<QRectF, bool> > matrices = d->matrixStorage->removeRows(position, number);
-    QList< QPair<QRectF, QString> > namedAreas = d->namedAreaStorage->removeRows(position, number);
-    QList< QPair<QRectF, SharedSubStyle> > styles = d->styleStorage->removeRows(position, number);
-    QVector< QPair<QPoint, QString> > userInputs = d->userInputStorage->removeRows(position, number);
-    QList< QPair<QRectF, Validity> > validities = d->validityStorage->removeRows(position, number);
-    QVector< QPair<QPoint, Value> > values = d->valueStorage->removeRows(position, number);
-    QVector< QPair<QPoint, QSharedPointer<QTextDocument> > > richTexts = d->richTextStorage->removeRows(position, number);
-    // recording undo?
-    if (d->undoData) {
-        d->undoData->bindings   << bindings;
-        d->undoData->comments   << comments;
-        d->undoData->conditions << conditions;
-        d->undoData->databases  << databases;
-        d->undoData->formulas   << formulas;
-        d->undoData->fusions    << fusions;
-        d->undoData->links      << links;
-        d->undoData->matrices   << matrices;
-        d->undoData->namedAreas << namedAreas;
-        d->undoData->styles     << styles;
-        d->undoData->userInputs << userInputs;
-        d->undoData->validities << validities;
-        d->undoData->values     << values;
-        d->undoData->richTexts  << richTexts;
-    }
+    d->bindingStorage->removeRows(position, number);
+    d->commentStorage->removeRows(position, number);
+    d->conditionsStorage->removeRows(position, number);
+    d->databaseStorage->removeRows(position, number);
+    d->formulaStorage->removeRows(position, number);
+    d->fusionStorage->removeRows(position, number);
+    d->linkStorage->removeRows(position, number);
+    d->matrixStorage->removeRows(position, number);
+    d->namedAreaStorage->removeRows(position, number);
+    d->styleStorage->removeRows(position, number);
+    d->userInputStorage->removeRows(position, number);
+    d->validityStorage->removeRows(position, number);
+    d->valueStorage->removeRows(position, number);
+    d->richTextStorage->removeRows(position, number);
 
     // Trigger a dependency update of the cells, which have a formula. (new positions)
     subStorage = d->formulaStorage->subStorage(invalidRegion);
@@ -1178,37 +1033,20 @@ void CellStorage::removeShiftLeft(const QRect& rect)
     const Region region(QRect(rect.topLeft() - QPoint(1, 0), QPoint(KS_colMax, rect.bottom())), d->sheet);
     d->sheet->map()->addDamage(new CellDamage(d->sheet, region, CellDamage::Binding | CellDamage::NamedArea));
 
-    QList< QPair<QRectF, Binding> > bindings = d->bindingStorage->removeShiftLeft(rect);
-    QList< QPair<QRectF, QString> > comments = d->commentStorage->removeShiftLeft(rect);
-    QList< QPair<QRectF, Conditions> > conditions = d->conditionsStorage->removeShiftLeft(rect);
-    QList< QPair<QRectF, Database> > databases = d->databaseStorage->removeShiftLeft(rect);
-    QVector< QPair<QPoint, Formula> > formulas = d->formulaStorage->removeShiftLeft(rect);
-    QList< QPair<QRectF, bool> > fusions = d->fusionStorage->removeShiftLeft(rect);
-    QVector< QPair<QPoint, QString> > links = d->linkStorage->removeShiftLeft(rect);
-    QList< QPair<QRectF, bool> > matrices = d->matrixStorage->removeShiftLeft(rect);
-    QList< QPair<QRectF, QString> > namedAreas = d->namedAreaStorage->removeShiftLeft(rect);
-    QList< QPair<QRectF, SharedSubStyle> > styles = d->styleStorage->removeShiftLeft(rect);
-    QVector< QPair<QPoint, QString> > userInputs = d->userInputStorage->removeShiftLeft(rect);
-    QList< QPair<QRectF, Validity> > validities = d->validityStorage->removeShiftLeft(rect);
-    QVector< QPair<QPoint, Value> > values = d->valueStorage->removeShiftLeft(rect);
-    QVector< QPair<QPoint, QSharedPointer<QTextDocument> > > richTexts = d->richTextStorage->removeShiftLeft(rect);
-    // recording undo?
-    if (d->undoData) {
-        d->undoData->bindings   << bindings;
-        d->undoData->comments   << comments;
-        d->undoData->conditions << conditions;
-        d->undoData->databases  << databases;
-        d->undoData->formulas   << formulas;
-        d->undoData->fusions    << fusions;
-        d->undoData->links      << links;
-        d->undoData->matrices   << matrices;
-        d->undoData->namedAreas << namedAreas;
-        d->undoData->styles     << styles;
-        d->undoData->userInputs << userInputs;
-        d->undoData->validities << validities;
-        d->undoData->values     << values;
-        d->undoData->richTexts  << richTexts;
-    }
+    d->bindingStorage->removeShiftLeft(rect);
+    d->commentStorage->removeShiftLeft(rect);
+    d->conditionsStorage->removeShiftLeft(rect);
+    d->databaseStorage->removeShiftLeft(rect);
+    d->formulaStorage->removeShiftLeft(rect);
+    d->fusionStorage->removeShiftLeft(rect);
+    d->linkStorage->removeShiftLeft(rect);
+    d->matrixStorage->removeShiftLeft(rect);
+    d->namedAreaStorage->removeShiftLeft(rect);
+    d->styleStorage->removeShiftLeft(rect);
+    d->userInputStorage->removeShiftLeft(rect);
+    d->validityStorage->removeShiftLeft(rect);
+    d->valueStorage->removeShiftLeft(rect);
+    d->richTextStorage->removeShiftLeft(rect);
 
     // Trigger a dependency update of the cells, which have a formula. (new positions)
     subStorage = d->formulaStorage->subStorage(invalidRegion);
@@ -1239,37 +1077,20 @@ void CellStorage::insertShiftRight(const QRect& rect)
     // Trigger an update of the bindings and the named areas.
     d->sheet->map()->addDamage(new CellDamage(d->sheet, invalidRegion, CellDamage::Binding | CellDamage::NamedArea));
 
-    QList< QPair<QRectF, Binding> > bindings = d->bindingStorage->insertShiftRight(rect);
-    QList< QPair<QRectF, QString> > comments = d->commentStorage->insertShiftRight(rect);
-    QList< QPair<QRectF, Conditions> > conditions = d->conditionsStorage->insertShiftRight(rect);
-    QList< QPair<QRectF, Database> > databases = d->databaseStorage->insertShiftRight(rect);
-    QVector< QPair<QPoint, Formula> > formulas = d->formulaStorage->insertShiftRight(rect);
-    QList< QPair<QRectF, bool> > fusions = d->fusionStorage->insertShiftRight(rect);
-    QVector< QPair<QPoint, QString> > links = d->linkStorage->insertShiftRight(rect);
-    QList< QPair<QRectF, bool> > matrices = d->matrixStorage->insertShiftRight(rect);
-    QList< QPair<QRectF, QString> > namedAreas = d->namedAreaStorage->insertShiftRight(rect);
-    QList< QPair<QRectF, SharedSubStyle> > styles = d->styleStorage->insertShiftRight(rect);
-    QVector< QPair<QPoint, QString> > userInputs = d->userInputStorage->insertShiftRight(rect);
-    QList< QPair<QRectF, Validity> > validities = d->validityStorage->insertShiftRight(rect);
-    QVector< QPair<QPoint, Value> > values = d->valueStorage->insertShiftRight(rect);
-    QVector< QPair<QPoint, QSharedPointer<QTextDocument> > > richTexts = d->richTextStorage->insertShiftRight(rect);
-    // recording undo?
-    if (d->undoData) {
-        d->undoData->bindings   << bindings;
-        d->undoData->comments   << comments;
-        d->undoData->conditions << conditions;
-        d->undoData->databases  << databases;
-        d->undoData->formulas   << formulas;
-        d->undoData->fusions    << fusions;
-        d->undoData->links      << links;
-        d->undoData->matrices   << matrices;
-        d->undoData->namedAreas << namedAreas;
-        d->undoData->styles     << styles;
-        d->undoData->userInputs << userInputs;
-        d->undoData->validities << validities;
-        d->undoData->values     << values;
-        d->undoData->richTexts  << richTexts;
-    }
+    d->bindingStorage->insertShiftRight(rect);
+    d->commentStorage->insertShiftRight(rect);
+    d->conditionsStorage->insertShiftRight(rect);
+    d->databaseStorage->insertShiftRight(rect);
+    d->formulaStorage->insertShiftRight(rect);
+    d->fusionStorage->insertShiftRight(rect);
+    d->linkStorage->insertShiftRight(rect);
+    d->matrixStorage->insertShiftRight(rect);
+    d->namedAreaStorage->insertShiftRight(rect);
+    d->styleStorage->insertShiftRight(rect);
+    d->userInputStorage->insertShiftRight(rect);
+    d->validityStorage->insertShiftRight(rect);
+    d->valueStorage->insertShiftRight(rect);
+    d->richTextStorage->insertShiftRight(rect);
 
     // Trigger a dependency update of the cells, which have a formula. (new positions)
     subStorage = d->formulaStorage->subStorage(invalidRegion);
@@ -1301,37 +1122,20 @@ void CellStorage::removeShiftUp(const QRect& rect)
     const Region region(QRect(rect.topLeft() - QPoint(0, 1), QPoint(rect.right(), KS_rowMax)), d->sheet);
     d->sheet->map()->addDamage(new CellDamage(d->sheet, region, CellDamage::Binding | CellDamage::NamedArea));
 
-    QList< QPair<QRectF, Binding> > bindings = d->bindingStorage->removeShiftUp(rect);
-    QList< QPair<QRectF, QString> > comments = d->commentStorage->removeShiftUp(rect);
-    QList< QPair<QRectF, Conditions> > conditions = d->conditionsStorage->removeShiftUp(rect);
-    QList< QPair<QRectF, Database> > databases = d->databaseStorage->removeShiftUp(rect);
-    QVector< QPair<QPoint, Formula> > formulas = d->formulaStorage->removeShiftUp(rect);
-    QList< QPair<QRectF, bool> > fusions = d->fusionStorage->removeShiftUp(rect);
-    QVector< QPair<QPoint, QString> > links = d->linkStorage->removeShiftUp(rect);
-    QList< QPair<QRectF, bool> > matrices = d->matrixStorage->removeShiftUp(rect);
-    QList< QPair<QRectF, QString> > namedAreas = d->namedAreaStorage->removeShiftUp(rect);
-    QList< QPair<QRectF, SharedSubStyle> > styles = d->styleStorage->removeShiftUp(rect);
-    QVector< QPair<QPoint, QString> > userInputs = d->userInputStorage->removeShiftUp(rect);
-    QList< QPair<QRectF, Validity> > validities = d->validityStorage->removeShiftUp(rect);
-    QVector< QPair<QPoint, Value> > values = d->valueStorage->removeShiftUp(rect);
-    QVector< QPair<QPoint, QSharedPointer<QTextDocument> > > richTexts = d->richTextStorage->removeShiftUp(rect);
-    // recording undo?
-    if (d->undoData) {
-        d->undoData->bindings   << bindings;
-        d->undoData->comments   << comments;
-        d->undoData->conditions << conditions;
-        d->undoData->databases  << databases;
-        d->undoData->formulas   << formulas;
-        d->undoData->fusions    << fusions;
-        d->undoData->links      << links;
-        d->undoData->matrices   << matrices;
-        d->undoData->namedAreas << namedAreas;
-        d->undoData->styles     << styles;
-        d->undoData->userInputs << userInputs;
-        d->undoData->validities << validities;
-        d->undoData->values     << values;
-        d->undoData->richTexts  << richTexts;
-    }
+    d->bindingStorage->removeShiftUp(rect);
+    d->commentStorage->removeShiftUp(rect);
+    d->conditionsStorage->removeShiftUp(rect);
+    d->databaseStorage->removeShiftUp(rect);
+    d->formulaStorage->removeShiftUp(rect);
+    d->fusionStorage->removeShiftUp(rect);
+    d->linkStorage->removeShiftUp(rect);
+    d->matrixStorage->removeShiftUp(rect);
+    d->namedAreaStorage->removeShiftUp(rect);
+    d->styleStorage->removeShiftUp(rect);
+    d->userInputStorage->removeShiftUp(rect);
+    d->validityStorage->removeShiftUp(rect);
+    d->valueStorage->removeShiftUp(rect);
+    d->richTextStorage->removeShiftUp(rect);
 
     // Trigger a dependency update of the cells, which have a formula. (new positions)
     subStorage = d->formulaStorage->subStorage(invalidRegion);
@@ -1362,37 +1166,20 @@ void CellStorage::insertShiftDown(const QRect& rect)
     // Trigger an update of the bindings and the named areas.
     d->sheet->map()->addDamage(new CellDamage(d->sheet, invalidRegion, CellDamage::Binding | CellDamage::NamedArea));
 
-    QList< QPair<QRectF, Binding> > bindings = d->bindingStorage->insertShiftDown(rect);
-    QList< QPair<QRectF, QString> > comments = d->commentStorage->insertShiftDown(rect);
-    QList< QPair<QRectF, Conditions> > conditions = d->conditionsStorage->insertShiftDown(rect);
-    QList< QPair<QRectF, Database> > databases = d->databaseStorage->insertShiftDown(rect);
-    QVector< QPair<QPoint, Formula> > formulas = d->formulaStorage->insertShiftDown(rect);
-    QList< QPair<QRectF, bool> > fusions = d->fusionStorage->insertShiftDown(rect);
-    QVector< QPair<QPoint, QString> > links = d->linkStorage->insertShiftDown(rect);
-    QList< QPair<QRectF, bool> > matrices = d->matrixStorage->insertShiftDown(rect);
-    QList< QPair<QRectF, QString> > namedAreas = d->namedAreaStorage->insertShiftDown(rect);
-    QList< QPair<QRectF, SharedSubStyle> > styles = d->styleStorage->insertShiftDown(rect);
-    QVector< QPair<QPoint, QString> > userInputs = d->userInputStorage->insertShiftDown(rect);
-    QList< QPair<QRectF, Validity> > validities = d->validityStorage->insertShiftDown(rect);
-    QVector< QPair<QPoint, Value> > values = d->valueStorage->insertShiftDown(rect);
-    QVector< QPair<QPoint, QSharedPointer<QTextDocument> > > richTexts = d->richTextStorage->insertShiftDown(rect);
-    // recording undo?
-    if (d->undoData) {
-        d->undoData->bindings   << bindings;
-        d->undoData->comments   << comments;
-        d->undoData->conditions << conditions;
-        d->undoData->databases  << databases;
-        d->undoData->formulas   << formulas;
-        d->undoData->fusions    << fusions;
-        d->undoData->links      << links;
-        d->undoData->matrices   << matrices;
-        d->undoData->namedAreas << namedAreas;
-        d->undoData->styles     << styles;
-        d->undoData->userInputs << userInputs;
-        d->undoData->validities << validities;
-        d->undoData->values     << values;
-        d->undoData->richTexts  << richTexts;
-    }
+    d->bindingStorage->insertShiftDown(rect);
+    d->commentStorage->insertShiftDown(rect);
+    d->conditionsStorage->insertShiftDown(rect);
+    d->databaseStorage->insertShiftDown(rect);
+    d->formulaStorage->insertShiftDown(rect);
+    d->fusionStorage->insertShiftDown(rect);
+    d->linkStorage->insertShiftDown(rect);
+    d->matrixStorage->insertShiftDown(rect);
+    d->namedAreaStorage->insertShiftDown(rect);
+    d->styleStorage->insertShiftDown(rect);
+    d->userInputStorage->insertShiftDown(rect);
+    d->validityStorage->insertShiftDown(rect);
+    d->valueStorage->insertShiftDown(rect);
+    d->richTextStorage->insertShiftDown(rect);
 
     // Trigger a dependency update of the cells, which have a formula. (new positions)
     subStorage = d->formulaStorage->subStorage(invalidRegion);
@@ -1665,10 +1452,26 @@ void CellStorage::startUndoRecording()
 #ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
-    // If undoData is not null, the recording wasn't stopped.
+    // If undo is set, the recording wasn't stopped.
     // Should not happen, hence this assertion.
-    Q_ASSERT(d->undoData == 0);
-    d->undoData = new CellStorageUndoData();
+    Q_ASSERT(e->undoEnabled == false);
+
+    d->bindingStorage->storeUndo(true);
+    d->commentStorage->storeUndo(true);
+    d->conditionsStorage->storeUndo(true);
+    d->databaseStorage->storeUndo(true);
+    d->formulaStorage->storeUndo(true);
+    d->fusionStorage->storeUndo(true);
+    d->linkStorage->storeUndo(true);
+    d->matrixStorage->storeUndo(true);
+    d->namedAreaStorage->storeUndo(true);
+    d->styleStorage->storeUndo(true);
+    d->userInputStorage->storeUndo(true);
+    d->validityStorage->storeUndo(true);
+    d->valueStorage->storeUndo(true);
+    d->richTextStorage->storeUndo(true);
+
+    d->undoEnabled = true;
 }
 
 void CellStorage::stopUndoRecording(KUndo2Command *parent)
@@ -1678,14 +1481,30 @@ void CellStorage::stopUndoRecording(KUndo2Command *parent)
 #endif
     // If undoData is null, the recording wasn't started.
     // Should not happen, hence this assertion.
-    Q_ASSERT(d->undoData != 0);
+    Q_ASSERT(d->undoEnabled != 0);
     // append sub-commands to the parent command
-    d->createCommand(parent); // needs d->undoData
+    d->createCommand(parent);
+    // TODO ... what to do about this?
     for (int i = 0; i < d->undoData->namedAreas.count(); ++i) {
         emit namedAreaRemoved(d->undoData->namedAreas[i].second);
     }
-    delete d->undoData;
-    d->undoData = 0;
+
+    d->bindingStorage->resetUndo();
+    d->commentStorage->resetUndo();
+    d->conditionsStorage->resetUndo();
+    d->databaseStorage->resetUndo();
+    d->formulaStorage->resetUndo();
+    d->fusionStorage->resetUndo();
+    d->linkStorage->resetUndo();
+    d->matrixStorage->resetUndo();
+    d->namedAreaStorage->resetUndo();
+    d->styleStorage->resetUndo();
+    d->userInputStorage->resetUndo();
+    d->validityStorage->resetUndo();
+    d->valueStorage->resetUndo();
+    d->richTextStorage->resetUndo();
+
+    d->undoEnabled = true;
 }
 
 void CellStorage::loadConditions(const QList<QPair<QRegion, Conditions> >& conditions)

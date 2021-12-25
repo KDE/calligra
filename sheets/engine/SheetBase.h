@@ -11,9 +11,9 @@
 
 
 
-
 #include "sheets_engine_export.h"
 
+#include <QString>
 
 
 namespace Calligra
@@ -21,22 +21,55 @@ namespace Calligra
 namespace Sheets
 {
 
+class MapBase;
 
 class CALLIGRA_SHEETS_ENGINE_EXPORT SheetBase
 {
 public:
-    explicit SheetBase();
+    /**
+     * Creates a sheet in \p map with the name \p sheetName.
+     */
+    SheetBase(MapBase* map, const QString& sheetName);
 
-    ~SheetBase();
+    /**
+     * Copy constructor.
+     * Creates a sheet with the contents and the settings of \p other.
+     */
+    SheetBase(const SheetBase& other);
 
+    virtual ~SheetBase();
+
+
+    /**
+     * \return the map this sheet belongs to.
+     */
+    MapBase* map() const;
+
+
+    /**
+     * \return the name of this sheet
+     */
+    QString sheetName() const;
+
+    /**
+     * Renames a sheet. This will automatically adapt all formulas
+     * in all sheets and all cells to reflect the new name.
+     *
+     * @param name The new sheet name.
+     *
+     * @return @c true if the sheet was renamed successfully
+     * @return @c false if the sheet could not be renamed. Usually the reason is
+     * that this name is already used.
+     *
+     * @see sheetName
+     */
+    virtual bool setSheetName(const QString& name);
 
 
 
 
 
 private:
-    // disable copying
-    SheetBase(const SheetBase &) = delete;
     SheetBase &operator=(const SheetBase &) = delete;
 
     class Private;

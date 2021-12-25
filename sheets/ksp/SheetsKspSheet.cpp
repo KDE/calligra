@@ -93,7 +93,7 @@ bool Ksp::loadSheet(Sheet *obj, const KoXmlElement& sheet)
 
         debugSheets << "Sheet::loadXML: table name =" << sname;
         obj->setObjectName(sname);
-        obj->setSheetName(sname, true);
+        obj->setSheetName(sname);
     }
 
 //     (dynamic_cast<SheetIface*>(obj->dcopObject()))->sheetNameHasChanged();

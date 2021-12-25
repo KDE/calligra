@@ -8,8 +8,8 @@
 
 #include <QPoint>
 
-#include "Cell.h"
-#include "Sheet.h"
+#include "CellBase.h"
+#include "SheetBase.h"
 #include "Region.h"
 
 using namespace Calligra::Sheets;
@@ -17,21 +17,21 @@ using namespace Calligra::Sheets;
 class Q_DECL_HIDDEN WorkbookDamage::Private
 {
 public:
-    Calligra::Sheets::Map* map;
+    Calligra::Sheets::MapBase *map;
     Changes changes;
 };
 
 class Q_DECL_HIDDEN SheetDamage::Private
 {
 public:
-    Calligra::Sheets::Sheet* sheet;
+    Calligra::Sheets::SheetBase *sheet;
     Changes changes;
 };
 
 class Q_DECL_HIDDEN CellDamage::Private
 {
 public:
-    Calligra::Sheets::Sheet* sheet;
+    Calligra::Sheets::SheetBase *sheet;
     Region region;
     Changes changes;
 };
@@ -42,7 +42,7 @@ public:
     Region region;
 };
 
-CellDamage::CellDamage(const Calligra::Sheets::Cell& cell, Changes changes)
+CellDamage::CellDamage(const Calligra::Sheets::CellBase &cell, Changes changes)
         : d(new Private)
 {
     d->sheet = cell.sheet();
@@ -51,7 +51,7 @@ CellDamage::CellDamage(const Calligra::Sheets::Cell& cell, Changes changes)
     d->changes = changes;
 }
 
-CellDamage::CellDamage(Calligra::Sheets::Sheet* sheet, const Region& region, Changes changes)
+CellDamage::CellDamage(Calligra::Sheets::SheetBase *sheet, const Region& region, Changes changes)
         : d(new Private)
 {
     d->sheet = sheet;
@@ -64,7 +64,7 @@ CellDamage::~CellDamage()
     delete d;
 }
 
-Sheet* CellDamage::sheet() const
+SheetBase *CellDamage::sheet() const
 {
     return d->sheet;
 }
@@ -80,7 +80,7 @@ CellDamage::Changes CellDamage::changes() const
 }
 
 
-SheetDamage::SheetDamage(Calligra::Sheets::Sheet* sheet, Changes changes)
+SheetDamage::SheetDamage(Calligra::Sheets::SheetBase *sheet, Changes changes)
         : d(new Private)
 {
     d->sheet = sheet;
@@ -92,7 +92,7 @@ SheetDamage::~SheetDamage()
     delete d;
 }
 
-Sheet* SheetDamage::sheet() const
+SheetBase *SheetDamage::sheet() const
 {
     return d->sheet;
 }
@@ -103,7 +103,7 @@ SheetDamage::Changes SheetDamage::changes() const
 }
 
 
-WorkbookDamage::WorkbookDamage(Calligra::Sheets::Map* map, Changes changes)
+WorkbookDamage::WorkbookDamage(Calligra::Sheets::MapBase *map, Changes changes)
         : d(new Private)
 {
     d->map = map;
@@ -115,7 +115,7 @@ WorkbookDamage::~WorkbookDamage()
     delete d;
 }
 
-Map* WorkbookDamage::map() const
+MapBase *WorkbookDamage::map() const
 {
     return d->map;
 }

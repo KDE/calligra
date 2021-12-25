@@ -10,7 +10,7 @@
 #include <QList>
 #include <QStringList>
 
-#include "sheets_odf_export.h"
+#include "sheets_engine_export.h"
 
 class QDomElement;
 
@@ -25,7 +25,7 @@ enum ParameterType { KSpread_Int, KSpread_Float, KSpread_String, KSpread_Boolean
  * \ingroup Value
  * A function parameter.
  */
-class CALLIGRA_SHEETS_ODF_EXPORT FunctionParameter
+class CALLIGRA_SHEETS_ENGINE_EXPORT FunctionParameter
 {
 public:
     FunctionParameter();
@@ -52,7 +52,7 @@ private:
  * \ingroup Value
  * A function description.
  */
-class CALLIGRA_SHEETS_ODF_EXPORT FunctionDescription
+class CALLIGRA_SHEETS_ENGINE_EXPORT FunctionDescription
 {
 public:
     FunctionDescription();

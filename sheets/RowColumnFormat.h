@@ -16,9 +16,6 @@
 #include "Global.h"
 #include "Style.h"
 
-class QDomElement;
-class QDomDocument;
-
 namespace Calligra
 {
 namespace Sheets

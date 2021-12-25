@@ -24,8 +24,6 @@
 #include "ValueParser.h"
 
 
-#include <QDomDocument>
-
 using namespace Calligra::Sheets;
 
 /////////////////////////////////////////////////////////////////////////////

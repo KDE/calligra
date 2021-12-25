@@ -8,7 +8,7 @@
 
 // Local
 #include "MapBase.h"
-
+#include "SheetBase.h"
 #include <QObject>
 
 using namespace Calligra::Sheets;
@@ -16,27 +16,94 @@ using namespace Calligra::Sheets;
 class Q_DECL_HIDDEN MapBase::Private
 {
 public:
-    Private(MapBase *map);
-    ~Private() {}
-private:
-    MapBase *m_map;
+
+    bool isLoading;
+    /**
+     * List of all sheets in this map.
+     */
+    QList<SheetBase *> lstSheets;
 };
 
-MapBase::Private::Private (MapBase *map)
-    : m_map(map)
-{
-
-}
 
 
 
 
 MapBase::MapBase() :
-    d(new Private(this))
+    d(new Private)
 {
+    d->isLoading = false;
 }
 
 MapBase::~MapBase()
 {
 }
+
+
+
+SheetBase *MapBase::sheet(int index) const
+{
+    return d->lstSheets.value(index);
+}
+
+int MapBase::indexOf(SheetBase *sheet) const
+{
+    return d->lstSheets.indexOf(sheet);
+}
+
+QList<SheetBase *>& MapBase::sheetList() const
+{
+    return d->lstSheets;
+}
+
+int MapBase::count() const
+{
+    return d->lstSheets.count();
+}
+
+
+SheetBase *MapBase::findSheet(const QString & _name) const
+{
+    for (SheetBase* sheet : d->lstSheets) {
+        if (_name.toLower() == sheet->sheetName().toLower())
+            return sheet;
+    }
+    return nullptr;
+}
+
+SheetBase *MapBase::nextSheet(SheetBase *currentSheet) const
+{
+    bool returnNext = false;
+    for (SheetBase* sheet : d->lstSheets) {
+        if (returnNext) return sheet;
+        if (sheet == currentSheet) returnNext = true;
+    }
+    // If returnNext is set here, it means that currentSheet was last in the list.
+    if (returnNext) return currentSheet;
+    return nullptr;
+}
+
+SheetBase * MapBase::previousSheet(SheetBase *currentSheet) const
+{
+    SheetBase *prev = nullptr;
+    for (SheetBase* sheet : d->lstSheets) {
+        if (sheet == currentSheet) {
+            if (prev) return prev;
+            return currentSheet;  // this means that currentSheet was first in the list
+        }
+        prev = sheet;
+    }
+    return nullptr;
+}
+
+
+
+bool Map::isLoading() const
+{
+    return d->isLoading;
+}
+
+void Map::setLoading(bool l) {
+    d->isLoading = l;
+}
+
 

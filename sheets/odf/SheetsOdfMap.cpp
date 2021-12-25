@@ -176,7 +176,7 @@ bool Odf::loadMap(Map *map, const KoXmlElement& body, KoOdfLoadingContext& odfCo
                 if (!sheetElement.attributeNS(KoXmlNS::table, "name", QString()).isEmpty()) {
                     const QString sheetName = sheetElement.attributeNS(KoXmlNS::table, "name", QString());
                     Sheet* sheet = map->addNewSheet(sheetName);
-                    sheet->setSheetName(sheetName, true);
+                    sheet->setSheetName(sheetName);
                     overallRowCount += KoXml::childNodesCount(sheetElement);
                 }
             }
@@ -312,7 +312,7 @@ bool Odf::loadTableShape(Sheet *sheet, const KoXmlElement &element, KoShapeLoadi
     Styles autoStyles = loadAutoStyles(styleManager, odfContext.stylesReader(), conditionalStyles, parser);
 
     if (!element.attributeNS(KoXmlNS::table, "name", QString()).isEmpty()) {
-        sheet->setSheetName(element.attributeNS(KoXmlNS::table, "name", QString()), true);
+        sheet->setSheetName(element.attributeNS(KoXmlNS::table, "name", QString()));
     }
     bool result = loadSheet(sheet, element, tableContext, autoStyles, conditionalStyles);
 

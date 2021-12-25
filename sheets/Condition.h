@@ -10,12 +10,9 @@
 #include "Style.h"
 #include "Value.h"
 
-#include <QDomElement>
 #include <QLinkedList>
 #include <QSharedData>
 #include <QVariant>
-
-#include <KoXmlReader.h>
 
 class QString;
 

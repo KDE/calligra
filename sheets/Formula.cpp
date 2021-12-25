@@ -7,16 +7,16 @@
 #include "Formula.h"
 
 #include "CalculationSettings.h"
-#include "Cell.h"
 #include "CellStorage.h"
 #include "Function.h"
 #include "FunctionRepository.h"
-#include "Sheet.h"
-#include "Map.h"
-#include "NamedAreaManager.h"
 #include "Region.h"
 #include "Value.h"
 #include "Util.h"
+
+#include "CellBase.h"
+#include "SheetBase.h"
+#include "MapBase.h"
 
 #include "ValueCalc.h"
 #include "ValueConverter.h"
@@ -89,11 +89,9 @@ struct stackEntry {
     void reset() {
         row1 = col1 = row2 = col2 = -1;
         reg = Calligra::Sheets::Region();
-        regIsNamedOrLabeled = false;
     }
     Value val;
     Calligra::Sheets::Region reg;
-    bool regIsNamedOrLabeled;
     int row1, col1, row2, col2;
 };
 
@@ -1455,7 +1453,7 @@ void Formula::compile(const Tokens& tokens) const
 
 bool Formula::isNamedArea(const QString& expr) const
 {
-    return d->sheet ? d->sheet->map()->namedAreaManager()->contains(expr) : false;
+    return d->sheet ? d->sheet->map()->isNamedArea(expr) : false;
 }
 
 
@@ -1468,23 +1466,21 @@ Value Formula::eval(CellIndirection cellIndirections) const
     return evalRecursive(cellIndirections, values);
 }
 
-// We need to unroll arrays. Do use the same logic to unroll like OpenOffice.org and Excel are using.
+// We need to unroll arrays.
 Value Formula::Private::valueOrElement(FuncExtra &fe, const stackEntry& entry) const
 {
     const Value& v = entry.val;
     const Region& region = entry.reg;
-    if(v.isArray()) {
-        if(v.count() == 1) // if there is only one item, use that one
-            return v.element(0);
+    if (!v.isArray()) return v;
+    if (!region.isValid()) return v;
 
-        if(region.isValid() && entry.regIsNamedOrLabeled) {
-            const QPoint position = region.firstRange().topLeft();
-            const int idx = fe.myrow - position.y(); // do we need to do the same for columns?
-            if(idx >= 0 && idx < int(v.count()))
-                return v.element(idx); // within the range returns the selected element
-        }
-    }
-    return v;
+    // Range - only the first one is supported.
+    QPoint topLeft = region.firstRange().topLeft();
+    int x = fe.mycol - topLeft.x();
+    int y = fe.myrow - topLeft.y();
+    if ((x >= 0) && (x < v.columns()) && (y >= 0) && (y < v.rows()))
+        return v.element(x, y);
+    return Value::errorVALUE();
 }
 
 // On OO.org Calc and MS Excel operations done with +, -, * and / do fail if one of the values is
@@ -1751,7 +1747,7 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
             val1 = Value::empty();
             entry.reset();
 
-            const Region region(c, map, d->sheet);
+            Region region = map->regionFromName(c, sheet);
             if (!region.isValid()) {
                 val1 = Value::errorREF();
             } else if (region.isSingular()) {
@@ -1776,7 +1772,6 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
                 entry.col1 = entry.col2 = position.x();
                 entry.row1 = entry.row2 = position.y();
                 entry.reg = region;
-                entry.regIsNamedOrLabeled = map->namedAreaManager()->contains(c);
             } else {
                 warnSheets << "Unhandled non singular region in Opcode::Cell with rects=" << region.rects();
             }
@@ -1791,7 +1786,7 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
             val1 = Value::empty();
             entry.reset();
 
-            const Region region(c, map, d->sheet);
+            Region region = map->regionFromName(c, sheet);
             if (region.isValid()) {
                 val1 = region.firstSheet()->cellStorage()->valueRegion(region);
                 // store the reference, so we can use it within functions
@@ -1800,7 +1795,6 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
                 entry.col2 = region.firstRange().right();
                 entry.row2 = region.firstRange().bottom();
                 entry.reg = region;
-                entry.regIsNamedOrLabeled = map->namedAreaManager()->contains(c);
             }
 
             entry.val = val1; // any array is valid here

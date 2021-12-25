@@ -21,7 +21,6 @@
 #include "sheets_export.h"
 
 #include <KoDataCenterBase.h>
-#include <KoXmlReader.h>
 
 class KoStore;
 class KoStyleManager;
@@ -29,11 +28,7 @@ class KoDocumentResourceManager;
 
 class KCompletion;
 
-class QDomElement;
-class QDomDocument;
 class KUndo2Command;
-
-class KoXmlWriter;
 
 namespace Calligra
 {
@@ -192,23 +187,6 @@ public:
     void moveSheet(const QString & _from, const QString & _to, bool _before = true);
 
     /**
-     * Searches for a sheet named @p name .
-     * @return a pointer to the searched sheet
-     * @return @c 0 if nothing was found
-     */
-    Sheet* findSheet(const QString& name) const;
-
-    /**
-     * @return a pointer to the next sheet to @p sheet
-     */
-    Sheet* nextSheet(Sheet* sheet) const;
-
-    /**
-     * @return a pointer to the previous sheet to @p sheet
-     */
-    Sheet* previousSheet(Sheet*) const;
-
-    /**
      * Creates a new sheet.
      * The sheet is not added to the map nor added to the GUI.
      * @return a pointer to a new Sheet
@@ -228,28 +206,6 @@ public:
      */
     Sheet* addNewSheet(const QString& name = QString());
 
-    /**
-     * @return a pointer to the sheet at index @p index in this map
-     * @return @c 0 if the index exceeds the list boundaries
-     */
-    Sheet* sheet(int index) const;
-
-    /**
-     * @return index of @p sheet in this map
-     * @return @c 0 if the index exceeds the list boundaries
-     */
-    int indexOf(Sheet* sheet) const;
-
-    /**
-     * @return the list of sheets in this map
-     */
-    QList<Sheet*>& sheetList() const;
-
-    /**
-     * @return amount of sheets in this map
-     */
-    int count() const;
-
     void removeSheet(Sheet* sheet);
     void reviveSheet(Sheet* sheet);
 
@@ -262,13 +218,7 @@ public:
     /**
      * \return true if the document is currently loading.
      */
-    bool isLoading() const;
-
-    /**
-     * \param l whether the document is currently loading
-     */
-    void setLoading(bool l);
-
+    virtual bool isLoading() const override;
     /**
      * \return the document's syntax version
      * \ingroup NativeFormat
@@ -303,6 +253,10 @@ public:
      */
     void addStringCompletion(const QString &string);
 
+    /**
+     * Convenience wrapper for namedAreaManager()->contains
+     * */
+    bool isNamedArea (const QString &name);
     /**
      * Creates a region consisting of the region defined in @p expression .
      * @param expression a string representing the region (e.g. "A1:B3")

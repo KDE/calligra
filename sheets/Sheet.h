@@ -27,7 +27,6 @@
 #include "calligra_sheets_limits.h"
 
 class QAbstractItemModel;
-class QDomElement;
 
 class KoShape;
 
@@ -97,12 +96,12 @@ public:
     QAbstractItemModel *model() const;
 
     /**
-     * \return the map this sheet belongs to
+     * \return the full map this sheet belongs to. This is the inherited version of map().
      */
-    Map* map() const;
+    Map* fullMap() const;
 
     /**
-     * \return the document this sheet belongs to
+     * \return the document this sheet belongs to.
      */
     DocBase* doc() const;
 
@@ -129,11 +128,6 @@ public:
     //
 
     /**
-     * \return the name of this sheet
-     */
-    QString sheetName() const;
-
-    /**
      * Renames a sheet. This will automatically adapt all formulas
      * in all sheets and all cells to reflect the new name.
      *
@@ -141,9 +135,6 @@ public:
      * and the GUI will reflect the change.
      *
      * @param name The new sheet name.
-     * @param init If set to true then no formula will be changed and no signal
-     *             will be emitted and no undo action created. Usually you do not
-     *             want to do that.
      *
      * @return @c true if the sheet was renamed successfully
      * @return @c false if the sheet could not be renamed. Usually the reason is
@@ -153,7 +144,7 @@ public:
      * @see TabBar::renameTab
      * @see sheetName
      */
-    bool setSheetName(const QString& name, bool init = false);
+    virtual bool setSheetName(const QString& name) override;
 
     /**
      * \return \c true , if a document is currently loading

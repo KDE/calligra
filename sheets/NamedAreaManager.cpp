@@ -17,10 +17,7 @@
 // Local
 #include "NamedAreaManager.h"
 
-#include <KoXmlReader.h>
-
 // Qt
-#include <QDomElement>
 #include <QHash>
 
 // Sheets

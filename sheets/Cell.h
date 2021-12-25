@@ -22,7 +22,6 @@
 #ifndef CALLIGRA_SHEETS_CELL
 #define CALLIGRA_SHEETS_CELL
 
-#include <QSharedDataPointer>
 #include <QSharedPointer>
 #include <QTextDocument>
 
@@ -71,13 +70,13 @@ public:
      * Constructor.
      * Creates a Cell for accessing the data in \p sheet at position \p col , \p row .
      */
-    Cell(const Sheet* sheet, int column, int row);
+    Cell(Sheet* sheet, int column, int row);
 
     /**
      * Constructor.
      * Creates a Cell for accessing the data in \p sheet at position \p pos .
      */
-    Cell(const Sheet* sheet, const QPoint& pos);
+    Cell(Sheet* sheet, const QPoint& pos);
 
     /**
      * Copy constructor.
@@ -87,12 +86,12 @@ public:
     /**
      * Destructor.
      */
-    ~Cell();
+    virtual ~Cell() override;
 
     /**
-     * \return the sheet this cell belongs to
+     * \return the full sheet this cell belongs to
      */
-    Sheet* sheet() const;
+    Sheet* fullSheet() const;
 
     /**
      * Returns the locale setting of this cell.
@@ -118,24 +117,9 @@ public:
     bool isEmpty() const;
 
     /**
-     * Returns true if this cell is the null cell.
-     */
-    bool isNull() const;
-
-    /**
      * Returns true if this cell holds a formula.
      */
     bool isFormula() const;
-
-    /**
-     * Returns the cell's column.
-     */
-    int column() const;
-
-    /**
-     * Returns the cell's row.
-     */
-    int row() const;
 
     /**
      * Returns the name of the cell. For example, the cell in first column and
@@ -234,23 +218,6 @@ public:
     Validity validity() const;
 
     void setValidity(Validity validity);
-
-    /**
-     * Returns the value that this cell holds. It could be from the user
-     * (i.e. when s/he enters a value) or a result of formula.
-     */
-    const Value value() const;
-
-    /**
-     * Sets the value for this cell.
-     * It also clears all errors, if the value itself is not an error.
-     * In addition to this, it calculates the outstring and sets the dirty
-     * flags so that a redraw is forced.
-     * \param value the new value
-     *
-     * \see setUserInput, parseUserInput
-     */
-    void setValue(const Value& value);
 
     /**
      * Returns the richtext that this cell holds.
@@ -523,9 +490,6 @@ public:
 
 private:
     friend class CellTest;
-
-    class Private;
-    QSharedDataPointer<Private> d;
 };
 
 inline uint qHash(const Cell& cell)

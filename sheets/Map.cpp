@@ -52,10 +52,6 @@ class Q_DECL_HIDDEN Map::Private
 public:
     DocBase* doc;
 
-    /**
-     * List of all sheets in this map.
-     */
-    QList<Sheet*> lstSheets;
     QList<Sheet*> lstDeletedSheets;
 
     // used to give every Sheet a unique default name.
@@ -88,7 +84,6 @@ public:
     RowFormat* defaultRowFormat;
 
     QList<Damage*> damages;
-    bool isLoading;
 
     int syntaxVersion;
 
@@ -131,8 +126,6 @@ Map::Map(DocBase* doc, int syntaxVersion)
     QFont font(KoGlobal::defaultFont());
     d->defaultRowFormat->setHeight(font.pointSizeF() + 4);
     d->defaultColumnFormat->setWidth((font.pointSizeF() + 4) * 5);
-
-    d->isLoading = false;
 
     // default document properties
     d->syntaxVersion = syntaxVersion;
@@ -361,41 +354,6 @@ void Map::moveSheet(const QString & _from, const QString & _to, bool _before)
     }
 }
 
-Sheet* Map::findSheet(const QString & _name) const
-{
-    foreach(Sheet* sheet, d->lstSheets) {
-        if (_name.toLower() == sheet->sheetName().toLower())
-            return sheet;
-    }
-    return 0;
-}
-
-Sheet * Map::nextSheet(Sheet * currentSheet) const
-{
-    if (currentSheet == d->lstSheets.last())
-        return currentSheet;
-    int index = 0;
-    foreach(Sheet* sheet, d->lstSheets) {
-        if (sheet == currentSheet)
-            return d->lstSheets.value(++index);
-        ++index;
-    }
-    return 0;
-}
-
-Sheet * Map::previousSheet(Sheet * currentSheet) const
-{
-    if (currentSheet == d->lstSheets.first())
-        return currentSheet;
-    int index = 0;
-    foreach(Sheet* sheet, d->lstSheets) {
-        if (sheet  == currentSheet)
-            return d->lstSheets.value(--index);
-        ++index;
-    }
-    return 0;
-}
-
 bool Map::loadChildren(KoStore * _store)
 {
     foreach(Sheet* sheet, d->lstSheets) {
@@ -442,26 +400,6 @@ QStringList Map::hiddenSheets() const
     return result;
 }
 
-Sheet* Map::sheet(int index) const
-{
-    return d->lstSheets.value(index);
-}
-
-int Map::indexOf(Sheet* sheet) const
-{
-    return d->lstSheets.indexOf(sheet);
-}
-
-QList<Sheet*>& Map::sheetList() const
-{
-    return d->lstSheets;
-}
-
-int Map::count() const
-{
-    return d->lstSheets.count();
-}
-
 void Map::setOverallRowsCounter(int number)
 {
     d->overallRowCount = number;
@@ -479,11 +417,7 @@ int Map::increaseLoadedRowsCounter(int number)
 bool Map::isLoading() const
 {
     // The KoDocument state is necessary to avoid damages while importing a file (through a filter).
-    return d->isLoading || (d->doc && d->doc->isLoading());
-}
-
-void Map::setLoading(bool l) {
-    d->isLoading = l;
+    return MapBase::isLoading() || (d->doc && d->doc->isLoading());
 }
 
 int Map::syntaxVersion() const
@@ -522,7 +456,11 @@ void Map::addStringCompletion(const QString &stringCompletion)
     }
 }
 
-Region & regionFromName(const QString& expression, Sheet* sheet = 0)
+bool Map::isNamedArea (const QString &name) {
+    return namedAreaManager()->contains(name);
+}
+
+Region & Map::regionFromName(const QString& expression, Sheet* sheet = 0)
 {
     Region res;
 

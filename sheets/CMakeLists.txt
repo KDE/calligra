@@ -272,14 +272,12 @@ set (calligrasheetsodf_LIB_SRCS
     BindingManager.cpp
     BindingModel.cpp
     BindingStorage.cpp
-    CalculationSettings.cpp
     Cell.cpp
     CellStorage.cpp
     Cluster.cpp
     Condition.cpp
     ConditionsStorage.cpp
     Currency.cpp
-    Damages.cpp
     DependencyManager.cpp
     DocBase.cpp
     Format.cpp
@@ -290,7 +288,6 @@ set (calligrasheetsodf_LIB_SRCS
     PrintSettings.cpp
     ProtectableObject.cpp
     RecalcManager.cpp
-    RectStorage.cpp
     RowColumnFormat.cpp
     RowFormatStorage.cpp
     RowRepeatStorage.cpp
@@ -303,10 +300,7 @@ set (calligrasheetsodf_LIB_SRCS
     StyleStorage.cpp
     Validity.cpp
     ValidityStorage.cpp
-    ValueCalc.cpp
-    ValueConverter.cpp
     ValueFormatter.cpp
-    ValueParser.cpp
 
     database/Database.cpp
     database/DatabaseManager.cpp
@@ -317,8 +311,6 @@ set (calligrasheetsodf_LIB_SRCS
     ${ksp_DIR_SRCS}
 
     # TODO: move the formula evaluation out of Formula.cpp so these files can move out of libcalligrasheetsodf
-    Function.cpp
-    FunctionDescription.cpp
     FunctionModule.cpp
     FunctionModuleRegistry.cpp
     FunctionRepository.cpp
@@ -423,17 +415,12 @@ install( FILES
     Global.h
     Map.h
     odf/OdfLoadingContext.h
-    PointStorage.h
     PrintSettings.h
     ProtectableObject.h
-    RectStorage.h
     RowColumnFormat.h
     RowFormatStorage.h
     Sheet.h
     Style.h
-    ValueCalc.h
-    ValueConverter.h
-    ValueStorage.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/sheets COMPONENT Devel)
 install( FILES
     part/CanvasBase.h

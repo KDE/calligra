@@ -17,7 +17,7 @@
 #ifndef CALLIGRA_SHEETS_CALCULATION_SETTINGS
 #define CALLIGRA_SHEETS_CALCULATION_SETTINGS
 
-#include "sheets_odf_export.h"
+#include "sheets_engine_export.h"
 
 #include <QDate>
 
@@ -32,7 +32,7 @@ namespace Sheets
  * Calculation settings
  * \ingroup Value
  */
-class CALLIGRA_SHEETS_ODF_EXPORT CalculationSettings
+class CALLIGRA_SHEETS_ENGINE_EXPORT CalculationSettings
 {
 public:
     /**

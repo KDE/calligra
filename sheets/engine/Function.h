@@ -14,7 +14,7 @@
 #include "Region.h"
 #include "Value.h"
 
-#include "sheets_export.h"
+#include "sheets_engine_export.h"
 
 
 namespace Calligra
@@ -51,7 +51,7 @@ typedef Value(*FunctionPtr)(valVector, ValueCalc *, FuncExtra *);
  * \ingroup Value
  * A function pointer and context.
  */
-class CALLIGRA_SHEETS_ODF_EXPORT Function
+class CALLIGRA_SHEETS_ENGINE_EXPORT Function
 {
 public:
     Function(const QString& name, FunctionPtr ptr);
@@ -89,7 +89,7 @@ private:
  * \ingroup Value
  * A helper-class to call a function.
  */
-class CALLIGRA_SHEETS_ODF_EXPORT FunctionCaller {
+class CALLIGRA_SHEETS_ENGINE_EXPORT FunctionCaller {
 public:
     FunctionPtr m_ptr;
     valVector m_args;

@@ -5,15 +5,27 @@ include_directories(
 )
 
 set (calligrasheetsengine_LIB_SRCS
-    CellBase.cpp
-    MapBase.cpp
+    SheetsDebug.cpp
     Number.cpp
     Util.cpp
+    CalculationSettings.cpp
     Localization.cpp
-    Region.cpp
-    SheetBase.cpp
-    SheetsDebug.cpp
+
     Value.cpp
+    ValueParser.cpp
+    ValueConverter.cpp
+    ValueCalc.cpp
+
+    Function.cpp
+    FunctionDescription.cpp
+
+    Region.cpp
+    RectStorage.cpp
+    Damages.cpp
+
+    CellBase.cpp
+    MapBase.cpp
+    SheetBase.cpp
 )
 
 add_library(calligrasheetsengine SHARED ${calligrasheetsengine_LIB_SRCS})
@@ -33,10 +45,15 @@ install( FILES
     CellBase.h
     MapBase.h
     Number.h
+    PointStorage.h
+    RectStorage.h
     Region.h
     RTree.h
     SheetBase.h
     Value.h
+    ValueCalc.h
+    ValueConverter.h
+    ValueStorage.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/sheets COMPONENT Devel)
 
 endif()

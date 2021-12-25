@@ -65,10 +65,9 @@ class Q_DECL_HIDDEN Sheet::Private
 public:
     Private(Sheet* sheet) : rows(sheet), canvasOffsetX(0), canvasOffsetY(0) {}
 
+    // We store this here even though MapBase also has a copy, so that we don't need to recast from MapBase to Map in main app.
     Map* workbook;
     SheetModel *model;
-
-    QString name;
 
     Qt::LayoutDirection layoutDirection;
 
@@ -112,6 +111,7 @@ public:
 
 Sheet::Sheet(Map* map, const QString &sheetName)
         : KoShapeUserData(map)
+        , SheetBase(map, sheetName)
         , KoShapeBasedDocumentBase()
         , d(new Private(this))
 {
@@ -126,10 +126,8 @@ Sheet::Sheet(Map* map, const QString &sheetName)
 
     d->layoutDirection = QApplication::layoutDirection();
 
-    d->name = sheetName;
-
     // Set a valid object name, so that we can offer scripting.
-    setObjectName(createObjectName(d->name));
+    setObjectName(createObjectName(sheetName));
 
     d->cellStorage = new CellStorage(this);
     d->columns.setAutoDelete(true);
@@ -164,19 +162,14 @@ Sheet::Sheet(const Sheet &other)
         : KoShapeUserData(other.d->workbook)
         , KoShapeBasedDocumentBase()
         , ProtectableObject(other)
+        , SheetBase(other)
         , d(new Private(this))
 {
     d->workbook = other.d->workbook;
     d->model = new SheetModel(this);
 
-    // create a unique name
-    int i = 1;
-    do
-        d->name = other.d->name + QString("_%1").arg(i++);
-    while (d->workbook->findSheet(d->name));
-
     // Set a valid object name, so that we can offer scripting.
-    setObjectName(createObjectName(d->name));
+    setObjectName(createObjectName(sheetName()));
 
     d->layoutDirection = other.d->layoutDirection;
     d->hide = other.d->hide;
@@ -237,12 +230,7 @@ QAbstractItemModel* Sheet::model() const
     return d->model;
 }
 
-QString Sheet::sheetName() const
-{
-    return d->name;
-}
-
-Map* Sheet::map() const
+Map* Sheet::fullMap() const
 {
     return d->workbook;
 }
@@ -1164,35 +1152,18 @@ void Sheet::hideSheet(bool _hide)
         map()->addDamage(new SheetDamage(this, SheetDamage::Shown));
 }
 
-bool Sheet::setSheetName(const QString& name, bool init)
+bool Sheet::setSheetName(const QString& name)
 {
-    Q_UNUSED(init);
-    if (map()->findSheet(name))
-        return false;
-
     if (isProtected())
         return false;
 
-    if (d->name == name)
+    QString old_name = sheetName();
+    if (old_name == name)
         return true;
 
-    QString old_name = d->name;
-    d->name = name;
-
-    // FIXME: Why is the change of a sheet's name not supposed to be propagated here?
-    // If it is not, we have to manually do so in the loading process, e.g. for the
-    // SheetAccessModel in the document's data center map.
-    //if (init)
-    //    return true;
-
-    foreach(Sheet* sheet, map()->sheetList()) {
-        sheet->changeCellTabName(old_name, name);
-    }
-
-    map()->addDamage(new SheetDamage(this, SheetDamage::Name));
+    if (!SheetBase::setSheetName(name)) return false;
 
     setObjectName(name);
-//     (dynamic_cast<SheetIface*>(dcopObject()))->sheetNameHasChanged();
 
     emit nameChanged(old_name, name);
 

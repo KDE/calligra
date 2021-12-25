@@ -8,6 +8,7 @@
 #define KSPREAD_VALUE_STORAGE
 
 #include "PointStorage.h"
+#include "Value.h"
 
 namespace Calligra
 {

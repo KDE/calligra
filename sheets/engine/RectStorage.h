@@ -10,6 +10,9 @@
 
 #include <QCache>
 #include <QRegion>
+#include <QElapsedTimer>
+#include <QList>
+#include <QVector>
 #include <QTimer>
 #include <QRunnable>
 #include <QTime>
@@ -18,9 +21,9 @@
 #include <QMutexLocker>
 #endif
 
-#include "sheets_export.h"
+#include "sheets_engine_export.h"
 
-#include "Map.h"
+#include "MapBase.h"
 #include "Region.h"
 #include "RTree.h"
 
@@ -49,10 +52,10 @@ class RectStorageLoader;
  * \note For data assigned to points use PointStorage.
  */
 template<typename T>
-class RectStorage
+class CALLIGRA_SHEETS_ENGINE_EXPORT RectStorage
 {
 public:
-    explicit RectStorage(Map* map);
+    explicit RectStorage(MapBase* map);
     RectStorage(const RectStorage& other);
     virtual ~RectStorage();
 
@@ -66,9 +69,9 @@ public:
      */
     QPair<QRectF, T> containedPair(const QPoint& point) const;
 
-    QList< QPair<QRectF, T> > intersectingPairs(const Region& region) const;
+    QVector< QPair<QRectF, T> > intersectingPairs(const Region& region) const;
 
-    QList< QPair<QRectF, T> > undoData(const Region& region) const;
+    QVector< QPair<QRectF, T> > currentData(const Region& region) const;
 
     /**
      * Returns the area, which got data attached.
@@ -95,51 +98,58 @@ public:
      * Inserts \p number rows at the position \p position .
      * It extends or shifts rectangles, respectively.
      */
-    QList< QPair<QRectF, T> > insertRows(int position, int number);
+    QVector< QPair<QRectF, T> > insertRows(int position, int number);
 
     /**
      * Inserts \p number columns at the position \p position .
      * It extends or shifts rectangles, respectively.
      */
-    QList< QPair<QRectF, T> > insertColumns(int position, int number);
+    QVector< QPair<QRectF, T> > insertColumns(int position, int number);
 
     /**
      * Deletes \p number rows at the position \p position .
      * It shrinks or shifts rectangles, respectively.
      */
-    QList< QPair<QRectF, T> > removeRows(int position, int number);
+    QVector< QPair<QRectF, T> > removeRows(int position, int number);
 
     /**
      * Deletes \p number columns at the position \p position .
      * It shrinks or shifts rectangles, respectively.
      */
-    QList< QPair<QRectF, T> > removeColumns(int position, int number);
+    QVector< QPair<QRectF, T> > removeColumns(int position, int number);
 
     /**
      * Shifts the rows right of \p rect to the right by the width of \p rect .
      * It extends or shifts rectangles, respectively.
      */
-    QList< QPair<QRectF, T> > insertShiftRight(const QRect& rect);
+    QVector< QPair<QRectF, T> > insertShiftRight(const QRect& rect);
 
     /**
      * Shifts the columns at the bottom of \p rect to the bottom by the height of \p rect .
      * It extends or shifts rectangles, respectively.
      */
-    QList< QPair<QRectF, T> > insertShiftDown(const QRect& rect);
+    QVector< QPair<QRectF, T> > insertShiftDown(const QRect& rect);
 
     /**
      * Shifts the rows left of \p rect to the left by the width of \p rect .
      * It shrinks or shifts rectangles, respectively.
      * \return the former rectangle/data pairs
      */
-    QList< QPair<QRectF, T> > removeShiftLeft(const QRect& rect);
+    QVector< QPair<QRectF, T> > removeShiftLeft(const QRect& rect);
 
     /**
      * Shifts the columns on top of \p rect to the top by the height of \p rect .
      * It shrinks or shifts rectangles, respectively.
      * \return the former rectangle/data pairs
      */
-    QList< QPair<QRectF, T> > removeShiftUp(const QRect& rect);
+    QVector< QPair<QRectF, T> > removeShiftUp(const QRect& rect);
+
+    QVector< QPair<QRectF, T> > &undoData();
+
+    void resetUndo();
+
+    void storeUndo(bool store);
+
 
 protected:
     virtual void triggerGarbageCollection();
@@ -162,7 +172,7 @@ protected:
      */
     void ensureLoaded() const;
 private:
-    Map* m_map;
+    MapBase* m_map;
     RTree<T> m_tree;
     QRegion m_usedArea;
     QMap<int, QPair<QRectF, T> > m_possibleGarbage;
@@ -172,6 +182,9 @@ private:
     mutable QMutex m_mutex;
 #endif
     mutable QRegion m_cachedArea;
+
+    bool m_storingUndo;
+    QVector< QPair<QRectF, T> > m_undoData;
 
     RectStorageLoader<T>* m_loader;
     friend class RectStorageLoader<T>;
@@ -192,8 +205,8 @@ private:
 };
 
 template<typename T>
-RectStorage<T>::RectStorage(Map* map)
-        : m_map(map), m_loader(0)
+RectStorage<T>::RectStorage(MapBase* map)
+        : m_map(map), m_storingUndo(false), m_loader(0)
 {
 }
 
@@ -202,6 +215,7 @@ RectStorage<T>::RectStorage(const RectStorage& other)
         : m_map(other.m_map)
         , m_usedArea(other.m_usedArea)
         , m_storedData(other.m_storedData)
+        , m_storingUndo(false)
         , m_loader(0)
 {
     m_tree = other.m_tree;
@@ -242,37 +256,18 @@ template<typename T>
 QPair<QRectF, T> RectStorage<T>::containedPair(const QPoint& point) const
 {
     ensureLoaded();
-    const QList< QPair<QRectF, T> > results = m_tree.intersectingPairs(QRect(point, point)).values();
+    const QVector< QPair<QRectF, T> > results = m_tree.intersectingPairs(QRect(point, point)).values().toVector();
     return results.isEmpty() ? qMakePair(QRectF(), T()) : results.last();
 }
 
 template<typename T>
-QList< QPair<QRectF, T> > RectStorage<T>::intersectingPairs(const Region& region) const
+QVector< QPair<QRectF, T> > RectStorage<T>::intersectingPairs(const Region& region) const
 {
     ensureLoaded();
     QList< QPair<QRectF, T> > result;
     Region::ConstIterator end = region.constEnd();
     for (Region::ConstIterator it = region.constBegin(); it != end; ++it)
-        result += m_tree.intersectingPairs((*it)->rect()).values();
-    return result;
-}
-
-template<typename T>
-QList< QPair<QRectF, T> > RectStorage<T>::undoData(const Region& region) const
-{
-    ensureLoaded();
-    QList< QPair<QRectF, T> > result;
-    Region::ConstIterator end = region.constEnd();
-    for (Region::ConstIterator it = region.constBegin(); it != end; ++it) {
-        const QRect rect = (*it)->rect();
-        QList< QPair<QRectF, T> > pairs = m_tree.intersectingPairs(rect).values();
-        for (int i = 0; i < pairs.count(); ++i) {
-            // trim the rects
-            pairs[i].first = pairs[i].first.intersected(rect);
-        }
-        // Always add a default value even if there are no pairs.
-        result << qMakePair(QRectF(rect), T()) << pairs;
-    }
+        result += m_tree.intersectingPairs((*it)->rect()).values().toVector();
     return result;
 }
 
@@ -291,9 +286,31 @@ void RectStorage<T>::load(const QList<QPair<QRegion, T> >& data)
 }
 
 template<typename T>
+QVector< QPair<QRectF, T> > RectStorage<T>::currentData(const Region& region) const
+{
+    ensureLoaded();
+    QList< QPair<QRectF, T> > result;
+    Region::ConstIterator end = region.constEnd();
+    for (Region::ConstIterator it = region.constBegin(); it != end; ++it) {
+        const QRect rect = (*it)->rect();
+        QList< QPair<QRectF, T> > pairs = m_tree.intersectingPairs(rect).values();
+        for (int i = 0; i < pairs.count(); ++i) {
+            // trim the rects
+            pairs[i].first = pairs[i].first.intersected(rect);
+        }
+        // Always add a default value even if there are no pairs.
+        result << qMakePair(QRectF(rect), T()) << pairs;
+    }
+    return result;
+}
+
+template<typename T>
 void RectStorage<T>::insert(const Region& region, const T& _data)
 {
     ensureLoaded();
+
+    if (m_storingUndo) m_undoData << currentData(region);
+
     T data;
     // lookup already used data
     int index = m_storedData.indexOf(_data);
@@ -316,6 +333,8 @@ template<typename T>
 void RectStorage<T>::remove(const Region& region, const T& data)
 {
     ensureLoaded();
+    if (m_storingUndo) m_undoData << currentData(region);
+
     if (!m_storedData.contains(data)) {
         return;
     }
@@ -328,105 +347,113 @@ void RectStorage<T>::remove(const Region& region, const T& data)
 }
 
 template<typename T>
-QList< QPair<QRectF, T> > RectStorage<T>::insertRows(int position, int number)
+QVector< QPair<QRectF, T> > RectStorage<T>::insertRows(int position, int number)
 {
     ensureLoaded();
     const QRect invalidRect(1, position, KS_colMax, KS_rowMax);
     // invalidate the affected, cached styles
     invalidateCache(invalidRect);
     // process the tree
-    QList< QPair<QRectF, T> > undoData;
+    QVector< QPair<QRectF, T> > undoData;
     undoData << qMakePair(QRectF(1, KS_rowMax - number + 1, KS_colMax, number), T());
     undoData << m_tree.insertRows(position, number, RTree<T>::CopyCurrent);
+    if (m_storingUndo) m_undoData << undoData;
     return undoData;
 }
 
 template<typename T>
-QList< QPair<QRectF, T> > RectStorage<T>::insertColumns(int position, int number)
+QVector< QPair<QRectF, T> > RectStorage<T>::insertColumns(int position, int number)
 {
     ensureLoaded();
     const QRect invalidRect(position, 1, KS_colMax, KS_rowMax);
     // invalidate the affected, cached styles
     invalidateCache(invalidRect);
     // process the tree
-    QList< QPair<QRectF, T> > undoData;
+    QVector< QPair<QRectF, T> > undoData;
     undoData << qMakePair(QRectF(KS_colMax - number + 1, 1, number, KS_rowMax), T());
     undoData << m_tree.insertColumns(position, number, RTree<T>::CopyCurrent);
+    if (m_storingUndo) m_undoData << undoData;
     return undoData;
 }
 
 template<typename T>
-QList< QPair<QRectF, T> > RectStorage<T>::removeRows(int position, int number)
+QVector< QPair<QRectF, T> > RectStorage<T>::removeRows(int position, int number)
 {
     ensureLoaded();
     const QRect invalidRect(1, position, KS_colMax, KS_rowMax);
     // invalidate the affected, cached styles
     invalidateCache(invalidRect);
     // process the tree
-    QList< QPair<QRectF, T> > undoData;
+    QVector< QPair<QRectF, T> > undoData;
     undoData << qMakePair(QRectF(1, position, KS_colMax, number), T());
     undoData << m_tree.removeRows(position, number);
+    if (m_storingUndo) m_undoData << undoData;
     return undoData;
 }
 
 template<typename T>
-QList< QPair<QRectF, T> > RectStorage<T>::removeColumns(int position, int number)
+QVector< QPair<QRectF, T> > RectStorage<T>::removeColumns(int position, int number)
 {
     ensureLoaded();
     const QRect invalidRect(position, 1, KS_colMax, KS_rowMax);
     // invalidate the affected, cached styles
     invalidateCache(invalidRect);
     // process the tree
-    QList< QPair<QRectF, T> > undoData;
+    QVector< QPair<QRectF, T> > undoData;
     undoData << qMakePair(QRectF(position, 1, number, KS_rowMax), T());
     undoData << m_tree.removeColumns(position, number);
+    if (m_storingUndo) m_undoData << undoData;
     return undoData;
 }
 
 template<typename T>
-QList< QPair<QRectF, T> > RectStorage<T>::insertShiftRight(const QRect& rect)
+QVector< QPair<QRectF, T> > RectStorage<T>::insertShiftRight(const QRect& rect)
 {
     ensureLoaded();
     const QRect invalidRect(rect.topLeft(), QPoint(KS_colMax, rect.bottom()));
-    QList< QPair<QRectF, T> > undoData;
+    QVector< QPair<QRectF, T> > undoData;
     undoData << qMakePair(QRectF(rect), T());
     undoData << m_tree.insertShiftRight(rect);
     regionChanged(invalidRect);
+    if (m_storingUndo) m_undoData << undoData;
     return undoData;
 }
 
 template<typename T>
-QList< QPair<QRectF, T> > RectStorage<T>::insertShiftDown(const QRect& rect)
+QVector< QPair<QRectF, T> > RectStorage<T>::insertShiftDown(const QRect& rect)
 {
     ensureLoaded();
     const QRect invalidRect(rect.topLeft(), QPoint(rect.right(), KS_rowMax));
-    QList< QPair<QRectF, T> > undoData;
+    QVector< QPair<QRectF, T> > undoData;
     undoData << qMakePair(QRectF(rect), T());
     undoData << m_tree.insertShiftDown(rect);
+    if (m_storingUndo) m_undoData << undoData;
     regionChanged(invalidRect);
     return undoData;
 }
 
 template<typename T>
-QList< QPair<QRectF, T> > RectStorage<T>::removeShiftLeft(const QRect& rect)
+QVector< QPair<QRectF, T> > RectStorage<T>::removeShiftLeft(const QRect& rect)
 {
     ensureLoaded();
     const QRect invalidRect(rect.topLeft(), QPoint(KS_colMax, rect.bottom()));
-    QList< QPair<QRectF, T> > undoData;
+    QVector< QPair<QRectF, T> > undoData;
     undoData << qMakePair(QRectF(rect), T());
     undoData << m_tree.removeShiftLeft(rect);
+    if (m_storingUndo) m_undoData << undoData;
     regionChanged(invalidRect);
     return undoData;
 }
 
 template<typename T>
-QList< QPair<QRectF, T> > RectStorage<T>::removeShiftUp(const QRect& rect)
+QVector< QPair<QRectF, T> > RectStorage<T>::removeShiftUp(const QRect& rect)
 {
     ensureLoaded();
     const QRect invalidRect(rect.topLeft(), QPoint(rect.right(), KS_rowMax));
-    QList< QPair<QRectF, T> > undoData;
+    QVector< QPair<QRectF, T> > undoData;
     undoData << qMakePair(QRectF(rect), T());
     undoData << m_tree.removeShiftUp(rect);
+    if (m_storingUndo) m_undoData << undoData;
     regionChanged(invalidRect);
     return undoData;
 }
@@ -434,6 +461,7 @@ QList< QPair<QRectF, T> > RectStorage<T>::removeShiftUp(const QRect& rect)
 template<typename T>
 void RectStorage<T>::triggerGarbageCollection()
 {
+    garbageCollection();
 }
 
 template<typename T>
@@ -541,6 +569,23 @@ void RectStorage<T>::ensureLoaded() const
     }
 }
 
+
+template<typename T>
+QVector< QPair<QRectF, T> > &RectStorage<T>::undoData() {
+    return m_undoData;
+}
+
+template<typename T>
+void RectStorage<T>::resetUndo() {
+    m_undoData.clear();
+    m_storingUndo = false;
+}
+
+template<typename T>
+void RectStorage<T>::storeUndo(bool store) {
+    m_storingUndo = store;
+}
+
 template<typename T>
 RectStorageLoader<T>::RectStorageLoader(RectStorage<T> *storage, const QList<QPair<QRegion, T> > &data)
     : m_storage(storage)
@@ -594,11 +639,11 @@ QList<QPair<QRegion, T> > RectStorageLoader<T>::data() const
      return m_data;
 }
 
-class CommentStorage : public QObject, public RectStorage<QString>
+class CALLIGRA_SHEETS_ENGINE_EXPORT CommentStorage : public QObject, public RectStorage<QString>
 {
     Q_OBJECT
 public:
-    explicit CommentStorage(Map* map) : QObject(map), RectStorage<QString>(map) {}
+    explicit CommentStorage(MapBase* map) : QObject(), RectStorage<QString>(map) {}
     CommentStorage(const CommentStorage& other) : QObject(other.parent()), RectStorage<QString>(other) {}
 
 protected Q_SLOTS:
@@ -612,11 +657,11 @@ protected Q_SLOTS:
 
 
 
-class CALLIGRA_SHEETS_ODF_EXPORT FusionStorage : public QObject, public RectStorage<bool>
+class CALLIGRA_SHEETS_ENGINE_EXPORT FusionStorage : public QObject, public RectStorage<bool>
 {
     Q_OBJECT
 public:
-    explicit FusionStorage(Map* map) : QObject(map), RectStorage<bool>(map) {}
+    explicit FusionStorage(MapBase* map) : QObject(), RectStorage<bool>(map) {}
     FusionStorage(const FusionStorage& other) : QObject(other.parent()), RectStorage<bool>(other) {}
 
 protected Q_SLOTS:
@@ -630,11 +675,11 @@ protected Q_SLOTS:
 
 
 
-class MatrixStorage : public QObject, public RectStorage<bool>
+class CALLIGRA_SHEETS_ENGINE_EXPORT MatrixStorage : public QObject, public RectStorage<bool>
 {
     Q_OBJECT
 public:
-    explicit MatrixStorage(Map* map) : QObject(map), RectStorage<bool>(map) {}
+    explicit MatrixStorage(MapBase* map) : QObject(), RectStorage<bool>(map) {}
     MatrixStorage(const MatrixStorage& other) : QObject(other.parent()), RectStorage<bool>(other) {}
 
 protected Q_SLOTS:

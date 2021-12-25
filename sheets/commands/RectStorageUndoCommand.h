@@ -8,7 +8,7 @@
 #define KSPREAD_RECT_STORAGE_UNDO_COMMAND
 
 // Qt
-#include <QList>
+#include <QVector>
 #include <QPair>
 #include <kundo2command.h>
 
@@ -40,15 +40,15 @@ public:
 
     void undo() override;
 
-    void add(const QList<Pair> &pairs);
+    void add(const QVector<Pair> &pairs);
 
     RectStorageUndoCommand& operator<<(const Pair &pair);
-    RectStorageUndoCommand& operator<<(const QList<Pair> &pairs);
+    RectStorageUndoCommand& operator<<(const QVector<Pair> &pairs);
 
 private:
     QAbstractItemModel *const m_model;
     const int m_role;
-    QList<Pair> m_undoData;
+    QVector<Pair> m_undoData;
 };
 
 template<typename T>
@@ -73,7 +73,7 @@ void RectStorageUndoCommand<T>::undo()
 }
 
 template<typename T>
-void RectStorageUndoCommand<T>::add(const QList<Pair>& pairs)
+void RectStorageUndoCommand<T>::add(const QVector<Pair>& pairs)
 {
     m_undoData << pairs;
 }
@@ -86,7 +86,7 @@ RectStorageUndoCommand<T>& RectStorageUndoCommand<T>::operator<<(const Pair& pai
 }
 
 template<typename T>
-RectStorageUndoCommand<T>& RectStorageUndoCommand<T>::operator<<(const QList<Pair>& pairs)
+RectStorageUndoCommand<T>& RectStorageUndoCommand<T>::operator<<(const QVector<Pair>& pairs)
 {
     m_undoData << pairs;
     return *this;

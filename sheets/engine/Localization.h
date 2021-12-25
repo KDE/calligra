@@ -12,9 +12,6 @@
 
 #include "sheets_engine_export.h"
 
-class QDomElement;
-class QDomDocument;
-
 namespace Calligra
 {
 namespace Sheets

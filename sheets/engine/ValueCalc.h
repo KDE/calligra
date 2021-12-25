@@ -14,7 +14,7 @@
 #include "Number.h"
 #include "Value.h"
 
-#include "sheets_export.h"
+#include "sheets_engine_export.h"
 
 #ifdef max
 # undef max
@@ -27,7 +27,7 @@ namespace Calligra
 {
 namespace Sheets
 {
-class Cell;
+class CellBase;
 class ValueCalc;
 class ValueConverter;
 
@@ -57,7 +57,7 @@ the Number object directly for that. This class is to be used for computations
 of more complicated and ranged functions.
 */
 
-class CALLIGRA_SHEETS_ODF_EXPORT ValueCalc
+class CALLIGRA_SHEETS_ENGINE_EXPORT ValueCalc
 {
 public:
     explicit ValueCalc(ValueConverter* c);
@@ -261,18 +261,18 @@ public:
     Value sum(const Value &range, bool full = true);
     Value sumsq(const Value &range, bool full = true);
     Value sumIf(const Value &range, const Condition &cond);
-    Value sumIf(const Cell &sumRangeStart,
+    Value sumIf(const CellBase &sumRangeStart,
                 const Value &checkRange, const Condition &cond);
-    Value sumIfs(const Cell &sumRangeStart,
+    Value sumIfs(const CellBase &sumRangeStart,
                  QList<Value> c_Range, QList<Condition> cond, const float limit);
     Value averageIf(const Value &range, const Condition &cond);
-    Value averageIf(const Cell &avgRangeStart,
+    Value averageIf(const CellBase &avgRangeStart,
                 const Value &checkRange, const Condition &cond);
-    Value averageIfs(const Cell &avgRangeStart,
+    Value averageIfs(const CellBase &avgRangeStart,
                  QList<Value> c_Range, QList<Condition> cond, const float limit);
     int count(const Value &range, bool full = true);
     int countIf(const Value &range, const Condition &cond);
-    Value countIfs(const Cell &cntRangeStart, QList<Value> c_range, QList<Condition> cond, const float limit);
+    Value countIfs(const CellBase &cntRangeStart, QList<Value> c_range, QList<Condition> cond, const float limit);
     Value avg(const Value &range, bool full = true);
     Value max(const Value &range, bool full = true);
     Value min(const Value &range, bool full = true);

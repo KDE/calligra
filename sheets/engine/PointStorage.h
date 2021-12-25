@@ -16,7 +16,6 @@
 
 #include <algorithm>
 
-// #define KSPREAD_POINT_STORAGE_HASH
 
 namespace Calligra
 {
@@ -62,7 +61,9 @@ public:
      * Constructor.
      * Creates an empty storage. Actually, does nothing.
      */
-    PointStorage() {}
+    PointStorage() {
+        m_storingUndo = false;
+    }
 
     /**
      * Destructor.
@@ -102,11 +103,7 @@ public:
             // insert missing rows
             m_rows.insert(m_rows.count(), row - m_rows.count(), m_data.count());
             // append the actual data
-#ifdef KSPREAD_POINT_STORAGE_HASH
-            m_data.append(*m_usedData.insert(data));
-#else
             m_data.append(data);
-#endif
             // append the column index
             m_cols.append(col);
         }
@@ -120,11 +117,7 @@ public:
                 // determine the index where the data and column has to be inserted
                 const int index = m_rows.value(row - 1) + (cit - cstart);
                 // insert the actual data
-#ifdef KSPREAD_POINT_STORAGE_HASH
-                m_data.insert(index, *m_usedData.insert(data));
-#else
                 m_data.insert(index, data);
-#endif
                 // insert the column index
                 m_cols.insert(index, col);
                 // adjust the offsets of the following rows
@@ -135,15 +128,13 @@ public:
             else {
                 const int index = m_rows.value(row - 1) + (cit - cstart);
                 const T oldData = m_data[ index ];
-#ifdef KSPREAD_POINT_STORAGE_HASH
-                m_data[ index ] = *m_usedData.insert(data);
-#else
                 m_data[ index ] = data;
-#endif
+                if (m_storingUndo) m_undoData << qMakePair(QPoint(col, row), oldData);
                 return oldData;
             }
         }
         squeezeRows();
+        if (m_storingUndo) m_undoData << qMakePair(QPoint(col, row), T());
         return T();
     }
 
@@ -175,15 +166,19 @@ public:
         Q_ASSERT(1 <= col && col <= KS_colMax);
         Q_ASSERT(1 <= row && row <= KS_rowMax);
         // row's missing?
-        if (row > m_rows.count())
+        if (row > m_rows.count()) {
+            if (m_storingUndo) m_undoData << qMakePair(QPoint(col, row), defaultVal);
             return defaultVal;
+        }
         const int rowStart = (row - 1 < m_rows.count()) ? m_rows.value(row - 1) : m_data.count();
         const int rowLength = (row < m_rows.count()) ? m_rows.value(row) - rowStart : -1;
         const QVector<int> cols = m_cols.mid(rowStart, rowLength);
         QVector<int>::const_iterator cit = std::lower_bound(cols.begin(), cols.end(), col);
         // column's missing?
-        if (cit == cols.constEnd() || col != *cit)
+        if (cit == cols.constEnd() || col != *cit) {
+            if (m_storingUndo) m_undoData << qMakePair(QPoint(col, row), defaultVal);
             return defaultVal;
+        }
         const int index = rowStart + (cit - cols.constBegin());
         // save the old data
         const T oldData = m_data[ index ];
@@ -195,6 +190,7 @@ public:
         for (int r = row; r < m_rows.count(); ++r)
             --m_rows[r];
         squeezeRows();
+        if (m_storingUndo) m_undoData << qMakePair(QPoint(col, row), oldData);
         return oldData;
     }
 
@@ -222,6 +218,7 @@ public:
             }
         }
         squeezeRows();
+        if (m_storingUndo) m_undoData << oldData;
         return oldData;
     }
 
@@ -250,6 +247,7 @@ public:
             }
         }
         squeezeRows();
+        if (m_storingUndo) m_undoData << oldData;
         return oldData;
     }
 
@@ -286,6 +284,7 @@ public:
         for (int r = 0; r < number; ++r)
             m_rows.insert(position, index);
         squeezeRows();
+        if (m_storingUndo) m_undoData << oldData;
         return oldData;
     }
 
@@ -323,6 +322,7 @@ public:
         while (rowCount-- > 0)
             m_rows.remove(position - 1);
         squeezeRows();
+        if (m_storingUndo) m_undoData << oldData;
         return oldData;
     }
 
@@ -352,6 +352,7 @@ public:
             }
         }
         squeezeRows();
+        if (m_storingUndo) m_undoData << oldData;
         return oldData;
     }
 
@@ -379,6 +380,7 @@ public:
             }
         }
         squeezeRows();
+        if (m_storingUndo) m_undoData << oldData;
         return oldData;
     }
 
@@ -479,6 +481,7 @@ public:
             }
         }
         squeezeRows();
+        if (m_storingUndo) m_undoData << oldData;
         return oldData;
     }
 
@@ -541,6 +544,7 @@ public:
             }
         }
         squeezeRows();
+        if (m_storingUndo) m_undoData << oldData;
         return oldData;
     }
 
@@ -852,6 +856,19 @@ public:
         return (m_rows == o.m_rows && m_cols == o.m_cols && m_data == o.m_data);
     }
 
+    QVector< QPair<QPoint, T> > &undoData() {
+        return m_undoData;
+    }
+
+    void resetUndo() {
+        m_undoData.clear();
+        m_storingUndo = false;
+    }
+
+    void storeUndo(bool store) {
+        m_storingUndo = store;
+    }
+
 private:
     void squeezeRows() {
         int row = m_rows.count() - 1;
@@ -864,9 +881,8 @@ private:
     QVector<int> m_rows;    // stores the row offsets in m_data
     QVector<T>   m_data;    // stores the actual non-default data
 
-#ifdef KSPREAD_POINT_STORAGE_HASH
-    QSet<T> m_usedData;
-#endif
+    bool m_storingUndo;
+    QVector< QPair<QPoint, T> > m_undoData;
 };
 
 } // namespace Sheets

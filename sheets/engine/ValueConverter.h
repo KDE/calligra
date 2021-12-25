@@ -20,7 +20,7 @@ class ValueParser;
  * \ingroup Value
  * Converts between the different Value types.
  */
-class CALLIGRA_SHEETS_ODF_EXPORT ValueConverter
+class CALLIGRA_SHEETS_ENGINE_EXPORT ValueConverter
 {
 public:
     /**

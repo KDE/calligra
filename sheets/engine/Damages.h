@@ -6,7 +6,7 @@
 #ifndef CALLIGRA_SHEETS_DAMAGES
 #define CALLIGRA_SHEETS_DAMAGES
 
-#include "sheets_export.h"
+#include "sheets_engine_export.h"
 
 #include <QDebug>
 
@@ -14,16 +14,16 @@ namespace Calligra
 {
 namespace Sheets
 {
-class Cell;
-class Map;
-class Sheet;
+class CellBase;
+class MapBase;
+class SheetBase;
 class Region;
 
 /**
  * \ingroup Damages
  * An abstract damage.
  */
-class CALLIGRA_SHEETS_ODF_EXPORT Damage
+class CALLIGRA_SHEETS_ENGINE_EXPORT Damage
 {
 public:
     virtual ~Damage() {}
@@ -47,7 +47,7 @@ public:
  * \ingroup Damages
  * A cell range damage.
  */
-class CALLIGRA_SHEETS_ODF_EXPORT CellDamage : public Damage
+class CALLIGRA_SHEETS_ENGINE_EXPORT CellDamage : public Damage
 {
 public:
     enum Change {
@@ -69,8 +69,8 @@ public:
     };
     Q_DECLARE_FLAGS(Changes, Change)
 
-    CellDamage(const Calligra::Sheets::Cell& cell, Changes changes);
-    CellDamage(Calligra::Sheets::Sheet* sheet, const Region& region, Changes changes);
+    CellDamage(const Calligra::Sheets::CellBase& cell, Changes changes);
+    CellDamage(Calligra::Sheets::SheetBase *sheet, const Region& region, Changes changes);
 
     ~CellDamage() override;
 
@@ -78,7 +78,7 @@ public:
         return Damage::Cell;
     }
 
-    Calligra::Sheets::Sheet* sheet() const;
+    Calligra::Sheets::SheetBase *sheet() const;
     const Region& region() const;
 
     Changes changes() const;
@@ -96,7 +96,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(CellDamage::Changes)
  * \ingroup Damages
  * A sheet damage.
  */
-class CALLIGRA_SHEETS_ODF_EXPORT SheetDamage : public Damage
+class CALLIGRA_SHEETS_ENGINE_EXPORT SheetDamage : public Damage
 {
 public:
 
@@ -112,7 +112,7 @@ public:
     };
     Q_DECLARE_FLAGS(Changes, Change)
 
-    SheetDamage(Calligra::Sheets::Sheet* sheet, Changes changes);
+    SheetDamage(Calligra::Sheets::SheetBase *sheet, Changes changes);
 
     ~SheetDamage() override;
 
@@ -120,7 +120,7 @@ public:
         return Damage::Sheet;
     }
 
-    Calligra::Sheets::Sheet* sheet() const;
+    Calligra::Sheets::SheetBase *sheet() const;
 
     Changes changes() const;
 
@@ -147,13 +147,13 @@ public:
     };
     Q_DECLARE_FLAGS(Changes, Change)
 
-    WorkbookDamage(Calligra::Sheets::Map* map, Changes changes);
+    WorkbookDamage(Calligra::Sheets::MapBase* map, Changes changes);
     ~WorkbookDamage() override;
 
     Type type() const override {
         return Damage::Workbook;
     }
-    Calligra::Sheets::Map* map() const;
+    Calligra::Sheets::MapBase* map() const;
     Changes changes() const;
 
 private:
@@ -169,7 +169,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(WorkbookDamage::Changes)
  * \ingroup Damages
  * A selection damage.
  */
-class CALLIGRA_SHEETS_ODF_EXPORT SelectionDamage : public Damage
+class CALLIGRA_SHEETS_ENGINE_EXPORT SelectionDamage : public Damage
 {
 public:
     explicit SelectionDamage(const Region &region);
@@ -196,9 +196,9 @@ private:
   QDebug support
 ****************************************************************************/
 
-CALLIGRA_SHEETS_ODF_EXPORT QDebug operator<<(QDebug str, const Calligra::Sheets::Damage& d);
-CALLIGRA_SHEETS_ODF_EXPORT QDebug operator<<(QDebug str, const Calligra::Sheets::CellDamage& d);
-CALLIGRA_SHEETS_ODF_EXPORT QDebug operator<<(QDebug str, const Calligra::Sheets::SheetDamage& d);
-CALLIGRA_SHEETS_ODF_EXPORT QDebug operator<<(QDebug str, const Calligra::Sheets::SelectionDamage& d);
+CALLIGRA_SHEETS_ENGINE_EXPORT QDebug operator<<(QDebug str, const Calligra::Sheets::Damage& d);
+CALLIGRA_SHEETS_ENGINE_EXPORT QDebug operator<<(QDebug str, const Calligra::Sheets::CellDamage& d);
+CALLIGRA_SHEETS_ENGINE_EXPORT QDebug operator<<(QDebug str, const Calligra::Sheets::SheetDamage& d);
+CALLIGRA_SHEETS_ENGINE_EXPORT QDebug operator<<(QDebug str, const Calligra::Sheets::SelectionDamage& d);
 
 #endif // CALLIGRA_SHEETS_DAMAGES

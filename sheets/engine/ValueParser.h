@@ -13,7 +13,7 @@
 
 #include "Number.h"
 
-#include "sheets_export.h"
+#include "sheets_engine_export.h"
 
 namespace Calligra
 {
@@ -27,7 +27,7 @@ class Value;
  * Generates a Value by parsing a user input text.
  * Determines the most probable Value type, e.g. integer or date.
  */
-class CALLIGRA_SHEETS_ODF_EXPORT ValueParser
+class CALLIGRA_SHEETS_ENGINE_EXPORT ValueParser
 {
 public:
     /**

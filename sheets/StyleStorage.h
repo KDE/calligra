@@ -11,6 +11,7 @@
 #include <QPair>
 #include <QPoint>
 #include <QRect>
+#include <QVector>
 
 #include "sheets_odf_export.h"
 #include <Region.h>
@@ -71,7 +72,7 @@ public:
      * reconstruct the former state of the storage after modification.
      * \return all substyle/range pairs intersecting \p rect
      */
-    QList< QPair<QRectF, SharedSubStyle> > undoData(const Region& rect) const;
+    QVector< QPair<QRectF, SharedSubStyle> > currentData(const Region& rect) const;
 
     /**
      * Returns the area, which got a style attached.
@@ -132,56 +133,63 @@ public:
      * Inserts \p number rows at the position \p position .
      * It extends or shifts rectangles, respectively.
      */
-    QList< QPair<QRectF, SharedSubStyle> > insertRows(int position, int number = 1);
+    QVector< QPair<QRectF, SharedSubStyle> > insertRows(int position, int number = 1);
 
     /**
      * Inserts \p number columns at the position \p position .
      * It extends or shifts rectangles, respectively.
      */
-    QList< QPair<QRectF, SharedSubStyle> > insertColumns(int position, int number = 1);
+    QVector< QPair<QRectF, SharedSubStyle> > insertColumns(int position, int number = 1);
 
     /**
      * Deletes \p number rows at the position \p position .
      * It shrinks or shifts rectangles, respectively.
      */
-    QList< QPair<QRectF, SharedSubStyle> > removeRows(int position, int number = 1);
+    QVector< QPair<QRectF, SharedSubStyle> > removeRows(int position, int number = 1);
 
     /**
      * Deletes \p number columns at the position \p position .
      * It shrinks or shifts rectangles, respectively.
      */
-    QList< QPair<QRectF, SharedSubStyle> > removeColumns(int position, int number = 1);
+    QVector< QPair<QRectF, SharedSubStyle> > removeColumns(int position, int number = 1);
 
     /**
      * Shifts the rows right of \p rect to the right by the width of \p rect .
      * It extends or shifts rectangles, respectively.
      */
-    QList< QPair<QRectF, SharedSubStyle> > insertShiftRight(const QRect& rect);
+    QVector< QPair<QRectF, SharedSubStyle> > insertShiftRight(const QRect& rect);
 
     /**
      * Shifts the columns at the bottom of \p rect to the bottom by the height of \p rect .
      * It extends or shifts rectangles, respectively.
      */
-    QList< QPair<QRectF, SharedSubStyle> > insertShiftDown(const QRect& rect);
+    QVector< QPair<QRectF, SharedSubStyle> > insertShiftDown(const QRect& rect);
 
     /**
      * Shifts the rows left of \p rect to the left by the width of \p rect .
      * It shrinks or shifts rectangles, respectively.
      * \return the former rectangle/data pairs
      */
-    QList< QPair<QRectF, SharedSubStyle> > removeShiftLeft(const QRect& rect);
+    QVector< QPair<QRectF, SharedSubStyle> > removeShiftLeft(const QRect& rect);
 
     /**
      * Shifts the columns on top of \p rect to the top by the height of \p rect .
      * It shrinks or shifts rectangles, respectively.
      * \return the former rectangle/data pairs
      */
-    QList< QPair<QRectF, SharedSubStyle> > removeShiftUp(const QRect& rect);
+    QVector< QPair<QRectF, SharedSubStyle> > removeShiftUp(const QRect& rect);
 
     /**
      * Invalidates all cached styles.
      */
     void invalidateCache();
+
+    QVector< QPair<QPoint, SharedSubStyle> > &undoData();
+
+    void resetUndo();
+
+    void storeUndo(bool store);
+
 
 protected Q_SLOTS:
     void garbageCollection();

@@ -13,8 +13,8 @@
 #include <QVector>
 #include <QPoint>
 
-#include "sheets_odf_export.h"
-#include "Cell.h"
+#include "sheets_engine_export.h"
+#include "CellBase.h"
 #include "Value.h"
 
 #define CALLIGRA_SHEETS_INLINE_ARRAYS
@@ -25,14 +25,14 @@ namespace Calligra
 {
 namespace Sheets
 {
-class Sheet;
-typedef QHash<Cell, Cell> CellIndirection;
+class SheetBase;
+typedef QHash<CellBase, CellBase> CellIndirection;
 
 /**
  * \ingroup Value
  * A formula token.
  */
-class CALLIGRA_SHEETS_ODF_EXPORT Token
+class CALLIGRA_SHEETS_ENGINE_EXPORT Token
 {
 public:
     /**
@@ -280,18 +280,18 @@ protected:
  *
  *
  */
-class CALLIGRA_SHEETS_ODF_EXPORT Formula
+class CALLIGRA_SHEETS_ENGINE_EXPORT Formula
 {
 public:
     /**
      * Creates a formula. It must be owned by a sheet.
      */
-    Formula(Sheet *sheet, const Cell& cell);
+    Formula(Sheet *sheet, const CellBase& cell);
 
     /**
      * Creates a formula. It must be owned by a sheet.
      */
-    explicit Formula(Sheet *sheet);
+    explicit Formula(SheetBase *sheet);
 
     /**
      * Creates a formula that is not owned by any sheet.
@@ -321,7 +321,7 @@ public:
     /**
      * Returns the cell which owns this formula.
      */
-    const Cell& cell() const;
+    const CellBase& cell() const;
 
     /**
      * Sets the expression for this formula.
@@ -394,7 +394,7 @@ protected:
      * helper function for recursive evaluations; makes sure one cell
      * is not evaluated more than once resulting in infinite loops
      */
-    Value evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value>& values) const;
+    Value evalRecursive(CellIndirection cellIndirections, QHash<CellBase, Value>& values) const;
 
 private:
     class Private;

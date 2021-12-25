@@ -55,8 +55,6 @@
 #include "ValueParser.h"
 #include "StyleStorage.h"
 
-#include <KoXmlReader.h>
-
 #include <QTimer>
 #include <QTextDocument>
 #include <QTextCursor>
@@ -75,34 +73,20 @@ public:
 
 
 Cell::Cell()
-        : d(0)
 {
 }
 
-Cell::Cell(const Sheet* sheet, int col, int row)
-        : d(new Private)
+Cell::Cell(Sheet* sheet, int col, int row)
+        : CellBase(sheet, col, row)
 {
-    Q_ASSERT(sheet != 0);
-    Q_ASSERT_X(1 <= col && col <= KS_colMax, __FUNCTION__, QString("%1 out of bounds").arg(col).toLocal8Bit());
-    Q_ASSERT_X(1 <= row && row <= KS_rowMax, __FUNCTION__, QString("%1 out of bounds").arg(row).toLocal8Bit());
-    d->sheet = const_cast<Sheet*>(sheet);
-    d->column = col;
-    d->row = row;
 }
 
-Cell::Cell(const Sheet* sheet, const QPoint& pos)
-        : d(new Private)
+Cell::Cell(Sheet* sheet, const QPoint& pos)
+        : CellBase(sheet, pos)
 {
-    Q_ASSERT(sheet != 0);
-    Q_ASSERT_X(1 <= pos.x() && pos.x() <= KS_colMax, __FUNCTION__, QString("%1 out of bounds").arg(pos.x()).toLocal8Bit());
-    Q_ASSERT_X(1 <= pos.y() && pos.y() <= KS_rowMax, __FUNCTION__, QString("%1 out of bounds").arg(pos.y()).toLocal8Bit());
-    d->sheet = const_cast<Sheet*>(sheet);
-    d->column = pos.x();
-    d->row = pos.y();
 }
 
 Cell::Cell(const Cell& other)
-        : d(other.d)
 {
 }
 
@@ -111,10 +95,10 @@ Cell::~Cell()
 }
 
 // Return the sheet that this cell belongs to.
-Sheet* Cell::sheet() const
+Sheet* Cell::fullSheet() const
 {
     Q_ASSERT(!isNull());
-    return d->sheet;
+    return dynamic_cast<Sheet *>(sheetBase());
 }
 
 KLocale* Cell::locale() const
@@ -176,39 +160,11 @@ bool Cell::isEmpty() const
     return true;
 }
 
-bool Cell::isNull() const
-{
-    return (!d);
-}
-
 // Return true if this cell is a formula.
 //
 bool Cell::isFormula() const
 {
     return !formula().expression().isEmpty();
-}
-
-// Return the column number of this cell.
-//
-int Cell::column() const
-{
-    // Make sure this isn't called for the null cell.  This assert
-    // can save you (could have saved me!) the hassle of some very
-    // obscure bugs.
-    Q_ASSERT(!isNull());
-    Q_ASSERT(1 <= d->column);   //&& d->column <= KS_colMax );
-    return d->column;
-}
-
-// Return the row number of this cell.
-int Cell::row() const
-{
-    // Make sure this isn't called for the null cell.  This assert
-    // can save you (could have saved me!) the hassle of some very
-    // obscure bugs.
-    Q_ASSERT(!isNull());
-    Q_ASSERT(1 <= d->row);   //&& d->row <= KS_rowMax );
-    return d->row;
 }
 
 // Return the name of this cell, i.e. the string that the user would
@@ -400,22 +356,6 @@ QString Cell::displayText(const Style& s, Value *v, bool *showFormula) const
             *showFormula = false;
     }
     return string;
-}
-
-
-// Return the value of this cell.
-//
-const Value Cell::value() const
-{
-    return sheet()->cellStorage()->value(d->column, d->row);
-}
-
-
-// Set the value of this cell.
-//
-void Cell::setValue(const Value& value)
-{
-    sheet()->cellStorage()->setValue(d->column, d->row, value);
 }
 
 

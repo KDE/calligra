@@ -7,7 +7,7 @@
 
 #include "ValueCalc.h"
 
-#include "Cell.h"
+#include "CellBase.h"
 #include "Number.h"
 #include "ValueConverter.h"
 #include "CalculationSettings.h"
@@ -1970,7 +1970,7 @@ Value ValueCalc::sumIf(const Value &range, const Condition &cond)
     return res;
 }
 
-Value ValueCalc::sumIf(const Cell &sumRangeStart, const Value &range, const Condition &cond)
+Value ValueCalc::sumIf(const CellBase &sumRangeStart, const Value &range, const Condition &cond)
 {
     if(range.isError())
         return range;
@@ -1996,7 +1996,7 @@ Value ValueCalc::sumIf(const Cell &sumRangeStart, const Value &range, const Cond
                 return Value::errorVALUE();
 
             if (matches(cond, v)) {
-                Value val = Cell(sumRangeStart.sheet(), sumRangeStart.column() + c, sumRangeStart.row() + r).value();
+                Value val = CellBase(sumRangeStart.sheet(), sumRangeStart.column() + c, sumRangeStart.row() + r).value();
                 if (val.isNumber()) {// only add numbers, no conversion from string allowed
                     res = add(res, val);
                 }
@@ -2006,7 +2006,7 @@ Value ValueCalc::sumIf(const Cell &sumRangeStart, const Value &range, const Cond
     return res;
 }
 
-Value ValueCalc::sumIfs(const Cell &sumRangeStart, QList<Value> range, QList<Condition> cond, const float limit)
+Value ValueCalc::sumIfs(const CellBase &sumRangeStart, QList<Value> range, QList<Condition> cond, const float limit)
 {
     if(range[0].isError())
         return range[0];
@@ -2088,7 +2088,7 @@ Value ValueCalc::averageIf(const Value &range, const Condition &cond)
     return res;
 }
 
-Value ValueCalc::averageIf(const Cell &avgRangeStart, const Value &range, const Condition &cond)
+Value ValueCalc::averageIf(const CellBase &avgRangeStart, const Value &range, const Condition &cond)
 {
     if(range.isError())
         return range;
@@ -2113,7 +2113,7 @@ Value ValueCalc::averageIf(const Cell &avgRangeStart, const Value &range, const 
                 return Value::errorVALUE();
 
             if (matches(cond, v)) {
-                Value val = Cell(avgRangeStart.sheet(), avgRangeStart.column() + c, avgRangeStart.row() + r).value();
+                Value val = CellBase(avgRangeStart.sheet(), avgRangeStart.column() + c, avgRangeStart.row() + r).value();
                 if (val.isNumber()) {// only add numbers, no conversion from string allowed
                     //debugSheets<<"add "<<val;
                     res = add(res, val);
@@ -2126,7 +2126,7 @@ Value ValueCalc::averageIf(const Cell &avgRangeStart, const Value &range, const 
     return res;
 }
 
-Value ValueCalc::averageIfs(const Cell &avgRangeStart, QList<Value> range, QList<Condition> cond, const float limit)
+Value ValueCalc::averageIfs(const CellBase &avgRangeStart, QList<Value> range, QList<Condition> cond, const float limit)
 {
     if(range[0].isError())
         return range[0];
@@ -2214,7 +2214,7 @@ int ValueCalc::countIf(const Value &range, const Condition &cond)
     return res;
 }
 
-Value ValueCalc::countIfs(const Cell &cntRangeStart, QList<Value> range, QList<Condition> cond, const float limit)
+Value ValueCalc::countIfs(const CellBase &cntRangeStart, QList<Value> range, QList<Condition> cond, const float limit)
 {
     if (!range[0].isArray())
         return Value(0.0);
