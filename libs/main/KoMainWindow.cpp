@@ -965,7 +965,10 @@ bool KoMainWindow::saveDocument(bool saveas, bool silent, int specialOutputFlag)
             QString fn = newURL.toLocalFile();
             if (QFileInfo(fn).completeSuffix().isEmpty()) {
                 QMimeType mime = QMimeDatabase().mimeTypeForName(_native_format);
-                fn.append(mime.preferredSuffix());
+                if (!mime.preferredSuffix().isEmpty()) {
+                    fn.append('.');
+                    fn.append(mime.preferredSuffix());
+                }
                 newURL = QUrl::fromLocalFile(fn);
             }
         }
