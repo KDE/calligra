@@ -229,13 +229,6 @@ target_link_libraries(TestGraphicsView calligrasheetscommon)
 
 ########### next target ###############
 
-sheets_add_unit_test(RowRepeatStorage
-    TestRowRepeatStorage.cpp
-    LINK_LIBRARIES calligrasheetscommon Qt5::Test
-)
-
-########### next target ###############
-
 sheets_add_unit_test(RowFormatStorage
     TestRowFormatStorage.cpp
     LINK_LIBRARIES calligrasheetscommon Qt5::Test
