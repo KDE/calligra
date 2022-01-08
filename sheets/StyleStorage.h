@@ -13,8 +13,9 @@
 #include <QRect>
 #include <QVector>
 
-#include "sheets_odf_export.h"
-#include <Region.h>
+#include "engine/StorageBase.h"
+#include "engine/sheets_odf_export.h"
+#include "engine/Region.h"
 #include <Style.h>
 
 namespace Calligra
@@ -35,7 +36,7 @@ class StyleStorageLoaderJob;
  * replacement of this backend. Decorated with some additional features like
  * garbage collection, caching, used area tracking, etc.
  */
-class CALLIGRA_SHEETS_ODF_EXPORT StyleStorage : public QObject
+class CALLIGRA_SHEETS_ODF_EXPORT StyleStorage : public StorageBase, public QObject
 {
     Q_OBJECT
 
@@ -133,51 +134,51 @@ public:
      * Inserts \p number rows at the position \p position .
      * It extends or shifts rectangles, respectively.
      */
-    QVector< QPair<QRectF, SharedSubStyle> > insertRows(int position, int number = 1);
+    void insertRows(int position, int number) override;
 
     /**
      * Inserts \p number columns at the position \p position .
      * It extends or shifts rectangles, respectively.
      */
-    QVector< QPair<QRectF, SharedSubStyle> > insertColumns(int position, int number = 1);
+    void insertColumns(int position, int number) override;
 
     /**
      * Deletes \p number rows at the position \p position .
      * It shrinks or shifts rectangles, respectively.
      */
-    QVector< QPair<QRectF, SharedSubStyle> > removeRows(int position, int number = 1);
+    void removeRows(int position, int number) override;
 
     /**
      * Deletes \p number columns at the position \p position .
      * It shrinks or shifts rectangles, respectively.
      */
-    QVector< QPair<QRectF, SharedSubStyle> > removeColumns(int position, int number = 1);
+    void removeColumns(int position, int number) override;
 
     /**
      * Shifts the rows right of \p rect to the right by the width of \p rect .
      * It extends or shifts rectangles, respectively.
      */
-    QVector< QPair<QRectF, SharedSubStyle> > insertShiftRight(const QRect& rect);
+    void insertShiftRight(const QRect& rect) override;
 
     /**
      * Shifts the columns at the bottom of \p rect to the bottom by the height of \p rect .
      * It extends or shifts rectangles, respectively.
      */
-    QVector< QPair<QRectF, SharedSubStyle> > insertShiftDown(const QRect& rect);
+    void insertShiftDown(const QRect& rect) override;
 
     /**
      * Shifts the rows left of \p rect to the left by the width of \p rect .
      * It shrinks or shifts rectangles, respectively.
      * \return the former rectangle/data pairs
      */
-    QVector< QPair<QRectF, SharedSubStyle> > removeShiftLeft(const QRect& rect);
+    void removeShiftLeft(const QRect& rect) override;
 
     /**
      * Shifts the columns on top of \p rect to the top by the height of \p rect .
      * It shrinks or shifts rectangles, respectively.
      * \return the former rectangle/data pairs
      */
-    QVector< QPair<QRectF, SharedSubStyle> > removeShiftUp(const QRect& rect);
+    void removeShiftUp(const QRect& rect) override;
 
     /**
      * Invalidates all cached styles.
@@ -186,9 +187,7 @@ public:
 
     QVector< QPair<QPoint, SharedSubStyle> > &undoData();
 
-    void resetUndo();
-
-    void storeUndo(bool store);
+    void resetUndo() override;
 
 
 protected Q_SLOTS:

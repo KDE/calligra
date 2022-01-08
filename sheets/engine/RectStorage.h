@@ -23,6 +23,7 @@
 
 #include "sheets_engine_export.h"
 
+#include "StorageBase.h"
 #include "MapBase.h"
 #include "Region.h"
 #include "RTree.h"
@@ -52,7 +53,7 @@ class RectStorageLoader;
  * \note For data assigned to points use PointStorage.
  */
 template<typename T>
-class CALLIGRA_SHEETS_ENGINE_EXPORT RectStorage
+class CALLIGRA_SHEETS_ENGINE_EXPORT RectStorage : public StorageBase
 {
 public:
     explicit RectStorage(MapBase* map);
@@ -98,57 +99,55 @@ public:
      * Inserts \p number rows at the position \p position .
      * It extends or shifts rectangles, respectively.
      */
-    QVector< QPair<QRectF, T> > insertRows(int position, int number);
+    void insertRows(int position, int number) override;
 
     /**
      * Inserts \p number columns at the position \p position .
      * It extends or shifts rectangles, respectively.
      */
-    QVector< QPair<QRectF, T> > insertColumns(int position, int number);
+    void insertColumns(int position, int number) override;
 
     /**
      * Deletes \p number rows at the position \p position .
      * It shrinks or shifts rectangles, respectively.
      */
-    QVector< QPair<QRectF, T> > removeRows(int position, int number);
+    void removeRows(int position, int number) override;
 
     /**
      * Deletes \p number columns at the position \p position .
      * It shrinks or shifts rectangles, respectively.
      */
-    QVector< QPair<QRectF, T> > removeColumns(int position, int number);
+    void removeColumns(int position, int number) override;
 
     /**
      * Shifts the rows right of \p rect to the right by the width of \p rect .
      * It extends or shifts rectangles, respectively.
      */
-    QVector< QPair<QRectF, T> > insertShiftRight(const QRect& rect);
+    void insertShiftRight(const QRect& rect) override;
 
     /**
      * Shifts the columns at the bottom of \p rect to the bottom by the height of \p rect .
      * It extends or shifts rectangles, respectively.
      */
-    QVector< QPair<QRectF, T> > insertShiftDown(const QRect& rect);
+    void insertShiftDown(const QRect& rect) override;
 
     /**
      * Shifts the rows left of \p rect to the left by the width of \p rect .
      * It shrinks or shifts rectangles, respectively.
      * \return the former rectangle/data pairs
      */
-    QVector< QPair<QRectF, T> > removeShiftLeft(const QRect& rect);
+    void removeShiftLeft(const QRect& rect) override;
 
     /**
      * Shifts the columns on top of \p rect to the top by the height of \p rect .
      * It shrinks or shifts rectangles, respectively.
      * \return the former rectangle/data pairs
      */
-    QVector< QPair<QRectF, T> > removeShiftUp(const QRect& rect);
+    void removeShiftUp(const QRect& rect) override;
 
     QVector< QPair<QRectF, T> > &undoData();
 
-    void resetUndo();
-
-    void storeUndo(bool store);
+    void resetUndo() override;
 
 
 protected:
@@ -347,7 +346,7 @@ void RectStorage<T>::remove(const Region& region, const T& data)
 }
 
 template<typename T>
-QVector< QPair<QRectF, T> > RectStorage<T>::insertRows(int position, int number)
+void RectStorage<T>::insertRows(int position, int number)
 {
     ensureLoaded();
     const QRect invalidRect(1, position, KS_colMax, KS_rowMax);
@@ -358,11 +357,10 @@ QVector< QPair<QRectF, T> > RectStorage<T>::insertRows(int position, int number)
     undoData << qMakePair(QRectF(1, KS_rowMax - number + 1, KS_colMax, number), T());
     undoData << m_tree.insertRows(position, number, RTree<T>::CopyCurrent);
     if (m_storingUndo) m_undoData << undoData;
-    return undoData;
 }
 
 template<typename T>
-QVector< QPair<QRectF, T> > RectStorage<T>::insertColumns(int position, int number)
+void RectStorage<T>::insertColumns(int position, int number)
 {
     ensureLoaded();
     const QRect invalidRect(position, 1, KS_colMax, KS_rowMax);
@@ -373,11 +371,10 @@ QVector< QPair<QRectF, T> > RectStorage<T>::insertColumns(int position, int numb
     undoData << qMakePair(QRectF(KS_colMax - number + 1, 1, number, KS_rowMax), T());
     undoData << m_tree.insertColumns(position, number, RTree<T>::CopyCurrent);
     if (m_storingUndo) m_undoData << undoData;
-    return undoData;
 }
 
 template<typename T>
-QVector< QPair<QRectF, T> > RectStorage<T>::removeRows(int position, int number)
+void RectStorage<T>::removeRows(int position, int number)
 {
     ensureLoaded();
     const QRect invalidRect(1, position, KS_colMax, KS_rowMax);
@@ -388,11 +385,10 @@ QVector< QPair<QRectF, T> > RectStorage<T>::removeRows(int position, int number)
     undoData << qMakePair(QRectF(1, position, KS_colMax, number), T());
     undoData << m_tree.removeRows(position, number);
     if (m_storingUndo) m_undoData << undoData;
-    return undoData;
 }
 
 template<typename T>
-QVector< QPair<QRectF, T> > RectStorage<T>::removeColumns(int position, int number)
+void RectStorage<T>::removeColumns(int position, int number)
 {
     ensureLoaded();
     const QRect invalidRect(position, 1, KS_colMax, KS_rowMax);
@@ -403,11 +399,10 @@ QVector< QPair<QRectF, T> > RectStorage<T>::removeColumns(int position, int numb
     undoData << qMakePair(QRectF(position, 1, number, KS_rowMax), T());
     undoData << m_tree.removeColumns(position, number);
     if (m_storingUndo) m_undoData << undoData;
-    return undoData;
 }
 
 template<typename T>
-QVector< QPair<QRectF, T> > RectStorage<T>::insertShiftRight(const QRect& rect)
+void RectStorage<T>::insertShiftRight(const QRect& rect)
 {
     ensureLoaded();
     const QRect invalidRect(rect.topLeft(), QPoint(KS_colMax, rect.bottom()));
@@ -416,11 +411,10 @@ QVector< QPair<QRectF, T> > RectStorage<T>::insertShiftRight(const QRect& rect)
     undoData << m_tree.insertShiftRight(rect);
     regionChanged(invalidRect);
     if (m_storingUndo) m_undoData << undoData;
-    return undoData;
 }
 
 template<typename T>
-QVector< QPair<QRectF, T> > RectStorage<T>::insertShiftDown(const QRect& rect)
+void RectStorage<T>::insertShiftDown(const QRect& rect)
 {
     ensureLoaded();
     const QRect invalidRect(rect.topLeft(), QPoint(rect.right(), KS_rowMax));
@@ -429,11 +423,10 @@ QVector< QPair<QRectF, T> > RectStorage<T>::insertShiftDown(const QRect& rect)
     undoData << m_tree.insertShiftDown(rect);
     if (m_storingUndo) m_undoData << undoData;
     regionChanged(invalidRect);
-    return undoData;
 }
 
 template<typename T>
-QVector< QPair<QRectF, T> > RectStorage<T>::removeShiftLeft(const QRect& rect)
+void RectStorage<T>::removeShiftLeft(const QRect& rect)
 {
     ensureLoaded();
     const QRect invalidRect(rect.topLeft(), QPoint(KS_colMax, rect.bottom()));
@@ -442,11 +435,10 @@ QVector< QPair<QRectF, T> > RectStorage<T>::removeShiftLeft(const QRect& rect)
     undoData << m_tree.removeShiftLeft(rect);
     if (m_storingUndo) m_undoData << undoData;
     regionChanged(invalidRect);
-    return undoData;
 }
 
 template<typename T>
-QVector< QPair<QRectF, T> > RectStorage<T>::removeShiftUp(const QRect& rect)
+void RectStorage<T>::removeShiftUp(const QRect& rect)
 {
     ensureLoaded();
     const QRect invalidRect(rect.topLeft(), QPoint(rect.right(), KS_rowMax));
@@ -455,7 +447,6 @@ QVector< QPair<QRectF, T> > RectStorage<T>::removeShiftUp(const QRect& rect)
     undoData << m_tree.removeShiftUp(rect);
     if (m_storingUndo) m_undoData << undoData;
     regionChanged(invalidRect);
-    return undoData;
 }
 
 template<typename T>
@@ -578,12 +569,7 @@ QVector< QPair<QRectF, T> > &RectStorage<T>::undoData() {
 template<typename T>
 void RectStorage<T>::resetUndo() {
     m_undoData.clear();
-    m_storingUndo = false;
-}
-
-template<typename T>
-void RectStorage<T>::storeUndo(bool store) {
-    m_storingUndo = store;
+    storeUndo(false);
 }
 
 template<typename T>

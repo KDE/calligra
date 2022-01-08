@@ -7,10 +7,10 @@
 #ifndef CALLIGRA_SHEETS_POINT_STORAGE
 #define CALLIGRA_SHEETS_POINT_STORAGE
 
-#include <QRect>
 #include <QString>
 #include <QVector>
 
+#include "StorageBase.h"
 #include "Region.h"
 #include "calligra_sheets_limits.h"
 
@@ -51,7 +51,7 @@ namespace Sheets
  *       data type as movable.
  */
 template<typename T>
-class PointStorage
+class PointStorage : public StorageBase
 {
     friend class PointStorageBenchmark;
     friend class PointStorageTest;
@@ -68,7 +68,7 @@ public:
     /**
      * Destructor.
      */
-    ~PointStorage() {}
+    virtual ~PointStorage() {}
 
     /**
      * Clears the storage.
@@ -196,9 +196,8 @@ public:
 
     /**
      * Insert \p number columns at \p position .
-     * \return the data, that became out of range (shifted over the end)
      */
-    QVector< QPair<QPoint, T> > insertColumns(int position, int number) {
+    void insertColumns(int position, int number) override {
         Q_ASSERT(1 <= position && position <= KS_colMax);
         QVector< QPair<QPoint, T> > oldData;
         for (int row = m_rows.count(); row >= 1; --row) {
@@ -219,14 +218,12 @@ public:
         }
         squeezeRows();
         if (m_storingUndo) m_undoData << oldData;
-        return oldData;
     }
 
     /**
      * Removes \p number columns at \p position .
-     * \return the removed data
      */
-    QVector< QPair<QPoint, T> > removeColumns(int position, int number) {
+    void removeColumns(int position, int number) override {
         Q_ASSERT(1 <= position && position <= KS_colMax);
         QVector< QPair<QPoint, T> > oldData;
         for (int row = m_rows.count(); row >= 1; --row) {
@@ -248,18 +245,16 @@ public:
         }
         squeezeRows();
         if (m_storingUndo) m_undoData << oldData;
-        return oldData;
     }
 
     /**
      * Insert \p number rows at \p position .
-     * \return the data, that became out of range (shifted over the end)
      */
-    QVector< QPair<QPoint, T> > insertRows(int position, int number) {
+    void insertRows(int position, int number) override {
         Q_ASSERT(1 <= position && position <= KS_rowMax);
         // row's missing?
         if (position > m_rows.count())
-            return QVector< QPair<QPoint, T> >();
+            return;
         QVector< QPair<QPoint, T> > oldData;
         int dataCount = 0;
         int rowCount = 0;
@@ -285,18 +280,16 @@ public:
             m_rows.insert(position, index);
         squeezeRows();
         if (m_storingUndo) m_undoData << oldData;
-        return oldData;
     }
 
     /**
      * Removes \p number rows at \p position .
-     * \return the removed data
      */
-    QVector< QPair<QPoint, T> > removeRows(int position, int number) {
+    void removeRows(int position, int number) override {
         Q_ASSERT(1 <= position && position <= KS_rowMax);
         // row's missing?
         if (position > m_rows.count())
-            return QVector< QPair<QPoint, T> >();
+            return;
         QVector< QPair<QPoint, T> > oldData;
         int dataCount = 0;
         int rowCount = 0;
@@ -323,15 +316,13 @@ public:
             m_rows.remove(position - 1);
         squeezeRows();
         if (m_storingUndo) m_undoData << oldData;
-        return oldData;
     }
 
     /**
      * Shifts the data right of \p rect to the left by the width of \p rect .
      * The data formerly contained in \p rect becomes overridden.
-     * \return the removed data
      */
-    QVector< QPair<QPoint, T> > removeShiftLeft(const QRect& rect) {
+    void removeShiftLeft(const QRect& rect) override {
         Q_ASSERT(1 <= rect.left() && rect.left() <= KS_colMax);
         QVector< QPair<QPoint, T> > oldData;
         for (int row = qMin(rect.bottom(), m_rows.count()); row >= rect.top(); --row) {
@@ -353,14 +344,12 @@ public:
         }
         squeezeRows();
         if (m_storingUndo) m_undoData << oldData;
-        return oldData;
     }
 
     /**
      * Shifts the data in and right of \p rect to the right by the width of \p rect .
-     * \return the data, that became out of range (shifted over the end)
      */
-    QVector< QPair<QPoint, T> > insertShiftRight(const QRect& rect) {
+    void insertShiftRight(const QRect& rect) override {
         Q_ASSERT(1 <= rect.left() && rect.left() <= KS_colMax);
         QVector< QPair<QPoint, T> > oldData;
         for (int row = rect.top(); row <= rect.bottom() && row <= m_rows.count(); ++row) {
@@ -381,7 +370,6 @@ public:
         }
         squeezeRows();
         if (m_storingUndo) m_undoData << oldData;
-        return oldData;
     }
 
     /**
@@ -389,12 +377,11 @@ public:
      * The data formerly contained in \p rect becomes overridden.
      * \return the removed data
      */
-    QVector< QPair<QPoint, T> > removeShiftUp(const QRect& rect) {
+    void removeShiftUp(const QRect& rect) override {
         Q_ASSERT(1 <= rect.top() && rect.top() <= KS_rowMax);
         // row's missing?
-        if (rect.top() > m_rows.count()) {
-            return QVector< QPair<QPoint, T> >();
-        }
+        if (rect.top() > m_rows.count())
+            return;
         QVector< QPair<QPoint, T> > oldData;
         for (int row = rect.top(); row <= m_rows.count() && row <= KS_rowMax - rect.height(); ++row) {
             const int rowStart = m_rows.value(row - 1);
@@ -482,18 +469,17 @@ public:
         }
         squeezeRows();
         if (m_storingUndo) m_undoData << oldData;
-        return oldData;
     }
 
     /**
      * Shifts the data in and below \p rect to the bottom by the height of \p rect .
      * \return the data, that became out of range (shifted over the end)
      */
-    QVector< QPair<QPoint, T> > insertShiftDown(const QRect& rect) {
+    void insertShiftDown(const QRect& rect) override {
         Q_ASSERT(1 <= rect.top() && rect.top() <= KS_rowMax);
         // row's missing?
         if (rect.top() > m_rows.count())
-            return QVector< QPair<QPoint, T> >();
+            return;
         QVector< QPair<QPoint, T> > oldData;
         for (int row = m_rows.count(); row >= rect.top(); --row) {
             const int rowStart = m_rows.value(row - 1);
@@ -545,7 +531,6 @@ public:
         }
         squeezeRows();
         if (m_storingUndo) m_undoData << oldData;
-        return oldData;
     }
 
     /**
@@ -860,13 +845,9 @@ public:
         return m_undoData;
     }
 
-    void resetUndo() {
+    void resetUndo() override {
         m_undoData.clear();
-        m_storingUndo = false;
-    }
-
-    void storeUndo(bool store) {
-        m_storingUndo = store;
+        storeUndo(false);
     }
 
 private:
@@ -881,7 +862,6 @@ private:
     QVector<int> m_rows;    // stores the row offsets in m_data
     QVector<T>   m_data;    // stores the actual non-default data
 
-    bool m_storingUndo;
     QVector< QPair<QPoint, T> > m_undoData;
 };
 

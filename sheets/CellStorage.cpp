@@ -70,7 +70,9 @@ public:
 #ifdef CALLIGRA_SHEETS_MT
             , bigUglyLock(QReadWriteLock::Recursive)
 #endif
-    {}
+    {
+        fillStorages();
+    }
 
     Private(const Private& other, Sheet* sheet)
             : sheet(sheet)
@@ -92,9 +94,12 @@ public:
 #ifdef CALLIGRA_SHEETS_MT
             , bigUglyLock(QReadWriteLock::Recursive)
 #endif
-    {}
+    {
+        fillStorages();
+    }
 
     ~Private() {
+        storages.clear();
         delete bindingStorage;
         delete commentStorage;
         delete conditionsStorage;
@@ -111,7 +116,27 @@ public:
         delete richTextStorage;
     }
 
+    void fillStorages() {
+        storages.clear();
+        storages.push_back (bindingStorage);
+        storages.push_back (commentStorage);
+        storages.push_back (conditionsStorage);
+        storages.push_back (databaseStorage);
+        storages.push_back (formulaStorage);
+        storages.push_back (fusionStorage);
+        storages.push_back (linkStorage);
+        storages.push_back (matrixStorage);
+        storages.push_back (namedAreaStorage);
+        storages.push_back (styleStorage);
+        storages.push_back (userInputStorage);
+        storages.push_back (validityStorage);
+        storages.push_back (valueStorage);
+        storages.push_back (richTextStorage);
+    }
+
     void createCommand(KUndo2Command *parent) const;
+    void recalcFormulas(const Region &r, bool includeDeps);
+    void updateBindings(const Region &r);
 
     Sheet*                  sheet;
     BindingStorage*         bindingStorage;
@@ -128,6 +153,8 @@ public:
     ValidityStorage*        validityStorage;
     ValueStorage*           valueStorage;
     RichTextStorage*        richTextStorage;
+
+    QList<StorageBase *> storages;
 
     bool undoEnabled;
 
@@ -210,6 +237,23 @@ void CellStorage::Private::createCommand(KUndo2Command *parent) const
     }
 }
 
+void CellStorage::Private::recalcFormulas(const Region &r, bool includeDeps)
+{
+    PointStorage<Formula> subStorage = formulaStorage->subStorage(r);
+    Cell cell;
+    for (int i = 0; i < subStorage.count(); ++i) {
+        cell = Cell(sheet, subStorage.col(i), subStorage.row(i));
+        sheet->map()->addDamage(new CellDamage(cell, CellDamage::Formula));
+    }
+
+    // Trigger a recalculation only for the cells, that depend on values in the changed region.
+    Region providers = sheet->map()->dependencyManager()->reduceToProvidingRegion(r);
+    sheet->map()->addDamage(new CellDamage(sheet, providers, CellDamage::Value));
+}
+
+void CellStorage::Private::updateBindings(const Region &r) {
+    sheet->map()->addDamage(new CellDamage(sheet, r, CellDamage::Binding | CellDamage::NamedArea));
+}
 
 CellStorage::CellStorage(Sheet* sheet)
         : QObject(sheet)
@@ -804,39 +848,15 @@ void CellStorage::insertColumns(int position, int number)
     // TODO Stefan: Optimize: Avoid the double creation of the sub-storages, but don't process
     //              formulas, that will get out of bounds after the operation.
     const Region invalidRegion(QRect(QPoint(position, 1), QPoint(KS_colMax, KS_rowMax)), d->sheet);
-    PointStorage<Formula> subStorage = d->formulaStorage->subStorage(invalidRegion);
-    Cell cell;
-    for (int i = 0; i < subStorage.count(); ++i) {
-        cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
-        d->sheet->map()->addDamage(new CellDamage(cell, CellDamage::Formula));
-    }
+    d->recalcFormulas(invalidRegion, false);
     // Trigger an update of the bindings and the named areas.
-    d->sheet->map()->addDamage(new CellDamage(d->sheet, invalidRegion, CellDamage::Binding | CellDamage::NamedArea));
+    d->updateBindings(invalidRegion);
 
-    d->bindingStorage->insertColumns(position, number);
-    d->commentStorage->insertColumns(position, number);
-    d->conditionsStorage->insertColumns(position, number);
-    d->databaseStorage->insertColumns(position, number);
-    d->formulaStorage->insertColumns(position, number);
-    d->fusionStorage->insertColumns(position, number);
-    d->linkStorage->insertColumns(position, number);
-    d->matrixStorage->insertColumns(position, number);
-    d->namedAreaStorage->insertColumns(position, number);
-    d->styleStorage->insertColumns(position, number);
-    d->userInputStorage->insertColumns(position, number);
-    d->richTextStorage->insertColumns(position, number);
-    d->validityStorage->insertColumns(position, number);
-    d->valueStorage->insertColumns(position, number);
+    for (StorageBase *storage : d->storages)
+        storage->insertColumns(position, number);
 
     // Trigger a dependency update of the cells, which have a formula. (new positions)
-    subStorage = d->formulaStorage->subStorage(invalidRegion);
-    for (int i = 0; i < subStorage.count(); ++i) {
-        cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
-        d->sheet->map()->addDamage(new CellDamage(cell, CellDamage::Formula));
-    }
-    // Trigger a recalculation only for the cells, that depend on values in the changed region.
-    Region providers = d->sheet->map()->dependencyManager()->reduceToProvidingRegion(invalidRegion);
-    d->sheet->map()->addDamage(new CellDamage(d->sheet, providers, CellDamage::Value));
+    d->recalcFormulas(invalidRegion, true);
 }
 
 void CellStorage::removeColumns(int position, int number)
@@ -844,42 +864,15 @@ void CellStorage::removeColumns(int position, int number)
 #ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
-    // Trigger a dependency update of the cells, which have a formula. (old positions)
     const Region invalidRegion(QRect(QPoint(position, 1), QPoint(KS_colMax, KS_rowMax)), d->sheet);
-    PointStorage<Formula> subStorage = d->formulaStorage->subStorage(invalidRegion);
-    Cell cell;
-    for (int i = 0; i < subStorage.count(); ++i) {
-        cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
-        d->sheet->map()->addDamage(new CellDamage(cell, CellDamage::Formula));
-    }
-    // Trigger an update of the bindings and the named areas.
+    d->recalcFormulas(invalidRegion, false);
     const Region region(QRect(QPoint(position - 1, 1), QPoint(KS_colMax, KS_rowMax)), d->sheet);
-    d->sheet->map()->addDamage(new CellDamage(d->sheet, region, CellDamage::Binding | CellDamage::NamedArea));
+    d->updateBindings(region);
 
-    d->bindingStorage->removeColumns(position, number);
-    d->commentStorage->removeColumns(position, number);
-    d->conditionsStorage->removeColumns(position, number);
-    d->databaseStorage->removeColumns(position, number);
-    d->formulaStorage->removeColumns(position, number);
-    d->fusionStorage->removeColumns(position, number);
-    d->linkStorage->removeColumns(position, number);
-    d->matrixStorage->removeColumns(position, number);
-    d->namedAreaStorage->removeColumns(position, number);
-    d->styleStorage->removeColumns(position, number);
-    d->userInputStorage->removeColumns(position, number);
-    d->validityStorage->removeColumns(position, number);
-    d->valueStorage->removeColumns(position, number);
-    d->richTextStorage->removeColumns(position, number);
+    for (StorageBase *storage : d->storages)
+        storage->removeColumns(position, number);
 
-    // Trigger a dependency update of the cells, which have a formula. (new positions)
-    subStorage = d->formulaStorage->subStorage(invalidRegion);
-    for (int i = 0; i < subStorage.count(); ++i) {
-        cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
-        d->sheet->map()->addDamage(new CellDamage(cell, CellDamage::Formula));
-    }
-    // Trigger a recalculation only for the cells, that depend on values in the changed region.
-    Region providers = d->sheet->map()->dependencyManager()->reduceToProvidingRegion(invalidRegion);
-    d->sheet->map()->addDamage(new CellDamage(d->sheet, providers, CellDamage::Value));
+    d->recalcFormulas(invalidRegion, true);
 }
 
 void CellStorage::insertRows(int position, int number)
@@ -887,41 +880,14 @@ void CellStorage::insertRows(int position, int number)
 #ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
-    // Trigger a dependency update of the cells, which have a formula. (old positions)
     const Region invalidRegion(QRect(QPoint(1, position), QPoint(KS_colMax, KS_rowMax)), d->sheet);
-    PointStorage<Formula> subStorage = d->formulaStorage->subStorage(invalidRegion);
-    Cell cell;
-    for (int i = 0; i < subStorage.count(); ++i) {
-        cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
-        d->sheet->map()->addDamage(new CellDamage(cell, CellDamage::Formula));
-    }
-    // Trigger an update of the bindings and the named areas.
-    d->sheet->map()->addDamage(new CellDamage(d->sheet, invalidRegion, CellDamage::Binding | CellDamage::NamedArea));
+    d->recalcFormulas(invalidRegion, false);
+    d->updateBindings(invalidRegion);
 
-    d->bindingStorage->insertRows(position, number);
-    d->commentStorage->insertRows(position, number);
-    d->conditionsStorage->insertRows(position, number);
-    d->databaseStorage->insertRows(position, number);
-    d->formulaStorage->insertRows(position, number);
-    d->fusionStorage->insertRows(position, number);
-    d->linkStorage->insertRows(position, number);
-    d->matrixStorage->insertRows(position, number);
-    d->namedAreaStorage->insertRows(position, number);
-    d->styleStorage->insertRows(position, number);
-    d->userInputStorage->insertRows(position, number);
-    d->validityStorage->insertRows(position, number);
-    d->valueStorage->insertRows(position, number);
-    d->richTextStorage->insertRows(position, number);
+    for (StorageBase *storage : d->storages)
+        storage->insertRows(position, number);
 
-    // Trigger a dependency update of the cells, which have a formula. (new positions)
-    subStorage = d->formulaStorage->subStorage(invalidRegion);
-    for (int i = 0; i < subStorage.count(); ++i) {
-        cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
-        d->sheet->map()->addDamage(new CellDamage(cell, CellDamage::Formula));
-    }
-    // Trigger a recalculation only for the cells, that depend on values in the changed region.
-    Region providers = d->sheet->map()->dependencyManager()->reduceToProvidingRegion(invalidRegion);
-    d->sheet->map()->addDamage(new CellDamage(d->sheet, providers, CellDamage::Value));
+    d->recalcFormulas(invalidRegion, true);
 }
 
 void CellStorage::removeRows(int position, int number)
@@ -929,42 +895,15 @@ void CellStorage::removeRows(int position, int number)
 #ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
-    // Trigger a dependency update of the cells, which have a formula. (old positions)
     const Region invalidRegion(QRect(QPoint(1, position), QPoint(KS_colMax, KS_rowMax)), d->sheet);
-    PointStorage<Formula> subStorage = d->formulaStorage->subStorage(invalidRegion);
-    Cell cell;
-    for (int i = 0; i < subStorage.count(); ++i) {
-        cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
-        d->sheet->map()->addDamage(new CellDamage(cell, CellDamage::Formula));
-    }
-    // Trigger an update of the bindings and the named areas.
+    d->recalcFormulas(invalidRegion, false);
     const Region region(QRect(QPoint(1, position - 1), QPoint(KS_colMax, KS_rowMax)), d->sheet);
-    d->sheet->map()->addDamage(new CellDamage(d->sheet, region, CellDamage::Binding | CellDamage::NamedArea));
+    d->updateBindings(region);
 
-    d->bindingStorage->removeRows(position, number);
-    d->commentStorage->removeRows(position, number);
-    d->conditionsStorage->removeRows(position, number);
-    d->databaseStorage->removeRows(position, number);
-    d->formulaStorage->removeRows(position, number);
-    d->fusionStorage->removeRows(position, number);
-    d->linkStorage->removeRows(position, number);
-    d->matrixStorage->removeRows(position, number);
-    d->namedAreaStorage->removeRows(position, number);
-    d->styleStorage->removeRows(position, number);
-    d->userInputStorage->removeRows(position, number);
-    d->validityStorage->removeRows(position, number);
-    d->valueStorage->removeRows(position, number);
-    d->richTextStorage->removeRows(position, number);
+    for (StorageBase *storage : d->storages)
+        storage->removeRows(position, number);
 
-    // Trigger a dependency update of the cells, which have a formula. (new positions)
-    subStorage = d->formulaStorage->subStorage(invalidRegion);
-    for (int i = 0; i < subStorage.count(); ++i) {
-        cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
-        d->sheet->map()->addDamage(new CellDamage(cell, CellDamage::Formula));
-    }
-    // Trigger a recalculation only for the cells, that depend on values in the changed region.
-    Region providers = d->sheet->map()->dependencyManager()->reduceToProvidingRegion(invalidRegion);
-    d->sheet->map()->addDamage(new CellDamage(d->sheet, providers, CellDamage::Value));
+    d->recalcFormulas(invalidRegion, true);
 }
 
 void CellStorage::removeShiftLeft(const QRect& rect)
@@ -972,42 +911,15 @@ void CellStorage::removeShiftLeft(const QRect& rect)
 #ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
-    // Trigger a dependency update of the cells, which have a formula. (old positions)
     const Region invalidRegion(QRect(rect.topLeft(), QPoint(KS_colMax, rect.bottom())), d->sheet);
-    PointStorage<Formula> subStorage = d->formulaStorage->subStorage(invalidRegion);
-    Cell cell;
-    for (int i = 0; i < subStorage.count(); ++i) {
-        cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
-        d->sheet->map()->addDamage(new CellDamage(cell, CellDamage::Formula));
-    }
-    // Trigger an update of the bindings and the named areas.
+    d->recalcFormulas(invalidRegion, false);
     const Region region(QRect(rect.topLeft() - QPoint(1, 0), QPoint(KS_colMax, rect.bottom())), d->sheet);
-    d->sheet->map()->addDamage(new CellDamage(d->sheet, region, CellDamage::Binding | CellDamage::NamedArea));
+    d->updateBindings(region);
 
-    d->bindingStorage->removeShiftLeft(rect);
-    d->commentStorage->removeShiftLeft(rect);
-    d->conditionsStorage->removeShiftLeft(rect);
-    d->databaseStorage->removeShiftLeft(rect);
-    d->formulaStorage->removeShiftLeft(rect);
-    d->fusionStorage->removeShiftLeft(rect);
-    d->linkStorage->removeShiftLeft(rect);
-    d->matrixStorage->removeShiftLeft(rect);
-    d->namedAreaStorage->removeShiftLeft(rect);
-    d->styleStorage->removeShiftLeft(rect);
-    d->userInputStorage->removeShiftLeft(rect);
-    d->validityStorage->removeShiftLeft(rect);
-    d->valueStorage->removeShiftLeft(rect);
-    d->richTextStorage->removeShiftLeft(rect);
+    for (StorageBase *storage : d->storages)
+        storage->removeShiftLeft(rect);
 
-    // Trigger a dependency update of the cells, which have a formula. (new positions)
-    subStorage = d->formulaStorage->subStorage(invalidRegion);
-    for (int i = 0; i < subStorage.count(); ++i) {
-        cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
-        d->sheet->map()->addDamage(new CellDamage(cell, CellDamage::Formula));
-    }
-    // Trigger a recalculation only for the cells, that depend on values in the changed region.
-    Region providers = d->sheet->map()->dependencyManager()->reduceToProvidingRegion(invalidRegion);
-    d->sheet->map()->addDamage(new CellDamage(d->sheet, providers, CellDamage::Value));
+    d->recalcFormulas(invalidRegion, true);
 }
 
 void CellStorage::insertShiftRight(const QRect& rect)
@@ -1015,41 +927,14 @@ void CellStorage::insertShiftRight(const QRect& rect)
 #ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
-    // Trigger a dependency update of the cells, which have a formula. (old positions)
     const Region invalidRegion(QRect(rect.topLeft(), QPoint(KS_colMax, rect.bottom())), d->sheet);
-    PointStorage<Formula> subStorage = d->formulaStorage->subStorage(invalidRegion);
-    Cell cell;
-    for (int i = 0; i < subStorage.count(); ++i) {
-        cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
-        d->sheet->map()->addDamage(new CellDamage(cell, CellDamage::Formula));
-    }
-    // Trigger an update of the bindings and the named areas.
-    d->sheet->map()->addDamage(new CellDamage(d->sheet, invalidRegion, CellDamage::Binding | CellDamage::NamedArea));
+    d->recalcFormulas(invalidRegion, false);
+    d->updateBindings(invalidRegion);
 
-    d->bindingStorage->insertShiftRight(rect);
-    d->commentStorage->insertShiftRight(rect);
-    d->conditionsStorage->insertShiftRight(rect);
-    d->databaseStorage->insertShiftRight(rect);
-    d->formulaStorage->insertShiftRight(rect);
-    d->fusionStorage->insertShiftRight(rect);
-    d->linkStorage->insertShiftRight(rect);
-    d->matrixStorage->insertShiftRight(rect);
-    d->namedAreaStorage->insertShiftRight(rect);
-    d->styleStorage->insertShiftRight(rect);
-    d->userInputStorage->insertShiftRight(rect);
-    d->validityStorage->insertShiftRight(rect);
-    d->valueStorage->insertShiftRight(rect);
-    d->richTextStorage->insertShiftRight(rect);
+    for (StorageBase *storage : d->storages)
+        storage->insertShiftRight(rect);
 
-    // Trigger a dependency update of the cells, which have a formula. (new positions)
-    subStorage = d->formulaStorage->subStorage(invalidRegion);
-    for (int i = 0; i < subStorage.count(); ++i) {
-        cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
-        d->sheet->map()->addDamage(new CellDamage(cell, CellDamage::Formula));
-    }
-    // Trigger a recalculation only for the cells, that depend on values in the changed region.
-    Region providers = d->sheet->map()->dependencyManager()->reduceToProvidingRegion(invalidRegion);
-    d->sheet->map()->addDamage(new CellDamage(d->sheet, providers, CellDamage::Value));
+    d->recalcFormulas(invalidRegion, true);
 }
 
 void CellStorage::removeShiftUp(const QRect& rect)
@@ -1057,42 +942,15 @@ void CellStorage::removeShiftUp(const QRect& rect)
 #ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
-    // Trigger a dependency update of the cells, which have a formula. (old positions)
     const Region invalidRegion(QRect(rect.topLeft(), QPoint(rect.right(), KS_rowMax)), d->sheet);
-    PointStorage<Formula> subStorage = d->formulaStorage->subStorage(invalidRegion);
-    Cell cell;
-    for (int i = 0; i < subStorage.count(); ++i) {
-        cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
-        d->sheet->map()->addDamage(new CellDamage(cell, CellDamage::Formula));
-    }
-    // Trigger an update of the bindings and the named areas.
+    d->recalcFormulas(invalidRegion, false);
     const Region region(QRect(rect.topLeft() - QPoint(0, 1), QPoint(rect.right(), KS_rowMax)), d->sheet);
-    d->sheet->map()->addDamage(new CellDamage(d->sheet, region, CellDamage::Binding | CellDamage::NamedArea));
+    d->updateBindings(region);
 
-    d->bindingStorage->removeShiftUp(rect);
-    d->commentStorage->removeShiftUp(rect);
-    d->conditionsStorage->removeShiftUp(rect);
-    d->databaseStorage->removeShiftUp(rect);
-    d->formulaStorage->removeShiftUp(rect);
-    d->fusionStorage->removeShiftUp(rect);
-    d->linkStorage->removeShiftUp(rect);
-    d->matrixStorage->removeShiftUp(rect);
-    d->namedAreaStorage->removeShiftUp(rect);
-    d->styleStorage->removeShiftUp(rect);
-    d->userInputStorage->removeShiftUp(rect);
-    d->validityStorage->removeShiftUp(rect);
-    d->valueStorage->removeShiftUp(rect);
-    d->richTextStorage->removeShiftUp(rect);
+    for (StorageBase *storage : d->storages)
+        storage->removeShiftUp(rect);
 
-    // Trigger a dependency update of the cells, which have a formula. (new positions)
-    subStorage = d->formulaStorage->subStorage(invalidRegion);
-    for (int i = 0; i < subStorage.count(); ++i) {
-        cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
-        d->sheet->map()->addDamage(new CellDamage(cell, CellDamage::Formula));
-    }
-    // Trigger a recalculation only for the cells, that depend on values in the changed region.
-    Region providers = d->sheet->map()->dependencyManager()->reduceToProvidingRegion(invalidRegion);
-    d->sheet->map()->addDamage(new CellDamage(d->sheet, providers, CellDamage::Value));
+    d->recalcFormulas(invalidRegion, true);
 }
 
 void CellStorage::insertShiftDown(const QRect& rect)
@@ -1100,41 +958,14 @@ void CellStorage::insertShiftDown(const QRect& rect)
 #ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&d->bigUglyLock);
 #endif
-    // Trigger a dependency update of the cells, which have a formula. (old positions)
     const Region invalidRegion(QRect(rect.topLeft(), QPoint(rect.right(), KS_rowMax)), d->sheet);
-    PointStorage<Formula> subStorage = d->formulaStorage->subStorage(invalidRegion);
-    Cell cell;
-    for (int i = 0; i < subStorage.count(); ++i) {
-        cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
-        d->sheet->map()->addDamage(new CellDamage(cell, CellDamage::Formula));
-    }
-    // Trigger an update of the bindings and the named areas.
-    d->sheet->map()->addDamage(new CellDamage(d->sheet, invalidRegion, CellDamage::Binding | CellDamage::NamedArea));
+    d->recalcFormulas(invalidRegion, false);
+    d->updateBindings(region);
 
-    d->bindingStorage->insertShiftDown(rect);
-    d->commentStorage->insertShiftDown(rect);
-    d->conditionsStorage->insertShiftDown(rect);
-    d->databaseStorage->insertShiftDown(rect);
-    d->formulaStorage->insertShiftDown(rect);
-    d->fusionStorage->insertShiftDown(rect);
-    d->linkStorage->insertShiftDown(rect);
-    d->matrixStorage->insertShiftDown(rect);
-    d->namedAreaStorage->insertShiftDown(rect);
-    d->styleStorage->insertShiftDown(rect);
-    d->userInputStorage->insertShiftDown(rect);
-    d->validityStorage->insertShiftDown(rect);
-    d->valueStorage->insertShiftDown(rect);
-    d->richTextStorage->insertShiftDown(rect);
+    for (StorageBase *storage : d->storages)
+        storage->insertShiftDown(rect);
 
-    // Trigger a dependency update of the cells, which have a formula. (new positions)
-    subStorage = d->formulaStorage->subStorage(invalidRegion);
-    for (int i = 0; i < subStorage.count(); ++i) {
-        cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
-        d->sheet->map()->addDamage(new CellDamage(cell, CellDamage::Formula));
-    }
-    // Trigger a recalculation only for the cells, that depend on values in the changed region.
-    Region providers = d->sheet->map()->dependencyManager()->reduceToProvidingRegion(invalidRegion);
-    d->sheet->map()->addDamage(new CellDamage(d->sheet, providers, CellDamage::Value));
+    d->recalcFormulas(invalidRegion, true);
 }
 
 Cell CellStorage::firstInColumn(int col, Visiting visiting) const
@@ -1399,20 +1230,8 @@ void CellStorage::startUndoRecording()
     // Should not happen, hence this assertion.
     Q_ASSERT(e->undoEnabled == false);
 
-    d->bindingStorage->storeUndo(true);
-    d->commentStorage->storeUndo(true);
-    d->conditionsStorage->storeUndo(true);
-    d->databaseStorage->storeUndo(true);
-    d->formulaStorage->storeUndo(true);
-    d->fusionStorage->storeUndo(true);
-    d->linkStorage->storeUndo(true);
-    d->matrixStorage->storeUndo(true);
-    d->namedAreaStorage->storeUndo(true);
-    d->styleStorage->storeUndo(true);
-    d->userInputStorage->storeUndo(true);
-    d->validityStorage->storeUndo(true);
-    d->valueStorage->storeUndo(true);
-    d->richTextStorage->storeUndo(true);
+    for (StorageBase *storage : d->storages)
+        storage->storeUndo(true);
 
     d->undoEnabled = true;
 }
@@ -1432,20 +1251,8 @@ void CellStorage::stopUndoRecording(KUndo2Command *parent)
         emit namedAreaRemoved(d->undoData->namedAreas[i].second);
     }
 
-    d->bindingStorage->resetUndo();
-    d->commentStorage->resetUndo();
-    d->conditionsStorage->resetUndo();
-    d->databaseStorage->resetUndo();
-    d->formulaStorage->resetUndo();
-    d->fusionStorage->resetUndo();
-    d->linkStorage->resetUndo();
-    d->matrixStorage->resetUndo();
-    d->namedAreaStorage->resetUndo();
-    d->styleStorage->resetUndo();
-    d->userInputStorage->resetUndo();
-    d->validityStorage->resetUndo();
-    d->valueStorage->resetUndo();
-    d->richTextStorage->resetUndo();
+    for (StorageBase *storage : d->storages)
+        storage->resetUndo();
 
     d->undoEnabled = true;
 }

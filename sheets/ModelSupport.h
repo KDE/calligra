@@ -10,10 +10,6 @@
 #include <QAbstractItemModel>
 #include <QItemSelection>
 
-#include "Cell.h"
-#include "Region.h"
-#include "Sheet.h"
-
 namespace Calligra
 {
 namespace Sheets
@@ -61,50 +57,12 @@ Q_DECLARE_FLAGS(CellDataRoles, CellDataRole)
 
 
 /**
- * Converts a model index into a Cell.
- * \ingroup Model
- */
-static inline Cell toCell(const QModelIndex &index)
-{
-    const int column = index.column() + 1;
-    const int row = index.row() + 1;
-    Sheet *const sheet = static_cast<Sheet*>(index.internalPointer());
-    return Cell(sheet, column, row);
-}
-
-/**
- * Converts a model index into cell coordinates.
- * \ingroup Model
- */
-static inline QPoint toPoint(const QModelIndex &index)
-{
-    const int column = index.column() + 1;
-    const int row = index.row() + 1;
-    return QPoint(column, row);
-}
-
-/**
  * Converts an item range into a range in cell coordinates.
  * \ingroup Model
  */
 static inline QRect toRange(const QItemSelectionRange &range)
 {
     return QRect(range.left() + 1, range.top() + 1, range.width(), range.height());
-}
-
-/**
- * Converts an item selection into a cell region.
- * \ingroup Model
- */
-static inline Region toRegion(const QItemSelection &selection)
-{
-    Region region;
-    for (int i = 0; i < selection.count(); ++i) {
-        const QItemSelectionRange range = selection[i];
-        Sheet *const sheet = static_cast<Sheet*>(range.topLeft().internalPointer());
-        region.add(toRange(range), sheet);
-    }
-    return region;
 }
 
 /**
@@ -118,27 +76,6 @@ static inline QItemSelectionRange fromRange(const QRect &range, const QAbstractI
     return QItemSelectionRange(topLeft, bottomRight);
 }
 
-/**
- * Converts a range in cell coordinates into a model item range.
- * \ingroup Model
- */
-static inline QItemSelectionRange fromRange(const QRect &range, Sheet *const sheet)
-{
-    return fromRange(range, sheet->model());
-}
-
-/**
- * Converts a cell region into an item selection.
- * \ingroup Model
- */
-static inline QItemSelection fromRegion(const Region &region)
-{
-    QItemSelection selection;
-    for (Region::ConstIterator it = region.constBegin(), end = region.constEnd(); it != end; ++it) {
-        selection.append(fromRange((*it)->rect(), (*it)->sheet()));
-    }
-    return selection;
-}
 
 } // namespace Sheets
 } // namespace Calligra
