@@ -10,7 +10,6 @@
 
 // Qt
 #ifdef CALLIGRA_SHEETS_MT
-#include <QReadWriteLock>
 #include <QReadLocker>
 #include <QWriteLocker>
 #endif
@@ -66,12 +65,7 @@ public:
             , validityStorage(new ValidityStorage(sheet->map()))
             , valueStorage(new ValueStorage())
             , richTextStorage(new RichTextStorage())
-            , undoEnabled(false)
-#ifdef CALLIGRA_SHEETS_MT
-            , bigUglyLock(QReadWriteLock::Recursive)
-#endif
     {
-        fillStorages();
     }
 
     Private(const Private& other, Sheet* sheet)
@@ -90,16 +84,10 @@ public:
             , validityStorage(new ValidityStorage(*other.validityStorage))
             , valueStorage(new ValueStorage(*other.valueStorage))
             , richTextStorage(new RichTextStorage(*other.richTextStorage))
-            , undoEnabled(false)
-#ifdef CALLIGRA_SHEETS_MT
-            , bigUglyLock(QReadWriteLock::Recursive)
-#endif
     {
-        fillStorages();
     }
 
     ~Private() {
-        storages.clear();
         delete bindingStorage;
         delete commentStorage;
         delete conditionsStorage;
@@ -114,24 +102,6 @@ public:
         delete validityStorage;
         delete valueStorage;
         delete richTextStorage;
-    }
-
-    void fillStorages() {
-        storages.clear();
-        storages.push_back (bindingStorage);
-        storages.push_back (commentStorage);
-        storages.push_back (conditionsStorage);
-        storages.push_back (databaseStorage);
-        storages.push_back (formulaStorage);
-        storages.push_back (fusionStorage);
-        storages.push_back (linkStorage);
-        storages.push_back (matrixStorage);
-        storages.push_back (namedAreaStorage);
-        storages.push_back (styleStorage);
-        storages.push_back (userInputStorage);
-        storages.push_back (validityStorage);
-        storages.push_back (valueStorage);
-        storages.push_back (richTextStorage);
     }
 
     void createCommand(KUndo2Command *parent) const;
@@ -153,14 +123,6 @@ public:
     ValidityStorage*        validityStorage;
     ValueStorage*           valueStorage;
     RichTextStorage*        richTextStorage;
-
-    QList<StorageBase *> storages;
-
-    bool undoEnabled;
-
-#ifdef CALLIGRA_SHEETS_MT
-    QReadWriteLock bigUglyLock;
-#endif
 };
 
 void CellStorage::Private::createCommand(KUndo2Command *parent) const
@@ -258,24 +220,58 @@ void CellStorage::Private::updateBindings(const Region &r) {
 CellStorage::CellStorage(Sheet* sheet)
         : QObject(sheet)
         , d(new Private(sheet))
+        , undoEnabled(false)
+#ifdef CALLIGRA_SHEETS_MT
+        , bigUglyLock(QReadWriteLock::Recursive)
+#endif
 {
+    fillStorages();
 }
 
 CellStorage::CellStorage(const CellStorage& other)
         : QObject(other.d->sheet)
         , d(new Private(*other.d, other.d->sheet))
+        , undoEnabled(false)
+#ifdef CALLIGRA_SHEETS_MT
+        , bigUglyLock(QReadWriteLock::Recursive)
+#endif
 {
+    fillStorages();
 }
 
 CellStorage::CellStorage(const CellStorage& other, Sheet* sheet)
         : QObject(sheet)
         , d(new Private(*other.d, sheet))
+        , undoEnabled(false)
+#ifdef CALLIGRA_SHEETS_MT
+        , bigUglyLock(QReadWriteLock::Recursive)
+#endif
 {
+    fillStorages();
 }
 
 CellStorage::~CellStorage()
 {
+    storages.clear();
     delete d;
+}
+
+void CellStorage::fillStorages() {
+    storages.clear();
+    storages.push_back (bindingStorage);
+    storages.push_back (commentStorage);
+    storages.push_back (conditionsStorage);
+    storages.push_back (databaseStorage);
+    storages.push_back (formulaStorage);
+    storages.push_back (fusionStorage);
+    storages.push_back (linkStorage);
+    storages.push_back (matrixStorage);
+    storages.push_back (namedAreaStorage);
+    storages.push_back (styleStorage);
+    storages.push_back (userInputStorage);
+    storages.push_back (validityStorage);
+    storages.push_back (valueStorage);
+    storages.push_back (richTextStorage);
 }
 
 Sheet* CellStorage::sheet() const
@@ -286,7 +282,7 @@ Sheet* CellStorage::sheet() const
 void CellStorage::take(int col, int row)
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QWriteLocker(&d->bigUglyLock);
+    QWriteLocker(&bigUglyLock);
 #endif
 
     d->formulaStorage->take(col, row);
@@ -311,7 +307,7 @@ void CellStorage::take(int col, int row)
 Binding CellStorage::binding(int column, int row) const
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QReadLocker rl(&d->bigUglyLock);
+    QReadLocker rl(&bigUglyLock);
 #endif
     return d->bindingStorage->contains(QPoint(column, row));
 }
@@ -319,7 +315,7 @@ Binding CellStorage::binding(int column, int row) const
 void CellStorage::setBinding(const Region& region, const Binding& binding)
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QWriteLocker(&d->bigUglyLock);
+    QWriteLocker(&bigUglyLock);
 #endif
     d->bindingStorage->insert(region, binding);
 }
@@ -327,7 +323,7 @@ void CellStorage::setBinding(const Region& region, const Binding& binding)
 void CellStorage::removeBinding(const Region& region, const Binding& binding)
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QWriteLocker(&d->bigUglyLock);
+    QWriteLocker(&bigUglyLock);
 #endif
     d->bindingStorage->remove(region, binding);
 }
@@ -335,7 +331,7 @@ void CellStorage::removeBinding(const Region& region, const Binding& binding)
 QString CellStorage::comment(int column, int row) const
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QReadLocker rl(&d->bigUglyLock);
+    QReadLocker rl(&bigUglyLock);
 #endif
     return d->commentStorage->contains(QPoint(column, row));
 }
@@ -343,7 +339,7 @@ QString CellStorage::comment(int column, int row) const
 void CellStorage::setComment(const Region& region, const QString& comment)
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QWriteLocker(&d->bigUglyLock);
+    QWriteLocker(&bigUglyLock);
 #endif
     d->commentStorage->insert(region, comment);
 }
@@ -351,7 +347,7 @@ void CellStorage::setComment(const Region& region, const QString& comment)
 Conditions CellStorage::conditions(int column, int row) const
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QReadLocker rl(&d->bigUglyLock);
+    QReadLocker rl(&bigUglyLock);
 #endif
     return d->conditionsStorage->contains(QPoint(column, row));
 }
@@ -359,7 +355,7 @@ Conditions CellStorage::conditions(int column, int row) const
 void CellStorage::setConditions(const Region& region, Conditions conditions)
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QWriteLocker(&d->bigUglyLock);
+    QWriteLocker(&bigUglyLock);
 #endif
     d->conditionsStorage->insert(region, conditions);
 }
@@ -367,7 +363,7 @@ void CellStorage::setConditions(const Region& region, Conditions conditions)
 Database CellStorage::database(int column, int row) const
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QReadLocker rl(&d->bigUglyLock);
+    QReadLocker rl(&bigUglyLock);
 #endif
     QPair<QRectF, Database> pair = d->databaseStorage->containedPair(QPoint(column, row));
     if (pair.first.isEmpty())
@@ -383,7 +379,7 @@ Database CellStorage::database(int column, int row) const
 QList< QPair<QRectF, Database> > CellStorage::databases(const Region& region) const
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QReadLocker rl(&d->bigUglyLock);
+    QReadLocker rl(&bigUglyLock);
 #endif
     return d->databaseStorage->intersectingPairs(region);
 }
@@ -391,7 +387,7 @@ QList< QPair<QRectF, Database> > CellStorage::databases(const Region& region) co
 void CellStorage::setDatabase(const Region& region, const Database& database)
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QWriteLocker(&d->bigUglyLock);
+    QWriteLocker(&bigUglyLock);
 #endif
     d->databaseStorage->insert(region, database);
 }
@@ -399,7 +395,7 @@ void CellStorage::setDatabase(const Region& region, const Database& database)
 Formula CellStorage::formula(int column, int row) const
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QReadLocker rl(&d->bigUglyLock);
+    QReadLocker rl(&bigUglyLock);
 #endif
     return d->formulaStorage->lookup(column, row, Formula::empty());
 }
@@ -407,7 +403,7 @@ Formula CellStorage::formula(int column, int row) const
 void CellStorage::setFormula(int column, int row, const Formula& formula)
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QWriteLocker(&d->bigUglyLock);
+    QWriteLocker(&bigUglyLock);
 #endif
     Formula old = Formula::empty();
     if (formula.expression().isEmpty())
@@ -427,7 +423,7 @@ void CellStorage::setFormula(int column, int row, const Formula& formula)
 QString CellStorage::link(int column, int row) const
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QReadLocker rl(&d->bigUglyLock);
+    QReadLocker rl(&bigUglyLock);
 #endif
     return d->linkStorage->lookup(column, row);
 }
@@ -435,7 +431,7 @@ QString CellStorage::link(int column, int row) const
 void CellStorage::setLink(int column, int row, const QString& link)
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QWriteLocker(&d->bigUglyLock);
+    QWriteLocker(&bigUglyLock);
 #endif
     if (link.isEmpty())
         d->linkStorage->take(column, row);
@@ -446,7 +442,7 @@ void CellStorage::setLink(int column, int row, const QString& link)
 QString CellStorage::namedArea(int column, int row) const
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QReadLocker rl(&d->bigUglyLock);
+    QReadLocker rl(&bigUglyLock);
 #endif
     QPair<QRectF, QString> pair = d->namedAreaStorage->containedPair(QPoint(column, row));
     if (pair.first.isEmpty())
@@ -459,7 +455,7 @@ QString CellStorage::namedArea(int column, int row) const
 QList< QPair<QRectF, QString> > CellStorage::namedAreas(const Region& region) const
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QReadLocker rl(&d->bigUglyLock);
+    QReadLocker rl(&bigUglyLock);
 #endif
     return d->namedAreaStorage->intersectingPairs(region);
 }
@@ -467,7 +463,7 @@ QList< QPair<QRectF, QString> > CellStorage::namedAreas(const Region& region) co
 void CellStorage::setNamedArea(const Region& region, const QString& namedArea)
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QWriteLocker(&d->bigUglyLock);
+    QWriteLocker(&bigUglyLock);
 #endif
     d->namedAreaStorage->insert(region, namedArea);
 }
@@ -475,7 +471,7 @@ void CellStorage::setNamedArea(const Region& region, const QString& namedArea)
 void CellStorage::removeNamedArea(const Region& region, const QString& namedArea)
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QWriteLocker(&d->bigUglyLock);
+    QWriteLocker(&bigUglyLock);
 #endif
     d->namedAreaStorage->remove(region, namedArea);
 }
@@ -489,7 +485,7 @@ void CellStorage::emitInsertNamedArea(const Region &region, const QString &named
 Style CellStorage::style(int column, int row) const
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QReadLocker rl(&d->bigUglyLock);
+    QReadLocker rl(&bigUglyLock);
 #endif
     return d->styleStorage->contains(QPoint(column, row));
 }
@@ -497,7 +493,7 @@ Style CellStorage::style(int column, int row) const
 Style CellStorage::style(const QRect& rect) const
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QReadLocker rl(&d->bigUglyLock);
+    QReadLocker rl(&bigUglyLock);
 #endif
     return d->styleStorage->contains(rect);
 }
@@ -505,7 +501,7 @@ Style CellStorage::style(const QRect& rect) const
 void CellStorage::setStyle(const Region& region, const Style& style)
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QWriteLocker(&d->bigUglyLock);
+    QWriteLocker(&bigUglyLock);
 #endif
     d->styleStorage->insert(region, style);
 }
@@ -513,7 +509,7 @@ void CellStorage::setStyle(const Region& region, const Style& style)
 void CellStorage::insertSubStyle(const QRect &rect, const SharedSubStyle &subStyle)
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QWriteLocker(&d->bigUglyLock);
+    QWriteLocker(&bigUglyLock);
 #endif
     d->styleStorage->insert(rect, subStyle);
 }
@@ -521,7 +517,7 @@ void CellStorage::insertSubStyle(const QRect &rect, const SharedSubStyle &subSty
 QString CellStorage::userInput(int column, int row) const
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QReadLocker rl(&d->bigUglyLock);
+    QReadLocker rl(&bigUglyLock);
 #endif
     return d->userInputStorage->lookup(column, row);
 }
@@ -529,7 +525,7 @@ QString CellStorage::userInput(int column, int row) const
 void CellStorage::setUserInput(int column, int row, const QString& userInput)
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QWriteLocker(&d->bigUglyLock);
+    QWriteLocker(&bigUglyLock);
 #endif
     if (userInput.isEmpty())
         d->userInputStorage->take(column, row);
@@ -540,7 +536,7 @@ void CellStorage::setUserInput(int column, int row, const QString& userInput)
 QSharedPointer<QTextDocument> CellStorage::richText(int column, int row) const
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QReadLocker rl(&d->bigUglyLock);
+    QReadLocker rl(&bigUglyLock);
 #endif
     return d->richTextStorage->lookup(column, row);
 }
@@ -548,7 +544,7 @@ QSharedPointer<QTextDocument> CellStorage::richText(int column, int row) const
 void CellStorage::setRichText(int column, int row, QSharedPointer<QTextDocument> text)
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QWriteLocker(&d->bigUglyLock);
+    QWriteLocker(&bigUglyLock);
 #endif
     if (text.isNull())
         d->richTextStorage->take(column, row);
@@ -559,7 +555,7 @@ void CellStorage::setRichText(int column, int row, QSharedPointer<QTextDocument>
 Validity CellStorage::validity(int column, int row) const
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QReadLocker rl(&d->bigUglyLock);
+    QReadLocker rl(&bigUglyLock);
 #endif
     return d->validityStorage->contains(QPoint(column, row));
 }
@@ -567,7 +563,7 @@ Validity CellStorage::validity(int column, int row) const
 void CellStorage::setValidity(const Region& region, Validity validity)
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QWriteLocker(&d->bigUglyLock);
+    QWriteLocker(&bigUglyLock);
 #endif
     d->validityStorage->insert(region, validity);
 }
@@ -575,7 +571,7 @@ void CellStorage::setValidity(const Region& region, Validity validity)
 Value CellStorage::value(int column, int row) const
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QReadLocker rl(&d->bigUglyLock);
+    QReadLocker rl(&bigUglyLock);
 #endif
     return d->valueStorage->lookup(column, row);
 }
@@ -583,7 +579,7 @@ Value CellStorage::value(int column, int row) const
 Value CellStorage::valueRegion(const Region& region) const
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QReadLocker rl(&d->bigUglyLock);
+    QReadLocker rl(&bigUglyLock);
 #endif
     // create a subStorage with adjusted origin
     return Value(d->valueStorage->subStorage(region, false), region.boundingRect().size());
@@ -592,7 +588,7 @@ Value CellStorage::valueRegion(const Region& region) const
 void CellStorage::setValue(int column, int row, const Value& value)
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QWriteLocker(&d->bigUglyLock);
+    QWriteLocker(&bigUglyLock);
 #endif
     // release any lock
     unlockCells(column, row);
@@ -625,7 +621,7 @@ void CellStorage::setValue(int column, int row, const Value& value)
 bool CellStorage::doesMergeCells(int column, int row) const
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QReadLocker rl(&d->bigUglyLock);
+    QReadLocker rl(&bigUglyLock);
 #endif
     const QPair<QRectF, bool> pair = d->fusionStorage->containedPair(QPoint(column, row));
     if (pair.first.isNull())
@@ -641,7 +637,7 @@ bool CellStorage::doesMergeCells(int column, int row) const
 bool CellStorage::isPartOfMerged(int column, int row) const
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QReadLocker rl(&d->bigUglyLock);
+    QReadLocker rl(&bigUglyLock);
 #endif
     const QPair<QRectF, bool> pair = d->fusionStorage->containedPair(QPoint(column, row));
     if (pair.first.isNull())
@@ -657,7 +653,7 @@ bool CellStorage::isPartOfMerged(int column, int row) const
 void CellStorage::mergeCells(int column, int row, int numXCells, int numYCells)
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QWriteLocker(&d->bigUglyLock);
+    QWriteLocker(&bigUglyLock);
 #endif
     // Start by unmerging the cells that we merge right now
     const QPair<QRectF, bool> pair = d->fusionStorage->containedPair(QPoint(column, row));
@@ -671,7 +667,7 @@ void CellStorage::mergeCells(int column, int row, int numXCells, int numYCells)
 Cell CellStorage::masterCell(int column, int row) const
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QReadLocker rl(&d->bigUglyLock);
+    QReadLocker rl(&bigUglyLock);
 #endif
     const QPair<QRectF, bool> pair = d->fusionStorage->containedPair(QPoint(column, row));
     if (pair.first.isNull())
@@ -684,7 +680,7 @@ Cell CellStorage::masterCell(int column, int row) const
 int CellStorage::mergedXCells(int column, int row) const
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QReadLocker rl(&d->bigUglyLock);
+    QReadLocker rl(&bigUglyLock);
 #endif
     const QPair<QRectF, bool> pair = d->fusionStorage->containedPair(QPoint(column, row));
     if (pair.first.isNull())
@@ -698,7 +694,7 @@ int CellStorage::mergedXCells(int column, int row) const
 int CellStorage::mergedYCells(int column, int row) const
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QReadLocker rl(&d->bigUglyLock);
+    QReadLocker rl(&bigUglyLock);
 #endif
     const QPair<QRectF, bool> pair = d->fusionStorage->containedPair(QPoint(column, row));
     if (pair.first.isNull())
@@ -712,7 +708,7 @@ int CellStorage::mergedYCells(int column, int row) const
 QList<Cell> CellStorage::masterCells(const Region& region) const
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QReadLocker rl(&d->bigUglyLock);
+    QReadLocker rl(&bigUglyLock);
 #endif
     const QList<QPair<QRectF, bool> > pairs = d->fusionStorage->intersectingPairs(region);
     if (pairs.isEmpty())
@@ -731,7 +727,7 @@ QList<Cell> CellStorage::masterCells(const Region& region) const
 bool CellStorage::locksCells(int column, int row) const
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QReadLocker rl(&d->bigUglyLock);
+    QReadLocker rl(&bigUglyLock);
 #endif
     const QPair<QRectF, bool> pair = d->matrixStorage->containedPair(QPoint(column, row));
     if (pair.first.isNull())
@@ -747,7 +743,7 @@ bool CellStorage::locksCells(int column, int row) const
 bool CellStorage::isLocked(int column, int row) const
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QReadLocker rl(&d->bigUglyLock);
+    QReadLocker rl(&bigUglyLock);
 #endif
     const QPair<QRectF, bool> pair = d->matrixStorage->containedPair(QPoint(column, row));
     if (pair.first.isNull())
@@ -763,7 +759,7 @@ bool CellStorage::isLocked(int column, int row) const
 bool CellStorage::hasLockedCells(const Region& region) const
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QReadLocker rl(&d->bigUglyLock);
+    QReadLocker rl(&bigUglyLock);
 #endif
     typedef QPair<QRectF, bool> RectBoolPair;
     QList<QPair<QRectF, bool> > pairs = d->matrixStorage->intersectingPairs(region);
@@ -789,7 +785,7 @@ bool CellStorage::hasLockedCells(const Region& region) const
 void CellStorage::lockCells(const QRect& rect)
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QWriteLocker(&d->bigUglyLock);
+    QWriteLocker(&bigUglyLock);
 #endif
     // Start by unlocking the cells that we lock right now
     const QPair<QRectF, bool> pair = d->matrixStorage->containedPair(rect.topLeft());  // FIXME
@@ -803,7 +799,7 @@ void CellStorage::lockCells(const QRect& rect)
 void CellStorage::unlockCells(int column, int row)
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QWriteLocker(&d->bigUglyLock);
+    QWriteLocker(&bigUglyLock);
 #endif
     const QPair<QRectF, bool> pair = d->matrixStorage->containedPair(QPoint(column, row));
     if (pair.first.isNull())
@@ -826,7 +822,7 @@ void CellStorage::unlockCells(int column, int row)
 QRect CellStorage::lockedCells(int column, int row) const
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QReadLocker rl(&d->bigUglyLock);
+    QReadLocker rl(&bigUglyLock);
 #endif
     const QPair<QRectF, bool> pair = d->matrixStorage->containedPair(QPoint(column, row));
     if (pair.first.isNull())
@@ -841,7 +837,7 @@ QRect CellStorage::lockedCells(int column, int row) const
 void CellStorage::insertColumns(int position, int number)
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QWriteLocker(&d->bigUglyLock);
+    QWriteLocker(&bigUglyLock);
 #endif
     // Trigger a dependency update of the cells, which have a formula. (old positions)
     // FIXME Stefan: Would it be better to directly alter the dependency tree?
@@ -852,7 +848,7 @@ void CellStorage::insertColumns(int position, int number)
     // Trigger an update of the bindings and the named areas.
     d->updateBindings(invalidRegion);
 
-    for (StorageBase *storage : d->storages)
+    for (StorageBase *storage : storages)
         storage->insertColumns(position, number);
 
     // Trigger a dependency update of the cells, which have a formula. (new positions)
@@ -862,14 +858,14 @@ void CellStorage::insertColumns(int position, int number)
 void CellStorage::removeColumns(int position, int number)
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QWriteLocker(&d->bigUglyLock);
+    QWriteLocker(&bigUglyLock);
 #endif
     const Region invalidRegion(QRect(QPoint(position, 1), QPoint(KS_colMax, KS_rowMax)), d->sheet);
     d->recalcFormulas(invalidRegion, false);
     const Region region(QRect(QPoint(position - 1, 1), QPoint(KS_colMax, KS_rowMax)), d->sheet);
     d->updateBindings(region);
 
-    for (StorageBase *storage : d->storages)
+    for (StorageBase *storage : storages)
         storage->removeColumns(position, number);
 
     d->recalcFormulas(invalidRegion, true);
@@ -878,13 +874,13 @@ void CellStorage::removeColumns(int position, int number)
 void CellStorage::insertRows(int position, int number)
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QWriteLocker(&d->bigUglyLock);
+    QWriteLocker(&bigUglyLock);
 #endif
     const Region invalidRegion(QRect(QPoint(1, position), QPoint(KS_colMax, KS_rowMax)), d->sheet);
     d->recalcFormulas(invalidRegion, false);
     d->updateBindings(invalidRegion);
 
-    for (StorageBase *storage : d->storages)
+    for (StorageBase *storage : storages)
         storage->insertRows(position, number);
 
     d->recalcFormulas(invalidRegion, true);
@@ -893,14 +889,14 @@ void CellStorage::insertRows(int position, int number)
 void CellStorage::removeRows(int position, int number)
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QWriteLocker(&d->bigUglyLock);
+    QWriteLocker(&bigUglyLock);
 #endif
     const Region invalidRegion(QRect(QPoint(1, position), QPoint(KS_colMax, KS_rowMax)), d->sheet);
     d->recalcFormulas(invalidRegion, false);
     const Region region(QRect(QPoint(1, position - 1), QPoint(KS_colMax, KS_rowMax)), d->sheet);
     d->updateBindings(region);
 
-    for (StorageBase *storage : d->storages)
+    for (StorageBase *storage : storages)
         storage->removeRows(position, number);
 
     d->recalcFormulas(invalidRegion, true);
@@ -909,14 +905,14 @@ void CellStorage::removeRows(int position, int number)
 void CellStorage::removeShiftLeft(const QRect& rect)
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QWriteLocker(&d->bigUglyLock);
+    QWriteLocker(&bigUglyLock);
 #endif
     const Region invalidRegion(QRect(rect.topLeft(), QPoint(KS_colMax, rect.bottom())), d->sheet);
     d->recalcFormulas(invalidRegion, false);
     const Region region(QRect(rect.topLeft() - QPoint(1, 0), QPoint(KS_colMax, rect.bottom())), d->sheet);
     d->updateBindings(region);
 
-    for (StorageBase *storage : d->storages)
+    for (StorageBase *storage : storages)
         storage->removeShiftLeft(rect);
 
     d->recalcFormulas(invalidRegion, true);
@@ -925,13 +921,13 @@ void CellStorage::removeShiftLeft(const QRect& rect)
 void CellStorage::insertShiftRight(const QRect& rect)
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QWriteLocker(&d->bigUglyLock);
+    QWriteLocker(&bigUglyLock);
 #endif
     const Region invalidRegion(QRect(rect.topLeft(), QPoint(KS_colMax, rect.bottom())), d->sheet);
     d->recalcFormulas(invalidRegion, false);
     d->updateBindings(invalidRegion);
 
-    for (StorageBase *storage : d->storages)
+    for (StorageBase *storage : storages)
         storage->insertShiftRight(rect);
 
     d->recalcFormulas(invalidRegion, true);
@@ -940,14 +936,14 @@ void CellStorage::insertShiftRight(const QRect& rect)
 void CellStorage::removeShiftUp(const QRect& rect)
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QWriteLocker(&d->bigUglyLock);
+    QWriteLocker(&bigUglyLock);
 #endif
     const Region invalidRegion(QRect(rect.topLeft(), QPoint(rect.right(), KS_rowMax)), d->sheet);
     d->recalcFormulas(invalidRegion, false);
     const Region region(QRect(rect.topLeft() - QPoint(0, 1), QPoint(rect.right(), KS_rowMax)), d->sheet);
     d->updateBindings(region);
 
-    for (StorageBase *storage : d->storages)
+    for (StorageBase *storage : storages)
         storage->removeShiftUp(rect);
 
     d->recalcFormulas(invalidRegion, true);
@@ -956,13 +952,13 @@ void CellStorage::removeShiftUp(const QRect& rect)
 void CellStorage::insertShiftDown(const QRect& rect)
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QWriteLocker(&d->bigUglyLock);
+    QWriteLocker(&bigUglyLock);
 #endif
     const Region invalidRegion(QRect(rect.topLeft(), QPoint(rect.right(), KS_rowMax)), d->sheet);
     d->recalcFormulas(invalidRegion, false);
     d->updateBindings(region);
 
-    for (StorageBase *storage : d->storages)
+    for (StorageBase *storage : storages)
         storage->insertShiftDown(rect);
 
     d->recalcFormulas(invalidRegion, true);
@@ -971,7 +967,7 @@ void CellStorage::insertShiftDown(const QRect& rect)
 Cell CellStorage::firstInColumn(int col, Visiting visiting) const
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QReadLocker rl(&d->bigUglyLock);
+    QReadLocker rl(&bigUglyLock);
 #endif
     Q_UNUSED(visiting);
 
@@ -990,7 +986,7 @@ Cell CellStorage::firstInColumn(int col, Visiting visiting) const
 Cell CellStorage::firstInRow(int row, Visiting visiting) const
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QReadLocker rl(&d->bigUglyLock);
+    QReadLocker rl(&bigUglyLock);
 #endif
     int newCol = 0;
     int tmpCol = 0;
@@ -1012,7 +1008,7 @@ Cell CellStorage::firstInRow(int row, Visiting visiting) const
 Cell CellStorage::lastInColumn(int col, Visiting visiting) const
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QReadLocker rl(&d->bigUglyLock);
+    QReadLocker rl(&bigUglyLock);
 #endif
     Q_UNUSED(visiting);
     int newRow = 0;
@@ -1029,7 +1025,7 @@ Cell CellStorage::lastInColumn(int col, Visiting visiting) const
 Cell CellStorage::lastInRow(int row, Visiting visiting) const
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QReadLocker rl(&d->bigUglyLock);
+    QReadLocker rl(&bigUglyLock);
 #endif
     Q_UNUSED(visiting);
     int newCol = 0;
@@ -1046,7 +1042,7 @@ Cell CellStorage::lastInRow(int row, Visiting visiting) const
 Cell CellStorage::nextInColumn(int col, int row, Visiting visiting) const
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QReadLocker rl(&d->bigUglyLock);
+    QReadLocker rl(&bigUglyLock);
 #endif
     Q_UNUSED(visiting);
     int newRow = 0;
@@ -1064,7 +1060,7 @@ Cell CellStorage::nextInColumn(int col, int row, Visiting visiting) const
 Cell CellStorage::nextInRow(int col, int row, Visiting visiting) const
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QReadLocker rl(&d->bigUglyLock);
+    QReadLocker rl(&bigUglyLock);
 #endif
     int newCol = 0;
     int tmpCol = 0;
@@ -1086,7 +1082,7 @@ Cell CellStorage::nextInRow(int col, int row, Visiting visiting) const
 Cell CellStorage::prevInColumn(int col, int row, Visiting visiting) const
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QReadLocker rl(&d->bigUglyLock);
+    QReadLocker rl(&bigUglyLock);
 #endif
     Q_UNUSED(visiting);
     int newRow = 0;
@@ -1103,7 +1099,7 @@ Cell CellStorage::prevInColumn(int col, int row, Visiting visiting) const
 Cell CellStorage::prevInRow(int col, int row, Visiting visiting) const
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QReadLocker rl(&d->bigUglyLock);
+    QReadLocker rl(&bigUglyLock);
 #endif
     Q_UNUSED(visiting);
     int newCol = 0;
@@ -1120,7 +1116,7 @@ Cell CellStorage::prevInRow(int col, int row, Visiting visiting) const
 int CellStorage::columns(bool includeStyles) const
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QReadLocker rl(&d->bigUglyLock);
+    QReadLocker rl(&bigUglyLock);
 #endif
     int max = 0;
     max = qMax(max, d->commentStorage->usedArea().right());
@@ -1141,7 +1137,7 @@ int CellStorage::columns(bool includeStyles) const
 int CellStorage::rows(bool includeStyles) const
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QReadLocker rl(&d->bigUglyLock);
+    QReadLocker rl(&bigUglyLock);
 #endif
     int max = 0;
     max = qMax(max, d->commentStorage->usedArea().bottom());
@@ -1162,7 +1158,7 @@ int CellStorage::rows(bool includeStyles) const
 CellStorage CellStorage::subStorage(const Region& region) const
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QReadLocker rl(&d->bigUglyLock);
+    QReadLocker rl(&bigUglyLock);
 #endif
     CellStorage subStorage(d->sheet);
     *subStorage.d->formulaStorage = d->formulaStorage->subStorage(region);
@@ -1224,26 +1220,26 @@ const ValueStorage* CellStorage::valueStorage() const
 void CellStorage::startUndoRecording()
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QWriteLocker(&d->bigUglyLock);
+    QWriteLocker(&bigUglyLock);
 #endif
     // If undo is set, the recording wasn't stopped.
     // Should not happen, hence this assertion.
-    Q_ASSERT(e->undoEnabled == false);
+    Q_ASSERT(undoEnabled == false);
 
-    for (StorageBase *storage : d->storages)
+    for (StorageBase *storage : storages)
         storage->storeUndo(true);
 
-    d->undoEnabled = true;
+    undoEnabled = true;
 }
 
 void CellStorage::stopUndoRecording(KUndo2Command *parent)
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QWriteLocker(&d->bigUglyLock);
+    QWriteLocker(&bigUglyLock);
 #endif
     // If undoData is null, the recording wasn't started.
     // Should not happen, hence this assertion.
-    Q_ASSERT(d->undoEnabled != 0);
+    Q_ASSERT(undoEnabled != 0);
     // append sub-commands to the parent command
     d->createCommand(parent);
     // TODO ... what to do about this?
@@ -1251,16 +1247,16 @@ void CellStorage::stopUndoRecording(KUndo2Command *parent)
         emit namedAreaRemoved(d->undoData->namedAreas[i].second);
     }
 
-    for (StorageBase *storage : d->storages)
+    for (StorageBase *storage : storages)
         storage->resetUndo();
 
-    d->undoEnabled = true;
+    undoEnabled = true;
 }
 
 void CellStorage::loadConditions(const QList<QPair<QRegion, Conditions> >& conditions)
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QWriteLocker(&d->bigUglyLock);
+    QWriteLocker(&bigUglyLock);
 #endif
     d->conditionsStorage->load(conditions);
 }
@@ -1268,7 +1264,7 @@ void CellStorage::loadConditions(const QList<QPair<QRegion, Conditions> >& condi
 void CellStorage::loadStyles(const QList<QPair<QRegion, Style> > &styles)
 {
 #ifdef CALLIGRA_SHEETS_MT
-    QWriteLocker(&d->bigUglyLock);
+    QWriteLocker(&bigUglyLock);
 #endif
     d->styleStorage->load(styles);
 }

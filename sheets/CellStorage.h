@@ -11,6 +11,10 @@
 #include <QRect>
 #include <QTextDocument>
 
+#ifdef CALLIGRA_SHEETS_MT
+#include <QReadWriteLock>
+#endif
+
 #include "Cell.h"
 #include "calligra_sheets_limits.h"
 #include "PointStorage.h"
@@ -381,6 +385,14 @@ Q_SIGNALS:
 private:
     // do not allow assignment
     CellStorage& operator=(const CellStorage&);
+
+    void fillStorages();
+    QList<StorageBase *> storages;
+
+#ifdef CALLIGRA_SHEETS_MT
+    QReadWriteLock bigUglyLock;
+#endif
+    bool undoEnabled;
 
     class Private;
     Private * const d;
