@@ -290,7 +290,6 @@ set (calligrasheetsodf_LIB_SRCS
     RecalcManager.cpp
     RowColumnFormat.cpp
     RowFormatStorage.cpp
-    RowRepeatStorage.cpp
     ShapeApplicationData.cpp
     Sheet.cpp
     SheetAccessModel.cpp

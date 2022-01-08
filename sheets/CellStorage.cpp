@@ -20,7 +20,6 @@
 #include "ConditionsStorage.h"
 #include "FormulaStorage.h"
 #include "RectStorage.h"
-#include "RowRepeatStorage.h"
 #include "StyleStorage.h"
 #include "ValidityStorage.h"
 #include "ValueStorage.h"
@@ -67,7 +66,6 @@ public:
             , validityStorage(new ValidityStorage(sheet->map()))
             , valueStorage(new ValueStorage())
             , richTextStorage(new RichTextStorage())
-            , rowRepeatStorage(new RowRepeatStorage())
             , undoEnabled(false)
 #ifdef CALLIGRA_SHEETS_MT
             , bigUglyLock(QReadWriteLock::Recursive)
@@ -90,7 +88,6 @@ public:
             , validityStorage(new ValidityStorage(*other.validityStorage))
             , valueStorage(new ValueStorage(*other.valueStorage))
             , richTextStorage(new RichTextStorage(*other.richTextStorage))
-            , rowRepeatStorage(new RowRepeatStorage(*other.rowRepeatStorage))
             , undoEnabled(false)
 #ifdef CALLIGRA_SHEETS_MT
             , bigUglyLock(QReadWriteLock::Recursive)
@@ -112,7 +109,6 @@ public:
         delete validityStorage;
         delete valueStorage;
         delete richTextStorage;
-        delete rowRepeatStorage;
     }
 
     void createCommand(KUndo2Command *parent) const;
@@ -132,7 +128,6 @@ public:
     ValidityStorage*        validityStorage;
     ValueStorage*           valueStorage;
     RichTextStorage*        richTextStorage;
-    RowRepeatStorage*       rowRepeatStorage;
 
     bool undoEnabled;
 
@@ -260,8 +255,6 @@ void CellStorage::take(int col, int row)
         // Trigger a recalculation of the consuming cells.
         CellDamage::Changes changes = CellDamage:: Binding | CellDamage::Formula | CellDamage::Value;
         d->sheet->map()->addDamage(new CellDamage(Cell(d->sheet, col, row), changes));
-
-        d->rowRepeatStorage->setRowRepeat(row, 1);
     }
     // also trigger a relayout of the first non-empty cell to the left of this cell
     int prevCol;
@@ -309,12 +302,6 @@ void CellStorage::setComment(const Region& region, const QString& comment)
     QWriteLocker(&d->bigUglyLock);
 #endif
     d->commentStorage->insert(region, comment);
-    if (!d->sheet->map()->isLoading()) {
-        foreach (const QRect& r, region.rects()) {
-            d->rowRepeatStorage->splitRowRepeat(r.top());
-            d->rowRepeatStorage->splitRowRepeat(r.bottom()+1);
-        }
-    }
 }
 
 Conditions CellStorage::conditions(int column, int row) const
@@ -331,12 +318,6 @@ void CellStorage::setConditions(const Region& region, Conditions conditions)
     QWriteLocker(&d->bigUglyLock);
 #endif
     d->conditionsStorage->insert(region, conditions);
-    if (!d->sheet->map()->isLoading()) {
-        foreach (const QRect& r, region.rects()) {
-            d->rowRepeatStorage->splitRowRepeat(r.top());
-            d->rowRepeatStorage->splitRowRepeat(r.bottom()+1);
-        }
-    }
 }
 
 Database CellStorage::database(int column, int row) const
@@ -395,7 +376,6 @@ void CellStorage::setFormula(int column, int row, const Formula& formula)
         if (!d->sheet->map()->isLoading()) {
             // trigger an update of the dependencies and a recalculation
             d->sheet->map()->addDamage(new CellDamage(Cell(d->sheet, column, row), CellDamage::Formula | CellDamage::Value));
-            d->rowRepeatStorage->setRowRepeat(row, 1);
         }
     }
 }
@@ -417,9 +397,6 @@ void CellStorage::setLink(int column, int row, const QString& link)
         d->linkStorage->take(column, row);
     else
         d->linkStorage->insert(column, row, link);
-
-    if (!d->sheet->map()->isLoading())
-        d->rowRepeatStorage->setRowRepeat(row, 1);
 }
 
 QString CellStorage::namedArea(int column, int row) const
@@ -487,12 +464,6 @@ void CellStorage::setStyle(const Region& region, const Style& style)
     QWriteLocker(&d->bigUglyLock);
 #endif
     d->styleStorage->insert(region, style);
-    if (!d->sheet->map()->isLoading()) {
-        foreach (const QRect& r, region.rects()) {
-            d->rowRepeatStorage->splitRowRepeat(r.top());
-            d->rowRepeatStorage->splitRowRepeat(r.bottom()+1);
-        }
-    }
 }
 
 void CellStorage::insertSubStyle(const QRect &rect, const SharedSubStyle &subStyle)
@@ -501,10 +472,6 @@ void CellStorage::insertSubStyle(const QRect &rect, const SharedSubStyle &subSty
     QWriteLocker(&d->bigUglyLock);
 #endif
     d->styleStorage->insert(rect, subStyle);
-    if (!d->sheet->map()->isLoading()) {
-        d->rowRepeatStorage->splitRowRepeat(rect.top());
-        d->rowRepeatStorage->splitRowRepeat(rect.bottom()+1);
-    }
 }
 
 QString CellStorage::userInput(int column, int row) const
@@ -524,9 +491,6 @@ void CellStorage::setUserInput(int column, int row, const QString& userInput)
         d->userInputStorage->take(column, row);
     else
         d->userInputStorage->insert(column, row, userInput);
-
-    if (!d->sheet->map()->isLoading())
-        d->rowRepeatStorage->setRowRepeat(row, 1);
 }
 
 QSharedPointer<QTextDocument> CellStorage::richText(int column, int row) const
@@ -562,12 +526,6 @@ void CellStorage::setValidity(const Region& region, Validity validity)
     QWriteLocker(&d->bigUglyLock);
 #endif
     d->validityStorage->insert(region, validity);
-    if (!d->sheet->map()->isLoading()) {
-        foreach (const QRect& r, region.rects()) {
-            d->rowRepeatStorage->splitRowRepeat(r.top());
-            d->rowRepeatStorage->splitRowRepeat(r.bottom()+1);
-        }
-    }
 }
 
 Value CellStorage::value(int column, int row) const
@@ -616,7 +574,6 @@ void CellStorage::setValue(int column, int row, const Value& value)
             Value v = d->valueStorage->prevInRow(column, row, &prevCol);
             if (!v.isEmpty())
                 d->sheet->map()->addDamage(new CellDamage(Cell(d->sheet, prevCol, row), CellDamage::Appearance));
-            d->rowRepeatStorage->setRowRepeat(row, 1);
         }
     }
 }
@@ -665,8 +622,6 @@ void CellStorage::mergeCells(int column, int row, int numXCells, int numYCells)
     // Merge the cells
     if (numXCells != 0 || numYCells != 0)
         d->fusionStorage->insert(Region(column, row, numXCells + 1, numYCells + 1), true);
-    if (!d->sheet->map()->isLoading())
-        d->rowRepeatStorage->setRowRepeat(row, 1);
 }
 
 Cell CellStorage::masterCell(int column, int row) const
@@ -967,8 +922,6 @@ void CellStorage::insertRows(int position, int number)
     // Trigger a recalculation only for the cells, that depend on values in the changed region.
     Region providers = d->sheet->map()->dependencyManager()->reduceToProvidingRegion(invalidRegion);
     d->sheet->map()->addDamage(new CellDamage(d->sheet, providers, CellDamage::Value));
-
-    d->rowRepeatStorage->insertRows(position, number);
 }
 
 void CellStorage::removeRows(int position, int number)
@@ -1012,8 +965,6 @@ void CellStorage::removeRows(int position, int number)
     // Trigger a recalculation only for the cells, that depend on values in the changed region.
     Region providers = d->sheet->map()->dependencyManager()->reduceToProvidingRegion(invalidRegion);
     d->sheet->map()->addDamage(new CellDamage(d->sheet, providers, CellDamage::Value));
-
-    d->rowRepeatStorage->removeRows(position, number);
 }
 
 void CellStorage::removeShiftLeft(const QRect& rect)
@@ -1057,8 +1008,6 @@ void CellStorage::removeShiftLeft(const QRect& rect)
     // Trigger a recalculation only for the cells, that depend on values in the changed region.
     Region providers = d->sheet->map()->dependencyManager()->reduceToProvidingRegion(invalidRegion);
     d->sheet->map()->addDamage(new CellDamage(d->sheet, providers, CellDamage::Value));
-
-    d->rowRepeatStorage->removeShiftLeft(rect);
 }
 
 void CellStorage::insertShiftRight(const QRect& rect)
@@ -1101,8 +1050,6 @@ void CellStorage::insertShiftRight(const QRect& rect)
     // Trigger a recalculation only for the cells, that depend on values in the changed region.
     Region providers = d->sheet->map()->dependencyManager()->reduceToProvidingRegion(invalidRegion);
     d->sheet->map()->addDamage(new CellDamage(d->sheet, providers, CellDamage::Value));
-
-    d->rowRepeatStorage->insertShiftRight(rect);
 }
 
 void CellStorage::removeShiftUp(const QRect& rect)
@@ -1146,8 +1093,6 @@ void CellStorage::removeShiftUp(const QRect& rect)
     // Trigger a recalculation only for the cells, that depend on values in the changed region.
     Region providers = d->sheet->map()->dependencyManager()->reduceToProvidingRegion(invalidRegion);
     d->sheet->map()->addDamage(new CellDamage(d->sheet, providers, CellDamage::Value));
-
-    d->rowRepeatStorage->removeShiftUp(rect);
 }
 
 void CellStorage::insertShiftDown(const QRect& rect)
@@ -1190,8 +1135,6 @@ void CellStorage::insertShiftDown(const QRect& rect)
     // Trigger a recalculation only for the cells, that depend on values in the changed region.
     Region providers = d->sheet->map()->dependencyManager()->reduceToProvidingRegion(invalidRegion);
     d->sheet->map()->addDamage(new CellDamage(d->sheet, providers, CellDamage::Value));
-
-    d->rowRepeatStorage->insertShiftDown(rect);
 }
 
 Cell CellStorage::firstInColumn(int col, Visiting visiting) const
@@ -1528,26 +1471,4 @@ void CellStorage::invalidateStyleCache()
     d->styleStorage->invalidateCache();
 }
 
-int CellStorage::rowRepeat(int row) const
-{
-#ifdef CALLIGRA_SHEETS_MT
-    QReadLocker rl(&d->bigUglyLock);
-#endif
-    return d->rowRepeatStorage->rowRepeat(row);
-}
 
-int CellStorage::firstIdenticalRow(int row) const
-{
-#ifdef CALLIGRA_SHEETS_MT
-    QReadLocker rl(&d->bigUglyLock);
-#endif
-    return d->rowRepeatStorage->firstIdenticalRow(row);
-}
-
-void CellStorage::setRowsRepeated(int row, int count)
-{
-#ifdef CALLIGRA_SHEETS_MT
-    QWriteLocker(&d->bigUglyLock);
-#endif
-    d->rowRepeatStorage->setRowRepeat(row, count);
-}

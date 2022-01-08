@@ -1220,9 +1220,6 @@ void Odf::saveColRowCell(Sheet *sheet, int maxCols, int maxRows, OdfSavingContex
             xmlWriter.addAttribute("table:style-name", mainStyles.insert(currentRowStyle, "ro"));
         }
 
-        // We cannot use cellStorage()->rowRepeat(i) here cause the RowRepeatStorage only knows
-        // about the content but not about the shapes anchored to a cell. So, we need to check
-        // for them here to be sure to catch them even when the content in the cell is repeated.
         int repeated = 1;
         // empty row?
         if (!sheet->cellStorage()->firstInRow(i) && !tableContext.rowHasCellAnchoredShapes(sheet, i)) { // row is empty
@@ -1672,7 +1669,6 @@ inline bool compareCellsInRows(CellStorage *cellStorage, int row1, int row2, int
 
 bool Odf::compareRows(Sheet *sheet, int row1, int row2, int maxCols, OdfSavingContext& tableContext)
 {
-#if 0
     if (!sheet->rowFormats()->rowsAreEqual(row1, row2)) {
         return false;
     }
@@ -1680,31 +1676,6 @@ bool Odf::compareRows(Sheet *sheet, int row1, int row2, int maxCols, OdfSavingCo
         return false;
     }
     return compareCellsInRows(sheet->cellStorage(), row1, row2, maxCols);
-#else
-    Q_UNUSED(maxCols);
-
-    // Optimized comparison by using the RowRepeatStorage to compare the content
-    // rather then an expensive loop like compareCellsInRows.
-    int row1repeated = sheet->cellStorage()->rowRepeat(row1);
-    Q_ASSERT( row2 > row1 );
-    if (row2 - row1 >= row1repeated) {
-        return false;
-    }
-
-    // The RowRepeatStorage does not take to-cell anchored shapes into account
-    // so we need to check for them explicit.
-    if (tableContext.rowHasCellAnchoredShapes(sheet, row1) != tableContext.rowHasCellAnchoredShapes(sheet, row2)) {
-        return false;
-    }
-
-    // Some sanity-checks to be sure our RowRepeatStorage works as expected.
-    Q_ASSERT_X( sheet->rowFormats()->rowsAreEqual(row1, row2), __FUNCTION__, QString("Bug in RowRepeatStorage").toLocal8Bit() );
-    //Q_ASSERT_X( compareCellsInRows(sheet->cellStorage(), row1, row2, maxCols), __FUNCTION__, QString("Bug in RowRepeatStorage").toLocal8Bit() );
-    Q_ASSERT_X( compareCellInRow(sheet->cellStorage()->lastInRow(row1), sheet->cellStorage()->lastInRow(row2), -1), __FUNCTION__, QString("Bug in RowRepeatStorage").toLocal8Bit() );
-
-    // If we reached that point then the both rows are equal.
-    return true;
-#endif
 }
 
 
