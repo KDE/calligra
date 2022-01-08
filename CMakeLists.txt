@@ -520,14 +520,6 @@ if (BUILD_VC)
 	    set(ADDITIONAL_VC_FLAGS "-Wabi -fabi-version=0 -ffp-contract=fast -fPIC")
 	endif()
 
-	#Handle Vc master
-	if(Vc_COMPILER_IS_GCC OR Vc_COMPILER_IS_CLANG)
-	    AddCompilerFlag("-std=c++11" _ok)
-	    if(NOT _ok)
-		AddCompilerFlag("-std=c++0x" _ok)
-	    endif()
-	endif()
-
 	macro(ko_compile_for_all_implementations_no_scalar _objs _src)
 	    if(PACKAGERS_BUILD)
 		vc_compile_for_all_implementations(${_objs} ${_src} FLAGS ${ADDITIONAL_VC_FLAGS} ONLY SSE2 SSSE3 SSE4_1 AVX AVX2+FMA+BMI2)
