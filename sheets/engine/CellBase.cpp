@@ -31,6 +31,7 @@
 #include "CellBase.h"
 #include "CellBaseStorage.h"
 #include "calligra_sheets_limits.h"
+#include "Formula.h"
 #include "SheetBase.h"
 
 #include <QObject>
@@ -133,6 +134,17 @@ void CellBase::setValue(const Value& value)
     sheet()->cellStorage()->setValue(d->column, d->row, value);
 }
 
+Formula CellBase::formula() const
+{
+    return sheet()->cellStorage()->formula(d->column, d->row);
+}
+
+void CellBase::setFormula(const Formula& formula)
+{
+    sheet()->cellStorage()->setFormula(column(), row(), formula);
+}
+
+
 
 
 
@@ -162,6 +174,31 @@ QString CellBase::columnName(unsigned int column)
         str.prepend(QChar('A' + (col % 26)));
 
     return str;
+}
+
+CellBase& CellBase::operator=(const CellBase & other)
+{
+    d = other.d;
+    return *this;
+}
+
+bool CellBase::operator<(const CellBase& other) const
+{
+    if (sheet() != other.sheet())
+        return sheet() < other.sheet(); // pointers!
+    if (row() < other.row())
+        return true;
+    return ((row() == other.row()) && (column() < other.column()));
+}
+
+bool CellBase::operator==(const CellBase& other) const
+{
+    return (row() == other.row() && column() == other.column() && sheet() == other.sheet());
+}
+
+bool CellBase::operator!() const
+{
+    return (!d);   // isNull()
 }
 
 

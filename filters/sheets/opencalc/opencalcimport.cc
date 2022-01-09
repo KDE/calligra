@@ -683,7 +683,7 @@ void OpenCalcImport::loadOasisConditionValue(const QString &styleCondition, Cond
         qDebug() << " listVal[0] :" << listVal[0] << " listVal[1] :" << listVal[1];
         newCondition.value1 = parser->parse(listVal[0]);
         newCondition.value2 = parser->parse(listVal[1]);
-        newCondition.cond = Conditional::Between;
+        newCondition.cond = Validity::Between;
     }
     if (val.contains("cell-content-is-not-between(")) {
         val.remove("cell-content-is-not-between(");
@@ -692,7 +692,7 @@ void OpenCalcImport::loadOasisConditionValue(const QString &styleCondition, Cond
         qDebug() << " listVal[0] :" << listVal[0] << " listVal[1] :" << listVal[1];
         newCondition.value1 = parser->parse(listVal[0]);
         newCondition.value2 = parser->parse(listVal[1]);
-        newCondition.cond = Conditional::Different;
+        newCondition.cond = Validity::Different;
     }
 
 }
@@ -704,23 +704,23 @@ void OpenCalcImport::loadOasisCondition(QString &valExpression, Conditional &new
     QString value;
     if (valExpression.indexOf("<=") == 0) {
         value = valExpression.remove(0, 2);
-        newCondition.cond = Conditional::InferiorEqual;
+        newCondition.cond = Validity::InferiorEqual;
     } else if (valExpression.indexOf(">=") == 0) {
         value = valExpression.remove(0, 2);
-        newCondition.cond = Conditional::SuperiorEqual;
+        newCondition.cond = Validity::SuperiorEqual;
     } else if (valExpression.indexOf("!=") == 0) {
         //add Differentto attribute
         value = valExpression.remove(0, 2);
-        newCondition.cond = Conditional::DifferentTo;
+        newCondition.cond = Validity::DifferentTo;
     } else if (valExpression.indexOf('<') == 0) {
         value = valExpression.remove(0, 1);
-        newCondition.cond = Conditional::Inferior;
+        newCondition.cond = Validity::Inferior;
     } else if (valExpression.indexOf('>') == 0) {
         value = valExpression.remove(0, 1);
-        newCondition.cond = Conditional::Superior;
+        newCondition.cond = Validity::Superior;
     } else if (valExpression.indexOf('=') == 0) {
         value = valExpression.remove(0, 1);
-        newCondition.cond = Conditional::Equal;
+        newCondition.cond = Validity::Equal;
     } else
         qDebug() << " I don't know how to parse it :" << valExpression;
     qDebug() << " value :" << value;
@@ -2077,7 +2077,7 @@ void OpenCalcImport::loadOasisValidation(Validity validity, const QString& valid
         //cell-content-text-length-is-between(Value, Value) | cell-content-text-length-is-not-between(Value, Value)
         else if (valExpression.contains("cell-content-text-length-is-between")) {
             validity.setRestriction(Validity::TextLength);
-            validity.setCondition(Conditional::Between);
+            validity.setCondition(Validity::Between);
             valExpression.remove("cell-content-text-length-is-between(");
             qDebug() << " valExpression :" << valExpression;
             valExpression.remove(')');
@@ -2085,7 +2085,7 @@ void OpenCalcImport::loadOasisValidation(Validity validity, const QString& valid
             loadOasisValidationValue(validity, listVal, parser);
         } else if (valExpression.contains("cell-content-text-length-is-not-between")) {
             validity.setRestriction(Validity::TextLength);
-            validity.setCondition(Conditional::Different);
+            validity.setCondition(Validity::Different);
             valExpression.remove("cell-content-text-length-is-not-between(");
             qDebug() << " valExpression :" << valExpression;
             valExpression.remove(')');
@@ -2123,14 +2123,14 @@ void OpenCalcImport::loadOasisValidation(Validity validity, const QString& valid
                 QStringList listVal = valExpression.split(',');
                 loadOasisValidationValue(validity, listVal, parser);
 
-                validity.setCondition(Conditional::Between);
+                validity.setCondition(Validity::Between);
             }
             if (valExpression.contains("cell-content-is-not-between(")) {
                 valExpression.remove("cell-content-is-not-between(");
                 valExpression.remove(')');
                 QStringList listVal = valExpression.split(',');
                 loadOasisValidationValue(validity, listVal, parser);
-                validity.setCondition(Conditional::Different);
+                validity.setCondition(Validity::Different);
             }
         }
     }
@@ -2193,23 +2193,23 @@ void OpenCalcImport::loadOasisValidationCondition(Validity validity, QString &va
     QString value;
     if (valExpression.contains("<=")) {
         value = valExpression.remove("<=");
-        validity.setCondition(Conditional::InferiorEqual);
+        validity.setCondition(Validity::InferiorEqual);
     } else if (valExpression.contains(">=")) {
         value = valExpression.remove(">=");
-        validity.setCondition(Conditional::SuperiorEqual);
+        validity.setCondition(Validity::SuperiorEqual);
     } else if (valExpression.contains("!=")) {
         //add Differentto attribute
         value = valExpression.remove("!=");
-        validity.setCondition(Conditional::DifferentTo);
+        validity.setCondition(Validity::DifferentTo);
     } else if (valExpression.contains('<')) {
         value = valExpression.remove('<');
-        validity.setCondition(Conditional::Inferior);
+        validity.setCondition(Validity::Inferior);
     } else if (valExpression.contains('>')) {
         value = valExpression.remove('>');
-        validity.setCondition(Conditional::Superior);
+        validity.setCondition(Validity::Superior);
     } else if (valExpression.contains('=')) {
         value = valExpression.remove('=');
-        validity.setCondition(Conditional::Equal);
+        validity.setCondition(Validity::Equal);
     } else
         qDebug() << " I don't know how to parse it :" << valExpression;
 

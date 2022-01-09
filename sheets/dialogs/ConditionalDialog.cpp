@@ -10,6 +10,7 @@
 
 #include "ConditionalDialog.h"
 #include "Condition.h"
+#include "Validity.h"
 
 #include "Cell.h"
 #include "Map.h"
@@ -359,80 +360,80 @@ void ConditionalDialog::init(Conditional const & tmp, int numCondition)
     }
 
     switch (tmp.cond) {
-    case Conditional::None :
-    case Conditional::IsTrueFormula: // was unhandled
+    case Validity::None :
+    case Validity::IsTrueFormula: // was unhandled
         break;
 
-    case Conditional::Equal :
+    case Validity::Equal :
         cb->setCurrentIndex(1);
         break;
 
-    case Conditional::Superior :
+    case Validity::Superior :
         cb->setCurrentIndex(2);
         break;
 
-    case Conditional::Inferior :
+    case Validity::Inferior :
         cb->setCurrentIndex(3);
         break;
 
-    case Conditional::SuperiorEqual :
+    case Validity::SuperiorEqual :
         cb->setCurrentIndex(4);
         break;
 
-    case Conditional::InferiorEqual :
+    case Validity::InferiorEqual :
         cb->setCurrentIndex(5);
         break;
 
-    case Conditional::Between :
+    case Validity::Between :
         cb->setCurrentIndex(6);
         kl2->setText(converter->asString(tmp.value2).asString());
         break;
 
-    case Conditional::Different :
+    case Validity::Different :
         cb->setCurrentIndex(7);
         kl2->setText(converter->asString(tmp.value2).asString());
         break;
-    case Conditional::DifferentTo :
+    case Validity::DifferentTo :
         cb->setCurrentIndex(8);
         break;
     }
 
-    if (tmp.cond != Conditional::None) {
+    if (tmp.cond != Validity::None) {
         kl1->setEnabled(true);
         kl1->setText(converter->asString(tmp.value1).asString());
     }
 }
 
-Conditional::Type ConditionalDialog::typeOfCondition(KComboBox const * const cb) const
+Validity::Type ConditionalDialog::typeOfCondition(KComboBox const * const cb) const
 {
-    Conditional::Type result = Conditional::None;
+    Validity::Type result = Validity::None;
     switch (cb->currentIndex()) {
     case 0 :
-        result = Conditional::None;
+        result = Validity::None;
         break;
     case 1 :
-        result = Conditional::Equal;
+        result = Validity::Equal;
         break;
     case 2 :
-        result = Conditional::Superior;
+        result = Validity::Superior;
         break;
     case 3 :
-        result = Conditional::Inferior;
+        result = Validity::Inferior;
         break;
     case 4 :
-        result = Conditional::SuperiorEqual;
+        result = Validity::SuperiorEqual;
         break;
     case 5 :
-        result = Conditional::InferiorEqual;
+        result = Validity::InferiorEqual;
         break;
     case 6 :
-        result = Conditional::Between;
+        result = Validity::Between;
         break;
     case 7 :
-        result = Conditional::Different;
+        result = Validity::Different;
         break;
     case 8 :
-        result = Conditional::DifferentTo;
+        result = Validity::DifferentTo;
         break;
     default:
         debugSheets << "Error in list";
@@ -485,7 +486,7 @@ bool ConditionalDialog::getCondition(Conditional & newCondition, const KComboBox
         return false;
 
     newCondition.cond = typeOfCondition(cb);
-    if (newCondition.cond == Conditional::None)
+    if (newCondition.cond == Validity::None)
         return false;
 
     Map *const map = m_selection->activeSheet()->map();

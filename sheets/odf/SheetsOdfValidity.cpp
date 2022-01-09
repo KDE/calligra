@@ -60,7 +60,7 @@ void Odf::loadValidation(Validity *validity, Cell* const cell, const QString& va
         //cell-content-text-length-is-between(Value, Value) | cell-content-text-length-is-not-between(Value, Value) | cell-content-is-in-list( StringList )
         else if (valExpression.contains("cell-content-text-length-is-between")) {
             validity->setRestriction(Validity::TextLength);
-            validity->setCondition(Conditional::Between);
+            validity->setCondition(Validity::Between);
             valExpression.remove("oooc:cell-content-text-length-is-between(");
             debugSheetsODF << " valExpression :" << valExpression;
             valExpression.remove(')');
@@ -68,7 +68,7 @@ void Odf::loadValidation(Validity *validity, Cell* const cell, const QString& va
             loadValidationValue(validity, listVal, cell->sheet()->map()->parser());
         } else if (valExpression.contains("cell-content-text-length-is-not-between")) {
             validity->setRestriction(Validity::TextLength);
-            validity->setCondition(Conditional::Different);
+            validity->setCondition(Validity::Different);
             valExpression.remove("oooc:cell-content-text-length-is-not-between(");
             debugSheetsODF << " valExpression :" << valExpression;
             valExpression.remove(')');
@@ -110,14 +110,14 @@ void Odf::loadValidation(Validity *validity, Cell* const cell, const QString& va
                 valExpression.remove(')');
                 QStringList listVal = valExpression.split(',', QString::SkipEmptyParts);
                 loadValidationValue(validity, listVal, cell->sheet()->map()->parser());
-                validity->setCondition(Conditional::Between);
+                validity->setCondition(Validity::Between);
             }
             if (valExpression.contains("cell-content-is-not-between(")) {
                 valExpression.remove("cell-content-is-not-between(");
                 valExpression.remove(')');
                 QStringList listVal = valExpression.split(',', QString::SkipEmptyParts);
                 loadValidationValue(validity, listVal, cell->sheet()->map()->parser());
-                validity->setCondition(Conditional::Different);
+                validity->setCondition(Validity::Different);
             }
         }
     }
@@ -216,23 +216,23 @@ void Odf::loadValidationCondition(Validity *validity, QString &valExpression, co
     QString value;
     if (valExpression.indexOf("<=") == 0) {
         value = valExpression.remove(0, 2);
-        validity->setCondition(Conditional::InferiorEqual);
+        validity->setCondition(Validity::InferiorEqual);
     } else if (valExpression.indexOf(">=") == 0) {
         value = valExpression.remove(0, 2);
-        validity->setCondition(Conditional::SuperiorEqual);
+        validity->setCondition(Validity::SuperiorEqual);
     } else if (valExpression.indexOf("!=") == 0) {
         //add Differentto attribute
         value = valExpression.remove(0, 2);
-        validity->setCondition(Conditional::DifferentTo);
+        validity->setCondition(Validity::DifferentTo);
     } else if (valExpression.indexOf('<') == 0) {
         value = valExpression.remove(0, 1);
-        validity->setCondition(Conditional::Inferior);
+        validity->setCondition(Validity::Inferior);
     } else if (valExpression.indexOf('>') == 0) {
         value = valExpression.remove(0, 1);
-        validity->setCondition(Conditional::Superior);
+        validity->setCondition(Validity::Superior);
     } else if (valExpression.indexOf('=') == 0) {
         value = valExpression.remove(0, 1);
-        validity->setCondition(Conditional::Equal);
+        validity->setCondition(Validity::Equal);
     } else
         debugSheetsODF << " I don't know how to parse it :" << valExpression;
     if (validity->restriction() == Validity::Date) {

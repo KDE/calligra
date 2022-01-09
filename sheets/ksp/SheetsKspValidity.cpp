@@ -27,7 +27,7 @@ bool Ksp::loadValidity(Validity *v, Cell* const cell, const KoXmlElement& validi
     KoXmlElement param = validityElement.namedItem("param").toElement();
     if (!param.isNull()) {
         if (param.hasAttribute("cond")) {
-            v->setCondition((Conditional::Type) param.attribute("cond").toInt(&ok));
+            v->setCondition((Validity::Type) param.attribute("cond").toInt(&ok));
             if (!ok)
                 return false;
         }
@@ -139,7 +139,7 @@ QDomElement Ksp::saveValidity(QDomDocument& doc, Validity *v, const ValueConvert
         timeMinElement.appendChild(doc.createTextNode(tmp));
         validityElement.appendChild(timeMinElement);
 
-        if (v->condition() == Conditional::Between || v->condition() == Conditional::Different) {
+        if (v->condition() == Validity::Between || v->condition() == Validity::Different) {
             QDomElement timeMaxElement = doc.createElement("timemax");
             tmp = converter->asString(v->maximumValue()).asString();
             timeMaxElement.appendChild(doc.createTextNode(tmp));
@@ -155,7 +155,7 @@ QDomElement Ksp::saveValidity(QDomDocument& doc, Validity *v, const ValueConvert
         dateMinElement.appendChild(doc.createTextNode(tmp));
         validityElement.appendChild(dateMinElement);
 
-        if (v->condition() == Conditional::Between || v->condition() == Conditional::Different) {
+        if (v->condition() == Validity::Between || v->condition() == Validity::Different) {
             QDomElement dateMaxElement = doc.createElement("datemax");
             const QDate maxDate = v->maximumValue().asDate(converter->settings());
             QString tmp("%1/%2/%3");

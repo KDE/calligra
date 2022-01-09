@@ -985,7 +985,7 @@ void WorksheetSubStreamHandler::handleCFRecord(Swinder::CFRecord *record)
 
     Conditional c;
     if (record->conditionType() == record->Formula) {
-        c.cond = Conditional::Formula;
+        c.cond = Validity::Formula;
         FormulaDecoder dec;
         QByteArray rgce = record->rgce1();
         unsigned size = rgce.size();
@@ -996,33 +996,33 @@ void WorksheetSubStreamHandler::handleCFRecord(Swinder::CFRecord *record)
         c.value1 = Value(f);
     } else {
         int valcount = 1;
-        c.cond = Conditional::None;
+        c.cond = Validity::None;
         switch (record->conditionFunction()) {
         case CFRecord::Between:
-            c.cond = Conditional::Between;
+            c.cond = Validity::Between;
             valcount = 2;
             break;
         case CFRecord::Outside:
-            c.cond = Conditional::Outside;
+            c.cond = Validity::Outside;
             valcount = 2;
             break;
         case CFRecord::Equal:
-            c.cond = Conditional::Equal;
+            c.cond = Validity::Equal;
             break;
         case CFRecord::NotEqual:
-            c.cond = Conditional::NotEqual;
+            c.cond = Validity::NotEqual;
             break;
         case CFRecord::Greater:
-            c.cond = Conditional::Greater;
+            c.cond = Validity::Greater;
             break;
         case CFRecord::Less:
-            c.cond = Conditional::Less;
+            c.cond = Validity::Less;
             break;
         case CFRecord::GreaterOrEqual:
-            c.cond = Conditional::GreaterOrEqual;
+            c.cond = Validity::GreaterOrEqual;
             break;
         case CFRecord::LessOrEqual:
-            c.cond = Conditional::LessOrEqual;
+            c.cond = Validity::LessOrEqual;
             break;
         }
         FormulaDecoder dec;

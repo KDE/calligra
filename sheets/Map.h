@@ -33,23 +33,15 @@ namespace Calligra
 namespace Sheets
 {
 class ApplicationSettings;
-class BindingManager;
-class CalculationSettings;
 class ColumnFormat;
 class DatabaseManager;
-class DependencyManager;
 class DocBase;
 class LoadingInfo;
-class NamedAreaManager;
-class RecalcManager;
 class RowFormat;
 class Sheet;
 class Style;
 class StyleManager;
-class ValueParser;
-class ValueConverter;
 class ValueFormatter;
-class ValueCalc;
 
 /**
  * The "embedded document".
@@ -89,29 +81,9 @@ public:
     bool completeSaving(KoStore *store, KoXmlWriter *manifestWriter, KoShapeSavingContext * context) override;
 
     /**
-     * \return a pointer to the binding manager
-     */
-    BindingManager* bindingManager() const;
-
-    /**
      * \return a pointer to the database manager
      */
     DatabaseManager* databaseManager() const;
-
-    /**
-     * \return a pointer to the dependency manager
-     */
-    DependencyManager* dependencyManager() const;
-
-    /**
-     * \return a pointer to the named area manager
-     */
-    NamedAreaManager* namedAreaManager() const;
-
-    /**
-     * \return a pointer to the recalculation manager
-     */
-    RecalcManager* recalcManager() const;
 
     /**
      * @return the StyleManager of this Document
@@ -124,34 +96,14 @@ public:
     KoStyleManager* textStyleManager() const;
 
     /**
-     * @return the value parser of this Document
-     */
-    ValueParser* parser() const;
-
-    /**
      * @return the value formatter of this Document
      */
     ValueFormatter* formatter() const;
 
     /**
-     * @return the value converter of this Document
-     */
-    ValueConverter* converter() const;
-
-    /**
-     * @return the value calculator of this Document
-     */
-    ValueCalc* calc() const;
-
-    /**
      * \return the application settings
      */
     ApplicationSettings* settings() const;
-
-    /**
-     * \return the calculation settings
-     */
-    CalculationSettings* calculationSettings() const;
 
     /**
      * \return the default row format
@@ -189,12 +141,6 @@ public:
      * @return a pointer to a new Sheet
      */
     Sheet* createSheet(const QString& name = QString());
-
-    /**
-     * Adds @p sheet to this map.
-     * The sheet becomes the active sheet.
-    */
-    void addSheet(Sheet* sheet);
 
     /**
      * Creates a new sheet.
@@ -295,21 +241,6 @@ Q_SIGNALS:
      * Emitted, if a command was added by addCommand(KUndo2Command *).
      */
     void commandAdded(KUndo2Command *command);
-
-    /**
-     * Emitted, if a newly created sheet was added to the document.
-     */
-    void sheetAdded(Sheet* sheet);
-
-    /**
-     * Emitted, if a sheet was deleted from the document.
-     */
-    void sheetRemoved(Sheet* sheet);
-
-    /**
-     * Emitted, if a sheet was revived, i.e. a deleted sheet was reinserted.
-     */
-    void sheetRevived(Sheet* sheet);
 
     /**
      * Emitted, if a status \p message should be shown in the status bar

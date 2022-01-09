@@ -83,7 +83,7 @@ bool NamedAreaCommand::postProcessing()
         for (int c = 0; c < storage->count(); ++c) {
             if (storage->data(c).expression().contains(tmp)) {
                 Cell cell(sheet, storage->col(c), storage->row(c));
-                if (cell.makeFormula()) {
+                if (cell.isFormula()) {
                     // recalculate cells
                     map->addDamage(new CellDamage(cell, CellDamage::Appearance | CellDamage::Binding |
                                                   CellDamage::Value));

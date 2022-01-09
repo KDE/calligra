@@ -286,7 +286,7 @@ public:
     /**
      * Creates a formula. It must be owned by a sheet.
      */
-    Formula(Sheet *sheet, const CellBase& cell);
+    Formula(SheetBase *sheet, const CellBase& cell);
 
     /**
      * Creates a formula. It must be owned by a sheet.
@@ -317,7 +317,7 @@ public:
     /**
      * Returns the cell which owns this formula.
      */
-    Sheet* sheet() const;
+    SheetBase* sheet() const;
     /**
      * Returns the cell which owns this formula.
      */

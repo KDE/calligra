@@ -278,7 +278,6 @@ set (calligrasheetsodf_LIB_SRCS
     Format.cpp
     HeaderFooter.cpp
     Map.cpp
-    NamedAreaManager.cpp
     PrintSettings.cpp
     ProtectableObject.cpp
     RowColumnFormat.cpp
@@ -290,8 +289,6 @@ set (calligrasheetsodf_LIB_SRCS
     Style.cpp
     StyleManager.cpp
     StyleStorage.cpp
-    Validity.cpp
-    ValidityStorage.cpp
     ValueFormatter.cpp
 
     database/Database.cpp

@@ -38,7 +38,7 @@
 
 using namespace Calligra::Sheets;
 
-Q_DECLARE_METATYPE(Conditional::Type)
+Q_DECLARE_METATYPE(Validity::Type)
 Q_DECLARE_METATYPE(Validity::Action)
 Q_DECLARE_METATYPE(Validity::Restriction)
 
@@ -65,7 +65,7 @@ ValidityDialog::ValidityDialog(QWidget* parent, Selection* selection)
 
     chooseType = new KComboBox(page1);
     tmpGridLayout->addWidget(chooseType, 0, 1);
-    chooseType->addItem(i18n("All"), QVariant::fromValue(Validity::None));
+    chooseType->addItem(i18n("All"), QVariant::fromValue(Validity::NoRestriction));
     chooseType->addItem(i18n("Number"), QVariant::fromValue(Validity::Number));
     chooseType->addItem(i18n("Integer"), QVariant::fromValue(Validity::Integer));
     chooseType->addItem(i18n("Text"), QVariant::fromValue(Validity::Text));
@@ -84,14 +84,14 @@ ValidityDialog::ValidityDialog(QWidget* parent, Selection* selection)
 
     choose = new KComboBox(page1);
     tmpGridLayout->addWidget(choose, 2, 1);
-    choose->addItem(i18n("equal to"), QVariant::fromValue(Conditional::Equal));
-    choose->addItem(i18n("greater than"), QVariant::fromValue(Conditional::Superior));
-    choose->addItem(i18n("less than"), QVariant::fromValue(Conditional::Inferior));
-    choose->addItem(i18n("equal to or greater than"), QVariant::fromValue(Conditional::SuperiorEqual));
-    choose->addItem(i18n("equal to or less than"), QVariant::fromValue(Conditional::InferiorEqual));
-    choose->addItem(i18n("between"), QVariant::fromValue(Conditional::Between));
-    choose->addItem(i18n("different from"), QVariant::fromValue(Conditional::Different));
-    choose->addItem(i18n("different to"), QVariant::fromValue(Conditional::DifferentTo));
+    choose->addItem(i18n("equal to"), QVariant::fromValue(Validity::Equal));
+    choose->addItem(i18n("greater than"), QVariant::fromValue(Validity::Superior));
+    choose->addItem(i18n("less than"), QVariant::fromValue(Validity::Inferior));
+    choose->addItem(i18n("equal to or greater than"), QVariant::fromValue(Validity::SuperiorEqual));
+    choose->addItem(i18n("equal to or less than"), QVariant::fromValue(Validity::InferiorEqual));
+    choose->addItem(i18n("between"), QVariant::fromValue(Validity::Between));
+    choose->addItem(i18n("different from"), QVariant::fromValue(Validity::Different));
+    choose->addItem(i18n("different to"), QVariant::fromValue(Validity::DifferentTo));
     choose->setCurrentIndex(0);
 
     edit1 = new QLabel(page1);
@@ -384,7 +384,7 @@ void ValidityDialog::init()
         title->setText(validity.title());
         QString tmp;
         switch (validity.restriction()) {
-        case Validity::None:
+        case Validity::NoRestriction:
             chooseType->setCurrentIndex(0);
             break;
         case Validity::Number:
@@ -525,9 +525,9 @@ void ValidityDialog::OkPressed()
     }
 
     if (chooseType->currentIndex() == 0) {//no validity
-        validity.setRestriction(Validity::None);
+        validity.setRestriction(Validity::NoRestriction);
         validity.setAction(Validity::Stop);
-        validity.setCondition(Conditional::Equal);
+        validity.setCondition(Validity::Equal);
         validity.setMessage(message->toPlainText());
         validity.setTitle(title->text());
         validity.setMinimumValue(Value());
@@ -535,7 +535,7 @@ void ValidityDialog::OkPressed()
     } else {
         validity.setRestriction(chooseType->itemData(chooseType->currentIndex()).value<Validity::Restriction>());
         validity.setAction(chooseAction->itemData(chooseAction->currentIndex()).value<Validity::Action>());
-        validity.setCondition(choose->itemData(choose->currentIndex()).value<Conditional::Type>());
+        validity.setCondition(choose->itemData(choose->currentIndex()).value<Validity::Type>());
         validity.setMessage(message->toPlainText());
         validity.setTitle(title->text());
         validity.setMinimumValue(Value());

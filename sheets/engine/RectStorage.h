@@ -263,10 +263,10 @@ template<typename T>
 QVector< QPair<QRectF, T> > RectStorage<T>::intersectingPairs(const Region& region) const
 {
     ensureLoaded();
-    QList< QPair<QRectF, T> > result;
+    QVector< QPair<QRectF, T> > result;
     Region::ConstIterator end = region.constEnd();
     for (Region::ConstIterator it = region.constBegin(); it != end; ++it)
-        result += m_tree.intersectingPairs((*it)->rect()).values().toVector();
+        result.append (m_tree.intersectingPairs((*it)->rect()).values().toVector());
     return result;
 }
 
@@ -288,7 +288,7 @@ template<typename T>
 QVector< QPair<QRectF, T> > RectStorage<T>::currentData(const Region& region) const
 {
     ensureLoaded();
-    QList< QPair<QRectF, T> > result;
+    QVector< QPair<QRectF, T> > result;
     Region::ConstIterator end = region.constEnd();
     for (Region::ConstIterator it = region.constBegin(); it != end; ++it) {
         const QRect rect = (*it)->rect();
@@ -298,7 +298,8 @@ QVector< QPair<QRectF, T> > RectStorage<T>::currentData(const Region& region) co
             pairs[i].first = pairs[i].first.intersected(rect);
         }
         // Always add a default value even if there are no pairs.
-        result << qMakePair(QRectF(rect), T()) << pairs;
+        result.push_back (qMakePair(QRectF(rect), T()));
+        result.append (QVector< QPair<QRectF, T> >::fromList (pairs));
     }
     return result;
 }

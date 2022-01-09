@@ -23,10 +23,8 @@
 
 // Sheets - rest
 #include "Damages.h"
-#include "DependencyManager.h"
 #include "Map.h"
 #include "ModelSupport.h"
-#include "RecalcManager.h"
 #include "Sheet.h"
 
 // commands
@@ -52,7 +50,6 @@ public:
             , databaseStorage(new DatabaseStorage(sheet->map()))
             , fusionStorage(new FusionStorage(sheet->map()))
             , linkStorage(new LinkStorage())
-            , matrixStorage(new MatrixStorage(sheet->map()))
             , styleStorage(new StyleStorage(sheet->map()))
             , richTextStorage(new RichTextStorage())
     {
@@ -65,7 +62,6 @@ public:
             , databaseStorage(new DatabaseStorage(*other.databaseStorage))
             , fusionStorage(new FusionStorage(*other.fusionStorage))
             , linkStorage(new LinkStorage(*other.linkStorage))
-            , matrixStorage(new MatrixStorage(*other.matrixStorage))
             , styleStorage(new StyleStorage(*other.styleStorage))
             , richTextStorage(new RichTextStorage(*other.richTextStorage))
     {
@@ -77,7 +73,6 @@ public:
         delete databaseStorage;
         delete fusionStorage;
         delete linkStorage;
-        delete matrixStorage;
         delete styleStorage;
         delete richTextStorage;
     }
@@ -90,7 +85,6 @@ public:
     DatabaseStorage*        databaseStorage;
     FusionStorage*          fusionStorage;
     LinkStorage*            linkStorage;
-    MatrixStorage*          matrixStorage;
     StyleStorage*           styleStorage;
     RichTextStorage*        richTextStorage;
 };
@@ -211,14 +205,13 @@ CellStorage::~CellStorage()
 }
 
 void CellStorage::fillExtraStorages() {
-    storages.push_back (commentStorage);
-    storages.push_back (conditionsStorage);
-    storages.push_back (databaseStorage);
-    storages.push_back (fusionStorage);
-    storages.push_back (linkStorage);
-    storages.push_back (matrixStorage);
-    storages.push_back (styleStorage);
-    storages.push_back (richTextStorage);
+    storages.push_back (d->commentStorage);
+    storages.push_back (d->conditionsStorage);
+    storages.push_back (d->databaseStorage);
+    storages.push_back (d->fusionStorage);
+    storages.push_back (d->linkStorage);
+    storages.push_back (d->styleStorage);
+    storages.push_back (d->richTextStorage);
 }
 
 Sheet* CellStorage::fullSheet() const
@@ -299,7 +292,7 @@ Database CellStorage::database(int column, int row) const
     return database;
 }
 
-QList< QPair<QRectF, Database> > CellStorage::databases(const Region& region) const
+QVector< QPair<QRectF, Database> > CellStorage::databases(const Region& region) const
 {
 #ifdef CALLIGRA_SHEETS_MT
     QReadLocker rl(&bigUglyLock);
@@ -332,43 +325,6 @@ void CellStorage::setLink(int column, int row, const QString& link)
         d->linkStorage->take(column, row);
     else
         d->linkStorage->insert(column, row, link);
-}
-
-QString CellStorage::namedArea(int column, int row) const
-{
-#ifdef CALLIGRA_SHEETS_MT
-    QReadLocker rl(&bigUglyLock);
-#endif
-    QPair<QRectF, QString> pair = d->namedAreaStorage->containedPair(QPoint(column, row));
-    if (pair.first.isEmpty())
-        return QString();
-    if (pair.second.isEmpty())
-        return QString();
-    return pair.second;
-}
-
-QList< QPair<QRectF, QString> > CellStorage::namedAreas(const Region& region) const
-{
-#ifdef CALLIGRA_SHEETS_MT
-    QReadLocker rl(&bigUglyLock);
-#endif
-    return d->namedAreaStorage->intersectingPairs(region);
-}
-
-void CellStorage::setNamedArea(const Region& region, const QString& namedArea)
-{
-#ifdef CALLIGRA_SHEETS_MT
-    QWriteLocker(&bigUglyLock);
-#endif
-    d->namedAreaStorage->insert(region, namedArea);
-}
-
-void CellStorage::removeNamedArea(const Region& region, const QString& namedArea)
-{
-#ifdef CALLIGRA_SHEETS_MT
-    QWriteLocker(&bigUglyLock);
-#endif
-    d->namedAreaStorage->remove(region, namedArea);
 }
 
 
@@ -532,116 +488,6 @@ QList<Cell> CellStorage::masterCells(const Region& region) const
         masterCells.append(Cell(d->sheet, pairs[i].first.toRect().topLeft()));
     }
     return masterCells;
-}
-
-bool CellStorage::locksCells(int column, int row) const
-{
-#ifdef CALLIGRA_SHEETS_MT
-    QReadLocker rl(&bigUglyLock);
-#endif
-    const QPair<QRectF, bool> pair = d->matrixStorage->containedPair(QPoint(column, row));
-    if (pair.first.isNull())
-        return false;
-    if (pair.second == false)
-        return false;
-    // master cell?
-    if (pair.first.toRect().topLeft() != QPoint(column, row))
-        return false;
-    return true;
-}
-
-bool CellStorage::isLocked(int column, int row) const
-{
-#ifdef CALLIGRA_SHEETS_MT
-    QReadLocker rl(&bigUglyLock);
-#endif
-    const QPair<QRectF, bool> pair = d->matrixStorage->containedPair(QPoint(column, row));
-    if (pair.first.isNull())
-        return false;
-    if (pair.second == false)
-        return false;
-    // master cell?
-    if (pair.first.toRect().topLeft() == QPoint(column, row))
-        return false;
-    return true;
-}
-
-bool CellStorage::hasLockedCells(const Region& region) const
-{
-#ifdef CALLIGRA_SHEETS_MT
-    QReadLocker rl(&bigUglyLock);
-#endif
-    typedef QPair<QRectF, bool> RectBoolPair;
-    QList<QPair<QRectF, bool> > pairs = d->matrixStorage->intersectingPairs(region);
-    foreach (const RectBoolPair& pair, pairs) {
-        if (pair.first.isNull())
-            continue;
-        if (pair.second == false)
-            continue;
-        // more than just the master cell in the region?
-        const QPoint topLeft = pair.first.toRect().topLeft();
-        if (pair.first.width() >= 1) {
-            if (region.contains(topLeft + QPoint(1, 0), d->sheet))
-                return true;
-        }
-        if (pair.first.height() >= 1) {
-            if (region.contains(topLeft + QPoint(0, 1), d->sheet))
-                return true;
-        }
-    }
-    return false;
-}
-
-void CellStorage::lockCells(const QRect& rect)
-{
-#ifdef CALLIGRA_SHEETS_MT
-    QWriteLocker(&bigUglyLock);
-#endif
-    // Start by unlocking the cells that we lock right now
-    const QPair<QRectF, bool> pair = d->matrixStorage->containedPair(rect.topLeft());  // FIXME
-    if (!pair.first.isNull())
-        d->matrixStorage->insert(Region(pair.first.toRect()), false);
-    // Lock the cells
-    if (rect.width() > 1 || rect.height() > 1)
-        d->matrixStorage->insert(Region(rect), true);
-}
-
-void CellStorage::unlockCells(int column, int row)
-{
-#ifdef CALLIGRA_SHEETS_MT
-    QWriteLocker(&bigUglyLock);
-#endif
-    const QPair<QRectF, bool> pair = d->matrixStorage->containedPair(QPoint(column, row));
-    if (pair.first.isNull())
-        return;
-    if (pair.second == false)
-        return;
-    if (pair.first.toRect().topLeft() != QPoint(column, row))
-        return;
-    const QRect rect = pair.first.toRect();
-    d->matrixStorage->insert(Region(rect), false);
-    // clear the values
-    for (int r = rect.top(); r <= rect.bottom(); ++r) {
-        for (int c = rect.left(); c <= rect.right(); ++c) {
-            if (r != rect.top() || c != rect.left())
-                setValue(c, r, Value());
-        }
-    }
-}
-
-QRect CellStorage::lockedCells(int column, int row) const
-{
-#ifdef CALLIGRA_SHEETS_MT
-    QReadLocker rl(&bigUglyLock);
-#endif
-    const QPair<QRectF, bool> pair = d->matrixStorage->containedPair(QPoint(column, row));
-    if (pair.first.isNull())
-        return QRect(column, row, 1, 1);
-    if (pair.second == false)
-        return QRect(column, row, 1, 1);
-    if (pair.first.toRect().topLeft() != QPoint(column, row))
-        return QRect(column, row, 1, 1);
-    return pair.first.toRect();
 }
 
 Cell CellStorage::firstInColumn(int col, Visiting visiting) const

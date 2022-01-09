@@ -12,7 +12,7 @@
 
 #include "Region.h"
 
-#include "sheets_odf_export.h"
+#include "sheets_engine_export.h"
 
 class QString;
 
@@ -20,13 +20,14 @@ namespace Calligra
 {
 namespace Sheets
 {
-class Map;
+class MapBase;
 class Region;
+class SheetBase;
 
 /**
  * Manages named cell areas.
  */
-class CALLIGRA_SHEETS_ODF_EXPORT NamedAreaManager : public QObject
+class CALLIGRA_SHEETS_ENGINE_EXPORT NamedAreaManager : public QObject
 {
     Q_OBJECT
 
@@ -34,19 +35,19 @@ public:
     /**
      * Constructor.
      */
-    explicit NamedAreaManager(const Map *map);
+    explicit NamedAreaManager(const MapBase *map);
 
     /**
      * Destructor.
      */
     ~NamedAreaManager() override;
 
-    const Map *map() const;
+    const MapBase *map() const;
 
-    void remove(Sheet* sheet);
+    void remove(SheetBase* sheet);
 
     Region namedArea(const QString& name) const;
-    Sheet* sheet(const QString& name) const;
+    SheetBase* sheet(const QString& name) const;
     bool contains(const QString& name) const;
 
     /**

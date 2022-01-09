@@ -22,8 +22,16 @@ namespace Calligra
 namespace Sheets
 {
 
-class SheetBase;
+class BindingManager;
+class CalculationSettings;
 class Damage;
+class DependencyManager;
+class NamedAreaManager;
+class RecalcManager;
+class SheetBase;
+class ValueCalc;
+class ValueConverter;
+class ValueParser;
 
 class CALLIGRA_SHEETS_ENGINE_EXPORT MapBase : public QObject
 {
@@ -74,6 +82,11 @@ public:
      */
     SheetBase* previousSheet(SheetBase *) const;
 
+    /**
+     * Adds @p sheet to this map.
+    */
+    void addSheet(SheetBase* sheet);
+
 
     /**
      * \return true if the document is currently loading.
@@ -87,6 +100,47 @@ public:
 
 
     /**
+     * @return the value parser of this Document
+     */
+    ValueParser* parser() const;
+
+    /**
+     * @return the value converter of this Document
+     */
+    ValueConverter* converter() const;
+
+    /**
+     * @return the value calculator of this Document
+     */
+    ValueCalc* calc() const;
+
+
+    /**
+     * \return a pointer to the binding manager
+     */
+    BindingManager* bindingManager() const;
+
+    /**
+     * \return a pointer to the dependency manager
+     */
+    DependencyManager* dependencyManager() const;
+
+    /**
+     * \return a pointer to the named area manager
+     */
+    NamedAreaManager* namedAreaManager() const;
+
+    /**
+     * \return a pointer to the recalculation manager
+     */
+    RecalcManager* recalcManager() const;
+
+    /**
+     * \return the calculation settings
+     */
+    CalculationSettings* calculationSettings() const;
+
+    /**
      * \ingroup Damages
      */
     void addDamage(Damage* damage);
@@ -96,6 +150,22 @@ Q_SIGNALS:
      * \ingroup Damages
      */
     void damagesFlushed(const QList<Damage*>& damages);
+
+    /**
+     * Emitted, if a newly created sheet was added to the document.
+     */
+    void sheetAdded(SheetBase* sheet);
+
+    /**
+     * Emitted, if a sheet was deleted from the document.
+     */
+    void sheetRemoved(SheetBase* sheet);
+
+    /**
+     * Emitted, if a sheet was revived, i.e. a deleted sheet was reinserted.
+     */
+    void sheetRevived(SheetBase* sheet);
+
 
 public Q_SLOTS:
     /**

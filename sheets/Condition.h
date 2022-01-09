@@ -14,6 +14,8 @@
 #include <QSharedData>
 #include <QVariant>
 
+#include "engine/Validity.h"
+
 class QString;
 
 namespace Calligra
@@ -34,15 +36,11 @@ class ValueParser;
 class CALLIGRA_SHEETS_ODF_EXPORT Conditional
 {
 public:
-    enum Type { None, Equal, Superior, Inferior, SuperiorEqual,
-                InferiorEqual, Between, Different, DifferentTo,
-                IsTrueFormula
-              };
 
     Value          value1;
     Value          value2;
     QString        styleName;
-    Type           cond;
+    Validity::Type cond;
     QString        baseCellAddress;
 
     Conditional();

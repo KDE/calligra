@@ -11,6 +11,7 @@
 #include "MapBase.h"
 #include "CellBaseStorage.h"
 #include "Damages.h"
+#include "FormulaStorage.h"
 
 #include <QObject>
 
@@ -118,6 +119,29 @@ bool SheetBase::setSheetName(const QString& name)
 
     return true;
 }
+
+void SheetBase::changeCellTabName(QString const & old_name, QString const & new_name)
+{
+    const FormulaStorage *fs = formulaStorage();
+    for (int c = 0; c < fs->count(); ++c) {
+        if (fs->data(c).expression().contains(old_name)) {
+            int nb = fs->data(c).expression().count(old_name + '!');
+            QString tmp = old_name + '!';
+            int len = tmp.length();
+            tmp = fs->data(c).expression();
+
+            for (int i = 0; i < nb; ++i) {
+                int pos = tmp.indexOf(old_name + '!');
+                tmp.replace(pos, len, new_name + '!');
+            }
+            CellBase cell(this, fs->col(c), fs->row(c));
+            Formula formula(this, cell);
+            formula.setExpression(tmp);
+            cell.setFormula(formula);
+        }
+    }
+}
+
 
 
 

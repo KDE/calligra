@@ -7,7 +7,7 @@
 #include "Formula.h"
 
 #include "CalculationSettings.h"
-#include "CellStorage.h"
+#include "CellBaseStorage.h"
 #include "Function.h"
 #include "FunctionRepository.h"
 #include "Region.h"
@@ -555,7 +555,7 @@ const Cell& Formula::cell() const
     return d->cell;
 }
 
-Sheet* Formula::sheet() const
+SheetBase* Formula::sheet() const
 {
     return d->sheet;
 }

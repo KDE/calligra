@@ -47,7 +47,7 @@ public:
     /**
      * Helper function for cellsToCalculate(const Region&) and cellsToCalculate(SheetBase*).
      */
-    void cellsToCalculate(const Region& region, QSet<Cell>& cells) const;
+    void cellsToCalculate(const Region& region, QSet<CellBase>& cells) const;
 
     /*
      * Stores cells ordered by its reference depth.
@@ -64,8 +64,8 @@ public:
      * \li depth(A2) = 1
      * \li depth(A3) = 2
      */
-    QMap<int, Cell> cells;
-    const Map* map;
+    QMap<int, CellBase> cells;
+    const MapBase* map;
     bool active;
 };
 
@@ -75,13 +75,13 @@ void RecalcManager::Private::cellsToCalculate(const Region& region)
         return;
 
     // retrieve the cell depths
-    QMap<Cell, int> depths = map->dependencyManager()->depths();
+    QMap<CellBase, int> depths = map->dependencyManager()->depths();
 
     // create the cell map ordered by depth
-    QSet<Cell> cells;
+    QSet<CellBase> cells;
     cellsToCalculate(region, cells);
-    const QSet<Cell>::ConstIterator end(cells.end());
-    for (QSet<Cell>::ConstIterator it(cells.begin()); it != end; ++it) {
+    const QSet<CellBase>::ConstIterator end(cells.end());
+    for (QSet<CellBase>::ConstIterator it(cells.begin()); it != end; ++it) {
         if ((*it).sheet()->isAutoCalculationEnabled())
             this->cells.insertMulti(depths[*it], *it);
     }
@@ -90,7 +90,7 @@ void RecalcManager::Private::cellsToCalculate(const Region& region)
 void RecalcManager::Private::cellsToCalculate(SheetBase* sheet)
 {
     // retrieve the cell depths
-    QMap<Cell, int> depths = map->dependencyManager()->depths();
+    QMap<CellBase, int> depths = map->dependencyManager()->depths();
 
     // NOTE Stefan: It's necessary, that the cells are filled in row-wise;
     //              beginning with the top left; ending with the bottom right.
@@ -98,7 +98,7 @@ void RecalcManager::Private::cellsToCalculate(SheetBase* sheet)
     //              way, which boosts performance (using PointStorage) for an
     //              empty storage (on loading). For an already filled value
     //              storage, the speed gain is not that sensible.
-    Cell cell;
+    CellBase cell;
     if (!sheet) { // map recalculation
         for (int s = 0; s < map->count(); ++s) {
             sheet = map->sheet(s);
@@ -115,7 +115,7 @@ void RecalcManager::Private::cellsToCalculate(SheetBase* sheet)
     }
 }
 
-void RecalcManager::Private::cellsToCalculate(const Region& region, QSet<Cell>& cells) const
+void RecalcManager::Private::cellsToCalculate(const Region& region, QSet<CellBase>& cells) const
 {
     Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it(region.constBegin()); it != end; ++it) {
@@ -123,7 +123,7 @@ void RecalcManager::Private::cellsToCalculate(const Region& region, QSet<Cell>& 
         const SheetBase* sheet = (*it)->sheet();
         for (int col = range.left(); col <= range.right(); ++col) {
             for (int row = range.top(); row <= range.bottom(); ++row) {
-                Cell cell(sheet, col, row);
+                CellBase cell(sheet, col, row);
                 // Even empty cells may act as value
                 // providers and need to be processed.
 
@@ -219,7 +219,7 @@ void RecalcManager::recalc(KoUpdater *updater)
     if (updater)
         updater->setProgress(0);
 
-    const QList<Cell> cells = d->cells.values();
+    const QList<CellBase> cells = d->cells.values();
     const int cellsCount = cells.count();
     for (int c = 0; c < cellsCount; ++c) {
         // only recalculate, if no circular dependency occurred
@@ -260,9 +260,9 @@ void RecalcManager::recalc(KoUpdater *updater)
 
 void RecalcManager::dump() const
 {
-    QMap<int, Cell>::ConstIterator end(d->cells.constEnd());
-    for (QMap<int, Cell>::ConstIterator it(d->cells.constBegin()); it != end; ++it) {
-        Cell cell = it.value();
+    QMap<int, CellBase>::ConstIterator end(d->cells.constEnd());
+    for (QMap<int, CellBase>::ConstIterator it(d->cells.constBegin()); it != end; ++it) {
+        CellBase cell = it.value();
         QString cellName = cell.name();
         while (cellName.count() < 4) cellName.prepend(' ');
         debugSheetsFormula << "depth(" << cellName << " ) =" << it.key();

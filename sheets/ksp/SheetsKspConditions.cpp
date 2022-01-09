@@ -70,7 +70,7 @@ void Ksp::loadConditions(Conditions *conditions, const KoXmlElement &element, co
             continue;
 
         bool ok = true;
-        newCondition.cond = (Conditional::Type) conditionElement.attribute("cond").toInt(&ok);
+        newCondition.cond = (Validity::Type) conditionElement.attribute("cond").toInt(&ok);
         if(!ok)
             continue;
 

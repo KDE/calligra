@@ -10,6 +10,7 @@
 #include "SheetsOdfPrivate.h"
 
 #include "Condition.h"
+#include "Validity.h"
 #include "Util.h"
 #include "StyleManager.h"
 #include "ValueConverter.h"
@@ -58,33 +59,33 @@ QString Odf::saveConditionValue(const Conditional &conditional, ValueConverter* 
     QString v2 = converter->asString(conditional.value2).asStringWithDoubleQuotes();
     QString value;
     switch (conditional.cond) {
-    case Conditional::None:
+    case Validity::None:
         break;
-    case Conditional::Equal:
+    case Validity::Equal:
         value = "cell-content()=" + v1;
         break;
-    case Conditional::Superior:
+    case Validity::Superior:
         value = "cell-content()>" + v1;
         break;
-    case Conditional::Inferior:
+    case Validity::Inferior:
         value = "cell-content()<" + v1;
         break;
-    case Conditional::SuperiorEqual:
+    case Validity::SuperiorEqual:
         value = "cell-content()>=" + v1;
         break;
-    case Conditional::InferiorEqual:
+    case Validity::InferiorEqual:
         value = "cell-content()<=" + v1;
         break;
-    case Conditional::Between:
+    case Validity::Between:
         value = "cell-content-is-between(" + v1 + ',' + v2 + ')';
         break;
-    case Conditional::DifferentTo:
+    case Validity::DifferentTo:
         value = "cell-content()!=" + v1;
         break;
-    case Conditional::Different:
+    case Validity::Different:
         value = "cell-content-is-not-between(" + v1 + ',' + v2 + ')';
         break;
-    case Conditional::IsTrueFormula:
+    case Validity::IsTrueFormula:
         value = "is-true-formula(" +
                 Odf::encodeFormula(conditional.value1.asString()) +
                 ')';
@@ -148,17 +149,17 @@ void Odf::loadConditionValue(const QString &styleCondition, Conditional &newCond
         val.remove(')');
         QStringList listVal = val.split(',', QString::SkipEmptyParts);
         loadValidationValue(listVal, newCondition, parser);
-        newCondition.cond = Conditional::Between;
+        newCondition.cond = Validity::Between;
     } else if (val.contains("cell-content-is-not-between(")) {
         val.remove("cell-content-is-not-between(");
         val.remove(')');
         QStringList listVal = val.split(',', QString::SkipEmptyParts);
         loadValidationValue(listVal, newCondition, parser);
-        newCondition.cond = Conditional::Different;
+        newCondition.cond = Validity::Different;
     } else if (val.startsWith(QLatin1String("is-true-formula("))) {
         val.remove(0, 16);
         if (val.endsWith(QLatin1Char(')'))) val.chop(1);
-        newCondition.cond = Conditional::IsTrueFormula;
+        newCondition.cond = Validity::IsTrueFormula;
         newCondition.value1 = Value(Odf::decodeFormula(val));
     }
 }
@@ -168,23 +169,23 @@ void Odf::loadCondition(QString &valExpression, Conditional &newCondition, const
     QString value;
     if (valExpression.indexOf("<=") == 0) {
         value = valExpression.remove(0, 2);
-        newCondition.cond = Conditional::InferiorEqual;
+        newCondition.cond = Validity::InferiorEqual;
     } else if (valExpression.indexOf(">=") == 0) {
         value = valExpression.remove(0, 2);
-        newCondition.cond = Conditional::SuperiorEqual;
+        newCondition.cond = Validity::SuperiorEqual;
     } else if (valExpression.indexOf("!=") == 0) {
         //add Differentto attribute
         value = valExpression.remove(0, 2);
-        newCondition.cond = Conditional::DifferentTo;
+        newCondition.cond = Validity::DifferentTo;
     } else if (valExpression.indexOf('<') == 0) {
         value = valExpression.remove(0, 1);
-        newCondition.cond = Conditional::Inferior;
+        newCondition.cond = Validity::Inferior;
     } else if (valExpression.indexOf('>') == 0) {
         value = valExpression.remove(0, 1);
-        newCondition.cond = Conditional::Superior;
+        newCondition.cond = Validity::Superior;
     } else if (valExpression.indexOf('=') == 0) {
         value = valExpression.remove(0, 1);
-        newCondition.cond = Conditional::Equal;
+        newCondition.cond = Validity::Equal;
     } else {
         warnSheets << " I don't know how to parse it :" << valExpression;
     }

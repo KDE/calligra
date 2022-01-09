@@ -679,35 +679,35 @@ void ExcelImport::Private::processSheetForConditionals(Sheet* is, Calligra::Shee
         foreach (const Conditional& c, cf->conditionals()) {
             Calligra::Sheets::Conditional kc;
             switch (c.cond) {
-            case Conditional::None:
-                kc.cond = Calligra::Sheets::Conditional::None;
+            case Validity::None:
+                kc.cond = Calligra::Sheets::Validity::None;
                 break;
-            case Conditional::Formula:
-                kc.cond = Calligra::Sheets::Conditional::IsTrueFormula;
+            case Validity::Formula:
+                kc.cond = Calligra::Sheets::Validity::IsTrueFormula;
                 break;
-            case Conditional::Between:
-                kc.cond = Calligra::Sheets::Conditional::Between;
+            case Validity::Between:
+                kc.cond = Calligra::Sheets::Validity::Between;
                 break;
-            case Conditional::Outside:
-                kc.cond = Calligra::Sheets::Conditional::Different;
+            case Validity::Outside:
+                kc.cond = Calligra::Sheets::Validity::Different;
                 break;
-            case Conditional::Equal:
-                kc.cond = Calligra::Sheets::Conditional::Equal;
+            case Validity::Equal:
+                kc.cond = Calligra::Sheets::Validity::Equal;
                 break;
-            case Conditional::NotEqual:
-                kc.cond = Calligra::Sheets::Conditional::DifferentTo;
+            case Validity::NotEqual:
+                kc.cond = Calligra::Sheets::Validity::DifferentTo;
                 break;
-            case Conditional::Greater:
-                kc.cond = Calligra::Sheets::Conditional::Superior;
+            case Validity::Greater:
+                kc.cond = Calligra::Sheets::Validity::Superior;
                 break;
-            case Conditional::Less:
-                kc.cond = Calligra::Sheets::Conditional::Inferior;
+            case Validity::Less:
+                kc.cond = Calligra::Sheets::Validity::Inferior;
                 break;
-            case Conditional::GreaterOrEqual:
-                kc.cond = Calligra::Sheets::Conditional::SuperiorEqual;
+            case Validity::GreaterOrEqual:
+                kc.cond = Calligra::Sheets::Validity::SuperiorEqual;
                 break;
-            case Conditional::LessOrEqual:
-                kc.cond = Calligra::Sheets::Conditional::InferiorEqual;
+            case Validity::LessOrEqual:
+                kc.cond = Calligra::Sheets::Validity::InferiorEqual;
                 break;
             }
             qCDebug(lcExcelImport) << "FRM:" << c.cond << kc.cond;

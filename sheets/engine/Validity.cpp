@@ -7,15 +7,11 @@
 // Local
 #include "Validity.h"
 
-// KF5
-#include <kmessagebox.h>
-
 // Sheets
 #include "CalculationSettings.h"
-#include "Cell.h"
-#include "Map.h"
-#include "Sheet.h"
-#include "Value.h"
+#include "CellBase.h"
+#include "MapBase.h"
+#include "SheetBase.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
 #include "ValueParser.h"
@@ -31,7 +27,7 @@ public:
     QString messageInfo;
     Value minValue;
     Value maxValue;
-    Conditional::Type cond;
+    Validity::Type cond;
     Action action;
     Restriction restriction;
     bool displayMessage;
@@ -43,7 +39,7 @@ public:
 Validity::Validity()
         : d(new Private)
 {
-    d->cond = Conditional::None;
+    d->cond = Validity::None;
     d->action = Stop;
     d->restriction = None;
     d->displayMessage = true;
@@ -75,7 +71,7 @@ bool Validity::allowEmptyCell() const
     return d->allowEmptyCell;
 }
 
-Conditional::Type Validity::condition() const
+Validity::Type Validity::condition() const
 {
     return d->cond;
 }
@@ -140,7 +136,7 @@ void Validity::setAllowEmptyCell(bool allow)
     d->allowEmptyCell = allow;
 }
 
-void Validity::setCondition(Conditional::Type condition)
+void Validity::setCondition(Validity::Type condition)
 {
     d->cond = condition;
 }
@@ -195,7 +191,7 @@ void Validity::setValidityList(const QStringList& list)
     d->listValidity = list;
 }
 
-bool Validity::testValidity(const Cell* cell) const
+bool Validity::testValidity(const CellBase* cell) const
 {
     bool valid = false;
     if (d->restriction != None) {
@@ -213,29 +209,29 @@ bool Validity::testValidity(const Cell* cell) const
             || (d->restriction == Time && cell->isTime())
             || (d->restriction == Date && cell->isDate())) {
             switch (d->cond) {
-            case Conditional::Equal:
+            case Validity::Equal:
                 valid = cell->value().equal(d->minValue, cs);
                 break;
-            case Conditional::DifferentTo:
+            case Validity::DifferentTo:
                 valid = !cell->value().equal(d->minValue, cs);
                 break;
-            case Conditional::Superior:
+            case Validity::Superior:
                 valid = cell->value().greater(d->minValue, cs);
                 break;
-            case Conditional::Inferior:
+            case Validity::Inferior:
                 valid = cell->value().less(d->minValue, cs);
                 break;
-            case Conditional::SuperiorEqual:
+            case Validity::SuperiorEqual:
                 valid = (cell->value().compare(d->minValue, cs)) >= 0;
                 break;
-            case Conditional::InferiorEqual:
+            case Validity::InferiorEqual:
                 valid = (cell->value().compare(d->minValue, cs)) <= 0;
                 break;
-            case Conditional::Between:
+            case Validity::Between:
                 valid = (cell->value().compare(d->minValue, cs) >= 0 &&
                          cell->value().compare(d->maxValue, cs) <= 0);
                 break;
-            case Conditional::Different:
+            case Validity::Different:
                 valid = (cell->value().compare(d->minValue, cs) < 0 ||
                          cell->value().compare(d->maxValue, cs) > 0);
                 break;
@@ -254,35 +250,35 @@ bool Validity::testValidity(const Cell* cell) const
                 const int min = d->minValue.asInteger();
                 const int max = d->maxValue.asInteger();
                 switch (d->cond) {
-                case Conditional::Equal:
+                case Validity::Equal:
                     if (len == min)
                         valid = true;
                     break;
-                case Conditional::DifferentTo:
+                case Validity::DifferentTo:
                     if (len != min)
                         valid = true;
                     break;
-                case Conditional::Superior:
+                case Validity::Superior:
                     if (len > min)
                         valid = true;
                     break;
-                case Conditional::Inferior:
+                case Validity::Inferior:
                     if (len < min)
                         valid = true;
                     break;
-                case Conditional::SuperiorEqual:
+                case Validity::SuperiorEqual:
                     if (len >= min)
                         valid = true;
                     break;
-                case Conditional::InferiorEqual:
+                case Validity::InferiorEqual:
                     if (len <= min)
                         valid = true;
                     break;
-                case Conditional::Between:
+                case Validity::Between:
                     if (len >= min && len <= max)
                         valid = true;
                     break;
-                case Conditional::Different:
+                case Validity::Different:
                     if (len < min || len > max)
                         valid = true;
                     break;

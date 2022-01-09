@@ -740,13 +740,6 @@ Q_SIGNALS:
     void nameChanged(const QString &oldName, const QString &name);
 
 protected:
-    /**
-     * \ingroup Value
-     * Change the name of a sheet in all formulas.
-     * When you change name sheet Sheet1 -> Price
-     * for all cell which refers to Sheet1, this function changes the name.
-     */
-    void changeCellTabName(QString const & old_name, QString const & new_name);
 
     //
     //////////////////////////////////////////////////////////////////////////

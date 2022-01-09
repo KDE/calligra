@@ -30,10 +30,9 @@
 #include <QVariant>
 
 // Sheets
-#include "sheets_export.h"
-#include "Condition.h"
+#include "sheets_engine_export.h"
+#include "Value.h"
 
-#include "KoXmlReaderForward.h"
 namespace Calligra
 {
 namespace Sheets
@@ -49,7 +48,7 @@ class ValueParser;
  *
  * \author Stefan Nikolaus <stefan.nikolaus@kdemail.net>
  */
-class CALLIGRA_SHEETS_ODF_EXPORT Validity
+class CALLIGRA_SHEETS_ENGINE_EXPORT Validity
 {
 public:
     /// The action invoked, if the validity check fails.
@@ -60,7 +59,7 @@ public:
     };
     /// The type of the restriction.
     enum Restriction {
-        None,       ///< No restriction
+        NoRestriction, ///< No restriction
         Number,     ///< Restrict to numbers
         Text,       ///< Restrict to texts
         Time,       ///< Restrict to times
@@ -69,6 +68,11 @@ public:
         TextLength, ///< Restrict text length
         List        ///< Restrict to lists
     };
+
+    enum Type { None, Equal, Superior, Inferior, SuperiorEqual,
+                InferiorEqual, Between, Different, DifferentTo,
+                IsTrueFormula
+              };
 
     /**
      * Constructor.
@@ -96,11 +100,11 @@ public:
      * Tests whether the content of \p cell is allowed.
      * \return \c true if the content is valid
      */
-    bool testValidity(const Cell* cell) const;
+    bool testValidity(const CellBase* cell) const;
 
     Action action() const;
     bool allowEmptyCell() const;
-    Conditional::Type condition() const;
+    Type condition() const;
 
     bool displayMessage() const;
     bool displayValidationInformation() const;
@@ -117,7 +121,7 @@ public:
 
     void setAction(Action action);
     void setAllowEmptyCell(bool allow);
-    void setCondition(Conditional::Type condition);
+    void setCondition(Type condition);
 
     void setDisplayMessage(bool display);
     void setDisplayValidationInformation(bool display);

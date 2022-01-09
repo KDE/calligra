@@ -7,7 +7,7 @@
 #include "BindingManager.h"
 
 #include "BindingStorage.h"
-#include "CellStorage.h"
+#include "CellBaseStorage.h"
 #include "MapBase.h"
 #include "Region.h"
 #include "SheetBase.h"

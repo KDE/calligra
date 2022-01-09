@@ -12,6 +12,16 @@
 #include "Region.h"
 #include "SheetBase.h"
 
+#include "BindingManager.h"
+#include "DependencyManager.h"
+#include "NamedAreaManager.h"
+#include "RecalcManager.h"
+
+#include "CalculationSettings.h"
+#include "ValueCalc.h"
+#include "ValueConverter.h"
+#include "ValueParser.h"
+
 #include <QTimer>
 
 using namespace Calligra::Sheets;
@@ -26,6 +36,15 @@ public:
      */
     QList<SheetBase *> lstSheets;
 
+    CalculationSettings* calculationSettings;
+    ValueCalc* calc;
+    ValueConverter* converter;
+    ValueParser* parser;
+
+    BindingManager* bindingManager;
+    DependencyManager* dependencyManager;
+    NamedAreaManager* namedAreaManager;
+    RecalcManager* recalcManager;
 
     QList<Damage*> damages;
 };
@@ -40,11 +59,41 @@ MapBase::MapBase() :
 {
     d->isLoading = false;
 
+    d->bindingManager = new BindingManager(this);
+    d->dependencyManager = new DependencyManager(this);
+    d->namedAreaManager = new NamedAreaManager(this);
+    d->recalcManager = new RecalcManager(this);
+    d->calculationSettings = new CalculationSettings();
+
+    d->parser = new ValueParser(d->calculationSettings);
+    d->converter = new ValueConverter(d->parser);
+    d->calc = new ValueCalc(d->converter);
+
     connect(this, SIGNAL(damagesFlushed()), this, SLOT(handleDamages()));
+
+    connect(this, SIGNAL(sheetAdded(sheet)), d->dependencyManager, SLOT(addSheet(sheet)));
+    connect(this, SIGNAL(sheetAdded(sheet)), d->recalcManager, SLOT(addSheet(sheet)));
+    connect(this, SIGNAL(sheetRemoved(sheet)), d->dependencyManager, SLOT(removeSheet(sheet)));
+    connect(this, SIGNAL(sheetRemoved(sheet)), d->recalcManager, SLOT(removeSheet(sheet)));
+    connect(this, SIGNAL(sheetRevived(sheet)), d->dependencyManager, SLOT(addSheet(sheet)));
+    connect(this, SIGNAL(sheetRevived(sheet)), d->recalcManager, SLOT(addSheet(sheet)));
+
+    connect(d->namedAreaManager, &NamedAreaManager::namedAreaModified,
+            d->dependencyManager, &DependencyManager::namedAreaModified);
+
 }
 
 MapBase::~MapBase()
 {
+    delete d->bindingManager;
+    delete d->dependencyManager;
+    delete d->namedAreaManager;
+    delete d->recalcManager;
+
+    delete d->parser;
+    delete d->converter;
+    delete d->calc;
+    delete d->calculationSettings;
 }
 
 
@@ -103,6 +152,56 @@ SheetBase * MapBase::previousSheet(SheetBase *currentSheet) const
     }
     return nullptr;
 }
+
+void MapBase::addSheet(SheetBase *_sheet)
+{
+    d->lstSheets.append(_sheet);
+    emit sheetAdded(_sheet);
+}
+
+
+
+ValueParser* MapBase::parser() const
+{
+    return d->parser;
+}
+
+ValueConverter* MapBase::converter() const
+{
+    return d->converter;
+}
+
+ValueCalc* MapBase::calc() const
+{
+    return d->calc;
+}
+
+
+BindingManager* MapBase::bindingManager() const
+{
+    return d->bindingManager;
+}
+
+DependencyManager* MapBase::dependencyManager() const
+{
+    return d->dependencyManager;
+}
+
+NamedAreaManager* MapBase::namedAreaManager() const
+{
+    return d->namedAreaManager;
+}
+
+RecalcManager* MapBase::recalcManager() const
+{
+    return d->recalcManager;
+}
+
+CalculationSettings* MapBase::calculationSettings() const
+{
+    return d->calculationSettings;
+}
+
 
 
 void MapBase::addDamage(Damage* damage)

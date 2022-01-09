@@ -119,6 +119,23 @@ public:
     Validity validity(int column, int row) const;
     void setValidity(const Region& region, Validity validity);
 
+    /**
+     * \return the named area's name associated with the Cell at \p column , \p row .
+     */
+    QString namedArea(int column, int row) const;
+    QVector< QPair<QRectF, QString> > namedAreas(const Region& region) const;
+    void setNamedArea(const Region& region, const QString& namedArea);
+    void removeNamedArea(const Region& region, const QString& namedArea);
+
+    /**
+     * \return \c true, if the cell's value is a matrix and obscures other cells
+     */
+    bool locksCells(int column, int row) const;
+    bool isLocked(int column, int row) const;
+    bool hasLockedCells(const Region& region) const;
+    void lockCells(const QRect& rect);
+    void unlockCells(int column, int row);
+    QRect lockedCells(int column, int row) const;
 
 
 
@@ -178,7 +195,11 @@ public:
 protected:
     void fillStorages();
 
+    QList<StorageBase *> storages;
 private:
+    // do not allow assignment
+    CellBaseStorage& operator=(const CellBaseStorage&);
+
     class Private;
     Private * const d;
 };

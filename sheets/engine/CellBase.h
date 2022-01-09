@@ -22,6 +22,7 @@ namespace Calligra
 namespace Sheets
 {
 
+class Formula;
 class SheetBase;
 
 class CALLIGRA_SHEETS_ENGINE_EXPORT CellBase
@@ -95,6 +96,17 @@ public:
      */
     void setValue(const Value& value);
 
+    /**
+     * The cell's formula. Usable to analyze the formula's tokens.
+     * \return pointer to the cell's formula object
+     */
+    Formula formula() const;
+
+    /**
+     * Sets \p formula as associated formula of this cell.
+     */
+    void setFormula(const Formula& formula);
+
 
 
 
@@ -106,12 +118,48 @@ public:
     static QString columnName(unsigned int column);
 
 
+    //////////////////////////////////////////////////////////////////////////
+    //
+    //BEGIN Operators
+    //
+
+    /**
+     * Assignment.
+     */
+    CellBase& operator=(const CellBase& other);
+
+    /**
+     * Tests whether this cell's location is less than the \p other 's.
+     * (QMap support)
+     * \note Does not compare the cell attributes/data.
+     */
+    bool operator<(const CellBase& other) const;
+
+    /**
+     * Tests for equality with \p other 's location only.
+     * (QHash support)
+     * \note Does not compare the cell attributes/data.
+     */
+    bool operator==(const CellBase& other) const;
+
+    /**
+     * Is null.
+     */
+    bool operator!() const;
+
+    //
+    //END Operators
 
 
 private:
     class Private;
     QSharedDataPointer<Private> d;
 };
+
+inline uint qHash(const CellBase& cell)
+{
+    return (static_cast<uint>(cell.column()) << 16) + static_cast<uint>(cell.row());
+}
 
 
 } // namespace Sheets

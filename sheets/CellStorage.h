@@ -112,7 +112,7 @@ public:
      * \return the database associated with the Cell at \p column , \p row .
      */
     Database database(int column, int row) const;
-    QList< QPair<QRectF, Database> > databases(const Region& region) const;
+    QVector< QPair<QRectF, Database> > databases(const Region& region) const;
     void setDatabase(const Region& region, const Database& database);
 
     /**
@@ -121,14 +121,7 @@ public:
     QString link(int column, int row) const;
     void setLink(int column, int row, const QString& link);
 
-    /**
-     * \return the named area's name associated with the Cell at \p column , \p row .
-     */
-    QString namedArea(int column, int row) const;
-    QList< QPair<QRectF, QString> > namedAreas(const Region& region) const;
-    void setNamedArea(const Region& region, const QString& namedArea);
     void emitInsertNamedArea(const Region &region, const QString &namedArea);
-    void removeNamedArea(const Region& region, const QString& namedArea);
 
     /**
      * \return the Style associated with the Cell at \p column , \p row .
@@ -167,16 +160,6 @@ public:
     int mergedXCells(int column, int row) const;
     int mergedYCells(int column, int row) const;
     QList<Cell> masterCells(const Region& region) const;
-
-    /**
-     * \return \c true, if the cell's value is a matrix and obscures other cells
-     */
-    bool locksCells(int column, int row) const;
-    bool isLocked(int column, int row) const;
-    bool hasLockedCells(const Region& region) const;
-    void lockCells(const QRect& rect);
-    void unlockCells(int column, int row);
-    QRect lockedCells(int column, int row) const;
 
     /**
      * Retrieve the first used data in \p col .
@@ -289,8 +272,6 @@ protected:
 private:
     // do not allow assignment
     CellStorage& operator=(const CellStorage&);
-
-    QList<StorageBase *> storages;
 
 #ifdef CALLIGRA_SHEETS_MT
     QReadWriteLock bigUglyLock;

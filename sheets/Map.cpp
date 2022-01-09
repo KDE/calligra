@@ -24,23 +24,15 @@
 #include <KoProgressUpdater.h>
 
 #include "ApplicationSettings.h"
-#include "BindingManager.h"
-#include "CalculationSettings.h"
 #include "CellStorage.h"
 #include "Damages.h"
-#include "DependencyManager.h"
 #include "DocBase.h"
 #include "LoadingInfo.h"
 #include "Localization.h"
-#include "NamedAreaManager.h"
-#include "RecalcManager.h"
 #include "RowColumnFormat.h"
 #include "Sheet.h"
 #include "StyleManager.h"
-#include "ValueCalc.h"
-#include "ValueConverter.h"
 #include "ValueFormatter.h"
-#include "ValueParser.h"
 
 // database
 #include "database/DatabaseManager.h"
@@ -64,20 +56,12 @@ public:
     LoadingInfo* loadingInfo;
     bool readwrite;
 
-    BindingManager* bindingManager;
     DatabaseManager* databaseManager;
-    DependencyManager* dependencyManager;
-    NamedAreaManager* namedAreaManager;
-    RecalcManager* recalcManager;
     StyleManager* styleManager;
     KoStyleManager* textStyleManager;
 
     ApplicationSettings* applicationSettings;
-    CalculationSettings* calculationSettings;
-    ValueCalc* calc;
-    ValueConverter* converter;
     ValueFormatter* formatter;
-    ValueParser* parser;
 
     // default objects
     ColumnFormat* defaultColumnFormat;
@@ -102,19 +86,11 @@ Map::Map(DocBase* doc, int syntaxVersion)
     d->loadingInfo = 0;
     d->readwrite = true;
 
-    d->bindingManager = new BindingManager(this);
     d->databaseManager = new DatabaseManager();
-    d->dependencyManager = new DependencyManager(this);
-    d->namedAreaManager = new NamedAreaManager(this);
-    d->recalcManager = new RecalcManager(this);
     d->styleManager = new StyleManager();
     d->textStyleManager = new KoStyleManager(this);
     d->applicationSettings = new ApplicationSettings();
-    d->calculationSettings = new CalculationSettings();
 
-    d->parser = new ValueParser(d->calculationSettings);
-    d->converter = new ValueConverter(d->parser);
-    d->calc = new ValueCalc(d->converter);
     d->formatter = new ValueFormatter(d->converter);
 
     d->defaultColumnFormat = new ColumnFormat();
@@ -127,20 +103,6 @@ Map::Map(DocBase* doc, int syntaxVersion)
     // default document properties
     d->syntaxVersion = syntaxVersion;
 
-    connect(this, &Map::sheetAdded,
-            d->dependencyManager, &DependencyManager::addSheet);
-    connect(this, &Map::sheetAdded,
-            d->recalcManager, &RecalcManager::addSheet);
-    connect(this, &Map::sheetRemoved,
-            d->dependencyManager, &DependencyManager::removeSheet);
-    connect(this, &Map::sheetRemoved,
-            d->recalcManager, &RecalcManager::removeSheet);
-    connect(this, &Map::sheetRevived,
-            d->dependencyManager, &DependencyManager::addSheet);
-    connect(this, &Map::sheetRevived,
-            d->recalcManager, &RecalcManager::addSheet);
-    connect(d->namedAreaManager, &NamedAreaManager::namedAreaModified,
-            d->dependencyManager, &DependencyManager::namedAreaModified);
 }
 
 Map::~Map()
@@ -156,18 +118,11 @@ Map::~Map()
 
     deleteLoadingInfo();
 
-    delete d->bindingManager;
     delete d->databaseManager;
-    delete d->dependencyManager;
-    delete d->namedAreaManager;
-    delete d->recalcManager;
     delete d->styleManager;
 
-    delete d->parser;
     delete d->formatter;
-    delete d->converter;
-    delete d->calc;
-    delete d->calculationSettings;
+
     delete d->applicationSettings;
 
     delete d->defaultColumnFormat;
@@ -218,29 +173,9 @@ bool Map::completeSaving(KoStore *store, KoXmlWriter *manifestWriter, KoShapeSav
     return true;
 }
 
-BindingManager* Map::bindingManager() const
-{
-    return d->bindingManager;
-}
-
 DatabaseManager* Map::databaseManager() const
 {
     return d->databaseManager;
-}
-
-DependencyManager* Map::dependencyManager() const
-{
-    return d->dependencyManager;
-}
-
-NamedAreaManager* Map::namedAreaManager() const
-{
-    return d->namedAreaManager;
-}
-
-RecalcManager* Map::recalcManager() const
-{
-    return d->recalcManager;
 }
 
 StyleManager* Map::styleManager() const
@@ -253,24 +188,9 @@ KoStyleManager* Map::textStyleManager() const
     return d->textStyleManager;
 }
 
-ValueParser* Map::parser() const
-{
-    return d->parser;
-}
-
 ValueFormatter* Map::formatter() const
 {
     return d->formatter;
-}
-
-ValueConverter* Map::converter() const
-{
-    return d->converter;
-}
-
-ValueCalc* Map::calc() const
-{
-    return d->calc;
 }
 
 const ColumnFormat* Map::defaultColumnFormat() const
@@ -298,11 +218,6 @@ ApplicationSettings* Map::settings() const
     return d->applicationSettings;
 }
 
-CalculationSettings* Map::calculationSettings() const
-{
-    return d->calculationSettings;
-}
-
 Sheet* Map::createSheet(const QString& name)
 {
     QString sheetName(i18n("Sheet%1", d->tableId++));
@@ -312,12 +227,6 @@ Sheet* Map::createSheet(const QString& name)
     connect(sheet, &Sheet::statusMessage,
             this, &Map::statusMessage);
     return sheet;
-}
-
-void Map::addSheet(Sheet *_sheet)
-{
-    d->lstSheets.append(_sheet);
-    emit sheetAdded(_sheet);
 }
 
 Sheet *Map::addNewSheet(const QString& name)

@@ -422,7 +422,7 @@ void DependencyManager::Private::generateDepths(const Region& region)
     for (Region::ConstIterator it(region.constBegin()); it != end; ++it) {
         const QRect range = (*it)->rect();
         const SheetBase* sheet = (*it)->sheet();
-        const CellStorage *cells = sheet->cellStorage();
+        const CellBaseStorage *cells = sheet->cellStorage();
 
         int bottom = range.bottom();
         if (bottom > cells->rows()) bottom = cells->rows();

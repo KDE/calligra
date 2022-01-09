@@ -21,30 +21,30 @@
 #include <QHash>
 
 // Sheets
-#include "CellStorage.h"
+#include "CellBaseStorage.h"
 #include "FormulaStorage.h"
 #include "LoadingInfo.h"
-#include "Map.h"
+#include "MapBase.h"
 #include "Region.h"
-#include "Sheet.h"
+#include "SheetBase.h"
 #include "Util.h"
 
 using namespace Calligra::Sheets;
 
 struct NamedArea {
     QString name;
-    Sheet* sheet;
+    SheetBase* sheet;
     QRect range;
 };
 
 class Q_DECL_HIDDEN NamedAreaManager::Private
 {
 public:
-    const Map* map;
+    const MapBase* map;
     QHash<QString, NamedArea> namedAreas;
 };
 
-NamedAreaManager::NamedAreaManager(const Map* map)
+NamedAreaManager::NamedAreaManager(const MapBase* map)
         : d(new Private)
 {
     d->map = map;
@@ -59,7 +59,7 @@ NamedAreaManager::~NamedAreaManager()
     delete d;
 }
 
-const Map *NamedAreaManager::map() const
+const MapBase *NamedAreaManager::map() const
 {
     return d->map;
 }
@@ -85,19 +85,9 @@ void NamedAreaManager::remove(const QString& name)
     namedArea.sheet->cellStorage()->removeNamedArea(Region(namedArea.range, namedArea.sheet), name);
     d->namedAreas.remove(name);
     emit namedAreaRemoved(name);
-    const QList<Sheet*> sheets = namedArea.sheet->map()->sheetList();
-    foreach(Sheet* sheet, sheets) {
-        const QString tmp = '\'' + name + '\'';
-        const FormulaStorage* const storage = sheet->formulaStorage();
-        for (int c = 0; c < storage->count(); ++c) {
-            if (storage->data(c).expression().contains(tmp)) {
-                Cell(sheet, storage->col(c), storage->row(c)).makeFormula();
-            }
-        }
-    }
 }
 
-void NamedAreaManager::remove(Sheet* sheet)
+void NamedAreaManager::remove(SheetBase* sheet)
 {
     const QList<NamedArea> namedAreas = d->namedAreas.values();
     for (int i = 0; i < namedAreas.count(); ++i) {
@@ -114,7 +104,7 @@ Calligra::Sheets::Region NamedAreaManager::namedArea(const QString& name) const
     return Region(namedArea.range, namedArea.sheet);
 }
 
-Sheet* NamedAreaManager::sheet(const QString& name) const
+SheetBase* NamedAreaManager::sheet(const QString& name) const
 {
     if (!d->namedAreas.contains(name))
         return 0;
@@ -133,7 +123,7 @@ QList<QString> NamedAreaManager::areaNames() const
 
 void NamedAreaManager::regionChanged(const Region& region)
 {
-    Sheet* sheet;
+    SheetBase* sheet;
     QList< QPair<QRectF, QString> > namedAreas;
     Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it = region.constBegin(); it != end; ++it) {
@@ -151,7 +141,7 @@ void NamedAreaManager::updateAllNamedAreas()
 {
     QList< QPair<QRectF, QString> > namedAreas;
     const QRect rect(QPoint(1, 1), QPoint(KS_colMax, KS_rowMax));
-    const QList<Sheet*> sheets = d->map->sheetList();
+    const QList<SheetBase*> sheets = d->map->sheetList();
     for (int i = 0; i < sheets.count(); ++i) {
         namedAreas = sheets[i]->cellStorage()->namedAreas(Region(rect, sheets[i]));
         for (int j = 0; j < namedAreas.count(); ++j) {

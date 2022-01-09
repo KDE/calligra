@@ -252,7 +252,6 @@ bool Ksp::loadCellData(Cell *cell, const KoXmlElement & text, Paste::Operation o
     if ((!t.isEmpty()) && (t[0] == '=')) {
         t = cell->decodeFormula(t);
         cell->parseUserInput(cell->pasteOperation(t, userInput(), op));
-        cell->makeFormula();
     }
     // rich text ?
     else if ((!t.isEmpty()) && (t[0] == '!')) {

@@ -239,32 +239,32 @@ QDomElement GNUMERICExport::GetValidity(QDomDocument gnumeric_doc, const Cell& c
     }
 
     switch (kspread_validity.condition()) {
-    case Conditional::None:
-    case Conditional::IsTrueFormula: // FIXME: handle isTrueFormula
+    case Validity::None:
+    case Validity::IsTrueFormula: // FIXME: handle isTrueFormula
         //Nothing
         break;
-    case Conditional::Equal:
+    case Validity::Equal:
         val.setAttribute("Operator", "2");
         break;
-    case Conditional::Superior:
+    case Validity::Superior:
         val.setAttribute("Operator", "4");
         break;
-    case Conditional::Inferior:
+    case Validity::Inferior:
         val.setAttribute("Operator", "5");
         break;
-    case Conditional::SuperiorEqual:
+    case Validity::SuperiorEqual:
         val.setAttribute("Operator", "6");
         break;
-    case Conditional::InferiorEqual:
+    case Validity::InferiorEqual:
         val.setAttribute("Operator", "7");
         break;
-    case Conditional::Between:
+    case Validity::Between:
         val.setAttribute("Operator", "0");
         break;
-    case Conditional::Different:
+    case Validity::Different:
         val.setAttribute("Operator", "3");
         break;
-    case Conditional::DifferentTo:
+    case Validity::DifferentTo:
         val.setAttribute("Operator", "1");
         break;
     }
@@ -275,23 +275,23 @@ QDomElement GNUMERICExport::GetValidity(QDomDocument gnumeric_doc, const Cell& c
     case Validity::Number: {
         val.setAttribute("Type", "2");
         switch (kspread_validity.condition()) {
-        case Conditional::None:
-        case Conditional::IsTrueFormula: // FIXME: handle isTrueFormula
+        case Validity::None:
+        case Validity::IsTrueFormula: // FIXME: handle isTrueFormula
             //Nothing
             break;
-        case Conditional::Equal:
-        case Conditional::Superior:
-        case Conditional::Inferior:
-        case Conditional::SuperiorEqual:
-        case Conditional::InferiorEqual:
-        case Conditional::Different: {
+        case Validity::Equal:
+        case Validity::Superior:
+        case Validity::Inferior:
+        case Validity::SuperiorEqual:
+        case Validity::InferiorEqual:
+        case Validity::Different: {
             QDomElement tmp = gnumeric_doc.createElement("gmr:Expression0");
             tmp.appendChild(gnumeric_doc.createTextNode(converter->asString(kspread_validity.minimumValue()).asString()));
             val.appendChild(tmp);
         }
         break;
-        case Conditional::Between:
-        case Conditional::DifferentTo: {
+        case Validity::Between:
+        case Validity::DifferentTo: {
             QDomElement tmp = gnumeric_doc.createElement("gmr:Expression0");
             tmp.appendChild(gnumeric_doc.createTextNode(converter->asString(kspread_validity.minimumValue()).asString()));
             val.appendChild(tmp);
@@ -311,23 +311,23 @@ QDomElement GNUMERICExport::GetValidity(QDomDocument gnumeric_doc, const Cell& c
     case Validity::Time:
         val.setAttribute("Type", "5");
         switch (kspread_validity.condition()) {
-        case Conditional::None:
-        case Conditional::IsTrueFormula: // FIXME: handle isTrueFormula
+        case Validity::None:
+        case Validity::IsTrueFormula: // FIXME: handle isTrueFormula
             //Nothing
             break;
-        case Conditional::Equal:
-        case Conditional::Superior:
-        case Conditional::Inferior:
-        case Conditional::SuperiorEqual:
-        case Conditional::InferiorEqual:
-        case Conditional::Different: {
+        case Validity::Equal:
+        case Validity::Superior:
+        case Validity::Inferior:
+        case Validity::SuperiorEqual:
+        case Validity::InferiorEqual:
+        case Validity::Different: {
             QDomElement tmp = gnumeric_doc.createElement("gmr:Expression0");
             tmp.appendChild(gnumeric_doc.createTextNode(converter->asString(kspread_validity.minimumValue()).asString()));
             val.appendChild(tmp);
         }
         break;
-        case Conditional::Between:
-        case Conditional::DifferentTo: {
+        case Validity::Between:
+        case Validity::DifferentTo: {
             QDomElement tmp = gnumeric_doc.createElement("gmr:Expression0");
             tmp.appendChild(gnumeric_doc.createTextNode(converter->asString(kspread_validity.minimumValue()).asString()));
             val.appendChild(tmp);
@@ -342,23 +342,23 @@ QDomElement GNUMERICExport::GetValidity(QDomDocument gnumeric_doc, const Cell& c
     case Validity::Date:
         val.setAttribute("Type", "4");
         switch (kspread_validity.condition()) {
-        case Conditional::None:
-        case Conditional::IsTrueFormula: // FIXME: handle isTrueFormula
+        case Validity::None:
+        case Validity::IsTrueFormula: // FIXME: handle isTrueFormula
             //Nothing
             break;
-        case Conditional::Equal:
-        case Conditional::Superior:
-        case Conditional::Inferior:
-        case Conditional::SuperiorEqual:
-        case Conditional::InferiorEqual:
-        case Conditional::Different: {
+        case Validity::Equal:
+        case Validity::Superior:
+        case Validity::Inferior:
+        case Validity::SuperiorEqual:
+        case Validity::InferiorEqual:
+        case Validity::Different: {
             QDomElement tmp = gnumeric_doc.createElement("gmr:Expression0");
             tmp.appendChild(gnumeric_doc.createTextNode(converter->asString(kspread_validity.minimumValue()).asString()));
             val.appendChild(tmp);
         }
         break;
-        case Conditional::Between:
-        case Conditional::DifferentTo: {
+        case Validity::Between:
+        case Validity::DifferentTo: {
             QDomElement tmp = gnumeric_doc.createElement("gmr:Expression0");
             tmp.appendChild(gnumeric_doc.createTextNode(converter->asString(kspread_validity.minimumValue()).asString()));
             val.appendChild(tmp);
@@ -373,23 +373,23 @@ QDomElement GNUMERICExport::GetValidity(QDomDocument gnumeric_doc, const Cell& c
     case Validity::Integer:
         val.setAttribute("Type", "1");
         switch (kspread_validity.condition()) {
-        case Conditional::None:
-        case Conditional::IsTrueFormula: // FIXME: handle isTrueFormula
+        case Validity::None:
+        case Validity::IsTrueFormula: // FIXME: handle isTrueFormula
             //Nothing
             break;
-        case Conditional::Equal:
-        case Conditional::Superior:
-        case Conditional::Inferior:
-        case Conditional::SuperiorEqual:
-        case Conditional::InferiorEqual:
-        case Conditional::Different: {
+        case Validity::Equal:
+        case Validity::Superior:
+        case Validity::Inferior:
+        case Validity::SuperiorEqual:
+        case Validity::InferiorEqual:
+        case Validity::Different: {
             QDomElement tmp = gnumeric_doc.createElement("gmr:Expression0");
             tmp.appendChild(gnumeric_doc.createTextNode(converter->asString(kspread_validity.minimumValue()).asString()));
             val.appendChild(tmp);
         }
         break;
-        case Conditional::Between:
-        case Conditional::DifferentTo: {
+        case Validity::Between:
+        case Validity::DifferentTo: {
             QDomElement tmp = gnumeric_doc.createElement("gmr:Expression0");
             tmp.appendChild(gnumeric_doc.createTextNode(converter->asString(kspread_validity.minimumValue()).asString()));
             val.appendChild(tmp);
@@ -403,23 +403,23 @@ QDomElement GNUMERICExport::GetValidity(QDomDocument gnumeric_doc, const Cell& c
     case Validity::TextLength:
         val.setAttribute("Type", "6");
         switch (kspread_validity.condition()) {
-        case Conditional::None:
-        case Conditional::IsTrueFormula: // FIXME: handle isTrueFormula
+        case Validity::None:
+        case Validity::IsTrueFormula: // FIXME: handle isTrueFormula
             //Nothing
             break;
-        case Conditional::Equal:
-        case Conditional::Superior:
-        case Conditional::Inferior:
-        case Conditional::SuperiorEqual:
-        case Conditional::InferiorEqual:
-        case Conditional::Different: {
+        case Validity::Equal:
+        case Validity::Superior:
+        case Validity::Inferior:
+        case Validity::SuperiorEqual:
+        case Validity::InferiorEqual:
+        case Validity::Different: {
             QDomElement tmp = gnumeric_doc.createElement("gmr:Expression0");
             tmp.appendChild(gnumeric_doc.createTextNode(converter->asString(kspread_validity.minimumValue()).asString()));
             val.appendChild(tmp);
         }
         break;
-        case Conditional::Between:
-        case Conditional::DifferentTo: {
+        case Validity::Between:
+        case Validity::DifferentTo: {
             QDomElement tmp = gnumeric_doc.createElement("gmr:Expression0");
             tmp.appendChild(gnumeric_doc.createTextNode(converter->asString(kspread_validity.minimumValue()).asString()));
             val.appendChild(tmp);
@@ -433,19 +433,19 @@ QDomElement GNUMERICExport::GetValidity(QDomDocument gnumeric_doc, const Cell& c
     case Validity::List:
         val.setAttribute("Type", "3");
         switch (kspread_validity.condition()) {
-        case Conditional::None:
-        case Conditional::IsTrueFormula: // FIXME: handle isTrueFormula
+        case Validity::None:
+        case Validity::IsTrueFormula: // FIXME: handle isTrueFormula
             //Nothing
             break;
-        case Conditional::Equal:
-        case Conditional::Superior:
-        case Conditional::Inferior:
-        case Conditional::SuperiorEqual:
-        case Conditional::InferiorEqual:
-        case Conditional::Different:
+        case Validity::Equal:
+        case Validity::Superior:
+        case Validity::Inferior:
+        case Validity::SuperiorEqual:
+        case Validity::InferiorEqual:
+        case Validity::Different:
             break;
-        case Conditional::Between:
-        case Conditional::DifferentTo:
+        case Validity::Between:
+        case Validity::DifferentTo:
             break;
         }
         break;

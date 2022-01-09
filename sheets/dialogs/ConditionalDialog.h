@@ -75,11 +75,11 @@ public Q_SLOTS:
 protected:
     Selection*          m_selection;
     ConditionalWidget * m_dlg;
-    Conditional::Type   m_result;
+    Validity::Type   m_result;
 
 private:
     void init(Conditional const & tmp, int numCondition);
-    Conditional::Type typeOfCondition(KComboBox const * const cb) const;
+    Validity::Type typeOfCondition(KComboBox const * const cb) const;
 
     bool checkInputData(KLineEdit const * const edit1,
                         KLineEdit const * const edit2);

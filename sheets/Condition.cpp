@@ -32,12 +32,12 @@ using namespace Calligra::Sheets;
 //
 /////////////////////////////////////////////////////////////////////////////
 
-Conditional::Conditional()
+Validity::Conditional()
     : cond(None)
 {
 }
 
-bool Conditional::operator==(const Conditional &other) const
+bool Validity::operator==(const Conditional &other) const
 {
     if (cond != other.cond) {
         return false;
@@ -112,58 +112,59 @@ bool Conditions::currentCondition(const Cell& cell, Conditional & condition) con
             continue;
         }
 
+        Qt::CaseSensitivity cs = calc->settings()->caseSensitiveComparisons();
         switch (condition.cond) {
-        case Conditional::Equal:
-            if (value.equal(condition.value1, calc->settings()->caseSensitiveComparisons())) {
+        case Validity::Equal:
+            if (value.equal(condition.value1, cs)) {
                 return true;
             }
             break;
-        case Conditional::Superior:
-            if (value.greater(condition.value1, calc->settings()->caseSensitiveComparisons())) {
+        case Validity::Superior:
+            if (value.greater(condition.value1, cs)) {
                 return true;
             }
             break;
-        case Conditional::Inferior:
-            if (value.less(condition.value1, calc->settings()->caseSensitiveComparisons())) {
+        case Validity::Inferior:
+            if (value.less(condition.value1, cs)) {
                 return true;
             }
             break;
-        case Conditional::SuperiorEqual:
-            if (value.compare(condition.value1, calc->settings()->caseSensitiveComparisons()) >= 0) {
+        case Validity::SuperiorEqual:
+            if (value.compare(condition.value1, cs) >= 0) {
                 return true;
             }
             break;
-        case Conditional::InferiorEqual:
-            if (value.compare(condition.value1, calc->settings()->caseSensitiveComparisons()) <= 0) {
+        case Validity::InferiorEqual:
+            if (value.compare(condition.value1, cs) <= 0) {
                 return true;
             }
             break;
-        case Conditional::Between: {
+        case Validity::Between: {
             const QVector<Value> values(QVector<Value>() << condition.value1 << condition.value2);
             const Value min = calc->min(values);
             const Value max = calc->max(values);
-            if (value.compare(min, calc->settings()->caseSensitiveComparisons()) >= 0
-                    && value.compare(max, calc->settings()->caseSensitiveComparisons()) <= 0) {
+            if (value.compare(min, cs) >= 0
+                    && value.compare(max, cs) <= 0) {
                 return true;
             }
             break;
         }
-        case Conditional::Different: {
+        case Validity::Different: {
             const QVector<Value> values(QVector<Value>() << condition.value1 << condition.value2);
             const Value min = calc->min(values);
             const Value max = calc->max(values);
-            if (value.greater(max, calc->settings()->caseSensitiveComparisons())
-                    || value.less(min, calc->settings()->caseSensitiveComparisons())) {
+            if (value.greater(max, cs)
+                    || value.less(min, cs)) {
                 return true;
             }
             break;
         }
-        case Conditional::DifferentTo:
-            if (!value.equal(condition.value1, calc->settings()->caseSensitiveComparisons())) {
+        case Validity::DifferentTo:
+            if (!value.equal(condition.value1, cs)) {
                 return true;
             }
             break;
-        case Conditional::IsTrueFormula:
+        case Validity::IsTrueFormula:
             // TODO: do some caching
             if (isTrueFormula(cell, condition.value1.asString(), condition.baseCellAddress)) {
                 return true;

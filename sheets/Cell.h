@@ -43,10 +43,8 @@ namespace Sheets
 class Conditions;
 class Database;
 class Doc;
-class Formula;
 class Sheet;
 class Validity;
-class Value;
 class CellTest;
 
 /**
@@ -173,17 +171,6 @@ public:
      * \return the database associated with this cell
      */
     Database database() const;
-
-    /**
-     * The cell's formula. Usable to analyze the formula's tokens.
-     * \return pointer to the cell's formula object
-     */
-    Formula formula() const;
-
-    /**
-     * Sets \p formula as associated formula of this cell.
-     */
-    void setFormula(const Formula& formula);
 
     /**
      * Returns the link associated with cell. It is empty if this cell
@@ -417,20 +404,6 @@ public:
     //
     //////////////////////////////////////////////////////////////////////////
     //
-    //BEGIN
-    //
-
-    /**
-     * Parses the formula.
-     * @return @c false on error.
-     */
-    bool makeFormula();
-
-    //
-    //END
-    //
-    //////////////////////////////////////////////////////////////////////////
-    //
     //BEGIN Effective style attributes
     //
 
@@ -446,37 +419,6 @@ public:
     //
     //END Effective style attributes
     //
-    //////////////////////////////////////////////////////////////////////////
-    //
-    //BEGIN Operators
-    //
-
-    /**
-     * Assignment.
-     */
-    Cell& operator=(const Cell& other);
-
-    /**
-     * Tests whether this cell's location is less than the \p other 's.
-     * (QMap support)
-     * \note Does not compare the cell attributes/data.
-     */
-    bool operator<(const Cell& other) const;
-
-    /**
-     * Tests for equality with \p other 's location only.
-     * (QHash support)
-     * \note Does not compare the cell attributes/data.
-     */
-    bool operator==(const Cell& other) const;
-
-    /**
-     * Is null.
-     */
-    bool operator!() const;
-
-    //
-    //END Operators
     //
     //////////////////////////////////////////////////////////////////////////
     //

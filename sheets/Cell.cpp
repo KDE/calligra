@@ -231,16 +231,6 @@ Database Cell::database() const
     return sheet()->cellStorage()->database(d->column, d->row);
 }
 
-Formula Cell::formula() const
-{
-    return sheet()->cellStorage()->formula(d->column, d->row);
-}
-
-void Cell::setFormula(const Formula& formula)
-{
-    sheet()->cellStorage()->setFormula(column(), row(), formula);
-}
-
 Style Cell::style() const
 {
     return sheet()->cellStorage()->style(d->column, d->row);
@@ -621,23 +611,6 @@ QString Cell::decodeFormula(const QString &_text) const
 //                          Formula handling
 
 
-bool Cell::makeFormula()
-{
-//   debugSheetsFormula ;
-
-    // sanity check
-    if (!isFormula())
-        return false;
-
-    // parse the formula and check for errors
-    if (!formula().isValid()) {
-        sheet()->showStatusMessage(i18n("Parsing of formula in cell %1 failed.", fullName()));
-        setValue(Value::errorPARSE());
-        return false;
-    }
-    return true;
-}
-
 int Cell::effectiveAlignX() const
 {
     const Style style = effectiveStyle();
@@ -692,12 +665,14 @@ void Cell::parseUserInput(const QString& text)
         formula.setExpression(text);
         setFormula(formula);
 
+/*  This most likely isn't needed anymore ...
         // parse the formula and check for errors
         if (!formula.isValid()) {
             sheet()->showStatusMessage(i18n("Parsing of formula in cell %1 failed.", fullName()));
             setValue(Value::errorPARSE());
             return;
         }
+*/
         return;
     }
 
@@ -901,31 +876,6 @@ QString Cell::pasteOperation(const QString &new_text, const QString &old_text, P
 
     tmp = decodeFormula(new_text);
     return tmp;
-}
-
-Cell& Cell::operator=(const Cell & other)
-{
-    d = other.d;
-    return *this;
-}
-
-bool Cell::operator<(const Cell& other) const
-{
-    if (sheet() != other.sheet())
-        return sheet() < other.sheet(); // pointers!
-    if (row() < other.row())
-        return true;
-    return ((row() == other.row()) && (column() < other.column()));
-}
-
-bool Cell::operator==(const Cell& other) const
-{
-    return (row() == other.row() && column() == other.column() && sheet() == other.sheet());
-}
-
-bool Cell::operator!() const
-{
-    return (!d);   // isNull()
 }
 
 bool Cell::compareData(const Cell& other) const

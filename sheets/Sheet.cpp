@@ -626,28 +626,6 @@ ColumnFormat* Sheet::nonDefaultColumnFormat(int _column, bool force_creation)
     return p;
 }
 
-void Sheet::changeCellTabName(QString const & old_name, QString const & new_name)
-{
-    for (int c = 0; c < formulaStorage()->count(); ++c) {
-        if (formulaStorage()->data(c).expression().contains(old_name)) {
-            int nb = formulaStorage()->data(c).expression().count(old_name + '!');
-            QString tmp = old_name + '!';
-            int len = tmp.length();
-            tmp = formulaStorage()->data(c).expression();
-
-            for (int i = 0; i < nb; ++i) {
-                int pos = tmp.indexOf(old_name + '!');
-                tmp.replace(pos, len, new_name + '!');
-            }
-            Cell cell(this, formulaStorage()->col(c), formulaStorage()->row(c));
-            Formula formula(this, cell);
-            formula.setExpression(tmp);
-            cell.setFormula(formula);
-            cell.makeFormula();
-        }
-    }
-}
-
 void Sheet::insertShiftRight(const QRect& rect)
 {
     foreach(Sheet* sheet, map()->sheetList()) {
