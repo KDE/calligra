@@ -268,10 +268,6 @@ set (calligrasheetsodf_LIB_SRCS
 
     part/Digest.cpp
     ApplicationSettings.cpp
-    Binding.cpp
-    BindingManager.cpp
-    BindingModel.cpp
-    BindingStorage.cpp
     Cell.cpp
     CellStorage.cpp
     Cluster.cpp

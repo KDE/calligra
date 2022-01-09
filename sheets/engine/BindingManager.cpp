@@ -8,9 +8,9 @@
 
 #include "BindingStorage.h"
 #include "CellStorage.h"
-#include "Map.h"
+#include "MapBase.h"
 #include "Region.h"
-#include "Sheet.h"
+#include "SheetBase.h"
 #include "BindingModel.h"
 
 #include <QAbstractItemModel>
@@ -20,10 +20,10 @@ using namespace Calligra::Sheets;
 class BindingManager::Private
 {
 public:
-    const Map* map;
+    const MapBase* map;
 };
 
-BindingManager::BindingManager(const Map* map)
+BindingManager::BindingManager(const MapBase* map)
         : d(new Private)
 {
     d->map = map;

@@ -26,6 +26,12 @@ set (calligrasheetsengine_LIB_SRCS
     CellBase.cpp
     MapBase.cpp
     SheetBase.cpp
+    CellBaseStorage.cpp
+
+    Binding.cpp
+    BindingManager.cpp
+    BindingModel.cpp
+    BindingStorage.cpp
 )
 
 add_library(calligrasheetsengine SHARED ${calligrasheetsengine_LIB_SRCS})
@@ -43,6 +49,7 @@ install( FILES
     calligra_sheets_limits.h
 
     CellBase.h
+    CellBaseStorage.h
     MapBase.h
     Number.h
     PointStorage.h

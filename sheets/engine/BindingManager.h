@@ -16,7 +16,7 @@ namespace Calligra
 {
 namespace Sheets
 {
-class Map;
+class MapBase;
 class Region;
 
 /**
@@ -29,7 +29,7 @@ public:
     /**
      * Constructor.
      */
-    explicit BindingManager(const Map *map);
+    explicit BindingManager(const MapBase *map);
 
     /**
      * Destructor.

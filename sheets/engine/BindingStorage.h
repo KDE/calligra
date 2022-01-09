@@ -24,7 +24,7 @@ class BindingStorage : public QObject, public RectStorage<Binding>
 {
     Q_OBJECT
 public:
-    explicit BindingStorage(Map* map) : QObject(map), RectStorage<Binding>(map) {}
+    explicit BindingStorage(MapBase* map) : QObject(), RectStorage<Binding>(map) {}
     BindingStorage(const BindingStorage& other) : QObject(other.parent()), RectStorage<Binding>(other) {}
 
 protected Q_SLOTS:

@@ -11,13 +11,10 @@
 #include <QRect>
 #include <QTextDocument>
 
-#ifdef CALLIGRA_SHEETS_MT
-#include <QReadWriteLock>
-#endif
+#include "engine/CellBaseStorage.h"
 
 #include "Cell.h"
 #include "calligra_sheets_limits.h"
-#include "PointStorage.h"
 
 #include "database/Database.h"
 
@@ -27,29 +24,20 @@ namespace Calligra
 {
 namespace Sheets
 {
-class Binding;
-class BindingStorage;
 class Cell;
 class CommentStorage;
 class Conditions;
 class ConditionsStorage;
-class Formula;
-class FormulaStorage;
 class FusionStorage;
 class LinkStorage;
-class Region;
 class RichTextStorage;
 class Sheet;
 class StyleStorage;
-class UserInputStorage;
-class Validity;
-class ValidityStorage;
-class Value;
-class ValueStorage;
 
 /**
  * \ingroup Storage
  * The cell storage.
+ * Extends the base storage with more types.
  * A wrapper around a couple of storages, which hold the cell data.
  * Provides methods to iterate over the non-empty cells.
  * Emits Damages on changes.
@@ -59,7 +47,7 @@ class ValueStorage;
  *
  * \note If you fill the storage, do it row-wise. That's more performant.
  */
-class CALLIGRA_SHEETS_ODF_EXPORT CellStorage : public QObject
+class CALLIGRA_SHEETS_ODF_EXPORT CellStorage : public CellBaseStorage, public QObject
 {
     Q_OBJECT
 public:
@@ -99,21 +87,14 @@ public:
     ~CellStorage() override;
 
     /**
-     * \return the sheet this CellStorage is for.
+     * \return the full sheet this CellStorage is for.
      */
-    Sheet* sheet() const;
+    Sheet* fullSheet() const;
 
     /**
      * Removes all data at \p col , \p row .
      */
-    void take(int col, int row);
-
-    /**
-     * \return the binding associated with the Cell at \p column , \p row .
-     */
-    Binding binding(int column, int row) const;
-    void setBinding(const Region& region, const Binding& binding);
-    void removeBinding(const Region& region, const Binding& binding);
+    virtual void take(int col, int row) override;
 
     /**
      * \return the comment associated with the Cell at \p column , \p row .
@@ -133,12 +114,6 @@ public:
     Database database(int column, int row) const;
     QList< QPair<QRectF, Database> > databases(const Region& region) const;
     void setDatabase(const Region& region, const Database& database);
-
-    /**
-     * \return the formula associated with the Cell at \p column , \p row .
-     */
-    Formula formula(int column, int row) const;
-    void setFormula(int column, int row, const Formula& formula);
 
     /**
      * \return the hyperlink associated with the Cell at \p column , \p row .
@@ -166,29 +141,6 @@ public:
     Style style(const QRect& rect) const;
     void setStyle(const Region& region, const Style& style);
     void insertSubStyle(const QRect& rect, const SharedSubStyle& subStyle);
-
-    /**
-     * \return the user input associated with the Cell at \p column , \p row .
-     */
-    QString userInput(int column, int row) const;
-    void setUserInput(int column, int row, const QString& input);
-
-    /**
-     * \return the validity checks associated with the Cell at \p column , \p row .
-     */
-    Validity validity(int column, int row) const;
-    void setValidity(const Region& region, Validity validity);
-
-    /**
-     * \return the value associated with the Cell at \p column , \p row .
-     */
-    Value value(int column, int row) const;
-
-    /**
-     * Creates a value array containing the values in \p region.
-     */
-    Value valueRegion(const Region& region) const;
-    void setValue(int column, int row, const Value& value);
 
     QSharedPointer<QTextDocument> richText(int column, int row) const;
     void setRichText(int column, int row, QSharedPointer<QTextDocument> text);
@@ -225,52 +177,6 @@ public:
     void lockCells(const QRect& rect);
     void unlockCells(int column, int row);
     QRect lockedCells(int column, int row) const;
-
-    /**
-     * Insert \p number columns at \p position .
-     * \return the data, that became out of range (shifted over the end)
-     */
-    void insertColumns(int position, int number = 1);
-
-    /**
-     * Removes \p number columns at \p position .
-     * \return the removed data
-     */
-    void removeColumns(int position, int number = 1);
-
-    /**
-     * Insert \p number rows at \p position .
-     * \return the data, that became out of range (shifted over the end)
-     */
-    void insertRows(int position, int number = 1);
-
-    /**
-     * Removes \p number rows at \p position .
-     * \return the removed data
-     */
-    void removeRows(int position, int number = 1);
-
-    /**
-     * Shifts the data right of \p rect to the left by the width of \p rect .
-     * The data formerly contained in \p rect becomes overridden.
-     */
-    void removeShiftLeft(const QRect& rect);
-
-    /**
-     * Shifts the data in and right of \p rect to the right by the width of \p rect .
-     */
-    void insertShiftRight(const QRect& rect);
-
-    /**
-     * Shifts the data below \p rect to the top by the height of \p rect .
-     * The data formerly contained in \p rect becomes overridden.
-     */
-    void removeShiftUp(const QRect& rect);
-
-    /**
-     * Shifts the data in and below \p rect to the bottom by the height of \p rect .
-     */
-    void insertShiftDown(const QRect& rect);
 
     /**
      * Retrieve the first used data in \p col .
@@ -346,16 +252,11 @@ public:
      */
     CellStorage subStorage(const Region& region) const;
 
-    const BindingStorage* bindingStorage() const;
     const CommentStorage* commentStorage() const;
     const ConditionsStorage* conditionsStorage() const;
-    const FormulaStorage* formulaStorage() const;
     const FusionStorage* fusionStorage() const;
     const LinkStorage* linkStorage() const;
     const StyleStorage* styleStorage() const;
-    const UserInputStorage* userInputStorage() const;
-    const ValidityStorage* validityStorage() const;
-    const ValueStorage* valueStorage() const;
 
     void loadConditions(const QList<QPair<QRegion, Conditions> >& conditions);
     void loadStyles(const QList<QPair<QRegion, Style> >& styles);
@@ -382,11 +283,13 @@ Q_SIGNALS:
     void insertNamedArea(const Region&, const QString&);
     void namedAreaRemoved(const QString&);
 
+protected:
+    /** Addition to the inherited fillStorages. We call this in constructors, so cannot override. */
+    void fillExtraStorages();
 private:
     // do not allow assignment
     CellStorage& operator=(const CellStorage&);
 
-    void fillStorages();
     QList<StorageBase *> storages;
 
 #ifdef CALLIGRA_SHEETS_MT
@@ -396,15 +299,6 @@ private:
 
     class Private;
     Private * const d;
-};
-
-class UserInputStorage : public PointStorage<QString>
-{
-public:
-    UserInputStorage& operator=(const PointStorage<QString>& o) {
-        PointStorage<QString>::operator=(o);
-        return *this;
-    }
 };
 
 class LinkStorage : public PointStorage<QString>

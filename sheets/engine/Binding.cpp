@@ -10,9 +10,9 @@
 
 #include "SheetsDebug.h"
 
-#include "CellStorage.h"
-#include "Map.h"
-#include "Sheet.h"
+#include "CellBaseStorage.h"
+#include "MapBase.h"
+#include "SheetBase.h"
 #include "Value.h"
 
 using namespace Calligra::Sheets;
@@ -120,7 +120,7 @@ bool BindingModel::setCellRegion(const QString& regionName)
 {
     Q_ASSERT(m_region.isValid());
     Q_ASSERT(m_region.firstSheet());
-    const Map* const map = m_region.firstSheet()->map();
+    const MapBase* const map = m_region.firstSheet()->map();
     const Region region = Region(regionName, map);
     if (!region.isValid()) {
         debugSheets << qPrintable(regionName) << "is not a valid region.";

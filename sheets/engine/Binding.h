@@ -10,7 +10,7 @@
 
 #include "Region.h"
 
-#include "sheets_export.h"
+#include "sheets_engine_export.h"
 
 namespace Calligra
 {
@@ -26,7 +26,7 @@ class BindingModel;
  * If a cell in the region is updated, the BindingManager informs this Binding, which
  * in turn informs the model it holds.
  */
-class CALLIGRA_SHEETS_ODF_EXPORT Binding
+class CALLIGRA_SHEETS_ENGINE_EXPORT Binding
 {
 public:
     Binding();
