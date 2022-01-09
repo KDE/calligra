@@ -28,6 +28,10 @@ set (calligrasheetsengine_LIB_SRCS
     SheetBase.cpp
     CellBaseStorage.cpp
 
+    Formula.cpp
+    RecalcManager.cpp
+    DependencyManager.cpp
+
     Binding.cpp
     BindingManager.cpp
     BindingModel.cpp

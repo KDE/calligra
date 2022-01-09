@@ -9,6 +9,7 @@
 // Local
 #include "SheetBase.h"
 #include "MapBase.h"
+#include "CellBaseStorage.h"
 #include "Damages.h"
 
 #include <QObject>
@@ -24,14 +25,16 @@ public:
 
     MapBase *workbook;
     QString name;
-private:
+
     SheetBase *m_sheet;
+    CellBaseStorage *cellStorage;
 };
 
 
 SheetBase::Private::Private (SheetBase *sheet)
     : m_sheet(sheet)
 {
+    cellStorage = nullptr;
 }
 
 
@@ -40,6 +43,7 @@ SheetBase::SheetBase(MapBase* map, const QString &sheetName) :
 {
     d->workbook = map;
     d->name = sheetName;
+    d->cellStorage = new CellBaseStorage(this);
 }
 
 SheetBase::SheetBase(const SheetBase &other)
@@ -56,7 +60,34 @@ SheetBase::SheetBase(const SheetBase &other)
 
 SheetBase::~SheetBase()
 {
+    delete d->cellStorage;
     delete d;
+}
+
+void SheetBase::setCellStorage(CellBaseStorage *storage)
+{
+    delete d->cellStorage;
+    d->cellStorage = storage;
+}
+
+CellBaseStorage* SheetBase::cellStorage() const {
+    return d->cellStorage;
+}
+
+
+const FormulaStorage* SheetBase::formulaStorage() const
+{
+    return d->cellStorage->formulaStorage();
+}
+
+const ValidityStorage* SheetBase::validityStorage() const
+{
+    return d->cellStorage->validityStorage();
+}
+
+const ValueStorage* SheetBase::valueStorage() const
+{
+    return d->cellStorage->valueStorage();
 }
 
 MapBase* SheetBase::map() const

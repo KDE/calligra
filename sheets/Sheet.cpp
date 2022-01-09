@@ -85,6 +85,9 @@ public:
     bool firstLetterUpper;
 
     // clusters to hold objects
+    
+    // This is the same object as the cellStorage in our base class. Keeping a separate pointer  so we don't need to dynamic_cast when needed.
+    // A better solution may be needed here, but for now this'll do.
     CellStorage* cellStorage;
     RowFormatStorage rows;
     ColumnCluster columns;
@@ -130,6 +133,7 @@ Sheet::Sheet(Map* map, const QString &sheetName)
     setObjectName(createObjectName(sheetName));
 
     d->cellStorage = new CellStorage(this);
+    setCellStorage(d->cellStorage);
     d->columns.setAutoDelete(true);
 
     d->documentSize = QSizeF(KS_colMax * d->workbook->defaultColumnFormat()->width(),
@@ -184,6 +188,8 @@ Sheet::Sheet(const Sheet &other)
     d->firstLetterUpper = other.d->firstLetterUpper;
 
     d->cellStorage = new CellStorage(*other.d->cellStorage, this);
+    setCellStorage(d->cellStorage);
+
     d->rows = other.d->rows;
     d->columns = other.d->columns;
 
@@ -219,8 +225,10 @@ Sheet::~Sheet()
     //causing a crash.
     setAutoCalculationEnabled(false);
 
+    // cellStorage will be deleted in the parent class destructor, and we must not do it here.
+    d->cellStorage = nullptr;
+
     delete d->print;
-    delete d->cellStorage;
     qDeleteAll(d->shapes);
     delete d;
 }
@@ -414,7 +422,7 @@ ColumnFormat *Sheet::nextColumn(int col) const
     return d->columns.next(col);
 }
 
-CellStorage* Sheet::cellStorage() const
+CellStorage* Sheet::fullCellStorage() const
 {
     return d->cellStorage;
 }
@@ -427,11 +435,6 @@ const CommentStorage* Sheet::commentStorage() const
 const ConditionsStorage* Sheet::conditionsStorage() const
 {
     return d->cellStorage->conditionsStorage();
-}
-
-const FormulaStorage* Sheet::formulaStorage() const
-{
-    return d->cellStorage->formulaStorage();
 }
 
 const FusionStorage* Sheet::fusionStorage() const
@@ -447,16 +450,6 @@ const LinkStorage* Sheet::linkStorage() const
 const StyleStorage* Sheet::styleStorage() const
 {
     return d->cellStorage->styleStorage();
-}
-
-const ValidityStorage* Sheet::validityStorage() const
-{
-    return d->cellStorage->validityStorage();
-}
-
-const ValueStorage* Sheet::valueStorage() const
-{
-    return d->cellStorage->valueStorage();
 }
 
 SheetPrint* Sheet::print() const
@@ -986,28 +979,29 @@ bool Sheet::cellIsEmpty(const Cell& cell, TestType _type)
 // TODO: convert into a manipulator, similar to the Dilation one
 bool Sheet::areaIsEmpty(const Region& region, TestType _type)
 {
+    CellStorage *storage = cellStorage();
     Region::ConstIterator endOfList = region.constEnd();
     for (Region::ConstIterator it = region.constBegin(); it != endOfList; ++it) {
         QRect range = (*it)->rect();
         // Complete rows selected ?
         if ((*it)->isRow()) {
             for (int row = range.top(); row <= range.bottom(); ++row) {
-                Cell cell = d->cellStorage->firstInRow(row);
+                Cell cell = storage->firstInRow(row);
                 while (!cell.isNull()) {
                     if (!cellIsEmpty(cell, _type))
                         return false;
-                    cell = d->cellStorage->nextInRow(cell.column(), row);
+                    cell = storage->nextInRow(cell.column(), row);
                 }
             }
         }
         // Complete columns selected ?
         else if ((*it)->isColumn()) {
             for (int col = range.left(); col <= range.right(); ++col) {
-                Cell cell = d->cellStorage->firstInColumn(col);
+                Cell cell = storage->firstInColumn(col);
                 while (!cell.isNull()) {
                     if (!cellIsEmpty(cell, _type))
                         return false;
-                    cell = d->cellStorage->nextInColumn(col, cell.row());
+                    cell = storage->nextInColumn(col, cell.row());
                 }
             }
         } else {

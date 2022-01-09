@@ -14,7 +14,7 @@
 #include <QHash>
 #include <QList>
 
-#include "Cell.h"
+#include "CellBase.h"
 #include "Region.h"
 #include "RTree.h"
 
@@ -23,8 +23,8 @@ namespace Calligra
 namespace Sheets
 {
 class Formula;
-class Map;
-class Sheet;
+class MapBase;
+class SheetBase;
 
 class Q_DECL_HIDDEN DependencyManager::Private
 {
@@ -122,12 +122,12 @@ public:
      */
     void dump() const;
 
-    const Map* map;
+    const MapBase* map;
     // stores providing regions ordered by their consuming cell locations
     // use QMap rather then QHash cause it's faster for our use-case
     QMap<Cell, Region> providers;
     // stores consuming cell locations ordered by their providing regions
-    QHash<Sheet*, RTree<Cell>*> consumers;
+    QHash<SheetBase*, RTree<Cell>*> consumers;
     // stores consuming cell locations ordered by their providing named area
     // (in addition to the general storage of the consuming cell locations)
     QHash<QString, QList<Cell> > namedAreaConsumers;

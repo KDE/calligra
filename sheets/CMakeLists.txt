@@ -274,16 +274,13 @@ set (calligrasheetsodf_LIB_SRCS
     Condition.cpp
     ConditionsStorage.cpp
     Currency.cpp
-    DependencyManager.cpp
     DocBase.cpp
     Format.cpp
-    Formula.cpp
     HeaderFooter.cpp
     Map.cpp
     NamedAreaManager.cpp
     PrintSettings.cpp
     ProtectableObject.cpp
-    RecalcManager.cpp
     RowColumnFormat.cpp
     RowFormatStorage.cpp
     ShapeApplicationData.cpp

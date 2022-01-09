@@ -29,6 +29,7 @@
 
 // Local
 #include "CellBase.h"
+#include "CellBaseStorage.h"
 #include "calligra_sheets_limits.h"
 #include "SheetBase.h"
 

@@ -21,7 +21,7 @@ namespace Calligra
 {
 namespace Sheets
 {
-class Sheet;
+class SheetBase;
 class ValueCalc;
 class Function;
 
@@ -41,7 +41,7 @@ struct FuncExtra {
     Function* function;
     QVector<rangeInfo> ranges;
     QVector<Region> regions;
-    Sheet *sheet;
+    SheetBase *sheet;
     int myrow, mycol;
 };
 

@@ -6,13 +6,13 @@
 // Local
 #include "RecalcManager.h"
 
-#include "Cell.h"
-#include "CellStorage.h"
+#include "CellBase.h"
+#include "CellBaseStorage.h"
 #include "DependencyManager.h"
 #include "Formula.h"
 #include "FormulaStorage.h"
-#include "Map.h"
-#include "Sheet.h"
+#include "MapBase.h"
+#include "SheetBase.h"
 #include "Region.h"
 #include "Value.h"
 #include "ElapsedTime_p.h"
@@ -42,10 +42,10 @@ public:
      * \see RecalcManager::recalcMap
      * \see RecalcManager::recalcSheet
      */
-    void cellsToCalculate(Sheet* sheet = 0);
+    void cellsToCalculate(SheetBase* sheet = 0);
 
     /**
-     * Helper function for cellsToCalculate(const Region&) and cellsToCalculate(Sheet*).
+     * Helper function for cellsToCalculate(const Region&) and cellsToCalculate(SheetBase*).
      */
     void cellsToCalculate(const Region& region, QSet<Cell>& cells) const;
 
@@ -87,7 +87,7 @@ void RecalcManager::Private::cellsToCalculate(const Region& region)
     }
 }
 
-void RecalcManager::Private::cellsToCalculate(Sheet* sheet)
+void RecalcManager::Private::cellsToCalculate(SheetBase* sheet)
 {
     // retrieve the cell depths
     QMap<Cell, int> depths = map->dependencyManager()->depths();
@@ -103,13 +103,13 @@ void RecalcManager::Private::cellsToCalculate(Sheet* sheet)
         for (int s = 0; s < map->count(); ++s) {
             sheet = map->sheet(s);
             for (int c = 0; c < sheet->formulaStorage()->count(); ++c) {
-                cell = Cell(sheet, sheet->formulaStorage()->col(c), sheet->formulaStorage()->row(c));
+                cell = CellBase(sheet, sheet->formulaStorage()->col(c), sheet->formulaStorage()->row(c));
                 cells.insertMulti(depths[cell], cell);
             }
         }
     } else { // sheet recalculation
         for (int c = 0; c < sheet->formulaStorage()->count(); ++c) {
-            cell = Cell(sheet, sheet->formulaStorage()->col(c), sheet->formulaStorage()->row(c));
+            cell = CellBase(sheet, sheet->formulaStorage()->col(c), sheet->formulaStorage()->row(c));
             cells.insertMulti(depths[cell], cell);
         }
     }
@@ -120,7 +120,7 @@ void RecalcManager::Private::cellsToCalculate(const Region& region, QSet<Cell>& 
     Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it(region.constBegin()); it != end; ++it) {
         const QRect range = (*it)->rect();
-        const Sheet* sheet = (*it)->sheet();
+        const SheetBase* sheet = (*it)->sheet();
         for (int col = range.left(); col <= range.right(); ++col) {
             for (int row = range.top(); row <= range.bottom(); ++row) {
                 Cell cell(sheet, col, row);
@@ -167,7 +167,7 @@ void RecalcManager::regionChanged(const Region& region)
     d->active = false;
 }
 
-void RecalcManager::recalcSheet(Sheet* const sheet)
+void RecalcManager::recalcSheet(SheetBase* const sheet)
 {
     if (d->active)
         return;
@@ -194,7 +194,7 @@ bool RecalcManager::isActive() const
     return d->active;
 }
 
-void RecalcManager::addSheet(Sheet *sheet)
+void RecalcManager::addSheet(SheetBase *sheet)
 {
     // Manages also the revival of a deleted sheet.
     Q_UNUSED(sheet);
@@ -205,7 +205,7 @@ void RecalcManager::addSheet(Sheet *sheet)
     }
 }
 
-void RecalcManager::removeSheet(Sheet *sheet)
+void RecalcManager::removeSheet(SheetBase *sheet)
 {
     Q_UNUSED(sheet);
     recalcMap(); // FIXME Stefan: Implement a more elegant solution.
@@ -229,7 +229,7 @@ void RecalcManager::recalc(KoUpdater *updater)
         if (!cells.value(c).formula().isValid())
             continue;
 
-        const Sheet* sheet = cells.value(c).sheet();
+        const SheetBase* sheet = cells.value(c).sheet();
 
         // evaluate the formula and set the result
         Value result = cells.value(c).formula().eval();
@@ -239,13 +239,13 @@ void RecalcManager::recalc(KoUpdater *updater)
             sheet->cellStorage()->unlockCells(rect.left(), rect.top());
             for (int row = rect.top(); row <= rect.bottom(); ++row) {
                 for (int col = rect.left(); col <= rect.right(); ++col) {
-                    Cell(sheet, col, row).setValue(result.element(col - rect.left(), row - rect.top()));
+                    CellBase(sheet, col, row).setValue(result.element(col - rect.left(), row - rect.top()));
                 }
             }
             // relock
             sheet->cellStorage()->lockCells(rect);
         } else {
-            Cell(cells.value(c)).setValue(result);
+            CellBase(cells.value(c)).setValue(result);
         }
         if (updater)
             updater->setProgress(int(qreal(c) / qreal(cellsCount) * 100.));

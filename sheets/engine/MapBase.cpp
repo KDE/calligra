@@ -8,8 +8,11 @@
 
 // Local
 #include "MapBase.h"
+#include "Damages.h"
+#include "Region.h"
 #include "SheetBase.h"
-#include <QObject>
+
+#include <QTimer>
 
 using namespace Calligra::Sheets;
 
@@ -22,6 +25,9 @@ public:
      * List of all sheets in this map.
      */
     QList<SheetBase *> lstSheets;
+
+
+    QList<Damage*> damages;
 };
 
 
@@ -29,9 +35,12 @@ public:
 
 
 MapBase::MapBase() :
-    d(new Private)
+    QObject()
+    , d(new Private)
 {
     d->isLoading = false;
+
+    connect(this, SIGNAL(damagesFlushed()), this, SLOT(handleDamages()));
 }
 
 MapBase::~MapBase()
@@ -96,13 +105,131 @@ SheetBase * MapBase::previousSheet(SheetBase *currentSheet) const
 }
 
 
+void MapBase::addDamage(Damage* damage)
+{
+    // Do not create a new Damage, if we are in loading process. Check for it before
+    // calling this function. This prevents unnecessary memory allocations (new).
+    // see FIXME in Sheet::setSheetName().
+//     Q_ASSERT(!isLoading());
+    Q_CHECK_PTR(damage);
 
-bool Map::isLoading() const
+#ifndef NDEBUG
+    if (damage->type() == Damage::Cell) {
+        debugSheetsDamage << "Adding\t" << *static_cast<CellDamage*>(damage);
+    } else if (damage->type() == Damage::Sheet) {
+        debugSheetsDamage << "Adding\t" << *static_cast<SheetDamage*>(damage);
+    } else if (damage->type() == Damage::Selection) {
+        debugSheetsDamage << "Adding\t" << *static_cast<SelectionDamage*>(damage);
+    } else {
+        debugSheetsDamage << "Adding\t" << *damage;
+    }
+#endif
+
+    d->damages.append(damage);
+
+    if (d->damages.count() == 1) {
+        QTimer::singleShot(0, this, SLOT(flushDamages()));
+    }
+}
+
+void MapBase::flushDamages()
+{
+    // Copy the damages to process. This allows new damages while processing.
+    QList<Damage*> damages = d->damages;
+    d->damages.clear();
+    emit damagesFlushed(damages);
+    qDeleteAll(damages);
+}
+
+void MapBase::handleDamages(const QList<Damage*>& damages)
+{
+    Region bindingChangedRegion;
+    Region formulaChangedRegion;
+    Region namedAreaChangedRegion;
+    Region valueChangedRegion;
+    WorkbookDamage::Changes workbookChanges = WorkbookDamage::None;
+    bool allValues = false, allFormulas = false;   // These are for improved code readability
+
+    QList<Damage*>::ConstIterator end(damages.end());
+    for (QList<Damage*>::ConstIterator it = damages.begin(); it != end; ++it) {
+        Damage* damage = *it;
+
+        if (damage->type() == Damage::Cell) {
+            CellDamage* cellDamage = static_cast<CellDamage*>(damage);
+            debugSheetsDamage << "Processing\t" << *cellDamage;
+            SheetBase* const damagedSheet = cellDamage->sheet();
+            const Region& region = cellDamage->region();
+            const CellDamage::Changes changes = cellDamage->changes();
+
+            if (!allValues) {
+                if (changes & CellDamage::Binding)
+                    bindingChangedRegion.add(region, damagedSheet);
+                if (changes & CellDamage::Value)
+                    valueChangedRegion.add(region, damagedSheet);
+            }
+            if (!allFormulas) {
+                if (changes & CellDamage::Formula)
+                    formulaChangedRegion.add(region, damagedSheet);
+                if (changes & CellDamage::NamedArea)
+                    namedAreaChangedRegion.add(region, damagedSheet);
+            }
+            continue;
+        }
+
+        if (damage->type() == Damage::Sheet) {
+            SheetDamage* sheetDamage = static_cast<SheetDamage*>(damage);
+            debugSheetsDamage << "Processing\t" << *sheetDamage;
+//             SheetBase* damagedSheet = sheetDamage->sheet();
+
+            if (sheetDamage->changes() & SheetDamage::PropertiesChanged) {
+            }
+            continue;
+        }
+
+        if (damage->type() == Damage::Workbook) {
+            WorkbookDamage* workbookDamage = static_cast<WorkbookDamage*>(damage);
+            debugSheetsDamage << "Processing\t" << *damage;
+            const WorkbookDamage::Changes changes = workbookDamage->changes();
+
+            workbookChanges |= changes;
+            if (changes & WorkbookDamage::Formula)
+                allFormulas = true;
+            if (changes & WorkbookDamage::Value)
+                allValues = true;
+            continue;
+        }
+//         debugSheetsDamage <<"Unhandled\t" << *damage;
+    }
+
+    if (allFormulas) {
+        d->namedAreaManager->updateAllNamedAreas();
+        d->dependencyManager->updateAllDependencies(this);
+    } else {
+        if (!namedAreaChangedRegion.isEmpty())
+            d->namedAreaManager->regionChanged(namedAreaChangedRegion);
+        if (!formulaChangedRegion.isEmpty())
+            d->dependencyManager->regionChanged(formulaChangedRegion);
+    }
+
+    if (allValues) {
+        d->recalcManager->recalcMap();
+        d->bindingManager->updateAllBindings();
+    } else {
+        if (!valueChangedRegion.isEmpty())
+            d->recalcManager->regionChanged(valueChangedRegion);
+        if (!bindingChangedRegion.isEmpty())
+            d->bindingManager->regionChanged(bindingChangedRegion);
+    }
+}
+
+
+
+bool MapBase::isLoading() const
 {
     return d->isLoading;
 }
 
-void Map::setLoading(bool l) {
+void MapBase::setLoading(bool l) {
     d->isLoading = l;
 }
 

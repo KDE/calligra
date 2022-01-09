@@ -8,8 +8,6 @@
 #ifndef __MAP_H__
 #define __MAP_H__
 
-#include <QList>
-#include <QObject>
 #include <QString>
 #include <QStringList>
 
@@ -38,7 +36,6 @@ class ApplicationSettings;
 class BindingManager;
 class CalculationSettings;
 class ColumnFormat;
-class Damage;
 class DatabaseManager;
 class DependencyManager;
 class DocBase;
@@ -58,7 +55,7 @@ class ValueCalc;
  * The "embedded document".
  * The Map holds all the document data.
  */
-class CALLIGRA_SHEETS_ODF_EXPORT Map : public MapBase, public QObject, public KoDataCenterBase, public ProtectableObject
+class CALLIGRA_SHEETS_ODF_EXPORT Map : public MapBase, public KoDataCenterBase, public ProtectableObject
 {
     Q_OBJECT
 public:
@@ -272,11 +269,6 @@ public:
     Sheet* filterSheetName(QString& sRegion);
 
     /**
-     * \ingroup Damages
-     */
-    void addDamage(Damage* damage);
-
-    /**
      * Return a pointer to the resource manager associated with the
      * document. The resource manager contains
      * document wide resources * such as variable managers, the image
@@ -288,12 +280,7 @@ public Q_SLOTS:
     /**
      * \ingroup Damages
      */
-    void flushDamages();
-
-    /**
-     * \ingroup Damages
-     */
-    void handleDamages(const QList<Damage*>& damages);
+    virtual void handleDamages(const QList<Damage*>& damages) override;
 
     /**
      * Emits the signal commandAdded(KUndo2Command *).
@@ -303,10 +290,6 @@ public Q_SLOTS:
     void addCommand(KUndo2Command *command);
 
 Q_SIGNALS:
-    /**
-     * \ingroup Damages
-     */
-    void damagesFlushed(const QList<Damage*>& damages);
 
     /**
      * Emitted, if a command was added by addCommand(KUndo2Command *).

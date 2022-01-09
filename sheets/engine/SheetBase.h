@@ -21,7 +21,12 @@ namespace Calligra
 namespace Sheets
 {
 
+class CellBaseStorage;
+class FormulaStorage;
+class ValidityStorage;
+class ValueStorage;
 class MapBase;
+
 
 class CALLIGRA_SHEETS_ENGINE_EXPORT SheetBase
 {
@@ -39,6 +44,11 @@ public:
 
     virtual ~SheetBase();
 
+    /**
+     * \ingroup Storage
+     * \return the cell storage
+     */
+    CellBaseStorage* cellStorage() const;
 
     /**
      * \return the map this sheet belongs to.
@@ -67,8 +77,15 @@ public:
 
 
 
+    const FormulaStorage* formulaStorage() const;
+    const ValidityStorage* validityStorage() const;
+    const ValueStorage* valueStorage() const;
 
-
+protected:
+    /**
+     * Used by the child class to override the base storage with the full-featured one.
+     */
+    void setCellStorage(CellBaseStorage *storage);
 private:
     SheetBase &operator=(const SheetBase &) = delete;
 

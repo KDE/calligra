@@ -73,7 +73,7 @@ void Binding::update(const Region& region)
     Region changedRegion;
     const QPoint offset = d->model->region().firstRange().topLeft();
     const QRect range = d->model->region().firstRange();
-    const Sheet* sheet = d->model->region().firstSheet();
+    const SheetBase* sheet = d->model->region().firstSheet();
     Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it = region.constBegin(); it != end; ++it) {
         if (sheet != (*it)->sheet())
@@ -181,7 +181,7 @@ QVariant BindingModel::data(const QModelIndex& index, int role) const
     if ((m_region.isEmpty()) || (role != Qt::EditRole && role != Qt::DisplayRole))
         return QVariant();
     const QPoint offset = m_region.firstRange().topLeft();
-    const Sheet* sheet = m_region.firstSheet();
+    const SheetBase* sheet = m_region.firstSheet();
     int row = offset.y() + index.row();
     int column = offset.x() + index.column();
     Value value = sheet->cellStorage()->value(column, row);
@@ -243,7 +243,7 @@ QVariant BindingModel::headerData(int section, Qt::Orientation orientation, int 
     const QPoint offset = m_region.firstRange().topLeft();
     const int col = (orientation == Qt::Vertical) ? offset.x() : offset.x() + section;
     const int row = (orientation == Qt::Vertical) ? offset.y() + section : offset.y();
-    const Sheet* sheet = m_region.firstSheet();
+    const SheetBase* sheet = m_region.firstSheet();
     const Value value = sheet->cellStorage()->value(col, row);
     return value.asVariant();
 }

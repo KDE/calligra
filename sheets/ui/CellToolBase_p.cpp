@@ -357,9 +357,10 @@ bool CellToolBase::Private::processEndKey(QKeyEvent *event)
         // move to the last used cell in the row
         int col = 1;
 
-        cell = sheet->cellStorage()->lastInRow(marker.y(), CellStorage::VisitContent);
+        CellStorage *cells = sheet->cellStorage();
+        cell = cells->lastInRow(marker.y(), CellStorage::VisitContent);
         while (!cell.isNull() && cell.column() > q->selection()->marker().x() && cell.isEmpty()) {
-            cell = sheet->cellStorage()->prevInRow(cell.column(), cell.row(), CellStorage::VisitContent);
+            cell = cells->prevInRow(cell.column(), cell.row(), CellStorage::VisitContent);
         }
 
         col = (cell.isNull()) ? q->maxCol() : cell.column();
@@ -456,6 +457,7 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
     int col;
 
     QPoint marker = q->selection()->marker();
+    CellStorage *cells = sheet->cellStorage();
 
     /* here, we want to move to the first or last cell in the given direction that is
         actually being used.  Ignore empty cells and cells on hidden rows/columns */
@@ -480,11 +482,11 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
             cell = lastCell;
         }
         if (searchThroughEmpty) {
-            cell = sheet->cellStorage()->prevInColumn(marker.x(), marker.y(), CellStorage::VisitContent);
+            cell = cells->prevInColumn(marker.x(), marker.y(), CellStorage::VisitContent);
 
             while ((!cell.isNull()) &&
                     (cell.isEmpty() || (sheet->rowFormats()->isHiddenOrFiltered(cell.row())))) {
-                cell = sheet->cellStorage()->prevInColumn(cell.column(), cell.row(), CellStorage::VisitContent);
+                cell = cells->prevInColumn(cell.column(), cell.row(), CellStorage::VisitContent);
             }
         }
 
@@ -521,11 +523,11 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
             cell = lastCell;
         }
         if (searchThroughEmpty) {
-            cell = sheet->cellStorage()->nextInColumn(marker.x(), marker.y(), CellStorage::VisitContent);
+            cell = cells->nextInColumn(marker.x(), marker.y(), CellStorage::VisitContent);
 
             while ((!cell.isNull()) &&
                     (cell.isEmpty() || (sheet->rowFormats()->isHiddenOrFiltered(cell.row())))) {
-                cell = sheet->cellStorage()->nextInColumn(cell.column(), cell.row(), CellStorage::VisitContent);
+                cell = cells->nextInColumn(cell.column(), cell.row(), CellStorage::VisitContent);
             }
         }
 
@@ -563,11 +565,11 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
                 cell = lastCell;
             }
             if (searchThroughEmpty) {
-                cell = sheet->cellStorage()->nextInRow(marker.x(), marker.y(), CellStorage::VisitContent);
+                cell = cells->nextInRow(marker.x(), marker.y(), CellStorage::VisitContent);
 
                 while ((!cell.isNull()) &&
                         (cell.isEmpty() || (sheet->columnFormat(cell.column())->isHiddenOrFiltered()))) {
-                    cell = sheet->cellStorage()->nextInRow(cell.column(), cell.row(), CellStorage::VisitContent);
+                    cell = cells->nextInRow(cell.column(), cell.row(), CellStorage::VisitContent);
                 }
             }
 
@@ -600,11 +602,11 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
                 cell = lastCell;
             }
             if (searchThroughEmpty) {
-                cell = sheet->cellStorage()->prevInRow(marker.x(), marker.y(), CellStorage::VisitContent);
+                cell = cells->prevInRow(marker.x(), marker.y(), CellStorage::VisitContent);
 
                 while ((!cell.isNull()) &&
                         (cell.isEmpty() || (sheet->columnFormat(cell.column())->isHiddenOrFiltered()))) {
-                    cell = sheet->cellStorage()->prevInRow(cell.column(), cell.row(), CellStorage::VisitContent);
+                    cell = cells->prevInRow(cell.column(), cell.row(), CellStorage::VisitContent);
                 }
             }
 
@@ -643,11 +645,11 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
                 cell = lastCell;
             }
             if (searchThroughEmpty) {
-                cell = sheet->cellStorage()->prevInRow(marker.x(), marker.y(), CellStorage::VisitContent);
+                cell = cells->prevInRow(marker.x(), marker.y(), CellStorage::VisitContent);
 
                 while ((!cell.isNull()) &&
                         (cell.isEmpty() || (sheet->columnFormat(cell.column())->isHiddenOrFiltered()))) {
-                    cell = sheet->cellStorage()->prevInRow(cell.column(), cell.row(), CellStorage::VisitContent);
+                    cell = cells->prevInRow(cell.column(), cell.row(), CellStorage::VisitContent);
                 }
             }
 
@@ -679,11 +681,11 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
                 cell = lastCell;
             }
             if (searchThroughEmpty) {
-                cell = sheet->cellStorage()->nextInRow(marker.x(), marker.y(), CellStorage::VisitContent);
+                cell = cells->nextInRow(marker.x(), marker.y(), CellStorage::VisitContent);
 
                 while ((!cell.isNull()) &&
                         (cell.isEmpty() || (sheet->columnFormat(cell.column())->isHiddenOrFiltered()))) {
-                    cell = sheet->cellStorage()->nextInRow(cell.column(), cell.row(), CellStorage::VisitContent);
+                    cell = cells->nextInRow(cell.column(), cell.row(), CellStorage::VisitContent);
                 }
             }
 

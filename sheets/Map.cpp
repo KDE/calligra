@@ -83,8 +83,6 @@ public:
     ColumnFormat* defaultColumnFormat;
     RowFormat* defaultRowFormat;
 
-    QList<Damage*> damages;
-
     int syntaxVersion;
 
     KCompletion listCompletion;
@@ -94,7 +92,6 @@ public:
 Map::Map(DocBase* doc, int syntaxVersion)
         :
         MapBase(),
-        QObject(doc),
         d(new Private)
 {
     setObjectName(QLatin1String("Map")); // necessary for D-Bus
@@ -144,8 +141,6 @@ Map::Map(DocBase* doc, int syntaxVersion)
             d->recalcManager, &RecalcManager::addSheet);
     connect(d->namedAreaManager, &NamedAreaManager::namedAreaModified,
             d->dependencyManager, &DependencyManager::namedAreaModified);
-    connect(this, &Map::damagesFlushed,
-            this, &Map::handleDamages);
 }
 
 Map::~Map()
@@ -456,6 +451,30 @@ void Map::addStringCompletion(const QString &stringCompletion)
     }
 }
 
+void Map::handleDamages(const QList<Damage*>& damages)
+{
+    MapBase::handleDamages(damages);
+
+    // The base class does most of the work here, we just add style invalidation.
+
+    QList<Damage*>::ConstIterator end(damages.end());
+    for (QList<Damage*>::ConstIterator it = damages.begin(); it != end; ++it) {
+        Damage* damage = *it;
+
+        if (damage->type() == Damage::Cell) {
+            CellDamage* cellDamage = static_cast<CellDamage*>(damage);
+            Sheet* damagedSheet = dynamic_cast<Sheet *>(cellDamage->sheet());
+            const CellDamage::Changes changes = cellDamage->changes();
+
+            // TODO Stefan: Detach the style cache from the CellView cache.
+            if (damagedSheet && changes.testFlag(CellDamage::Appearance))
+                // Rebuild the style storage cache.
+                damagedSheet->fullCellStorage()->invalidateStyleCache(); // FIXME more fine-grained
+        }
+    }
+}
+
+
 bool Map::isNamedArea (const QString &name) {
     return namedAreaManager()->contains(name);
 }
@@ -549,137 +568,6 @@ Sheet* Map::filterSheetName(QString& sRegion)
     return sheet;
 }
 
-
-void Map::addDamage(Damage* damage)
-{
-    // Do not create a new Damage, if we are in loading process. Check for it before
-    // calling this function. This prevents unnecessary memory allocations (new).
-    // see FIXME in Sheet::setSheetName().
-//     Q_ASSERT(!isLoading());
-    Q_CHECK_PTR(damage);
-
-#ifndef NDEBUG
-    if (damage->type() == Damage::Cell) {
-        debugSheetsDamage << "Adding\t" << *static_cast<CellDamage*>(damage);
-    } else if (damage->type() == Damage::Sheet) {
-        debugSheetsDamage << "Adding\t" << *static_cast<SheetDamage*>(damage);
-    } else if (damage->type() == Damage::Selection) {
-        debugSheetsDamage << "Adding\t" << *static_cast<SelectionDamage*>(damage);
-    } else {
-        debugSheetsDamage << "Adding\t" << *damage;
-    }
-#endif
-
-    d->damages.append(damage);
-
-    if (d->damages.count() == 1) {
-        QTimer::singleShot(0, this, &Map::flushDamages);
-    }
-}
-
-void Map::flushDamages()
-{
-    // Copy the damages to process. This allows new damages while processing.
-    QList<Damage*> damages = d->damages;
-    d->damages.clear();
-    emit damagesFlushed(damages);
-    qDeleteAll(damages);
-}
-
-void Map::handleDamages(const QList<Damage*>& damages)
-{
-    Region bindingChangedRegion;
-    Region formulaChangedRegion;
-    Region namedAreaChangedRegion;
-    Region valueChangedRegion;
-    WorkbookDamage::Changes workbookChanges = WorkbookDamage::None;
-
-    QList<Damage*>::ConstIterator end(damages.end());
-    for (QList<Damage*>::ConstIterator it = damages.begin(); it != end; ++it) {
-        Damage* damage = *it;
-
-        if (damage->type() == Damage::Cell) {
-            CellDamage* cellDamage = static_cast<CellDamage*>(damage);
-            debugSheetsDamage << "Processing\t" << *cellDamage;
-            Sheet* const damagedSheet = cellDamage->sheet();
-            const Region& region = cellDamage->region();
-            const CellDamage::Changes changes = cellDamage->changes();
-
-            // TODO Stefan: Detach the style cache from the CellView cache.
-            if ((changes.testFlag(CellDamage::Appearance))) {
-                // Rebuild the style storage cache.
-                damagedSheet->cellStorage()->invalidateStyleCache(); // FIXME more fine-grained
-            }
-            if ((cellDamage->changes() & CellDamage::Binding) &&
-                    !workbookChanges.testFlag(WorkbookDamage::Value)) {
-                bindingChangedRegion.add(region, damagedSheet);
-            }
-            if ((cellDamage->changes() & CellDamage::Formula) &&
-                    !workbookChanges.testFlag(WorkbookDamage::Formula)) {
-                formulaChangedRegion.add(region, damagedSheet);
-            }
-            if ((cellDamage->changes() & CellDamage::NamedArea) &&
-                    !workbookChanges.testFlag(WorkbookDamage::Formula)) {
-                namedAreaChangedRegion.add(region, damagedSheet);
-            }
-            if ((cellDamage->changes() & CellDamage::Value) &&
-                    !workbookChanges.testFlag(WorkbookDamage::Value)) {
-                valueChangedRegion.add(region, damagedSheet);
-            }
-            continue;
-        }
-
-        if (damage->type() == Damage::Sheet) {
-            SheetDamage* sheetDamage = static_cast<SheetDamage*>(damage);
-            debugSheetsDamage << "Processing\t" << *sheetDamage;
-//             Sheet* damagedSheet = sheetDamage->sheet();
-
-            if (sheetDamage->changes() & SheetDamage::PropertiesChanged) {
-            }
-            continue;
-        }
-
-        if (damage->type() == Damage::Workbook) {
-            WorkbookDamage* workbookDamage = static_cast<WorkbookDamage*>(damage);
-            debugSheetsDamage << "Processing\t" << *damage;
-
-            workbookChanges |= workbookDamage->changes();
-            if (workbookDamage->changes() & WorkbookDamage::Formula) {
-                formulaChangedRegion.clear();
-            }
-            if (workbookDamage->changes() & WorkbookDamage::Value) {
-                valueChangedRegion.clear();
-            }
-            continue;
-        }
-//         debugSheetsDamage <<"Unhandled\t" << *damage;
-    }
-
-    // Update the named areas.
-    if (!namedAreaChangedRegion.isEmpty()) {
-        d->namedAreaManager->regionChanged(namedAreaChangedRegion);
-    }
-    // First, update the dependencies.
-    if (!formulaChangedRegion.isEmpty()) {
-        d->dependencyManager->regionChanged(formulaChangedRegion);
-    }
-    // Tell the RecalcManager which cells have had a value change.
-    if (!valueChangedRegion.isEmpty()) {
-        d->recalcManager->regionChanged(valueChangedRegion);
-    }
-    if (workbookChanges.testFlag(WorkbookDamage::Formula)) {
-        d->namedAreaManager->updateAllNamedAreas();
-        d->dependencyManager->updateAllDependencies(this);
-    }
-    if (workbookChanges.testFlag(WorkbookDamage::Value)) {
-        d->recalcManager->recalcMap();
-        d->bindingManager->updateAllBindings();
-    }
-    // Update the bindings
-    if (!bindingChangedRegion.isEmpty()) {
-        d->bindingManager->regionChanged(bindingChangedRegion);
-    }
-}
 
 void Map::addCommand(KUndo2Command *command)
 {

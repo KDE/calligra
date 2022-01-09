@@ -18,14 +18,16 @@ namespace Calligra
 {
 namespace Sheets
 {
+class MapBase;
 class Region;
+class SheetBase;
 
 /**
  * \ingroup Value
  * Manages the dependencies between cells caused by references in formulas.
  * This dependency information is used for the recalculation of the cells.
  */
-class CALLIGRA_SHEETS_ODF_EXPORT DependencyManager : public QObject
+class CALLIGRA_SHEETS_ENGINE_EXPORT DependencyManager : public QObject
 {
     Q_OBJECT
     friend class TestDependencies;
@@ -33,7 +35,7 @@ class CALLIGRA_SHEETS_ODF_EXPORT DependencyManager : public QObject
 
 public:
     /** constructor */
-    explicit DependencyManager(const Map *map);
+    explicit DependencyManager(const MapBase *map);
     /** destructor */
     ~DependencyManager() override;
 
@@ -55,13 +57,13 @@ public:
     /**
      * Updates the whole \p map.
      */
-    void updateAllDependencies(const Map* map, KoUpdater *updater = 0);
+    void updateAllDependencies(const MapBase* map, KoUpdater *updater = 0);
 
     /**
      * Returns the cell depths.
      * \return the cell depths
      */
-    QMap<Cell, int> depths() const;
+    QMap<CellBase, int> depths() const;
 
     /**
      * Returns the region, that consumes the value of \p cell.
@@ -73,7 +75,7 @@ public:
      *
      * \return region consuming \p cell 's value
      */
-    Region consumingRegion(const Cell& cell) const;
+    Region consumingRegion(const CellBase& cell) const;
 
     /**
      * Returns the region, that is reduced to those parts of \p region, that provide values.
@@ -87,7 +89,7 @@ public:
      * \param movedRegion the region, that was moved
      * \param destination the new upper left corner of the region
      */
-    void regionMoved(const Region& movedRegion, const Cell& destination);
+    void regionMoved(const Region& movedRegion, const CellBase& destination);
 
 public Q_SLOTS:
     void namedAreaModified(const QString&);
@@ -95,12 +97,12 @@ public Q_SLOTS:
     /**
      * Called after a sheet was added.
      */
-    void addSheet(Sheet *sheet);
+    void addSheet(SheetBase *sheet);
 
     /**
      * Called after a sheet was removed.
      */
-    void removeSheet(Sheet *sheet);
+    void removeSheet(SheetBase *sheet);
 
 protected:
     /**
@@ -110,7 +112,7 @@ protected:
      *
      * \see regionMoved()
      */
-    void updateFormula(const Cell& cell, const Region::Element* oldLocation, const Region::Point& offset);
+    void updateFormula(const CellBase& cell, const Region::Element* oldLocation, const Region::Point& offset);
 
 private:
     Q_DISABLE_COPY(DependencyManager)

@@ -15,9 +15,9 @@ namespace Calligra
 {
 namespace Sheets
 {
-class Cell;
-class Map;
-class Sheet;
+class CellBase;
+class MapBase;
+class SheetBase;
 
 /**
  * \class RecalcManager
@@ -37,7 +37,7 @@ class Sheet;
  * Cell value changes are blocked while doing this, i.e. they do not
  * trigger a new recalculation event.
  */
-class CALLIGRA_SHEETS_ODF_EXPORT RecalcManager : public QObject
+class CALLIGRA_SHEETS_ENGINE_EXPORT RecalcManager : public QObject
 {
     Q_OBJECT
 public:
@@ -46,7 +46,7 @@ public:
      *
      * \param map The Map which this RecalcManager belongs to.
      */
-    explicit RecalcManager(Map *const map);
+    explicit RecalcManager(MapBase *const map);
 
     /**
      * Destructor.
@@ -67,7 +67,7 @@ public:
      *
      * \see recalc()
      */
-    void recalcSheet(Sheet* const sheet);
+    void recalcSheet(SheetBase* const sheet);
 
     /**
      * Recalculates the whole map.
@@ -92,12 +92,12 @@ public Q_SLOTS:
     /**
      * Called after a sheet was added.
      */
-    void addSheet(Sheet *sheet);
+    void addSheet(SheetBase *sheet);
 
     /**
      * Called after a sheet was removed.
      */
-    void removeSheet(Sheet *sheet);
+    void removeSheet(SheetBase *sheet);
 
 protected:
     /**

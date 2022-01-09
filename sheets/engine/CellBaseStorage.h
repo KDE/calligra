@@ -80,7 +80,7 @@ public:
     /**
      * Removes all data at \p col , \p row .
      */
-    virtual void take(int col, int row);
+//    virtual void take(int col, int row);
 
 
     /**

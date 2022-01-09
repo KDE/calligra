@@ -351,18 +351,15 @@ public:
 
     /**
      * \ingroup Storage
-     * \return the cell storage
+     * \return the full cell storage
      */
-    CellStorage* cellStorage() const;
+    CellStorage* fullCellStorage() const;
 
     const CommentStorage* commentStorage() const;
     const ConditionsStorage* conditionsStorage() const;
-    const FormulaStorage* formulaStorage() const;
     const FusionStorage* fusionStorage() const;
     const LinkStorage* linkStorage() const;
     const StyleStorage* styleStorage() const;
-    const ValidityStorage* validityStorage() const;
-    const ValueStorage* valueStorage() const;
 
     /**
      * \ingroup Storage

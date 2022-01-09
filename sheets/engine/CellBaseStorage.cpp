@@ -94,7 +94,7 @@ void CellBaseStorage::Private::updateBindings(const Region &r) {
 
 
 
-CellBaseStorage::CellBaseStorage(Sheet* sheet)
+CellBaseStorage::CellBaseStorage(SheetBase* sheet)
         : QObject(sheet)
         , d(new Private(sheet))
         , undoEnabled(false)
@@ -117,7 +117,7 @@ CellBaseStorage::CellBaseStorage(const CellBaseStorage& other)
     fillStorages();
 }
 
-CellBaseStorage::CellBaseStorage(const CellBaseStorage& other, Sheet* sheet)
+CellBaseStorage::CellBaseStorage(const CellBaseStorage& other, SheetBase* sheet)
         : QObject(sheet)
         , CellBaseStorageBase(other, sheet),
         , d(new Private(*other.d, sheet))

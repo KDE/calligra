@@ -10,8 +10,10 @@
 #define __MAPBASE_H__
 
 
-
 #include "sheets_engine_export.h"
+
+#include <QList>
+#include <QObject>
 #include <QList>
 
 
@@ -21,9 +23,11 @@ namespace Sheets
 {
 
 class SheetBase;
+class Damage;
 
-class CALLIGRA_SHEETS_ENGINE_EXPORT MapBase
+class CALLIGRA_SHEETS_ENGINE_EXPORT MapBase : public QObject
 {
+    Q_OBJECT
 public:
     explicit MapBase();
 
@@ -82,6 +86,27 @@ public:
     void setLoading(bool l);
 
 
+    /**
+     * \ingroup Damages
+     */
+    void addDamage(Damage* damage);
+
+Q_SIGNALS:
+    /**
+     * \ingroup Damages
+     */
+    void damagesFlushed(const QList<Damage*>& damages);
+
+public Q_SLOTS:
+    /**
+     * \ingroup Damages
+     */
+    void flushDamages();
+
+    /**
+     * \ingroup Damages
+     */
+    virtual void handleDamages(const QList<Damage*>& damages);
 
 
 private:
