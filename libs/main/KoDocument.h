@@ -723,6 +723,9 @@ protected:
 
 public:
 
+    /// Returns a valid default url
+    QUrl defaultUrl() const;
+
     QString localFilePath() const override;
     void setLocalFilePath( const QString &localFilePath );
 

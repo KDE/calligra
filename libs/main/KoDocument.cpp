@@ -2534,6 +2534,29 @@ void KoDocument::setUrl(const QUrl &url)
     d->m_url = url;
 }
 
+QUrl KoDocument::defaultUrl() const
+{
+    QUrl url;
+    if (documentInfo()) {
+        url = QUrl(documentInfo()->aboutInfo("title"));
+    }
+    if (url.isEmpty()) {
+        url = this->url();
+    }
+    if (url.isEmpty()) {
+        QMimeType mime = QMimeDatabase().mimeTypeForName(nativeFormatMimeType());
+        auto name = i18n("Untitled");
+        auto ext = mime.preferredSuffix();
+        if (!ext.isEmpty()) {
+            ext.prepend('.');
+            name += ext;
+        }
+        url = QUrl(name);
+        url.setScheme("file");
+    }
+    return url;
+}
+
 QString KoDocument::localFilePath() const
 {
     return d->m_file;

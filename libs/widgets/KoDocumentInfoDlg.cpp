@@ -344,6 +344,7 @@ void KoDocumentInfoDlg::saveEncryption()
 
     KMainWindow* mainWindow = dynamic_cast< KMainWindow* >(parent());
 
+    bool saveas = doc->url().isEmpty();
     if (doc->specialOutputFlag() == KoDocumentBase::SaveEncrypted) {
         // Decrypt
         if (KMessageBox::warningContinueCancel(
@@ -357,7 +358,6 @@ void KoDocumentInfoDlg::saveEncryption()
                     ) != KMessageBox::Continue) {
             return;
         }
-        bool modified = doc->isModified();
         doc->setOutputMimeType(doc->outputMimeType(), doc->specialOutputFlag() & ~KoDocumentBase::SaveEncrypted);
         if (!mainWindow) {
             KMessageBox::information(
@@ -368,9 +368,9 @@ void KoDocumentInfoDlg::saveEncryption()
                         "DecryptSaveMessage");
             return;
         }
-        if (modified && KMessageBox::questionYesNo(
+        if (KMessageBox::questionYesNo(
                     this,
-                    i18n("<qt>The document has been changed since it was opened. To complete the decryption the document needs to be saved."
+                    i18n("<qt>To complete the decryption the document needs to be saved."
                          "<p>Do you want to save the document now?</qt>"),
                     i18n("Save Document"),
                     KStandardGuiItem::save(),
@@ -379,6 +379,8 @@ void KoDocumentInfoDlg::saveEncryption()
                     ) != KMessageBox::Yes) {
             return;
         }
+        // Force saveas so user can decide if overwrite the encrypted file or not
+        saveas = true;
     } else {
         // Encrypt
         bool modified = doc->isModified();
@@ -410,7 +412,7 @@ void KoDocumentInfoDlg::saveEncryption()
                         "EncryptSaveMessage");
             return;
         }
-        if (modified && KMessageBox::questionYesNo(
+        if (KMessageBox::questionYesNo(
                     this,
                     i18n("<qt>The document has been changed since it was opened. To complete the encryption the document needs to be saved."
                          "<p>Do you want to save the document now?</qt>"),
@@ -421,9 +423,10 @@ void KoDocumentInfoDlg::saveEncryption()
                     ) != KMessageBox::Yes) {
             return;
         }
+        saveas = true; // Force saveas because save will silently fail when doc is not modified
     }
     // Why do the dirty work ourselves?
-    emit saveRequested(doc->url().isEmpty(), false, doc->specialOutputFlag());
+    emit saveRequested(saveas, false, doc->specialOutputFlag());
     d->toggleEncryption = false;
     d->applyToggleEncryption = false;
     // Detects when the user cancelled saving

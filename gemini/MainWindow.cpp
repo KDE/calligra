@@ -719,18 +719,10 @@ bool MainWindow::Private::queryClose()
 
     // main doc + internally stored child documents
     if (DocumentManager::instance()->document()->isModified()) {
-        QString name;
-        if (DocumentManager::instance()->document()->documentInfo()) {
-            name = DocumentManager::instance()->document()->documentInfo()->aboutInfo("title");
-        }
-        if (name.isEmpty())
-            name = DocumentManager::instance()->document()->url().fileName();
-
-        if (name.isEmpty())
-            name = i18n("Untitled");
+        auto url = DocumentManager::instance()->document()->defaultUrl();
 
         int res = KMessageBox::warningYesNoCancel(q,
-                  i18n("<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?</p>", name),
+                  i18n("<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?</p>", url.fileName()),
                   QString(),
                   KStandardGuiItem::save(),
                   KStandardGuiItem::discard());
