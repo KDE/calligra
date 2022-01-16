@@ -29,6 +29,7 @@ public:
     QString name;
 
     bool autoCalc;
+    bool firstLetterUpper;
 
     SheetBase *m_sheet;
     CellBaseStorage *cellStorage;
@@ -50,6 +51,7 @@ SheetBase::SheetBase(MapBase* map, const QString &sheetName) :
     d->cellStorage = new CellBaseStorage(this);
 
     d->autoCalc = true;
+    d->firstLetterUpper = false;
 }
 
 SheetBase::SheetBase(const SheetBase &other)
@@ -58,6 +60,7 @@ SheetBase::SheetBase(const SheetBase &other)
     d->workbook = other.d->workbook;
 
     d->autoCalc = other.d->autoCalc;
+    d->firstLetterUpper = other.d->firstLetterUpper;
 
     // create a unique name
     int i = 1;
@@ -171,7 +174,29 @@ void SheetBase::setAutoCalculationEnabled(bool enable)
     }
 }
 
+bool SheetBase::getFirstLetterUpper() const
+{
+    return d->firstLetterUpper;
+}
 
+void SheetBase::setFirstLetterUpper(bool _firstUpper)
+{
+    d->firstLetterUpper = _firstUpper;
+}
+
+
+void SheetBase::showStatusMessage(const QString & /*message*/, int /*timeout*/) const {
+    // TODO
+#warning Implement this.
+}
+
+bool SheetBase::onValidationFailed(Validity::Action action, const CellBase *cell, const QString &/*message*/, const QString &/*title*/) const
+{
+    QString msg = QString("Validation for cell ") + cell->fullName() + " failed.";
+    showStatusMessage(msg);
+    if (action == Validity::Information) return true;
+    return false;
+}
 
 
 

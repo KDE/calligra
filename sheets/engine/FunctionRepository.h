@@ -9,7 +9,7 @@
 #include <QSharedPointer>
 #include <QStringList>
 
-#include "sheets_export.h"
+#include "sheets_engine_export.h"
 
 namespace Calligra
 {
@@ -22,7 +22,7 @@ class FunctionDescription;
  * \ingroup Value
  * The function repository.
  */
-class CALLIGRA_SHEETS_ODF_EXPORT FunctionRepository
+class CALLIGRA_SHEETS_ENGINE_EXPORT FunctionRepository
 {
 public:
     FunctionRepository();

@@ -6,29 +6,24 @@
 
 #include "Formula.h"
 
-//#include "CalculationSettings.h"
-//#include "CellBaseStorage.h"
-//#include "Function.h"
-//#include "FunctionRepository.h"
-//#include "Region.h"
-//#include "Value.h"
-//#include "Util.h"
+#include "CalculationSettings.h"
+#include "CellBaseStorage.h"
+#include "Function.h"
+#include "FunctionRepository.h"
+#include "Region.h"
+#include "Value.h"
+#include "Util.h"
 
-//#include "CellBase.h"
-//#include "SheetBase.h"
-//#include "MapBase.h"
+#include "CellBase.h"
+#include "SheetBase.h"
+#include "MapBase.h"
 
-//#include "ValueCalc.h"
-//#include "ValueConverter.h"
-//#include "ValueParser.h"
+#include "ValueCalc.h"
+#include "ValueConverter.h"
 
-//#include <limits.h>
+#include <QStack>
 
-//#include <QStack>
-//#include <QString>
-//#include <QTextStream>
-
-//#include <klocale.h>
+#include <klocale.h>
 
 #define CALLIGRA_SHEETS_UNICODE_OPERATORS
 
@@ -98,8 +93,8 @@ struct stackEntry {
 class Q_DECL_HIDDEN Formula::Private : public QSharedData
 {
 public:
-    Cell cell;
-    Sheet *sheet;
+    CellBase cell;
+    SheetBase *sheet;
     mutable bool dirty;
     mutable bool valid;
     QString expression;
@@ -509,7 +504,7 @@ bool Calligra::Sheets::isIdentifier(QChar ch)
 
 // Constructor
 
-Formula::Formula(Sheet *sheet, const Cell& cell)
+Formula::Formula(SheetBase *sheet, const CellBase& cell)
         : d(new Private)
 {
     d->cell = cell;
@@ -517,10 +512,10 @@ Formula::Formula(Sheet *sheet, const Cell& cell)
     clear();
 }
 
-Formula::Formula(Sheet *sheet)
+Formula::Formula(SheetBase *sheet)
         : d(new Private)
 {
-    d->cell = Cell();
+    d->cell = CellBase();
     d->sheet = sheet;
     clear();
 }
@@ -528,7 +523,7 @@ Formula::Formula(Sheet *sheet)
 Formula::Formula()
         : d(new Private)
 {
-    d->cell = Cell();
+    d->cell = CellBase();
     d->sheet = 0;
     clear();
 }
@@ -550,7 +545,7 @@ Formula::~Formula()
 {
 }
 
-const Cell& Formula::cell() const
+const CellBase& Formula::cell() const
 {
     return d->cell;
 }
@@ -584,10 +579,7 @@ QString Formula::expression() const
 bool Formula::isValid() const
 {
     if (d->dirty) {
-        KLocale* locale = !d->cell.isNull() ? d->cell.locale() : 0;
-        if ((!locale) && d->sheet)
-            locale = d->sheet->map()->calculationSettings()->locale();
-        Tokens tokens = scan(d->expression, locale);
+        Tokens tokens = scan(d->expression, locale());
 
         if (tokens.valid())
             compile(tokens);
@@ -608,17 +600,19 @@ void Formula::clear()
     d->codes.clear();
 }
 
+KLocale *Formula::locale() const {
+    SheetBase *sheet = d->sheet;
+    if ((!sheet) && (!d->cell.isNull())) sheet = d->cell.sheet();
+    return sheet ? sheet->map()->calculationSettings()->locale() : nullptr;
+}
+
 // Returns list of token for the expression.
 // this triggers again the lexical analysis step. it is however preferable
 // (even when there's small performance penalty) because otherwise we need to
 // store parsed tokens all the time which serves no good purpose.
-
 Tokens Formula::tokens() const
 {
-    KLocale* locale = !d->cell.isNull() ? d->cell.locale() : 0;
-    if ((!locale) && d->sheet)
-        locale = d->sheet->map()->calculationSettings()->locale();
-    return scan(d->expression, locale);
+    return scan(d->expression, locale());
 }
 
 Tokens Formula::scan(const QString &expr, const KLocale* locale) const
@@ -1462,7 +1456,7 @@ bool Formula::isNamedArea(const QString& expr) const
 // evaluate the cellIndirections
 Value Formula::eval(CellIndirection cellIndirections) const
 {
-    QHash<Cell, Value> values;
+    QHash<CellBase, Value> values;
     return evalRecursive(cellIndirections, values);
 }
 
@@ -1478,7 +1472,7 @@ Value Formula::Private::valueOrElement(FuncExtra &fe, const stackEntry& entry) c
     QPoint topLeft = region.firstRange().topLeft();
     int x = fe.mycol - topLeft.x();
     int y = fe.myrow - topLeft.y();
-    if ((x >= 0) && (x < v.columns()) && (y >= 0) && (y < v.rows()))
+    if ((x >= 0) && (x < (int)v.columns()) && (y >= 0) && (y < (int)v.rows()))
         return v.element(x, y);
     return Value::errorVALUE();
 }
@@ -1510,7 +1504,7 @@ Value numericOrError(const ValueConverter* converter, const Value &v)
     return Value::errorVALUE();
 }
 
-Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value>& values) const
+Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<CellBase, Value>& values) const
 {
     QStack<stackEntry> stack;
     stackEntry entry;
@@ -1519,7 +1513,7 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
     QString c;
     QVector<Value> args;
 
-    const Map* map = d->sheet ? d->sheet->map() : new Map(0 /*document*/);
+    const MapBase* map = d->sheet ? d->sheet->map() : new MapBase();
     const ValueConverter* converter = map->converter();
     ValueCalc* calc = map->calc();
 
@@ -1631,18 +1625,18 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
         case Opcode::Intersect: {
             val1 = stack.pop().val;
             val2 = stack.pop().val;
-            Region r1(d->constants[index].asString(), map, d->sheet);
-            Region r2(d->constants[index+1].asString(), map, d->sheet);
+            Region r1 = map->regionFromName(d->constants[index].asString(), d->sheet);
+            Region r2 = map->regionFromName(d->constants[index+1].asString(), d->sheet);
             if(!r1.isValid() || !r2.isValid()) {
                 val1 = Value::errorNULL();
             } else {
                 Region r = r1.intersected(r2);
                 QRect rect = r.boundingRect();
-                Cell cell;
+                CellBase cell;
                 if(rect.top() == rect.bottom())
-                    cell = Cell(r.firstSheet(), fe.mycol, rect.top());
+                    cell = CellBase(r.firstSheet(), fe.mycol, rect.top());
                 else if(rect.left() == rect.right())
-                    cell = Cell(r.firstSheet(), rect.left(), fe.mycol);
+                    cell = CellBase(r.firstSheet(), rect.left(), fe.mycol);
                 if(cell.isNull())
                     val1 = Value::errorNULL();
                 else if(cell.isEmpty())
@@ -1747,15 +1741,15 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
             val1 = Value::empty();
             entry.reset();
 
-            Region region = map->regionFromName(c, sheet);
+            Region region = map->regionFromName(c, d->sheet);
             if (!region.isValid()) {
                 val1 = Value::errorREF();
             } else if (region.isSingular()) {
                 const QPoint position = region.firstRange().topLeft();
                 if (cellIndirections.isEmpty())
-                    val1 = Cell(region.firstSheet(), position).value();
+                    val1 = CellBase(region.firstSheet(), position).value();
                 else {
-                    Cell cell(region.firstSheet(), position);
+                    CellBase cell(region.firstSheet(), position);
                     cell = cellIndirections.value(cell, cell);
                     if (values.contains(cell))
                         val1 = values.value(cell);
@@ -1786,7 +1780,7 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<Cell, Value
             val1 = Value::empty();
             entry.reset();
 
-            Region region = map->regionFromName(c, sheet);
+            Region region = map->regionFromName(c, d->sheet);
             if (region.isValid()) {
                 val1 = region.firstSheet()->cellStorage()->valueRegion(region);
                 // store the reference, so we can use it within functions

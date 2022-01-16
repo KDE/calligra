@@ -19,8 +19,8 @@
 #ifndef ELAPSED_TIME_P_H
 #define ELAPSED_TIME_P_H
 
-//#include "SheetsDebug.h"
-//#include <QElapsedTimer>
+#include "SheetsDebug.h"
+#include <QElapsedTimer>
 
 namespace Calligra
 {

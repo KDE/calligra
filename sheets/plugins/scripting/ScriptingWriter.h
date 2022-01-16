@@ -207,8 +207,7 @@ public Q_SLOTS:
         //c->setValue(v);
         Calligra::Sheets::Cell cell(m_sheet, m_column, m_row);
         if (!parse) {
-            cell.setUserInput(value.toString());
-            cell.setValue(v);
+            cell.setCellValue(v);
         } else {
             cell.parseUserInput(value.toString());
         }

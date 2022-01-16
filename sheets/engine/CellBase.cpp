@@ -32,8 +32,12 @@
 #include "CellBaseStorage.h"
 #include "calligra_sheets_limits.h"
 #include "Formula.h"
+#include "MapBase.h"
 #include "SheetBase.h"
+#include "Validity.h"
 #include "Value.h"
+#include "ValueConverter.h"
+#include "ValueParser.h"
 
 
 using namespace Calligra::Sheets;
@@ -184,6 +188,122 @@ void CellBase::setFormula(const Formula& formula)
     sheet()->cellStorage()->setFormula(column(), row(), formula);
 }
 
+void CellBase::setCellValue(const Value &value)
+{
+    // remove an existing formula
+    setFormula(Formula::empty());
+    setValue(value);
+    QString str = sheet()->map()->converter()->asString(value).asString();
+    sheet()->cellStorage()->setUserInput(column(), row(), str);
+}
+
+QString CellBase::userInput() const
+{
+    const Formula formula = this->formula();
+    if (!formula.expression().isEmpty())
+        return formula.expression();
+    return sheet()->cellStorage()->userInput(d->column, d->row);
+}
+
+void CellBase::setUserInput(const QString& string)
+{
+    if (!string.isEmpty() && (string[0] == '=')) {
+        // set the formula
+        Formula formula(sheet(), *this);
+        formula.setExpression(string);
+        setFormula(formula);
+        // remove an existing user input (the non-formula one)
+        sheet()->cellStorage()->setUserInput(column(), row(), QString());
+    } else {
+        // remove an existing formula
+        setFormula(Formula::empty());
+        // set the value
+        sheet()->cellStorage()->setUserInput(column(), row(), string);
+    }
+
+}
+
+Value CellBase::parsedUserInput(const QString& text)
+{
+    // Parses the text and return the appropriate value.
+    Value value = sheet()->map()->parser()->parse(text);
+
+    // convert first letter to uppercase ?
+    if (sheet()->getFirstLetterUpper() && value.isString() && !text.isEmpty()) {
+        QString str = value.asString();
+        value = Value(str[0].toUpper() + str.right(str.length() - 1));
+    }
+    return value;
+}
+
+// parses the text
+void CellBase::parseUserInput(const QString& text)
+{
+    // empty string?
+    if (text.isEmpty()) {
+        setCellValue(Value::empty());
+        return;
+    }
+
+    // a formula?
+    if (text[0] == '=') {
+        Formula formula(sheet(), *this);
+        formula.setExpression(text);
+        setFormula(formula);
+
+/*  This most likely isn't needed anymore ...
+        // parse the formula and check for errors
+        if (!formula.isValid()) {
+            sheet()->showStatusMessage(i18n("Parsing of formula in cell %1 failed.", fullName()));
+            setValue(Value::errorPARSE());
+            return;
+        }
+*/
+        return;
+    }
+
+    // keep the old formula and value in case that validation fails
+    const Formula oldFormula = formula();
+    const QString oldUserInput = userInput();
+    const Value oldValue = value();
+
+    // here, the new value is not a formula anymore; clear an existing one
+    setFormula(Formula());
+
+    Value value = parsedUserInput(text);
+
+    // set the new value
+    setUserInput(text);
+    setValue(value);
+
+    // validation
+    if (!sheet()->map()->isLoading()) {
+        Validity validity = this->validity();
+        if (!validity.testValidity(this)) {
+            debugSheetsODF << "Validation failed";
+            //reapply old value if action == stop
+            setFormula(oldFormula);
+            setUserInput(oldUserInput);
+            setValue(oldValue);
+        }
+    }
+}
+
+void CellBase::setRawUserInput(const QString& string)
+{
+    if (!string.isEmpty() && string[0] == '=') {
+        // set the formula
+        Formula formula(sheet(), *this);
+        formula.setExpression(string);
+        setFormula(formula);
+    } else {
+        // set the value
+        sheet()->cellStorage()->setUserInput(d->column, d->row, string);
+    }
+}
+
+
+
 bool CellBase::isEmpty() const
 {
     // empty = no value or formula
@@ -210,6 +330,28 @@ QRect CellBase::lockedCells() const
 {
     return sheet()->cellStorage()->lockedCells(d->column, d->row);
 }
+
+QString CellBase::comment() const
+{
+    return sheet()->cellStorage()->comment(d->column, d->row);
+}
+
+void CellBase::setComment(const QString& comment)
+{
+    sheet()->cellStorage()->setComment(Region(cellPosition()), comment);
+}
+
+Validity CellBase::validity() const
+{
+    return sheet()->cellStorage()->validity(d->column, d->row);
+}
+
+void CellBase::setValidity(Validity validity)
+{
+    sheet()->cellStorage()->setValidity(Region(cellPosition()), validity);
+}
+
+
 
 
 

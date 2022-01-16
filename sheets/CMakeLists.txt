@@ -299,11 +299,6 @@ set (calligrasheetsodf_LIB_SRCS
     ${odf_DIR_SRCS}
     ${ksp_DIR_SRCS}
 
-    # TODO: move the formula evaluation out of Formula.cpp so these files can move out of libcalligrasheetsodf
-    FunctionModule.cpp
-    FunctionModuleRegistry.cpp
-    FunctionRepository.cpp
-
     # TODO: move HeaderFooter from SheetPrint to PrintSettings, and replace SheetPrint with PrintSettings in Sheet to get rid of this dependency
     SheetPrint.cpp
     SheetPrint_p.cpp

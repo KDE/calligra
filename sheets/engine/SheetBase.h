@@ -12,9 +12,9 @@
 
 
 #include "sheets_engine_export.h"
+#include "Validity.h"
 
 #include <QString>
-
 
 namespace Calligra
 {
@@ -79,6 +79,8 @@ public:
 
     bool isAutoCalculationEnabled() const;
     void setAutoCalculationEnabled(bool enable);
+    bool getFirstLetterUpper() const;
+    void setFirstLetterUpper(bool _firstUpper);
 
 
 
@@ -86,6 +88,12 @@ public:
     const ValidityStorage* validityStorage() const;
     const ValueStorage* valueStorage() const;
 
+
+    virtual void showStatusMessage(const QString &message, int timeout = 3000) const;
+    /**
+     * Called when validation fails.
+     */
+    virtual bool onValidationFailed(Validity::Action action, const CellBase *cell, const QString &message, const QString &title) const;
 protected:
     /**
      * \ingroup Value

@@ -5,24 +5,23 @@
 #ifndef CALLIGRA_SHEETS_FUNCTION_MODULE_REGISTRY
 #define CALLIGRA_SHEETS_FUNCTION_MODULE_REGISTRY
 
-#include <QObject>
-
 #include <KoGenericRegistry.h>
 
-#include "sheets_odf_export.h"
-#include "FunctionModule.h"
+#include "sheets_engine_export.h"
 
 namespace Calligra
 {
 namespace Sheets
 {
 
+class FunctionModule;
+
 /**
  * \ingroup Plugin
  * \ingroup Value
  * Registry for function modules.
  */
-class CALLIGRA_SHEETS_ODF_EXPORT FunctionModuleRegistry : public KoGenericRegistry<FunctionModule*>
+class CALLIGRA_SHEETS_ENGINE_EXPORT FunctionModuleRegistry : public KoGenericRegistry<FunctionModule*>
 {
 public:
     /**

@@ -11,15 +11,12 @@
 #include <QCache>
 #include <QRegion>
 #include <QElapsedTimer>
-//#include <QList>
 #include <QString>
-//#include <QVector>
 #include <QTimer>
 #include <QRunnable>
-//#include <QTime>
 #ifdef CALLIGRA_SHEETS_MT
-//#include <QMutex>
-//#include <QMutexLocker>
+#include <QMutex>
+#include <QMutexLocker>
 #endif
 
 #include "sheets_engine_export.h"

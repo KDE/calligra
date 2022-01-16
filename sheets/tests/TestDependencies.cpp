@@ -70,10 +70,10 @@ void TestDependencies::testCircles()
 
 void TestDependencies::testDepths()
 {
-    Cell a1(m_sheet, 1, 1); a1.setUserInput("5");
-    Cell a2(m_sheet, 1, 2); a2.setUserInput("=A1");
-    Cell a3(m_sheet, 1, 3); a3.setUserInput("=A2");
-    Cell a4(m_sheet, 1, 4); a4.setUserInput("=A1 + A3");
+    Cell a1(m_sheet, 1, 1); a1.parseUserinput("5");
+    Cell a2(m_sheet, 1, 2); a2.parseUserinput("=A1");
+    Cell a3(m_sheet, 1, 3); a3.parseUserinput("=A2");
+    Cell a4(m_sheet, 1, 4); a4.parseUserinput("=A1 + A3");
 
     QApplication::processEvents(); // handle Damages
     
@@ -83,7 +83,7 @@ void TestDependencies::testDepths()
     QCOMPARE(depths[a3], 2);
     QCOMPARE(depths[a4], 3);
 
-    a2.setUserInput("");
+    a2.parseUserinput("");
     QApplication::processEvents(); // handle Damages
     
     depths = m_map->dependencyManager()->depths();

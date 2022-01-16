@@ -8,15 +8,9 @@
 #ifndef KSPREAD_RTREE
 #define KSPREAD_RTREE
 
-//#include <QRect>
-//#include <QVector>
-
 #include <KoRTree.h>
 
-//#include "SheetsDebug.h"
 #include "calligra_sheets_limits.h"
-
-//#include <algorithm>
 
 // Use dynamic_cast instead of cached root node
 // this is much slower but it is here so it is easy to check that still all works.

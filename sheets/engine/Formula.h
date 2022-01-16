@@ -5,17 +5,13 @@
 #ifndef CALLIGRA_SHEETS_FORMULA
 #define CALLIGRA_SHEETS_FORMULA
 
-//#include <QHash>
-//#include <QSharedDataPointer>
-//#include <QString>
-//#include <QTextStream>
-//#include <QVariant>
-//#include <QVector>
-//#include <QPoint>
+#include <QHash>
+#include <QString>
+#include <QTextStream>
+#include <QVector>
 
 #include "sheets_engine_export.h"
-//#include "CellBase.h"
-//#include "Value.h"
+#include "CellBase.h"
 
 #define CALLIGRA_SHEETS_INLINE_ARRAYS
 
@@ -368,6 +364,9 @@ public:
      * this function returns tokens which is not valid.
      */
     Tokens scan(const QString& expr, const KLocale* locale = 0) const;
+
+    // Locale belonging to the current cell/sheet, if any.
+    KLocale *locale() const;
 
     /**
      * Assignment operator.

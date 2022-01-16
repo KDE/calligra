@@ -633,18 +633,15 @@ static void fillSequence(const QList<Cell>& _srcList,
             cell.parseUserInput(cell.decodeFormula(_seqList.value(s)->value().asString()));
         } else if (value.format() == Value::fmt_Time) {
             const Value timeValue = cell.sheet()->map()->converter()->asTime(value);
-            cell.setValue(timeValue);
-            cell.setUserInput(cell.sheet()->map()->converter()->asString(timeValue).asString());
+            cell.setCellValue(timeValue);
         } else if (value.format() == Value::fmt_Date) {
             const Value dateValue = cell.sheet()->map()->converter()->asDate(value);
-            cell.setValue(dateValue);
-            cell.setUserInput(cell.sheet()->map()->converter()->asString(dateValue).asString());
+            cell.setCellValue(dateValue);
         } else if (value.type() == Value::Boolean ||
                    value.type() == Value::Complex ||
                    value.type() == Value::Float ||
                    value.type() == Value::Integer) {
-            cell.setValue(value);
-            cell.setUserInput(cell.sheet()->map()->converter()->asString(value).asString());
+            cell.setCellValue(value);
         } else { // if (value.type() == Value::String)
             QRegExp number("(\\d+)");
             int pos = number.indexIn(value.asString());
@@ -655,8 +652,7 @@ static void fillSequence(const QList<Cell>& _srcList,
                 cell.parseUserInput(value.asString());
                 cell.setLink(_srcList.at(s).link());
             } else {
-                cell.setValue(value);
-                cell.setUserInput(value.asString());
+                cell.setCellValue(value);
             }
         }
 

@@ -143,11 +143,6 @@ public:
     virtual bool setSheetName(const QString& name) override;
 
     /**
-     * \return \c true , if a document is currently loading
-     */
-    bool isLoading();
-
-    /**
      * Returns the layout direction of the sheet.
      */
     Qt::LayoutDirection layoutDirection() const;
@@ -204,10 +199,6 @@ public:
     bool getHideZero() const;
 
     void setHideZero(bool _hideZero);
-
-    bool getFirstLetterUpper() const;
-
-    void setFirstLetterUpper(bool _firstUpper);
 
     /**
      * @return true if this sheet is hidden
@@ -485,6 +476,11 @@ public:
     void adjustCellAnchoredShapesY(qreal minY, qreal maxY, qreal delta);
     void adjustCellAnchoredShapesY(qreal delta, int firstRow, int lastRow = KS_rowMax);
 
+    /**
+     * Called when validation fails.
+     */
+    virtual bool onValidationFailed(Validity::Action action, const CellBase *cell, const QString &message, const QString &title) const override;
+
     //
     //END UNSORTED METHODS
     //
@@ -497,7 +493,7 @@ public:
      * \ingroup Commands
      */
     bool areaIsEmpty(const Region& area, TestType _type = Text) ;
-
+ 
     //
     //END Methods related to manipulations of selected cells
     //
@@ -630,7 +626,7 @@ public:
     /**
      * Shows a status \p message in the status bar for \p timeout msecs.
      */
-    void showStatusMessage(const QString &message, int timeout = 3000);
+    virtual void showStatusMessage(const QString &message, int timeout = 3000) const override;
 
     void updateLocale();
 

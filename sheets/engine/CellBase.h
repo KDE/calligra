@@ -24,6 +24,7 @@ namespace Sheets
 class Formula;
 class SheetBase;
 class Value;
+class Validity;
 
 class CALLIGRA_SHEETS_ENGINE_EXPORT CellBase
 {
@@ -122,8 +123,6 @@ public:
     /**
      * Sets the value for this cell.
      * It also clears all errors, if the value itself is not an error.
-     * In addition to this, it calculates the outstring and sets the dirty
-     * flags so that a redraw is forced.
      * \param value the new value
      *
      * \see setUserInput, parseUserInput
@@ -150,6 +149,58 @@ public:
      * Returns true if this cell holds a formula.
      */
     bool isFormula() const;
+
+    /**
+     * Sets a cell value and generates the user input accordingly. Wrapper for setValue + setUserInput.
+     */
+    void setCellValue(const Value &value);
+
+    /**
+     * Return the text the user entered. This could be a value (e.g. "14.03")
+     * or a formula (e.g. "=SUM(A1:A10)")
+     */
+    QString userInput() const;
+
+    /**
+     * Sets the user input without parsing it. Formulas are still processed.
+     *
+     * \see parseUserInput, setValue
+     */
+    virtual void setUserInput(const QString& text);
+
+    /**
+     * Sets the user input and parses it.
+     *
+     * \see setUserInput, setValue
+     */
+    void parseUserInput(const QString& text);
+
+    virtual Value parsedUserInput(const QString& text);
+
+    /**
+     * Sets the user input without parsing it, without clearing existing formulas
+     * userinput or rich text. Used during loading of documents only!
+     * If \p text is a formula, creates a formula object and sets \p text as
+     * its expression. Otherwise, simply stores \p text as user input.
+     *
+     * \see parseUserInput, setValue
+     */
+    void setRawUserInput(const QString& text);
+
+
+    /**
+     * \return the comment associated with this cell
+     */
+    QString comment() const;
+
+    void setComment(const QString& comment);
+
+    /**
+     * \return the validity checks associated with this cell
+     */
+    Validity validity() const;
+
+    void setValidity(Validity validity);
 
 
 

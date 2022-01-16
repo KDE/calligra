@@ -24,6 +24,7 @@ namespace Sheets
 
 class Binding;
 class BindingStorage;
+class CommentStorage;
 class Formula;
 class FormulaStorage;
 class Region;
@@ -114,6 +115,12 @@ public:
     void removeBinding(const Region& region, const Binding& binding);
 
     /**
+     * \return the comment associated with the Cell at \p column , \p row .
+     */
+    QString comment(int column, int row) const;
+    void setComment(const Region& region, const QString& comment);
+
+    /**
      * \return the validity checks associated with the Cell at \p column , \p row .
      */
     Validity validity(int column, int row) const;
@@ -188,6 +195,7 @@ public:
 
 
     const BindingStorage* bindingStorage() const;
+    const CommentStorage* commentStorage() const;
     const FormulaStorage* formulaStorage() const;
     const UserInputStorage* userInputStorage() const;
     const ValidityStorage* validityStorage() const;

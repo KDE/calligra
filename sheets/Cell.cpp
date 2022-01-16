@@ -150,16 +150,6 @@ bool Cell::hasDefaultContent() const
     return true;
 }
 
-QString Cell::comment() const
-{
-    return sheet()->cellStorage()->comment(d->column, d->row);
-}
-
-void Cell::setComment(const QString& comment)
-{
-    sheet()->cellStorage()->setComment(Region(cellPosition()), comment);
-}
-
 Conditions Cell::conditions() const
 {
     return sheet()->cellStorage()->conditions(d->column, d->row);
@@ -197,67 +187,29 @@ void Cell::setStyle(const Style& style)
     sheet()->cellStorage()->styleStorage()->contains(cellPosition());
 }
 
-Validity Cell::validity() const
-{
-    return sheet()->cellStorage()->validity(d->column, d->row);
-}
-
-void Cell::setValidity(Validity validity)
-{
-    sheet()->cellStorage()->setValidity(Region(cellPosition()), validity);
-}
 
 
-
-
-
-// Return the user input of this cell.  This could, for instance, be a
-// formula.
-//
-QString Cell::userInput() const
-{
-    const Formula formula = this->formula();
-    if (!formula.expression().isEmpty())
-        return formula.expression();
-    return sheet()->cellStorage()->userInput(d->column, d->row);
-}
 
 void Cell::setUserInput(const QString& string)
 {
     QString old = userInput();
 
-    if (!string.isEmpty() && string[0] == '=') {
-        // set the formula
-        Formula formula(sheet(), *this);
-        formula.setExpression(string);
-        setFormula(formula);
-        // remove an existing user input (the non-formula one)
-        sheet()->cellStorage()->setUserInput(d->column, d->row, QString());
-    } else {
-        // remove an existing formula
-        setFormula(Formula::empty());
-        // set the value
-        sheet()->cellStorage()->setUserInput(d->column, d->row, string);
-    }
+    CellBase::setUserInput(string);
 
-    if (old != string) {
+    if (old != string)
         // remove any existing richtext
         setRichText(QSharedPointer<QTextDocument>());
-    }
 }
 
-void Cell::setRawUserInput(const QString& string)
+// Overrides the parser to disable parsing if the style is set to string
+Value Cell::parsedUserInput(const QString& text)
 {
-    if (!string.isEmpty() && string[0] == '=') {
-        // set the formula
-        Formula formula(sheet(), *this);
-        formula.setExpression(string);
-        setFormula(formula);
-    } else {
-        // set the value
-        sheet()->cellStorage()->setUserInput(d->column, d->row, string);
-    }
+    if (style().formatType() == Format::Text)
+        return Value(text);
+
+    return CellBase::parsedUserInput(text);
 }
+
 
 
 // Return the out text, i.e. the text that is visible in the cells
@@ -588,81 +540,6 @@ double Cell::height() const
 {
     const int bottomRow = d->row + mergedYCells();
     return sheet()->rowFormats()->totalRowHeight(d->row, bottomRow);
-}
-
-// parses the text
-void Cell::parseUserInput(const QString& text)
-{
-//   debugSheets ;
-
-    // empty string?
-    if (text.isEmpty()) {
-        setValue(Value::empty());
-        setUserInput(text);
-        setFormula(Formula::empty());
-        return;
-    }
-
-    // a formula?
-    if (text[0] == '=') {
-        Formula formula(sheet(), *this);
-        formula.setExpression(text);
-        setFormula(formula);
-
-/*  This most likely isn't needed anymore ...
-        // parse the formula and check for errors
-        if (!formula.isValid()) {
-            sheet()->showStatusMessage(i18n("Parsing of formula in cell %1 failed.", fullName()));
-            setValue(Value::errorPARSE());
-            return;
-        }
-*/
-        return;
-    }
-
-    // keep the old formula and value for the case, that validation fails
-    const Formula oldFormula = formula();
-    const QString oldUserInput = userInput();
-    const Value oldValue = value();
-
-    // here, the new value is not a formula anymore; clear an existing one
-    setFormula(Formula());
-
-    Value value;
-    if (style().formatType() == Format::Text)
-        value = Value(QString(text));
-    else {
-        // Parses the text and return the appropriate value.
-        value = sheet()->map()->parser()->parse(text);
-
-#if 0
-        // Parsing as time acts like an autoformat: we even change the input text
-        // [h]:mm:ss -> might get set by ValueParser
-        if (isTime() && (formatType() != Format::Time7))
-            setUserInput(locale()->formatTime(value().asDateTime(sheet()->map()->calculationSettings()).time(), true));
-#endif
-
-        // convert first letter to uppercase ?
-        if (sheet()->getFirstLetterUpper() && value.isString() && !text.isEmpty()) {
-            QString str = value.asString();
-            value = Value(str[0].toUpper() + str.right(str.length() - 1));
-        }
-    }
-    // set the new value
-    setUserInput(text);
-    setValue(value);
-
-    // validation
-    if (!sheet()->isLoading()) {
-        Validity validity = this->validity();
-        if (!validity.testValidity(this)) {
-            debugSheetsODF << "Validation failed";
-            //reapply old value if action == stop
-            setFormula(oldFormula);
-            setUserInput(oldUserInput);
-            setValue(oldValue);
-        }
-    }
 }
 
 QString Cell::link() const

@@ -6,9 +6,9 @@
 
 #include "SheetsDebug.h"
 #include "Function.h"
+#include "FunctionModule.h"
 #include "FunctionRepository.h"
 
-#include <QGlobalStatic>
 #include <KSharedConfig>
 
 #ifndef SHEETS_NO_PLUGINMODULES

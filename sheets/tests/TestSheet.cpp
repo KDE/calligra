@@ -96,7 +96,7 @@ void SheetTest::testRemoveRows()
     QFETCH(QString, result);
 
     Cell cell(m_sheet, col, row);
-    cell.setUserInput(formula);
+    cell.parseUserInput(formula);
     m_sheet->removeRows(rowToRemove, numRows);
 
     QCOMPARE(cell.userInput(), result);
@@ -133,7 +133,7 @@ void SheetTest::testRemoveColumns()
     QFETCH(QString, result);
 
     Cell cell(m_sheet, 1, 1);
-    cell.setUserInput(formula);
+    cell.parseUserInput(formula);
     m_sheet->removeColumns(columnToRemove, 1);
 
     QCOMPARE(cell.userInput(), result);

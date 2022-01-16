@@ -44,7 +44,6 @@ class Conditions;
 class Database;
 class Doc;
 class Sheet;
-class Validity;
 class CellTest;
 
 /**
@@ -115,13 +114,6 @@ public:
     QString displayText(const Style& s = Style(), Value* v = 0, bool *showFormula = 0) const;
 
     /**
-     * \return the comment associated with this cell
-     */
-    QString comment() const;
-
-    void setComment(const QString& comment);
-
-    /**
      * \return the conditions associated with this cell
      */
     Conditions conditions() const;
@@ -161,13 +153,6 @@ public:
     void setStyle(const Style& style);
 
     /**
-     * \return the validity checks associated with this cell
-     */
-    Validity validity() const;
-
-    void setValidity(Validity validity);
-
-    /**
      * Returns the richtext that this cell holds.
      */
     QSharedPointer<QTextDocument> richText() const;
@@ -181,40 +166,12 @@ public:
     void setRichText(QSharedPointer<QTextDocument> text);
 
     /**
-     * Return the text the user entered. This could be a value (e.g. "14.03")
-     * or a formula (e.g. "=SUM(A1:A10)")
-     */
-    QString userInput() const;
-
-    /**
-     * Sets the user input without parsing it.
-     * If \p text is a formula, creates a formula object and sets \p text as
-     * its expression. Otherwise, simply stores \p text as user input.
+     * Sets the user input without parsing it. Formulas are still processed.
      *
      * \see parseUserInput, setValue
      */
-    void setUserInput(const QString& text);
-
-    /**
-     * Sets the user input without parsing it, without clearing existing formulas
-     * userinput or rich text. Used during loading of documents only!
-     * If \p text is a formula, creates a formula object and sets \p text as
-     * its expression. Otherwise, simply stores \p text as user input.
-     *
-     * \see parseUserInput, setValue
-     */
-    void setRawUserInput(const QString& text);
-
-    /**
-     * Sets the user input and parses it.
-     * If \p text is a formula, creates a formula object and sets \p text as
-     * its expression. Otherwise, parses \p text, creates an appropriate value,
-     * including the proper type, validates the value and, if accepted, stores
-     * \p text as the user input and the value as the cell's value.
-     *
-     * \see setUserInput, setValue
-     */
-    void parseUserInput(const QString& text);
+    virtual void setUserInput(const QString& text) override;
+    virtual Value parsedUserInput(const QString& text) override;
 
     /**
      * Copies the format from \p cell .

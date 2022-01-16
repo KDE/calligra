@@ -27,6 +27,7 @@ class Damage;
 class DependencyManager;
 class NamedAreaManager;
 class RecalcManager;
+class Region;
 class SheetBase;
 class ValueCalc;
 class ValueConverter;
@@ -140,9 +141,29 @@ public:
     CalculationSettings* calculationSettings() const;
 
     /**
+     * Convenience wrapper for namedAreaManager()->contains
+     * */
+    bool isNamedArea (const QString &name);
+
+    /**
      * \ingroup Damages
      */
     void addDamage(Damage* damage);
+
+
+    /**
+     * Creates a region consisting of the region defined in @p expression .
+     * @param expression a string representing the region (e.g. "A1:B3")
+     * @param sheet the fallback sheet, if \p expression does not contain one
+     */
+    Region regionFromName(const QString& expression, SheetBase* sheet = 0) const;
+    /**
+     * @param sRegion will be modified, if a valid sheet was found. The sheetname
+     * will be removed
+     * @return sheet named in the @p sRegion or null
+     */
+    SheetBase* filterSheetName(QString& sRegion) const;
+
 
 Q_SIGNALS:
     /**

@@ -11,7 +11,7 @@
 #include <QString>
 #include <kpluginfactory.h>
 
-#include "sheets_export.h"
+#include "sheets_engine_export.h"
 
 namespace Calligra
 {
@@ -23,7 +23,7 @@ class Function;
  * \ingroup Value
  * A function module provides several Function objects.
  */
-class CALLIGRA_SHEETS_ODF_EXPORT FunctionModule : public QObject
+class CALLIGRA_SHEETS_ENGINE_EXPORT FunctionModule : public QObject
 {
     Q_OBJECT
 public:

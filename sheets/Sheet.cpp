@@ -79,7 +79,6 @@ public:
     bool lcMode;
     bool showColumnNumber;
     bool hideZero;
-    bool firstLetterUpper;
 
     // clusters to hold objects
     
@@ -146,7 +145,6 @@ Sheet::Sheet(Map* map, const QString &sheetName)
     d->lcMode = false;
     d->showColumnNumber = false;
     d->hideZero = false;
-    d->firstLetterUpper = false;
     d->print = new SheetPrint(this);
 
     // document size changes always trigger a visible size change
@@ -180,7 +178,6 @@ Sheet::Sheet(const Sheet &other)
     d->lcMode = other.d->lcMode;
     d->showColumnNumber = other.d->showColumnNumber;
     d->hideZero = other.d->hideZero;
-    d->firstLetterUpper = other.d->firstLetterUpper;
 
     d->cellStorage = new CellStorage(*other.d->cellStorage, this);
     setCellStorage(d->cellStorage);
@@ -364,16 +361,6 @@ bool Sheet::getHideZero() const
 void Sheet::setHideZero(bool _hideZero)
 {
     d->hideZero = _hideZero;
-}
-
-bool Sheet::getFirstLetterUpper() const
-{
-    return d->firstLetterUpper;
-}
-
-void Sheet::setFirstLetterUpper(bool _firstUpper)
-{
-    d->firstLetterUpper = _firstUpper;
 }
 
 bool Sheet::isShowPageOutline() const
@@ -971,10 +958,28 @@ bool Sheet::areaIsEmpty(const Region& region, TestType _type)
     return true;
 }
 
-bool Sheet::isLoading()
+bool Sheet::onValidationFailed(Validity::Action action, const CellBase *cell, const QString &message, const QString &title) const
 {
-    return map()->isLoading();
+    showStatusMessage(i18n("Validation for cell %1 failed", cell->fullName()));
+
+    switch (action) {
+        case Validity::Stop:
+            KMessageBox::error((QWidget*)0, message, title);
+            break;
+        case Validity::Warning:
+            if (KMessageBox::warningYesNo((QWidget*)0, message, title) == KMessageBox::Yes) {
+                return true;
+            }
+            break;
+        case Validity::Information:
+            KMessageBox::information((QWidget*)0, message, title);
+            return true;
+            break;
+    }
+    return false;
 }
+
+
 
 QRect Sheet::usedArea(bool onlyContent) const
 {
@@ -1084,7 +1089,7 @@ const RowFormatStorage* Sheet::rowFormats() const
     return &d->rows;
 }
 
-void Sheet::showStatusMessage(const QString &message, int timeout)
+void Sheet::showStatusMessage(const QString &message, int timeout) const
 {
     emit statusMessage(message, timeout);
 }

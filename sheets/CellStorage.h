@@ -25,7 +25,6 @@ namespace Calligra
 namespace Sheets
 {
 class Cell;
-class CommentStorage;
 class Conditions;
 class ConditionsStorage;
 class FusionStorage;
@@ -95,12 +94,6 @@ public:
      * Removes all data at \p col , \p row .
      */
     virtual void take(int col, int row) override;
-
-    /**
-     * \return the comment associated with the Cell at \p column , \p row .
-     */
-    QString comment(int column, int row) const;
-    void setComment(const Region& region, const QString& comment);
 
     /**
      * \return the conditional formattings associated with the Cell at \p column , \p row .
@@ -235,7 +228,6 @@ public:
      */
     CellStorage subStorage(const Region& region) const;
 
-    const CommentStorage* commentStorage() const;
     const ConditionsStorage* conditionsStorage() const;
     const FusionStorage* fusionStorage() const;
     const LinkStorage* linkStorage() const;

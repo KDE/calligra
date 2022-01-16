@@ -5,14 +5,14 @@
 */
 
 // Local
-//#include "Validity.h"
+#include "Validity.h"
 
 // Sheets
-//#include "CalculationSettings.h"
-//#include "CellBase.h"
-//#include "MapBase.h"
-//#include "SheetBase.h"
-//#include "ValueCalc.h"
+#include "CalculationSettings.h"
+#include "CellBase.h"
+#include "MapBase.h"
+#include "SheetBase.h"
+#include "ValueCalc.h"
 //#include "ValueConverter.h"
 //#include "ValueParser.h"
 
@@ -41,7 +41,7 @@ Validity::Validity()
 {
     d->cond = Validity::None;
     d->action = Stop;
-    d->restriction = None;
+    d->restriction = NoRestriction;
     d->displayMessage = true;
     d->allowEmptyCell = false;
     d->displayValidationInformation = false;
@@ -58,7 +58,7 @@ Validity::~Validity()
 
 bool Validity::isEmpty() const
 {
-    return d->restriction == None;
+    return d->restriction == NoRestriction;
 }
 
 Validity::Action Validity::action() const
@@ -193,125 +193,111 @@ void Validity::setValidityList(const QStringList& list)
 
 bool Validity::testValidity(const CellBase* cell) const
 {
+    if (d->restriction == NoRestriction) return true;
+
     bool valid = false;
-    if (d->restriction != None) {
-        //fixme
-        if (d->allowEmptyCell && cell->userInput().isEmpty())
-            return true;
 
-        ValueCalc *const calc = cell->sheet()->map()->calc();
-        const Qt::CaseSensitivity cs = calc->settings()->caseSensitiveComparisons();
+    //fixme
+    if (d->allowEmptyCell && cell->userInput().isEmpty())
+        return true;
 
-        if ((cell->value().isNumber() &&
-                (d->restriction == Number ||
-                 (d->restriction == Integer &&
-                  numToDouble(cell->value().asFloat()) == ceil(numToDouble(cell->value().asFloat())))))
-            || (d->restriction == Time && cell->isTime())
-            || (d->restriction == Date && cell->isDate())) {
+    ValueCalc *const calc = cell->sheet()->map()->calc();
+    const Qt::CaseSensitivity cs = calc->settings()->caseSensitiveComparisons();
+    Value val = cell->value();
+
+    if ((val.isNumber() &&
+            (d->restriction == Number ||
+             (d->restriction == Integer &&
+              numToDouble(val.asFloat()) == ceil(numToDouble(val.asFloat())))))
+        || (d->restriction == Time && (val.format() == Value::fmt_Time))
+        || (d->restriction == Date && (val.format() == Value::fmt_Date))) {
+        switch (d->cond) {
+        case Validity::Equal:
+            valid = val.equal(d->minValue, cs);
+            break;
+        case Validity::DifferentTo:
+            valid = !val.equal(d->minValue, cs);
+            break;
+        case Validity::Superior:
+            valid = val.greater(d->minValue, cs);
+            break;
+        case Validity::Inferior:
+            valid = val.less(d->minValue, cs);
+            break;
+        case Validity::SuperiorEqual:
+            valid = (val.compare(d->minValue, cs)) >= 0;
+            break;
+        case Validity::InferiorEqual:
+            valid = (val.compare(d->minValue, cs)) <= 0;
+            break;
+        case Validity::Between:
+            valid = (val.compare(d->minValue, cs) >= 0 &&
+                     val.compare(d->maxValue, cs) <= 0);
+            break;
+        case Validity::Different:
+            valid = (val.compare(d->minValue, cs) < 0 ||
+                     val.compare(d->maxValue, cs) > 0);
+            break;
+        default :
+            break;
+        }
+    } else if (d->restriction == Text) {
+        valid = val.isString();
+    } else if (d->restriction == List) {
+        //test int value
+        if (val.isString() && d->listValidity.contains(val.asString()))
+            valid = true;
+    } else if (d->restriction == TextLength) {
+        if (val.isString()) {
+            int len = val.asString().length();
+            const int min = d->minValue.asInteger();
+            const int max = d->maxValue.asInteger();
             switch (d->cond) {
             case Validity::Equal:
-                valid = cell->value().equal(d->minValue, cs);
+                if (len == min)
+                    valid = true;
                 break;
             case Validity::DifferentTo:
-                valid = !cell->value().equal(d->minValue, cs);
+                if (len != min)
+                    valid = true;
                 break;
             case Validity::Superior:
-                valid = cell->value().greater(d->minValue, cs);
+                if (len > min)
+                    valid = true;
                 break;
             case Validity::Inferior:
-                valid = cell->value().less(d->minValue, cs);
+                if (len < min)
+                    valid = true;
                 break;
             case Validity::SuperiorEqual:
-                valid = (cell->value().compare(d->minValue, cs)) >= 0;
+                if (len >= min)
+                    valid = true;
                 break;
             case Validity::InferiorEqual:
-                valid = (cell->value().compare(d->minValue, cs)) <= 0;
+                if (len <= min)
+                    valid = true;
                 break;
             case Validity::Between:
-                valid = (cell->value().compare(d->minValue, cs) >= 0 &&
-                         cell->value().compare(d->maxValue, cs) <= 0);
+                if (len >= min && len <= max)
+                    valid = true;
                 break;
             case Validity::Different:
-                valid = (cell->value().compare(d->minValue, cs) < 0 ||
-                         cell->value().compare(d->maxValue, cs) > 0);
+                if (len < min || len > max)
+                    valid = true;
                 break;
             default :
                 break;
             }
-        } else if (d->restriction == Text) {
-            valid = cell->value().isString();
-        } else if (d->restriction == List) {
-            //test int value
-            if (cell->value().isString() && d->listValidity.contains(cell->value().asString()))
-                valid = true;
-        } else if (d->restriction == TextLength) {
-            if (cell->value().isString()) {
-                int len = cell->displayText().length();
-                const int min = d->minValue.asInteger();
-                const int max = d->maxValue.asInteger();
-                switch (d->cond) {
-                case Validity::Equal:
-                    if (len == min)
-                        valid = true;
-                    break;
-                case Validity::DifferentTo:
-                    if (len != min)
-                        valid = true;
-                    break;
-                case Validity::Superior:
-                    if (len > min)
-                        valid = true;
-                    break;
-                case Validity::Inferior:
-                    if (len < min)
-                        valid = true;
-                    break;
-                case Validity::SuperiorEqual:
-                    if (len >= min)
-                        valid = true;
-                    break;
-                case Validity::InferiorEqual:
-                    if (len <= min)
-                        valid = true;
-                    break;
-                case Validity::Between:
-                    if (len >= min && len <= max)
-                        valid = true;
-                    break;
-                case Validity::Different:
-                    if (len < min || len > max)
-                        valid = true;
-                    break;
-                default :
-                    break;
-                }
-            }
         }
-    } else {
-        valid = true;
     }
 
-    if (!valid) {
-        if (d->displayMessage) {
-            switch (d->action) {
-            case Stop:
-                KMessageBox::error((QWidget*)0, d->message, d->title);
-                break;
-            case Warning:
-                if (KMessageBox::warningYesNo((QWidget*)0, d->message, d->title) == KMessageBox::Yes) {
-                    valid = true;
-                }
-                break;
-            case Information:
-                KMessageBox::information((QWidget*)0, d->message, d->title);
-                valid = true;
-                break;
-            }
-        }
+    if (valid) return true;
 
-        cell->sheet()->showStatusMessage(i18n("Validation for cell %1 failed", cell->fullName()));
+    if (d->displayMessage) {
+        valid = cell->sheet()->onValidationFailed (d->action, cell, d->message, d->title);
     }
-    return valid;
+
+    return false;
 }
 
 void Validity::operator=(const Validity & other)

@@ -332,4 +332,94 @@ void MapBase::setLoading(bool l) {
     d->isLoading = l;
 }
 
+Region MapBase::regionFromName(const QString& expression, SheetBase* sheet) const
+{
+    Region res;
+
+    if (expression.isEmpty()) return res;
+
+    // FIXME Stefan: Does not respect quoted names!
+    QStringList substrings = expression.split(';');
+    for (QString sRegion : substrings) {
+
+        // check for a named area first
+        const Region namedAreaRegion = namedAreaManager()->namedArea(sRegion);
+        if (namedAreaRegion.isValid()) {
+            res.add(namedAreaRegion, sheet);
+            continue;
+        }
+
+        // Single cell or cell range
+        int delimiterPos = sRegion.indexOf(':');
+        if (delimiterPos > -1) {
+            // range
+            QString sUL = sRegion.left(delimiterPos);
+            QString sLR = sRegion.mid(delimiterPos + 1);
+
+            SheetBase* firstSheet = filterSheetName(sUL);
+            SheetBase* lastSheet = filterSheetName(sLR);
+            // TODO: lastSheet is silently ignored if it is different from firstSheet
+
+            // Still has the sheet name separator?
+            if (sUL.contains('!') || sLR.contains('!'))
+                return res;
+
+            if (!firstSheet)
+                firstSheet = sheet;
+            if (!lastSheet)
+                lastSheet = sheet;
+
+            // TODO: shouldn't use Region::Point, the cell name needs to be moved elsewhere
+            Region::Point ul(sUL);
+            Region::Point lr(sLR);
+
+            if (ul.isValid() && lr.isValid()) {
+                QRect range = QRect(ul.pos(), lr.pos());
+                res.add(range, firstSheet);
+            } else if (ul.isValid()) {
+                res.add(ul.pos(), firstSheet);
+            } else { // lr.isValid()
+                res.add(lr.pos(), firstSheet);
+            }
+        } else {
+            // single cell
+            SheetBase* targetSheet = filterSheetName(sRegion);
+            // Still has the sheet name separator?
+            if (sRegion.contains('!'))
+                return res;
+            if (!targetSheet) targetSheet = sheet;
+            Region::Point pt(sRegion);
+            res.add(pt.pos(), targetSheet);
+        }
+    }
+
+    return res;
+}
+
+// get sheet name from a cell range string
+SheetBase* MapBase::filterSheetName(QString& sRegion) const
+{
+    SheetBase* sheet = 0;
+    int delimiterPos = sRegion.lastIndexOf('!');
+    if (delimiterPos < 0)
+        delimiterPos = sRegion.lastIndexOf('.');
+    if (delimiterPos > -1) {
+        QString sheetName = sRegion.left(delimiterPos);
+        sheet = findSheet(sheetName);
+        // try again without apostrophes
+        while(!sheet && sheetName.count() > 2 && sheetName[0] == '\'' && sheetName[sheetName.count()-1] == '\'') {
+            sheetName = sheetName.mid(1, sheetName.count() - 2);
+            sheet = findSheet(sheetName);
+        }
+        // remove the sheet name, incl. '!', from the string
+        if (sheet)
+            sRegion = sRegion.right(sRegion.length() - delimiterPos - 1);
+    }
+    return sheet;
+}
+
+bool MapBase::isNamedArea (const QString &name) {
+    return namedAreaManager()->contains(name);
+}
+
 

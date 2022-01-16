@@ -193,8 +193,7 @@ void CalendarTool::setText(Sheet* sheet, int _row, int _column, const QString& _
 {
     Cell cell(sheet, _column, _row);
     if (asString) {
-        cell.setUserInput(_text);
-        cell.setValue(Value(_text));
+        cell.setCellValue(Value(_text));
     } else {
         cell.parseUserInput(_text);
     }

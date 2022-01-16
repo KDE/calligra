@@ -15,19 +15,17 @@
 */
 
 // Local
-//#include "NamedAreaManager.h"
+#include "NamedAreaManager.h"
 
 // Qt
-//#include <QHash>
+#include <QHash>
 
 // Sheets
-//#include "CellBaseStorage.h"
-//#include "FormulaStorage.h"
-//#include "LoadingInfo.h"
-//#include "MapBase.h"
-//#include "Region.h"
-//#include "SheetBase.h"
-//#include "Util.h"
+#include "CellBaseStorage.h"
+#include "MapBase.h"
+#include "Region.h"
+#include "SheetBase.h"
+#include "calligra_sheets_limits.h"
 
 using namespace Calligra::Sheets;
 
@@ -124,7 +122,7 @@ QList<QString> NamedAreaManager::areaNames() const
 void NamedAreaManager::regionChanged(const Region& region)
 {
     SheetBase* sheet;
-    QList< QPair<QRectF, QString> > namedAreas;
+    QVector< QPair<QRectF, QString> > namedAreas;
     Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it = region.constBegin(); it != end; ++it) {
         sheet = (*it)->sheet();
@@ -139,7 +137,7 @@ void NamedAreaManager::regionChanged(const Region& region)
 
 void NamedAreaManager::updateAllNamedAreas()
 {
-    QList< QPair<QRectF, QString> > namedAreas;
+    QVector< QPair<QRectF, QString> > namedAreas;
     const QRect rect(QPoint(1, 1), QPoint(KS_colMax, KS_rowMax));
     const QList<SheetBase*> sheets = d->map->sheetList();
     for (int i = 0; i < sheets.count(); ++i) {

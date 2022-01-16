@@ -61,8 +61,7 @@ bool AbstractDataManipulator::process(Element* element)
                 }
                 cell.parseUserInput(val.asString());
             } else {
-                cell.setValue(val); // val can be empty - that's fine
-                cell.setUserInput(m_sheet->map()->converter()->asString(val).asString());
+                cell.setCellValue(val); // val can be empty - that's fine
                 if (fmtType != Format::None) {
                     Style style;
                     style.setFormatType(fmtType);

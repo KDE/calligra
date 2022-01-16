@@ -18,6 +18,9 @@ set (calligrasheetsengine_LIB_SRCS
 
     Function.cpp
     FunctionDescription.cpp
+    FunctionRepository.cpp
+    FunctionModule.cpp
+    FunctionModuleRegistry.cpp
 
     Region.cpp
     RectStorage.cpp
@@ -75,7 +78,10 @@ endif()
 target_link_libraries(calligrasheetsengine
     PUBLIC
         Qt5::Core
+        Qt5::Xml
         KF5::KDELibs4Support
+    PRIVATE
+        koplugin
 )
 
 set_target_properties(calligrasheetsengine PROPERTIES

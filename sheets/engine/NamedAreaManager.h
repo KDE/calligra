@@ -7,10 +7,7 @@
 #ifndef CALLIGRA_SHEETS_NAMED_AREA_MANAGER
 #define CALLIGRA_SHEETS_NAMED_AREA_MANAGER
 
-//#include <QList>
-//#include <QObject>
-
-//#include "Region.h"
+#include <QObject>
 
 #include "sheets_engine_export.h"
 

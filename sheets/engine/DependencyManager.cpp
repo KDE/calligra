@@ -17,6 +17,7 @@
 #include "NamedAreaManager.h"
 #include "SheetBase.h"
 #include "Value.h"
+#include "ValueStorage.h"
 #include "ElapsedTime_p.h"
 #include "Updater.h"
 
@@ -415,11 +416,14 @@ void DependencyManager::Private::generateDepths(const Region& region)
         const QRect range = (*it)->rect();
         SheetBase* sheet = (*it)->sheet();
         const CellBaseStorage *cells = sheet->cellStorage();
+        // only values and formulas are relevant for us
+        int rows = max(cells->formulaStorage()->rows(), cells->valueStorage()->rows());
+        int columns = max(cells->formulaStorage()->columns(), cells->valueStorage()->columns());
 
         int bottom = range.bottom();
-        if (bottom > cells->rows()) bottom = cells->rows();
+        if (bottom > rows) bottom = rows;
         int right = range.right();
-        if (right > cells->columns()) right = cells->columns();
+        if (right > columns) right = columns;
 
         for (int row = range.top(); row <= bottom; ++row) {
             for (int col = range.left(); col <= right; ++col) {

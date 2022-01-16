@@ -12,11 +12,8 @@
 #include "FunctionModuleRegistry.h"
 
 #include <QDomElement>
-#include <QDomNode>
 #include <QFile>
-#include <QHash>
 
-#include <QGlobalStatic>
 #include <KLocalizedString>
 
 Q_GLOBAL_STATIC(Calligra::Sheets::FunctionRepository, s_instance)

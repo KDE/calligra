@@ -197,24 +197,6 @@ public:
     void addStringCompletion(const QString &string);
 
     /**
-     * Convenience wrapper for namedAreaManager()->contains
-     * */
-    bool isNamedArea (const QString &name);
-    /**
-     * Creates a region consisting of the region defined in @p expression .
-     * @param expression a string representing the region (e.g. "A1:B3")
-     * @param sheet the fallback sheet, if \p expression does not contain one
-     */
-    Region & regionFromName(const QString& expression, Sheet* sheet = 0);
-
-    /**
-     * @param sRegion will be modified, if a valid sheet was found. The sheetname
-     * will be removed
-     * @return sheet named in the @p sRegion or null
-     */
-    Sheet* filterSheetName(QString& sRegion);
-
-    /**
      * Return a pointer to the resource manager associated with the
      * document. The resource manager contains
      * document wide resources * such as variable managers, the image
