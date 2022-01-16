@@ -124,7 +124,7 @@ QVariant valueToVariant(const Calligra::Sheets::Value& value, Sheet* sheet)
     case Calligra::Sheets::Value::Boolean:
         return QVariant(value.asBoolean());
     case Calligra::Sheets::Value::Integer:
-        return static_cast<qint64>(value.asInteger());
+        return static_cast<int64_t>(value.asInteger());
     case Calligra::Sheets::Value::Float:
         return (double) numToDouble(value.asFloat());
     case Calligra::Sheets::Value::Complex:

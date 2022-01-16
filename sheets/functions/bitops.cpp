@@ -56,51 +56,51 @@ QString BitOpsModule::descriptionFileName() const
 // Function: BITAND
 Value func_bitand(valVector args, ValueCalc *, FuncExtra *)
 {
-    const quint64 x = args[0].asInteger();
-    const quint64 y = args[1].asInteger();
-    return Value(static_cast<qint64>(x & y));
+    const uint64_t x = args[0].asInteger();
+    const uint64_t y = args[1].asInteger();
+    return Value(static_cast<int64_t>(x & y));
 }
 
 // Function: BITOR
 Value func_bitor(valVector args, ValueCalc *, FuncExtra *)
 {
-    const quint64 x = args[0].asInteger();
-    const quint64 y = args[1].asInteger();
-    return Value(static_cast<qint64>(x | y));
+    const uint64_t x = args[0].asInteger();
+    const uint64_t y = args[1].asInteger();
+    return Value(static_cast<int64_t>(x | y));
 }
 
 // Function: BITXOR
 Value func_bitxor(valVector args, ValueCalc *, FuncExtra *)
 {
-    const quint64 x = args[0].asInteger();
-    const quint64 y = args[1].asInteger();
-    return Value(static_cast<qint64>(x ^ y));
+    const uint64_t x = args[0].asInteger();
+    const uint64_t y = args[1].asInteger();
+    return Value(static_cast<int64_t>(x ^ y));
 }
 
 // Function: BITLSHIFT
 Value func_bitlshift(valVector args, ValueCalc *, FuncExtra *)
 {
-    const quint64 x = args[0].asInteger();
+    const uint64_t x = args[0].asInteger();
     const int numshift = args[1].asInteger();
     if (numshift == 0)
-        return Value(static_cast<qint64>(x));
+        return Value(static_cast<int64_t>(x));
     else if (numshift > 0)
-        return Value(static_cast<qint64>(x << numshift));
+        return Value(static_cast<int64_t>(x << numshift));
     else // negative left shift, becomes right shift
-        return Value(static_cast<qint64>(x >>(-1 * numshift)));
+        return Value(static_cast<int64_t>(x >>(-1 * numshift)));
 }
 
 // Function: BITRSHIFT
 Value func_bitrshift(valVector args, ValueCalc *, FuncExtra *)
 {
-    const quint64 x = args[0].asInteger();
+    const uint64_t x = args[0].asInteger();
     const int numshift = args[1].asInteger();
     if (numshift == 0)
-        return Value(static_cast<qint64>(x));
+        return Value(static_cast<int64_t>(x));
     else if (numshift > 0)
-        return Value(static_cast<qint64>(x >> numshift));
+        return Value(static_cast<int64_t>(x >> numshift));
     else // negative right shift, becomes left shift
-        return Value(static_cast<qint64>(x << (-1 * numshift)));
+        return Value(static_cast<int64_t>(x << (-1 * numshift)));
 }
 
 #include "bitops.moc"

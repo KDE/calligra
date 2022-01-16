@@ -66,10 +66,6 @@ class CALLIGRA_SHEETS_ODF_EXPORT Sheet : public SheetBase, public KoShapeUserDat
         public ProtectableObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString sheetName READ sheetName WRITE setSheetName NOTIFY nameChanged)
-    Q_PROPERTY(bool autoCalc READ isAutoCalculationEnabled WRITE setAutoCalculationEnabled)
-    Q_PROPERTY(bool showGrid READ getShowGrid WRITE setShowGrid)
-
 public:
     enum ChangeRef       { ColumnInsert, ColumnRemove, RowInsert, RowRemove };
     enum TestType        { Text, Validity, Comment, ConditionalCellAttribute };
@@ -200,10 +196,6 @@ public:
     bool getLcMode() const;
 
     void setLcMode(bool _lcMode);
-
-    bool isAutoCalculationEnabled() const;
-
-    void setAutoCalculationEnabled(bool enable);
 
     bool getShowColumnNumber() const;
 

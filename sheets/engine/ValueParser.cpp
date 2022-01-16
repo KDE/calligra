@@ -175,7 +175,7 @@ Value ValueParser::readNumber(const QString& _str, bool *ok) const
     tot += major;
     if (!isInt) tot += '.' + minor + exponentialPart;
 
-    return isInt ? Value(tot.toLongLong(ok)) : Value(tot.toDouble(ok));
+    return isInt ? Value((int64_t) tot.toLongLong(ok)) : Value(tot.toDouble(ok));
 }
 
 Number ValueParser::readImaginary(const QString& str, bool* ok) const

@@ -15,19 +15,19 @@
 */
 
 // Local
-#include "NamedAreaManager.h"
+//#include "NamedAreaManager.h"
 
 // Qt
-#include <QHash>
+//#include <QHash>
 
 // Sheets
-#include "CellBaseStorage.h"
-#include "FormulaStorage.h"
-#include "LoadingInfo.h"
-#include "MapBase.h"
-#include "Region.h"
-#include "SheetBase.h"
-#include "Util.h"
+//#include "CellBaseStorage.h"
+//#include "FormulaStorage.h"
+//#include "LoadingInfo.h"
+//#include "MapBase.h"
+//#include "Region.h"
+//#include "SheetBase.h"
+//#include "Util.h"
 
 using namespace Calligra::Sheets;
 

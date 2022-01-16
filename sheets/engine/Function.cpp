@@ -6,8 +6,6 @@
 // Local
 #include "Function.h"
 
-#include "Value.h"
-
 using namespace Calligra::Sheets;
 
 class Q_DECL_HIDDEN Function::Private

@@ -22,7 +22,6 @@
 #include "CellStorage.h"
 #include "Cluster.h"
 #include "Damages.h"
-#include "DependencyManager.h"
 #include "DocBase.h"
 #include "FormulaStorage.h"
 #include "HeaderFooter.h"
@@ -30,7 +29,6 @@
 #include "Map.h"
 #include "NamedAreaManager.h"
 #include "PrintSettings.h"
-#include "RecalcManager.h"
 #include "RowColumnFormat.h"
 #include "RowFormatStorage.h"
 #include "ShapeApplicationData.h"
@@ -78,7 +76,6 @@ public:
     bool showFormula;
     bool showFormulaIndicator;
     bool showCommentIndicator;
-    bool autoCalc;
     bool lcMode;
     bool showColumnNumber;
     bool hideZero;
@@ -150,7 +147,6 @@ Sheet::Sheet(Map* map, const QString &sheetName)
     d->showColumnNumber = false;
     d->hideZero = false;
     d->firstLetterUpper = false;
-    d->autoCalc = true;
     d->print = new SheetPrint(this);
 
     // document size changes always trigger a visible size change
@@ -181,7 +177,6 @@ Sheet::Sheet(const Sheet &other)
     d->showFormula = other.d->showFormula;
     d->showFormulaIndicator = other.d->showFormulaIndicator;
     d->showCommentIndicator = other.d->showCommentIndicator;
-    d->autoCalc = other.d->autoCalc;
     d->lcMode = other.d->lcMode;
     d->showColumnNumber = other.d->showColumnNumber;
     d->hideZero = other.d->hideZero;
@@ -349,27 +344,6 @@ bool Sheet::getLcMode() const
 void Sheet::setLcMode(bool _lcMode)
 {
     d->lcMode = _lcMode;
-}
-
-bool Sheet::isAutoCalculationEnabled() const
-{
-    return d->autoCalc;
-}
-
-void Sheet::setAutoCalculationEnabled(bool enable)
-{
-    //Avoid possible recalculation of dependencies if the auto calc setting hasn't changed
-    if (d->autoCalc == enable)
-        return;
-
-    d->autoCalc = enable;
-    //If enabling automatic calculation, make sure that the dependencies are up-to-date
-    if (enable == true) {
-        map()->dependencyManager()->addSheet(this);
-        map()->recalcManager()->recalcSheet(this);
-    } else {
-        map()->dependencyManager()->removeSheet(this);
-    }
 }
 
 bool Sheet::getShowColumnNumber() const

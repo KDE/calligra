@@ -8,15 +8,15 @@
 #ifndef KSPREAD_RTREE
 #define KSPREAD_RTREE
 
-#include <QRect>
-#include <QVector>
+//#include <QRect>
+//#include <QVector>
 
 #include <KoRTree.h>
 
-#include "SheetsDebug.h"
+//#include "SheetsDebug.h"
 #include "calligra_sheets_limits.h"
 
-#include <algorithm>
+//#include <algorithm>
 
 // Use dynamic_cast instead of cached root node
 // this is much slower but it is here so it is easy to check that still all works.
@@ -407,8 +407,8 @@ void RTree<T>::load(const QList<QPair<QRegion, T> >& data)
     
     QList<LoadData> rectData;
     QVector<int> indices;
-    foreach (const DataRegion& dataRegion, data) {
-        foreach (const QRect& rect, dataRegion.first.rects()) {
+    for (const DataRegion& dataRegion : data) {
+        for (const QRect& rect : dataRegion.first.rects()) {
             qreal h = calcLoadingRectValue(rect);
             rectData.append(LoadData(rect, &dataRegion.second, h));
             indices.append(indices.size());

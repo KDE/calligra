@@ -14,8 +14,6 @@
 #include "Region.h"
 #include "calligra_sheets_limits.h"
 
-#include <algorithm>
-
 
 namespace Calligra
 {

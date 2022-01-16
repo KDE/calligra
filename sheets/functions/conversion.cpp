@@ -162,7 +162,7 @@ Value func_roman(valVector args, ValueCalc *calc, FuncExtra *)
     static const QString RNThousands[] = {"", "M", "MM", "MMM"};
 
     // precision loss is not a problem here, as we only use the 0-3999 range
-    qint64 value = calc->conv()->asInteger(args[0]).asInteger();
+    int64_t value = calc->conv()->asInteger(args[0]).asInteger();
     if ((value < 0) || (value > 3999)) {
         return Value::errorNA();
     }

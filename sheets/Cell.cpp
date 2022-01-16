@@ -150,62 +150,6 @@ bool Cell::hasDefaultContent() const
     return true;
 }
 
-bool Cell::isEmpty() const
-{
-    // empty = no value or formula
-    if (value() != Value())
-        return false;
-    if (formula() != Formula())
-        return false;
-    return true;
-}
-
-// Return true if this cell is a formula.
-//
-bool Cell::isFormula() const
-{
-    return !formula().expression().isEmpty();
-}
-
-// Return the name of this cell, i.e. the string that the user would
-// use to reference it.  Example: A1, BZ16
-//
-QString Cell::name() const
-{
-    return name(column(), row());
-}
-
-// Return the name of any cell given by (col, row).
-//
-// static
-QString Cell::name(int col, int row)
-{
-    return columnName(col) + QString::number(row);
-}
-
-// Return the name of this cell, including the sheet name.
-// Example: sheet1!A5
-//
-QString Cell::fullName() const
-{
-    return fullName(sheet(), column(), row());
-}
-
-// Return the full name of any cell given a sheet and (col, row).
-//
-// static
-QString Cell::fullName(const Sheet* s, int col, int row)
-{
-    return s->sheetName() + '!' + name(col, row);
-}
-
-// Return the symbolic name of the column of this cell.  Examples: A, BB.
-//
-QString Cell::columnName() const
-{
-    return columnName(column());
-}
-
 QString Cell::comment() const
 {
     return sheet()->cellStorage()->comment(d->column, d->row);
@@ -787,16 +731,6 @@ int Cell::mergedYCells() const
     return sheet()->cellStorage()->mergedYCells(d->column, d->row);
 }
 
-bool Cell::isLocked() const
-{
-    return sheet()->cellStorage()->isLocked(d->column, d->row);
-}
-
-QRect Cell::lockedCells() const
-{
-    return sheet()->cellStorage()->lockedCells(d->column, d->row);
-}
-
 
 QString Cell::pasteOperation(const QString &new_text, const QString &old_text, Paste::Operation op)
 {
@@ -901,8 +835,4 @@ bool Cell::compareData(const Cell& other) const
     return true;
 }
 
-QPoint Cell::cellPosition() const
-{
-    Q_ASSERT(!isNull());
-    return QPoint(column(), row());
-}
+

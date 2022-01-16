@@ -7,11 +7,6 @@
 #ifndef CALLIGRA_SHEETS_VALUECALC
 #define CALLIGRA_SHEETS_VALUECALC
 
-#include <map>
-
-#include <QVector>
-
-#include "Number.h"
 #include "Value.h"
 
 #include "sheets_engine_export.h"

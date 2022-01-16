@@ -4,16 +4,16 @@
 // SPDX-License-Identifier: LGPL-2.0-or-later
 
 #include "Binding.h"
-#include "BindingModel.h"
+//#include "BindingModel.h"
 
-#include <QRect>
+//#include <QRect>
 
-#include "SheetsDebug.h"
+//#include "SheetsDebug.h"
 
-#include "CellBaseStorage.h"
-#include "MapBase.h"
-#include "SheetBase.h"
-#include "Value.h"
+//#include "CellBaseStorage.h"
+//#include "MapBase.h"
+//#include "SheetBase.h"
+//#include "Value.h"
 
 using namespace Calligra::Sheets;
 

@@ -5,17 +5,17 @@
 #ifndef CALLIGRA_SHEETS_FORMULA
 #define CALLIGRA_SHEETS_FORMULA
 
-#include <QHash>
-#include <QSharedDataPointer>
-#include <QString>
-#include <QTextStream>
-#include <QVariant>
-#include <QVector>
-#include <QPoint>
+//#include <QHash>
+//#include <QSharedDataPointer>
+//#include <QString>
+//#include <QTextStream>
+//#include <QVariant>
+//#include <QVector>
+//#include <QPoint>
 
 #include "sheets_engine_export.h"
-#include "CellBase.h"
-#include "Value.h"
+//#include "CellBase.h"
+//#include "Value.h"
 
 #define CALLIGRA_SHEETS_INLINE_ARRAYS
 
@@ -192,7 +192,7 @@ public:
      * Returns integer value for an integer token.
      * For any other type of token, returns 0.
      */
-    qint64 asInteger() const;
+    int64_t asInteger() const;
 
     /**
      * Returns floating-point value for a floating-point token.

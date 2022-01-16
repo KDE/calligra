@@ -5,16 +5,16 @@
 */
 
 // Local
-#include "Validity.h"
+//#include "Validity.h"
 
 // Sheets
-#include "CalculationSettings.h"
-#include "CellBase.h"
-#include "MapBase.h"
-#include "SheetBase.h"
-#include "ValueCalc.h"
-#include "ValueConverter.h"
-#include "ValueParser.h"
+//#include "CalculationSettings.h"
+//#include "CellBase.h"
+//#include "MapBase.h"
+//#include "SheetBase.h"
+//#include "ValueCalc.h"
+//#include "ValueConverter.h"
+//#include "ValueParser.h"
 
 using namespace Calligra::Sheets;
 

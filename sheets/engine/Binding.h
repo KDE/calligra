@@ -5,10 +5,10 @@
 #ifndef CALLIGRA_SHEETS_BINDING
 #define CALLIGRA_SHEETS_BINDING
 
-#include <QSharedDataPointer>
-#include <QVariant>
+//#include <QSharedDataPointer>
+//#include <QVariant>
 
-#include "Region.h"
+//#include "Region.h"
 
 #include "sheets_engine_export.h"
 

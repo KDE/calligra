@@ -1289,11 +1289,11 @@ Value func_frequency(valVector args, ValueCalc*, FuncExtra*)
         if (*it == numToDouble(bins.element(v).asFloat()))
             ++it;
         // add the number of values in this interval to the result
-        result.setElement(0, v, Value(static_cast<qint64>(it - begin)));
+        result.setElement(0, v, Value(static_cast<int64_t>(it - begin)));
         begin = it;
     }
     // the remaining values
-    result.setElement(0, bins.count(), Value(static_cast<qint64>(data.constEnd() - begin)));
+    result.setElement(0, bins.count(), Value(static_cast<int64_t>(data.constEnd() - begin)));
 
     return result;
 }
@@ -2257,8 +2257,8 @@ Value func_poisson(valVector args, ValueCalc *calc, FuncExtra *)
         else {
             result = Value(1.0);
             Value fFak(1.0);
-            qint64 nEnd = calc->conv()->asInteger(x).asInteger();
-            for (qint64 i = 1; i <= nEnd; ++i) {
+            int64_t nEnd = calc->conv()->asInteger(x).asInteger();
+            for (int64_t i = 1; i <= nEnd; ++i) {
                 // fFak *= i
                 fFak = calc->mul(fFak, (int)i);
                 // result += pow (lambda, i) / fFak

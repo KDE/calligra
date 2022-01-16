@@ -6,29 +6,29 @@
 
 #include "Formula.h"
 
-#include "CalculationSettings.h"
-#include "CellBaseStorage.h"
-#include "Function.h"
-#include "FunctionRepository.h"
-#include "Region.h"
-#include "Value.h"
-#include "Util.h"
+//#include "CalculationSettings.h"
+//#include "CellBaseStorage.h"
+//#include "Function.h"
+//#include "FunctionRepository.h"
+//#include "Region.h"
+//#include "Value.h"
+//#include "Util.h"
 
-#include "CellBase.h"
-#include "SheetBase.h"
-#include "MapBase.h"
+//#include "CellBase.h"
+//#include "SheetBase.h"
+//#include "MapBase.h"
 
-#include "ValueCalc.h"
-#include "ValueConverter.h"
-#include "ValueParser.h"
+//#include "ValueCalc.h"
+//#include "ValueConverter.h"
+//#include "ValueParser.h"
 
-#include <limits.h>
+//#include <limits.h>
 
-#include <QStack>
-#include <QString>
-#include <QTextStream>
+//#include <QStack>
+//#include <QString>
+//#include <QTextStream>
 
-#include <klocale.h>
+//#include <klocale.h>
 
 #define CALLIGRA_SHEETS_UNICODE_OPERATORS
 
@@ -372,9 +372,9 @@ bool Token::asBoolean() const
     // FIXME check also for i18n version
 }
 
-qint64 Token::asInteger() const
+int64_t Token::asInteger() const
 {
-    if (isInteger()) return m_text.toLongLong();
+    if (isInteger()) return (int64_t) m_text.toLongLong();
     else return 0;
 }
 

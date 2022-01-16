@@ -8,19 +8,20 @@
 #ifndef CALLIGRA_SHEETS_DEPENDENCY_MANAGER
 #define CALLIGRA_SHEETS_DEPENDENCY_MANAGER
 
-#include <QObject>
-
+#include "sheets_engine_export.h"
 #include "Region.h"
 
-class KoUpdater;
+#include <QObject>
 
 namespace Calligra
 {
 namespace Sheets
 {
+class CellBase;
 class MapBase;
 class Region;
 class SheetBase;
+class Updater;
 
 /**
  * \ingroup Value
@@ -57,7 +58,7 @@ public:
     /**
      * Updates the whole \p map.
      */
-    void updateAllDependencies(const MapBase* map, KoUpdater *updater = 0);
+    void updateAllDependencies(const MapBase* map, Updater *updater = 0);
 
     /**
      * Returns the cell depths.

@@ -13,14 +13,9 @@
 #include "FormulaStorage.h"
 #include "MapBase.h"
 #include "SheetBase.h"
-#include "Region.h"
+#include "Updater.h"
 #include "Value.h"
 #include "ElapsedTime_p.h"
-
-#include <KoUpdater.h>
-
-#include <QHash>
-#include <QMap>
 
 using namespace Calligra::Sheets;
 
@@ -120,7 +115,7 @@ void RecalcManager::Private::cellsToCalculate(const Region& region, QSet<CellBas
     Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it(region.constBegin()); it != end; ++it) {
         const QRect range = (*it)->rect();
-        const SheetBase* sheet = (*it)->sheet();
+        SheetBase* sheet = (*it)->sheet();
         for (int col = range.left(); col <= range.right(); ++col) {
             for (int row = range.top(); row <= range.bottom(); ++row) {
                 CellBase cell(sheet, col, row);
@@ -142,8 +137,8 @@ void RecalcManager::Private::cellsToCalculate(const Region& region, QSet<CellBas
     }
 }
 
-RecalcManager::RecalcManager(Map *const map)
-        : QObject(map)
+RecalcManager::RecalcManager(MapBase *const map)
+        : QObject()
         , d(new Private)
 {
     d->map  = map;
@@ -178,7 +173,7 @@ void RecalcManager::recalcSheet(SheetBase* const sheet)
     d->active = false;
 }
 
-void RecalcManager::recalcMap(KoUpdater *updater)
+void RecalcManager::recalcMap(Updater *updater)
 {
     if (d->active)
         return;
@@ -211,7 +206,7 @@ void RecalcManager::removeSheet(SheetBase *sheet)
     recalcMap(); // FIXME Stefan: Implement a more elegant solution.
 }
 
-void RecalcManager::recalc(KoUpdater *updater)
+void RecalcManager::recalc(Updater *updater)
 {
     debugSheetsFormula << "Recalculating" << d->cells.count() << " cell(s)..";
     ElapsedTime et("Recalculating cells", ElapsedTime::PrintOnlyTime);
@@ -229,7 +224,7 @@ void RecalcManager::recalc(KoUpdater *updater)
         if (!cells.value(c).formula().isValid())
             continue;
 
-        const SheetBase* sheet = cells.value(c).sheet();
+        SheetBase* sheet = cells.value(c).sheet();
 
         // evaluate the formula and set the result
         Value result = cells.value(c).formula().eval();

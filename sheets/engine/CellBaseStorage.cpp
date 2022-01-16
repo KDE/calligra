@@ -16,8 +16,8 @@
 #endif
 
 #include "Formula.h"
-#include "MapBase.h"
 #include "SheetBase.h"
+#include "CellBase.h"
 
 #include "BindingStorage.h"
 #include "RectStorage.h"
@@ -70,7 +70,7 @@ public:
         delete valueStorage;
     }
 
-    void recalcFormulas(const Region &r, bool includeDeps);
+    void recalcFormulas(const Region &r);
     void updateBindings(const Region &r);
 
     SheetBase*              sheet;
@@ -84,7 +84,7 @@ public:
     ValueStorage*           valueStorage;
 };
 
-void CellBaseStorage::Private::recalcFormulas(const Region &r, bool includeDeps)
+void CellBaseStorage::Private::recalcFormulas(const Region &r)
 {
     PointStorage<Formula> subStorage = formulaStorage->subStorage(r);
     CellBase cell;
@@ -397,7 +397,7 @@ bool CellBaseStorage::hasLockedCells(const Region& region) const
 #endif
     typedef QPair<QRectF, bool> RectBoolPair;
     QVector<QPair<QRectF, bool> > pairs = d->matrixStorage->intersectingPairs(region);
-    foreach (const RectBoolPair& pair, pairs) {
+    for (const RectBoolPair& pair : pairs) {
         if (pair.first.isNull())
             continue;
         if (pair.second == false)
@@ -481,7 +481,7 @@ void CellBaseStorage::insertColumns(int position, int number)
     // TODO Stefan: Optimize: Avoid the double creation of the sub-storages, but don't process
     //              formulas, that will get out of bounds after the operation.
     const Region invalidRegion(QRect(QPoint(position, 1), QPoint(KS_colMax, KS_rowMax)), d->sheet);
-    d->recalcFormulas(invalidRegion, false);
+    d->recalcFormulas(invalidRegion);
     // Trigger an update of the bindings and the named areas.
     d->updateBindings(invalidRegion);
 
@@ -489,7 +489,7 @@ void CellBaseStorage::insertColumns(int position, int number)
         storage->insertColumns(position, number);
 
     // Trigger a dependency update of the cells, which have a formula. (new positions)
-    d->recalcFormulas(invalidRegion, true);
+    d->recalcFormulas(invalidRegion);
 }
 
 void CellBaseStorage::removeColumns(int position, int number)
@@ -498,14 +498,14 @@ void CellBaseStorage::removeColumns(int position, int number)
     QWriteLocker(&bigUglyLock);
 #endif
     const Region invalidRegion(QRect(QPoint(position, 1), QPoint(KS_colMax, KS_rowMax)), d->sheet);
-    d->recalcFormulas(invalidRegion, false);
+    d->recalcFormulas(invalidRegion);
     const Region region(QRect(QPoint(position - 1, 1), QPoint(KS_colMax, KS_rowMax)), d->sheet);
     d->updateBindings(region);
 
     for (StorageBase *storage : storages)
         storage->removeColumns(position, number);
 
-    d->recalcFormulas(invalidRegion, true);
+    d->recalcFormulas(invalidRegion);
 }
 
 void CellBaseStorage::insertRows(int position, int number)
@@ -514,13 +514,13 @@ void CellBaseStorage::insertRows(int position, int number)
     QWriteLocker(&bigUglyLock);
 #endif
     const Region invalidRegion(QRect(QPoint(1, position), QPoint(KS_colMax, KS_rowMax)), d->sheet);
-    d->recalcFormulas(invalidRegion, false);
+    d->recalcFormulas(invalidRegion);
     d->updateBindings(invalidRegion);
 
     for (StorageBase *storage : storages)
         storage->insertRows(position, number);
 
-    d->recalcFormulas(invalidRegion, true);
+    d->recalcFormulas(invalidRegion);
 }
 
 void CellBaseStorage::removeRows(int position, int number)
@@ -529,14 +529,14 @@ void CellBaseStorage::removeRows(int position, int number)
     QWriteLocker(&bigUglyLock);
 #endif
     const Region invalidRegion(QRect(QPoint(1, position), QPoint(KS_colMax, KS_rowMax)), d->sheet);
-    d->recalcFormulas(invalidRegion, false);
+    d->recalcFormulas(invalidRegion);
     const Region region(QRect(QPoint(1, position - 1), QPoint(KS_colMax, KS_rowMax)), d->sheet);
     d->updateBindings(region);
 
     for (StorageBase *storage : storages)
         storage->removeRows(position, number);
 
-    d->recalcFormulas(invalidRegion, true);
+    d->recalcFormulas(invalidRegion);
 }
 
 void CellBaseStorage::removeShiftLeft(const QRect& rect)
@@ -545,14 +545,14 @@ void CellBaseStorage::removeShiftLeft(const QRect& rect)
     QWriteLocker(&bigUglyLock);
 #endif
     const Region invalidRegion(QRect(rect.topLeft(), QPoint(KS_colMax, rect.bottom())), d->sheet);
-    d->recalcFormulas(invalidRegion, false);
+    d->recalcFormulas(invalidRegion);
     const Region region(QRect(rect.topLeft() - QPoint(1, 0), QPoint(KS_colMax, rect.bottom())), d->sheet);
     d->updateBindings(region);
 
     for (StorageBase *storage : storages)
         storage->removeShiftLeft(rect);
 
-    d->recalcFormulas(invalidRegion, true);
+    d->recalcFormulas(invalidRegion);
 }
 
 void CellBaseStorage::insertShiftRight(const QRect& rect)
@@ -561,13 +561,13 @@ void CellBaseStorage::insertShiftRight(const QRect& rect)
     QWriteLocker(&bigUglyLock);
 #endif
     const Region invalidRegion(QRect(rect.topLeft(), QPoint(KS_colMax, rect.bottom())), d->sheet);
-    d->recalcFormulas(invalidRegion, false);
+    d->recalcFormulas(invalidRegion);
     d->updateBindings(invalidRegion);
 
     for (StorageBase *storage : storages)
         storage->insertShiftRight(rect);
 
-    d->recalcFormulas(invalidRegion, true);
+    d->recalcFormulas(invalidRegion);
 }
 
 void CellBaseStorage::removeShiftUp(const QRect& rect)
@@ -576,14 +576,14 @@ void CellBaseStorage::removeShiftUp(const QRect& rect)
     QWriteLocker(&bigUglyLock);
 #endif
     const Region invalidRegion(QRect(rect.topLeft(), QPoint(rect.right(), KS_rowMax)), d->sheet);
-    d->recalcFormulas(invalidRegion, false);
+    d->recalcFormulas(invalidRegion);
     const Region region(QRect(rect.topLeft() - QPoint(0, 1), QPoint(rect.right(), KS_rowMax)), d->sheet);
     d->updateBindings(region);
 
     for (StorageBase *storage : storages)
         storage->removeShiftUp(rect);
 
-    d->recalcFormulas(invalidRegion, true);
+    d->recalcFormulas(invalidRegion);
 }
 
 void CellBaseStorage::insertShiftDown(const QRect& rect)
@@ -592,13 +592,13 @@ void CellBaseStorage::insertShiftDown(const QRect& rect)
     QWriteLocker(&bigUglyLock);
 #endif
     const Region invalidRegion(QRect(rect.topLeft(), QPoint(rect.right(), KS_rowMax)), d->sheet);
-    d->recalcFormulas(invalidRegion, false);
+    d->recalcFormulas(invalidRegion);
     d->updateBindings(invalidRegion);
 
     for (StorageBase *storage : storages)
         storage->insertShiftDown(rect);
 
-    d->recalcFormulas(invalidRegion, true);
+    d->recalcFormulas(invalidRegion);
 }
 
 

@@ -989,7 +989,7 @@ Value func_trunc(valVector args, ValueCalc *calc, FuncExtra *)
     Number result = args[0].asFloat();
     if (args.count() == 2)
         result = result * ::qPow(10, (int)args[1].asInteger());
-    result = (args[0].asFloat() < 0) ? -(qint64)(-result) : (qint64)result;
+    result = (args[0].asFloat() < 0) ? -(int64_t)(-result) : (int64_t)result;
     if (args.count() == 2)
         result = result * ::qPow(10, -(int)args[1].asInteger());
     return Value(result);

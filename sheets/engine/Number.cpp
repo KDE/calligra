@@ -6,7 +6,7 @@
 
 #ifdef CALLIGRA_SHEETS_HIGH_PRECISION_SUPPORT
 
-#include <math.h>
+//#include <math.h>
 
 using namespace Calligra::Sheets;
 

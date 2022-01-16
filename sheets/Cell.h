@@ -110,45 +110,6 @@ public:
     bool hasDefaultContent() const;
 
     /**
-     * Returns true, if this cell has no content, i.e no value and no formula.
-     */
-    bool isEmpty() const;
-
-    /**
-     * Returns true if this cell holds a formula.
-     */
-    bool isFormula() const;
-
-    /**
-     * Returns the name of the cell. For example, the cell in first column and
-     * first row is "A1".
-     */
-    QString name() const;
-
-    /**
-     * Returns the full name of the cell, i.e. including the worksheet name.
-     * Example: "Sheet1!A1"
-     */
-    QString fullName() const;
-
-    /**
-     * Returns the column name of the cell.
-     */
-    QString columnName() const;
-
-    /**
-     * Given the cell position, this static function returns the name of the cell.
-     * Example: name(5,4) will return "E4".
-     */
-    static QString name(int col, int row);
-
-    /**
-     * Given the sheet and cell position, this static function returns the full name
-     * of the cell, i.e. with the name of the sheet.
-     */
-    static QString fullName(const Sheet *s, int col, int row);
-
-    /**
      * \return the output text, e.g. the result of a formula
      */
     QString displayText(const Style& s = Style(), Value* v = 0, bool *showFormula = 0) const;
@@ -288,11 +249,6 @@ public:
     double height() const;
 
     /**
-     * \return the position of this cell
-     */
-    QPoint cellPosition() const;
-
-    /**
      * @return true if the cell should be printed in a print out.
      *         That's the case, if it has any content, border, backgroundcolor,
      *         or background brush.
@@ -354,17 +310,6 @@ public:
 
     //
     //END Merging
-    //
-    //////////////////////////////////////////////////////////////////////////
-    //
-    //BEGIN Matrix locking
-    //
-
-    bool isLocked() const;
-    QRect lockedCells() const;
-
-    //
-    //END Matrix locking
     //
     //////////////////////////////////////////////////////////////////////////
     //

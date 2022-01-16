@@ -12,7 +12,6 @@
 
 #include "sheets_engine_export.h"
 
-#include <QList>
 #include <QObject>
 #include <QList>
 

@@ -8,7 +8,9 @@
 // Local
 #include "Util.h"
 #include "CellBase.h"
+#include "SheetsDebug.h"
 
+#include <cmath>
 
 int Calligra::Sheets::Util::decodeColumnLabelText(const QString &labelText)
 {

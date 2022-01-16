@@ -19,7 +19,6 @@
 #include "CalculationSettings.h"
 
 #include "Localization.h"
-#include "SheetsDebug.h"
 
 using namespace Calligra::Sheets;
 

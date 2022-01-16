@@ -9,10 +9,8 @@
 #define CALLIGRA_SHEETS_UTIL
 
 #include <QString>
-#include <QRect>
 
 #include "sheets_common_export.h"
-#include "Value.h"
 
 namespace Calligra
 {

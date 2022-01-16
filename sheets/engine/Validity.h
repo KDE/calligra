@@ -22,12 +22,12 @@
 #define CALLIGRA_SHEETS_VALIDITY
 
 // Qt
-#include <QDate>
-#include <QHash>
-#include <QSharedDataPointer>
-#include <QStringList>
-#include <QTime>
-#include <QVariant>
+//#include <QDate>
+//#include <QHash>
+//#include <QSharedDataPointer>
+//#include <QStringList>
+//#include <QTime>
+//#include <QVariant>
 
 // Sheets
 #include "sheets_engine_export.h"

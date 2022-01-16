@@ -33,6 +33,7 @@
 #include "Sheet.h"
 #include "StyleManager.h"
 #include "ValueFormatter.h"
+#include "engine/Updater.h"
 
 // database
 #include "database/DatabaseManager.h"
@@ -70,6 +71,21 @@ public:
     int syntaxVersion;
 
     KCompletion listCompletion;
+};
+
+
+class Q_DECL_HIDDEN SheetUpdater : public Updater {
+public:
+    SheetUpdater(KoUpdater *realUpdater) {
+        m_updater = realUpdater;
+    }
+
+    virtual void setProgress(int percent) override {
+        m_updater->setProgress(percent);
+    }
+
+private:
+    KoUpdater m_updater;
 };
 
 
@@ -151,16 +167,25 @@ bool Map::completeLoading(KoStore *store)
     Q_UNUSED(store);
 
     QPointer<KoUpdater> dependencyUpdater, recalcUpdater;
+    // These exist so that we don't pull in a kowidgets dependency into engine
+    SheetUpdater *depWrapper = nullptr, recalcWrapper = nullptr;
+
     if (doc() && doc()->progressUpdater()) {
         dependencyUpdater = doc()->progressUpdater()->startSubtask(1, "Calligra::Sheets::DependencyManager::updateAllDependencies");
         recalcUpdater = doc()->progressUpdater()->startSubtask(1, "Calligra::Sheets::RecalcManager::recalc");
+        depWrapper = new SheetUpdater(dependencyUpdater);
+        recalcWrapper = new SheetUpdater(recalcUpdater);
     }
 
+
     // Initial build of all cell dependencies.
-    d->dependencyManager->updateAllDependencies(this, dependencyUpdater);
+    d->dependencyManager->updateAllDependencies(this, depWrapper);
     // Recalc the whole workbook now, since there may be formulas other spreadsheets support,
     // but Calligra Sheets does not.
-    d->recalcManager->recalcMap(recalcUpdater);
+    d->recalcManager->recalcMap(recalcWrapper);
+
+    delete depWrapper;
+    delete recalcWrapper;
 
     return true;
 }

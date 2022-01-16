@@ -8,18 +8,11 @@
 #include "ValueCalc.h"
 
 #include "CellBase.h"
-#include "Number.h"
 #include "ValueConverter.h"
 #include "CalculationSettings.h"
 #include "SheetsDebug.h"
 
-#include <QRegExp>
-
-#include <errno.h>
-#include <float.h>
-#include <math.h>
-#include <stdlib.h>
-#include <time.h>
+#include <cfloat>
 
 using namespace Calligra::Sheets;
 
@@ -855,7 +848,7 @@ Value ValueCalc::fromBase(const Value &val, int base)
 {
     QString str = converter->asString(val).asString();
     bool ok;
-    qint64 num = str.toLongLong(&ok, base);
+    int64_t num = (int64_t) str.toLongLong(&ok, base);
     if (ok)
         return Value(num);
     return Value::errorVALUE();

@@ -11,8 +11,6 @@
 
 #include <KLocalizedString>
 
-#include "SheetsDebug.h"
-
 using namespace Calligra::Sheets;
 
 static ParameterType toType(const QString& type)

@@ -11,11 +11,7 @@
 // Local
 #include "DependencyManager.h"
 
-#include <QHash>
-#include <QList>
-
 #include "CellBase.h"
-#include "Region.h"
 #include "RTree.h"
 
 namespace Calligra
@@ -42,7 +38,7 @@ public:
      * \see removeDependencies
      * \see computeDependencies
      */
-    void generateDependencies(const Cell& cell, const Formula& formula);
+    void generateDependencies(const CellBase& cell, const Formula& formula);
 
     /**
      * Computes the reference depth.
@@ -59,14 +55,14 @@ public:
      * \li depth(A2) = 1
      * \li depth(A3) = 2
      */
-    int computeDepth(Cell cell) const;
+    int computeDepth(CellBase cell) const;
 
     /**
      * Used in the recalculation events for changed regions.
      * Determines the reference depth for each position in \p region .
      *
      * \see computeDepth
-     * \see generateDepths(Cell cell)
+     * \see generateDepths(CellBase cell)
      */
     void generateDepths(const Region& region);
 
@@ -74,26 +70,26 @@ public:
      * Generates the depth of cell and all of its consumers.
      * Calls itself recursively for the cell's consuming cells.
      */
-    void generateDepths(Cell cell, QSet<Cell>& computedDepths);
+    void generateDepths(CellBase cell, QSet<CellBase>& computedDepths);
 
     /**
      * Returns the region, that consumes the value of \p cell.
-     * \see DependencyManager::consumingRegion(const Cell&)
+     * \see DependencyManager::consumingRegion(const CellBase&)
      * \return region consuming \p cell 's value
      */
-    Region consumingRegion(const Cell& cell) const;
+    Region consumingRegion(const CellBase& cell) const;
 
     void namedAreaModified(const QString& name);
 
     /**
      * Removes all dependencies of \p cell .
      */
-    void removeDependencies(const Cell& cell);
+    void removeDependencies(const CellBase& cell);
 
     /**
      * Removes the depths of \p cell and all its consumers.
      */
-    void removeDepths(const Cell& cell);
+    void removeDepths(const CellBase& cell);
 
     /**
      * Computes and stores the dependencies.
@@ -109,7 +105,7 @@ public:
      * for performance reasons.
      * Do not call this method for a \p cell not containing a \p formula.
      */
-    void computeDependencies(const Cell& cell, const Formula& formula);
+    void computeDependencies(const CellBase& cell, const Formula& formula);
 
     enum Direction { Forward, Backward };
     /**
@@ -125,12 +121,12 @@ public:
     const MapBase* map;
     // stores providing regions ordered by their consuming cell locations
     // use QMap rather then QHash cause it's faster for our use-case
-    QMap<Cell, Region> providers;
+    QMap<CellBase, Region> providers;
     // stores consuming cell locations ordered by their providing regions
-    QHash<SheetBase*, RTree<Cell>*> consumers;
+    QHash<SheetBase*, RTree<CellBase>*> consumers;
     // stores consuming cell locations ordered by their providing named area
     // (in addition to the general storage of the consuming cell locations)
-    QHash<QString, QList<Cell> > namedAreaConsumers;
+    QHash<QString, QList<CellBase> > namedAreaConsumers;
     /*
      * Stores cells with its reference depth.
      * Depth means the maximum depth of all cells this cell depends on plus one,
@@ -147,7 +143,7 @@ public:
      * \li depth(A3) = 2
      */
     // use QMap rather then QHash cause it's faster for our use-case
-    QMap<Cell, int> depths;
+    QMap<CellBase, int> depths;
 };
 
 } // namespace Sheets

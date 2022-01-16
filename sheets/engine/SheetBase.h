@@ -77,6 +77,11 @@ public:
 
 
 
+    bool isAutoCalculationEnabled() const;
+    void setAutoCalculationEnabled(bool enable);
+
+
+
     const FormulaStorage* formulaStorage() const;
     const ValidityStorage* validityStorage() const;
     const ValueStorage* valueStorage() const;

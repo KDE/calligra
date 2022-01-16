@@ -33,9 +33,8 @@
 #include "calligra_sheets_limits.h"
 #include "Formula.h"
 #include "SheetBase.h"
+#include "Value.h"
 
-#include <QObject>
-#include <QSharedData>
 
 using namespace Calligra::Sheets;
 
@@ -120,6 +119,47 @@ int CellBase::row() const
     return d->row;
 }
 
+QPoint CellBase::cellPosition() const
+{
+    Q_ASSERT(!isNull());
+    return QPoint(column(), row());
+}
+
+// Return the name of this cell, i.e. the string that the user would
+// use to reference it.  Example: A1, BZ16
+QString CellBase::name() const
+{
+    return name(column(), row());
+}
+
+// Return the name of any cell given by (col, row).
+// static
+QString CellBase::name(int col, int row)
+{
+    return columnName(col) + QString::number(row);
+}
+
+// Return the name of this cell, including the sheet name.
+// Example: sheet1!A5
+QString CellBase::fullName() const
+{
+    return fullName(sheet(), column(), row());
+}
+
+// Return the full name of any cell given a sheet and (col, row).
+// static
+QString CellBase::fullName(const SheetBase *s, int col, int row)
+{
+    return s->sheetName() + '!' + name(col, row);
+}
+
+// Return the symbolic name of the column of this cell.  Examples: A, BB.
+QString CellBase::columnName() const
+{
+    return columnName(column());
+}
+
+
 
 // Return the value of this cell.
 const Value CellBase::value() const
@@ -142,6 +182,33 @@ Formula CellBase::formula() const
 void CellBase::setFormula(const Formula& formula)
 {
     sheet()->cellStorage()->setFormula(column(), row(), formula);
+}
+
+bool CellBase::isEmpty() const
+{
+    // empty = no value or formula
+    if (value() != Value())
+        return false;
+    if (formula() != Formula())
+        return false;
+    return true;
+}
+
+// Return true if this cell is a formula.
+//
+bool CellBase::isFormula() const
+{
+    return !formula().expression().isEmpty();
+}
+
+bool CellBase::isLocked() const
+{
+    return sheet()->cellStorage()->isLocked(d->column, d->row);
+}
+
+QRect CellBase::lockedCells() const
+{
+    return sheet()->cellStorage()->lockedCells(d->column, d->row);
 }
 
 

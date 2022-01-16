@@ -9,6 +9,8 @@
 
 #include "Value.h"
 
+#include "sheets_engine_export.h"
+
 namespace Calligra
 {
 namespace Sheets

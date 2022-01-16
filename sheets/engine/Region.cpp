@@ -20,13 +20,8 @@
 // Local
 #include "Region.h"
 
-#include <QRegExp>
-#include <QStringList>
-
-#include "SheetsDebug.h"
 #include "calligra_sheets_limits.h"
 #include "CellBase.h"
-#include "MapBase.h"
 #include "SheetBase.h"
 #include "Util.h"
 
@@ -132,7 +127,7 @@ Region::~Region()
 QVector<QRect> Region::rects() const
 {
     QVector<QRect> cellRects;
-    foreach(Element *element, d->cells) {
+    for (Element *element : d->cells) {
         cellRects.append(element->rect());
     }
     return cellRects;
@@ -280,7 +275,7 @@ Region Region::intersected(const Region& region) const
     QRect rect = rects[0];
     SheetBase *s = region.cells()[0]->sheet();
     // intersect each element with the rectangle
-    foreach(Element *element, d->cells) {
+    for (Element *element : d->cells) {
       if (element->sheet() != s) continue;
       if (element->type() == Element::Point) {
         Point* point = static_cast<Point*>(element);

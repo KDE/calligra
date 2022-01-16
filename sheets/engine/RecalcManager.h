@@ -6,10 +6,9 @@
 #define CALLIGRA_SHEETS_RECALC_MANAGER
 
 #include <Region.h>
+#include "sheets_engine_export.h"
 
 #include <QObject>
-
-class KoUpdater;
 
 namespace Calligra
 {
@@ -18,6 +17,7 @@ namespace Sheets
 class CellBase;
 class MapBase;
 class SheetBase;
+class Updater;
 
 /**
  * \class RecalcManager
@@ -75,7 +75,7 @@ public:
      *
      * \see recalc()
      */
-    void recalcMap(KoUpdater *updater = 0);
+    void recalcMap(Updater *updater = 0);
 
     /**
      * Returns the recalculation state.
@@ -106,7 +106,7 @@ protected:
      *
      * \see recalcCell()
      */
-    void recalc(KoUpdater *updater = 0);
+    void recalc(Updater *updater = 0);
 
 private:
     Q_DISABLE_COPY(RecalcManager)

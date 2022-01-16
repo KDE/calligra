@@ -8,7 +8,6 @@
 #define KSPREAD_FORMULA_STORAGE
 
 #include "Formula.h"
-#include "calligra_sheets_limits.h"
 #include "PointStorage.h"
 
 namespace Calligra

@@ -8,12 +8,13 @@
 
 // Local
 #include "SheetBase.h"
+#include "CellBase.h"
 #include "MapBase.h"
 #include "CellBaseStorage.h"
 #include "Damages.h"
 #include "FormulaStorage.h"
-
-#include <QObject>
+#include "DependencyManager.h"
+#include "RecalcManager.h"
 
 
 using namespace Calligra::Sheets;
@@ -26,6 +27,8 @@ public:
 
     MapBase *workbook;
     QString name;
+
+    bool autoCalc;
 
     SheetBase *m_sheet;
     CellBaseStorage *cellStorage;
@@ -45,12 +48,16 @@ SheetBase::SheetBase(MapBase* map, const QString &sheetName) :
     d->workbook = map;
     d->name = sheetName;
     d->cellStorage = new CellBaseStorage(this);
+
+    d->autoCalc = true;
 }
 
 SheetBase::SheetBase(const SheetBase &other)
         : d(new Private(this))
 {
     d->workbook = other.d->workbook;
+
+    d->autoCalc = other.d->autoCalc;
 
     // create a unique name
     int i = 1;
@@ -139,6 +146,28 @@ void SheetBase::changeCellTabName(QString const & old_name, QString const & new_
             formula.setExpression(tmp);
             cell.setFormula(formula);
         }
+    }
+}
+
+bool SheetBase::isAutoCalculationEnabled() const
+{
+    return d->autoCalc;
+}
+
+void SheetBase::setAutoCalculationEnabled(bool enable)
+{
+    //Avoid possible recalculation of dependencies if the auto calc setting hasn't changed
+    if (d->autoCalc == enable)
+        return;
+
+    d->autoCalc = enable;
+
+    //If enabling automatic calculation, make sure that the dependencies are up-to-date
+    if (enable) {
+        map()->dependencyManager()->addSheet(this);
+        map()->recalcManager()->recalcSheet(this);
+    } else {
+        map()->dependencyManager()->removeSheet(this);
     }
 }
 

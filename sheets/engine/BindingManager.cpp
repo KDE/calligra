@@ -4,16 +4,16 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include "BindingManager.h"
+//#include "BindingManager.h"
 
-#include "BindingStorage.h"
-#include "CellBaseStorage.h"
-#include "MapBase.h"
-#include "Region.h"
-#include "SheetBase.h"
-#include "BindingModel.h"
+//#include "BindingStorage.h"
+//#include "CellBaseStorage.h"
+//#include "MapBase.h"
+//#include "Region.h"
+//#include "SheetBase.h"
+//#include "BindingModel.h"
 
-#include <QAbstractItemModel>
+//#include <QAbstractItemModel>
 
 using namespace Calligra::Sheets;
 

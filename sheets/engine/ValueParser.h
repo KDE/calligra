@@ -12,7 +12,6 @@
 #include <QDateTime>
 
 #include "Number.h"
-
 #include "sheets_engine_export.h"
 
 namespace Calligra

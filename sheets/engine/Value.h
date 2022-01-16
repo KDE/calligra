@@ -9,12 +9,11 @@
 #include <complex>
 
 #include <QDateTime>
-#include <QSharedDataPointer>
 #include <QString>
 #include <QTextStream>
 #include <QVariant>
 
-#include "SheetsDebug.h"
+#include "sheets_engine_export.h"
 #include "Number.h"
 
 using namespace std;
@@ -99,7 +98,7 @@ public:
     /**
      * Creates an integer value.
      */
-    explicit Value(qint64 i);
+    explicit Value(int64_t i);
 
     /**
      * Creates an integer value.
@@ -267,7 +266,7 @@ public:
      *
      * Call this function only if isNumber() returns true.
      */
-    qint64 asInteger() const;
+    int64_t asInteger() const;
 
     /**
      * Returns the floating-point value of this value.

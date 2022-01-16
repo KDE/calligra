@@ -6,16 +6,12 @@
 #include "Value.h"
 #include "CalculationSettings.h"
 #include "ValueStorage.h"
-#include "SheetsDebug.h"
 
 #include <KLocalizedString>
 
-#include <QString>
-#include <QTextStream>
+#include <QSize>
 
-#include <float.h>
-#include <math.h>
-#include <limits.h>
+#include <cfloat>
 
 using namespace Calligra::Sheets;
 
@@ -46,7 +42,7 @@ public:
         // b is also secondarily used to indicate a null value if type == Empty,
         // without using up space for an explicit member variable.
         bool b;
-        qint64 i;
+        int64_t i;
         Number f;
         complex<Number>* pc;
         QString* ps;
@@ -233,7 +229,7 @@ Value::Value(bool b)
 }
 
 // create an integer value
-Value::Value(qint64 i)
+Value::Value(int64_t i)
         : d(Private::null())
 {
     d->type = Integer;
@@ -246,7 +242,7 @@ Value::Value(int i)
         : d(Private::null())
 {
     d->type = Integer;
-    d->i = static_cast<qint64>(i);
+    d->i = static_cast<int64_t>(i);
     d->format = fmt_Number;
 }
 
@@ -373,15 +369,15 @@ bool Value::asBoolean() const
 }
 
 // get the value as integer
-qint64 Value::asInteger() const
+int64_t Value::asInteger() const
 {
-    qint64 result = 0;
+    int64_t result = 0;
     if (type() == Integer)
         result = d->i;
     else if (type() == Float)
-        result = static_cast<qint64>(floor(numToDouble(d->f)));
+        result = static_cast<int64_t>(floor(numToDouble(d->f)));
     else if (type() == Complex)
-        result = static_cast<qint64>(floor(numToDouble(d->pc->real())));
+        result = static_cast<int64_t>(floor(numToDouble(d->pc->real())));
     return result;
 }
 
@@ -450,7 +446,7 @@ QVariant Value::asVariant() const
         result = d->b;
         break;
     case Value::Integer:
-        result = d->i;
+        result = (qlonglong) d->i;
         break;
     case Value::Float:
         result = (double) numToDouble(d->f);
@@ -800,8 +796,8 @@ int Value::compare(const Value& v, Qt::CaseSensitivity cs) const
 
     // integer vs integer
     if ((t1 == Integer) && (t2 == Integer)) {
-        qint64 p = asInteger();
-        qint64 q = v.asInteger();
+        int64_t p = asInteger();
+        int64_t q = v.asInteger();
         return (p == q) ? 0 : (p < q) ? -1 : 1;
     }
 
@@ -964,9 +960,9 @@ uint qHash(const Value& value)
     case Value::Integer:
         return ::qHash(value.asInteger());
     case Value::Float:
-        return ::qHash((qint64)numToDouble(value.asFloat()));
+        return ::qHash((int64_t)numToDouble(value.asFloat()));
     case Value::Complex:
-        return ::qHash((qint64)value.asComplex().real());
+        return ::qHash((int64_t)value.asComplex().real());
     case Value::String:
         return ::qHash(value.asString());
     case Value::Array:

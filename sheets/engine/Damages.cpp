@@ -6,8 +6,6 @@
 // Local
 #include "Damages.h"
 
-#include <QPoint>
-
 #include "CellBase.h"
 #include "SheetBase.h"
 #include "Region.h"

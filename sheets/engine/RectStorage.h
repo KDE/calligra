@@ -11,14 +11,15 @@
 #include <QCache>
 #include <QRegion>
 #include <QElapsedTimer>
-#include <QList>
-#include <QVector>
+//#include <QList>
+#include <QString>
+//#include <QVector>
 #include <QTimer>
 #include <QRunnable>
-#include <QTime>
+//#include <QTime>
 #ifdef CALLIGRA_SHEETS_MT
-#include <QMutex>
-#include <QMutexLocker>
+//#include <QMutex>
+//#include <QMutexLocker>
 #endif
 
 #include "sheets_engine_export.h"
@@ -543,7 +544,7 @@ void RectStorage<T>::invalidateCache(const QRect& invRect)
 #endif
     const QVector<QRect> rects = m_cachedArea.intersected(invRect).rects();
     m_cachedArea = m_cachedArea.subtracted(invRect);
-    foreach(const QRect& rect, rects) {
+    for (const QRect& rect : rects) {
         for (int col = rect.left(); col <= rect.right(); ++col) {
             for (int row = rect.top(); row <= rect.bottom(); ++row)
                 m_cache.remove(QPoint(col, row));     // also deletes it
@@ -589,7 +590,7 @@ void RectStorageLoader<T>::run()
 
     QList<QPair<QRegion, T> > treeData;
     typedef QPair<QRegion, T> TRegion;
-    foreach (const TRegion& tr, m_data) {
+    for (const TRegion& tr : m_data) {
         const QRegion& reg = tr.first;
         const T& d = tr.second;
 

@@ -7,8 +7,6 @@
 #ifndef CALLIGRA_SHEETS_FUNCTIONS
 #define CALLIGRA_SHEETS_FUNCTIONS
 
-#include <QList>
-#include <QStringList>
 #include <QVector>
 
 #include "Region.h"

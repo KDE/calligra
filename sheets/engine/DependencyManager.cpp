@@ -10,23 +10,15 @@
 #include "DependencyManager.h"
 #include "DependencyManager_p.h"
 
-#include "CellBase.h"
 #include "CellBaseStorage.h"
 #include "Formula.h"
 #include "FormulaStorage.h"
 #include "MapBase.h"
 #include "NamedAreaManager.h"
-#include "Region.h"
-#include "RTree.h"
 #include "SheetBase.h"
 #include "Value.h"
 #include "ElapsedTime_p.h"
-// #include "DocBase.h"
-
-#include <QHash>
-#include <QList>
-
-#include <KoUpdater.h>
+#include "Updater.h"
 
 using namespace Calligra::Sheets;
 
@@ -36,7 +28,7 @@ void DependencyManager::Private::dump() const
 {
     QMap<CellBase, Region>::ConstIterator mend(providers.end());
     for (QMap<CellBase, Region>::ConstIterator mit(providers.begin()); mit != mend; ++mit) {
-        Cell cell = mit.key();
+        CellBase cell = mit.key();
 
         QStringList debugStr;
         Region::ConstIterator rend((*mit).constEnd());
@@ -48,7 +40,7 @@ void DependencyManager::Private::dump() const
     }
 
     foreach(SheetBase* sheet, consumers.keys()) {
-        const QList< QPair<QRectF, Cell> > pairs = consumers[sheet]->intersectingPairs(QRect(1, 1, KS_colMax, KS_rowMax)).values();
+        const QList< QPair<QRectF, CellBase> > pairs = consumers[sheet]->intersectingPairs(QRect(1, 1, KS_colMax, KS_rowMax)).values();
         QHash<QString, QString> table;
         for (int i = 0; i < pairs.count(); ++i) {
             Region tmpRange(pairs[i].first.toRect(), sheet);
@@ -60,7 +52,7 @@ void DependencyManager::Private::dump() const
         }
     }
 
-    foreach(const Cell &cell, depths.keys()) {
+    foreach(const CellBase &cell, depths.keys()) {
         QString cellName = cell.name();
         while (cellName.count() < 4) cellName.prepend(' ');
         debugSheetsFormula << "depth(" << cellName << " ) =" << depths[cell];
@@ -92,11 +84,11 @@ void DependencyManager::regionChanged(const Region& region)
     Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it(region.constBegin()); it != end; ++it) {
         const QRect range = (*it)->rect();
-        const SheetBase* sheet = (*it)->sheet();
+        SheetBase* sheet = (*it)->sheet();
 
         for (int col = range.left(); col <= range.right(); ++col) {
             for (int row = range.top(); row <= range.bottom(); ++row) {
-                Cell cell(sheet, col, row);
+                CellBase cell(sheet, col, row);
                 const Formula formula = cell.formula();
 
                 // remove it and all its consumers from the reference depth list
@@ -135,8 +127,8 @@ void DependencyManager::addSheet(SheetBase *sheet)
     // FIXME Stefan: Iterate only over the consumers in sheet. Needs adjustment
     //               of the way the providers are stored. Now: only by cell.
     //               Future: QHash<SheetBase*, QHash<CellBase, Region> >
-    const QList<Cell> consumers = d->providers.keys();
-    foreach(const Cell& cell, consumers) {
+    const QList<CellBase> consumers = d->providers.keys();
+    foreach(const CellBase& cell, consumers) {
         if (cell.sheet() == sheet) {
             // Those cells may had got providing regions. Clear them first.
             // TODO
@@ -146,9 +138,9 @@ void DependencyManager::addSheet(SheetBase *sheet)
         }
     }
 
-    Cell cell;
+    CellBase cell;
     for (int c = 0; c < sheet->formulaStorage()->count(); ++c) {
-        cell = Cell(sheet, sheet->formulaStorage()->col(c), sheet->formulaStorage()->row(c));
+        cell = CellBase(sheet, sheet->formulaStorage()->col(c), sheet->formulaStorage()->row(c));
 
         d->generateDependencies(cell, sheet->formulaStorage()->data(c));
         if (!d->depths.contains(cell)) {
@@ -165,7 +157,7 @@ void DependencyManager::removeSheet(SheetBase *sheet)
     // TODO Stefan: Implement, if dependencies should not be tracked all the time.
 }
 
-void DependencyManager::updateAllDependencies(const MapBase* map, KoUpdater *updater)
+void DependencyManager::updateAllDependencies(const MapBase* map, Updater *updater)
 {
     ElapsedTime et("Generating dependencies", ElapsedTime::PrintOnlyTime);
 
@@ -185,11 +177,11 @@ void DependencyManager::updateAllDependencies(const MapBase* map, KoUpdater *upd
             cellsCount += sheet->formulaStorage()->count();
     }
 
-    Cell cell;
+    CellBase cell;
     int cellCurrent = 0;
-    foreach(const SheetBase* sheet, map->sheetList()) {
+    for(SheetBase* sheet : map->sheetList()) {
         for (int c = 0; c < sheet->formulaStorage()->count(); ++c, ++cellCurrent) {
-            cell = Cell(sheet, sheet->formulaStorage()->col(c), sheet->formulaStorage()->row(c));
+            cell = CellBase(sheet, sheet->formulaStorage()->col(c), sheet->formulaStorage()->row(c));
 
             d->generateDependencies(cell, sheet->formulaStorage()->data(c));
             if (!sheet->formulaStorage()->data(c).isValid())
@@ -200,9 +192,9 @@ void DependencyManager::updateAllDependencies(const MapBase* map, KoUpdater *upd
         }
     }
     cellCurrent = 0;
-    foreach(const SheetBase* sheet, map->sheetList()) {
+    for (SheetBase* sheet : map->sheetList()) {
         for (int c = 0; c < sheet->formulaStorage()->count(); ++c, ++cellCurrent) {
-            cell = Cell(sheet, sheet->formulaStorage()->col(c), sheet->formulaStorage()->row(c));
+            cell = CellBase(sheet, sheet->formulaStorage()->col(c), sheet->formulaStorage()->row(c));
 
             if (!d->depths.contains(cell)) {
                 int depth = d->computeDepth(cell);
@@ -231,11 +223,11 @@ Calligra::Sheets::Region DependencyManager::consumingRegion(const CellBase& cell
 Calligra::Sheets::Region DependencyManager::reduceToProvidingRegion(const Region& region) const
 {
     Region providingRegion;
-    QList< QPair<QRectF, Cell> > pairs;
+    QList< QPair<QRectF, CellBase> > pairs;
     Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it(region.constBegin()); it != end; ++it) {
         SheetBase* const sheet = (*it)->sheet();
-        QHash<SheetBase*, RTree<Cell>*>::ConstIterator cit = d->consumers.constFind(sheet);
+        QHash<SheetBase*, RTree<CellBase>*>::ConstIterator cit = d->consumers.constFind(sheet);
         if (cit == d->consumers.constEnd())
             continue;
 
@@ -255,12 +247,12 @@ void DependencyManager::regionMoved(const Region& movedRegion, const CellBase& d
         SheetBase* const sheet = (*it)->sheet();
         locationOffset.setSheet((sheet == destination.sheet()) ? 0 : destination.sheet());
 
-        QHash<SheetBase*, RTree<Cell>*>::ConstIterator cit = d->consumers.constFind(sheet);
+        QHash<SheetBase*, RTree<CellBase>*>::ConstIterator cit = d->consumers.constFind(sheet);
         if (cit == d->consumers.constEnd())
             continue;
 
-        QList<Cell> dependentLocations = cit.value()->intersects((*it)->rect());
-        foreach(const Cell &c, dependentLocations) {
+        QList<CellBase> dependentLocations = cit.value()->intersects((*it)->rect());
+        foreach(const CellBase &c, dependentLocations) {
             updateFormula(c, (*it), locationOffset);
         }
     }
@@ -290,7 +282,7 @@ void DependencyManager::updateFormula(const CellBase& cell, const Region::Elemen
         //parse each cell/range and put it to our expression
         if (token.type() == Token::Cell || token.type() == Token::Range) {
             // FIXME Stefan: Special handling for named areas
-            const Region region(token.text(), sheet->map(), sheet);
+            const Region region = sheet->map()->regionFromName (token.text(), sheet);
             //debugSheetsFormula << region.name();
 
             // the offset contains a sheet, only if it was an intersheet move.
@@ -306,7 +298,7 @@ void DependencyManager::updateFormula(const CellBase& cell, const Region::Elemen
             expression.append(token.text());
         }
     }
-    Cell(cell).parseUserInput(expression);
+    CellBase(cell).parseUserInput(expression);
 }
 
 void DependencyManager::Private::reset()
@@ -315,18 +307,18 @@ void DependencyManager::Private::reset()
     consumers.clear();
 }
 
-Calligra::Sheets::Region DependencyManager::Private::consumingRegion(const Cell& cell) const
+Calligra::Sheets::Region DependencyManager::Private::consumingRegion(const CellBase& cell) const
 {
-    QHash<SheetBase*, RTree<Cell>*>::ConstIterator cit = consumers.constFind(cell.sheet());
+    QHash<SheetBase*, RTree<CellBase>*>::ConstIterator cit = consumers.constFind(cell.sheet());
     if (cit == consumers.constEnd()) {
         //debugSheetsFormula << "No consumer tree found for the cell's sheet.";
         return Region();
     }
 
-    const QList<Cell> consumers = cit.value()->contains(cell.cellPosition());
+    const QList<CellBase> consumers = cit.value()->contains(cell.cellPosition());
 
     Region region;
-    foreach(const Cell& c, consumers) 
+    foreach(const CellBase& c, consumers) 
         region.add(c.cellPosition(), c.sheet());
     return region;
 }
@@ -337,20 +329,20 @@ void DependencyManager::Private::namedAreaModified(const QString& name)
     // basically means that all cells referencing this area should be treated
     // as modified - that will retrieve updated area ranges and also update
     // everything as necessary ...
-    QHash<QString, QList<Cell> >::ConstIterator it = namedAreaConsumers.constFind(name);
+    QHash<QString, QList<CellBase> >::ConstIterator it = namedAreaConsumers.constFind(name);
     if (it == namedAreaConsumers.constEnd())
         return;
 
     Region region;
-    const QList<Cell> namedAreaConsumersList = it.value();
-    foreach(const Cell &c, namedAreaConsumersList) {
+    const QList<CellBase> namedAreaConsumersList = it.value();
+    foreach(const CellBase &c, namedAreaConsumersList) {
         generateDependencies(c, c.formula());
         region.add(c.cellPosition(), c.sheet());
     }
     generateDepths(region);
 }
 
-void DependencyManager::Private::removeDependencies(const Cell& cell)
+void DependencyManager::Private::removeDependencies(const CellBase& cell)
 {
     // look if the cell has any providers
     QMap<CellBase, Region>::ConstIterator pit = providers.constFind(cell);
@@ -361,14 +353,14 @@ void DependencyManager::Private::removeDependencies(const Cell& cell)
     Region region = pit.value();
     Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it(region.constBegin()); it != end; ++it) {
-        QHash<SheetBase*, RTree<Cell>*>::ConstIterator cit = consumers.constFind((*it)->sheet());
+        QHash<SheetBase*, RTree<CellBase>*>::ConstIterator cit = consumers.constFind((*it)->sheet());
         if (cit != consumers.constEnd()) {
             cit.value()->remove((*it)->rect(), cell);
         }
     }
 
     // remove information about named area dependencies
-    QHash<QString, QList<Cell> >::Iterator nit(namedAreaConsumers.begin());
+    QHash<QString, QList<CellBase> >::Iterator nit(namedAreaConsumers.begin());
     while (nit != namedAreaConsumers.end()) {
         nit.value().removeAll(cell);
         if (nit.value().isEmpty())
@@ -385,21 +377,21 @@ void DependencyManager::Private::removeDependencies(const Cell& cell)
     providers.remove(cell);
 }
 
-void DependencyManager::Private::removeDepths(const Cell& cell)
+void DependencyManager::Private::removeDepths(const CellBase& cell)
 {
     QMap<CellBase, int>::Iterator dit = depths.find(cell);
     if (dit == depths.end())
         return;
-    QHash<SheetBase*, RTree<Cell>*>::ConstIterator cit = consumers.constFind(cell.sheet());
+    QHash<SheetBase*, RTree<CellBase>*>::ConstIterator cit = consumers.constFind(cell.sheet());
     if (cit == consumers.constEnd())
         return;
     depths.erase(dit);
-    const QList<Cell> consumers = cit.value()->contains(cell.cellPosition());
-    foreach(const Cell &c, consumers)
+    const QList<CellBase> consumers = cit.value()->contains(cell.cellPosition());
+    foreach(const CellBase &c, consumers)
         removeDepths(c);
 }
 
-void DependencyManager::Private::generateDependencies(const Cell& cell, const Formula& formula)
+void DependencyManager::Private::generateDependencies(const CellBase& cell, const Formula& formula)
 {
     //get rid of old dependencies first
     removeDependencies(cell);
@@ -416,12 +408,12 @@ void DependencyManager::Private::generateDependencies(const Cell& cell, const Fo
 
 void DependencyManager::Private::generateDepths(const Region& region)
 {
-    QSet<Cell> computedDepths;
+    QSet<CellBase> computedDepths;
 
     Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it(region.constBegin()); it != end; ++it) {
         const QRect range = (*it)->rect();
-        const SheetBase* sheet = (*it)->sheet();
+        SheetBase* sheet = (*it)->sheet();
         const CellBaseStorage *cells = sheet->cellStorage();
 
         int bottom = range.bottom();
@@ -431,16 +423,16 @@ void DependencyManager::Private::generateDepths(const Region& region)
 
         for (int row = range.top(); row <= bottom; ++row) {
             for (int col = range.left(); col <= right; ++col) {
-                Cell cell(sheet, col, row);
+                CellBase cell(sheet, col, row);
                 generateDepths(cell, computedDepths);
             }
         }
     }
 }
 
-void DependencyManager::Private::generateDepths(Cell cell, QSet<Cell>& computedDepths)
+void DependencyManager::Private::generateDepths(CellBase cell, QSet<CellBase>& computedDepths)
 {
-    static QSet<Cell> processedCells;
+    static QSet<CellBase> processedCells;
 
     //prevent infinite recursion (circular dependencies)
     if (processedCells.contains(cell) || cell.value() == Value::errorCIRCLE()) {
@@ -463,13 +455,13 @@ void DependencyManager::Private::generateDepths(Cell cell, QSet<Cell>& computedD
 
     // Recursion. We need the whole dependency tree of the changed region.
     // An infinite loop is prevented by the check above.
-    QHash<SheetBase*, RTree<Cell>*>::ConstIterator cit = consumers.constFind(cell.sheet());
+    QHash<SheetBase*, RTree<CellBase>*>::ConstIterator cit = consumers.constFind(cell.sheet());
     if (cit == consumers.constEnd()) {
         processedCells.remove(cell);
         return;
     }
-    const QList<Cell> consumers = cit.value()->contains(cell.cellPosition());
-    foreach (const Cell &c, consumers) {
+    const QList<CellBase> consumers = cit.value()->contains(cell.cellPosition());
+    foreach (const CellBase &c, consumers) {
         generateDepths(c, computedDepths);
     }
 
@@ -477,10 +469,10 @@ void DependencyManager::Private::generateDepths(Cell cell, QSet<Cell>& computedD
     processedCells.remove(cell);
 }
 
-int DependencyManager::Private::computeDepth(Cell cell) const
+int DependencyManager::Private::computeDepth(CellBase cell) const
 {
     // a set of cell, which depth is currently calculated
-    static QSet<Cell> processedCells;
+    static QSet<CellBase> processedCells;
 
     //prevent infinite recursion (circular dependencies)
     if (processedCells.contains(cell) || cell.value() == Value::errorCIRCLE()) {
@@ -504,7 +496,7 @@ int DependencyManager::Private::computeDepth(Cell cell) const
         const int bottom = range.bottom();
         for (int col = range.left(); col <= right; ++col) {
             for (int row = range.top(); row <= bottom; ++row) {
-                Cell referencedCell = Cell(sheet, col, row);
+                CellBase referencedCell = CellBase(sheet, col, row);
                 if (!providers.contains(referencedCell)) {
                     // no further references
                     // depth is one at least
@@ -532,7 +524,7 @@ int DependencyManager::Private::computeDepth(Cell cell) const
     return depth;
 }
 
-void DependencyManager::Private::computeDependencies(const Cell& cell, const Formula& formula)
+void DependencyManager::Private::computeDependencies(const CellBase& cell, const Formula& formula)
 {
     // Broken formula -> meaningless dependencies
     if (!formula.isValid())
@@ -569,7 +561,7 @@ void DependencyManager::Private::computeDependencies(const Cell& cell, const For
                 }
 
                 // check if valid cell/range
-                Region region(token.text(), sheet->map(), sheet);
+                Region region = sheet->map()->regionFromName (token.text(), sheet);
                 if (region.isValid()) {
                     if (isNamedArea) {
                         if ((i > 0 && tokens[i-1].isOperator()) || (i < tokens.count()-1 && tokens[i+1].isOperator())) {
@@ -589,9 +581,9 @@ void DependencyManager::Private::computeDependencies(const Cell& cell, const For
                     SheetBase* sheet = region.firstSheet();
 
                     // create consumer tree, if not existing yet
-                    QHash<SheetBase*, RTree<Cell>*>::iterator it = consumers.find(sheet);
+                    QHash<SheetBase*, RTree<CellBase>*>::iterator it = consumers.find(sheet);
                     if (it == consumers.end()) {
-                        it = consumers.insert(sheet, new RTree<Cell>());
+                        it = consumers.insert(sheet, new RTree<CellBase>());
                     }
                     // add cell as consumer of the range
                     it.value()->insert(region.firstRange(), cell);
@@ -610,15 +602,15 @@ void DependencyManager::Private::computeDependencies(const Cell& cell, const For
 void DependencyManager::Private::removeCircularDependencyFlags(const Region& region, Direction direction)
 {
     // a set of cells, which circular dependency flag is currently removed
-    static QSet<Cell> processedCells;
+    static QSet<CellBase> processedCells;
 
     Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it(region.constBegin()); it != end; ++it) {
         const QRect range = (*it)->rect();
-        const SheetBase* sheet = (*it)->sheet();
+        SheetBase* sheet = (*it)->sheet();
         for (int col = range.left(); col <= range.right(); ++col) {
             for (int row = range.top(); row <= range.bottom(); ++row) {
-                Cell cell(sheet, col, row);
+                CellBase cell(sheet, col, row);
 
                 if (processedCells.contains(cell))
                     continue;
