@@ -14,6 +14,8 @@ if (POLICY CMP0071)
     cmake_policy(SET CMP0071 NEW)
 endif()
 
+set (CMAKE_CXX_STANDARD 17)
+
 # ensure out-of-source build
 string(COMPARE EQUAL "${CMAKE_SOURCE_DIR}" "${CMAKE_BINARY_DIR}" isBuildInSource)
 if(isBuildInSource)
