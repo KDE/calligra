@@ -22,8 +22,6 @@ namespace Calligra
 namespace Sheets
 {
 
-class Binding;
-class BindingStorage;
 class CommentStorage;
 class Formula;
 class FormulaStorage;
@@ -108,13 +106,6 @@ public:
     void setValue(int column, int row, const Value& value);
 
     /**
-     * \return the binding associated with the Cell at \p column , \p row .
-     */
-    Binding binding(int column, int row) const;
-    void setBinding(const Region& region, const Binding& binding);
-    void removeBinding(const Region& region, const Binding& binding);
-
-    /**
      * \return the comment associated with the Cell at \p column , \p row .
      */
     QString comment(int column, int row) const;
@@ -194,7 +185,6 @@ public:
 
 
 
-    const BindingStorage* bindingStorage() const;
     const CommentStorage* commentStorage() const;
     const FormulaStorage* formulaStorage() const;
     const UserInputStorage* userInputStorage() const;

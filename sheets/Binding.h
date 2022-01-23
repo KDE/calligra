@@ -5,12 +5,9 @@
 #ifndef CALLIGRA_SHEETS_BINDING
 #define CALLIGRA_SHEETS_BINDING
 
-//#include <QSharedDataPointer>
-//#include <QVariant>
+#include "Region.h"
 
-//#include "Region.h"
-
-#include "sheets_engine_export.h"
+#include "sheets_core_export.h"
 
 namespace Calligra
 {
@@ -26,7 +23,7 @@ class BindingModel;
  * If a cell in the region is updated, the BindingManager informs this Binding, which
  * in turn informs the model it holds.
  */
-class CALLIGRA_SHEETS_ENGINE_EXPORT Binding
+class CALLIGRA_SHEETS_CORE_EXPORT Binding
 {
 public:
     Binding();

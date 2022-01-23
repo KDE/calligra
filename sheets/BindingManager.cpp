@@ -4,16 +4,15 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-//#include "BindingManager.h"
+#include "BindingManager.h"
 
-//#include "BindingStorage.h"
-//#include "CellBaseStorage.h"
-//#include "MapBase.h"
-//#include "Region.h"
-//#include "SheetBase.h"
-//#include "BindingModel.h"
-
-//#include <QAbstractItemModel>
+#include "Binding.h"
+#include "calligra_sheets_limits.h"
+#include "BindingStorage.h"
+#include "CellBaseStorage.h"
+#include "MapBase.h"
+#include "SheetBase.h"
+#include "BindingModel.h"
 
 using namespace Calligra::Sheets;
 
@@ -36,7 +35,7 @@ BindingManager::~BindingManager()
 
 const QAbstractItemModel* BindingManager::createModel(const QString& regionName)
 {
-    const Region region(regionName, d->map);
+    const Region region = d->map->regionFromName(regionName, nullptr);
     if (!region.isValid() || !region.isContiguous() || !region.firstSheet()) {
         return 0;
     }
@@ -47,7 +46,7 @@ const QAbstractItemModel* BindingManager::createModel(const QString& regionName)
 
 bool BindingManager::removeModel(const QAbstractItemModel* model)
 {
-    QList< QPair<QRectF, Binding> > bindings;
+    QVector< QPair<QRectF, Binding> > bindings;
     const QRect rect(QPoint(1, 1), QPoint(KS_colMax, KS_rowMax));
     const QList<SheetBase*> sheets = d->map->sheetList();
     for (int i = 0; i < sheets.count(); ++i) {
@@ -66,14 +65,14 @@ bool BindingManager::removeModel(const QAbstractItemModel* model)
 
 bool BindingManager::isCellRegionValid(const QString& regionName) const
 {
-    const Region region(regionName, d->map);
+    const Region region = d->map->regionFromName(regionName, nullptr);
     return (region.isValid() && region.isContiguous() && region.firstSheet());
 }
 
 void BindingManager::regionChanged(const Region& region)
 {
     SheetBase* sheet;
-    QList< QPair<QRectF, Binding> > bindings;
+    QVector< QPair<QRectF, Binding> > bindings;
     Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it = region.constBegin(); it != end; ++it) {
         sheet = (*it)->sheet();
@@ -86,7 +85,7 @@ void BindingManager::regionChanged(const Region& region)
 
 void BindingManager::updateAllBindings()
 {
-    QList< QPair<QRectF, Binding> > bindings;
+    QVector< QPair<QRectF, Binding> > bindings;
     const QRect rect(QPoint(1, 1), QPoint(KS_colMax, KS_rowMax));
     const QList<SheetBase*> sheets = d->map->sheetList();
     for (int i = 0; i < sheets.count(); ++i) {

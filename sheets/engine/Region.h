@@ -112,7 +112,7 @@ public:
 
 
     /**
-     *  @return a QRegion that unifies all contained ranges
+     *  @return a vector of all the contained ranges
      */
     QVector<QRect> rects() const;
 
@@ -228,26 +228,25 @@ public:
      */
     Element* add(const Region& region, SheetBase* sheet = 0);
 
-    /* TODO Stefan #3: Improve! */
     /**
-     * Subtracts the point @p point from this region.
+     * Removes all rectangles that intersect with the point.
      * @param point the point's location
      * @param sheet the sheet the point belongs to
      */
-    void sub(const QPoint& point, SheetBase* sheet);
+    void removeIntersects(const QPoint& point, SheetBase* sheet);
 
     /**
-     * Subtracts the range @p range from this region.
+     * Removes all rectangles that intersect with the range.
      * @param range the range's location
      * @param sheet the sheet the range belongs to
      */
-    void sub(const QRect& range, SheetBase* sheet);
+    void removeIntersects(const QRect& range, SheetBase* sheet);
 
     /**
-     * Subtracts the region @p region from this region.
+     * Removes all rectangles that intersect with the region.
      * @param region the region to subtract
      */
-    void sub(const Region& region);
+    void removeIntersects(const Region& region);
 
     /**
      * Intersects the region @p region and this region and

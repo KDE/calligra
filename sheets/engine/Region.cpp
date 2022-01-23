@@ -209,39 +209,29 @@ Region::Element* Region::add(const Region& region, SheetBase* sheet)
     return d->cells.isEmpty() ? 0 : d->cells.last();
 }
 
-void Region::sub(const QPoint& point, SheetBase* sheet)
+void Region::removeIntersects(const QPoint& point, SheetBase* sheet)
 {
-    // TODO Stefan: Improve!
-    Iterator endOfList(d->cells.end());
-    for (Iterator it = d->cells.begin(); it != endOfList; ++it) {
-        Element *element = *it;
-        if (element->sheet() != sheet) {
-            continue;
-        }
-        if (element->rect() == QRect(point, point)) {
-            delete element;
-            d->cells.removeAll(element);
-            break;
-        }
-    }
+    removeIntersects(QRect(point, point), sheet);
 }
 
-void Region::sub(const QRect& range, SheetBase* sheet)
+void Region::removeIntersects(const QRect& range, SheetBase* sheet)
 {
     const QRect normalizedRange = normalized(range);
+    QList<Element *> toRemove;
     // TODO Stefan: Improve!
     Iterator endOfList(d->cells.end());
-    for (Iterator it = d->cells.begin(); it != endOfList; ++it) {
-        Element *element = *it;
-        if (element->sheet() != sheet) {
+    for (Element *element : d->cells) {
+        if (element->sheet() != sheet)
             continue;
-        }
-        if (element->rect() == normalizedRange) {
+
+        if (element->rect().intersects (normalizedRange)) {
             delete element;
-            d->cells.removeAll(element);
-            break;
+            toRemove.push_back (element);
         }
     }
+
+    for (Element *el : toRemove)
+        d->cells.removeAll(el);
 }
 
 void Region::sub(const Region& region)

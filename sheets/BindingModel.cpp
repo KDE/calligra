@@ -1,107 +1,25 @@
-// This file is part of the KDE project
-// SPDX-FileCopyrightText: 2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
-// SPDX-FileCopyrightText: 2008 Thomas Zander <zander@kde.org>
-// SPDX-License-Identifier: LGPL-2.0-or-later
+/* This file is part of the KDE project
+   SPDX-FileCopyrightText: 2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+    SPDX-FileCopyrightText: 2008 Thomas Zander <zander@kde.org>
 
-#include "Binding.h"
-//#include "BindingModel.h"
+   SPDX-License-Identifier: LGPL-2.0-or-later
+*/
+
+#include "BindingModel.h"
 
 //#include <QRect>
 
 //#include "SheetsDebug.h"
 
-//#include "CellBaseStorage.h"
-//#include "MapBase.h"
-//#include "SheetBase.h"
-//#include "Value.h"
+#include "Binding.h"
+#include "CellBase.h"
+#include "CellBaseStorage.h"
+#include "MapBase.h"
+#include "SheetBase.h"
+#include "Value.h"
+
 
 using namespace Calligra::Sheets;
-
-class Q_DECL_HIDDEN Binding::Private : public QSharedData
-{
-public:
-    BindingModel* model;
-    Private(Binding *q) : model(new BindingModel(q)) {}
-    ~Private() { delete model; }
-};
-
-
-Binding::Binding()
-    : d(new Private(this))
-{
-}
-
-Binding::Binding(const Region& region)
-    : d(new Private(this))
-{
-    Q_ASSERT(region.isValid());
-    d->model->setRegion(region);
-}
-
-Binding::Binding(const Binding& other)
-    : d(other.d)
-{
-}
-
-Binding::~Binding()
-{
-}
-
-bool Binding::isEmpty() const
-{
-    return d->model->region().isEmpty();
-}
-
-Calligra::Sheets::BindingModel* Binding::model() const
-{
-    return d->model;
-}
-
-const Calligra::Sheets::Region& Binding::region() const
-{
-    return d->model->region();
-}
-
-void Binding::setRegion(const Region& region)
-{
-    d->model->setRegion(region);
-}
-
-void Binding::update(const Region& region)
-{
-    QRect rect;
-    Region changedRegion;
-    const QPoint offset = d->model->region().firstRange().topLeft();
-    const QRect range = d->model->region().firstRange();
-    const SheetBase* sheet = d->model->region().firstSheet();
-    Region::ConstIterator end(region.constEnd());
-    for (Region::ConstIterator it = region.constBegin(); it != end; ++it) {
-        if (sheet != (*it)->sheet())
-            continue;
-        rect = range & (*it)->rect();
-        rect.translate(-offset.x(), -offset.y());
-        if (rect.isValid()) {
-            d->model->emitDataChanged(rect);
-            changedRegion.add(rect, (*it)->sheet());
-        }
-    }
-    d->model->emitChanged(changedRegion);
-}
-
-void Binding::operator=(const Binding & other)
-{
-    d = other.d;
-}
-
-bool Binding::operator==(const Binding& other) const
-{
-    return d == other.d;
-}
-
-bool Binding::operator<(const Binding& other) const
-{
-    return d < other.d;
-}
 
 QHash<QString, QVector<QRect> > BindingModel::cellRegion() const
 {
@@ -121,7 +39,7 @@ bool BindingModel::setCellRegion(const QString& regionName)
     Q_ASSERT(m_region.isValid());
     Q_ASSERT(m_region.firstSheet());
     const MapBase* const map = m_region.firstSheet()->map();
-    const Region region = Region(regionName, map);
+    const Region region = map->regionFromName(regionName, nullptr);
     if (!region.isValid()) {
         debugSheets << qPrintable(regionName) << "is not a valid region.";
         return false;
@@ -160,7 +78,7 @@ bool BindingModel::isCellRegionValid(const QString& regionName) const
 {
     Q_CHECK_PTR(m_region.firstSheet());
     Q_CHECK_PTR(m_region.firstSheet()->map());
-    return Region(regionName, m_region.firstSheet()->map()).isValid();
+    return m_region.firstSheet()->map()->regionFromName(regionName).isValid();
 }
 
 void BindingModel::emitChanged(const Region& region)
@@ -181,7 +99,7 @@ QVariant BindingModel::data(const QModelIndex& index, int role) const
     if ((m_region.isEmpty()) || (role != Qt::EditRole && role != Qt::DisplayRole))
         return QVariant();
     const QPoint offset = m_region.firstRange().topLeft();
-    const SheetBase* sheet = m_region.firstSheet();
+    SheetBase* sheet = m_region.firstSheet();
     int row = offset.y() + index.row();
     int column = offset.x() + index.column();
     Value value = sheet->cellStorage()->value(column, row);
@@ -189,7 +107,7 @@ QVariant BindingModel::data(const QModelIndex& index, int role) const
     switch (role) {
         case Qt::DisplayRole: {
             // return the in the cell displayed test
-            Cell c(sheet, column, row);
+            CellBase c(sheet, column, row);
             bool showFormula = false;
             return c.displayText(Style(), &value, &showFormula);
         }

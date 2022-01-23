@@ -9,7 +9,6 @@
 #define CALLIGRA_SHEETS_RECT_STORAGE
 
 #include <QCache>
-#include <QRegion>
 #include <QElapsedTimer>
 #include <QString>
 #include <QTimer>
@@ -81,7 +80,7 @@ public:
     /**
      * Mass loading of data, removes any existing data first
      */
-    void load(const QList<QPair<QRegion, T> >& data);
+    void load(const QList<QPair<Region, T> >& data);
 
     /**
      * Assigns \p data to \p region .
@@ -171,14 +170,14 @@ protected:
 private:
     MapBase* m_map;
     RTree<T> m_tree;
-    QRegion m_usedArea;
+    Region m_usedArea;
     QMap<int, QPair<QRectF, T> > m_possibleGarbage;
     QList<T> m_storedData;
     mutable QCache<QPoint, T> m_cache;
 #ifdef CALLIGRA_SHEETS_MT
     mutable QMutex m_mutex;
 #endif
-    mutable QRegion m_cachedArea;
+    mutable Region m_cachedArea;
 
     bool m_storingUndo;
     QVector< QPair<QRectF, T> > m_undoData;
@@ -191,14 +190,14 @@ template<typename T>
 class RectStorageLoader : public QRunnable
 {
 public:
-    RectStorageLoader(RectStorage<T>* storage, const QList<QPair<QRegion, T> >& data);
+    RectStorageLoader(RectStorage<T>* storage, const QList<QPair<Region, T> >& data);
     void run() override;
     void waitForFinished();
     bool isFinished() const;
-    QList<QPair<QRegion, T> > data() const;
+    QList<QPair<Region, T> > data() const;
 private:
     RectStorage<T>* m_storage;
-    QList<QPair<QRegion, T> > m_data;
+    QList<QPair<Region, T> > m_data;
 };
 
 template<typename T>
@@ -245,7 +244,7 @@ T RectStorage<T>::contains(const QPoint& point) const
     T data = results.isEmpty() ? T() : results.last();
     // insert style into the cache
     m_cache.insert(point, new T(data));
-    m_cachedArea += QRect(point, point);
+    m_cachedArea.add(point);
     return data;
 }
 
@@ -276,7 +275,7 @@ QRect RectStorage<T>::usedArea() const
 }
 
 template<typename T>
-void RectStorage<T>::load(const QList<QPair<QRegion, T> >& data)
+void RectStorage<T>::load(const QList<QPair<Region, T> >& data)
 {
     Q_ASSERT(!m_loader);
     m_loader = new RectStorageLoader<T>(this, data);
@@ -539,8 +538,9 @@ void RectStorage<T>::invalidateCache(const QRect& invRect)
 #ifdef CALLIGRA_SHEETS_MT
     QMutexLocker ml(&m_mutex);
 #endif
-    const QVector<QRect> rects = m_cachedArea.intersected(invRect).rects();
-    m_cachedArea = m_cachedArea.subtracted(invRect);
+    Region invRegion = Region(invRect);
+    const QVector<QRect> rects = m_cachedArea.intersected(invRegion).rects();
+    m_cachedArea.removeIntersects(invRegion);
     for (const QRect& rect : rects) {
         for (int col = rect.left(); col <= rect.right(); ++col) {
             for (int row = rect.top(); row <= rect.bottom(); ++row)
@@ -572,7 +572,7 @@ void RectStorage<T>::resetUndo() {
 }
 
 template<typename T>
-RectStorageLoader<T>::RectStorageLoader(RectStorage<T> *storage, const QList<QPair<QRegion, T> > &data)
+RectStorageLoader<T>::RectStorageLoader(RectStorage<T> *storage, const QList<QPair<Region, T> > &data)
     : m_storage(storage)
     , m_data(data)
 {
@@ -585,10 +585,10 @@ void RectStorageLoader<T>::run()
     debugSheets << "Loading conditional styles";
     QElapsedTimer t; t.start();
 
-    QList<QPair<QRegion, T> > treeData;
-    typedef QPair<QRegion, T> TRegion;
+    QList<QPair<Region, T> > treeData;
+    typedef QPair<Region, T> TRegion;
     for (const TRegion& tr : m_data) {
-        const QRegion& reg = tr.first;
+        const Region& reg = tr.first;
         const T& d = tr.second;
 
         int index = m_storage->m_storedData.indexOf(d);
@@ -619,7 +619,7 @@ bool RectStorageLoader<T>::isFinished() const
 }
 
 template<typename T>
-QList<QPair<QRegion, T> > RectStorageLoader<T>::data() const
+QList<QPair<Region, T> > RectStorageLoader<T>::data() const
 {
      return m_data;
 }

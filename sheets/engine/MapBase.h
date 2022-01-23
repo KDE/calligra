@@ -21,7 +21,6 @@ namespace Calligra
 namespace Sheets
 {
 
-class BindingManager;
 class CalculationSettings;
 class Damage;
 class DependencyManager;
@@ -114,11 +113,6 @@ public:
      */
     ValueCalc* calc() const;
 
-
-    /**
-     * \return a pointer to the binding manager
-     */
-    BindingManager* bindingManager() const;
 
     /**
      * \return a pointer to the dependency manager

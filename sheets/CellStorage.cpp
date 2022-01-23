@@ -45,6 +45,7 @@ class Q_DECL_HIDDEN CellStorage::Private
 public:
     Private(Sheet* sheet)
             : sheet(sheet)
+            , bindingStorage(new BindingStorage(sheet->map()))
             , conditionsStorage(new ConditionsStorage(sheet->map()))
             , databaseStorage(new DatabaseStorage(sheet->map()))
             , fusionStorage(new FusionStorage(sheet->map()))
@@ -56,6 +57,7 @@ public:
 
     Private(const Private& other, Sheet* sheet)
             : sheet(sheet)
+            , bindingStorage(new BindingStorage(*other.bindingStorage))
             , conditionsStorage(new ConditionsStorage(*other.conditionsStorage))
             , databaseStorage(new DatabaseStorage(*other.databaseStorage))
             , fusionStorage(new FusionStorage(*other.fusionStorage))
@@ -66,6 +68,7 @@ public:
     }
 
     ~Private() {
+        delete bindingStorage;
         delete conditionsStorage;
         delete databaseStorage;
         delete fusionStorage;
@@ -77,6 +80,7 @@ public:
     void createCommand(KUndo2Command *parent) const;
 
     Sheet*                  sheet;
+    BindingStorage*         bindingStorage;
     ConditionsStorage*      conditionsStorage;
     DatabaseStorage*        databaseStorage;
     FusionStorage*          fusionStorage;
@@ -201,6 +205,7 @@ CellStorage::~CellStorage()
 }
 
 void CellStorage::fillExtraStorages() {
+    storages.push_back (d->bindingStorage);
     storages.push_back (d->conditionsStorage);
     storages.push_back (d->databaseStorage);
     storages.push_back (d->fusionStorage);
@@ -237,6 +242,30 @@ void CellStorage::take(int col, int row)
     if (!v.isEmpty())
         d->sheet->map()->addDamage(new CellDamage(Cell(d->sheet, prevCol, row), CellDamage::Appearance));
 
+}
+
+Binding CellStorage::binding(int column, int row) const
+{
+#ifdef CALLIGRA_SHEETS_MT
+    QReadLocker rl(&bigUglyLock);
+#endif
+    return d->bindingStorage->contains(QPoint(column, row));
+}
+
+void CellStorage::setBinding(const Region& region, const Binding& binding)
+{
+#ifdef CALLIGRA_SHEETS_MT
+    QWriteLocker(&bigUglyLock);
+#endif
+    d->bindingStorage->insert(region, binding);
+}
+
+void CellStorage::removeBinding(const Region& region, const Binding& binding)
+{
+#ifdef CALLIGRA_SHEETS_MT
+    QWriteLocker(&bigUglyLock);
+#endif
+    d->bindingStorage->remove(region, binding);
 }
 
 Conditions CellStorage::conditions(int column, int row) const
@@ -670,6 +699,11 @@ CellStorage CellStorage::subStorage(const Region& region) const
     *subStorage.d->linkStorage = d->linkStorage->subStorage(region);
     *subStorage.d->valueStorage = d->valueStorage->subStorage(region);
     return subStorage;
+}
+
+const BindingStorage* CellStorage::bindingStorage() const
+{
+    return d->bindingStorage;
 }
 
 const ConditionsStorage* CellStorage::conditionsStorage() const

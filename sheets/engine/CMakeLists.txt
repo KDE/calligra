@@ -38,10 +38,6 @@ set (calligrasheetsengine_LIB_SRCS
     ValidityStorage.cpp
     Formula.cpp
 
-    Binding.cpp
-    BindingManager.cpp
-    BindingModel.cpp
-    BindingStorage.cpp
 )
 
 add_library(calligrasheetsengine SHARED ${calligrasheetsengine_LIB_SRCS})
@@ -79,7 +75,7 @@ target_link_libraries(calligrasheetsengine
     PUBLIC
         Qt5::Core
         Qt5::Xml
-        KF5::KDELibs4Support
+        KF5::CoreAddons
     PRIVATE
         koplugin
 )

@@ -11,6 +11,7 @@
 #include <KoRTree.h>
 
 #include "calligra_sheets_limits.h"
+#include "Region.h"
 
 // Use dynamic_cast instead of cached root node
 // this is much slower but it is here so it is easy to check that still all works.
@@ -92,7 +93,7 @@ public:
      */
     void insert(const QRectF& rect, const T& data) override;
 
-    void load(const QList<QPair<QRegion, T> >& data);
+    void load(const QList<QPair<Region, T> >& data);
 
     void remove(const QRectF& rect, const T& data, int id = -1);
 
@@ -391,13 +392,13 @@ static inline qreal calcLoadingRectValue(const QRectF& r)
 }
 
 template<typename T>
-void RTree<T>::load(const QList<QPair<QRegion, T> >& data)
+void RTree<T>::load(const QList<QPair<Region, T> >& data)
 {
     // clear current tree
     clear();
 
     // make rect->data mapping
-    typedef QPair<QRegion, T> DataRegion;
+    typedef QPair<Region, T> DataRegion;
     
     QList<LoadData> rectData;
     QVector<int> indices;

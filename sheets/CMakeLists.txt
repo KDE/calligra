@@ -290,6 +290,10 @@ set (calligrasheetsodf_LIB_SRCS
     StyleManager.cpp
     StyleStorage.cpp
     ValueFormatter.cpp
+    Binding.cpp
+    BindingManager.cpp
+    BindingModel.cpp
+    BindingStorage.cpp
 
     database/Database.cpp
     database/DatabaseManager.cpp

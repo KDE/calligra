@@ -24,6 +24,8 @@ namespace Calligra
 {
 namespace Sheets
 {
+class Binding;
+class BindingStorage;
 class Cell;
 class Conditions;
 class ConditionsStorage;
@@ -94,6 +96,13 @@ public:
      * Removes all data at \p col , \p row .
      */
     virtual void take(int col, int row) override;
+
+    /**
+     * \return the binding associated with the Cell at \p column , \p row .
+     */
+    Binding binding(int column, int row) const;
+    void setBinding(const Region& region, const Binding& binding);
+    void removeBinding(const Region& region, const Binding& binding);
 
     /**
      * \return the conditional formattings associated with the Cell at \p column , \p row .
@@ -228,6 +237,7 @@ public:
      */
     CellStorage subStorage(const Region& region) const;
 
+    const BindingStorage* bindingStorage() const;
     const ConditionsStorage* conditionsStorage() const;
     const FusionStorage* fusionStorage() const;
     const LinkStorage* linkStorage() const;

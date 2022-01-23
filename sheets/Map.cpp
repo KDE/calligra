@@ -24,6 +24,7 @@
 #include <KoProgressUpdater.h>
 
 #include "ApplicationSettings.h"
+#include "BindingManager.h"
 #include "CellStorage.h"
 #include "Damages.h"
 #include "DocBase.h"
@@ -57,6 +58,7 @@ public:
     LoadingInfo* loadingInfo;
     bool readwrite;
 
+    BindingManager* bindingManager;
     DatabaseManager* databaseManager;
     StyleManager* styleManager;
     KoStyleManager* textStyleManager;
@@ -102,6 +104,7 @@ Map::Map(DocBase* doc, int syntaxVersion)
     d->loadingInfo = 0;
     d->readwrite = true;
 
+    d->bindingManager = new BindingManager(this);
     d->databaseManager = new DatabaseManager();
     d->styleManager = new StyleManager();
     d->textStyleManager = new KoStyleManager(this);
@@ -134,6 +137,7 @@ Map::~Map()
 
     deleteLoadingInfo();
 
+    delete d->bindingManager;
     delete d->databaseManager;
     delete d->styleManager;
 
@@ -196,6 +200,11 @@ bool Map::completeSaving(KoStore *store, KoXmlWriter *manifestWriter, KoShapeSav
     Q_UNUSED(manifestWriter);
     Q_UNUSED(context);
     return true;
+}
+
+BindingManager* MapBase::bindingManager() const
+{
+    return d->bindingManager;
 }
 
 DatabaseManager* Map::databaseManager() const
@@ -389,7 +398,10 @@ void Map::handleDamages(const QList<Damage*>& damages)
 {
     MapBase::handleDamages(damages);
 
-    // The base class does most of the work here, we just add style invalidation.
+    // The base class does most of the work here, we just process bindings and add style invalidation.
+
+    Region bindingChangedRegion;
+    bool allValues = false;
 
     QList<Damage*>::ConstIterator end(damages.end());
     for (QList<Damage*>::ConstIterator it = damages.begin(); it != end; ++it) {
@@ -397,14 +409,38 @@ void Map::handleDamages(const QList<Damage*>& damages)
 
         if (damage->type() == Damage::Cell) {
             CellDamage* cellDamage = static_cast<CellDamage*>(damage);
-            Sheet* damagedSheet = dynamic_cast<Sheet *>(cellDamage->sheet());
+            SheetBase* const damagedSheet = cellDamage->sheet();
+            const Region& region = cellDamage->region();
             const CellDamage::Changes changes = cellDamage->changes();
+
+            if (!allValues) {
+                if (changes & CellDamage::Binding)
+                    bindingChangedRegion.add(region, damagedSheet);
+            }
 
             // TODO Stefan: Detach the style cache from the CellView cache.
             if (damagedSheet && changes.testFlag(CellDamage::Appearance))
                 // Rebuild the style storage cache.
                 damagedSheet->fullCellStorage()->invalidateStyleCache(); // FIXME more fine-grained
+            continue;
         }
+
+        if (damage->type() == Damage::Workbook) {
+            WorkbookDamage* workbookDamage = static_cast<WorkbookDamage*>(damage);
+            debugSheetsDamage << "Processing\t" << *damage;
+            const WorkbookDamage::Changes changes = workbookDamage->changes();
+
+            if (changes & WorkbookDamage::Value)
+                allValues = true;
+            continue;
+        }
+    }
+
+    if (allValues) {
+        d->bindingManager->updateAllBindings();
+    } else {
+        if (!bindingChangedRegion.isEmpty())
+            d->bindingManager->regionChanged(bindingChangedRegion);
     }
 }
 

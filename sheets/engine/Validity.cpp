@@ -13,8 +13,6 @@
 #include "MapBase.h"
 #include "SheetBase.h"
 #include "ValueCalc.h"
-//#include "ValueConverter.h"
-//#include "ValueParser.h"
 
 using namespace Calligra::Sheets;
 

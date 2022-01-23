@@ -12,7 +12,6 @@
 #include "Region.h"
 #include "SheetBase.h"
 
-#include "BindingManager.h"
 #include "DependencyManager.h"
 #include "NamedAreaManager.h"
 #include "RecalcManager.h"
@@ -41,7 +40,6 @@ public:
     ValueConverter* converter;
     ValueParser* parser;
 
-    BindingManager* bindingManager;
     DependencyManager* dependencyManager;
     NamedAreaManager* namedAreaManager;
     RecalcManager* recalcManager;
@@ -59,7 +57,6 @@ MapBase::MapBase() :
 {
     d->isLoading = false;
 
-    d->bindingManager = new BindingManager(this);
     d->dependencyManager = new DependencyManager(this);
     d->namedAreaManager = new NamedAreaManager(this);
     d->recalcManager = new RecalcManager(this);
@@ -85,7 +82,6 @@ MapBase::MapBase() :
 
 MapBase::~MapBase()
 {
-    delete d->bindingManager;
     delete d->dependencyManager;
     delete d->namedAreaManager;
     delete d->recalcManager;
@@ -177,11 +173,6 @@ ValueCalc* MapBase::calc() const
 }
 
 
-BindingManager* MapBase::bindingManager() const
-{
-    return d->bindingManager;
-}
-
 DependencyManager* MapBase::dependencyManager() const
 {
     return d->dependencyManager;
@@ -242,7 +233,6 @@ void MapBase::flushDamages()
 
 void MapBase::handleDamages(const QList<Damage*>& damages)
 {
-    Region bindingChangedRegion;
     Region formulaChangedRegion;
     Region namedAreaChangedRegion;
     Region valueChangedRegion;
@@ -261,8 +251,6 @@ void MapBase::handleDamages(const QList<Damage*>& damages)
             const CellDamage::Changes changes = cellDamage->changes();
 
             if (!allValues) {
-                if (changes & CellDamage::Binding)
-                    bindingChangedRegion.add(region, damagedSheet);
                 if (changes & CellDamage::Value)
                     valueChangedRegion.add(region, damagedSheet);
             }
@@ -312,12 +300,9 @@ void MapBase::handleDamages(const QList<Damage*>& damages)
 
     if (allValues) {
         d->recalcManager->recalcMap();
-        d->bindingManager->updateAllBindings();
     } else {
         if (!valueChangedRegion.isEmpty())
             d->recalcManager->regionChanged(valueChangedRegion);
-        if (!bindingChangedRegion.isEmpty())
-            d->bindingManager->regionChanged(bindingChangedRegion);
     }
 }
 

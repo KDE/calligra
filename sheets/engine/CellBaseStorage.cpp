@@ -19,7 +19,6 @@
 #include "SheetBase.h"
 #include "CellBase.h"
 
-#include "BindingStorage.h"
 #include "RectStorage.h"
 #include "FormulaStorage.h"
 #include "ValidityStorage.h"
@@ -38,7 +37,6 @@ class Q_DECL_HIDDEN CellBaseStorage::Private : public QSharedData
 public:
     Private(SheetBase* sheet)
             : sheet(sheet)
-            , bindingStorage(new BindingStorage(sheet->map()))
             , commentStorage(new CommentStorage(sheet->map()))
             , formulaStorage(new FormulaStorage())
             , matrixStorage(new MatrixStorage(sheet->map()))
@@ -51,7 +49,6 @@ public:
 
     Private(const Private& other, SheetBase* sheet)
             : sheet(sheet)
-            , bindingStorage(new BindingStorage(*other.bindingStorage))
             , commentStorage(new CommentStorage(*other.commentStorage))
             , formulaStorage(new FormulaStorage(*other.formulaStorage))
             , matrixStorage(new MatrixStorage(*other.matrixStorage))
@@ -63,7 +60,6 @@ public:
     }
 
     ~Private() {
-        delete bindingStorage;
         delete commentStorage;
         delete formulaStorage;
         delete matrixStorage;
@@ -78,7 +74,6 @@ public:
 
     SheetBase*              sheet;
 
-    BindingStorage*         bindingStorage;
     CommentStorage*         commentStorage;
     FormulaStorage*         formulaStorage;
     MatrixStorage*          matrixStorage;
@@ -143,7 +138,6 @@ CellBaseStorage::~CellBaseStorage()
 
 void CellBaseStorage::fillStorages() {
     storages.clear();
-    storages.push_back (d->bindingStorage);
     storages.push_back (d->commentStorage);
     storages.push_back (d->formulaStorage);
     storages.push_back (d->matrixStorage);
@@ -159,11 +153,6 @@ SheetBase* CellBaseStorage::sheet() const
     return d->sheet;
 }
 
-
-const BindingStorage* CellBaseStorage::bindingStorage() const
-{
-    return d->bindingStorage;
-}
 
 const CommentStorage* CellBaseStorage::commentStorage() const
 {
@@ -287,30 +276,6 @@ void CellBaseStorage::setValue(int column, int row, const Value& value)
                 d->sheet->map()->addDamage(new CellDamage(CellBase(d->sheet, prevCol, row), CellDamage::Appearance));
         }
     }
-}
-
-Binding CellBaseStorage::binding(int column, int row) const
-{
-#ifdef CALLIGRA_SHEETS_MT
-    QReadLocker rl(&bigUglyLock);
-#endif
-    return d->bindingStorage->contains(QPoint(column, row));
-}
-
-void CellBaseStorage::setBinding(const Region& region, const Binding& binding)
-{
-#ifdef CALLIGRA_SHEETS_MT
-    QWriteLocker(&bigUglyLock);
-#endif
-    d->bindingStorage->insert(region, binding);
-}
-
-void CellBaseStorage::removeBinding(const Region& region, const Binding& binding)
-{
-#ifdef CALLIGRA_SHEETS_MT
-    QWriteLocker(&bigUglyLock);
-#endif
-    d->bindingStorage->remove(region, binding);
 }
 
 QString CellBaseStorage::comment(int column, int row) const

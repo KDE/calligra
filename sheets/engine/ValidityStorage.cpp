@@ -4,6 +4,6 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-//#include "ValidityStorage.h"
+#include "ValidityStorage.h"
 
 // cmake automoc needs this cpp file
