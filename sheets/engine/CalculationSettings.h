@@ -21,12 +21,11 @@
 
 #include <QDate>
 
-class KLocale;
-
 namespace Calligra
 {
 namespace Sheets
 {
+class Localization;
 
 /**
  * Calculation settings
@@ -47,9 +46,9 @@ public:
 
     /**
      * A document could use a different localization as the KDE default.
-     * @return the KLocale associated with this document
+     * @return the locale associated with this document
      */
-    KLocale *locale() const;
+    Localization *locale() const;
 
     /**
      * Sets the reference year.

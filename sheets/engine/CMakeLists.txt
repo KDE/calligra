@@ -76,6 +76,8 @@ target_link_libraries(calligrasheetsengine
         Qt5::Core
         Qt5::Xml
         KF5::CoreAddons
+        KF5::ConfigCore
+        KF5::I18n
     PRIVATE
         koplugin
 )

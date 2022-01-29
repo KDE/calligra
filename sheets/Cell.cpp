@@ -101,7 +101,7 @@ Sheet* Cell::fullSheet() const
     return dynamic_cast<Sheet *>(sheetBase());
 }
 
-KLocale* Cell::locale() const
+Localization* Cell::locale() const
 {
     return sheet()->map()->calculationSettings()->locale();
 }

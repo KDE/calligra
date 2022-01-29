@@ -10,6 +10,7 @@
 #include "CellBaseStorage.h"
 #include "Function.h"
 #include "FunctionRepository.h"
+#include "Localization.h"
 #include "Region.h"
 #include "Value.h"
 #include "Util.h"
@@ -22,8 +23,6 @@
 #include "ValueConverter.h"
 
 #include <QStack>
-
-#include <klocale.h>
 
 #define CALLIGRA_SHEETS_UNICODE_OPERATORS
 
@@ -600,7 +599,7 @@ void Formula::clear()
     d->codes.clear();
 }
 
-KLocale *Formula::locale() const {
+Localization *Formula::locale() const {
     SheetBase *sheet = d->sheet;
     if ((!sheet) && (!d->cell.isNull())) sheet = d->cell.sheet();
     return sheet ? sheet->map()->calculationSettings()->locale() : nullptr;
@@ -615,7 +614,7 @@ Tokens Formula::tokens() const
     return scan(d->expression, locale());
 }
 
-Tokens Formula::scan(const QString &expr, const KLocale* locale) const
+Tokens Formula::scan(const QString &expr, const Localization* locale) const
 {
     // parsing state
     enum { Start, Finish, InNumber, InDecimal, InExpIndicator, InExponent,

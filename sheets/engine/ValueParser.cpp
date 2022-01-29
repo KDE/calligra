@@ -13,6 +13,8 @@
 #include "Localization.h"
 #include "Value.h"
 
+#include <KLocalizedString>
+
 using namespace Calligra::Sheets;
 
 ValueParser::ValueParser(const CalculationSettings* settings)
@@ -56,13 +58,9 @@ Value ValueParser::parse(const QString& str) const
     if (ok)
         return val;
 
-    // Test for money number
-    Number money = m_settings->locale()->readMoney(strStripped, &ok);
-    if (ok) {
-        val = Value(money);
-        val.setFormat(Value::fmt_Money);
+    val = tryParseDateTime(strStripped, &ok);
+    if (ok)
         return val;
-    }
 
     val = tryParseDate(strStripped, &ok);
     if (ok)
@@ -83,14 +81,13 @@ Value ValueParser::tryParseBool(const QString& str, bool *ok) const
     if (ok) *ok = false;
 
     const QString& lowerStr = str.toLower();
-    const QStringList localeCodes(m_settings->locale()->country());
 
     if ((lowerStr == "true") ||
-            (lowerStr == ki18n("true").toString(localeCodes).toLower())) {
+            (lowerStr == m_settings->locale()->formatBool(true))) {
         val = Value(true);
         if (ok) *ok = true;
     } else if ((lowerStr == "false") ||
-               (lowerStr == ki18n("false").toString(localeCodes).toLower())) {
+               (lowerStr == m_settings->locale()->formatBool(false))) {
         val = Value(false);
         if (ok) *ok = true;
     }
@@ -251,273 +248,150 @@ Value ValueParser::tryParseNumber(const QString& str, bool *ok) const
     return value;
 }
 
+static QString removeYearFromFormat(const QString &format)
+{
+    // The tricky part is that we need to remove any separator around the year
+    // For instance YY-mm-dd becomes mm-dd and dd/mm/YY becomes %d/%m
+    // If the year is in the middle, say mm-YY/dd, we'll remove the sep.
+    // before it (mm/dd).
+    int yearPos = format.indexOf("Y", 0, Qt::CaseInsensitive);
+    if (yearPos == -1) return QString();
+
+    QString fmt = format;
+    while ((fmt[yearPos] == 'y') || (fmt[yearPos] == 'Y'))
+        fmt.remove(yearPos, 1);
+    if (yearPos == 0) {
+        while (fmt.length() && fmt[0].isLetter()) fmt.remove(0, 1);
+    } else {
+        while ((yearPos > 0) && (!fmt[yearPos-1].isLetter())) {
+            fmt.remove(yearPos - 1, 1);
+            yearPos--;
+        }
+    }
+    return fmt;
+}
+
+// If the year is in the 1-99 or 1900-1999 range, need to check if a two-digit or a four-digit value was entered.
+int ValueParser::repairYear(int year, const QString &str) const {
+    if (year >= 2000) return year;
+
+    int ref = m_settings->referenceYear();
+    if ((year >= 1900) && (year <= 1999)) {
+        QString strYear = QString::number(year);
+        if (str.indexOf(strYear) >= 0) return year;
+        // Entered a two-digit year
+        if (year < ref) return year + 100;
+        return year;
+    }
+    if ((year >= 1) && (year <= 99)) {
+        // check if 00 + year was entered
+        QString strYear = "00" + QString::number(year);
+        if (str.indexOf(strYear) >= 0) return year;
+        // We actually want 19XX or 20XX
+        if (year + 1900 < ref) return year + 2000;
+        return year + 1900;
+    }
+
+    return year;
+}
+
+Value ValueParser::tryParseDateTime(const QString& str, bool *ok) const
+{
+    Localization *locale = m_settings->locale();
+    QDateTime datetime = locale->readDateTime(str, ok);
+
+    // Try without the year
+    if (!(*ok)) {
+        QString fmt = locale->dateTimeFormat(true);
+        fmt = removeYearFromFormat(fmt);
+        datetime = locale->readDateTime(str, fmt, ok);
+        if (ok) {
+            int year = QDate::currentDate().year();
+            datetime.setDate(QDate(year, datetime.date().month(), datetime.date().day()));
+        }
+    }
+    if (!(*ok)) {
+        QString fmt = locale->dateTimeFormat(false);
+        fmt = removeYearFromFormat(fmt);
+        datetime = locale->readDateTime(str, fmt, ok);
+        if (ok) {
+            int year = QDate::currentDate().year();
+            datetime.setDate(QDate(year, datetime.date().month(), datetime.date().day()));
+        }
+    }
+
+    if (!(*ok)) {
+        // Still not valid - try to use the standard Qt date parsing, using ISO 8601 format
+        datetime = QDateTime::fromString(str, Qt::ISODate);
+        if (datetime.isValid())
+            *ok = true;
+    }
+
+    if (*ok) {
+        // repair two-digit years
+        int myYear = datetime.date().year();
+        int year = repairYear(myYear, str);
+        if (year != myYear)
+            datetime.setDate(QDate(year, datetime.date().month(), datetime.date().day()));
+    }
+
+    return Value(datetime, m_settings);
+}
+
 Value ValueParser::tryParseDate(const QString& str, bool *ok) const
 {
-    bool valid = false;
-    QDate tmpDate = m_settings->locale()->readDate(str, &valid);
-    if (!valid) {
-        // Try without the year
-        // The tricky part is that we need to remove any separator around the year
-        // For instance %Y-%m-%d becomes %m-%d and %d/%m/%Y becomes %d/%m
-        // If the year is in the middle, say %m-%Y/%d, we'll remove the sep.
-        // before it (%m/%d).
-        QString fmt = m_settings->locale()->dateFormatShort();
-        int yearPos = fmt.indexOf("%Y", 0, Qt::CaseInsensitive);
-        if (yearPos > -1) {
-            if (yearPos == 0) {
-                fmt.remove(0, 2);
-                while (fmt[0] != '%')
-                    fmt.remove(0, 1);
-            } else {
-                fmt.remove(yearPos, 2);
-                for (; yearPos > 0 && fmt[yearPos-1] != '%'; --yearPos)
-                    fmt.remove(yearPos, 1);
-            }
-            //debugSheets <<"Cell::tryParseDate short format w/o date:" << fmt;
-            tmpDate = m_settings->locale()->readDate(str, fmt, &valid);
+    Localization *locale = m_settings->locale();
+    QDate date = locale->readDate(str, ok);
+
+    // Try without the year
+    if (!(*ok)) {
+        QString fmt = locale->dateFormat(true);
+        fmt = removeYearFromFormat(fmt);
+        date = locale->readDate(str, fmt, ok);
+        if (ok) {
+            int year = QDate::currentDate().year();
+            date.setDate(year, date.month(), date.day());
         }
     }
-    if (valid) {
-        // Note: if shortdate format only specifies 2 digits year, then 3/4/1955
-        // will be treated as in year 3055, while 3/4/55 as year 2055
-        // (because 55 < 69, see KLocale) and thus there's no way to enter for
-        // year 1995
-
-        // The following fixes the problem, 3/4/1955 will always be 1955
-
-        QString fmt = m_settings->locale()->dateFormatShort();
-        if ((fmt.contains("%y") == 1) && (tmpDate.year() > 2999))
-            tmpDate = tmpDate.addYears(-1900);
-
-        // this is another HACK !
-        // with two digit years, 0-69 is treated as year 2000-2069 (see KLocale)
-        // however, in Excel only 0-29 is year 2000-2029, 30 or later is 1930
-        // onwards
-
-        // the following provides workaround for KLocale so we're compatible
-        // with Excel
-        // (e.g 3/4/45 is Mar 4, 1945 not Mar 4, 2045)
-        if ((tmpDate.year() >= 2030) && (tmpDate.year() <= 2069)) {
-            QString yearFourDigits = QString::number(tmpDate.year());
-            QString yearTwoDigits = QString::number(tmpDate.year() % 100);
-
-            // if year is 2045, check to see if "2045" isn't there --> actual
-            // input is "45"
-            if ((str.count(yearTwoDigits) >= 1) &&
-                    (str.count(yearFourDigits) == 0))
-                tmpDate = tmpDate.addYears(-100);
-        }
-    }
-    if (!valid) {
-        //try to use the standard Qt date parsing, using ISO 8601 format
-        tmpDate = QDate::fromString(str, Qt::ISODate);
-        if (tmpDate.isValid()) {
-            valid = true;
+    if (!(*ok)) {
+        QString fmt = locale->dateFormat(false);
+        fmt = removeYearFromFormat(fmt);
+        date = locale->readDate(str, fmt, ok);
+        if (ok) {
+            int year = QDate::currentDate().year();
+            date.setDate(year, date.month(), date.day());
         }
     }
 
-    if (ok)
-        *ok = valid;
+    if (!(*ok)) {
+        // Still not valid - try to use the standard Qt date parsing, using ISO 8601 format
+        date = QDate::fromString(str, Qt::ISODate);
+        if (date.isValid())
+            *ok = true;
+    }
 
-    return Value(tmpDate, m_settings);
+    if (*ok) {
+        int year = repairYear(date.year(), str);
+        if (year != date.year())
+            date.setDate(year, date.month(), date.day());
+    }
+
+    return Value(date, m_settings);
 }
 
 Value ValueParser::tryParseTime(const QString& str, bool *ok) const
 {
-    bool valid = false;
-    QDateTime tmpTime = readTime(str, true, &valid);
-    if (!valid)
-        tmpTime = readTime(str, false, &valid);
+    Localization *locale = m_settings->locale();
+    QTime time = locale->readTime(str, ok);
 
-    if (!valid) {
-        const QStringList localeCodes(m_settings->locale()->country());
-        const QString stringPm = ki18n("pm").toString(localeCodes);
-        const QString stringAm = ki18n("am").toString(localeCodes);
-        int pos = 0;
-        if ((pos = str.indexOf(stringPm, 0, Qt::CaseInsensitive)) != -1) {
-            // cut off 'PM'
-            QString tmp = str.mid(0, str.length() - stringPm.length());
-            tmp = tmp.simplified();
-            // try again
-            tmpTime = readTime(tmp, true, &valid);
-            if (!valid)
-                tmpTime = readTime(tmp, false, &valid);
-            if (valid && tmpTime.time().hour() > 11)
-                valid = false;
-            else if (valid)
-                tmpTime = tmpTime.addSecs(43200); // add 12 hours
-        } else if ((pos = str.indexOf(stringAm, 0, Qt::CaseInsensitive)) != -1) {
-            // cut off 'AM'
-            QString tmp = str.mid(0, str.length() - stringAm.length());
-            tmp = tmp.simplified();
-            // try again
-            tmpTime = readTime(tmp, true, &valid);
-            if (!valid)
-                tmpTime = readTime(tmp, false, &valid);
-            if (valid && tmpTime.time().hour() > 11)
-                valid = false;
-        }
+    if (!(*ok)) {
+        // Try to use the standard Qt time parsing, using ISO 8601 format
+        time = QTime::fromString(str, Qt::ISODate);
+        if (time.isValid())
+            *ok = true;
     }
 
-    if (ok)
-        *ok = valid;
-    Value value;
-    if (valid) {
-        value = Value(tmpTime, m_settings);
-        value.setFormat(Value::fmt_Time);
-    }
-    return value;
+    return Value(time);
 }
 
-QDateTime ValueParser::readTime(const QString& intstr, bool withSeconds, bool* ok) const
-{
-    QString str = intstr.simplified().toLower();
-    QString format = m_settings->locale()->timeFormat().simplified();
-    if (!withSeconds) {
-        int n = format.indexOf("%S");
-        format = format.left(n - 1);
-    }
-
-    QDateTime result;
-    int hour = 0;
-    int minute = 0;
-    int second = 0;
-    int msecs = 0;
-    bool g_12h = false;
-    bool pm = false;
-    bool negative = false;
-    uint strpos = 0;
-    uint formatpos = 0;
-
-    const uint l  = format.length();
-    const uint sl = str.length();
-
-    while (l > formatpos || sl > strpos) {
-        if (!(l > formatpos && sl > strpos))
-            goto error;
-
-        QChar c(format.at(formatpos++));
-
-        if (c != '%') {
-            if (c.isSpace())
-                ++strpos;
-            else if (c != str.at(strpos++))
-                goto error;
-            continue;
-        }
-
-        // remove space at the beginning
-        if (sl > strpos && str.at(strpos).isSpace())
-            ++strpos;
-
-        c = format.at(formatpos++);
-        switch (c.toLatin1()) {
-        case 'p': {
-            const QStringList localeCodes(m_settings->locale()->country());
-            QString s(ki18n("pm").toString(localeCodes).toLower());
-            int len = s.length();
-            if (str.mid(strpos, len) == s) {
-                pm = true;
-                strpos += len;
-            } else {
-                s = ki18n("am").toString(localeCodes).toLower();
-                len = s.length();
-                if (str.mid(strpos, len) == s) {
-                    pm = false;
-                    strpos += len;
-                } else
-                    goto error;
-            }
-        }
-        break;
-
-        case 'k':
-        case 'H':
-            g_12h = false;
-            if (str.at(strpos) == '-') {
-                negative = true;
-                if (sl <= ++strpos)
-                    goto error;
-            }
-            hour = readInt(str, strpos);
-            if (hour < 0)
-                goto error;
-
-            break;
-
-        case 'l':
-        case 'I':
-            g_12h = true;
-            if (str.at(strpos) == '-') {
-                negative = true;
-                if (sl <= ++strpos)
-                    goto error;
-            }
-            hour = readInt(str, strpos);
-            if (hour < 1 || hour > 12)
-                goto error;
-
-            break;
-
-        case 'M':
-            minute = readInt(str, strpos);
-            if (minute < 0 || minute > 59)
-                goto error;
-
-            break;
-
-        case 'S':
-            if (!withSeconds)
-                break;
-            second = readInt(str, strpos);
-            if (second < 0 || second > 59)
-                goto error;
-            if (strpos < sl && str.indexOf(m_settings->locale()->decimalSymbol()) == (int)strpos) {
-                strpos += m_settings->locale()->decimalSymbol().length();
-                msecs = readInt(str, strpos);
-                if (msecs < 0 || msecs > 999)
-                    goto error;
-            }
-
-            break;
-        }
-    }
-
-    if (g_12h) {
-        hour %= 12;
-        if (pm) hour += 12;
-    }
-
-    if (ok)
-        *ok = true;
-    result = QDateTime(m_settings->referenceDate(), QTime(0, 0), Qt::UTC);
-    msecs += (((hour * 60 + minute) * 60 + second) * 1000);
-    result = result.addMSecs(negative ? -msecs : msecs);
-    return result;
-
-error:
-    if (ok)
-        *ok = false;
-    // return invalid date if it didn't work
-    return QDateTime(m_settings->referenceDate(), QTime(-1, -1, -1), Qt::UTC);
-}
-
-/**
- * helper function to read integers, used in readTime
- * @param str
- * @param pos the position to start at. It will be updated when we parse it.
- * @return the integer read in the string, or -1 if no string
- */
-int ValueParser::readInt(const QString& str, uint& pos) const
-{
-    if (!str.at(pos).isDigit())
-        return -1;
-    int result = 0;
-    for (; (uint) str.length() > pos && str.at(pos).isDigit(); pos++) {
-        result *= 10;
-        result += str.at(pos).digitValue();
-    }
-
-    return result;
-}
 

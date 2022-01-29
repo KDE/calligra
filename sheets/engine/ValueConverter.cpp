@@ -247,73 +247,61 @@ Value ValueConverter::asNumeric(const Value &value, bool* ok) const
 
 Value ValueConverter::asString(const Value &value) const
 {
-    // This is a simpler version of ValueFormatter... We cannot use that one,
-    // as we sometimes want to generate the string differently ...
-
+    Localization *locale = m_parser->settings()->locale();
     Value val;
     QString s;
-    Value::Format fmt;
-    int pos;
+    Value::Format fmt = value.format();
     switch (value.type()) {
     case Value::Empty:
         val = Value(QString());
         break;
     case Value::Boolean: {
-        const QStringList localeCodes(m_parser->settings()->locale()->country());
-        val = Value(value.asBoolean() ? ki18n("True").toString(localeCodes) :
-                    ki18n("False").toString(localeCodes));
+        QString str = locale->formatBool(value.asBoolean());
+        val = Value(str);
         break;
     }
-    case Value::Integer: {
-        fmt = value.format();
+    case Value::Integer:
+    {
         if (fmt == Value::fmt_Percent)
             val = Value(QString::number(value.asInteger() * 100) + " %");
         else if (fmt == Value::fmt_DateTime)
-            val = Value(m_parser->settings()->locale()->formatDateTime(value.asDateTime(settings())));
+            val = Value(locale->formatDateTime(value.asDateTime(settings()), true));
         else if (fmt == Value::fmt_Date)
-            val = Value(m_parser->settings()->locale()->formatDate(value.asDate(settings())));
+            val = Value(locale->formatDate(value.asDate(settings()), true));
         else if (fmt == Value::fmt_Time)
-            val = Value(m_parser->settings()->locale()->formatTime(value.asTime()));
+            val = Value(locale->formatTime(value.asTime()));
         else
+        {
             val = Value(QString::number(value.asInteger()));
+        }
     }
     break;
     case Value::Float:
-        fmt = value.format();
         if (fmt == Value::fmt_DateTime)
-            val = Value(m_parser->settings()->locale()->formatDateTime(value.asDateTime(settings())));
+            val = Value(locale->formatDateTime(value.asDateTime(settings()), true));
         else if (fmt == Value::fmt_Date)
-            val = Value(m_parser->settings()->locale()->formatDate(value.asDate(settings()), KLocale::ShortDate));
+            val = Value(locale->formatDate(value.asDate(settings()), true));
         else if (fmt == Value::fmt_Time)
-            val = Value(m_parser->settings()->locale()->formatTime(value.asTime()));
+            val = Value(locale->formatTime(value.asTime(), true));
         else {
             //convert the number, change decimal point from English to local
-            s = QString::number(numToDouble(value.asFloat()), 'g', 10);
-            const QString decimalSymbol = m_parser->settings()->locale()->decimalSymbol();
-            if (!decimalSymbol.isNull() && ((pos = s.indexOf('.')) != -1))
-                s.replace(pos, 1, decimalSymbol);
+            s = locale->formatDoubleNoSep(numToDouble(value.asFloat()));
             if (fmt == Value::fmt_Percent)
                 s += " %";
             val = Value(s);
         }
         break;
     case Value::Complex:
-        fmt = value.format();
         if (fmt == Value::fmt_DateTime)
-            val = Value(m_parser->settings()->locale()->formatDateTime(value.asDateTime(settings())));
+            val = Value(locale->formatDateTime(value.asDateTime(settings()), true));
         else if (fmt == Value::fmt_Date)
-            val = Value(m_parser->settings()->locale()->formatDate(value.asDate(settings()), KLocale::ShortDate));
+            val = Value(locale->formatDate(value.asDate(settings()), true));
         else if (fmt == Value::fmt_Time)
-            val = Value(m_parser->settings()->locale()->formatTime(value.asTime()));
+            val = Value(locale->formatTime(value.asTime(), true));
         else {
             //convert the number, change decimal point from English to local
-            const QString decimalSymbol = m_parser->settings()->locale()->decimalSymbol();
-            QString real = QString::number(numToDouble(value.asComplex().real()), 'g', 10);
-            if (!decimalSymbol.isNull() && ((pos = real.indexOf('.')) != -1))
-                real.replace(pos, 1, decimalSymbol);
-            QString imag = QString::number(numToDouble(value.asComplex().imag()), 'g', 10);
-            if (!decimalSymbol.isNull() && ((pos = imag.indexOf('.')) != -1))
-                imag.replace(pos, 1, decimalSymbol);
+            QString real = locale->formatDoubleNoSep(numToDouble(value.asComplex().real()));
+            QString imag = locale->formatDoubleNoSep(numToDouble(value.asComplex().imag()));
             s = real;
             if (value.asComplex().imag() >= 0.0)
                 s += '+';
@@ -365,8 +353,7 @@ Value ValueConverter::asDateTime(const Value &value, bool* ok) const
         val.setFormat(Value::fmt_DateTime);
         break;
     case Value::String:
-        //no DateTime m_parser, so we parse as Date, hoping for the best ...
-        val = m_parser->tryParseDate(value.asString(), &okay);
+        val = m_parser->tryParseDateTime(value.asString(), &okay);
         if (!okay)
             val = Value::errorVALUE();
         if (ok)

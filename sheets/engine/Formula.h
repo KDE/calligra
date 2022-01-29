@@ -15,12 +15,11 @@
 
 #define CALLIGRA_SHEETS_INLINE_ARRAYS
 
-class KLocale;
-
 namespace Calligra
 {
 namespace Sheets
 {
+class Localization;
 class SheetBase;
 typedef QHash<CellBase, CellBase> CellIndirection;
 
@@ -363,10 +362,10 @@ public:
      * If the expression contains error (e.g. unknown operator, string no terminated)
      * this function returns tokens which is not valid.
      */
-    Tokens scan(const QString& expr, const KLocale* locale = 0) const;
+    Tokens scan(const QString& expr, const Localization* locale = 0) const;
 
     // Locale belonging to the current cell/sheet, if any.
-    KLocale *locale() const;
+    Localization *locale() const;
 
     /**
      * Assignment operator.

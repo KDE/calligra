@@ -44,7 +44,6 @@
 
 // KF5
 #include <kcolorutils.h>
-#include <klocale.h>
 
 // Calligra
 #include <KoPostscriptPaintDevice.h>
@@ -55,6 +54,7 @@
 #include "CalculationSettings.h"
 #include "CellStorage.h"
 #include "Condition.h"
+#include "Localization.h"
 #include "Map.h"
 #include "PrintSettings.h"
 #include "RowColumnFormat.h"
@@ -1518,7 +1518,7 @@ QString CellView::textDisplaying(const QFontMetricsF& fm, const Cell& cell)
         if (!cell.isEmpty())
             tmpIndent = style().indentation();
 
-        KLocale* locale = cell.sheet()->map()->calculationSettings()->locale();
+        Localization* locale = cell.sheet()->map()->calculationSettings()->locale();
 
         // Estimate worst case length to reduce the number of iterations.
         int start = qRound((len - 4.0 - 1.0 - tmpIndent) / fm.width('.'));

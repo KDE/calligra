@@ -9,10 +9,10 @@
 #include "FunctionModule.h"
 #include "FunctionRepository.h"
 
+#include <KConfigGroup>
 #include <KSharedConfig>
 
 #ifndef SHEETS_NO_PLUGINMODULES
-#include <kplugininfo.h>
 #include <KPluginFactory>
 #include <KoPluginLoader.h>
 #else

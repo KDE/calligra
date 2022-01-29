@@ -34,8 +34,6 @@ class QRect;
 class QPoint;
 class QDate;
 
-class KLocale;
-
 namespace Calligra
 {
 namespace Sheets
@@ -45,6 +43,7 @@ class Database;
 class Doc;
 class Sheet;
 class CellTest;
+class Localization;
 
 /**
  * An accessor to the actual cell data.
@@ -93,7 +92,7 @@ public:
     /**
      * Returns the locale setting of this cell.
      */
-    KLocale* locale() const;
+    Localization* locale() const;
 
     /**
      * Returns true, if this is a default cell, i.e. if the cell has no value, formula, link and

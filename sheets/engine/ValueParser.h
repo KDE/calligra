@@ -60,6 +60,13 @@ public:
     Value tryParseNumber(const QString& str, bool *ok = 0) const;
 
     /**
+     * Tries for datetime type. If \p str can be interpreted as this
+     * type, \p ok is set to \c true and the corresponding value will
+     * be returned.
+     */
+    Value tryParseDateTime(const QString& str, bool *ok = 0) const;
+
+    /**
      * Tries for date type. If \p str can be interpreted as this
      * type, \p ok is set to \c true and the corresponding value will
      * be returned.
@@ -75,11 +82,6 @@ public:
 
 protected:
     /**
-     * Converts \p str to a date/time value.
-     */
-    QDateTime readTime(const QString& str, bool withSeconds, bool *ok) const;
-
-    /**
      * A helper function to read numbers and distinguish integers and FPs.
      */
     Value readNumber(const QString &_str, bool* ok) const;
@@ -90,11 +92,9 @@ protected:
     Number readImaginary(const QString& str, bool* ok) const;
 
     /**
-     * A helper function to read integers.
-     * Used in the parsing process for date and time values.
+     * A helper function to handle two-digit years.
      */
-    int readInt(const QString& str, uint& pos) const;
-
+    int repairYear(int year, const QString &str) const;
 private:
     const CalculationSettings* m_settings;
 };

@@ -25,7 +25,7 @@ using namespace Calligra::Sheets;
 class Q_DECL_HIDDEN CalculationSettings::Private
 {
 public:
-    KLocale* locale;
+    Localization* locale;
     bool caseSensitiveComparisons : 1;
     bool precisionAsShown         : 1;
     bool wholeCellSearchCriteria  : 1;
@@ -69,7 +69,7 @@ CalculationSettings::~CalculationSettings()
     delete d;
 }
 
-KLocale* CalculationSettings::locale() const
+Localization* CalculationSettings::locale() const
 {
     return d->locale;
 }
