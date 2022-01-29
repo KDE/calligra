@@ -31,7 +31,7 @@ namespace Calligra
 namespace Sheets
 {
 class ApplicationSettings;
-class Bindingmanager;
+class BindingManager;
 class ColumnFormat;
 class DatabaseManager;
 class DocBase;

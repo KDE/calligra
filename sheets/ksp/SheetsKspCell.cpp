@@ -39,12 +39,12 @@ namespace Calligra {
 namespace Sheets {
 
 namespace Ksp {
-    bool loadCellData(Cell *cell, const KoXmlElement & text, Paste::Operation op, const QString &_dataType);
+    bool loadCellData(Cell *cell, const KoXmlElement & text, const QString &_dataType);
     bool saveCellResult(Cell *cell, QDomDocument& doc, QDomElement& result, QString str);
 }
 
 
-Cell Ksp::loadCell(const KoXmlElement & cell, Sheet *sheet, int _xshift, int _yshift, Paste::Mode mode, Paste::Operation op, bool paste)
+Cell Ksp::loadCell(const KoXmlElement & cell, Sheet *sheet)
 {
     bool ok;
 
@@ -52,9 +52,9 @@ Cell Ksp::loadCell(const KoXmlElement & cell, Sheet *sheet, int _xshift, int _ys
     // First of all determine in which row and column this
     // cell belongs.
     //
-    int row = cell.attribute("row").toInt(&ok) + _yshift;
+    int row = cell.attribute("row").toInt(&ok);
     if (!ok) return Cell();
-    int column = cell.attribute("column").toInt(&ok) + _xshift;
+    int column = cell.attribute("column").toInt(&ok);
     if (!ok) return Cell();
 
     // Validation
@@ -73,8 +73,7 @@ Cell Ksp::loadCell(const KoXmlElement & cell, Sheet *sheet, int _xshift, int _ys
     // Load formatting information.
     //
     KoXmlElement formatElement = cell.namedItem("format").toElement();
-    if (!formatElement.isNull() &&
-            ((mode == Paste::Normal) || (mode == Paste::Format) || (mode == Paste::NoBorder))) {
+    if (!formatElement.isNull()) {
         int mergedXCells = 0;
         int mergedYCells = 0;
         if (formatElement.hasAttribute("colspan")) {
@@ -105,7 +104,7 @@ Cell Ksp::loadCell(const KoXmlElement & cell, Sheet *sheet, int _xshift, int _ys
             res.mergeCells(column, >row, mergedXCells, mergedYCells);
 
         Style style;
-        if (!loadStyle(&style, formatElement, mode))
+        if (!loadStyle(&style, formatElement))
             return Cell();
         res.setStyle(style);
     }
@@ -121,9 +120,6 @@ Cell Ksp::loadCell(const KoXmlElement & cell, Sheet *sheet, int _xshift, int _ys
         loadConditions(&conditions, conditionsElement, valueParser);
         if (!conditions.isEmpty())
             res.setConditions(conditions);
-    } else if (paste && (mode == Paste::Normal || mode == Paste::NoBorder)) {
-        //clear the conditional formatting
-        res.setConditions(Conditions());
     }
 
     KoXmlElement validityElement = cell.namedItem("validity").toElement();
@@ -131,17 +127,13 @@ Cell Ksp::loadCell(const KoXmlElement & cell, Sheet *sheet, int _xshift, int _ys
         Validity validity;
         if (loadValidity(&validity, this, validityElement))
             res.setValidity(validity);
-    } else if (paste && (mode == Paste::Normal || mode == Paste::NoBorder)) {
-        // clear the validity
-        res.setValidity(Validity());
     }
 
     //
     // Load the comment
     //
     KoXmlElement comment = cell.namedItem("comment").toElement();
-    if (!comment.isNull() &&
-            (mode == Paste::Normal || mode == Paste::Comment || mode == Paste::NoBorder)) {
+    if (!comment.isNull()) {
         QString t = comment.text();
         //t = t.trimmed();
         res.setComment(t);
@@ -155,8 +147,7 @@ Cell Ksp::loadCell(const KoXmlElement & cell, Sheet *sheet, int _xshift, int _ys
     // also here. Not good.
     KoXmlElement text = cell.namedItem("text").toElement();
 
-    if (!text.isNull() &&
-            (mode == Paste::Normal || mode == Paste::Text || mode == Paste::NoBorder || mode == Paste::Result)) {
+    if (!text.isNull()) {
 
         /* older versions mistakenly put the datatype attribute on the cell instead
            of the text. Just move it over in case we're parsing an old document */
@@ -166,13 +157,7 @@ Cell Ksp::loadCell(const KoXmlElement & cell, Sheet *sheet, int _xshift, int _ys
 
         KoXmlElement result = cell.namedItem("result").toElement();
         QString txt = text.text();
-        if ((mode == Paste::Result) && (txt[0] == '='))
-            // paste text of the element, if we want to paste result
-            // and the source cell contains a formula
-            res.setUserInput(result.text());
-        else
-            //otherwise copy everything
-            loadCellData(&res, text, op, dataType);
+        loadCellData(&res, text, dataType);
 
         if (!result.isNull()) {
             QString dataType;
@@ -239,7 +224,7 @@ Cell Ksp::loadCell(const KoXmlElement & cell, Sheet *sheet, int _xshift, int _ys
     return res;
 }
 
-bool Ksp::loadCellData(Cell *cell, const KoXmlElement & text, Paste::Operation op, const QString &_dataType)
+bool Ksp::loadCellData(Cell *cell, const KoXmlElement & text, const QString &_dataType)
 {
     //TODO: use converter()->asString() to generate userInput()
 
@@ -251,7 +236,7 @@ bool Ksp::loadCellData(Cell *cell, const KoXmlElement & text, Paste::Operation o
     // A formula like =A1+A2 ?
     if ((!t.isEmpty()) && (t[0] == '=')) {
         t = cell->decodeFormula(t);
-        cell->parseUserInput(cell->pasteOperation(t, userInput(), op));
+        cell->parseUserInput(t);
     }
     // rich text ?
     else if ((!t.isEmpty()) && (t[0] == '!')) {
@@ -305,7 +290,7 @@ bool Ksp::loadCellData(Cell *cell, const KoXmlElement & text, Paste::Operation o
                 else if (isTime() && (t.count(':') == 2))
                     dataType = "Time";
                 else {
-                    cell->parseUserInput(pasteOperation(t, userInput(), op));
+                    cell->parseUserInput(t);
                     newStyleLoading = false;
                 }
             }
@@ -338,14 +323,13 @@ bool Ksp::loadCellData(Cell *cell, const KoXmlElement & text, Paste::Operation o
                         t = locale->formatNumber(value().asInteger() * 100);
                     else
                         t = locale->formatNumber(numToDouble(value().asFloat() * 100.0), precision);
-                    cell->setUserInput(cell->pasteOperation(t, userInput(), op));
-                    cell->setUserInput(userInput() + '%');
+                    cell->setUserInput(t + "%");
                 } else {
                     if (cell->value().isInteger())
                         t = locale->formatLong(value().asInteger());
                     else
                         t = locale->formatNumber(numToDouble(value().asFloat()), precision);
-                    cell->setUserInput(cell->pasteOperation(t, userInput(), op));
+                    cell->setUserInput(t);
                 }
             }
 
@@ -360,7 +344,7 @@ bool Ksp::loadCellData(Cell *cell, const KoXmlElement & text, Paste::Operation o
                 if (cell->value().asDate(sett).isValid())   // Should always be the case for new docs
                     cell->setUserInput(locale()->formatDate(cell->value().asDate(sett), KLocale::ShortDate));
                 else { // This happens with old docs, when format is set wrongly to date
-                    cell->parseUserInput(pasteOperation(t, userInput(), op));
+                    cell->parseUserInput(t);
                 }
             }
 
@@ -379,13 +363,13 @@ bool Ksp::loadCellData(Cell *cell, const KoXmlElement & text, Paste::Operation o
                 if (cell->value().asTime().isValid())    // Should always be the case for new docs
                     cell->setUserInput(locale()->formatTime(cell->value().asTime(), true));
                 else { // This happens with old docs, when format is set wrongly to time
-                    cell->parseUserInput(pasteOperation(t, userInput(), op));
+                    cell->parseUserInput(t);
                 }
             }
 
             else {
                 // Set the cell's text
-                cell->setUserInput(cell->pasteOperation(t, userInput(), op));
+                cell->setUserInput(t);
                 cell->setValue(Value(userInput()));
             }
         }

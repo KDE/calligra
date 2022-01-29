@@ -34,7 +34,7 @@ class StyleStorageLoaderJob;
  * replacement of this backend. Decorated with some additional features like
  * garbage collection, caching, used area tracking, etc.
  */
-class CALLIGRA_SHEETS_CORE_EXPORT StyleStorage : public StorageBase, public QObject
+class CALLIGRA_SHEETS_CORE_EXPORT StyleStorage : public QObject, public StorageBase
 {
     Q_OBJECT
 

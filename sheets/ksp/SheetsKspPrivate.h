@@ -73,12 +73,7 @@ namespace Ksp {
     QDomElement saveSheet(Sheet *sheet, QDomDocument& dd);
 
     // cell
-    Cell loadCell(const KoXmlElement& cell,
-              Sheet *sheet,
-              int _xshift, int _yshift,
-              Paste::Mode pm = Paste::Normal,
-              Paste::Operation op = Paste::OverWrite,
-              bool paste = false);
+    Cell loadCell(const KoXmlElement& cell, Sheet *sheet);
 
     /**
      * Save a cell.

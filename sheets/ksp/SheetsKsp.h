@@ -35,7 +35,7 @@ namespace Ksp {
     bool loadDoc(DocBase *obj, const KoXmlDocument& doc);
     QDomDocument saveDoc(DocBase *document);
 
-    bool loadStyle(Style *style, KoXmlElement& format, Paste::Mode mode = Paste::Normal);
+    bool loadStyle(Style *style, KoXmlElement& format);
 
 }
 

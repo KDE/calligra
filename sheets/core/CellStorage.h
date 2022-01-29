@@ -48,7 +48,7 @@ class StyleStorage;
  *
  * \note If you fill the storage, do it row-wise. That's more performant.
  */
-class CALLIGRA_SHEETS_CORE_EXPORT CellStorage : public CellBaseStorage, public QObject
+class CALLIGRA_SHEETS_CORE_EXPORT CellStorage : public QObject, public CellBaseStorage
 {
     Q_OBJECT
 public:
@@ -95,7 +95,7 @@ public:
     /**
      * Removes all data at \p col , \p row .
      */
-    virtual void take(int col, int row) override;
+    virtual void take(int col, int row);
 
     /**
      * \return the binding associated with the Cell at \p column , \p row .

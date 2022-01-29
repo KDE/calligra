@@ -24,10 +24,10 @@ namespace Sheets {
 
 namespace Ksp {
     QDomElement saveRowFormat(RowFormat *f, QDomDocument&, Sheet *sheet, int yshift = 0);
-    bool loadRowFormat(RowFormat *f, const KoXmlElement& row, Sheet *sheet, int yshift = 0, Paste::Mode mode = Paste::Normal);
+    bool loadRowFormat(RowFormat *f, const KoXmlElement& row, Sheet *sheet);
 
     QDomElement saveColFormat(ColumnFormat *f, QDomDocument&, Sheet *sheet, int xshift = 0) const;
-    bool loadColFormat(ColumnFormat *f, const KoXmlElement& row, Sheet *sheet, int xshift = 0, Paste::Mode mode = Paste::Normal);
+    bool loadColFormat(ColumnFormat *f, const KoXmlElement& row, Sheet *sheet);
 }
 
 
@@ -260,7 +260,7 @@ bool Ksp::loadSheet(Sheet *obj, const KoXmlElement& sheet)
         if (!e.isNull()) {
             QString tagName = e.tagName();
             if (tagName == "cell")
-                loadCell(e, obj, 0, 0);
+                loadCell(e, obj);
             else if (tagName == "row") {
                 RowFormat *rl = new RowFormat();
                 rl->setSheet(obj);
@@ -540,11 +540,11 @@ QDomElement Ksp::saveRowFormat(RowFormat *f, QDomDocument& doc, Sheet *sheet, in
     return row;
 }
 
-bool Ksp::loadRowFormat (RowFormat *f, const KoXmlElement & row, Sheet *sheet, int yshift, Paste::Mode mode)
+bool Ksp::loadRowFormat (RowFormat *f, const KoXmlElement & row, Sheet *sheet, int yshift)
 {
     bool ok;
 
-    f->setRow (row.attribute("row").toInt(&ok) + yshift);
+    f->setRow (row.attribute("row").toInt(&ok));
     if (!ok)
         return false;
 
@@ -575,9 +575,9 @@ bool Ksp::loadRowFormat (RowFormat *f, const KoXmlElement & row, Sheet *sheet, i
 
     KoXmlElement el(row.namedItem("format").toElement());
 
-    if (!el.isNull() && (mode == Paste::Normal || mode == Paste::Format || mode == Paste::NoBorder)) {
+    if (!el.isNull()) {
         Style style;
-        if (!loadStyle (&style, el, mode))
+        if (!loadStyle (&style, el))
             return false;
         sheet->cellStorage()->setStyle(Region(QRect(1, f->row(), KS_colMax, 1)), style);
         return true;
@@ -606,7 +606,7 @@ QDomElement Ksp::saveColFormat(ColumnFormat *f, QDomDocument& doc, Sheet *sheet,
     return col;
 }
 
-bool Ksp::loadColFormat(ColumnFormat *f, const KoXmlElement & col, Sheet *sheet, int xshift, Paste::Mode mode)
+bool Ksp::loadColFormat(ColumnFormat *f, const KoXmlElement & col, Sheet *sheet)
 {
     bool ok;
     if (col.hasAttribute("width")) {
@@ -619,7 +619,7 @@ bool Ksp::loadColFormat(ColumnFormat *f, const KoXmlElement & col, Sheet *sheet,
             return false;
     }
 
-    f->setColumn(col.attribute("column").toInt(&ok) + xshift);
+    f->setColumn(col.attribute("column").toInt(&ok));
 
     if (!ok)
         return false;
@@ -641,9 +641,9 @@ bool Ksp::loadColFormat(ColumnFormat *f, const KoXmlElement & col, Sheet *sheet,
 
     KoXmlElement el(col.namedItem("format").toElement());
 
-    if (!el.isNull() && (mode == Paste::Normal || mode == Paste::Format || mode == Paste::NoBorder)) {
+    if (!el.isNull()) {
         Style style;
-        if (!loadStyle (&style, el, mode))
+        if (!loadStyle (&style, el))
             return false;
         sheet->cellStorage()->setStyle(Region(QRect(f->column(), 1, 1, KS_rowMax)), style);
         return true;

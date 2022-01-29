@@ -289,17 +289,6 @@ public:
      */
     QString decodeFormula(const QString& text) const;
 
-    /**
-     * Merges the @p new_text with @p old_text during a paste operation.
-     * If both texts represent doubles, then the operation is performed on both
-     * values and the result is returned. If both texts represents a formula or
-     * one a formula and the other a double value, then a formula is returned.
-     * In all other cases @p new_text is returned.
-     *
-     * @return the merged text.
-     */
-    QString pasteOperation(const QString &new_text, const QString &old_text, Paste::Operation op);
-
     //
     //END Cut & paste
     //

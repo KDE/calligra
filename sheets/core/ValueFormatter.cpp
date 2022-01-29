@@ -9,10 +9,9 @@
 
 #include "ValueFormatter.h"
 
-// #include "CalculationSettings.h"
-// #include "Localization.h"
-// #include "ValueConverter.h"
-// #include "SheetsDebug.h"
+#include "CalculationSettings.h"
+#include "Localization.h"
+#include "ValueConverter.h"
 
 // #include <kcalendarsystem.h>
 // #include <KLocalizedString>

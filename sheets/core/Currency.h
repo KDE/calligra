@@ -8,6 +8,7 @@
 #ifndef CALLIGRA_SHEETS_CURRENCY
 #define CALLIGRA_SHEETS_CURRENCY
 
+#include <QHash>
 #include <QString>
 
 #include "sheets_core_export.h"
@@ -73,10 +74,10 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-Q_DECLARE_METATYPE(Calligra::Sheets::Currency)
-
-static inline uint qHash(const Calligra::Sheets::Currency& cur) {
+inline uint qHash(const Calligra::Sheets::Currency& cur) {
     return ::qHash(cur.code());
 }
+
+// Q_DECLARE_METATYPE(Calligra::Sheets::Currency);
 
 #endif

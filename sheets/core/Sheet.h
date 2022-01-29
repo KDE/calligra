@@ -56,7 +56,7 @@ class SheetTest;
 /**
  * A sheet contains several cells.
  */
-class CALLIGRA_SHEETS_CORE_EXPORT Sheet : public SheetBase, public KoShapeUserData, public KoShapeBasedDocumentBase,
+class CALLIGRA_SHEETS_CORE_EXPORT Sheet : public KoShapeUserData, public SheetBase, public KoShapeBasedDocumentBase
         public ProtectableObject
 {
     Q_OBJECT
