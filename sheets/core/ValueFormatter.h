@@ -10,8 +10,10 @@
 
 #include <QDateTime>
 
-#include "Number.h"
+#include "sheets_core_export.h"
 #include "Style.h"
+
+#include "engine/Number.h"
 
 namespace Calligra
 {
@@ -25,7 +27,7 @@ class ValueConverter;
  * \ingroup Value
  * Generates a textual representation of a Value with a given formatting.
  */
-class CALLIGRA_SHEETS_ODF_EXPORT ValueFormatter
+class CALLIGRA_SHEETS_CORE_EXPORT ValueFormatter
 {
 public:
     /**

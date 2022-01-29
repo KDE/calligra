@@ -1,7 +1,7 @@
 
 include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}/../
-    ${CMAKE_CURRENT_BINARY_DIR}/../
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_BINARY_DIR}
 )
 
 set (calligrasheetsengine_LIB_SRCS
@@ -25,6 +25,7 @@ set (calligrasheetsengine_LIB_SRCS
     Region.cpp
     RectStorage.cpp
     Damages.cpp
+    ProtectableObject.cpp
 
     CellBase.cpp
     MapBase.cpp
@@ -59,6 +60,7 @@ install( FILES
     MapBase.h
     Number.h
     PointStorage.h
+    ProtectableObject.h
     RectStorage.h
     Region.h
     RTree.h

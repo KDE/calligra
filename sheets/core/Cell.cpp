@@ -29,35 +29,35 @@
 // Local
 #include "Cell.h"
 
-#include <stdlib.h>
-#include <ctype.h>
-#include <float.h>
-#include <math.h>
+// #include <stdlib.h>
+// #include <ctype.h>
+// #include <float.h>
+// #include <math.h>
 
-#include "SheetsDebug.h"
-#include "CalculationSettings.h"
-#include "CellStorage.h"
-#include "Condition.h"
-#include "Formula.h"
-#include "Localization.h"
-#include "LoadingInfo.h"
-#include "Map.h"
-#include "NamedAreaManager.h"
-#include "RowColumnFormat.h"
-#include "RowFormatStorage.h"
-#include "Sheet.h"
-#include "Style.h"
-#include "StyleManager.h"
-#include "Util.h"
-#include "Value.h"
-#include "Validity.h"
-#include "ValueFormatter.h"
-#include "ValueParser.h"
-#include "StyleStorage.h"
+// #include "SheetsDebug.h"
+// #include "CalculationSettings.h"
+// #include "CellStorage.h"
+// #include "Condition.h"
+// #include "Formula.h"
+// #include "Localization.h"
+// #include "LoadingInfo.h"
+// #include "Map.h"
+// #include "NamedAreaManager.h"
+// #include "RowColumnFormat.h"
+// #include "RowFormatStorage.h"
+// #include "Sheet.h"
+// #include "Style.h"
+// #include "StyleManager.h"
+// #include "Util.h"
+// #include "Value.h"
+// #include "Validity.h"
+// #include "ValueFormatter.h"
+// #include "ValueParser.h"
+// #include "StyleStorage.h"
 
-#include <QTimer>
-#include <QTextDocument>
-#include <QTextCursor>
+// #include <QTimer>
+// #include <QTextDocument>
+// #include <QTextCursor>
 
 using namespace Calligra::Sheets;
 

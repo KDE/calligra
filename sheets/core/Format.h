@@ -17,7 +17,7 @@
 #ifndef CALLIGRA_SHEETS_FORMAT
 #define CALLIGRA_SHEETS_FORMAT
 
-#include "sheets_export.h"
+#include "sheets_core_export.h"
 
 namespace Calligra
 {
@@ -111,11 +111,11 @@ enum Type {
 };
 
 //helper functions for the formatting
-CALLIGRA_SHEETS_ODF_EXPORT bool isDate(Type type);
-CALLIGRA_SHEETS_ODF_EXPORT bool isTime(Type type);
-CALLIGRA_SHEETS_ODF_EXPORT bool isFraction(Type type);
-CALLIGRA_SHEETS_ODF_EXPORT bool isMoney(Type type);
-CALLIGRA_SHEETS_ODF_EXPORT bool isNumber(Type type);
+CALLIGRA_SHEETS_CORE_EXPORT bool isDate(Type type);
+CALLIGRA_SHEETS_CORE_EXPORT bool isTime(Type type);
+CALLIGRA_SHEETS_CORE_EXPORT bool isFraction(Type type);
+CALLIGRA_SHEETS_CORE_EXPORT bool isMoney(Type type);
+CALLIGRA_SHEETS_CORE_EXPORT bool isNumber(Type type);
 
 } // namespace Format
 } // namespace Sheets

@@ -7,11 +7,10 @@
 #ifndef CALLIGRA_SHEETS_PROTECTABLE_OBJECT
 #define CALLIGRA_SHEETS_PROTECTABLE_OBJECT
 
-#include <KoXmlReader.h>
-
 #include <QByteArray>
+#include <QString>
 
-#include "sheets_odf_export.h"
+#include "sheets_engine_export.h"
 
 namespace Calligra
 {
@@ -24,7 +23,7 @@ namespace Sheets
  * The inheriting object decides which of its data should be protected.
  * It has to use isProtected() to check whether it's protected.
  */
-class CALLIGRA_SHEETS_ODF_EXPORT ProtectableObject
+class CALLIGRA_SHEETS_ENGINE_EXPORT ProtectableObject
 {
 public:
     enum Mode {
@@ -33,9 +32,9 @@ public:
     };
 
     /**
-     * Retrieves the \p password.
+     * Retrieves the password hash.
      */
-    void password(QByteArray &password) const;
+    QByteArray passwordHash() const;
 
     /**
      * \return \c true on enabled protection; \c false on disabled protection
@@ -43,30 +42,25 @@ public:
     bool isProtected() const;
 
     /**
-     * Sets this object to be protected by \p password.
+     * Sets this object to be protected by \p password hash.
      */
     void setProtected(QByteArray const &password);
 
     /**
-     * Checks if \p password matches the password of this object.
+     * Sets this object to be protected by \p password.
      */
-    bool checkPassword(QByteArray const &password) const;
+    void setProtected(const QString &password);
 
     /**
-     * Shows a dialog for entering the password.
-     * If the password is correct, the protection is enabled for
-     * \p mode being \c Lock, or it is disabled for \p mode being \c Unlock.
-     * \param parent the parent Qwidget
-     * \param mode the mode
-     * \param title the window title
-     * \return \c true on success; \c false on failure
+     * Checks if \p password matches the password of this object.
      */
-    bool showPasswordDialog(QWidget* parent, Mode mode, const QString& title);
+    bool checkPassword(const QString &password) const;
 
 private:
     // disable assignment operator
     void operator=(const ProtectableObject&);
 
+    QByteArray passwordHash(const QString &password) const;
     QByteArray m_password;
 };
 

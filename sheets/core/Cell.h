@@ -27,7 +27,7 @@
 
 #include "engine/CellBase.h"
 
-#include "Global.h"
+#include "sheets_core_export.h"
 #include "Style.h"
 
 class QRect;
@@ -51,7 +51,7 @@ class Localization;
  * storages in CellStorage. It provides methods to alter and retrieve this data
  * and methods related to loading and saving the contents.
  */
-class CALLIGRA_SHEETS_ODF_EXPORT Cell : public CellBase
+class CALLIGRA_SHEETS_CORE_EXPORT Cell : public CellBase
 {
 public:
     /**

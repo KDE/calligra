@@ -8,11 +8,9 @@
 #ifndef CALLIGRA_SHEETS_CURRENCY
 #define CALLIGRA_SHEETS_CURRENCY
 
-#include <QHash>
-#include <QMetaType>
 #include <QString>
 
-#include "sheets_odf_export.h"
+#include "sheets_core_export.h"
 
 namespace Calligra
 {
@@ -24,7 +22,7 @@ namespace Sheets
  * \class Currency
  * Currency format information.
  */
-class CALLIGRA_SHEETS_ODF_EXPORT Currency
+class CALLIGRA_SHEETS_CORE_EXPORT Currency
 {
 public:
     enum Format { Native, Gnumeric, OpenCalc, ApplixSpread, GobeProductiveSpread, HancomSheet };

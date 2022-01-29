@@ -1482,6 +1482,43 @@ void View::setShapeAnchoring(const QString& mode)
     }
 }
 
+bool View::showPasswordDialog(ProtectableObject *obj, Mode mode, const QString& title)
+{
+    if (mode == Lock) {
+        QPointer<KNewPasswordDialog> dlg = new KNewPasswordDialog(this);
+        dlg->setPrompt(i18n("Enter a password."));
+        dlg->setWindowTitle(title);
+        if (dlg->exec() != KPasswordDialog::Accepted) {
+            return false;
+        }
+
+        QByteArray hash;
+        QString password = dlg->password();
+        if (password.length() > 0) {
+            SHA1::getHash(password, hash);
+        }
+        obj->setProtected (hash);
+        delete dlg;
+    } else { /* Unlock */
+        QPointer<KPasswordDialog> dlg = new KPasswordDialog(this);
+        dlg->setPrompt(i18n("Enter the password."));
+        dlg->setWindowTitle(title);
+        if (dlg->exec() != KPasswordDialog::Accepted) {
+            return false;
+        }
+
+        QString password(dlg->password());
+        if (!obj->checkPassword(password)) {
+            KMessageBox::error(parent, i18n("Password is incorrect."));
+            return false;
+        }
+        m_password = QByteArray();
+        delete dlg;
+    }
+    return true;
+}
+
+
 void View::toggleProtectDoc(bool mode)
 {
     if (!doc() || !doc()->map())
@@ -1489,10 +1526,10 @@ void View::toggleProtectDoc(bool mode)
 
     bool success;
     if (mode) {
-        success = doc()->map()->showPasswordDialog(this, ProtectableObject::Lock,
+        success = showPasswordDialog(doc()->map(), ProtectableObject::Lock,
                   i18n("Protect Document"));
     } else {
-        success = doc()->map()->showPasswordDialog(this, ProtectableObject::Unlock,
+        success = showPasswordDialog(doc()->map(), ProtectableObject::Unlock,
                   i18n("Unprotect Document"));
     }
     if (!success) {
@@ -1512,10 +1549,10 @@ void View::toggleProtectSheet(bool mode)
 
     bool success;
     if (mode) {
-        success = activeSheet()->showPasswordDialog(this, ProtectableObject::Lock,
+        success = showPasswordDialog(activeSheet(), ProtectableObject::Lock,
                   i18n("Protect Sheet"));
     } else {
-        success = activeSheet()->showPasswordDialog(this, ProtectableObject::Unlock,
+        success = showPasswordDialog(activeSheet(), ProtectableObject::Unlock,
                   i18n("Unprotect Sheet"));
     }
     if (!success) {

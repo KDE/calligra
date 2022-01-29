@@ -1005,8 +1005,7 @@ bool Odf::saveSheet(Sheet *sheet, OdfSavingContext& tableContext)
     xmlWriter.startElement("table:table");
     xmlWriter.addAttribute("table:name", sheet->sheetName());
     xmlWriter.addAttribute("table:style-name", saveSheetStyleName(sheet, mainStyles));
-    QByteArray pwd;
-    sheet->password(pwd);
+    QByteArray pwd = sheet->passwordHash();
     if (!pwd.isNull()) {
         xmlWriter.addAttribute("table:protected", "true");
         QByteArray str = KCodecs::base64Encode(pwd);

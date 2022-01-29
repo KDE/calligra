@@ -9,21 +9,19 @@
 
 #include <QObject>
 #include <QPair>
-#include <QPoint>
-#include <QRect>
 #include <QVector>
 
 #include "engine/StorageBase.h"
-#include "engine/sheets_odf_export.h"
 #include "engine/Region.h"
-#include <Style.h>
+
+#include "sheets_core_export.h"
+#include "Style.h"
 
 namespace Calligra
 {
 namespace Sheets
 {
 class Map;
-class Style;
 class StyleManager;
 class SubStyle;
 class StyleStorageLoaderJob;
@@ -36,7 +34,7 @@ class StyleStorageLoaderJob;
  * replacement of this backend. Decorated with some additional features like
  * garbage collection, caching, used area tracking, etc.
  */
-class CALLIGRA_SHEETS_ODF_EXPORT StyleStorage : public StorageBase, public QObject
+class CALLIGRA_SHEETS_CORE_EXPORT StyleStorage : public StorageBase, public QObject
 {
     Q_OBJECT
 
@@ -128,7 +126,7 @@ public:
     /**
      * Replaces the current styles with those in \p styles
      */
-    void load(const QList<QPair<QRegion, Style> >& styles);
+    void load(const QList<QPair<Region, Style> >& styles);
 
     /**
      * Inserts \p number rows at the position \p position .

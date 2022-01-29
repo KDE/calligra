@@ -188,7 +188,6 @@ set (part_DIR_SRCS
     part/CanvasItem.cpp
     part/CellTool.cpp
     part/CellToolFactory.cpp
-    #part/Digest.cpp
     part/Doc.cpp
     part/Part.cpp
     part/Factory.cpp
@@ -266,30 +265,19 @@ endif()
 
 set (calligrasheetsodf_LIB_SRCS
 
-    part/Digest.cpp
     ApplicationSettings.cpp
-    Cell.cpp
-    CellStorage.cpp
     Cluster.cpp
     Condition.cpp
     ConditionsStorage.cpp
-    Currency.cpp
     DocBase.cpp
-    Format.cpp
     HeaderFooter.cpp
-    Map.cpp
     PrintSettings.cpp
-    ProtectableObject.cpp
     RowColumnFormat.cpp
     RowFormatStorage.cpp
     ShapeApplicationData.cpp
-    Sheet.cpp
     SheetAccessModel.cpp
     SheetModel.cpp
-    Style.cpp
     StyleManager.cpp
-    StyleStorage.cpp
-    ValueFormatter.cpp
     Binding.cpp
     BindingManager.cpp
     BindingModel.cpp
@@ -394,21 +382,13 @@ install( FILES
     ${CMAKE_CURRENT_BINARY_DIR}/sheets_common_generated_export.h
 
 
-    Cell.h
-    CellStorage.h
     Condition.h
-    Currency.h
     DocBase.h
-    Format.h
     Global.h
-    Map.h
     odf/OdfLoadingContext.h
     PrintSettings.h
-    ProtectableObject.h
     RowColumnFormat.h
     RowFormatStorage.h
-    Sheet.h
-    Style.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/sheets COMPONENT Devel)
 install( FILES
     part/CanvasBase.h

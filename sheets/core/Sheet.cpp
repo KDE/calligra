@@ -10,35 +10,35 @@
 // Local
 #include "Sheet.h"
 
-#include <QApplication>
+// #include <QApplication>
 
-#include <kcodecs.h>
+// #include <kcodecs.h>
 
-#include <KoShape.h>
-#include <KoDocumentResourceManager.h>
-#include <KoUnit.h>
-#include <KoCanvasResourceIdentities.h>
+// #include <KoShape.h>
+// #include <KoDocumentResourceManager.h>
+// #include <KoUnit.h>
+// #include <KoCanvasResourceIdentities.h>
 
-#include "CellStorage.h"
-#include "Cluster.h"
-#include "Damages.h"
-#include "DocBase.h"
-#include "FormulaStorage.h"
-#include "HeaderFooter.h"
-#include "LoadingInfo.h"
-#include "Map.h"
-#include "NamedAreaManager.h"
-#include "PrintSettings.h"
-#include "RowColumnFormat.h"
-#include "RowFormatStorage.h"
-#include "ShapeApplicationData.h"
-#include "SheetPrint.h"
-#include "SheetModel.h"
-#include "StyleStorage.h"
-#include "Validity.h"
-#include "ValueConverter.h"
-#include "ValueStorage.h"
-#include "database/Filter.h"
+// #include "CellStorage.h"
+// #include "Cluster.h"
+// #include "Damages.h"
+// #include "DocBase.h"
+// #include "FormulaStorage.h"
+// #include "HeaderFooter.h"
+// #include "LoadingInfo.h"
+// #include "Map.h"
+// #include "NamedAreaManager.h"
+// #include "PrintSettings.h"
+// #include "RowColumnFormat.h"
+// #include "RowFormatStorage.h"
+// #include "ShapeApplicationData.h"
+// #include "SheetPrint.h"
+// #include "SheetModel.h"
+// #include "StyleStorage.h"
+// #include "Validity.h"
+// #include "ValueConverter.h"
+// #include "ValueStorage.h"
+// #include "database/Filter.h"
 
 namespace Calligra
 {

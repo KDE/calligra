@@ -10,31 +10,31 @@
 
 // Qt
 #ifdef CALLIGRA_SHEETS_MT
-#include <QReadLocker>
-#include <QWriteLocker>
+// #include <QReadLocker>
+// #include <QWriteLocker>
 #endif
 
 // Sheets - storages
-#include "BindingStorage.h"
-#include "ConditionsStorage.h"
-#include "RectStorage.h"
-#include "StyleStorage.h"
-#include "ValidityStorage.h"
+// #include "BindingStorage.h"
+// #include "ConditionsStorage.h"
+// #include "RectStorage.h"
+// #include "StyleStorage.h"
+// #include "ValidityStorage.h"
 
 // Sheets - rest
-#include "Damages.h"
-#include "Map.h"
-#include "ModelSupport.h"
-#include "Sheet.h"
+// #include "Damages.h"
+// #include "Map.h"
+// #include "ModelSupport.h"
+// #include "Sheet.h"
 
 // commands
-#include "commands/PointStorageUndoCommand.h"
-#include "commands/RectStorageUndoCommand.h"
-#include "commands/StyleStorageUndoCommand.h"
+// #include "commands/PointStorageUndoCommand.h"
+// #include "commands/RectStorageUndoCommand.h"
+// #include "commands/StyleStorageUndoCommand.h"
 
 // database
-#include "database/DatabaseStorage.h"
-#include "database/DatabaseManager.h"
+// #include "database/DatabaseStorage.h"
+// #include "database/DatabaseManager.h"
 
 Q_DECLARE_METATYPE(QSharedPointer<QTextDocument>)
 

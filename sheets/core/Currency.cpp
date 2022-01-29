@@ -8,7 +8,7 @@
 // Locale
 #include "Currency.h"
 
-#include <KLocalizedString>
+// #include <KLocalizedString>
 
 using namespace Calligra::Sheets;
 

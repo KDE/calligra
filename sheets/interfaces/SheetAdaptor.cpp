@@ -482,7 +482,7 @@ void SheetAdaptor::setPrintFooterRight(const QString & text)
 }
 #endif
 
-bool SheetAdaptor::checkPassword(const QByteArray& passwd) const
+bool SheetAdaptor::checkPassword(const QString& passwd) const
 {
     return m_sheet->checkPassword(passwd);
 }
@@ -492,7 +492,7 @@ bool SheetAdaptor::isProtected() const
     return m_sheet->isProtected();
 }
 
-void SheetAdaptor::setProtected(const QByteArray& passwd)
+void SheetAdaptor::setProtected(const QString& passwd)
 {
     m_sheet->setProtected(passwd);
 }

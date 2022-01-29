@@ -10,21 +10,15 @@
 #ifndef CALLIGRA_SHEETS_SHEET
 #define CALLIGRA_SHEETS_SHEET
 
-#include <QClipboard>
-#include <QHash>
-#include <QList>
-#include <QRect>
-
-#include <KoDocument.h>
 #include <KoShapeBasedDocumentBase.h>
 #include <KoShapeUserData.h>
 
+#include "engine/calligra_sheets_limits.h"
 #include "engine/SheetBase.h"
 
-#include "Cell.h"
-#include "Style.h"
+#include "sheets_core_export.h"
+
 #include "ProtectableObject.h"
-#include "calligra_sheets_limits.h"
 
 class QAbstractItemModel;
 
@@ -62,7 +56,7 @@ class SheetTest;
 /**
  * A sheet contains several cells.
  */
-class CALLIGRA_SHEETS_ODF_EXPORT Sheet : public SheetBase, public KoShapeUserData, public KoShapeBasedDocumentBase,
+class CALLIGRA_SHEETS_CORE_EXPORT Sheet : public SheetBase, public KoShapeUserData, public KoShapeBasedDocumentBase,
         public ProtectableObject
 {
     Q_OBJECT

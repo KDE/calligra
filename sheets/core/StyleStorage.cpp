@@ -8,20 +8,20 @@
 // Local
 #include "StyleStorage.h"
 
-#include <QCache>
-#include <QRegion>
-#include <QTimer>
-#include <QRunnable>
+// #include <QCache>
+// #include <QRegion>
+// #include <QTimer>
+// #include <QRunnable>
 #ifdef CALLIGRA_SHEETS_MT
-#include <QMutex>
-#include <QMutexLocker>
+// #include <QMutex>
+// #include <QMutexLocker>
 #endif
 
-#include "Map.h"
-#include "RTree.h"
-#include "Style.h"
-#include "StyleManager.h"
-#include "RectStorage.h"
+// #include "Map.h"
+// #include "RTree.h"
+// #include "Style.h"
+// #include "StyleManager.h"
+// #include "RectStorage.h"
 
 static const int g_maximumCachedStyles = 10000;
 

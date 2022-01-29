@@ -9,16 +9,16 @@
 
 #include "ValueFormatter.h"
 
-#include "CalculationSettings.h"
-#include "Localization.h"
-#include "ValueConverter.h"
-#include "SheetsDebug.h"
+// #include "CalculationSettings.h"
+// #include "Localization.h"
+// #include "ValueConverter.h"
+// #include "SheetsDebug.h"
 
-#include <kcalendarsystem.h>
-#include <KLocalizedString>
+// #include <kcalendarsystem.h>
+// #include <KLocalizedString>
 
-#include <float.h>
-#include <math.h>
+// #include <float.h>
+// #include <math.h>
 
 using namespace Calligra::Sheets;
 

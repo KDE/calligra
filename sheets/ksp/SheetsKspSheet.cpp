@@ -352,8 +352,7 @@ QDomElement Ksp::saveSheet(Sheet *obj, QDomDocument& dd)
     sheet.setAttribute("lcmode", QString::number((int)obj->getLcMode()));
     sheet.setAttribute("autoCalc", QString::number((int)obj->isAutoCalculationEnabled()));
     sheet.setAttribute("borders1.2", "1");
-    QByteArray pwd;
-    obj->password(pwd);
+    QByteArray pwd = obj->passwordHash();
     if (!pwd.isNull()) {
         if (pwd.size() > 0) {
             QByteArray str = KCodecs::base64Encode(pwd);

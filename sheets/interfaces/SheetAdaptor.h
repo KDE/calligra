@@ -146,13 +146,13 @@ public Q_SLOTS: // METHODS
     //void setPrintFooterMiddle(const QString & text);
     //void setPrintFooterRight(const QString & text);
 
-    //NOTE: don't publish "QByteArray password()" cause that may introduce insecure situations...
+    //NOTE: don't publish "QByteArray passwordHash()" cause that may introduce insecure situations...
     /** Return true if passwd is the correct password. */
-    virtual bool checkPassword(const QByteArray& passwd) const;
+    virtual bool checkPassword(const QString& passwd) const;
     /** Return true if the sheet/document is protected. */
     virtual bool isProtected() const;
     /** Protect the document with the password passwd. */
-    virtual void setProtected(const QByteArray& passwd);
+    virtual void setProtected(const QString& passwd);
 
 Q_SIGNALS:
 

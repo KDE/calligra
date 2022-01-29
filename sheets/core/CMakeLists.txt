@@ -4,10 +4,42 @@ include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}/../
 )
 
-set (core_LIB_SRCS
+set (calligrasheetscore_LIB_SRCS
+    Currency.cpp
+    Format.cpp
+    ValueFormatter.cpp
+    Cell.cpp
+    Map.cpp
+    Sheet.cpp
+    Style.cpp
+    StyleStorage.cpp
+    CellStorage.cpp
 )
 
 add_library(calligrasheetscore SHARED ${calligrasheetscore_LIB_SRCS})
+
+
+generate_export_header(calligrasheetscore
+    EXPORT_FILE_NAME sheets_core_generated_export.h
+    BASE_NAME CALLIGRA_SHEETS_CORE
+)
+if (SHOULD_BUILD_DEVEL_HEADERS)
+
+install( FILES
+    sheets_core_export.h
+    ${CMAKE_CURRENT_BINARY_DIR}/sheets_core_generated_export.h
+
+    Currency.h
+    Format.h
+    Cell.h
+    Map.h
+    Sheet.h
+    Style.h
+    CellStorage.h
+DESTINATION ${INCLUDE_INSTALL_DIR}/sheets COMPONENT Devel)
+
+endif()
+
 
 target_link_libraries(calligrasheetscore
     PUBLIC

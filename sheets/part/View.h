@@ -44,6 +44,7 @@ class Damage;
 class Sheet;
 class Canvas;
 class Doc;
+class ProtectableObject;
 class Region;
 class Selection;
 class SheetView;
@@ -166,6 +167,18 @@ public:
      * \return \c true if the view is not being fully created yet.
      */
     bool isLoading() const;
+
+    /**
+     * Shows a dialog for entering the password.
+     * If the password is correct, the protection is enabled for
+     * \p mode being \c Lock, or it is disabled for \p mode being \c Unlock.
+     * \param parent the parent Qwidget
+     * \param mode the mode
+     * \param title the window title
+     * \return \c true on success; \c false on failure
+     */
+    bool showPasswordDialog(ProtectableObject *obj, Mode mode, const QString& title);
+
 
 public Q_SLOTS:
     /** Clears all visual cached data. */

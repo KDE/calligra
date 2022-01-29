@@ -12,11 +12,10 @@
 #include <QTextDocument>
 
 #include "engine/CellBaseStorage.h"
+#include "engine/calligra_sheets_limits.h"
 
+#include "sheets_core_export.h"
 #include "Cell.h"
-#include "calligra_sheets_limits.h"
-
-#include "database/Database.h"
 
 class KUndo2Command;
 
@@ -29,6 +28,7 @@ class BindingStorage;
 class Cell;
 class Conditions;
 class ConditionsStorage;
+class Database;
 class FusionStorage;
 class LinkStorage;
 class RichTextStorage;
@@ -48,7 +48,7 @@ class StyleStorage;
  *
  * \note If you fill the storage, do it row-wise. That's more performant.
  */
-class CALLIGRA_SHEETS_ODF_EXPORT CellStorage : public CellBaseStorage, public QObject
+class CALLIGRA_SHEETS_CORE_EXPORT CellStorage : public CellBaseStorage, public QObject
 {
     Q_OBJECT
 public:

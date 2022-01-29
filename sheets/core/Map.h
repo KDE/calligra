@@ -13,10 +13,8 @@
 
 #include "engine/MapBase.h"
 
+#include "sheets_core_export.h"
 #include "ProtectableObject.h"
-#include "Region.h"
-
-#include "sheets_export.h"
 
 #include <KoDataCenterBase.h>
 
@@ -48,7 +46,7 @@ class ValueFormatter;
  * The "embedded document".
  * The Map holds all the document data.
  */
-class CALLIGRA_SHEETS_ODF_EXPORT Map : public MapBase, public KoDataCenterBase, public ProtectableObject
+class CALLIGRA_SHEETS_CORE_EXPORT Map : public MapBase, public KoDataCenterBase, public ProtectableObject
 {
     Q_OBJECT
 public:

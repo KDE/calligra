@@ -39,8 +39,7 @@ QDomElement Ksp::saveMap(Map *map, QDomDocument& doc)
 
     QDomElement mymap = doc.createElement("map");
 
-    QByteArray password;
-    map->password(password);
+    QByteArray password = map->passwordHash();
     if (!password.isNull()) {
         if (password.size() > 0) {
             QByteArray str = KCodecs::base64Encode(password);

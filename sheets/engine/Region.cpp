@@ -234,16 +234,16 @@ void Region::removeIntersects(const QRect& range, SheetBase* sheet)
         d->cells.removeAll(el);
 }
 
-void Region::sub(const Region& region)
+void Region::removeIntersects(const Region& region)
 {
     ConstIterator endOfList(region.constEnd());
     for (ConstIterator it = region.constBegin(); it != endOfList; ++it) {
         Element *element = *it;
         if (element->type() == Element::Point) {
             Point* point = static_cast<Point*>(element);
-            sub(Region(point->pos()));
+            removeIntersects(Region(point->pos()));
         } else {
-            sub(Region(element->rect()));
+            removeIntersects(Region(element->rect()));
         }
     }
 }

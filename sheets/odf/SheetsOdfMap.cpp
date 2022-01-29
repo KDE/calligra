@@ -275,8 +275,7 @@ bool Odf::saveMap(Map *map, KoXmlWriter & xmlWriter, KoShapeSavingContext & savi
 
     saveCalculationSettings(map->calculationSettings(), xmlWriter); // table::calculation-settings
 
-    QByteArray password;
-    map->password(password);
+    QByteArray password = map->passwordHash();
     if (!password.isNull()) {
         xmlWriter.addAttribute("table:structure-protected", "true");
         QByteArray str = KCodecs::base64Encode(password);

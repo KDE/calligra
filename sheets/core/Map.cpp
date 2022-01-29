@@ -8,36 +8,36 @@
 // Local
 #include "Map.h"
 
-#include <stdlib.h>
-#include <time.h>
+// #include <stdlib.h>
+// #include <time.h>
 
-#include <QTimer>
+// #include <QTimer>
 
-#include <kcodecs.h>
-#include <kcompletion.h>
+// #include <kcodecs.h>
+// #include <kcompletion.h>
 
-#include <KoGlobal.h>
-#include <KoEmbeddedDocumentSaver.h>
-#include <KoStyleManager.h>
-#include <KoParagraphStyle.h>
-#include <KoUpdater.h>
-#include <KoProgressUpdater.h>
+// #include <KoGlobal.h>
+// #include <KoEmbeddedDocumentSaver.h>
+// #include <KoStyleManager.h>
+// #include <KoParagraphStyle.h>
+// #include <KoUpdater.h>
+// #include <KoProgressUpdater.h>
 
-#include "ApplicationSettings.h"
-#include "BindingManager.h"
-#include "CellStorage.h"
-#include "Damages.h"
-#include "DocBase.h"
-#include "LoadingInfo.h"
-#include "Localization.h"
-#include "RowColumnFormat.h"
-#include "Sheet.h"
-#include "StyleManager.h"
-#include "ValueFormatter.h"
-#include "engine/Updater.h"
+// #include "ApplicationSettings.h"
+// #include "BindingManager.h"
+// #include "CellStorage.h"
+// #include "Damages.h"
+// #include "DocBase.h"
+// #include "LoadingInfo.h"
+// #include "Localization.h"
+// #include "RowColumnFormat.h"
+// #include "Sheet.h"
+// #include "StyleManager.h"
+// #include "ValueFormatter.h"
+// #include "engine/Updater.h"
 
 // database
-#include "database/DatabaseManager.h"
+// #include "database/DatabaseManager.h"
 
 using namespace Calligra::Sheets;
 
