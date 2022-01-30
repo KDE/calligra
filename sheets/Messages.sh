@@ -11,5 +11,5 @@ source ../kundo2_aware_xgettext.sh
 $EXTRACTRC --tag-group=koffice functions/*.xml >> rc.cpp
 $EXTRACTRC chart/*.ui dialogs/*.ui  part/dialogs/*.ui *.kcfg *.rc >> rc.cpp
 $EXTRACTATTR --attr=optionWidget,name ui/CellToolOptionWidgets.xml >> rc.cpp
-kundo2_aware_xgettext $potfilename *.cpp chart/*.cpp commands/*.cpp database/*.cpp dialogs/*.cpp functions/*.cpp part/AboutData.h part/*.cpp part/commands/*.cpp part/dialogs/*.cpp ui/*.cpp
+kundo2_aware_xgettext $potfilename *.cpp engine/*.cpp core/*.cpp chart/*.cpp commands/*.cpp database/*.cpp dialogs/*.cpp functions/*.cpp part/AboutData.h part/*.cpp part/commands/*.cpp part/dialogs/*.cpp ui/*.cpp
 rm -f rc.cpp

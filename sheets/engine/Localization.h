@@ -32,6 +32,7 @@ public:
 
     QString decimalSymbol() const;
     QString negativeSign() const;
+    QString positiveSign() const;
     QString thousandsSeparator() const;
 
     QDateTime readDateTime(const QString &str, bool *ok);
@@ -41,11 +42,47 @@ public:
     QTime readTime(const QString &str, bool *ok);
     QTime readTime(const QString &str, const QString &format, bool *ok);
 
-    QString dateTimeFormat(bool longFormat);
-    QString dateFormat(bool longFormat);
-    QString timeFormat(bool longFormat);
+    /**
+     * Uses these date/time formats:
+     * d = day as number without a leading zero
+     * dd = day as number including a leading zero
+     * ddd = appreviated name of day (e.g. 'Mon' to 'Sun')
+     * dddd = full name of day (e.g. 'Monday' to 'Sunday')
+     * M = month as number without a leading zero
+     * MM = month as number including a leading zero
+     * MMM = appreviated name of month (e.g. 'Jan' to 'Dec')
+     * MMMM = full name of month (e.g. 'January' to 'December')
+     * yy = two-digit year
+     * yyyy = four-digit year
+     *
+     * h = hour without a leading zero, 0-23 format, or 1-12 if AM/PM display
+     * hh = hour with a leading zero, 0-23 format, or 1-12 if AM/PM display
+     * H = hour without a leading zero, always 0-23 format
+     * HH = hour with a leading zero, always 0-23 format
+     * m = minute as number without a leading zero
+     * mm = minute as number including a leading zero
+     * s = second as number without a leading zero
+     * ss = second as number including a leading zero
+     * AP/A = uppercase AM/PM
+     * ap/a = lowercase am/pm
+     * t = timezone
+     */
+    QString dateTimeFormat(bool longFormat) const;
+    QString dateFormat(bool longFormat) const;
+    QString timeFormat(bool longFormat) const;
+    QString dateFormat(int type) const;
+
+    QString currencySymbol() const;
+
+    QString timeSeparator() const { return timeSep; }
+    bool timeWithAMPM() const { return includesAMPM; }
+    QString dateSeparator(bool longDate) const { return longDate ? dateSepLong : dateSepShort; }
 
     QString formatBool(bool val) const;
+
+    QString formatNumber(double num, int precision = -1);
+    QString formatCurrency(double num, const QString &currencySymbol, int precision = -1);
+
     /** Formats using the correct decimal point, but no thousands separators */
     QString formatDoubleNoSep(double val) const;
     QString formatDateTime(const QDateTime &datetime, bool longFormat = true);
@@ -60,7 +97,11 @@ public:
     QString toUpper(const QString &str) const;
     QString toLower(const QString &str) const;
 private:
+    void setLocale(const QLocale &l);
+
     QLocale locale;
+    QString timeSep, dateSepShort, dateSepLong;
+    bool includesAMPM;
 };
 
 } // namespace Sheets

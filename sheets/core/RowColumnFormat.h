@@ -8,13 +8,7 @@
 #ifndef CALLIGRA_SHEETS_ROW_COLUMN_FORMAT
 #define CALLIGRA_SHEETS_ROW_COLUMN_FORMAT
 
-#include <QBrush>
-
-#include <KoXmlReader.h>
-
-#include "sheets_export.h"
-#include "Global.h"
-#include "Style.h"
+#include "sheets_core_export.h"
 
 namespace Calligra
 {
@@ -26,7 +20,7 @@ class RowFormatStorage;
 /**
  * A row style.
  */
-class CALLIGRA_SHEETS_ODF_EXPORT RowFormat
+class CALLIGRA_SHEETS_CORE_EXPORT RowFormat
 {
 public:
     RowFormat();
@@ -108,7 +102,7 @@ private:
 /**
  * A column style.
  */
-class CALLIGRA_SHEETS_ODF_EXPORT ColumnFormat
+class CALLIGRA_SHEETS_CORE_EXPORT ColumnFormat
 {
 public:
     ColumnFormat();

@@ -18,7 +18,7 @@
 
 #include "sheets_core_export.h"
 
-#include "ProtectableObject.h"
+#include "engine/ProtectableObject.h"
 
 class QAbstractItemModel;
 
@@ -56,7 +56,7 @@ class SheetTest;
 /**
  * A sheet contains several cells.
  */
-class CALLIGRA_SHEETS_CORE_EXPORT Sheet : public KoShapeUserData, public SheetBase, public KoShapeBasedDocumentBase
+class CALLIGRA_SHEETS_CORE_EXPORT Sheet : public KoShapeUserData, public SheetBase, public KoShapeBasedDocumentBase,
         public ProtectableObject
 {
     Q_OBJECT

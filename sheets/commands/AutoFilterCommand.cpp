@@ -14,7 +14,6 @@
 #include "Sheet.h"
 
 #include "database/Database.h"
-#include "database/DatabaseManager.h"
 
 using namespace Calligra::Sheets;
 
@@ -30,7 +29,7 @@ AutoFilterCommand::~AutoFilterCommand()
 
 void AutoFilterCommand::redo()
 {
-    Database database(m_sheet->map()->databaseManager()->createUniqueName());
+    Database database();
     database.setDisplayFilterButtons(true);
     database.setRange(*this);
     m_sheet->cellStorage()->setDatabase(*this, database);

@@ -7,9 +7,7 @@
 #ifndef CALLIGRA_SHEETS_ROWFORMATSTORAGE_H
 #define CALLIGRA_SHEETS_ROWFORMATSTORAGE_H
 
-#include <Qt>
-
-#include "sheets_odf_export.h"
+#include "sheets_core_export.h"
 
 namespace Calligra {
 namespace Sheets {
@@ -17,7 +15,7 @@ namespace Sheets {
 class Sheet;
 
 /** first and last row are both inclusive in all functions */
-class CALLIGRA_SHEETS_ODF_EXPORT RowFormatStorage
+class CALLIGRA_SHEETS_CORE_EXPORT RowFormatStorage
 {
 public:
     explicit RowFormatStorage(Sheet *sheet);
@@ -25,8 +23,8 @@ public:
 
     Sheet* sheet() const;
 
-    qreal rowHeight(int row, int* lastRow = 0, int* firstRow = 0) const;
-    void setRowHeight(int firstRow, int lastRow, qreal height);
+    double rowHeight(int row, int* lastRow = 0, int* firstRow = 0) const;
+    void setRowHeight(int firstRow, int lastRow, double height);
 
     bool isHidden(int row, int* lastRow = 0, int* firstRow = 0) const;
     void setHidden(int firstRow, int lastRow, bool hidden);
@@ -36,12 +34,12 @@ public:
 
     bool isHiddenOrFiltered(int row, int* lastRow = 0, int* firstRow = 0) const;
 
-    qreal visibleHeight(int row, int* lastRow = 0, int* firstRow = 0) const;
+    double visibleHeight(int row, int* lastRow = 0, int* firstRow = 0) const;
 
-    qreal totalRowHeight(int firstRow, int lastRow) const;
-    qreal totalVisibleRowHeight(int firstRow, int lastRow) const;
+    double totalRowHeight(int firstRow, int lastRow) const;
+    double totalVisibleRowHeight(int firstRow, int lastRow) const;
 
-    int rowForPosition(qreal ypos, qreal * topOfRow = 0) const;
+    int rowForPosition(double ypos, double * topOfRow = 0) const;
 
     bool hasPageBreak(int row, int* lastRow = 0, int* firstRow = 0) const;
     void setPageBreak(int firstRow, int lastRow, bool pageBreak);

@@ -7,13 +7,12 @@
 #ifndef CALLIGRA_SHEETS_CONDITION_H
 #define CALLIGRA_SHEETS_CONDITION_H
 
-#include "Style.h"
-#include "Value.h"
-
 #include <QLinkedList>
 #include <QSharedData>
 #include <QVariant>
 
+#include "sheets_core_export.h"
+#include "engine/Value.h"
 #include "engine/Validity.h"
 
 class QString;
@@ -23,6 +22,7 @@ namespace Calligra
 namespace Sheets
 {
 class Cell;
+class Style;
 class ValueConverter;
 class ValueParser;
 
@@ -33,7 +33,7 @@ class ValueParser;
  * Holds the actual condition and the applicable style for conditional
  * Cell formattings.
  */
-class CALLIGRA_SHEETS_ODF_EXPORT Conditional
+class CALLIGRA_SHEETS_CORE_EXPORT Conditional
 {
 public:
 
@@ -58,7 +58,7 @@ uint qHash(const Conditional& condition);
  * \ingroup Style
  * Manages a set of conditions for a cell.
  */
-class CALLIGRA_SHEETS_ODF_EXPORT Conditions
+class CALLIGRA_SHEETS_CORE_EXPORT Conditions
 {
 public:
     /**

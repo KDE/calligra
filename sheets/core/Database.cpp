@@ -8,24 +8,17 @@
 
 #include <QString>
 
-#include "DatabaseSource.h"
-#include "Filter.h"
-#include "Map.h"
-#include "Region.h"
+//#include "DataFilter.h"
+//#include "Map.h"
+//#include "engine/Region.h"
 
 using namespace Calligra::Sheets;
-
-class Sort;
-class SubtotalRules;
 
 class Q_DECL_HIDDEN Database::Private : public QSharedData
 {
 public:
     Private()
-            : source(0)
-            , sort(0)
             , filter()
-            , subtotalRules(0)
             , isSelection(false)
             , onUpdateKeepStyles(false)
             , onUpdateKeepSize(true)
@@ -38,11 +31,7 @@ public:
 
     Private(const Private& other)
             : QSharedData(other)
-            , source(/*other.source ? new DatabaseSource(*other.source) : */0)
-            , sort(/*other.sort ? new Sort(*other.sort) : */0)
             , filter(other.filter)
-            , subtotalRules(/*other.subtotalRules ? new SubtotalRules(*other.subtotalRules) : */0)
-            , name(other.name)
             , isSelection(other.isSelection)
             , onUpdateKeepStyles(other.onUpdateKeepStyles)
             , onUpdateKeepSize(other.onUpdateKeepSize)
@@ -55,15 +44,9 @@ public:
     }
 
     virtual ~Private() {
-//         delete source;
-//         delete sort;
-//         delete subtotalRules;
     }
 
-    DatabaseSource* source;
-    Sort* sort;
     Filter filter;
-    SubtotalRules* subtotalRules;
     QString name;
     bool isSelection                    : 1;
     bool onUpdateKeepStyles             : 1;
@@ -101,17 +84,7 @@ Database::~Database()
 
 bool Database::isEmpty() const
 {
-    return d->name.isNull(); // it may be empty though
-}
-
-const QString& Database::name() const
-{
-    return d->name;
-}
-
-void Database::setName(const QString& name)
-{
-    d->name = name;
+    return range().isEmpty(); // it may be empty though
 }
 
 bool Database::isSelection() const {
@@ -216,8 +189,6 @@ void Database::operator=(const Database & other)
 bool Database::operator==(const Database& other) const
 {
     // NOTE Stefan: Don't compare targetRangeAddress.
-    if (d->name != other.d->name)
-        return false;
     if (d->isSelection != other.d->isSelection)
         return false;
     if (d->onUpdateKeepStyles != other.d->onUpdateKeepStyles)
@@ -234,14 +205,8 @@ bool Database::operator==(const Database& other) const
         return false;
     if (d->refreshDelay != other.d->refreshDelay)
         return false;
-//     if (*d->source != *other.d->source)
-//         return false;
-//     if (*d->sort != *other.d->sort)
-//         return false;
     if (d->filter != other.d->filter)
         return false;
-//     if (*d->subtotalRules != *other.d->subtotalRules)
-//         return false;
     return true;
 }
 

@@ -140,7 +140,7 @@ protected:
      * \p string , if necessary.
      * \return the truncated string
      */
-    QString removeTrailingZeros(const QString& string, const QString& decimalSymbol);
+    QString removeTrailingZeros(const QString& string, const QString &currencySymbol, const QString& decimalSymbol);
 
 private:
     const ValueConverter* m_converter;

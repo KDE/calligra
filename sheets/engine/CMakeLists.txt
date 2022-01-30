@@ -1,8 +1,4 @@
 
-include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_BINARY_DIR}
-)
 
 set (calligrasheetsengine_LIB_SRCS
     SheetsDebug.cpp
@@ -42,6 +38,12 @@ set (calligrasheetsengine_LIB_SRCS
 )
 
 add_library(calligrasheetsengine SHARED ${calligrasheetsengine_LIB_SRCS})
+
+target_include_directories( calligrasheetsengine
+    PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_BINARY_DIR}
+)
 
 generate_export_header(calligrasheetsengine
     EXPORT_FILE_NAME sheets_engine_generated_export.h

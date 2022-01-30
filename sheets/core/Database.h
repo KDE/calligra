@@ -8,9 +8,8 @@
 #define CALLIGRA_SHEETS_DATABASE
 
 #include <QSharedDataPointer>
-#include <QVariant>
 
-#include "sheets_odf_export.h"
+#include "sheets_core_export.h"
 
 
 namespace Calligra
@@ -23,8 +22,10 @@ class Region;
 
 /**
  * OpenDocument, 8.6.1 Database Range
+ *
+ * Source of data mapped to a database range. Largely unused right now, we just load/save these, and use them for filtering.
  */
-class CALLIGRA_SHEETS_ODF_EXPORT Database
+class CALLIGRA_SHEETS_CORE_EXPORT Database
 {
 public:
     /**
@@ -32,12 +33,6 @@ public:
      * Creates an empty database.
      */
     Database();
-
-    /**
-     * Constructor.
-     * Creates a database named \p name.
-     */
-    explicit Database(const QString &name);
 
     /**
      * Copy Constructor.
@@ -53,16 +48,6 @@ public:
      * \return \c true if this is the default/empty database
      */
     bool isEmpty() const;
-
-    /**
-     * \return the database's name
-     */
-    const QString& name() const;
-
-    /**
-     * Sets the database's name.
-     */
-    void setName(const QString& name);
 
     bool isSelection() const;
     void setIsSelection(bool sel);

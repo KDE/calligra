@@ -44,6 +44,7 @@ class Doc;
 class Sheet;
 class CellTest;
 class Localization;
+class CellStorage;
 
 /**
  * An accessor to the actual cell data.
@@ -321,6 +322,9 @@ public:
     bool compareData(const Cell& other) const;
 
 private:
+    // Caching this value for easier retrieval
+    CellStorage *cs;
+
     friend class CellTest;
 };
 

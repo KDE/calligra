@@ -13,12 +13,12 @@ using namespace Calligra::Sheets;
 
 Localization::Localization()
 {
-    locale = QLocale::system();
+    setLocale(QLocale::system());
 }
 
 void Localization::defaultSystemConfig()
 {
-    locale = QLocale::system();
+    setLocale(QLocale::system());
 }
 
 QString Localization::decimalSymbol() const
@@ -29,6 +29,11 @@ QString Localization::decimalSymbol() const
 QString Localization::negativeSign() const
 {
     return locale.negativeSign();
+}
+
+QString Localization::positiveSign() const
+{
+    return locale.positiveSign();
 }
 
 QString Localization::thousandsSeparator() const
@@ -87,19 +92,38 @@ QTime Localization::readTime(const QString &str, const QString &format, bool *ok
     return res;
 }
 
-QString Localization::dateTimeFormat(bool longFormat)
+QString Localization::dateTimeFormat(bool longFormat) const
 {
     return locale.dateTimeFormat(longFormat ? QLocale::LongFormat : QLocale::ShortFormat);
 }
 
-QString Localization::dateFormat(bool longFormat)
+QString Localization::dateFormat(bool longFormat) const
 {
     return locale.dateTimeFormat(longFormat ? QLocale::LongFormat : QLocale::ShortFormat);
 }
 
-QString Localization::timeFormat(bool longFormat)
+QString Localization::timeFormat(bool longFormat) const
 {
     return locale.dateTimeFormat(longFormat ? QLocale::LongFormat : QLocale::ShortFormat);
+}
+
+QString Localization::dateFormat(int type) const
+{
+    if (type == 1) return "d" + dateSepShort + "M" + dateSepShort + "yyyy";
+    if (type == 2) return "d" + dateSepShort + "M" + dateSepShort + "yy";
+    if (type == 3) return "d" + dateSepShort + "MMM" + dateSepShort + "yy";
+    if (type == 4) return "d" + dateSepShort + "MMM" + dateSepShort + "yyyy";
+    if (type == 5) return "d" + dateSepLong + "MMMM" + dateSepLong + "yy";
+    if (type == 6) return "d" + dateSepLong + "MMMM" + dateSepLong + "yyyy";
+    if (type == 7) return "d" + dateSepLong + "MMMM" + dateSepLong + "yy";
+    if (type == 8) return "d" + dateSepLong + "MMMM" + dateSepLong + "yyyy";
+
+    return QString();
+}
+
+QString Localization::currencySymbol() const
+{
+    return locale.currencySymbol();
 }
 
 
@@ -113,6 +137,18 @@ QString Localization::formatBool(bool val) const
 {
     KLocalizedString str = val ? ki18n("true") : ki18n("false");
     return translateString(str).toLower();
+}
+
+QString Localization::formatNumber(double num, int precision)
+{
+    if (precision < 0) precision = 2;
+    return locale.toString(num, 'g', precision);
+}
+
+QString Localization::formatCurrency(double num, const QString &currencySymbol, int precision)
+{
+    if (precision < 0) precision = 2;
+    return locale.toCurrencyString(num, currencySymbol, precision);
 }
 
 QString Localization::formatDoubleNoSep(double val) const
@@ -167,4 +203,42 @@ QString Localization::toLower(const QString &str) const
     return locale.toLower(str);
 }
 
+static QString getSeparator(const QString &str) {
+    QString sep;
+    int stage = 0;
+    for (int i = 0; i < str.length(); ++i)
+    {
+        if (stage == 0) {
+            if (str[i].isLetter())
+                stage++;
+            continue;
+        }
+        if (stage == 1) {
+            if (str[i].isLetter()) continue;
+            stage++;  // no continue here, we want to apply stage2 logic
+        }
+        if (stage == 2) {
+            if (str[i].isLetter()) break;  // we're done
+            sep += str[i];
+        }
+    }
+
+    return sep;
+}
+
+void Localization::setLocale(const QLocale &l) {
+    locale = l;
+
+    // Determine the date/time separator
+    QString format = timeFormat(false);
+    timeSep = getSeparator(format);
+    format = timeFormat(true);
+    if (format.indexOf("A") >= 0) includesAMPM = true;
+    else includesAMPM = false;
+
+    format = dateFormat(true);
+    dateSepLong = getSeparator(format);
+    format = dateFormat(false);
+    dateSepShort = getSeparator(format);
+}
 

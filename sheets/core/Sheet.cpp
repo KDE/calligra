@@ -23,6 +23,7 @@
 // #include "Cluster.h"
 // #include "Damages.h"
 // #include "DocBase.h"
+#include "engine/Formula.h"
 // #include "FormulaStorage.h"
 // #include "HeaderFooter.h"
 // #include "LoadingInfo.h"
@@ -38,7 +39,7 @@
 // #include "Validity.h"
 // #include "ValueConverter.h"
 // #include "ValueStorage.h"
-// #include "database/Filter.h"
+// #include "DataFilter.h"
 
 namespace Calligra
 {

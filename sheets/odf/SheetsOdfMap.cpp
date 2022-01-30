@@ -31,7 +31,6 @@
 #include "Sheet.h"
 #include "StyleManager.h"
 #include "Validity.h"
-#include "database/DatabaseManager.h"
 
 #include <QHash>
 
@@ -558,16 +557,9 @@ void Odf::saveDatabase(const Database &database, KoXmlWriter& xmlWriter)
     xmlWriter.addAttribute("table:target-range-address", saveRegion(database.range().name()));
     if (database.refreshDelay())
         xmlWriter.addAttribute("table:refresh-delay", database.refreshDelay());
-    // TODO
-//     if (database.source())
-//         database.source().saveOdf(xmlWriter);
-//     if (database.sort())
-//         database.sort().saveOdf(xmlWriter);
 
     saveDatabaseFilter(database.filter(), xmlWriter);
 
-//     if (database.subtotalRules())
-//         database.subtotalRules().saveOdf(xmlWriter);
     xmlWriter.endElement();
 }
 

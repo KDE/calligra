@@ -8,25 +8,23 @@
 // Local
 #include "RowColumnFormat.h"
 
-#include <float.h>
-#include <iostream>
-#include <stdlib.h>
-#include <stdio.h>
+// #include <float.h>
+// #include <iostream>
+// #include <stdlib.h>
+// #include <stdio.h>
 
-#include <KoXmlNS.h>
-#include <KoUnit.h>
+// #include <KoUnit.h>
 
-#include "SheetsDebug.h"
-#include "CellStorage.h"
-#include "Map.h"
-#include "Region.h"
-#include "RowFormatStorage.h"
-#include "Sheet.h"
-#include "SheetPrint.h"
-#include "Style.h"
-#include "StyleManager.h"
+// #include "SheetsDebug.h"
+// #include "CellStorage.h"
+// #include "Map.h"
+// #include "Region.h"
+// #include "RowFormatStorage.h"
+// #include "Sheet.h"
+// #include "SheetPrint.h"
+// #include "Style.h"
+// #include "StyleManager.h"
 
-using namespace std;
 using namespace Calligra::Sheets;
 
 /*****************************************************************************

@@ -9,9 +9,9 @@
 #include "calligra_sheets_limits.h"
 #include "3rdparty/mdds/flat_segment_tree.hpp"
 
-#include "Map.h"
+#include "engine/MapBase.h"
 #include "RowColumnFormat.h"
-#include "Sheet.h"
+#include "engine/SheetBase.h"
 
 using namespace Calligra::Sheets;
 
@@ -19,10 +19,10 @@ class Q_DECL_HIDDEN RowFormatStorage::Private
 {
 public:
     Private();
-    qreal rawRowHeight(int row, int* lastRow = 0, int* firstRow = 0) const;
+    double rawRowHeight(int row, int* lastRow = 0, int* firstRow = 0) const;
 
     Sheet* sheet;
-    mdds::flat_segment_tree<int, qreal> rowHeights;
+    mdds::flat_segment_tree<int, double> rowHeights;
     mdds::flat_segment_tree<int, bool> hidden;
     mdds::flat_segment_tree<int, bool> filtered;
     mdds::flat_segment_tree<int, bool> hasPageBreak;
@@ -58,9 +58,9 @@ Sheet* RowFormatStorage::sheet() const
     return d->sheet;
 }
 
-qreal RowFormatStorage::rowHeight(int row, int *lastRow, int *firstRow) const
+double RowFormatStorage::rowHeight(int row, int *lastRow, int *firstRow) const
 {
-    qreal v = d->rawRowHeight(row, lastRow, firstRow);
+    double v = d->rawRowHeight(row, lastRow, firstRow);
     if (v == -1) {
         return d->sheet->map()->defaultRowFormat()->height();
     } else {
@@ -68,9 +68,9 @@ qreal RowFormatStorage::rowHeight(int row, int *lastRow, int *firstRow) const
     }
 }
 
-qreal RowFormatStorage::Private::rawRowHeight(int row, int *lastRow, int *firstRow) const
+double RowFormatStorage::Private::rawRowHeight(int row, int *lastRow, int *firstRow) const
 {
-    qreal v;
+    double v;
     if (!rowHeights.search(row, v, firstRow, lastRow)) {
         if (firstRow) *firstRow = row;
         if (lastRow) *lastRow = row;
@@ -81,10 +81,10 @@ qreal RowFormatStorage::Private::rawRowHeight(int row, int *lastRow, int *firstR
     }
 }
 
-void RowFormatStorage::setRowHeight(int firstRow, int lastRow, qreal height)
+void RowFormatStorage::setRowHeight(int firstRow, int lastRow, double height)
 {
     // first get old row height to properly update documentSize
-    qreal deltaHeight = -totalVisibleRowHeight(firstRow, lastRow);
+    double deltaHeight = -totalVisibleRowHeight(firstRow, lastRow);
 
     d->rowHeights.insert_back(firstRow, lastRow+1, height);
 
@@ -92,52 +92,52 @@ void RowFormatStorage::setRowHeight(int firstRow, int lastRow, qreal height)
     d->sheet->adjustDocumentHeight(deltaHeight);
 }
 
-qreal RowFormatStorage::totalRowHeight(int firstRow, int lastRow) const
+double RowFormatStorage::totalRowHeight(int firstRow, int lastRow) const
 {
     if (lastRow < firstRow) return 0;
-    qreal res = 0;
+    double res = 0;
     for (int row = firstRow; row <= lastRow; ++row) {
         int last;
-        qreal h = rowHeight(row, &last);
+        double h = rowHeight(row, &last);
         res += (qMin(last, lastRow) - row + 1) * h;
         row = last;
     }
     return res;
 }
 
-qreal RowFormatStorage::visibleHeight(int row, int *lastRow, int *firstRow) const
+double RowFormatStorage::visibleHeight(int row, int *lastRow, int *firstRow) const
 {
     if (isHiddenOrFiltered(row, lastRow, firstRow)) {
         return 0.0;
     } else {
         int hLastRow, hFirstRow;
-        qreal height = rowHeight(row, &hLastRow, &hFirstRow);
+        double height = rowHeight(row, &hLastRow, &hFirstRow);
         if (lastRow) *lastRow = qMin(*lastRow, hLastRow);
         if (firstRow) *firstRow = qMax(*firstRow, hFirstRow);
         return height;
     }
 }
 
-qreal RowFormatStorage::totalVisibleRowHeight(int firstRow, int lastRow) const
+double RowFormatStorage::totalVisibleRowHeight(int firstRow, int lastRow) const
 {
     if (lastRow < firstRow) return 0;
-    qreal res = 0;
+    double res = 0;
     for (int row = firstRow; row <= lastRow; ++row) {
         int last;
-        qreal h = visibleHeight(row, &last);
+        double h = visibleHeight(row, &last);
         res += (qMin(last, lastRow) - row + 1) * h;
         row = last;
     }
     return res;
 }
 
-int RowFormatStorage::rowForPosition(qreal ypos, qreal *topOfRow) const
+int RowFormatStorage::rowForPosition(double ypos, double *topOfRow) const
 {
     int row = 1;
-    qreal y = 0;
+    double y = 0;
     while (row < KS_rowMax) {
         int last;
-        const qreal h = visibleHeight(row, &last);
+        const double h = visibleHeight(row, &last);
         if (h == 0) {
             row = last+1;
             continue;
@@ -169,7 +169,7 @@ bool RowFormatStorage::isHidden(int row, int *lastRow, int *firstRow) const
 
 void RowFormatStorage::setHidden(int firstRow, int lastRow, bool hidden)
 {
-    qreal deltaHeight = 0;
+    double deltaHeight = 0;
     if (hidden) deltaHeight -= totalVisibleRowHeight(firstRow, lastRow);
     d->hidden.insert_back(firstRow, lastRow+1, hidden);
     if (!hidden) deltaHeight += totalVisibleRowHeight(firstRow, lastRow);
@@ -191,7 +191,7 @@ bool RowFormatStorage::isFiltered(int row, int* lastRow, int *firstRow) const
 
 void RowFormatStorage::setFiltered(int firstRow, int lastRow, bool filtered)
 {
-    qreal deltaHeight = 0;
+    double deltaHeight = 0;
     if (filtered) deltaHeight -= totalVisibleRowHeight(firstRow, lastRow);
     d->filtered.insert_back(firstRow, lastRow+1, filtered);
     if (!filtered) deltaHeight += totalVisibleRowHeight(firstRow, lastRow);
@@ -269,7 +269,7 @@ void RowFormatStorage::setDefault(int firstRow, int lastRow)
 
 void RowFormatStorage::insertRows(int row, int number)
 {
-    qreal deltaHeight = -totalRowHeight(KS_rowMax - number + 1, KS_rowMax);
+    double deltaHeight = -totalRowHeight(KS_rowMax - number + 1, KS_rowMax);
     d->rowHeights.shift_right(row, number, false);
     deltaHeight += totalRowHeight(row, row + number - 1);
     d->sheet->adjustDocumentHeight(deltaHeight);
@@ -281,7 +281,7 @@ void RowFormatStorage::insertRows(int row, int number)
 
 void RowFormatStorage::removeRows(int row, int number)
 {
-    qreal deltaHeight = -totalRowHeight(row, row + number - 1);
+    double deltaHeight = -totalRowHeight(row, row + number - 1);
     d->rowHeights.shift_left(row, row+number-1);
     deltaHeight += totalRowHeight(KS_rowMax - number + 1, KS_rowMax);
     d->sheet->adjustDocumentHeight(deltaHeight);

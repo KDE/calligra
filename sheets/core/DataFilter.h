@@ -10,7 +10,7 @@
 #include <QHash>
 #include <QString>
 
-#include "sheets_odf_export.h"
+#include "sheets_core_export.h"
 
 namespace Calligra
 {
@@ -57,7 +57,7 @@ public:
 /**
  * OpenDocument, 8.7.1 Table Filter
  */
-class CALLIGRA_SHEETS_ODF_EXPORT Filter
+class CALLIGRA_SHEETS_CORE_EXPORT Filter
 {
 public:
 

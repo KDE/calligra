@@ -29,65 +29,45 @@
 // Local
 #include "Cell.h"
 
-// #include <stdlib.h>
-// #include <ctype.h>
-// #include <float.h>
-// #include <math.h>
+#include "engine/CalculationSettings.h"
+#include "engine/Formula.h"
+#include "engine/NamedAreaManager.h"
 
-// #include "SheetsDebug.h"
-// #include "CalculationSettings.h"
-// #include "CellStorage.h"
-// #include "Condition.h"
-// #include "Formula.h"
-// #include "Localization.h"
-// #include "LoadingInfo.h"
-// #include "Map.h"
-// #include "NamedAreaManager.h"
-// #include "RowColumnFormat.h"
-// #include "RowFormatStorage.h"
-// #include "Sheet.h"
-// #include "Style.h"
-// #include "StyleManager.h"
-// #include "Util.h"
-// #include "Value.h"
-// #include "Validity.h"
-// #include "ValueFormatter.h"
-// #include "ValueParser.h"
-// #include "StyleStorage.h"
+#include "CellStorage.h"
+#include "Currency.h"
+#include "Condition.h"
+#include "Database.h"
+#include "Map.h"
+#include "RowColumnFormat.h"
+#include "RowFormatStorage.h"
+#include "Sheet.h"
+#include "ValueFormatter.h"
+#include "StyleStorage.h"
 
-// #include <QTimer>
-// #include <QTextDocument>
-// #include <QTextCursor>
 
 using namespace Calligra::Sheets;
 
-class Q_DECL_HIDDEN Cell::Private : public QSharedData
-{
-public:
-    Private() : sheet(0), column(0), row(0) {}
-
-    Sheet*  sheet;
-    uint    column  : 17; // KS_colMax
-    uint    row     : 21; // KS_rowMax
-};
-
-
 Cell::Cell()
 {
+    cs = nullptr;
 }
 
 Cell::Cell(Sheet* sheet, int col, int row)
         : CellBase(sheet, col, row)
 {
+    cs = sheet ? sheet->fullCellStorage() : nullptr;
 }
 
 Cell::Cell(Sheet* sheet, const QPoint& pos)
         : CellBase(sheet, pos)
 {
+    cs = sheet ? sheet->fullCellStorage() : nullptr;
 }
 
 Cell::Cell(const Cell& other)
+        : CellBase(other)
 {
+    cs = fullSheet()->fullCellStorage();
 }
 
 Cell::~Cell()
@@ -98,7 +78,7 @@ Cell::~Cell()
 Sheet* Cell::fullSheet() const
 {
     Q_ASSERT(!isNull());
-    return dynamic_cast<Sheet *>(sheetBase());
+    return dynamic_cast<Sheet *>(sheet());
 }
 
 Localization* Cell::locale() const
@@ -152,27 +132,27 @@ bool Cell::hasDefaultContent() const
 
 Conditions Cell::conditions() const
 {
-    return sheet()->cellStorage()->conditions(d->column, d->row);
+    return cs->conditions(column(), row());
 }
 
 void Cell::setConditions(const Conditions& conditions)
 {
-    sheet()->cellStorage()->setConditions(Region(cellPosition()), conditions);
+    cs->setConditions(Region(cellPosition()), conditions);
 }
 
 Database Cell::database() const
 {
-    return sheet()->cellStorage()->database(d->column, d->row);
+    return cs->database(column(), row());
 }
 
 Style Cell::style() const
 {
-    return sheet()->cellStorage()->style(d->column, d->row);
+    return cs->style(column(), row());
 }
 
 Style Cell::effectiveStyle() const
 {
-    Style style = sheet()->cellStorage()->style(d->column, d->row);
+    Style style = cs->style(column(), row());
     // use conditional formatting attributes
     const Style conditionalStyle = conditions().testConditions(*this);
     if (!conditionalStyle.isEmpty()) {
@@ -183,8 +163,8 @@ Style Cell::effectiveStyle() const
 
 void Cell::setStyle(const Style& style)
 {
-    sheet()->cellStorage()->setStyle(Region(cellPosition()), style);
-    sheet()->cellStorage()->styleStorage()->contains(cellPosition());
+    cs->setStyle(Region(cellPosition()), style);
+    cs->styleStorage()->contains(cellPosition());
 }
 
 
@@ -225,14 +205,14 @@ QString Cell::displayText(const Style& s, Value *v, bool *showFormula) const
     const Style style = s.isEmpty() ? effectiveStyle() : s;
     // Display a formula if warranted.  If not, display the value instead;
     // this is the most common case.
-    if ( isFormula() && !(sheet()->isProtected() && style.hideFormula()) &&
-         ( (showFormula && *showFormula) || (!showFormula && sheet()->getShowFormula()) ) )
+    if ( isFormula() && !(fullSheet()->isProtected() && style.hideFormula()) &&
+         ( (showFormula && *showFormula) || (!showFormula && fullSheet()->getShowFormula()) ) )
     {
         string = userInput();
         if (showFormula)
             *showFormula = true;
     } else if (!isEmpty()) {
-        Value theValue = sheet()->map()->formatter()->formatText(value(), style.formatType(), style.precision(),
+        Value theValue = fullSheet()->fullMap()->formatter()->formatText(value(), style.formatType(), style.precision(),
                  style.floatFormat(), style.prefix(),
                  style.postfix(), style.currency().symbol(),
                  style.customFormat(), style.thousandsSep());
@@ -247,12 +227,12 @@ QString Cell::displayText(const Style& s, Value *v, bool *showFormula) const
 
 QSharedPointer<QTextDocument> Cell::richText() const
 {
-    return sheet()->cellStorage()->richText(d->column, d->row);
+    return cs->richText(column(), row());
 }
 
 void Cell::setRichText(QSharedPointer<QTextDocument> text)
 {
-    sheet()->cellStorage()->setRichText(d->column, d->row, text);
+    cs->setRichText(column(), row(), text);
 }
 
 // FIXME: Continue commenting and cleaning here (ingwa)
@@ -264,7 +244,7 @@ void Cell::copyFormat(const Cell& cell)
     Q_ASSERT(!cell.isNull());
     Value value = this->value();
     value.setFormat(cell.value().format());
-    sheet()->cellStorage()->setValue(d->column, d->row, value);
+    sheet()->cellStorage()->setValue(column(), row(), value);
     if (!style().isDefault() || !cell.style().isDefault())
         setStyle(cell.style());
     if (!conditions().isEmpty() || !cell.conditions().isEmpty())
@@ -295,10 +275,10 @@ void Cell::copyContent(const Cell& cell)
         setFormula(formula);
     } else {
         // copy the user input
-        sheet()->cellStorage()->setUserInput(d->column, d->row, cell.userInput());
+        sheet()->cellStorage()->setUserInput(column(), row(), cell.userInput());
     }
     // copy the value in both cases
-    sheet()->cellStorage()->setValue(d->column, d->row, cell.value());
+    sheet()->cellStorage()->setValue(column(), row(), cell.value());
 }
 
 bool Cell::needsPrinting() const
@@ -359,7 +339,7 @@ QString Cell::encodeFormula(bool fixedReferences) const
                 result.append(token.text()); // simply keep the area name
                 break;
             }
-            const Region region(token.text(), sheet()->map());
+            const Region region = sheet()->map()->regionFromName(token.text(), sheet());
             // Actually, a contiguous region, but the fixation is needed
             Region::ConstIterator end = region.constEnd();
             for (Region::ConstIterator it = region.constBegin(); it != end; ++it) {
@@ -374,13 +354,13 @@ QString Cell::encodeFormula(bool fixedReferences) const
                     else if (fixedReferences)
                         result.append(QChar(0xA7) + QString("%1").arg(pos.x()));
                     else
-                        result.append(QString("#%1").arg(pos.x() - (int)d->column));
+                        result.append(QString("#%1").arg(pos.x() - (int)column()));
                     if ((*it)->isRowFixed())
                         result.append(QString("$%1#").arg(pos.y()));
                     else if (fixedReferences)
                         result.append(QChar(0xA7) + QString("%1#").arg(pos.y()));
                     else
-                        result.append(QString("#%1#").arg(pos.y() - (int)d->row));
+                        result.append(QString("#%1#").arg(pos.y() - (int)row()));
                 } else { // ((*it)->type() == Region::Range)
                     if ((*it)->sheet())
                         result.append((*it)->sheet()->sheetName() + '!');
@@ -390,13 +370,13 @@ QString Cell::encodeFormula(bool fixedReferences) const
                     else if (fixedReferences)
                         result.append(QChar(0xA7) + QString("%1").arg(pos.x()));
                     else
-                        result.append(QString("#%1").arg(pos.x() - (int)d->column));
+                        result.append(QString("#%1").arg(pos.x() - (int)column()));
                     if ((*it)->isTopFixed())
                         result.append(QString("$%1#").arg(pos.y()));
                     else if (fixedReferences)
                         result.append(QChar(0xA7) + QString("%1#").arg(pos.y()));
                     else
-                        result.append(QString("#%1#").arg(pos.y() - (int)d->row));
+                        result.append(QString("#%1#").arg(pos.y() - (int)row()));
                     result.append(':');
                     pos = (*it)->rect().bottomRight();
                     if ((*it)->isRightFixed())
@@ -404,13 +384,13 @@ QString Cell::encodeFormula(bool fixedReferences) const
                     else if (fixedReferences)
                         result.append(QChar(0xA7) + QString("%1").arg(pos.x()));
                     else
-                        result.append(QString("#%1").arg(pos.x() - (int)d->column));
+                        result.append(QString("#%1").arg(pos.x() - (int)column()));
                     if ((*it)->isBottomFixed())
                         result.append(QString("$%1#").arg(pos.y()));
                     else if (fixedReferences)
                         result.append(QChar(0xA7) + QString("%1#").arg(pos.y()));
                     else
-                        result.append(QString("#%1#").arg(pos.y() - (int)d->row));
+                        result.append(QString("#%1#").arg(pos.y() - (int)row()));
                 }
             }
             break;
@@ -465,7 +445,7 @@ QString Cell::decodeFormula(const QString &_text) const
             if (pos != oldPos)
                 col = _text.midRef(oldPos, pos - oldPos).toInt();
             if (!abs1 && !era1)
-                col += d->column;
+                col += column();
             // Skip '#' or '$'
 
             _t = _text[pos++];
@@ -474,17 +454,17 @@ QString Cell::decodeFormula(const QString &_text) const
             else if (_t == QChar(0xA7))
                 era2 = true;
 
-            int row = 0;
+            int _row = 0;
             oldPos = pos;
             while (pos < length && (_text[pos].isDigit() || _text[pos] == '-')) ++pos;
             if (pos != oldPos)
-                row = _text.midRef(oldPos, pos - oldPos).toInt();
+                _row = _text.midRef(oldPos, pos - oldPos).toInt();
             if (!abs2 && !era2)
-                row += d->row;
+                _row += row();
             // Skip '#' or '$'
             ++pos;
-            if (row < 1 || col < 1 || row > KS_rowMax || col > KS_colMax) {
-                debugSheetsODF << "Cell::decodeFormula: row or column out of range (col:" << col << " | row:" << row << ')';
+            if (_row < 1 || col < 1 || _row > KS_rowMax || col > KS_colMax) {
+                debugSheetsODF << "Cell::decodeFormula: row or column out of range (col:" << col << " | row:" << _row << ')';
                 erg += Value::errorREF().errorMessage();
             } else {
                 if (abs1)
@@ -493,7 +473,7 @@ QString Cell::decodeFormula(const QString &_text) const
 
                 if (abs2)
                     erg += '$';
-                erg += QString::number(row);
+                erg += QString::number(_row);
             }
         } else
             erg += _text[pos++];
@@ -529,27 +509,27 @@ int Cell::effectiveAlignX() const
 
 double Cell::width() const
 {
-    const int rightCol = d->column + mergedXCells();
+    const int rightCol = column() + mergedXCells();
     double width = 0.0;
-    for (int col = d->column; col <= rightCol; ++col)
-        width += sheet()->columnFormat(col)->width();
+    for (int col = column(); col <= rightCol; ++col)
+        width += fullSheet()->columnFormat(col)->width();
     return width;
 }
 
 double Cell::height() const
 {
-    const int bottomRow = d->row + mergedYCells();
-    return sheet()->rowFormats()->totalRowHeight(d->row, bottomRow);
+    const int bottomRow = row() + mergedYCells();
+    return fullSheet()->rowFormats()->totalRowHeight(row(), bottomRow);
 }
 
 QString Cell::link() const
 {
-    return sheet()->cellStorage()->link(d->column, d->row);
+    return cs->link(column(), row());
 }
 
 void Cell::setLink(const QString& link)
 {
-    sheet()->cellStorage()->setLink(d->column, d->row, link);
+    cs->setLink(column(), row(), link);
 
     if (!link.isEmpty() && userInput().isEmpty())
         parseUserInput(link);
@@ -578,34 +558,34 @@ bool Cell::isText() const
 
 bool Cell::isPartOfMerged() const
 {
-    return sheet()->cellStorage()->isPartOfMerged(d->column, d->row);
+    return cs->isPartOfMerged(column(), row());
 }
 
 Cell Cell::masterCell() const
 {
-    return sheet()->cellStorage()->masterCell(d->column, d->row);
+    return cs->masterCell(column(), row());
 }
 
 // Merge a number of cells, i.e. make this cell obscure a number of
 // other cells.  If _x and _y == 0, then the merging is removed.
 void Cell::mergeCells(int _col, int _row, int _x, int _y)
 {
-    sheet()->cellStorage()->mergeCells(_col, _row, _x, _y);
+    cs->mergeCells(_col, _row, _x, _y);
 }
 
 bool Cell::doesMergeCells() const
 {
-    return sheet()->cellStorage()->doesMergeCells(d->column, d->row);
+    return cs->doesMergeCells(column(), row());
 }
 
 int Cell::mergedXCells() const
 {
-    return sheet()->cellStorage()->mergedXCells(d->column, d->row);
+    return cs->mergedXCells(column(), row());
 }
 
 int Cell::mergedYCells() const
 {
-    return sheet()->cellStorage()->mergedYCells(d->column, d->row);
+    return cs->mergedYCells(column(), row());
 }
 
 

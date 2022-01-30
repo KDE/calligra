@@ -1,9 +1,4 @@
 
-include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}/../
-    ${CMAKE_CURRENT_BINARY_DIR}/../
-)
-
 set (calligrasheetscore_LIB_SRCS
     Currency.cpp
     Format.cpp
@@ -14,9 +9,22 @@ set (calligrasheetscore_LIB_SRCS
     Style.cpp
     StyleStorage.cpp
     CellStorage.cpp
+    Condition.cpp
+    ConditionsStorage.cpp
+    RowFormatStorage.cpp
+    RowColumnFormat.cpp
+    Database.cpp
+    DatabaseStorage.cpp
+    DataFilter.cpp
 )
 
 add_library(calligrasheetscore SHARED ${calligrasheetscore_LIB_SRCS})
+
+target_include_directories( calligrasheetscore
+    PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/../
+    ${CMAKE_CURRENT_BINARY_DIR}/../
+)
 
 
 generate_export_header(calligrasheetscore
@@ -29,6 +37,7 @@ install( FILES
     sheets_core_export.h
     ${CMAKE_CURRENT_BINARY_DIR}/sheets_core_generated_export.h
 
+    Condition.h
     Currency.h
     Format.h
     Cell.h
@@ -36,10 +45,12 @@ install( FILES
     Sheet.h
     Style.h
     CellStorage.h
+    RowColumnFormat.h
+    Database.h
+    DataFilter.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/sheets COMPONENT Devel)
 
 endif()
-
 
 target_link_libraries(calligrasheetscore
     PUBLIC

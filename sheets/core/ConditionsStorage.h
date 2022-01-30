@@ -7,24 +7,27 @@
 #ifndef KSPREAD_CONDITIONS_STORAGE
 #define KSPREAD_CONDITIONS_STORAGE
 
+#include "sheets_core_export.h"
 #include "Condition.h"
-#include "RectStorage.h"
+
+#include "engine/RectStorage.h"
 
 namespace Calligra
 {
 namespace Sheets
 {
+class MapBase;
 
 /**
  * \class ConditionsStorage
  * \ingroup Storage
  * Stores conditional cell styles.
  */
-class ConditionsStorage : public QObject, public RectStorage<Conditions>
+class CALLIGRA_SHEETS_CORE_EXPORT ConditionsStorage : public QObject, public RectStorage<Conditions>
 {
     Q_OBJECT
 public:
-    explicit ConditionsStorage(Map* map) : QObject(map), RectStorage<Conditions>(map) {}
+    explicit ConditionsStorage(MapBase* map) : QObject(map), RectStorage<Conditions>(map) {}
     ConditionsStorage(const ConditionsStorage& other) : QObject(other.parent()), RectStorage<Conditions>(other) {}
 
 protected Q_SLOTS:

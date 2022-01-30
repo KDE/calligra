@@ -83,10 +83,6 @@ set (commands_DIR_SRCS
 set (database_DIR_SRCS
     #database/Database.cpp
     #database/DatabaseManager.cpp
-    database/DatabaseSource.cpp
-    database/DatabaseSourceQuery.cpp
-    database/DatabaseSourceSql.cpp
-    database/DatabaseSourceTable.cpp
     #database/Filter.cpp
     database/FilterPopup.cpp
     )
@@ -267,13 +263,9 @@ set (calligrasheetsodf_LIB_SRCS
 
     ApplicationSettings.cpp
     Cluster.cpp
-    Condition.cpp
-    ConditionsStorage.cpp
     DocBase.cpp
     HeaderFooter.cpp
     PrintSettings.cpp
-    RowColumnFormat.cpp
-    RowFormatStorage.cpp
     ShapeApplicationData.cpp
     SheetAccessModel.cpp
     SheetModel.cpp
@@ -283,10 +275,6 @@ set (calligrasheetsodf_LIB_SRCS
     BindingModel.cpp
     BindingStorage.cpp
 
-    database/Database.cpp
-    database/DatabaseManager.cpp
-    database/DatabaseStorage.cpp
-    database/Filter.cpp
 
     ${odf_DIR_SRCS}
     ${ksp_DIR_SRCS}
@@ -382,12 +370,10 @@ install( FILES
     ${CMAKE_CURRENT_BINARY_DIR}/sheets_common_generated_export.h
 
 
-    Condition.h
     DocBase.h
     Global.h
     odf/OdfLoadingContext.h
     PrintSettings.h
-    RowColumnFormat.h
     RowFormatStorage.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/sheets COMPONENT Devel)
 install( FILES
@@ -408,10 +394,6 @@ install( FILES
     ui/Selection.h
     ui/SheetView.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/calligrasheets/ui COMPONENT Devel)
-install( FILES
-    database/Database.h
-    database/Filter.h
-DESTINATION ${INCLUDE_INSTALL_DIR}/calligrasheets/database COMPONENT Devel)
 install( FILES
     commands/AbstractRegionCommand.h
     commands/DataManipulators.h

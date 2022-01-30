@@ -21,8 +21,6 @@
 #include "SheetsOdf.h"
 #include "SheetsOdfPrivate.h"
 
-#include <klocale.h>
-
 #include <KoGenStyle.h>
 #include <KoGenStyles.h>
 #include <KoOdfStylesReader.h>
@@ -35,6 +33,7 @@
 
 #include "CalculationSettings.h"
 #include "Condition.h"
+#include "engine/Localization.h"
 #include "Map.h"
 #include "StyleManager.h"
 
@@ -92,7 +91,7 @@ namespace Odf {
     QString saveBackgroundStyle(KoGenStyles &mainStyles, const QBrush &brush);
 
     // Helpers
-    Format::Type dateType(const QString&);
+    Format::Type dateType(const QString&, Localization *locale);
     Format::Type timeType(const QString&);
     Format::Type fractionType(const QString&);
     Format::Type numberType(const QString&);
@@ -370,7 +369,7 @@ void Odf::loadDataStyle(Style *style, KoOdfStylesReader &stylesReader, const QSt
         // formatting string
         tmp = dataStyle.formatStr;
         if (!tmp.isEmpty()) {
-            style->setFormatType(dateType(tmp));
+            style->setFormatType(dateType(tmp, parser->settings()->locale()));
         }
         break;
     case KoOdfNumberStyles::Time:
@@ -1014,33 +1013,6 @@ QString Odf::saveStyleNumeric(KoGenStyle &style, KoGenStyles &mainStyles,
     case Format::Date6:
     case Format::Date7:
     case Format::Date8:
-    case Format::Date9:
-    case Format::Date10:
-    case Format::Date11:
-    case Format::Date12:
-    case Format::Date13:
-    case Format::Date14:
-    case Format::Date15:
-    case Format::Date16:
-    case Format::Date17:
-    case Format::Date18:
-    case Format::Date19:
-    case Format::Date20:
-    case Format::Date21:
-    case Format::Date22:
-    case Format::Date23:
-    case Format::Date24:
-    case Format::Date25:
-    case Format::Date26:
-    case Format::Date27:
-    case Format::Date28:
-    case Format::Date29:
-    case Format::Date30:
-    case Format::Date31:
-    case Format::Date32:
-    case Format::Date33:
-    case Format::Date34:
-    case Format::Date35:
         styleName = saveStyleNumericDate(mainStyles, _style, _prefix, _postfix);
         valueType = "date";
         break;
@@ -1145,130 +1117,46 @@ QString Odf::saveStyleNumericScientific(KoGenStyles&mainStyles, Format::Type /*_
 }
 
 QString Odf::saveStyleNumericDate(KoGenStyles&mainStyles, Format::Type _style,
-                                       const QString& _prefix, const QString& _postfix)
+                                       const QString& _prefix, const QString& _postfix, Localization *locale)
 {
     QString format;
-    bool locale = false;
     switch (_style) {
         //TODO fixme use locale of Calligra Sheets and not kglobal
     case Format::ShortDate:
-        format = KLocale::global()->dateFormatShort();
-        locale = true;
+        format = locale->dateFormat(false);
         break;
     case Format::TextDate:
-        format = KLocale::global()->dateFormat();
-        locale = true;
+        format = locale->dateFormat(true);
         break;
     case Format::Date1:
-        format = "dd-MMM-yy";
+        format = locale->dateFormat(1);
         break;
     case Format::Date2:
-        format = "dd-MMM-yyyy";
+        format = locale->dateFormat(2);
         break;
     case Format::Date3:
-        format = "dd-M";
+        format = locale->dateFormat(3);
         break;
     case Format::Date4:
-        format = "dd-MM";
+        format = locale->dateFormat(4);
         break;
     case Format::Date5:
-        format = "dd/MM/yy";
+        format = locale->dateFormat(5);
         break;
     case Format::Date6:
-        format = "dd/MM/yyyy";
+        format = locale->dateFormat(6);
         break;
     case Format::Date7:
-        format = "MMM-yy";
+        format = locale->dateFormat(7);
         break;
     case Format::Date8:
-        format = "MMMM-yy";
-        break;
-    case Format::Date9:
-        format = "MMMM-yyyy";
-        break;
-    case Format::Date10:
-        format = "MMMMM-yy";
-        break;
-    case Format::Date11:
-        format = "dd/MMM";
-        break;
-    case Format::Date12:
-        format = "dd/MM";
-        break;
-    case Format::Date13:
-        format = "dd/MMM/yyyy";
-        break;
-    case Format::Date14:
-        format = "yyyy/MMM/dd";
-        break;
-    case Format::Date15:
-        format = "yyyy-MMM-dd";
-        break;
-    case Format::Date16:
-        format = "yyyy/MM/dd";
-        break;
-    case Format::Date17:
-        format = "d MMMM yyyy";
-        break;
-    case Format::Date18:
-        format = "MM/dd/yyyy";
-        break;
-    case Format::Date19:
-        format = "MM/dd/yy";
-        break;
-    case Format::Date20:
-        format = "MMM/dd/yy";
-        break;
-    case Format::Date21:
-        format = "MMM/dd/yyyy";
-        break;
-    case Format::Date22:
-        format = "MMM-yyyy";
-        break;
-    case Format::Date23:
-        format = "yyyy";
-        break;
-    case Format::Date24:
-        format = "yy";
-        break;
-    case Format::Date25:
-        format = "yyyy/MM/dd";
-        break;
-    case Format::Date26:
-        format = "yyyy/MMM/dd";
-        break;
-    case Format::Date27:
-        format = "MMM/yy";
-        break;
-    case Format::Date28:
-        format = "MMM/yyyy";
-        break;
-    case Format::Date29:
-        format = "MMMM/yy";
-        break;
-    case Format::Date30:
-        format = "MMMM/yyyy";
-        break;
-    case Format::Date31:
-        format = "dd-MM";
-        break;
-    case Format::Date32:
-        format = "MM/yy";
-        break;
-    case Format::Date33:
-        format = "MM-yy";
-        break;
-    case Format::Date34:
-        format = "ddd d MMM yyyy";
-        break;
-    case Format::Date35:
-        format = "dddd d MMM yyyy";
+        format = locale->dateFormat(8);
         break;
     default:
         debugSheetsODF << "this date format is not defined ! :" << _style;
         break;
     }
-    return KoOdfNumberStyles::saveOdfDateStyle(mainStyles, format, locale, _prefix, _postfix);
+    return KoOdfNumberStyles::saveOdfDateStyle(mainStyles, format, false, _prefix, _postfix);
 }
 
 QString Odf::saveStyleNumericCustom(KoGenStyles& /*mainStyles*/, Format::Type /*_style*/,
@@ -1389,107 +1277,20 @@ QString Odf::saveStyleNumericFraction(KoGenStyles &mainStyles, Format::Type form
 
 // Helpers
 
-static QString convertDateFormat(const QString& date)
+Format::Type Odf::dateType(const QString &_f, Localization *locale)
 {
-    QString result = date;
-    result.replace("%Y", "yyyy");
-    result.replace("%y", "yy");
-    result.replace("%n", "M");
-    result.replace("%m", "MM");
-    result.replace("%e", "d");
-    result.replace("%d", "dd");
-    result.replace("%b", "MMM");
-    result.replace("%B", "MMMM");
-    result.replace("%a", "ddd");
-    result.replace("%A", "dddd");
-    return result;
-}
+    if (f == locale->dateFormat(false) return Format::ShortDate;
+    if (f == locale->dateFormat(true) return Format::TextDate;
 
-Format::Type Odf::dateType(const QString &_f)
-{
-    const QString dateFormatShort = convertDateFormat(KLocale::global()->dateFormatShort());
-    const QString dateFormat = convertDateFormat(KLocale::global()->dateFormat());
-    QString _format = _f;
-    _format.replace(' ', '-');
-
-    if (_format == "d-MMM-yy" || _format == "dd-MMM-yy")
-        return Format::Date1;
-    else if (_format == "dd-MMM-yyyy")
-        return Format::Date2;
-    else if (_format == "d-MM")
-        return Format::Date3;
-    else if (_format == "dd-MM")   //TODO ???????
-        return Format::Date4;
-    else if (_format == "dd/MM/yy")
-        return Format::Date5;
-    else if (_format == "dd/MM/yyyy")
-        return Format::Date6;
-    else if (_format == "MMM-yy")
-        return Format::Date7;
-    else if (_format == "MMMM-yy")
-        return Format::Date8;
-    else if (_format == "MMMM-yyyy")
-        return Format::Date9;
-    else if (_format == "MMMMM-yy" || _format == "X-yy")
-        return Format::Date10;
-    else if (_format == "dd/MMM")
-        return Format::Date11;
-    else if (_format == "dd/MM")
-        return Format::Date12;
-    else if (_format == "dd/MMM/yyyy")
-        return Format::Date13;
-    else if (_format == "yyyy/MMM/dd")
-        return Format::Date14;
-    else if (_format == "yyyy-MMM-dd")
-        return Format::Date15;
-    else if (_format == "yyyy-MM-dd")
-        return Format::Date16;
-    else if (_format == "d MMMM yyyy")
-        return Format::Date17;
-    else if (_format == "MM/dd/yyyy")
-        return Format::Date18;
-    else if (_format == "MM/dd/yy")
-        return Format::Date19;
-    else if (_format == "MMM/dd/yy")
-        return Format::Date20;
-    else if (_format == "MMM/dd/yyyy")
-        return Format::Date21;
-    else if (_format == "MMM-yyyy")
-        return Format::Date22;
-    else if (_format == "yyyy")
-        return Format::Date23;
-    else if (_format == "yy")
-        return Format::Date24;
-    else if (_format == "yyyy/MM/dd")
-        return Format::Date25;
-    else if (_format == "yyyy/MMM/dd")
-        return Format::Date26;
-    else if (_format == "MMM/yy")
-        return Format::Date27;
-    else if (_format == "MMM/yyyy")
-        return Format::Date28;
-    else if (_format == "MMMM/yy")
-        return Format::Date29;
-    else if (_format == "MMMM/yyyy")
-        return Format::Date30;
-    else if (_format == "dd-MM")
-        return Format::Date31;
-    else if (_format == "MM/yy")
-        return Format::Date32;
-    else if (_format == "MM-yy")
-        return Format::Date33;
-    else if (QRegExp("^[d]+[\\s]*[d]{1,2}[\\s]+[M]{1,4}[\\s]+[y]{2,2}$").indexIn(_f) >= 0)
-        return Format::Date34;
-    else if (QRegExp("^[d]+[\\s]*[d]{1,2}[\\s]+[M]{1,}[\\s]+[y]{2,4}$").indexIn(_f) >= 0)
-        return Format::Date35;
-    else if (_format == dateFormatShort)
-        return Format::ShortDate;
-    else if (_format == dateFormat)
-        return Format::TextDate;
-    else {
-        debugSheets << "Unhandled date format=" << _format;
-        return Format::ShortDate;
-    }
+    if (f == locale->dateFormat(1) return Format::Date1;
+    if (f == locale->dateFormat(2) return Format::Date2;
+    if (f == locale->dateFormat(3) return Format::Date3;
+    if (f == locale->dateFormat(4) return Format::Date4;
+    if (f == locale->dateFormat(5) return Format::Date5;
+    if (f == locale->dateFormat(6) return Format::Date6;
+    if (f == locale->dateFormat(7) return Format::Date7;
+    if (f == locale->dateFormat(8) return Format::Date8;
+    return Format::ShortDate;
 }
 
 Format::Type Odf::timeType(const QString &_format)

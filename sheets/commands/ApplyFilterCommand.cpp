@@ -15,8 +15,8 @@
 #include "RowColumnFormat.h"
 #include "RowFormatStorage.h"
 
-#include "database/Database.h"
-#include "database/Filter.h"
+#include "core/Database.h"
+#include "core/DataFilter.h"
 
 using namespace Calligra::Sheets;
 

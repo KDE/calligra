@@ -7,6 +7,8 @@
 #ifndef KSPREAD_DATABASE_STORAGE
 #define KSPREAD_DATABASE_STORAGE
 
+#include "sheets_core_export.h"
+
 #include "Database.h"
 #include "RectStorage.h"
 
@@ -18,11 +20,11 @@ namespace Sheets
 /**
  * DatabaseStorage
  */
-class DatabaseStorage : public QObject, public RectStorage<Database>
+class CALLIGRA_SHEETS_CORE_EXPORT DatabaseStorage : public QObject, public RectStorage<Database>
 {
     Q_OBJECT
 public:
-    explicit DatabaseStorage(Map* map) : QObject(map), RectStorage<Database>(map) {}
+    explicit DatabaseStorage(MapBase* map) : QObject(map), RectStorage<Database>(map) {}
     DatabaseStorage(const DatabaseStorage& other) : QObject(other.parent()), RectStorage<Database>(other) {}
 
 protected Q_SLOTS:
