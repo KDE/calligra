@@ -8,6 +8,7 @@
 #define CALLIGRA_SHEETS_STYLE_MANAGER
 
 #include "sheets_core_export.h"
+#include <QHash>
 #include <QMap>
 #include <QString>
 

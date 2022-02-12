@@ -302,6 +302,27 @@ Region Region::intersected(const Region& region) const
     return result;
 }
 
+Region Region::translated(int dx, int dy) const
+{
+    if (isEmpty()) return Region();
+    Region result;
+
+    ConstIterator end(constEnd());
+    for (ConstIterator it = constBegin(); it != end; ++it) {
+        Element *element = *it;
+        if (element->type() == Element::Point) {
+            Point* point = static_cast<Point*>(element);
+            QPoint pt = point->pos();
+            result.add(QPoint(pt.x() + dx, pt.y() + dy), element->sheet());
+        } else {
+            QRect rect = element->rect();
+            result.add(rect.translated(dx, dy), element->sheet());
+        }
+    }
+
+    return result;
+}
+
 Region Region::intersectedWithRow(int row) const
 {
     Region result;

@@ -8,20 +8,16 @@
 // Local
 #include "StyleStorage.h"
 
-// #include <QCache>
-// #include <QRegion>
-// #include <QTimer>
-// #include <QRunnable>
+#include <QTime>
 #ifdef CALLIGRA_SHEETS_MT
-// #include <QMutex>
-// #include <QMutexLocker>
+#include <QMutex>
+#include <QMutexLocker>
 #endif
 
-// #include "Map.h"
-// #include "RTree.h"
-// #include "Style.h"
-// #include "StyleManager.h"
-// #include "RectStorage.h"
+#include "Map.h"
+#include "RTree.h"
+#include "StyleManager.h"
+#include "RectStorage.h"
 
 static const int g_maximumCachedStyles = 10000;
 
@@ -41,18 +37,18 @@ public:
     RTree<SharedSubStyle> tree;
     QMap<int, bool> usedColumns; // FIXME Stefan: Use QList and std::upper_bound() for insertion.
     QMap<int, bool> usedRows;
-    QRegion usedArea;
+    Region usedArea;
     QHash<Style::Key, QList<SharedSubStyle> > subStyles;
     QMap<int, QPair<QRectF, SharedSubStyle> > possibleGarbage;
     QCache<QPoint, Style> cache;
-    QRegion cachedArea;
+    Region cachedArea;
     StyleStorageLoaderJob* loader;
 #ifdef CALLIGRA_SHEETS_MT
     QMutex cacheMutex;
 #endif
 
     bool m_storingUndo;
-    QVector< QPair<QRectF, T> > m_undoData;
+    QVector< QPair<QRectF, SharedSubStyle> > m_undoData;
 
     void ensureLoaded();
 };
@@ -60,17 +56,17 @@ public:
 class Calligra::Sheets::StyleStorageLoaderJob : public QRunnable
 {
 public:
-    StyleStorageLoaderJob(StyleStorage* storage, const QList<QPair<QRegion, Style> >& styles);
+    StyleStorageLoaderJob(StyleStorage* storage, const QList<QPair<Region, Style> >& styles);
     void run() override;
     void waitForFinished();
     bool isFinished();
-    QList<QPair<QRegion, Style> > data() const { return m_styles; }
+    QList<QPair<Region, Style> > data() const { return m_styles; }
 private:
     StyleStorage* m_storage;
-    QList<QPair<QRegion, Style> > m_styles;
+    QList<QPair<Region, Style> > m_styles;
 };
 
-StyleStorageLoaderJob::StyleStorageLoaderJob(StyleStorage *storage, const QList<QPair<QRegion, Style> > &styles)
+StyleStorageLoaderJob::StyleStorageLoaderJob(StyleStorage *storage, const QList<QPair<Region, Style> > &styles)
     : m_storage(storage), m_styles(styles)
 {
 
@@ -92,21 +88,21 @@ void StyleStorageLoaderJob::run()
     debugSheetsStyle << "Loading styles:" << endl << m_styles;
     QTime t; t.start();
     StyleStorage::Private* d = m_storage->d;
-    QList<QPair<QRegion, SharedSubStyle> > subStyles;
+    QList<QPair<Region, SharedSubStyle> > subStyles;
 
-    d->usedArea = QRegion();
+    d->usedArea = Region();
     d->usedColumns.clear();
     d->usedRows.clear();
     {
 #ifdef CALLIGRA_SHEETS_MT
         QMutexLocker(&d->cacheMutex);
 #endif
-        d->cachedArea = QRegion();
+        d->cachedArea = Region();
         d->cache.clear();
     }
-    typedef QPair<QRegion, Style> StyleRegion;
+    typedef QPair<Region, Style> StyleRegion;
     foreach (const StyleRegion& styleArea, m_styles) {
-        const QRegion& reg = styleArea.first;
+        const Region& reg = styleArea.first;
         const Style& style = styleArea.second;
         if (style.isEmpty()) continue;
 
@@ -123,11 +119,11 @@ void StyleStorageLoaderJob::run()
                         d->usedRows.insert(i, true);
                     }
                 } else {
-                    d->usedArea += rect;
+                    d->usedArea.add(rect);
                 }
             }
         } else {
-            d->usedArea += reg;
+            d->usedArea.add(reg);
         }
 
         // find substyles
@@ -228,7 +224,7 @@ Style StyleStorage::contains(const QPoint& point) const
 #endif
             // insert style into the cache
             d->cache.insert(point, style);
-            d->cachedArea += QRect(point, point);
+            d->cachedArea.add(QRect(point, point));
         }
 
         return *style;
@@ -242,7 +238,7 @@ Style StyleStorage::contains(const QPoint& point) const
 #endif
         // insert style into the cache
         d->cache.insert(point, style);
-        d->cachedArea += QRect(point, point);
+        d->cachedArea.add(QRect(point, point));
     }
     //if (point.x() == 1 && point.y() == 1) {debugSheetsStyle <<"StyleStorage: style:"<<point<<':'; style->dump();}
     return *style;
@@ -262,10 +258,10 @@ Style StyleStorage::intersects(const QRect& rect) const
     return composeStyle(subStyles);
 }
 
-QList< QPair<QRectF, SharedSubStyle> > StyleStorage::currentData(const Region& region) const
+QVector< QPair<QRectF, SharedSubStyle> > StyleStorage::currentData(const Region& region) const
 {
     d->ensureLoaded();
-    QList< QPair<QRectF, SharedSubStyle> > result;
+    QVector< QPair<QRectF, SharedSubStyle> > result;
     Region::ConstIterator end = region.constEnd();
     for (Region::ConstIterator it = region.constBegin(); it != end; ++it) {
         const QRect rect = (*it)->rect();
@@ -275,7 +271,8 @@ QList< QPair<QRectF, SharedSubStyle> > StyleStorage::currentData(const Region& r
             pairs[i].first = pairs[i].first.intersected(rect);
         }
         // Always a default subStyle first, even if there are no pairs.
-        result << qMakePair(QRectF(rect), SharedSubStyle()) << pairs;
+        result.push_back (qMakePair(QRectF(rect), SharedSubStyle()));
+        result.append (QVector< QPair<QRectF, SharedSubStyle> >::fromList (pairs));
     }
     return result;
 }
@@ -357,14 +354,14 @@ int StyleStorage::nextRowStyleIndex(int row) const
 int StyleStorage::firstColumnIndexInRow(int row) const
 {
     d->ensureLoaded();
-    const QRect rect = (d->usedArea & QRect(QPoint(1, row), QPoint(KS_colMax, row))).boundingRect();
+    const QRect rect = (d->usedArea.intersected(Region(QRect(QPoint(1, row), QPoint(KS_colMax, row))))).boundingRect();
     return rect.isNull() ? 0 : rect.left();
 }
 
 int StyleStorage::nextColumnIndexInRow(int column, int row) const
 {
     d->ensureLoaded();
-    const QRect rect = (d->usedArea & QRect(QPoint(column + 1, row), QPoint(KS_colMax, row))).boundingRect();
+    const QRect rect = (d->usedArea.intersected(Region(QRect(QPoint(column + 1, row), QPoint(KS_colMax, row))))).boundingRect();
     return rect.isNull() ? 0 : rect.left();
 }
 
@@ -372,7 +369,7 @@ void StyleStorage::insert(const QRect& rect, const SharedSubStyle& subStyle, boo
 {
     d->ensureLoaded();
 
-    if (m_storingUndo) d->m_undoData << currentData(region);
+    if (m_storingUndo) d->m_undoData << currentData(Region(rect));
 
 //     debugSheetsStyle <<"StyleStorage: inserting" << SubStyle::name(subStyle->type()) <<" into" << rect;
     // keep track of the used area
@@ -385,7 +382,7 @@ void StyleStorage::insert(const QRect& rect, const SharedSubStyle& subStyle, boo
                 d->usedColumns.insert(i, true);
         }
         if (isDefault)
-            d->usedArea -= rect;
+            d->usedArea.removeIntersects(rect, nullptr);
     } else if (rect.left() == 1 && rect.right() >= KS_colMax) {
         for (int i = rect.top(); i <= rect.bottom(); ++i) {
             if (isDefault)
@@ -394,12 +391,12 @@ void StyleStorage::insert(const QRect& rect, const SharedSubStyle& subStyle, boo
                 d->usedRows.insert(i, true);
         }
         if (isDefault)
-            d->usedArea -= rect;
+            d->usedArea.removeIntersects(rect, nullptr);
     } else {
         if (isDefault)
-            d->usedArea -= rect;
+            d->usedArea.removeIntersects(rect, nullptr);
         else
-            d->usedArea += rect;
+            d->usedArea.add(rect);
     }
 
     // lookup already used substyles
@@ -445,7 +442,7 @@ void StyleStorage::insert(const Region& region, const Style& style)
     }
 }
 
-void StyleStorage::load(const QList<QPair<QRegion, Style> >& styles)
+void StyleStorage::load(const QList<QPair<Region, Style> >& styles)
 {
     Q_ASSERT(!d->loader);
     d->loader = new StyleStorageLoaderJob(this, styles);
@@ -458,12 +455,12 @@ void StyleStorage::insertRows(int position, int number)
     // invalidate the affected, cached styles
     invalidateCache(invalidRect);
     // update the used area
-    const QRegion usedArea = d->usedArea & invalidRect;
-    d->usedArea -= invalidRect;
-    d->usedArea += usedArea.translated(0, number);
-    const QVector<QRect> rects = (d->usedArea & QRect(1, position - 1, KS_colMax, 1)).rects();
+    const Region usedArea = d->usedArea.intersected (Region(invalidRect));
+    d->usedArea.removeIntersects(invalidRect, nullptr);
+    d->usedArea.add(usedArea.translated(0, number));
+    const QVector<QRect> rects = (d->usedArea.intersected (Region(QRect(1, position - 1, KS_colMax, 1)))).rects();
     for (int i = 0; i < rects.count(); ++i)
-        d->usedArea += rects[i].adjusted(0, 1, 0, number + 1);
+        d->usedArea.add(rects[i].adjusted(0, 1, 0, number + 1));
     // update the used rows
     QMap<int, bool> map;
     QMap<int, bool>::iterator begin = d->usedRows.lowerBound(position);
@@ -489,12 +486,12 @@ void StyleStorage::insertColumns(int position, int number)
     // invalidate the affected, cached styles
     invalidateCache(invalidRect);
     // update the used area
-    const QRegion usedArea = d->usedArea & invalidRect;
-    d->usedArea -= invalidRect;
-    d->usedArea += usedArea.translated(number, 0);
-    const QVector<QRect> rects = (d->usedArea & QRect(position - 1, 0, 1, KS_rowMax)).rects();
+    const Region usedArea = d->usedArea.intersected(Region(invalidRect));
+    d->usedArea.removeIntersects(invalidRect, nullptr);
+    d->usedArea.add(usedArea.translated(number, 0));
+    const QVector<QRect> rects = (d->usedArea.intersected(Region(QRect(position - 1, 0, 1, KS_rowMax)))).rects();
     for (int i = 0; i < rects.count(); ++i)
-        d->usedArea += rects[i].adjusted(1, 0, number + 1, 0);
+        d->usedArea.add (rects[i].adjusted(1, 0, number + 1, 0));
     // update the used columns
     QMap<int, bool> map;
     QMap<int, bool>::iterator begin = d->usedColumns.upperBound(position);
@@ -520,9 +517,9 @@ void StyleStorage::removeRows(int position, int number)
     // invalidate the affected, cached styles
     invalidateCache(invalidRect);
     // update the used area
-    const QRegion usedArea = d->usedArea & QRect(1, position + number, KS_colMax, KS_rowMax);
-    d->usedArea -= invalidRect;
-    d->usedArea += usedArea.translated(0, -number);
+    const Region usedArea = d->usedArea.intersected(Region(QRect(1, position + number, KS_colMax, KS_rowMax)));
+    d->usedArea.removeIntersects(invalidRect, nullptr);
+    d->usedArea.add (usedArea.translated(0, -number));
     // update the used rows
     QMap<int, bool> map;
     QMap<int, bool>::iterator begin = d->usedRows.upperBound(position);
@@ -548,9 +545,9 @@ void StyleStorage::removeColumns(int position, int number)
     // invalidate the affected, cached styles
     invalidateCache(invalidRect);
     // update the used area
-    const QRegion usedArea = d->usedArea & QRect(position + number, 1, KS_colMax, KS_rowMax);
-    d->usedArea -= invalidRect;
-    d->usedArea += usedArea.translated(-number, 0);
+    const Region usedArea = d->usedArea.intersected(Region(QRect(position + number, 1, KS_colMax, KS_rowMax)));
+    d->usedArea.removeIntersects(invalidRect, nullptr);
+    d->usedArea.add (usedArea.translated(-number, 0));
     // update the used columns
     QMap<int, bool> map;
     QMap<int, bool>::iterator begin = d->usedColumns.upperBound(position);
@@ -578,21 +575,21 @@ void StyleStorage::insertShiftRight(const QRect& rect)
     undoData << d->tree.insertShiftRight(rect);
     regionChanged(invalidRect);
     // update the used area
-    const QRegion usedArea = d->usedArea & invalidRect;
-    d->usedArea -= invalidRect;
-    d->usedArea += usedArea.translated(rect.width(), 0);
-    const QVector<QRect> rects = (d->usedArea & QRect(rect.left() - 1, rect.top(), 1, rect.height())).rects();
+    const Region usedArea = d->usedArea.intersected(Region(invalidRect));
+    d->usedArea.removeIntersects(invalidRect, nullptr);
+    d->usedArea.add (usedArea.translated(rect.width(), 0));
+    const QVector<QRect> rects = (d->usedArea.intersected(Region(QRect(rect.left() - 1, rect.top(), 1, rect.height())))).rects();
     for (int i = 0; i < rects.count(); ++i)
-        d->usedArea += rects[i].adjusted(1, 0, rect.width() + 1, 0);
+        d->usedArea.add (rects[i].adjusted(1, 0, rect.width() + 1, 0));
     // update the used columns
     QMap<int, bool>::iterator begin = d->usedColumns.upperBound(rect.left());
     QMap<int, bool>::iterator end = d->usedColumns.end();
     for (QMap<int, bool>::iterator it = begin; it != end; ++it) {
         if (it.key() + rect.width() <= KS_colMax)
-            d->usedArea += QRect(it.key() + rect.width(), rect.top(), rect.width(), rect.height());
+            d->usedArea.add (QRect(it.key() + rect.width(), rect.top(), rect.width(), rect.height()));
     }
     if (d->usedColumns.contains(rect.left() - 1))
-        d->usedArea += rect;
+        d->usedArea.add (rect);
     if (m_storingUndo) d->m_undoData << undoData;
 }
 
@@ -605,21 +602,21 @@ void StyleStorage::insertShiftDown(const QRect& rect)
     undoData << d->tree.insertShiftDown(rect);
     regionChanged(invalidRect);
     // update the used area
-    const QRegion usedArea = d->usedArea & invalidRect;
-    d->usedArea -= invalidRect;
-    d->usedArea += usedArea.translated(0, rect.height());
-    const QVector<QRect> rects = (d->usedArea & QRect(rect.left(), rect.top() - 1, rect.width(), 1)).rects();
+    const Region usedArea = d->usedArea.intersected(Region(invalidRect));
+    d->usedArea.removeIntersects(invalidRect, nullptr);
+    d->usedArea.add (usedArea.translated(0, rect.height()));
+    const QVector<QRect> rects = (d->usedArea.intersected(Region(QRect(rect.left(), rect.top() - 1, rect.width(), 1)))).rects();
     for (int i = 0; i < rects.count(); ++i)
-        d->usedArea += rects[i].adjusted(0, 1, 0, rect.height() + 1);
+        d->usedArea.add (rects[i].adjusted(0, 1, 0, rect.height() + 1));
     // update the used rows
     QMap<int, bool>::iterator begin = d->usedRows.upperBound(rect.top());
     QMap<int, bool>::iterator end = d->usedRows.end();
     for (QMap<int, bool>::iterator it = begin; it != end; ++it) {
         if (it.key() + rect.height() <= KS_rowMax)
-            d->usedArea += QRect(rect.left(), it.key() + rect.height(), rect.width(), rect.height());
+            d->usedArea.add (QRect(rect.left(), it.key() + rect.height(), rect.width(), rect.height()));
     }
     if (d->usedRows.contains(rect.top() - 1))
-        d->usedArea += rect;
+        d->usedArea.add (rect);
     if (m_storingUndo) d->m_undoData << undoData;
 }
 
@@ -632,15 +629,15 @@ void StyleStorage::removeShiftLeft(const QRect& rect)
     undoData << d->tree.removeShiftLeft(rect);
     regionChanged(invalidRect);
     // update the used area
-    const QRegion usedArea = d->usedArea & QRect(rect.right() + 1, rect.top(), KS_colMax, rect.height());
-    d->usedArea -= invalidRect;
-    d->usedArea += usedArea.translated(-rect.width(), 0);
+    const Region usedArea = d->usedArea.intersected(Region(QRect(rect.right() + 1, rect.top(), KS_colMax, rect.height())));
+    d->usedArea.removeIntersects(invalidRect, nullptr);
+    d->usedArea.add (usedArea.translated(-rect.width(), 0));
     // update the used columns
     QMap<int, bool>::iterator begin = d->usedColumns.upperBound(rect.right() + 1);
     QMap<int, bool>::iterator end = d->usedColumns.end();
     for (QMap<int, bool>::iterator it = begin; it != end; ++it) {
         if (it.key() - rect.width() >= rect.left())
-            d->usedArea += QRect(it.key() - rect.width(), rect.top(), rect.width(), rect.height());
+            d->usedArea.add (QRect(it.key() - rect.width(), rect.top(), rect.width(), rect.height()));
     }
     if (m_storingUndo) d->m_undoData << undoData;
 }
@@ -654,15 +651,15 @@ void StyleStorage::removeShiftUp(const QRect& rect)
     undoData << d->tree.removeShiftUp(rect);
     regionChanged(invalidRect);
     // update the used area
-    const QRegion usedArea = d->usedArea & QRect(rect.left(), rect.bottom() + 1, rect.width(), KS_rowMax);
-    d->usedArea -= invalidRect;
-    d->usedArea += usedArea.translated(0, -rect.height());
+    const Region usedArea = d->usedArea.intersected(Region(QRect(rect.left(), rect.bottom() + 1, rect.width(), KS_rowMax)));
+    d->usedArea.removeIntersects(invalidRect, nullptr);
+    d->usedArea.add (usedArea.translated(0, -rect.height()));
     // update the used rows
     QMap<int, bool>::iterator begin = d->usedRows.upperBound(rect.bottom() + 1);
     QMap<int, bool>::iterator end = d->usedRows.end();
     for (QMap<int, bool>::iterator it = begin; it != end; ++it) {
         if (it.key() - rect.height() >= rect.top())
-            d->usedArea += QRect(rect.left(), it.key() - rect.height(), rect.width(), rect.height());
+            d->usedArea.add (QRect(rect.left(), it.key() - rect.height(), rect.width(), rect.height()));
     }
     if (m_storingUndo) d->m_undoData << undoData;
 }
@@ -677,7 +674,7 @@ void StyleStorage::invalidateCache()
     QMutexLocker ml(&d->cacheMutex);
 #endif
     d->cache.clear();
-    d->cachedArea = QRegion();
+    d->cachedArea = Region();
 }
 
 void StyleStorage::garbageCollection()
@@ -842,8 +839,8 @@ void StyleStorage::invalidateCache(const QRect& rect)
     QMutexLocker ml(&d->cacheMutex);
 #endif
 //     debugSheetsStyle <<"StyleStorage: Invalidating" << rect;
-    const QRegion region = d->cachedArea.intersected(rect);
-    d->cachedArea = d->cachedArea.subtracted(rect);
+    const Region region = d->cachedArea.intersected(Region(rect));
+    d->cachedArea.removeIntersects(rect, nullptr);
     foreach(const QRect& rect, region.rects()) {
         for (int col = rect.left(); col <= rect.right(); ++col) {
             for (int row = rect.top(); row <= rect.bottom(); ++row) {
@@ -990,12 +987,12 @@ StyleManager* StyleStorage::styleManager() const
     return d->map->styleManager();
 }
 
-QVector< QPair<QRectF, SharedSubStyle> > &styleManager::undoData()
+QVector< QPair<QRectF, SharedSubStyle> > &StyleStorage::undoData()
 {
-    return m_undoData;
+    return d->m_undoData;
 }
 
-void styleManager::resetUndo()
+void StyleStorage::resetUndo()
 {
     d->m_undoData.clear();
     storeUndo(false);

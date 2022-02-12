@@ -261,6 +261,11 @@ public:
     Region intersectedWithRow(int row) const;
 
     /**
+     * Returns a region that is shifted by the given coordinates.
+     */
+    Region translated(int dx, int dy) const;
+
+    /**
      * @param point the point's location
      * @param sheet the sheet the point belongs to
      */

@@ -15,11 +15,11 @@
 #endif
 
 // Sheets - storages
-// #include "BindingStorage.h"
-// #include "ConditionsStorage.h"
+#include "BindingStorage.h"
+#include "ConditionsStorage.h"
+#include "StyleStorage.h"
+#include "ValidityStorage.h"
 // #include "RectStorage.h"
-// #include "StyleStorage.h"
-// #include "ValidityStorage.h"
 
 // Sheets - rest
 // #include "Damages.h"
