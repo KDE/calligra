@@ -10,6 +10,7 @@
 
 #include <QHash>
 #include <QString>
+#include <QMetaType>
 
 #include "sheets_core_export.h"
 
@@ -74,10 +75,12 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-inline uint qHash(const Calligra::Sheets::Currency& cur) {
+uint qHash(const Calligra::Sheets::Currency& cur) {
     return ::qHash(cur.code());
 }
 
-// Q_DECLARE_METATYPE(Calligra::Sheets::Currency);
+Q_DECLARE_METATYPE(Calligra::Sheets::Currency)
+Q_DECLARE_TYPEINFO(Calligra::Sheets::Currency, Q_MOVABLE_TYPE);
+
 
 #endif

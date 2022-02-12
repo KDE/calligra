@@ -31,6 +31,7 @@ class MapBase;
 class CALLIGRA_SHEETS_ENGINE_EXPORT SheetBase
 {
 public:
+    enum ChangeRef       { ColumnInsert, ColumnRemove, RowInsert, RowRemove };
     /**
      * Creates a sheet in \p map with the name \p sheetName.
      */
@@ -89,6 +90,28 @@ public:
     const ValueStorage* valueStorage() const;
 
 
+
+    /**
+     * \ingroup Value
+     * Change name of reference when the user inserts or removes a column,
+     * a row or a cell (= insertion of a row [or column] on a single column [or row]).
+     * For example the formula =Sheet1!A1 is changed into =Sheet1!B1 if a Column
+     * is inserted before A.
+     *
+     * @param pos the point of insertion (only one coordinate may be used, depending
+     * on the other parameters).
+     * @param fullRowOrColumn if true, a whole row or column has been inserted/removed.
+     *                        if false, we inserted or removed a cell
+     * @param ref see ChangeRef
+     * @param sheetName completes the pos specification by giving the sheet name
+     * @param number number of columns which were inserted
+     */
+    void changeNameCellRef(const QPoint& pos, bool fullRowOrColumn, ChangeRef ref,
+                           const QString& sheetName, int number);
+
+    void changeNameCellRefs(const QRect& rect, bool fullRowOrColumn, ChangeRef ref);
+
+
     virtual void showStatusMessage(const QString &message, int timeout = 3000) const;
     /**
      * Called when validation fails.
@@ -102,6 +125,18 @@ protected:
      * for all cell which refers to Sheet1, this function changes the name.
      */
     void changeCellTabName(QString const & old_name, QString const & new_name);
+
+    /**
+     * \ingroup Value
+     * \see changeNameCellRef()
+     */
+    QString changeNameCellRefHelper(const QPoint& pos, bool fullRowOrColumn, ChangeRef ref,
+                                    int NbCol, const QPoint& point, bool isColumnFixed,
+                                    bool isRowFixed);
+    QString changeNameCellRefHelper(const QPoint& pos, const QRect& rect, bool fullRowOrColumn, ChangeRef ref,
+                                    int NbCol, const QPoint& point, bool isColumnFixed,
+                                    bool isRowFixed);
+
 
     /**
      * Used by the child class to override the base storage with the full-featured one.

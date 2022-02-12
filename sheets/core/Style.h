@@ -18,7 +18,7 @@
 
 #include "sheets_core_export.h"
 #include "Format.h"
-
+#include "Currency.h"
 
 static inline uint qHash(const QColor& color)
 { return uint(color.rgb()); }
@@ -37,7 +37,6 @@ namespace Calligra
 namespace Sheets
 {
 class Conditions;
-class Currency;
 class CustomStyle;
 class SharedSubStyle;
 class Style;
@@ -47,8 +46,6 @@ class ValueParser;
 
 // used for preloading OASIS auto styles
 typedef QHash<QString, Style>       Styles;
-// needs to be ordered (QMap) for the style dialog
-typedef QMap<QString, CustomStyle*> CustomStyles;
 
 CALLIGRA_SHEETS_CORE_EXPORT uint qHash(const Style& style);
 

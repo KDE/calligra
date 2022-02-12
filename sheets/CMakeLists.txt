@@ -262,24 +262,12 @@ endif()
 set (calligrasheetsodf_LIB_SRCS
 
     ApplicationSettings.cpp
-    Cluster.cpp
-    DocBase.cpp
-    HeaderFooter.cpp
-    PrintSettings.cpp
-    ShapeApplicationData.cpp
-    SheetAccessModel.cpp
     SheetModel.cpp
-    StyleManager.cpp
-    Binding.cpp
-    BindingManager.cpp
-    BindingModel.cpp
-    BindingStorage.cpp
 
 
     ${odf_DIR_SRCS}
     ${ksp_DIR_SRCS}
 
-    # TODO: move HeaderFooter from SheetPrint to PrintSettings, and replace SheetPrint with PrintSettings in Sheet to get rid of this dependency
     SheetPrint.cpp
     SheetPrint_p.cpp
     )
@@ -292,7 +280,6 @@ target_link_libraries(calligrasheetsodf
         calligrasheetsengine
         calligrasheetscore
         komain
-        KF5::KDELibs4Support
     PRIVATE
         koplugin
         KF5::Completion
@@ -370,11 +357,8 @@ install( FILES
     ${CMAKE_CURRENT_BINARY_DIR}/sheets_common_generated_export.h
 
 
-    DocBase.h
     Global.h
     odf/OdfLoadingContext.h
-    PrintSettings.h
-    RowFormatStorage.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/sheets COMPONENT Devel)
 install( FILES
     part/CanvasBase.h
@@ -429,7 +413,7 @@ set_target_properties(calligrasheets PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Calli
 install( FILES ${CMAKE_CURRENT_BINARY_DIR}/calligrasheets_KDEINIT_SRCS.icns DESTINATION ${BUNDLE_INSTALL_DIR}/calligrasheets.app/Contents/Resources)
 endif ()
 
-target_link_libraries(kdeinit_calligrasheets komain KF5::KDELibs4Support)
+target_link_libraries(kdeinit_calligrasheets calligrasheetscore komain )
 
 install(TARGETS kdeinit_calligrasheets  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

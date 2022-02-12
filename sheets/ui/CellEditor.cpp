@@ -256,11 +256,6 @@ CellEditor::CellEditor(CellToolBase *cellTool,QHash<int,QString> &wordList, QWid
     const bool wrapText = cell.style().wrapText();
     d->textEdit->setWordWrapMode(wrapText ? QTextOption::WordWrap : QTextOption::NoWrap);
 
-#if 0 // FIXME Implement a completion aware KTextEdit.
-    setCompletionMode(selection()->view()->doc()->completionMode());
-    setCompletionObject(&selection()->view()->doc()->map()->stringCompletion(), true);
-#endif
-    
     //populateWordCollection();
     
     //AutoCompletion Code

@@ -9,23 +9,23 @@
 
 #include "HeaderFooter.h"
 
-#include "part/Doc.h" // FIXME detach from part
-#include "Sheet.h"
-#include "SheetPrint.h"
-#include "SheetsDebug.h"
+// #include "part/Doc.h" // FIXME detach from part
+// #include "Sheet.h"
+// #include "SheetPrint.h"
+// #include "SheetsDebug.h"
 
-#include <KoDocumentInfo.h>
+// #include <KoDocumentInfo.h>
 
-#include <KLocalizedString>
-#include <kmessagebox.h>
+// #include <KLocalizedString>
+// #include <kmessagebox.h>
 
-#include <QDate>
-#include <QPainter>
-#include <QTime>
-#include <QUrl>
+// #include <QDate>
+// #include <QPainter>
+// #include <QTime>
+// #include <QUrl>
 
-#include <pwd.h>
-#include <unistd.h>
+// #include <pwd.h>
+// #include <unistd.h>
 
 
 #define NO_MODIFICATION_POSSIBLE \

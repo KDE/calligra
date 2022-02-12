@@ -113,7 +113,6 @@ public:
     SheetPrint *q;
     Sheet * m_pSheet;
 
-    PrintSettings* m_settings;
     HeaderFooter *m_headerFooter;
 
     /**

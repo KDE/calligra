@@ -17,22 +17,40 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 #include "DocBase.h"
-#include "DocBase_p.h"
 
-#include <KoDocumentResourceManager.h>
-#include <KoShapeRegistry.h>
-#include <KoPart.h>
+// #include <KoDocumentResourceManager.h>
+// #include <KoPart.h>
 
-#include "calligra_sheets_limits.h"
-#include "CalculationSettings.h"
-#include "Map.h"
-#include "SheetAccessModel.h"
+// #include "calligra_sheets_limits.h"
+// #include "CalculationSettings.h"
+// #include "Map.h"
 
-#include "ElapsedTime_p.h"
-#include "odf/SheetsOdf.h"
-#include "ksp/SheetsKsp.h"
+// #include "ElapsedTime_p.h"
+// #include "odf/SheetsOdf.h"
+// #include "ksp/SheetsKsp.h"
 
-#include "part/View.h" // TODO: get rid of this dependency
+// #include "part/View.h" // TODO: get rid of this dependency
+static const int CURRENT_SYNTAX_VERSION = 1;
+
+namespace Calligra {
+namespace Sheets {
+
+class Q_DECL_HIDDEN DocBase::Private
+{
+public:
+    Map *map;
+    static QList<DocBase*> s_docs;
+    static int s_docId;
+
+    // document properties
+    bool configLoadFromFile       : 1;
+    QStringList spellListIgnoreAll;
+    KoDocumentResourceManager *resourceManager;
+};
+
+} // namespace Sheets
+} // namespace Calligra
+
 
 using namespace Calligra::Sheets;
 
@@ -49,26 +67,22 @@ DocBase::DocBase(KoPart *part)
     d->resourceManager = new KoDocumentResourceManager();
     d->map = new Map(this, CURRENT_SYNTAX_VERSION);
 
+    d->resourceManager->setUndoStack(undoStack());
+    QVariant variant;
+    variant.setValue<void*>(d->map->sheetAccessModel());
+    d->resourceManager->setResource(::Sheets::CanvasResource::AccessModel, variant);
+
     // Document Url for FILENAME function and page header/footer.
     d->map->calculationSettings()->setFileName(url().toDisplayString());
-
-    KoShapeRegistry *registry = KoShapeRegistry::instance();
-    foreach (const QString &id, registry->keys()) {
-        KoShapeFactoryBase *shapeFactory = registry->value(id);
-        shapeFactory->newDocumentResourceManager(d->resourceManager);
-    }
 
     d->configLoadFromFile = false;
 
     documents().append(this);
-
-    d->sheetAccessModel = new SheetAccessModel(d->map);
 }
 
 DocBase::~DocBase()
 {
     delete d->map;
-    delete d->sheetAccessModel;
     delete d->resourceManager;
     delete d;
 }
@@ -97,11 +111,6 @@ int DocBase::syntaxVersion() const
 KoDocumentResourceManager* DocBase::resourceManager() const
 {
     return d->resourceManager;
-}
-
-SheetAccessModel *DocBase::sheetAccessModel() const
-{
-    return d->sheetAccessModel;
 }
 
 void DocBase::initConfig()

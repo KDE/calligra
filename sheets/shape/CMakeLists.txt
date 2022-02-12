@@ -36,7 +36,7 @@ target_link_libraries(calligra_shape_spreadsheet
         Qt5::PrintSupport
         KF5::Completion
 )
-# target_link_libraries(calligra_shape_spreadsheet flake KF5::KDELibs4Support)
+# target_link_libraries(calligra_shape_spreadsheet flake)
 
 # install(TARGETS calligra_shape_spreadsheet-deferred DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/deferred)
 install(TARGETS calligra_shape_spreadsheet DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/shapes)

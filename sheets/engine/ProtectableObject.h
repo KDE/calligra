@@ -31,6 +31,13 @@ public:
         Unlock
     };
 
+    ProtectableObject();
+
+    /**
+     * Copy constructor. Needs to be defined because of the dummy operator=.
+     */
+    ProtectableObject(const ProtectableObject& other);
+
     /**
      * Retrieves the password hash.
      */

@@ -20,7 +20,7 @@
 
 #include <KoDocument.h>
 
-#include "sheets_common_export.h"
+#include "sheets_core_export.h"
 
 class KoDocumentResourceManager;
 class KoPart;
@@ -33,9 +33,8 @@ namespace Sheets
 {
 class Map;
 class Sheet;
-class SheetAccessModel;
 
-class CALLIGRA_SHEETS_COMMON_EXPORT DocBase : public KoDocument
+class CALLIGRA_SHEETS_CORE_EXPORT DocBase : public KoDocument
 {
     Q_OBJECT
 public:
@@ -83,8 +82,6 @@ public:
      * @see KoCanvasBase::resourceManager()
      */
     KoDocumentResourceManager *resourceManager() const;
-
-    SheetAccessModel *sheetAccessModel() const;
 
     virtual void initConfig();
 

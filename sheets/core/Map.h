@@ -22,22 +22,19 @@ class KoStore;
 class KoStyleManager;
 class KoDocumentResourceManager;
 
-class KCompletion;
-
 class KUndo2Command;
 
 namespace Calligra
 {
 namespace Sheets
 {
-class ApplicationSettings;
 class BindingManager;
 class ColumnFormat;
-class DatabaseManager;
 class DocBase;
 class LoadingInfo;
 class RowFormat;
 class Sheet;
+class SheetAccessModel;
 class Style;
 class StyleManager;
 class ValueFormatter;
@@ -85,11 +82,6 @@ public:
     BindingManager* bindingManager() const;
 
     /**
-     * \return a pointer to the database manager
-     */
-    DatabaseManager* databaseManager() const;
-
-    /**
      * @return the StyleManager of this Document
      */
     StyleManager* styleManager() const;
@@ -103,11 +95,6 @@ public:
      * @return the value formatter of this Document
      */
     ValueFormatter* formatter() const;
-
-    /**
-     * \return the application settings
-     */
-    ApplicationSettings* settings() const;
 
     /**
      * \return the default row format
@@ -130,15 +117,6 @@ public:
     void setDefaultRowHeight(double height);
 
 
-    bool loadChildren(KoStore* _store);
-
-    /**
-     * The sheet named @p _from is being moved to the sheet @p _to.
-     * If @p  _before is true @p _from is inserted before (after otherwise)
-     * @p  _to.
-     */
-    void moveSheet(const QString & _from, const QString & _to, bool _before = true);
-
     /**
      * Creates a new sheet.
      * The sheet is not added to the map nor added to the GUI.
@@ -152,9 +130,6 @@ public:
      * @return a pointer to the new sheet
      */
     Sheet* addNewSheet(const QString& name = QString());
-
-    void removeSheet(Sheet* sheet);
-    void reviveSheet(Sheet* sheet);
 
     QStringList visibleSheets() const;
     QStringList hiddenSheets() const;
@@ -189,16 +164,7 @@ public:
      */
     void deleteLoadingInfo();
 
-    /**
-     * \return the KCompletion object, that allows user input completions.
-     */
-    KCompletion &stringCompletion();
-
-    /**
-     * Adds \p string to the list of string values in order to be able to
-     * complete user inputs.
-     */
-    void addStringCompletion(const QString &string);
+    SheetAccessModel *sheetAccessModel() const;
 
     /**
      * Return a pointer to the resource manager associated with the

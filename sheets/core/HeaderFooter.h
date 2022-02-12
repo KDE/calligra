@@ -9,11 +9,9 @@
 #ifndef CALLIGRA_SHEETS_HEADER_FOOTER
 #define CALLIGRA_SHEETS_HEADER_FOOTER
 
-#include <KoPageLayout.h>
-
 #include <QString>
 
-#include "sheets_export.h"
+#include "sheets_core_export.h"
 
 namespace Calligra
 {
@@ -21,7 +19,7 @@ namespace Sheets
 {
 class Sheet;
 
-class CALLIGRA_SHEETS_ODF_EXPORT HeaderFooter
+class CALLIGRA_SHEETS_CORE_EXPORT HeaderFooter
 {
 public:
     explicit HeaderFooter(Sheet* sheet);

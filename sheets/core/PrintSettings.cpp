@@ -11,8 +11,8 @@
 #include "PrintSettings.h"
 
 // Sheets
-#include "calligra_sheets_limits.h"
-#include "Region.h"
+#include "engine/calligra_sheets_limits.h"
+#include "engine/Region.h"
 
 // Calligra
 #include <KoPageLayout.h>

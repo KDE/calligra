@@ -13,7 +13,7 @@
 
 #include <QPair>
 
-#include "sheets_odf_export.h"
+#include "sheets_core_export.h"
 
 class QSize;
 
@@ -27,7 +27,7 @@ class Sheet;
 /**
  * Settings used for printing.
  */
-class CALLIGRA_SHEETS_ODF_EXPORT PrintSettings
+class CALLIGRA_SHEETS_CORE_EXPORT PrintSettings
 {
 public:
     enum PageOrder { TopToBottom, LeftToRight };

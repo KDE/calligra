@@ -72,6 +72,13 @@ public:
     SheetBase* findSheet(const QString& name) const;
 
     /**
+     * The sheet named @p _from is being moved to the sheet @p _to.
+     * If @p  _before is true @p _from is inserted before (after otherwise)
+     * @p  _to.
+     */
+    void moveSheet(const QString & _from, const QString & _to, bool _before = true);
+
+    /**
      * @return a pointer to the next sheet to @p sheet
      */
     SheetBase* nextSheet(SheetBase *sheet) const;
@@ -158,6 +165,9 @@ public:
      */
     SheetBase* filterSheetName(QString& sRegion) const;
 
+
+    void removeSheet(SheetBase* sheet);
+    void reviveSheet(SheetBase* sheet);
 
 Q_SIGNALS:
     /**

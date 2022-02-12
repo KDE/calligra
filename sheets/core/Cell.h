@@ -86,6 +86,11 @@ public:
     virtual ~Cell() override;
 
     /**
+     * Assignment.
+     */
+    Cell& operator=(const Cell& other);
+
+    /**
      * \return the full sheet this cell belongs to
      */
     Sheet* fullSheet() const;
@@ -214,9 +219,7 @@ public:
      */
     bool needsPrinting() const;
 
-    //
-    //END
-    //
+
     //////////////////////////////////////////////////////////////////////////
     //
     //BEGIN Merging

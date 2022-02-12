@@ -74,8 +74,6 @@ public:
 
     int supportedSpecialFormats() const override;
 
-    virtual bool loadChildren(KoStore* _store);
-
     // reimplemented; paints the thumbnail
     void paintContent(QPainter & painter, const QRect & rect) override;
     virtual void paintContent(QPainter & painter, const QRect & rect, Sheet* sheet);

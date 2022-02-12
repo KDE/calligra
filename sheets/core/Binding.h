@@ -5,7 +5,7 @@
 #ifndef CALLIGRA_SHEETS_BINDING
 #define CALLIGRA_SHEETS_BINDING
 
-#include "Region.h"
+#include "engine/Region.h"
 
 #include "sheets_core_export.h"
 

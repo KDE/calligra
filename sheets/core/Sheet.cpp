@@ -10,36 +10,29 @@
 // Local
 #include "Sheet.h"
 
-// #include <QApplication>
+#include <QApplication>
 
-// #include <kcodecs.h>
+#include <KLocalizedString>
+#include <KMessageBox>
 
-// #include <KoShape.h>
-// #include <KoDocumentResourceManager.h>
-// #include <KoUnit.h>
-// #include <KoCanvasResourceIdentities.h>
+#include <KoShape.h>
 
-// #include "CellStorage.h"
-// #include "Cluster.h"
-// #include "Damages.h"
-// #include "DocBase.h"
+#include "engine/Damages.h"
 #include "engine/Formula.h"
-// #include "FormulaStorage.h"
-// #include "HeaderFooter.h"
-// #include "LoadingInfo.h"
-// #include "Map.h"
-// #include "NamedAreaManager.h"
-// #include "PrintSettings.h"
-// #include "RowColumnFormat.h"
-// #include "RowFormatStorage.h"
-// #include "ShapeApplicationData.h"
-// #include "SheetPrint.h"
-// #include "SheetModel.h"
-// #include "StyleStorage.h"
-// #include "Validity.h"
-// #include "ValueConverter.h"
-// #include "ValueStorage.h"
-// #include "DataFilter.h"
+#include "engine/NamedAreaManager.h"
+#include "engine/ValueStorage.h"
+
+#include "CellStorage.h"
+#include "Condition.h"
+#include "Database.h"
+#include "Cluster.h"
+#include "HeaderFooter.h"
+#include "Map.h"
+#include "PrintSettings.h"
+#include "RowColumnFormat.h"
+#include "RowFormatStorage.h"
+#include "ShapeApplicationData.h"
+#include "DataFilter.h"
 
 namespace Calligra
 {
@@ -66,7 +59,6 @@ public:
 
     // We store this here even though MapBase also has a copy, so that we don't need to recast from MapBase to Map in main app.
     Map* workbook;
-    SheetModel *model;
 
     Qt::LayoutDirection layoutDirection;
 
@@ -90,8 +82,8 @@ public:
     ColumnCluster columns;
     QList<KoShape*> shapes;
 
-    // hold the print object
-    SheetPrint* print;
+    HeaderFooter *headerFooter;
+    PrintSettings* printSettings;
 
     // Indicates whether the sheet should paint the page breaks.
     // Doing so costs some time, so by default it should be turned off.
@@ -116,13 +108,6 @@ Sheet::Sheet(Map* map, const QString &sheetName)
         , d(new Private(this))
 {
     d->workbook = map;
-    if (map->doc()) {
-        resourceManager()->setUndoStack(map->doc()->undoStack());
-        QVariant variant;
-        variant.setValue<void*>(map->doc()->sheetAccessModel());
-        resourceManager()->setResource(::Sheets::CanvasResource::AccessModel, variant);
-    }
-    d->model = new SheetModel(this);
 
     d->layoutDirection = QApplication::layoutDirection();
 
@@ -146,7 +131,9 @@ Sheet::Sheet(Map* map, const QString &sheetName)
     d->lcMode = false;
     d->showColumnNumber = false;
     d->hideZero = false;
-    d->print = new SheetPrint(this);
+
+    d->printSettings = new PrintSettings();
+    d->headerFooter = new HeaderFooter(this);
 
     // document size changes always trigger a visible size change
     connect(this, &Sheet::documentSizeChanged, this, &Sheet::visibleSizeChanged);
@@ -159,13 +146,12 @@ Sheet::Sheet(Map* map, const QString &sheetName)
 
 Sheet::Sheet(const Sheet &other)
         : KoShapeUserData(other.d->workbook)
+        , SheetBase(other)
         , KoShapeBasedDocumentBase()
         , ProtectableObject(other)
-        , SheetBase(other)
         , d(new Private(this))
 {
     d->workbook = other.d->workbook;
-    d->model = new SheetModel(this);
 
     // Set a valid object name, so that we can offer scripting.
     setObjectName(createObjectName(sheetName()));
@@ -181,6 +167,7 @@ Sheet::Sheet(const Sheet &other)
     d->hideZero = other.d->hideZero;
 
     d->cellStorage = new CellStorage(*other.d->cellStorage, this);
+    d->headerFooter = new HeaderFooter(*other.d->headerFooter);
     setCellStorage(d->cellStorage);
 
     d->rows = other.d->rows;
@@ -202,7 +189,7 @@ Sheet::Sheet(const Sheet &other)
     }
 #endif // CALLIGRA_SHEETS_WIP_COPY_SHEET_(SHAPES)
 
-    d->print = new SheetPrint(this); // FIXME = new SheetPrint(*other.d->print);
+    d->printSettings = other.d->printSettings;
 
     d->showPageOutline = other.d->showPageOutline;
     d->documentSize = other.d->documentSize;
@@ -221,14 +208,10 @@ Sheet::~Sheet()
     // cellStorage will be deleted in the parent class destructor, and we must not do it here.
     d->cellStorage = nullptr;
 
-    delete d->print;
+    delete d->printSettings;
+    delete d->headerFooter;
     qDeleteAll(d->shapes);
     delete d;
-}
-
-QAbstractItemModel* Sheet::model() const
-{
-    return d->model;
 }
 
 Map* Sheet::fullMap() const
@@ -262,11 +245,6 @@ void Sheet::deleteShapes()
 {
     qDeleteAll(d->shapes);
     d->shapes.clear();
-}
-
-KoDocumentResourceManager* Sheet::resourceManager() const
-{
-    return map()->resourceManager();
 }
 
 QList<KoShape*> Sheet::shapes() const
@@ -375,7 +353,7 @@ const ColumnFormat* Sheet::columnFormat(int _column) const
     if (p != 0)
         return p;
 
-    return map()->defaultColumnFormat();
+    return fullMap()->defaultColumnFormat();
 }
 
 // needed in loading code
@@ -414,21 +392,16 @@ const StyleStorage* Sheet::styleStorage() const
     return d->cellStorage->styleStorage();
 }
 
-SheetPrint* Sheet::print() const
-{
-    return d->print;
-}
-
 PrintSettings* Sheet::printSettings() const
 {
-    return d->print->settings();
+    return d->printSettings;
 }
 
-void Sheet::setPrintSettings(const PrintSettings &settings)
+void Sheet::setPrintSettings(const PrintSettings &settings, bool forcePaint)
 {
-    d->print->setSettings(settings);
+    *(d->printSettings) = settings;
     // Repaint, if page borders are shown and this is the active sheet.
-    if (isShowPageOutline()) {
+    if (isShowPageOutline() || forcePaint) {
         // Just repaint everything visible; no need to invalidate the visual cache.
         map()->addDamage(new SheetDamage(this, SheetDamage::ContentChanged));
     }
@@ -436,7 +409,7 @@ void Sheet::setPrintSettings(const PrintSettings &settings)
 
 HeaderFooter *Sheet::headerFooter() const
 {
-    return d->print->headerFooter();
+    return d->headerFooter;
 }
 
 QSizeF Sheet::documentSize() const
@@ -456,7 +429,7 @@ void Sheet::adjustDocumentHeight(double deltaHeight)
     emit documentSizeChanged(d->documentSize);
 }
 
-void Sheet::adjustCellAnchoredShapesX(qreal minX, qreal maxX, qreal delta)
+void Sheet::adjustCellAnchoredShapesX(double minX, double maxX, double delta)
 {
     foreach (KoShape* s, d->shapes) {
         if (dynamic_cast<ShapeApplicationData*>(s->applicationData())->isAnchoredToCell()) {
@@ -469,12 +442,12 @@ void Sheet::adjustCellAnchoredShapesX(qreal minX, qreal maxX, qreal delta)
     }
 }
 
-void Sheet::adjustCellAnchoredShapesX(qreal delta, int firstCol, int lastCol)
+void Sheet::adjustCellAnchoredShapesX(double delta, int firstCol, int lastCol)
 {
     adjustCellAnchoredShapesX(columnPosition(firstCol), columnPosition(lastCol+1), delta);
 }
 
-void Sheet::adjustCellAnchoredShapesY(qreal minY, qreal maxY, qreal delta)
+void Sheet::adjustCellAnchoredShapesY(double minY, double maxY, double delta)
 {
     foreach (KoShape* s, d->shapes) {
         if (dynamic_cast<ShapeApplicationData*>(s->applicationData())->isAnchoredToCell()) {
@@ -487,12 +460,12 @@ void Sheet::adjustCellAnchoredShapesY(qreal minY, qreal maxY, qreal delta)
     }
 }
 
-void Sheet::adjustCellAnchoredShapesY(qreal delta, int firstRow, int lastRow)
+void Sheet::adjustCellAnchoredShapesY(double delta, int firstRow, int lastRow)
 {
     adjustCellAnchoredShapesY(rowPosition(firstRow), rowPosition(lastRow+1), delta);
 }
 
-int Sheet::leftColumn(qreal _xpos, qreal &_left) const
+int Sheet::leftColumn(double _xpos, double &_left) const
 {
     _left = 0.0;
     int col = 1;
@@ -513,9 +486,9 @@ int Sheet::rightColumn(double _xpos) const
     return col;
 }
 
-int Sheet::topRow(qreal _ypos, qreal & _top) const
+int Sheet::topRow(double _ypos, double & _top) const
 {
-    qreal top;
+    double top;
     int row = rowFormats()->rowForPosition(_ypos, &top);
     _top = top;
     return row;
@@ -579,7 +552,7 @@ ColumnFormat* Sheet::nonDefaultColumnFormat(int _column, bool force_creation)
     if (p != 0 || !force_creation)
         return p;
 
-    p = new ColumnFormat(*map()->defaultColumnFormat());
+    p = new ColumnFormat(*fullMap()->defaultColumnFormat());
     p->setSheet(this);
     p->setColumn(_column);
 
@@ -590,46 +563,22 @@ ColumnFormat* Sheet::nonDefaultColumnFormat(int _column, bool force_creation)
 
 void Sheet::insertShiftRight(const QRect& rect)
 {
-    foreach(Sheet* sheet, map()->sheetList()) {
-        for (int i = rect.top(); i <= rect.bottom(); ++i) {
-            sheet->changeNameCellRef(QPoint(rect.left(), i), false,
-                                     Sheet::ColumnInsert, sheetName(),
-                                     rect.right() - rect.left() + 1);
-        }
-    }
+    changeNameCellRefs(rect, false, SheetBase::ColumnInsert);
 }
 
 void Sheet::insertShiftDown(const QRect& rect)
 {
-    foreach(Sheet* sheet, map()->sheetList()) {
-        for (int i = rect.left(); i <= rect.right(); ++i) {
-            sheet->changeNameCellRef(QPoint(i, rect.top()), false,
-                                     Sheet::RowInsert, sheetName(),
-                                     rect.bottom() - rect.top() + 1);
-        }
-    }
+    changeNameCellRefs(rect, false, SheetBase::RowInsert);
 }
 
 void Sheet::removeShiftUp(const QRect& rect)
 {
-    foreach(Sheet* sheet, map()->sheetList()) {
-        for (int i = rect.left(); i <= rect.right(); ++i) {
-            sheet->changeNameCellRef(QPoint(i, rect.top()), false,
-                                     Sheet::RowRemove, sheetName(),
-                                     rect.bottom() - rect.top() + 1);
-        }
-    }
+    changeNameCellRefs(rect, false, SheetBase::RowRemove);
 }
 
 void Sheet::removeShiftLeft(const QRect& rect)
 {
-    foreach(Sheet* sheet, map()->sheetList()) {
-        for (int i = rect.top(); i <= rect.bottom(); ++i) {
-            sheet->changeNameCellRef(QPoint(rect.left(), i), false,
-                                     Sheet::ColumnRemove, sheetName(),
-                                     rect.right() - rect.left() + 1);
-        }
-    }
+    changeNameCellRefs(rect, false, SheetBase::ColumnRemove);
 }
 
 void Sheet::insertColumns(int col, int number)
@@ -643,26 +592,18 @@ void Sheet::insertColumns(int col, int number)
     // Adjust document width (plus widths of new columns; minus widths of removed columns).
     adjustDocumentWidth(deltaWidth);
 
-    foreach(Sheet* sheet, map()->sheetList()) {
-        sheet->changeNameCellRef(QPoint(col, 1), true,
-                                 Sheet::ColumnInsert, sheetName(),
-                                 number);
-    }
-    //update print settings
-    d->print->insertColumn(col, number);
+    changeNameCellRefs(QRect(QPoint(col, 1), QPoint(col + number - 1, KS_colMax)), true, Sheet::ColumnInsert);
+
+    emit columnsAdded(col, number);
 }
 
 void Sheet::insertRows(int row, int number)
 {
     d->rows.insertRows(row, number);
 
-    foreach(Sheet* sheet, map()->sheetList()) {
-        sheet->changeNameCellRef(QPoint(1, row), true,
-                                 Sheet::RowInsert, sheetName(),
-                                 number);
-    }
-    //update print settings
-    d->print->insertRow(row, number);
+    changeNameCellRefs(QRect(QPoint(1, row), QPoint(KS_rowMax, row + number - 1)), true, Sheet::RowInsert);
+
+    emit rowsAdded(row, number);
 }
 
 void Sheet::removeColumns(int col, int number)
@@ -676,218 +617,18 @@ void Sheet::removeColumns(int col, int number)
     // Adjust document width (plus widths of new columns; minus widths of removed columns).
     adjustDocumentWidth(deltaWidth);
 
-    foreach(Sheet* sheet, map()->sheetList()) {
-        sheet->changeNameCellRef(QPoint(col, 1), true,
-                                 Sheet::ColumnRemove, sheetName(),
-                                 number);
-    }
-    //update print settings
-    d->print->removeColumn(col, number);
+    changeNameCellRefs(QRect(QPoint(col, 1), QPoint(col + number - 1, KS_colMax)), true, Sheet::ColumnRemove);
+
+    emit columnsRemoved(col, number);
 }
 
 void Sheet::removeRows(int row, int number)
 {
     d->rows.removeRows(row, number);
 
-    foreach(Sheet* sheet, map()->sheetList()) {
-        sheet->changeNameCellRef(QPoint(1, row), true,
-                                 Sheet::RowRemove, sheetName(),
-                                 number);
-    }
+    changeNameCellRefs(QRect(QPoint(1, row), QPoint(KS_rowMax, row + number - 1)), true, Sheet::RowRemove);
 
-    //update print settings
-    d->print->removeRow(row, number);
-}
-
-QString Sheet::changeNameCellRefHelper(const QPoint& pos, bool fullRowOrColumn, ChangeRef ref,
-                                       int nbCol, const QPoint& point, bool isColumnFixed,
-                                       bool isRowFixed)
-{
-    QString newPoint;
-    int col = point.x();
-    int row = point.y();
-    // update column
-    if (isColumnFixed)
-        newPoint.append('$');
-    if (ref == ColumnInsert &&
-            col + nbCol <= KS_colMax &&
-            col >= pos.x() &&    // Column after the new one : +1
-            (fullRowOrColumn || row == pos.y())) {  // All rows or just one
-        newPoint += Cell::columnName(col + nbCol);
-    } else if (ref == ColumnRemove &&
-               col > pos.x() &&    // Column after the deleted one : -1
-               (fullRowOrColumn || row == pos.y())) {  // All rows or just one
-        newPoint += Cell::columnName(col - nbCol);
-    } else
-        newPoint += Cell::columnName(col);
-
-    // Update row
-    if (isRowFixed)
-        newPoint.append('$');
-    if (ref == RowInsert &&
-            row + nbCol <= KS_rowMax &&
-            row >= pos.y() &&   // Row after the new one : +1
-            (fullRowOrColumn || col == pos.x())) {  // All columns or just one
-        newPoint += QString::number(row + nbCol);
-    } else if (ref == RowRemove &&
-               row > pos.y() &&   // Row after the deleted one : -1
-               (fullRowOrColumn || col == pos.x())) {  // All columns or just one
-        newPoint += QString::number(row - nbCol);
-    } else
-        newPoint += QString::number(row);
-
-    if (((ref == ColumnRemove
-            && (col >= pos.x() && col < pos.x() + nbCol) // Column is the deleted one : error
-            && (fullRowOrColumn || row == pos.y())) ||
-            (ref == RowRemove
-             && (row >= pos.y() && row < pos.y() + nbCol) // Row is the deleted one : error
-             && (fullRowOrColumn || col == pos.x())) ||
-            (ref == ColumnInsert
-             && col + nbCol > KS_colMax
-             && col >= pos.x()     // Column after the new one : +1
-             && (fullRowOrColumn || row == pos.y())) ||
-            (ref == RowInsert
-             && row + nbCol > KS_rowMax
-             && row >= pos.y() // Row after the new one : +1
-             && (fullRowOrColumn || col == pos.x())))) {
-        newPoint = '#' + i18n("Dependency") + '!';
-    }
-    return newPoint;
-}
-
-QString Sheet::changeNameCellRefHelper(const QPoint& pos, const QRect& rect, bool fullRowOrColumn, ChangeRef ref,
-                                       int nbCol, const QPoint& point, bool isColumnFixed,
-                                       bool isRowFixed)
-{
-    const bool isFirstColumn = pos.x() == rect.left();
-    const bool isLastColumn = pos.x() == rect.right();
-    const bool isFirstRow = pos.y() == rect.top();
-    const bool isLastRow = pos.y() == rect.bottom();
-
-    QString newPoint;
-    int col = point.x();
-    int row = point.y();
-    // update column
-    if (isColumnFixed)
-        newPoint.append('$');
-    if (ref == ColumnInsert &&
-            col + nbCol <= KS_colMax &&
-            col >= pos.x() &&    // Column after the new one : +1
-            (fullRowOrColumn || row == pos.y())) {  // All rows or just one
-        newPoint += Cell::columnName(col + nbCol);
-    } else if (ref == ColumnRemove &&
-               (col > pos.x() ||
-                (col == pos.x() && isLastColumn)) &&    // Column after the deleted one : -1
-               (fullRowOrColumn || row == pos.y())) {  // All rows or just one
-        newPoint += Cell::columnName(col - nbCol);
-    } else
-        newPoint += Cell::columnName(col);
-
-    // Update row
-    if (isRowFixed)
-        newPoint.append('$');
-    if (ref == RowInsert &&
-            row + nbCol <= KS_rowMax &&
-            row >= pos.y() &&   // Row after the new one : +1
-            (fullRowOrColumn || col == pos.x())) {  // All columns or just one
-        newPoint += QString::number(row + nbCol);
-    } else if (ref == RowRemove &&
-               (row > pos.y() ||
-                (row == pos.y() && isLastRow)) &&   // Row after the deleted one : -1
-               (fullRowOrColumn || col == pos.x())) {  // All columns or just one
-        newPoint += QString::number(row - nbCol);
-    } else
-        newPoint += QString::number(row);
-
-    if (((ref == ColumnRemove
-            && col == pos.x() // Column is the deleted one : error
-            && (fullRowOrColumn || row == pos.y())
-            && (isFirstColumn && isLastColumn)) ||
-            (ref == RowRemove
-             && row == pos.y() // Row is the deleted one : error
-             && (fullRowOrColumn || col == pos.x())
-             && (isFirstRow && isLastRow)) ||
-            (ref == ColumnInsert
-             && col + nbCol > KS_colMax
-             && col >= pos.x()     // Column after the new one : +1
-             && (fullRowOrColumn || row == pos.y())) ||
-            (ref == RowInsert
-             && row + nbCol > KS_rowMax
-             && row >= pos.y() // Row after the new one : +1
-             && (fullRowOrColumn || col == pos.x())))) {
-        newPoint = '#' + i18n("Dependency") + '!';
-    }
-    return newPoint;
-}
-
-void Sheet::changeNameCellRef(const QPoint& pos, bool fullRowOrColumn, ChangeRef ref,
-                              const QString& tabname, int nbCol)
-{
-    for (int c = 0; c < formulaStorage()->count(); ++c) {
-        QString newText('=');
-        const Tokens tokens = formulaStorage()->data(c).tokens();
-        for (int t = 0; t < tokens.count(); ++t) {
-            const Token token = tokens[t];
-            switch (token.type()) {
-            case Token::Cell:
-            case Token::Range: {
-                if (map()->namedAreaManager()->contains(token.text())) {
-                    newText.append(token.text()); // simply keep the area name
-                    break;
-                }
-                const Region region(token.text(), map());
-                if (!region.isValid() || !region.isContiguous()) {
-                    newText.append(token.text());
-                    break;
-                }
-                if (!region.firstSheet() && tabname != sheetName()) {
-                    // nothing to do here
-                    newText.append(token.text());
-                    break;
-                }
-                // actually only one element in here, but we need extended access to the element
-                Region::ConstIterator end(region.constEnd());
-                for (Region::ConstIterator it(region.constBegin()); it != end; ++it) {
-                    Region::Element* element = (*it);
-                    if (element->type() == Region::Element::Point) {
-                        if (element->sheet())
-                            newText.append(element->sheet()->sheetName() + '!');
-                        QString newPoint = changeNameCellRefHelper(pos, fullRowOrColumn, ref,
-                                           nbCol,
-                                           element->rect().topLeft(),
-                                           element->isColumnFixed(),
-                                           element->isRowFixed());
-                        newText.append(newPoint);
-                    } else { // (element->type() == Region::Element::Range)
-                        if (element->sheet())
-                            newText.append(element->sheet()->sheetName() + '!');
-                        QString newPoint;
-                        newPoint = changeNameCellRefHelper(pos, element->rect(), fullRowOrColumn, ref,
-                                                           nbCol, element->rect().topLeft(),
-                                                           element->isColumnFixed(),
-                                                           element->isRowFixed());
-                        newText.append(newPoint + ':');
-                        newPoint = changeNameCellRefHelper(pos, element->rect(), fullRowOrColumn, ref,
-                                                           nbCol, element->rect().bottomRight(),
-                                                           element->isColumnFixed(),
-                                                           element->isRowFixed());
-                        newText.append(newPoint);
-                    }
-                }
-                break;
-            }
-            default: {
-                newText.append(token.text());
-                break;
-            }
-            }
-        }
-
-        Cell cell(this, formulaStorage()->col(c), formulaStorage()->row(c));
-        Formula formula(this, cell);
-        formula.setExpression(newText);
-        cell.setFormula(formula);
-    }
+    emit rowsRemoved(row, number);
 }
 
 // helper function for Sheet::areaIsEmpty
@@ -919,7 +660,7 @@ bool Sheet::cellIsEmpty(const Cell& cell, TestType _type)
 // TODO: convert into a manipulator, similar to the Dilation one
 bool Sheet::areaIsEmpty(const Region& region, TestType _type)
 {
-    CellStorage *storage = cellStorage();
+    CellStorage *storage = fullCellStorage();
     Region::ConstIterator endOfList = region.constEnd();
     for (Region::ConstIterator it = region.constBegin(); it != endOfList; ++it) {
         QRect range = (*it)->rect();
@@ -945,12 +686,11 @@ bool Sheet::areaIsEmpty(const Region& region, TestType _type)
                 }
             }
         } else {
-            Cell cell;
             int right  = range.right();
             int bottom = range.bottom();
             for (int x = range.left(); x <= right; ++x)
                 for (int y = range.top(); y <= bottom; ++y) {
-                    cell = Cell(this, x, y);
+                    Cell cell(this, x, y);
                     if (!cellIsEmpty(cell, _type))
                         return false;
                 }
@@ -1137,7 +877,8 @@ void Sheet::updateLocale()
 
 void Sheet::applyDatabaseFilter(const Database &database)
 {
-    Sheet* const sheet = database.range().lastSheet();
+    Sheet* const sheet = dynamic_cast<Sheet *>(database.range().lastSheet());
+    if (!sheet) return;
     const QRect range = database.range().lastRange();
     const int start = database.orientation() == Qt::Vertical ? range.top() : range.left();
     const int end = database.orientation() == Qt::Vertical ? range.bottom() : range.right();
@@ -1155,8 +896,8 @@ void Sheet::applyDatabaseFilter(const Database &database)
     else // database.orientation() == Qt::Horizontal
         sheet->map()->addDamage(new SheetDamage(sheet, SheetDamage::ColumnsChanged));
 
-    cellStorage()->setDatabase(database.range(), Database());
-    cellStorage()->setDatabase(database.range(), database);
+    fullCellStorage()->setDatabase(database.range(), Database());
+    fullCellStorage()->setDatabase(database.range(), database);
     map()->addDamage(new CellDamage(this, database.range(), CellDamage::Appearance));
 }
 

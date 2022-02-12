@@ -20,8 +20,6 @@
 
 #include "engine/ProtectableObject.h"
 
-class QAbstractItemModel;
-
 class KoShape;
 
 namespace Calligra
@@ -33,6 +31,7 @@ class CellStorage;
 class ColumnFormat;
 class CommentStorage;
 class ConditionsStorage;
+class Database;
 class FormulaStorage;
 class DocBase;
 class FusionStorage;
@@ -44,7 +43,6 @@ class Region;
 class RowFormat;
 class RowFormatStorage;
 class Sheet;
-class SheetPrint;
 class Style;
 class StyleStorage;
 class Validity;
@@ -61,7 +59,6 @@ class CALLIGRA_SHEETS_CORE_EXPORT Sheet : public KoShapeUserData, public SheetBa
 {
     Q_OBJECT
 public:
-    enum ChangeRef       { ColumnInsert, ColumnRemove, RowInsert, RowRemove };
     enum TestType        { Text, Validity, Comment, ConditionalCellAttribute };
 
     /**
@@ -81,11 +78,6 @@ public:
     ~Sheet() override;
 
     /**
-     * \return a model for this sheet
-     */
-    QAbstractItemModel *model() const;
-
-    /**
      * \return the full map this sheet belongs to. This is the inherited version of map().
      */
     Map* fullMap() const;
@@ -98,7 +90,6 @@ public:
     // KoShapeBasedDocumentBase interface
     void addShape(KoShape* shape) override;
     void removeShape(KoShape* shape) override;
-    KoDocumentResourceManager* resourceManager() const override;
 
     /**
      * Deletes all shapes without emitting shapeRemoved()
@@ -365,7 +356,7 @@ public:
      *
      * \return the row for the given position \p _ypos
      */
-    int topRow(qreal _ypos, qreal &_top) const;
+    int topRow(double _ypos, double &_top) const;
 
     /**
      * \ingroup Coordinates
@@ -389,7 +380,7 @@ public:
      *
      * \return the column for the given position \p _xpos
      */
-    int leftColumn(qreal _xpos, qreal &_left) const;
+    int leftColumn(double _xpos, double &_left) const;
 
     /**
      * \ingroup Coordinates
@@ -460,15 +451,15 @@ public:
      * Adjusts the position of cell anchored shapes as a result of a column size change/insertion/removal.
      * All cell anchored shapes with x coordinates >= minX and < maxX will be moved by delta.
      */
-    void adjustCellAnchoredShapesX(qreal minX, qreal maxX, qreal delta);
-    void adjustCellAnchoredShapesX(qreal delta, int firstCol, int lastCol = KS_colMax);
+    void adjustCellAnchoredShapesX(double minX, double maxX, double delta);
+    void adjustCellAnchoredShapesX(double delta, int firstCol, int lastCol = KS_colMax);
 
     /**
      * Adjusts the position of cell anchored shapes as a result of a row size change/insertion/removal.
      * All cell anchored shapes with y coordinates >= minY and < maxY will be moved by delta.
      */
-    void adjustCellAnchoredShapesY(qreal minY, qreal maxY, qreal delta);
-    void adjustCellAnchoredShapesY(qreal delta, int firstRow, int lastRow = KS_rowMax);
+    void adjustCellAnchoredShapesY(double minY, double maxY, double delta);
+    void adjustCellAnchoredShapesY(double delta, int firstRow, int lastRow = KS_rowMax);
 
     /**
      * Called when validation fails.
@@ -568,24 +559,6 @@ public:
     void hideSheet(bool _hide);
 
     /**
-     * \ingroup Value
-     * Change name of reference when the user inserts or removes a column,
-     * a row or a cell (= insertion of a row [or column] on a single column [or row]).
-     * For example the formula =Sheet1!A1 is changed into =Sheet1!B1 if a Column
-     * is inserted before A.
-     *
-     * @param pos the point of insertion (only one coordinate may be used, depending
-     * on the other parameters).
-     * @param fullRowOrColumn if true, a whole row or column has been inserted/removed.
-     *                        if false, we inserted or removed a cell
-     * @param ref see ChangeRef
-     * @param sheetName completes the pos specification by giving the sheet name
-     * @param number number of columns which were inserted
-     */
-    void changeNameCellRef(const QPoint& pos, bool fullRowOrColumn, ChangeRef ref,
-                           const QString& sheetName, int number);
-
-    /**
      * \ingroup ColumnRowFormat
      * Insert the non-default column format \p columnFormat.
      */
@@ -627,12 +600,6 @@ public:
 
     /**
      * \ingroup Page
-     * The page layout manager.
-     */
-    SheetPrint *print() const;
-
-    /**
-     * \ingroup Page
      * Print settings.
      */
     PrintSettings* printSettings() const;
@@ -641,7 +608,7 @@ public:
      * \ingroup Page
      * Sets the print settings.
      */
-    void setPrintSettings(const PrintSettings& settings);
+    void setPrintSettings(const PrintSettings& settings, bool forcePaint = false);
 
     /**
      * \ingroup Page
@@ -696,7 +663,7 @@ Q_SIGNALS:
      * Emitted, if a status \p message should be shown in the status bar
      * for \p timeout msecs.
      */
-    void statusMessage(const QString& message, int timeout);
+    void statusMessage(const QString& message, int timeout) const;
 
     /**
      * \ingroup Embedding
@@ -721,6 +688,34 @@ Q_SIGNALS:
      */
     void nameChanged(const QString &oldName, const QString &name);
 
+    /**
+     * Emitted when one or more columns have been added.
+     * \param col first column number
+     * \param number number of columns
+     */
+    void columnsAdded(int col, int number);
+
+    /**
+     * Emitted when one or more rows have been added.
+     * \param col first row number
+     * \param number number of rows
+     */
+    void rowsAdded(int row, int number);
+
+    /**
+     * Emitted when one or more columns have been removed.
+     * \param col first column number
+     * \param number number of columns
+     */
+    void columnsRemoved(int col, int number);
+
+    /**
+     * Emitted when one or more rows have been removed.
+     * \param col first row number
+     * \param number number of rows
+     */
+    void rowsRemoved(int row, int number);
+
 protected:
 
     //
@@ -732,17 +727,6 @@ protected:
      * \see areaIsEmpty()
      */
     bool cellIsEmpty(const Cell& cell, TestType _type);
-
-    /**
-     * \ingroup Value
-     * \see changeNameCellRef()
-     */
-    QString changeNameCellRefHelper(const QPoint& pos, bool fullRowOrColumn, ChangeRef ref,
-                                    int NbCol, const QPoint& point, bool isColumnFixed,
-                                    bool isRowFixed);
-    QString changeNameCellRefHelper(const QPoint& pos, const QRect& rect, bool fullRowOrColumn, ChangeRef ref,
-                                    int NbCol, const QPoint& point, bool isColumnFixed,
-                                    bool isRowFixed);
 
 private:
 

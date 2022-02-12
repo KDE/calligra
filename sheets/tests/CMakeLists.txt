@@ -74,7 +74,7 @@ sheets_add_unit_test(Region
 
 sheets_add_unit_test(RTree
     TestRTree.cpp
-    LINK_LIBRARIES calligrasheetscommon KF5::KDELibs4Support Qt5::Test
+    LINK_LIBRARIES calligrasheetscommon Qt5::Test
 )
 
 ########### next target ###############
@@ -260,11 +260,11 @@ sheets_add_unit_test(PasteCommand
 set(BenchmarkPointStorage_SRCS BenchmarkPointStorage.cpp)
 add_executable(BenchmarkPointStorage ${BenchmarkPointStorage_SRCS})
 ecm_mark_as_test(BenchmarkPointStorage)
-target_link_libraries(BenchmarkPointStorage Qt5::Test KF5::KDELibs4Support)
+target_link_libraries(BenchmarkPointStorage Qt5::Test)
 
 ########### next target ###############
 
 set(BenchmarkRTree_SRCS BenchmarkRTree.cpp)
 add_executable(BenchmarkRTree ${BenchmarkRTree_SRCS})
 ecm_mark_as_test(BenchmarkRTree)
-target_link_libraries(BenchmarkRTree KF5::KDELibs4Support Qt5::Test)
+target_link_libraries(BenchmarkRTree Qt5::Test)

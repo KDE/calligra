@@ -136,6 +136,12 @@ Doc::Doc(KoPart *part)
     QDBusConnection::sessionBus().registerObject('/' + objectName() + '/' + d->map->objectName(), d->map);
 #endif
 
+    KoShapeRegistry *registry = KoShapeRegistry::instance();
+    foreach (const QString &id, registry->keys()) {
+        KoShapeFactoryBase *shapeFactory = registry->value(id);
+        shapeFactory->newDocumentResourceManager(resourceManager());
+    }
+
     // Init chart shape factory with Calligra Sheets' specific configuration panels.
     KoShapeFactoryBase *chartShape = KoShapeRegistry::instance()->value(ChartShapeId);
     if (chartShape) {
@@ -213,11 +219,6 @@ QDomDocument Doc::saveXML()
     }
 
     return DocBase::saveXML();
-}
-
-bool Doc::loadChildren(KoStore* _store)
-{
-    return map()->loadChildren(_store);
 }
 
 

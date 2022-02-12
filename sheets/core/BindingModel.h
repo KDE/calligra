@@ -8,7 +8,7 @@
 #ifndef CALLIGRA_SHEETS_BINDING_MODEL
 #define CALLIGRA_SHEETS_BINDING_MODEL
 
-#include "Region.h"
+#include "engine/Region.h"
 
 #include <KoChartModel.h>
 

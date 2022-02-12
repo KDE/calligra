@@ -5,7 +5,7 @@
 */
 
 #include "AboutData.h"
-#include "DocBase.h"
+#include "core/DocBase.h"
 
 #include <KoApplication.h>
 #include <Calligra2Migration.h>

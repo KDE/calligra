@@ -33,7 +33,7 @@ public:
     /**
      * List of all sheets in this map.
      */
-    QList<SheetBase *> lstSheets;
+    QList<SheetBase *> lstSheets, lstDeletedSheets;
 
     CalculationSettings* calculationSettings;
     ValueCalc* calc;
@@ -82,6 +82,12 @@ MapBase::MapBase() :
 
 MapBase::~MapBase()
 {
+    // we have to explicitly delete the Sheets, not let QObject take care of that
+    // as the sheet in its destructor expects the Map to still exist
+    for (SheetBase *sheet : d->lstSheets)
+        delete sheet;
+    d->lstSheets.clear();
+
     delete d->dependencyManager;
     delete d->namedAreaManager;
     delete d->recalcManager;
@@ -124,6 +130,29 @@ SheetBase *MapBase::findSheet(const QString & _name) const
     return nullptr;
 }
 
+void MapBase::moveSheet(const QString & _from, const QString & _to, bool _before)
+{
+    SheetBase* sheetfrom = findSheet(_from);
+    SheetBase* sheetto = findSheet(_to);
+
+    int from = d->lstSheets.indexOf(sheetfrom) ;
+    int to = d->lstSheets.indexOf(sheetto) ;
+    if (!_before)
+        ++to;
+
+    if (to > (int)d->lstSheets.count()) {
+        d->lstSheets.append(sheetfrom);
+        d->lstSheets.removeAt(from);
+    } else if (from < to) {
+        d->lstSheets.insert(to, sheetfrom);
+        d->lstSheets.removeAt(from);
+    } else {
+        d->lstSheets.removeAt(from);
+        d->lstSheets.insert(to, sheetfrom);
+    }
+}
+
+
 SheetBase *MapBase::nextSheet(SheetBase *currentSheet) const
 {
     bool returnNext = false;
@@ -153,6 +182,21 @@ void MapBase::addSheet(SheetBase *_sheet)
 {
     d->lstSheets.append(_sheet);
     emit sheetAdded(_sheet);
+}
+
+void MapBase::removeSheet(SheetBase* sheet)
+{
+    d->lstSheets.removeAll(sheet);
+    d->lstDeletedSheets.append(sheet);
+    namedAreaManager()->remove(sheet);
+    emit sheetRemoved(sheet);
+}
+
+void MapBase::reviveSheet(SheetBase* sheet)
+{
+    d->lstDeletedSheets.removeAll(sheet);
+    d->lstSheets.append(sheet);
+    emit sheetRevived(sheet);
 }
 
 

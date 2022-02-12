@@ -10,6 +10,13 @@
 
 using namespace Calligra::Sheets;
 
+ProtectableObject::ProtectableObject() {
+}
+
+ProtectableObject::ProtectableObject(const ProtectableObject& other) {
+    m_password = other.m_password;
+}
+
 QByteArray ProtectableObject::passwordHash() const
 {
     return m_password;

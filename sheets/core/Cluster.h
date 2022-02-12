@@ -7,7 +7,7 @@
 #ifndef CLUSTER_H
 #define CLUSTER_H
 
-#include "Value.h"
+#include "sheets_core_export.h"
 
 #define CALLIGRA_SHEETS_CLUSTER_LEVEL1 256
 #define CALLIGRA_SHEETS_CLUSTER_LEVEL2 256
@@ -28,7 +28,7 @@ class RowFormat;
  * A pointer map to all column formats. Should probably be converted to something like RowFormatStorage.
  * \see Cluster
  */
-class ColumnCluster
+class CALLIGRA_SHEETS_CORE_EXPORT ColumnCluster
 {
 public:
     ColumnCluster();

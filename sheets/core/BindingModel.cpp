@@ -7,16 +7,12 @@
 
 #include "BindingModel.h"
 
-//#include <QRect>
-
-//#include "SheetsDebug.h"
-
+#include "engine/CellBase.h"
+#include "engine/CellBaseStorage.h"
+#include "engine/MapBase.h"
+#include "engine/SheetBase.h"
+#include "engine/Value.h"
 #include "Binding.h"
-#include "CellBase.h"
-#include "CellBaseStorage.h"
-#include "MapBase.h"
-#include "SheetBase.h"
-#include "Value.h"
 
 
 using namespace Calligra::Sheets;

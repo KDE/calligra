@@ -9,7 +9,7 @@
 
 #include <KoShapeApplicationData.h>
 
-#include "sheets_export.h"
+#include "sheets_core_export.h"
 
 namespace Calligra
 {
@@ -20,7 +20,7 @@ namespace Sheets
  * \ingroup Embedding
  * Calligra Sheets specific data attached to each shape.
  */
-class CALLIGRA_SHEETS_ODF_EXPORT ShapeApplicationData : public KoShapeApplicationData
+class CALLIGRA_SHEETS_CORE_EXPORT ShapeApplicationData : public KoShapeApplicationData
 {
 public:
     /**

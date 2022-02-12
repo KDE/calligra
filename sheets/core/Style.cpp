@@ -9,17 +9,13 @@
 // Local
 #include "Style.h"
 
-// #include <QBrush>
-// #include <QHash>
-// #include <QPen>
-// #include <QFontDatabase>
+#include <QFontDatabase>
+#include <QTextCharFormat>
 
-// #include <KoGlobal.h>
+#include <KoGlobal.h>
 
-// #include "SheetsDebug.h"
-// #include "Currency.h"
-// #include "StyleManager.h"
-// #include "Util.h"
+#include "Currency.h"
+#include "StyleManager.h"
 
 using namespace Calligra::Sheets;
 

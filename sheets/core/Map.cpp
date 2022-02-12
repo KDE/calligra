@@ -8,36 +8,30 @@
 // Local
 #include "Map.h"
 
-// #include <stdlib.h>
-// #include <time.h>
+#include <KLocalizedString>
 
-// #include <QTimer>
+#include <KoGlobal.h>
+#include <KoStyleManager.h>
+#include <KoUpdater.h>
+#include <KoProgressUpdater.h>
 
-// #include <kcodecs.h>
-// #include <kcompletion.h>
+#include "engine/Damages.h"
+#include "engine/DependencyManager.h"
+#include "engine/RecalcManager.h"
+#include "engine/Region.h"
+#include "engine/SheetsDebug.h"
+#include "engine/SheetBase.h"
+#include "engine/Updater.h"
 
-// #include <KoGlobal.h>
-// #include <KoEmbeddedDocumentSaver.h>
-// #include <KoStyleManager.h>
-// #include <KoParagraphStyle.h>
-// #include <KoUpdater.h>
-// #include <KoProgressUpdater.h>
-
-// #include "ApplicationSettings.h"
-// #include "BindingManager.h"
-// #include "CellStorage.h"
-// #include "Damages.h"
-// #include "DocBase.h"
-// #include "LoadingInfo.h"
-// #include "Localization.h"
-// #include "RowColumnFormat.h"
-// #include "Sheet.h"
-// #include "StyleManager.h"
-// #include "ValueFormatter.h"
-// #include "engine/Updater.h"
-
-// database
-// #include "database/DatabaseManager.h"
+#include "BindingManager.h"
+#include "Sheet.h"
+#include "CellStorage.h"
+#include "DocBase.h"
+#include "LoadingInfo.h"
+#include "RowColumnFormat.h"
+#include "SheetAccessModel.h"
+#include "StyleManager.h"
+#include "ValueFormatter.h"
 
 using namespace Calligra::Sheets;
 
@@ -45,8 +39,6 @@ class Q_DECL_HIDDEN Map::Private
 {
 public:
     DocBase* doc;
-
-    QList<Sheet*> lstDeletedSheets;
 
     // used to give every Sheet a unique default name.
     int tableId;
@@ -59,11 +51,10 @@ public:
     bool readwrite;
 
     BindingManager* bindingManager;
-    DatabaseManager* databaseManager;
     StyleManager* styleManager;
     KoStyleManager* textStyleManager;
 
-    ApplicationSettings* applicationSettings;
+    SheetAccessModel *sheetAccessModel;
     ValueFormatter* formatter;
 
     // default objects
@@ -71,8 +62,6 @@ public:
     RowFormat* defaultRowFormat;
 
     int syntaxVersion;
-
-    KCompletion listCompletion;
 };
 
 
@@ -87,7 +76,7 @@ public:
     }
 
 private:
-    KoUpdater m_updater;
+    KoUpdater *m_updater;
 };
 
 
@@ -105,12 +94,11 @@ Map::Map(DocBase* doc, int syntaxVersion)
     d->readwrite = true;
 
     d->bindingManager = new BindingManager(this);
-    d->databaseManager = new DatabaseManager();
     d->styleManager = new StyleManager();
     d->textStyleManager = new KoStyleManager(this);
-    d->applicationSettings = new ApplicationSettings();
 
-    d->formatter = new ValueFormatter(d->converter);
+    d->sheetAccessModel = new SheetAccessModel(this);
+    d->formatter = new ValueFormatter(converter());
 
     d->defaultColumnFormat = new ColumnFormat();
     d->defaultRowFormat = new RowFormat();
@@ -128,22 +116,18 @@ Map::~Map()
 {
     // Because some of the shapes might be using a sheet in this map, delete
     // all shapes in each sheet before all sheets are deleted together.
-    foreach(Sheet *sheet, d->lstSheets)
-        sheet->deleteShapes();
-    // we have to explicitly delete the Sheets, not let QObject take care of that
-    // as the sheet in its destructor expects the Map to still exist
-    qDeleteAll(d->lstSheets);
-    d->lstSheets.clear();
+    for(SheetBase *sheet : sheetList()) {
+        Sheet *fullSheet = dynamic_cast<Sheet *>(sheet);
+        if (fullSheet) fullSheet->deleteShapes();
+    }
 
     deleteLoadingInfo();
 
     delete d->bindingManager;
-    delete d->databaseManager;
     delete d->styleManager;
 
+    delete d->sheetAccessModel;
     delete d->formatter;
-
-    delete d->applicationSettings;
 
     delete d->defaultColumnFormat;
     delete d->defaultRowFormat;
@@ -172,7 +156,7 @@ bool Map::completeLoading(KoStore *store)
 
     QPointer<KoUpdater> dependencyUpdater, recalcUpdater;
     // These exist so that we don't pull in a kowidgets dependency into engine
-    SheetUpdater *depWrapper = nullptr, recalcWrapper = nullptr;
+    SheetUpdater *depWrapper = nullptr, *recalcWrapper = nullptr;
 
     if (doc() && doc()->progressUpdater()) {
         dependencyUpdater = doc()->progressUpdater()->startSubtask(1, "Calligra::Sheets::DependencyManager::updateAllDependencies");
@@ -183,10 +167,10 @@ bool Map::completeLoading(KoStore *store)
 
 
     // Initial build of all cell dependencies.
-    d->dependencyManager->updateAllDependencies(this, depWrapper);
+    dependencyManager()->updateAllDependencies(this, depWrapper);
     // Recalc the whole workbook now, since there may be formulas other spreadsheets support,
     // but Calligra Sheets does not.
-    d->recalcManager->recalcMap(recalcWrapper);
+    recalcManager()->recalcMap(recalcWrapper);
 
     delete depWrapper;
     delete recalcWrapper;
@@ -202,14 +186,9 @@ bool Map::completeSaving(KoStore *store, KoXmlWriter *manifestWriter, KoShapeSav
     return true;
 }
 
-BindingManager* MapBase::bindingManager() const
+BindingManager* Map::bindingManager() const
 {
     return d->bindingManager;
-}
-
-DatabaseManager* Map::databaseManager() const
-{
-    return d->databaseManager;
 }
 
 StyleManager* Map::styleManager() const
@@ -217,6 +196,7 @@ StyleManager* Map::styleManager() const
     return d->styleManager;
 }
 
+// TODO - do we actually need this? It's only used in load/save, nowhere else.
 KoStyleManager* Map::textStyleManager() const
 {
     return d->textStyleManager;
@@ -225,6 +205,11 @@ KoStyleManager* Map::textStyleManager() const
 ValueFormatter* Map::formatter() const
 {
     return d->formatter;
+}
+
+SheetAccessModel *Map::sheetAccessModel() const
+{
+    return d->sheetAccessModel;
 }
 
 const ColumnFormat* Map::defaultColumnFormat() const
@@ -247,11 +232,6 @@ void Map::setDefaultRowHeight(double height)
     d->defaultRowFormat->setHeight(height);
 }
 
-ApplicationSettings* Map::settings() const
-{
-    return d->applicationSettings;
-}
-
 Sheet* Map::createSheet(const QString& name)
 {
     QString sheetName(i18n("Sheet%1", d->tableId++));
@@ -270,58 +250,14 @@ Sheet *Map::addNewSheet(const QString& name)
     return t;
 }
 
-void Map::moveSheet(const QString & _from, const QString & _to, bool _before)
-{
-    Sheet* sheetfrom = findSheet(_from);
-    Sheet* sheetto = findSheet(_to);
-
-    int from = d->lstSheets.indexOf(sheetfrom) ;
-    int to = d->lstSheets.indexOf(sheetto) ;
-    if (!_before)
-        ++to;
-
-    if (to > (int)d->lstSheets.count()) {
-        d->lstSheets.append(sheetfrom);
-        d->lstSheets.removeAt(from);
-    } else if (from < to) {
-        d->lstSheets.insert(to, sheetfrom);
-        d->lstSheets.removeAt(from);
-    } else {
-        d->lstSheets.removeAt(from);
-        d->lstSheets.insert(to, sheetfrom);
-    }
-}
-
-bool Map::loadChildren(KoStore * _store)
-{
-    foreach(Sheet* sheet, d->lstSheets) {
-        if (!sheet->loadChildren(_store))
-            return false;
-    }
-    return true;
-}
-
-void Map::removeSheet(Sheet* sheet)
-{
-    d->lstSheets.removeAll(sheet);
-    d->lstDeletedSheets.append(sheet);
-    d->namedAreaManager->remove(sheet);
-    emit sheetRemoved(sheet);
-}
-
-void Map::reviveSheet(Sheet* sheet)
-{
-    d->lstDeletedSheets.removeAll(sheet);
-    d->lstSheets.append(sheet);
-    emit sheetRevived(sheet);
-}
-
 // FIXME cache this for faster operation
 QStringList Map::visibleSheets() const
 {
     QStringList result;
-    foreach(Sheet* sheet, d->lstSheets) {
-        if (!sheet->isHidden())
+    for (SheetBase *sheet : sheetList()) {
+        Sheet *fullSheet = dynamic_cast<Sheet *>(sheet);
+        if (!fullSheet) continue;
+        if (!fullSheet->isHidden())
             result.append(sheet->sheetName());
     }
     return result;
@@ -331,8 +267,10 @@ QStringList Map::visibleSheets() const
 QStringList Map::hiddenSheets() const
 {
     QStringList result;
-    foreach(Sheet* sheet, d->lstSheets) {
-        if (sheet->isHidden())
+    for (SheetBase *sheet : sheetList()) {
+        Sheet *fullSheet = dynamic_cast<Sheet *>(sheet);
+        if (!fullSheet) continue;
+        if (fullSheet->isHidden())
             result.append(sheet->sheetName());
     }
     return result;
@@ -382,18 +320,6 @@ void Map::deleteLoadingInfo()
     d->loadingInfo = 0;
 }
 
-KCompletion& Map::stringCompletion()
-{
-    return d->listCompletion;
-}
-
-void Map::addStringCompletion(const QString &stringCompletion)
-{
-    if (d->listCompletion.items().contains(stringCompletion) == 0) {
-        d->listCompletion.addItem(stringCompletion);
-    }
-}
-
 void Map::handleDamages(const QList<Damage*>& damages)
 {
     MapBase::handleDamages(damages);
@@ -419,9 +345,11 @@ void Map::handleDamages(const QList<Damage*>& damages)
             }
 
             // TODO Stefan: Detach the style cache from the CellView cache.
-            if (damagedSheet && changes.testFlag(CellDamage::Appearance))
+            if (damagedSheet && changes.testFlag(CellDamage::Appearance)) {
+                Sheet *fullSheet = dynamic_cast<Sheet *>(damagedSheet);
                 // Rebuild the style storage cache.
-                damagedSheet->fullCellStorage()->invalidateStyleCache(); // FIXME more fine-grained
+                if (fullSheet) fullSheet->fullCellStorage()->invalidateStyleCache(); // FIXME more fine-grained
+            }
             continue;
         }
 

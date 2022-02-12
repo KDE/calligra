@@ -6,12 +6,12 @@
 
 #include "BindingManager.h"
 
+#include "engine/calligra_sheets_limits.h"
+#include "engine/CellBaseStorage.h"
+#include "engine/MapBase.h"
+#include "engine/SheetBase.h"
 #include "Binding.h"
-#include "calligra_sheets_limits.h"
 #include "BindingStorage.h"
-#include "CellBaseStorage.h"
-#include "MapBase.h"
-#include "SheetBase.h"
 #include "BindingModel.h"
 
 using namespace Calligra::Sheets;

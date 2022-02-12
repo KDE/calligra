@@ -16,8 +16,8 @@ namespace Sheets {
 bool Ksp::loadDoc(DocBase *obj, const KoXmlDocument& doc)
 {
     QPointer<KoUpdater> updater;
-    if (progressUpdater()) {
-        updater = progressUpdater()->startSubtask(1, "Ksp::loadDoc");
+    if (obj->progressUpdater()) {
+        updater = obj->progressUpdater()->startSubtask(1, "Ksp::loadDoc");
         updater->setProgress(0);
     }
 

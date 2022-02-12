@@ -74,6 +74,12 @@ Cell::~Cell()
 {
 }
 
+Cell& Cell::operator=(const Cell& other)
+{
+    CellBase::operator=(other);
+    return *this;
+}
+
 // Return the sheet that this cell belongs to.
 Sheet* Cell::fullSheet() const
 {

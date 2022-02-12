@@ -6,24 +6,19 @@
 
 // Ours
 #include "SheetAccessModel.h"
-#include "calligra_sheets_limits.h"
 #include "Map.h"
-#include "Binding.h"
+
+#include "engine/calligra_sheets_limits.h"
+#include "engine/Damages.h"
+#include "engine/Region.h"
+#include "engine/SheetBase.h"
+
 #include "BindingManager.h"
-#include "Damages.h"
-#include "Region.h"
 
 // Qt
-#include <QList>
-#include <QMap>
-#include <QStandardItem>
 #include <QAbstractItemModel>
+#include <QPointer>
 #include <QVariant>
-
-// Calligra
-//#include <KoStore.h>
-//#include <KoXmlWriter.h>
-//#include <KoShapeSavingContext.h>
 
 Q_DECLARE_METATYPE(QPointer<QAbstractItemModel>)
 
@@ -39,7 +34,7 @@ public:
     /// Stores in what column each Sheet is. We need this because
     /// a Sheet is removed from its Map before the sheetRemoved() signal
     /// is emitted, thus we can't ask the Map what index it had.
-    QMap<Sheet*, int> cols;
+    QMap<SheetBase*, int> cols;
 };
 
 SheetAccessModel::SheetAccessModel(Map *map)
@@ -66,7 +61,7 @@ SheetAccessModel::~SheetAccessModel()
     delete d;
 }
 
-void SheetAccessModel::slotSheetAdded(Sheet *sheet)
+void SheetAccessModel::slotSheetAdded(SheetBase *sheet)
 {
     Q_ASSERT(!d->cols.contains(sheet));
 
@@ -87,7 +82,7 @@ void SheetAccessModel::slotSheetAdded(Sheet *sheet)
     setHeaderData( sheetIndex, Qt::Horizontal, sheet->sheetName() );
 }
 
-void SheetAccessModel::slotSheetRemoved(Sheet *sheet)
+void SheetAccessModel::slotSheetRemoved(SheetBase *sheet)
 {
     Q_ASSERT(d->cols.contains(sheet));
     removeColumn(d->cols[sheet]);
@@ -108,7 +103,7 @@ void SheetAccessModel::handleDamages(const QList<Damage*>& damages)
             debugSheetsDamage << "Processing\t" << *sheetDamage;
 
             if (sheetDamage->changes() & SheetDamage::Name) {
-                Sheet *sheet = sheetDamage->sheet();
+                SheetBase *sheet = sheetDamage->sheet();
                 // We should never receive signals from sheets that are not in our model
                 Q_ASSERT(d->cols.contains(sheet));
                 const int sheetIndex = d->cols[sheet];

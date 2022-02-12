@@ -11,7 +11,6 @@
 #include "SheetPrint.h"
 #include "SheetPrint_p.h"
 
-#include "HeaderFooter.h"
 #include "PrintSettings.h"
 #include "calligra_sheets_limits.h"
 #include "Region.h"
@@ -25,13 +24,15 @@ SheetPrint::SheetPrint(Sheet *sheet)
 {
     d->m_pSheet = sheet;
 
-    d->m_settings = new PrintSettings();
-    d->m_headerFooter = new HeaderFooter(sheet);
-
     d->m_maxCheckedNewPageX = 0;
     d->m_maxCheckedNewPageY = 0;
     d->m_dPrintRepeatColumnsWidth = 0.0;
     d->m_dPrintRepeatRowsHeight = 0.0;
+
+    connect(sheet, &Sheet::columnsAdded, this, &SheetPrint::insertColumn);
+    connect(sheet, &Sheet::rowsAdded, this, &SheetPrint::insertRow);
+    connect(sheet, &Sheet::columnsRemoved, this, &SheetPrint::removeColumn);
+    connect(sheet, &Sheet::rowsRemoved, this, &SheetPrint::removeRow);
 }
 
 SheetPrint::SheetPrint(const SheetPrint &other)
@@ -40,7 +41,6 @@ SheetPrint::SheetPrint(const SheetPrint &other)
     d->m_pSheet = other.d->m_pSheet;
 
     d->m_settings = new PrintSettings(*other.d->m_settings);
-    d->m_headerFooter = new HeaderFooter(*other.d->m_headerFooter);
 
     d->m_maxCheckedNewPageX = other.d->m_maxCheckedNewPageX;
     d->m_maxCheckedNewPageY = other.d->m_maxCheckedNewPageY;
@@ -48,12 +48,15 @@ SheetPrint::SheetPrint(const SheetPrint &other)
     d->m_dPrintRepeatRowsHeight = other.d->m_dPrintRepeatRowsHeight;
     d->m_lnewPageListX = other.d->m_lnewPageListX;
     d->m_lnewPageListY = other.d->m_lnewPageListY;
+
+    connect(sheet, &Sheet::columnsAdded, this, &SheetPrint::insertColumn);
+    connect(sheet, &Sheet::rowsAdded, this, &SheetPrint::insertRow);
+    connect(sheet, &Sheet::columnsRemoved, this, &SheetPrint::removeColumn);
+    connect(sheet, &Sheet::rowsRemoved, this, &SheetPrint::removeRow);
 }
 
 SheetPrint::~SheetPrint()
 {
-    delete d->m_headerFooter;
-    delete d->m_settings;
     delete d;
 }
 
@@ -62,6 +65,7 @@ PrintSettings *SheetPrint::settings() const
     return d->m_settings;
 }
 
+// TODO - this should all be done differently?
 void SheetPrint::setSettings(const PrintSettings &settings, bool force)
 {
     // Relayout forced?
@@ -165,11 +169,6 @@ void SheetPrint::setSettings(const PrintSettings &settings, bool force)
     } else if (row <= KS_rowMax) {
         updateVerticalPageParameters(row);
     }
-}
-
-HeaderFooter *SheetPrint::headerFooter() const
-{
-    return d->m_headerFooter;
 }
 
 bool SheetPrint::isColumnOnNewPage(int _column)
@@ -488,7 +487,6 @@ void SheetPrint::operator=(const SheetPrint & other)
     d->m_pSheet = other.d->m_pSheet;
 
     *d->m_settings = *other.d->m_settings;
-    *d->m_headerFooter = *other.d->m_headerFooter;
 
     d->m_maxCheckedNewPageX = other.d->m_maxCheckedNewPageX;
     d->m_maxCheckedNewPageY = other.d->m_maxCheckedNewPageY;

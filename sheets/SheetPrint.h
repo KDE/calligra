@@ -9,6 +9,7 @@
 #ifndef CALLIGRA_SHEETS_SHEET_PRINT
 #define CALLIGRA_SHEETS_SHEET_PRINT
 
+#include <QObject>
 #include <QRectF>
 
 #include "sheets_export.h"
@@ -19,7 +20,6 @@ namespace Calligra
 namespace Sheets
 {
 class HeaderFooter;
-class PrintSettings;
 class Sheet;
 
 /**
@@ -29,17 +29,14 @@ class Sheet;
  * zooming, page limits and column/row repetitions.
  * \ingroup Printing
  */
-class CALLIGRA_SHEETS_ODF_EXPORT SheetPrint
+class CALLIGRA_SHEETS_ODF_EXPORT SheetPrint : public QObject
 {
+Q_OBJECT
 public:
     explicit SheetPrint(Sheet * sheet = 0);
     SheetPrint(const SheetPrint &other);
     ~SheetPrint();
 
-    /**
-     * \return the print settings
-     */
-    PrintSettings *settings() const;
 
     /**
      * Sets the print \p settings.
@@ -47,11 +44,6 @@ public:
      * \param force Forces a relayout of the pages, if \c true.
      */
     void setSettings(const PrintSettings &settings, bool force = false);
-
-    /**
-     * \return the header & footer object
-     */
-    HeaderFooter *headerFooter() const;
 
     /**
      * Tests whether @p column is the first column of a new page. In this
@@ -86,6 +78,32 @@ public:
     void updateVerticalPageParameters(int row);
 
     /**
+     * The number of pages.
+     */
+    int pageCount() const;
+
+    /**
+     * Return the cell range of the requested page.
+     * \param page the page number
+     * \return the page's cell range
+     */
+    QRect cellRange(int page) const;
+
+    /**
+     * Return the document area of the requested page.
+     * \param page the page number
+     * \return the page's document area
+     */
+    QRectF documentArea(int page) const;
+
+    /**
+     * Assignment operator.
+     */
+    void operator=(const SheetPrint &);
+
+
+public Q_SLOTS:
+    /**
      * Updates the print range, according to the inserted columns
      * \param col the column index
      * \param nbCol number of inserted columns
@@ -113,29 +131,6 @@ public:
      */
     void removeRow(int row, int nbRow);
 
-    /**
-     * The number of pages.
-     */
-    int pageCount() const;
-
-    /**
-     * Return the cell range of the requested page.
-     * \param page the page number
-     * \return the page's cell range
-     */
-    QRect cellRange(int page) const;
-
-    /**
-     * Return the document area of the requested page.
-     * \param page the page number
-     * \return the page's document area
-     */
-    QRectF documentArea(int page) const;
-
-    /**
-     * Assignment operator.
-     */
-    void operator=(const SheetPrint &);
 
 
 private:

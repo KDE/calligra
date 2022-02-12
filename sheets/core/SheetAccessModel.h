@@ -9,7 +9,7 @@
 
 #include <QStandardItemModel>
 
-#include "Sheet.h"
+#include "sheets_core_export.h"
 
 namespace Calligra
 {
@@ -18,7 +18,7 @@ namespace Sheets
 
 class Damage;
 class Map;
-class Sheet;
+class SheetBase;
 
 /**
  * @brief Class that can be used by any shape embedded in Calligra Sheets to access sheet data,
@@ -39,7 +39,7 @@ class Sheet;
  * view->setModel( firstSheet.data() );
  * @endcode
  */
-class SheetAccessModel : public QStandardItemModel
+class CALLIGRA_SHEETS_CORE_EXPORT SheetAccessModel : public QStandardItemModel
 {
     Q_OBJECT
 
@@ -48,9 +48,9 @@ public:
     ~SheetAccessModel() override;
 
 public Q_SLOTS:
-    void slotSheetAdded(Sheet *sheet);
-    void slotSheetRemoved(Sheet *sheet);
-        void handleDamages(const QList<Damage*> &damages);
+    void slotSheetAdded(SheetBase *sheet);
+    void slotSheetRemoved(SheetBase *sheet);
+    void handleDamages(const QList<Damage*> &damages);
 
 private:
     class Private;

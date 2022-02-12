@@ -6,16 +6,27 @@ set (calligrasheetscore_LIB_SRCS
     Cell.cpp
     Map.cpp
     Sheet.cpp
+    SheetAccessModel.cpp
     Style.cpp
     StyleStorage.cpp
+    StyleManager.cpp
     CellStorage.cpp
+    Cluster.cpp
     Condition.cpp
     ConditionsStorage.cpp
     RowFormatStorage.cpp
     RowColumnFormat.cpp
+    HeaderFooter.cpp
     Database.cpp
     DatabaseStorage.cpp
     DataFilter.cpp
+    Binding.cpp
+    BindingManager.cpp
+    BindingModel.cpp
+    BindingStorage.cpp
+    PrintSettings.cpp
+    DocBase.cpp
+    ShapeApplicationData.cpp
 )
 
 add_library(calligrasheetscore SHARED ${calligrasheetscore_LIB_SRCS})
@@ -46,8 +57,11 @@ install( FILES
     Style.h
     CellStorage.h
     RowColumnFormat.h
+    RowFormatStorage.h
     Database.h
     DataFilter.h
+    DocBase.h
+    PrintSettings.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/sheets COMPONENT Devel)
 
 endif()

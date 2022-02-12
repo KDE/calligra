@@ -7,17 +7,17 @@
 // own header
 #include "StyleManager.h"
 
-#include <QBrush>
-#include <QPen>
-#include <QStringList>
+// #include <QBrush>
+// #include <QPen>
+// #include <QStringList>
 
-#include <KLocalizedString>
+// #include <KLocalizedString>
 
-#include "SheetsDebug.h"
-#include "CalculationSettings.h"
-#include "Condition.h"
-#include "Map.h"
-#include "Style.h"
+// #include "SheetsDebug.h"
+// #include "CalculationSettings.h"
+// #include "Condition.h"
+// #include "Map.h"
+// #include "Style.h"
 
 using namespace Calligra::Sheets;
 

@@ -8,7 +8,7 @@
 #define KSPREAD_BINDING_STORAGE
 
 #include "Binding.h"
-#include "RectStorage.h"
+#include "engine/RectStorage.h"
 
 namespace Calligra
 {

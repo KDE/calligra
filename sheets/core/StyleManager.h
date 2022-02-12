@@ -7,8 +7,9 @@
 #ifndef CALLIGRA_SHEETS_STYLE_MANAGER
 #define CALLIGRA_SHEETS_STYLE_MANAGER
 
-#include "sheets_export.h"
-#include <Style.h>
+#include "sheets_core_export.h"
+#include <QMap>
+#include <QString>
 
 class QStringList;
 
@@ -19,6 +20,10 @@ namespace Sheets
 class Conditions;
 class Map;
 class ValueParser;
+class CustomStyle;
+
+// needs to be ordered (QMap) for the style dialog
+typedef QMap<QString, CustomStyle*> CustomStyles;
 
 /**
  * \class StyleManager
@@ -27,7 +32,7 @@ class ValueParser;
  * The StyleManager takes care of named styles. It also provides some static
  * methods for the preloading of OpenDocument autostyles.
  */
-class CALLIGRA_SHEETS_ODF_EXPORT StyleManager
+class CALLIGRA_SHEETS_CORE_EXPORT StyleManager
 {
     friend class StyleManagerDialog;
 
