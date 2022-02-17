@@ -26,9 +26,7 @@ include_directories(${KOMAIN_INCLUDES}
 
 set(calligragemini_SRCS
     main.cpp
-    MainWindow.cpp
     desktopviewproxy.cpp
-    Constants.cpp
     DocumentListModel.cpp
     DocumentManager.cpp
     ProgressProxy.cpp
@@ -38,7 +36,6 @@ set(calligragemini_SRCS
     SimpleTouchArea.cpp
 #     TouchDeclarativeView.cpp
     PropertyContainer.cpp
-    Theme.cpp
     ToolManager.cpp
     ParagraphStylesModel.cpp
     KeyboardModel.cpp
@@ -48,6 +45,7 @@ set(calligragemini_SRCS
     TemplatesModel.cpp
     TemplateVariantsModel.cpp
     CloudAccountsModel.cpp
+    resources.qrc
 )
 
 set(thumbnailhelper_SRCS
@@ -78,7 +76,7 @@ target_link_libraries(calligragemini
     Qt5::Qml
     Qt5::Gui
     Qt5::Core
-    KF5::IconThemes
+    Qt::QuickControls2 
     komain
     wordsprivate
     calligrastageprivate

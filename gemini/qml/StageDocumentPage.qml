@@ -4,9 +4,9 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-import QtQuick 2.0
+import QtQuick 2.15
+import QtQuick.Controls 2.15 as QQC2
 import org.kde.kirigami 2.7 as Kirigami
-import "components"
 import org.kde.calligra 1.0 as Calligra
 
 Item {
@@ -198,7 +198,7 @@ Item {
                     Behavior on opacity { NumberAnimation { duration: Kirigami.Units.shortDuration; } }
                     color: "#00adf5";
                 }
-                Label {
+                QQC2.Label {
                     anchors {
                         top: parent.top;
                         left: parent.left;

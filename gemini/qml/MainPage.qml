@@ -7,7 +7,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15 as QQC2
 import org.kde.kirigami 2.14 as Kirigami
-import "components"
 import "panels"
 import org.calligra 1.0
 import org.kde.calligra 1.0 as Calligra
@@ -23,22 +22,6 @@ Kirigami.Page {
     property var toolManager: ToolManager {
         id: toolManager;
         onCurrentToolChanged: console.debug("Current tool is now " + currentTool.toolId());
-    }
-    Loader {
-        id: viewLoader;
-        anchors {
-            top: toolbar.top;
-            left: parent.left;
-            right: parent.right;
-            bottom: parent.bottom;
-        }
-    }
-    Connections {
-        target: viewLoader.item;
-        // ok, so this looks weird, but we explicitly want to keep the notes
-        // panel open unless they're interacting with the other gui bits, not
-        // if they're moving through the document
-        onCanvasInteractionStarted: closeToolbarMenus(notesButton);
     }
 
     function closeToolbarMenus(sender) {

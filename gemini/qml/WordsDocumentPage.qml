@@ -4,6 +4,7 @@
 // SPDX-LicenseIdentifier: GPL-2.0-or-later
 
 import QtQuick 2.15
+import QtQml 2.15
 import QtQuick.Controls 2.15 as QQC2
 import QtQuick.Layouts 1.15
 import org.kde.kirigami 2.14 as Kirigami
@@ -72,18 +73,10 @@ MainPage {
                 baseLoadingDialog.visible = true;
             } else if(status == Calligra.DocumentStatus.Loaded) {
                 console.debug("doc and part: " + wordsDocument.document + " " + wordsDocument.part);
-                mainWindow.setDocAndPart(wordsDocument.document, wordsDocument.part);
                 baseLoadingDialog.hideMe();
             }
         }
         onCurrentIndexChanged: navigatorListView.positionViewAtIndex(currentIndex - 1, ListView.Center);
-    }
-
-    Calligra.ContentsModel {
-        id: wordsContentModel;
-        document: wordsDocument;
-        useToC: false;
-        thumbnailSize: Qt.size(Kirigami.Units.gridUnit * 10, Kirigami.Units.gridUnit * 10);
     }
 
     onNavigateModeChanged: {
@@ -108,31 +101,121 @@ MainPage {
         controllerFlickable.contentY = controllerFlickable.contentHeight - controllerFlickable.height;
     }
 
-
-    Calligra.View {
-        id: wordsCanvas;
-        document: wordsDocument;
-        anchors {
-            top: parent.top
-            bottom: parent.bottom
-            horizontalCenter: parent.horizontalCenter
+    Flickable {
+        id: bgScrollArea;
+        anchors.fill: parent;
+        contentHeight: wordsDocument.documentSize.height;
+        interactive: base.state !== "readermode";
+        boundsBehavior: controllerFlickable.boundsBehavior;
+        Item {
+            width: parent.width;
+            height: wordsDocument.documentSize.height;
+            MouseArea {
+                anchors.fill: parent;
+                property int oldX: 0
+                property int oldY: 0
+                property int swipeDistance: 10
+                onPressed: {
+                    oldX = mouseX;
+                    oldY = mouseY;
+                }
+                onReleased: {
+                    base.canvasInteractionStarted();
+                    controllerItem.pageChanging = true;
+                    var xDiff = oldX - mouseX;
+                    var yDiff = oldY - mouseY;
+                    // Don't react if the swipe distance is too small
+                    if(Math.abs(xDiff) < swipeDistance && Math.abs(yDiff) < swipeDistance) {
+                        if(Math.abs(xDiff) > 2 || Math.abs(yDiff) > 2) {
+                            // If the swipe distance is sort of big (2 pixels on a 1080p screen)
+                            // we can assume the finger has moved some distance and should be ignored
+                            // as not-a-tap.
+                            controllerItem.pageChanging = false;
+                            return;
+                        }
+                        // This might be done in onClick, but that then eats the events, which is not useful
+                        // for reader mode we'll accept clicks here, to simulate an e-reader style navigation mode
+                        if(mouse.x < width / 2) {
+                            controllerFlickable.pageUp();
+                        }
+                        else if(mouse.x > width / 2) {
+                            controllerFlickable.pageDown();
+                        }
+                    }
+                    else if(base.state === "readermode") {
+                        if ( Math.abs(xDiff) > Math.abs(yDiff) ) {
+                            if( oldX > mouseX) {
+                                // left
+                                controllerFlickable.pageDown();
+                            } else {
+                                // right
+                                controllerFlickable.pageUp()
+                            }
+                        } else {
+                            if( oldY > mouseY) {
+                                // up
+                                controllerFlickable.pageDown();
+                            }
+                            else {
+                                // down
+                                controllerFlickable.pageUp();
+                            }
+                        }
+                    }
+                    controllerItem.pageChanging = false;
+                }
+            }
         }
-        width: controllerFlickable.width
+    }
+    Binding {
+        target: controllerFlickable;
+        property: "contentY";
+        value: bgScrollArea.contentY;
+        when: controllerFlickable.verticalVelocity === 0;
+        restoreMode: Binding.RestoreBinding
+    }
+    Binding {
+        target: bgScrollArea;
+        property: "contentY";
+        value: controllerFlickable.contentY;
+        when: bgScrollArea.verticalVelocity === 0;
+        restoreMode: Binding.RestoreBinding
     }
 
-    QQC2.ScrollView {
+    QQC2.ScrollBar {
+        id: scrollBar
+	anchors.right: parent.right
+        anchors.rightMargin: !thumbnailSidebar.modal ? thumbnailSidebar.width * thumbnailSidebar.position : 0
+	height: parent.height
+    }
+
+    Item {
+        id: wordsContentItem;
+
         anchors {
             top: parent.top
             bottom: parent.bottom
+            rightMargin: (!thumbnailSidebar.modal ? thumbnailSidebar.width * thumbnailSidebar.position : 0) - (scrollBar.visible ? scrollBar.width : 0)
+            left: parent.left
+            right: parent.right
         }
-        width: parent.width - (!thumbnailSidebar.modal && thumbnailSidebar.drawerOpen ? thumbnailSidebar.implicitWidth : 0);
+
+        Calligra.View {
+            id: wordsCanvas
+            document: wordsDocument
+            width: controllerFlickable.contentWidth
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.rightMargin: (!thumbnailSidebar.modal ? thumbnailSidebar.width * thumbnailSidebar.position / 2 : 0) - (scrollBar.visible ? scrollBar.width / 2: 0)
+            height: parent.height
+        }
 
         Flickable {
             id: controllerFlickable;
-            width: Math.min(parent.width, base.width);
             interactive: base.state !== "readermode";
             property int fastVelocity: Kirigami.Units.gridUnit * 50
             anchors.horizontalCenter: parent.horizontalCenter
+            width: Math.min(wordsDocument.documentSize.width, parent.width)
+            height: parent.height
             onVerticalVelocityChanged: {
                 if (Math.abs(verticalVelocity) > fastVelocity && !controllerItem.pageChanging) {
                     d.showThings();
@@ -199,7 +282,7 @@ MainPage {
 
                     property int oldX: 0
                     property int oldY: 0
-                    property int swipeDistance: Settings.theme.adjustedPixel(10);
+                    property int swipeDistance: 10
                     onPressed: {
                         oldX = mouseX;
                         oldY = mouseY;
@@ -214,7 +297,7 @@ MainPage {
                         controllerItem.pageChanging = true;
                         // Don't react if the swipe distance is too small
                         if(Math.abs(xDiff) < swipeDistance && Math.abs(yDiff) < swipeDistance) {
-                            if(Math.abs(xDiff) > Settings.theme.adjustedPixel(2) || Math.abs(yDiff) > Settings.theme.adjustedPixel(2)) {
+                            if(Math.abs(xDiff) > 2 || Math.abs(yDiff) > 2) {
                                 // If the swipe distance is sort of big (2 pixels on a 1080p screen)
                                 // we can assume the finger has moved some distance and should be ignored
                                 // as not-a-tap.
@@ -282,9 +365,6 @@ MainPage {
                 return;
             }
             base.state = "sidebarShown";
-            pageNumber.opacity = 1;
-            hideTimer.stop();
-            hidePageNumTimer.stop();
         }
         function hideThings() {
             /*if(navigatorSidebar.containsMouse) {
@@ -292,27 +372,6 @@ MainPage {
             }*/
             hideTimer.start();
             hidePageNumTimer.start();
-        }
-    }
-    Timer {
-        id: hidePageNumTimer;
-        running: false;
-        repeat: false;
-        interval: 500;
-        onTriggered: {
-            pageNumber.opacity = 0;
-        }
-    }
-    Timer {
-        id: hideTimer;
-        running: false;
-        repeat: false;
-        interval: 2000;
-        onTriggered: {
-            if (base.state === "readermode") {
-                return;
-            }
-            base.state = "";
         }
     }
 
@@ -327,9 +386,6 @@ MainPage {
                     d.zoomToFit();
                     controllerFlickable.contentY = wordsCanvas.pagePosition(wordsDocument.currentIndex) + 1;
 					base.canvasInteractionStarted();
-                    if(mainWindow.maximized) {
-                        mainWindow.fullScreen = true;
-                    }
                 }
             }
         },
@@ -338,92 +394,33 @@ MainPage {
             ScriptAction {
                 script: {
                     d.restoreZoom();
-					base.canvasInteractionStarted();
-                    mainWindow.fullScreen = false;
+                    base.canvasInteractionStarted();
                 }
             }
         }
     ]
 
-    /*
-        Item {
-            anchors.fill: navigatorListView;
-            clip: true;
-            Item {
-                id: visualiserContainer;
-                property double scale: height / controllerFlickable.contentHeight;
-                width: parent.width;
-                height: (wordsDocument === null) ? 0 : wordsDocument.indexCount * Settings.theme.adjustedPixel(190);
-                x: 0;
-                y: -navigatorListView.contentY;
-                Rectangle {
-                    x: 0;
-                    y: controllerFlickable.contentY * visualiserContainer.scale;
-                    width: Settings.theme.adjustedPixel(190);
-                    height: visualiserContainer.scale * controllerFlickable.height;
-                    color: "#00adf5"
-                    opacity: 0.4;
-                }
+    footer: QQC2.ToolBar {
+        contentItem: RowLayout {
+            Item { 
+                Layout.fillWidth: true
             }
-        }
-    }*/
 
-    Item {
-        id: pageNumber;
-        anchors {
-            right: parent.right;
-            bottom: parent.bottom;
-            margins: Kirigami.Units.largeSpacing;
-        }
-        opacity: 0;
-        Behavior on opacity { NumberAnimation { duration: Kirigami.Units.shortDuration; } }
-        height: Constants.GridHeight / 2;
-        width: Constants.GridWidth;
-        Rectangle {
-            anchors.fill: parent;
-            radius: Kirigami.Units.largeSpacing;
-            color: Settings.theme.color("components/overlay/base");
-            opacity: 0.7;
-        }
-        QQC2.Label {
-            anchors.centerIn: parent;
-            color: Settings.theme.color("components/overlay/text");
-            text: (wordsDocument === null) ? 0 : wordsDocument.currentIndex + " of " + wordsDocument.indexCount;
-        }
-    }
-    Rectangle {
-        id: zoomLevel;
-        radius: Kirigami.Units.largeSpacing;
-        color: Kirigami.Units.alternateBackgroundColor
-        opacity: 0;
-        anchors {
-            right: parent.right;
-            bottom: (pageNumber.opacity > 0) ? pageNumber.top : parent.bottom;
-            margins: Kirigami.Units.largeSpacing;
-        }
-        Behavior on opacity { NumberAnimation { duration: Kirigami.Units.shortDuration; } }
-        height: zoomLabel.implicitHeight + Kirigami.Units.largeSpacing
-        width: Math.max(Kirigami.Units.gridUnit * 4, zoomLabel)
-        Timer {
-            id: hideZoomLevelTimer;
-            repeat: false; running: false; interval: 1000;
-            onTriggered: zoomLevel.opacity = 0;
-        }
-        QQC2.Label {
-            id: zoomLabel
-            anchors.centerIn: parent;
-            text: wordsCanvas.zoomAction ? (wordsCanvas.zoomAction.effectiveZoom * 100).toFixed(2) + "%" : "";
-            onTextChanged: {
-                zoomLevel.opacity = 1;
-                hideZoomLevelTimer.start();
+            QQC2.Label {
+                id: zoomLabel
+                text: (controllerItem.zoom * 100).toFixed(2) + "%"
+            }
+
+	    QQC2.Label {
+                text: (wordsDocument === null) ? 0 : wordsDocument.currentIndex + "/" + wordsDocument.indexCount;
             }
         }
     }
 
-    Connections {
-        target: applicationWindow()
-        onWidthChanged: thumbnailSidebar.modal = width < Kirigami.Units.gridUnit * 50
-    }
+    //Connections {
+    //    target: applicationWindow()
+    //    onWidthChanged: thumbnailSidebar.modal = width < Kirigami.Units.gridUnit * 50
+    //}
 
     /// Sidebar containing the preview of the slides
     Kirigami.OverlayDrawer {
@@ -435,31 +432,38 @@ MainPage {
         parent: base.QQC2.overlay
         height: base.height
         width: contentItem.implicitWidth
+        modal:false
         contentItem: QQC2.ScrollView {
             implicitWidth: Kirigami.Units.gridUnit * 15
             ListView {
                 id: navigatorListView;
                 clip: true;
-                model: wordsContentModel;
+                model: Calligra.ContentsModel {
+                    id: wordsContentModel;
+                    document: wordsDocument;
+                    useToC: false;
+                    thumbnailSize: Qt.size(Kirigami.Units.gridUnit * 10, Kirigami.Units.gridUnit * 14);
+                }
+
                 delegate: QQC2.ItemDelegate {
                     onClicked: {
                         wordsDocument.currentIndex = model.contentIndex;
                         // controllerFlickable.contentY = wordsCanvas.pagePosition(index + 1) + 1;
                         base.canvasInteractionStarted();
                     }
-                    width: navigatorListView.width
-                    contentItem: ColumnLayout {
-                        Calligra.ImageDataItem {
-                            id: navigatorThumbnail;
-                            Layout.preferredWidth: Kirigami.Units.gridUnit * 11
-                            Layout.alignment: Qt.AlignHCenter
-                            Layout.fillHeight: true
-                            data: model.thumbnail;
-                        }
-                        QQC2.Label {
-                            Layout.fillWidth: true
-                            text: index + 1;
-                        }
+                    width: Kirigami.Units.gridUnit * 15
+                    height: Kirigami.Units.gridUnit * 15
+                    Calligra.ImageDataItem {
+                        id: navigatorThumbnail;
+                        data: model.thumbnail;
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.top: parent.top
+                        width: Kirigami.Units.gridUnit * 11
+                    }
+                    QQC2.Label {
+                        Layout.fillWidth: true
+                        text: index + 1;
+                        anchors.horizontalCenter: parent.horizontalCenter
                     }
                 }
             }

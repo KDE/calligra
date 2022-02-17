@@ -1,0 +1,37 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/MainPage.qml</file>
+        <file>qml/WelcomePage.qml</file>
+        <file>qml/PresentationDJMode.qml</file>
+        <file>qml/StageDocumentPage.qml</file>
+        <file>qml/WordsDocumentPage.qml</file>
+        <file>qml/CalligraDocumentPage.qml</file>
+        <file>qml/panels/ImageToolsPanel.qml</file>
+        <file>qml/panels/NotesPanel.qml</file>
+        <file>qml/panels/OptionsPanel.qml</file>
+        <file>qml/panels/TextStylePanel.qml</file>
+        <file>qml/panels/notespanelpages/NotesPanelAddCustom.qml</file>
+        <file>qml/panels/notespanelpages/NotesPanelMain.qml</file>
+        <file>qml/panels/notespanelpages/NotesPanelSummary.qml</file>
+        <file>qml/components/DocumentTile.qml</file>
+        <file>qml/components/RangeInput.qml</file>
+        <file>qml/welcomepages/CustomDocWords.qml</file>
+        <file>qml/welcomepages/VariantSelector.qml</file>
+        <file>qml/welcomepages/WelcomePageCloud.qml</file>
+        <file>qml/welcomepages/WelcomePageFilebrowser.qml</file>
+        <file>qml/welcomepages/WelcomePageStage.qml</file>
+        <file>qml/welcomepages/WelcomePageWords.qml</file>
+        <file>qml/welcomepages/WelcomePageRecent.qml</file>
+        <file>qml/welcomepages/cloud/AddGit.qml</file>
+        <file>qml/welcomepages/cloud/AddWebdav.qml</file>
+        <file>qml/welcomepages/cloud/Git.qml</file>
+        <file>qml/welcomepages/cloud/RemoveAccountDlg.qml</file>
+        <file>qml/welcomepages/cloud/Webdav.qml</file>
+        <file>qml/welcomepages/cloud/EditDetailsBase.qml</file>
+        <file>qml/welcomepages/cloud/EditGit.qml</file>
+        <file>qml/welcomepages/cloud/git/CreateCheckout.qml</file>
+        <file>qml/welcomepages/cloud/git/GetUserCredentials.qml</file>
+        <file>qml/welcomepages/cloud/git/createCheckoutContainer.qml</file>
+        <file>qml/welcomepages/cloud/git/repositoryContentContainer.qml</file>
+    </qresource>
+</RCC>

@@ -5,14 +5,16 @@
  */
 
 import QtQuick 2.0
+import QtQuick.Controls 2.2 as QQC2
+import org.kde.kirigami 2.7 as Kirigami
 import org.calligra 1.0
 import "../../components"
 
-Page {
+Kirigami.Page {
     id: base;
     property string pageName: "accountsPageWebdav";
     property QtObject accountDetails;
-    Label {
+    QQC2.Label {
         anchors.fill: parent;
         text: accountDetails ? "webdav stuffs for account " + accountDetails.username : "werbderb";
         horizontalAlignment: Text.AlignHCenter;

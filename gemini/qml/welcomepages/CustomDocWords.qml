@@ -385,7 +385,7 @@ Kirigami.Page {
                     min: 1; max: 999; decimals: 2;
                     value: 20;
                 }
-                Label {
+                QQC2.Label {
                     height: marginLeft.height;
                     width: parent.width / 3;
                     text: i18n("Margins");

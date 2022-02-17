@@ -10,9 +10,8 @@ import QtQuick.Layouts 1.15
 import org.calligra 1.0
 import org.kde.kirigami 2.1 as Kirigami
 import "welcomepages"
-import "components"
 
-Kirigami.ApplicationItem {
+Kirigami.ApplicationWindow {
     id: base;
     visible: true
     onWidthChanged: {
@@ -66,11 +65,11 @@ Kirigami.ApplicationItem {
             Settings.currentFile = fileName;
 
             let documentPage;
-            if(Settings.currentFileClass === WORDS_MIME_TYPE) {
+            if(Settings.currentFileClass === MimeType.words) {
                 documentPage = pageStack.push(wordPage, {
                     source: simplifiedFilename,
                 });
-            } else if(Settings.currentFileClass === STAGE_MIME_TYPE) {
+            } else if(Settings.currentFileClass === MimeType.stage) {
                 documentPage = pageStacklayers.push(stagePage, {
                     source: simplifiedFilename,
                 });
@@ -83,10 +82,6 @@ Kirigami.ApplicationItem {
             RecentFileManager.addRecent(fileName);
             //mainWindow.setAlternativeSaveAction(alternativeSaveAction);
         }
-    }
-
-    contextDrawer: Kirigami.ContextDrawer {
-        id: contextDrawer
     }
 
     Connections {

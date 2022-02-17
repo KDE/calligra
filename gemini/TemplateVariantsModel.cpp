@@ -7,8 +7,7 @@
 #include "TemplateVariantsModel.h"
 #include <QColor>
 #include <QDebug>
-#include <KIconLoader>
-#include <kicontheme.h>
+
 struct TemplateVariant {
     TemplateVariant()
     {}
@@ -105,9 +104,8 @@ void TemplateVariantsModel::addVariant(QString name, QString color, QString swat
 
     if(picture.at(0) == QChar('/') || picture.at(1) == QChar(':')) {
         entry->thumbnail = picture;
-    }
-    else {
-        entry->thumbnail = KIconLoader::global()->iconPath(picture, KIconLoader::Desktop, true);
+    } else {
+        entry->thumbnail = "";
     }
 }
 

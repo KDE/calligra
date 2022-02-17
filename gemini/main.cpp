@@ -13,14 +13,50 @@
 #include <QProcessEnvironment>
 #include <QDir>
 #include <QMessageBox>
-#include <QSplashScreen>
 #include <QDebug>
+#include <QQuickWindow>
+#include <QQmlApplicationEngine>
+#include <QQmlContext>
+#include <QQuickStyle>
+#include <QApplication>
 
-#include <KIconLoader>
 #include <KLocalizedString>
 #include <KAboutData>
 
-#include "MainWindow.h"
+#include <KoCanvasBase.h>
+#include <KoToolManager.h>
+#include <KoMainWindow.h>
+#include <KoGlobal.h>
+#include <KoDocumentInfo.h>
+#include <KoView.h>
+#include <KoPart.h>
+#include <KoDocumentEntry.h>
+#include <KoFilterManager.h>
+#include <part/KWFactory.h>
+#include <stage/part/KPrDocument.h>
+#include <stage/part/KPrFactory.h>
+#include <stage/part/KPrViewModePresentation.h>
+#include <KoAbstractGradient.h>
+#include <KoZoomController.h>
+#include <KoFileDialog.h>
+#include <KoDialog.h>
+#include <KoIcon.h>
+
+#include "PropertyContainer.h"
+#include "RecentFileManager.h"
+#include "DocumentManager.h"
+#include "Settings.h"
+#include "DocumentListModel.h"
+#include "Constants.h"
+#include "SimpleTouchArea.h"
+#include "ToolManager.h"
+#include "ParagraphStylesModel.h"
+#include "KeyboardModel.h"
+#include "ScribbleArea.h"
+#include "RecentImageImageProvider.h"
+#include "RecentFilesModel.h"
+#include "TemplatesModel.h"
+#include "CloudAccountsModel.h"
 
 //#include "sketch/SketchInputContext.h"
 
@@ -28,11 +64,29 @@
 
 int main( int argc, char** argv )
 {
+    QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+
 #if defined HAVE_X11
     QApplication::setAttribute(Qt::AA_X11InitThreads);
 #endif
-
+    QIcon::setFallbackThemeName("breeze");
     QApplication app(argc, argv);
+    // Default to org.kde.desktop style unless the user forces another style
+    if (qEnvironmentVariableIsEmpty("QT_QUICK_CONTROLS_STYLE")) {
+        QQuickStyle::setStyle(QStringLiteral("org.kde.desktop"));
+    }
+
+#ifdef Q_OS_WINDOWS
+    if (AttachConsole(ATTACH_PARENT_PROCESS)) {
+        freopen("CONOUT$", "w", stdout);
+        freopen("CONOUT$", "w", stderr);
+    }
+
+    QApplication::setStyle(QStringLiteral("breeze"));
+    auto font = app.font();
+    font.setPointSize(10);
+    app.setFont(font);
+#endif
 
     KAboutData aboutData(QStringLiteral("calligragemini"),
                          i18n("Calligra Gemini"),
@@ -44,7 +98,7 @@ int main( int argc, char** argv )
                          QStringLiteral("https://www.calligra.org"),
                          QStringLiteral("submit@bugs.kde.org"));
 
-    app.setAttribute(Qt::AA_DontCreateNativeWidgetSiblings, true);
+    aboutData.addAuthor(i18n("Carl Schwan"), QString(), QStringLiteral("carl@carlschwan.eu"));
     KAboutData::setApplicationData(aboutData);
 
     QCommandLineParser parser;
@@ -56,10 +110,9 @@ int main( int argc, char** argv )
     parser.process(app);
     aboutData.processCommandLine(&parser);
 
-    QStringList fileNames;
-    foreach(const QString &fileName, parser.positionalArguments()) {
+    for(const QString &fileName : parser.positionalArguments()) {
         if (QFile::exists(fileName)) {
-            fileNames << fileName;
+            DocumentManager::instance()->recentFileManager()->addRecent(QDir::current().absoluteFilePath(fileName));
         }
     }
 
@@ -95,25 +148,42 @@ int main( int argc, char** argv )
     app.addLibraryPath(appdir.absolutePath() + "/lib/kde4");
 #endif
 
-    KIconLoader::global()->addAppDir("calligra");
-    KIconLoader::global()->addAppDir("calligragemini");
-    KIconLoader::global()->addAppDir("calligrawords");
-    KIconLoader::global()->addAppDir("calligrastage");
-    KIconLoader::global()->addAppDir("calligrasheets");
+
+    qmlRegisterUncreatableType<PropertyContainer>("org.calligra", 1, 0, "PropertyContainer", "Contains properties and naively extends QML to support dynamic properties");
+    qmlRegisterType<DocumentListModel>("org.calligra", 1, 0, "DocumentListModel");
+    qmlRegisterType<SimpleTouchArea>("org.calligra", 1, 0, "SimpleTouchArea");
+    qmlRegisterType<ToolManager>("org.calligra", 1, 0, "ToolManager");
+    qmlRegisterType<ParagraphStylesModel>("org.calligra", 1, 0, "ParagraphStylesModel");
+    qmlRegisterType<KeyboardModel>("org.calligra", 1, 0, "KeyboardModel");
+    qmlRegisterType<ScribbleArea>("org.calligra", 1, 0, "ScribbleArea");
+    qmlRegisterType<RecentFilesModel>("org.calligra", 1, 0, "RecentFilesModel");
+    qmlRegisterType<TemplatesModel>("org.calligra", 1, 0, "TemplatesModel");
+    qmlRegisterType<CloudAccountsModel>("org.calligra", 1, 0, "CloudAccountsModel");
+    qmlRegisterType<KPrViewModePresentation>();
+    qRegisterMetaType<QAction*>();
+    qmlRegisterSingletonInstance("org.calligra", 1, 0, "DocumentManager", DocumentManager::instance());
+
+    Settings settings;
+    qmlRegisterSingletonInstance("org.calligra", 1, 0, "Settings", &settings);
+    qmlRegisterSingletonInstance("org.calligra", 1, 0, "RecentFileManager", DocumentManager::instance()->recentFileManager());
+
+    qmlRegisterSingletonType("org.calligra", 1, 0, "MimeType", [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QJSValue {
+        Q_UNUSED(engine)
+    
+        QJSValue mimeTypes = scriptEngine->newObject();
+        mimeTypes.setProperty("words", QString(WORDS_MIME_TYPE));
+        mimeTypes.setProperty("stage", QString(STAGE_MIME_TYPE));
+        return mimeTypes;
+    });
 
     app.processEvents();
 
-    MainWindow window(fileNames);
-
-    if (parser.isSet("vkb")) {
-//        app.setInputContext(new SketchInputContext(&app));
-    }
-
-#ifdef Q_OS_WIN
-    window.showMaximized();
-#else
-    window.show();
-#endif
+    QQmlApplicationEngine engine;
+    engine.rootContext()->setContextObject(new KLocalizedContext(&engine));
+    KLocalizedString::setApplicationDomain("neochat");
+    engine.addImageProvider(QLatin1String("recentimage"), new RecentImageImageProvider);
+    QObject::connect(&engine, &QQmlApplicationEngine::quit, &app, &QCoreApplication::quit);
+    engine.load(QUrl(QStringLiteral("qrc:/qml/WelcomePage.qml")));
 
     return app.exec();
 }

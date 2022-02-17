@@ -240,6 +240,7 @@ find_package(Qt5 ${REQUIRED_QT_VERSION} QUIET
     DBus
     OpenGL
     Quick
+    QuickControls2
     QuickWidgets
     Sql
 )
@@ -258,6 +259,10 @@ set_package_properties(Qt5OpenGL PROPERTIES
 set_package_properties(Qt5Quick PROPERTIES
     PURPOSE "Required for QtQuick2 components"
     TYPE RECOMMENDED
+    )
+set_package_properties(Qt5QuickControls2 PROPERTIES
+    PURPOSE "Required for QtQuick2 components"
+    TYPE REQUIRED
     )
 set_package_properties(Qt5QuickWidgets PROPERTIES
     PURPOSE "Required for Calligra Gemini"
