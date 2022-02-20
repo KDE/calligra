@@ -8,9 +8,9 @@
 
 #include <QString>
 
-//#include "DataFilter.h"
+#include "DataFilter.h"
 //#include "Map.h"
-//#include "engine/Region.h"
+#include "engine/Region.h"
 
 using namespace Calligra::Sheets;
 
@@ -18,7 +18,7 @@ class Q_DECL_HIDDEN Database::Private : public QSharedData
 {
 public:
     Private()
-            , filter()
+            : filter()
             , isSelection(false)
             , onUpdateKeepStyles(false)
             , onUpdateKeepSize(true)

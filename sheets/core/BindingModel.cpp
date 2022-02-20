@@ -7,12 +7,13 @@
 
 #include "BindingModel.h"
 
-#include "engine/CellBase.h"
-#include "engine/CellBaseStorage.h"
 #include "engine/MapBase.h"
-#include "engine/SheetBase.h"
 #include "engine/Value.h"
 #include "Binding.h"
+#include "Cell.h"
+#include "CellStorage.h"
+#include "Sheet.h"
+#include "Style.h"
 
 
 using namespace Calligra::Sheets;
@@ -46,8 +47,10 @@ bool BindingModel::setCellRegion(const QString& regionName)
         if (!(*it)->isValid()) {
             continue;
         }
+        SheetBase *sheet = (*it)->sheet();
+        Sheet *fullSheet = dynamic_cast<Sheet *>(sheet);
         // FIXME Stefan: This may also clear other bindings!
-        (*it)->sheet()->cellStorage()->setBinding(Region((*it)->rect(), (*it)->sheet()), Binding());
+        fullSheet->fullCellStorage()->setBinding(Region((*it)->rect(), (*it)->sheet()), Binding());
     }
     // Set the new region
     m_region = region;
@@ -56,7 +59,9 @@ bool BindingModel::setCellRegion(const QString& regionName)
         if (!(*it)->isValid()) {
             continue;
         }
-        (*it)->sheet()->cellStorage()->setBinding(Region((*it)->rect(), (*it)->sheet()), *m_binding);
+        SheetBase *sheet = (*it)->sheet();
+        Sheet *fullSheet = dynamic_cast<Sheet *>(sheet);
+        fullSheet->fullCellStorage()->setBinding(Region((*it)->rect(), (*it)->sheet()), *m_binding);
     }
     return true;
 }
@@ -103,7 +108,8 @@ QVariant BindingModel::data(const QModelIndex& index, int role) const
     switch (role) {
         case Qt::DisplayRole: {
             // return the in the cell displayed test
-            CellBase c(sheet, column, row);
+            Sheet *fullSheet = dynamic_cast<Sheet *>(sheet);
+            Cell c(fullSheet, column, row);
             bool showFormula = false;
             return c.displayText(Style(), &value, &showFormula);
         }

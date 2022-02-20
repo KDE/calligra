@@ -9,29 +9,25 @@
 
 #include "HeaderFooter.h"
 
+#include "engine/SheetsDebug.h"
+
 // #include "part/Doc.h" // FIXME detach from part
-// #include "Sheet.h"
+#include "DocBase.h"
+#include "Sheet.h"
 // #include "SheetPrint.h"
-// #include "SheetsDebug.h"
 
-// #include <KoDocumentInfo.h>
+#include <KoDocumentInfo.h>
 
-// #include <KLocalizedString>
+#include <KLocalizedString>
 // #include <kmessagebox.h>
 
 // #include <QDate>
 // #include <QPainter>
 // #include <QTime>
-// #include <QUrl>
+#include <QUrl>
 
-// #include <pwd.h>
-// #include <unistd.h>
-
-
-#define NO_MODIFICATION_POSSIBLE \
-    do { \
-        KMessageBox::error( 0, i18n ( "You cannot change a protected sheet" ) ); return; \
-    } while(0)
+#include <pwd.h>
+#include <unistd.h>
 
 
 using namespace Calligra::Sheets;
@@ -100,9 +96,6 @@ QString HeaderFooter::delocalizeHeadFootLine(const QString &_text) const
 void HeaderFooter::setHeadFootLine(const QString &_headl, const QString &_headm, const QString &_headr,
                                    const QString &_footl, const QString &_footm, const QString &_footr)
 {
-    if (m_pSheet->isProtected())
-        NO_MODIFICATION_POSSIBLE;
-
     m_headLeft  = _headl;
     m_headRight = _headr;
     m_headMid   = _headm;
@@ -112,10 +105,10 @@ void HeaderFooter::setHeadFootLine(const QString &_headl, const QString &_headm,
     if (m_pSheet->doc()) m_pSheet->doc()->setModified(true);
 }
 
-QString HeaderFooter::completeHeading(const QString &_data, int _page, const QString &_sheet) const
+QString HeaderFooter::completeHeading(const QString &_data, int _page, int _pageCount, const QString &_sheet) const
 {
     QString page(QString::number(_page));
-    QString pages(QString::number(m_pSheet->print()->pageCount()));
+    QString pages(QString::number(_pageCount));
 
     QString pathFileName(m_pSheet->doc()->url().path());
     if (pathFileName.isNull())

@@ -25,29 +25,29 @@ public:
     explicit HeaderFooter(Sheet* sheet);
     ~HeaderFooter();
 
-    QString headLeft(int _p, const QString &_t)const {
+    QString headLeft(int _p, int _pages, const QString &_t)const {
         if (m_headLeft.isNull()) return "";
-        return completeHeading(m_headLeft, _p, _t);
+        return completeHeading(m_headLeft, _p, _pages, _t);
     }
-    QString headMid(int _p, const QString &_t)const {
+    QString headMid(int _p, int _pages, const QString &_t)const {
         if (m_headMid.isNull()) return "";
-        return completeHeading(m_headMid, _p, _t);
+        return completeHeading(m_headMid, _p, _pages, _t);
     }
-    QString headRight(int _p, const QString &_t)const {
+    QString headRight(int _p, int _pages, const QString &_t)const {
         if (m_headRight.isNull()) return "";
-        return completeHeading(m_headRight, _p, _t);
+        return completeHeading(m_headRight, _p, _pages, _t);
     }
-    QString footLeft(int _p, const QString &_t)const {
+    QString footLeft(int _p, int _pages, const QString &_t)const {
         if (m_footLeft.isNull()) return "";
-        return completeHeading(m_footLeft, _p, _t);
+        return completeHeading(m_footLeft, _p, _pages, _t);
     }
-    QString footMid(int _p, const QString &_t)const {
+    QString footMid(int _p, int _pages, const QString &_t)const {
         if (m_footMid.isNull()) return "";
-        return completeHeading(m_footMid, _p, _t);
+        return completeHeading(m_footMid, _p, _pages, _t);
     }
-    QString footRight(int _p, const QString &_t)const {
+    QString footRight(int _p, int _pages, const QString &_t)const {
         if (m_footRight.isNull()) return "";
-        return completeHeading(m_footRight, _p, _t);
+        return completeHeading(m_footRight, _p, _pages, _t);
     }
 
     QString headLeft()const {
@@ -105,9 +105,10 @@ private:
      * returns the modified one.
      *
      * @param _page is the page number for which the heading is produced.
+     * @param _pageCount is the total page count.
      * @param _Sheet is the name of the Sheet for which we generate the headings.
      */
-    QString completeHeading(const QString &_data, int _page, const QString &_sheet) const ;
+    QString completeHeading(const QString &_data, int _page, int _pageCount, const QString &_sheet) const ;
 
     Sheet *m_pSheet;
 

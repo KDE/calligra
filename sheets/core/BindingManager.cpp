@@ -7,9 +7,9 @@
 #include "BindingManager.h"
 
 #include "engine/calligra_sheets_limits.h"
-#include "engine/CellBaseStorage.h"
 #include "engine/MapBase.h"
-#include "engine/SheetBase.h"
+#include "CellStorage.h"
+#include "Sheet.h"
 #include "Binding.h"
 #include "BindingStorage.h"
 #include "BindingModel.h"
@@ -40,7 +40,9 @@ const QAbstractItemModel* BindingManager::createModel(const QString& regionName)
         return 0;
     }
     Binding binding(region);
-    region.firstSheet()->cellStorage()->setBinding(region, binding);
+    SheetBase *sheet = region.firstSheet();
+    Sheet *fullSheet = dynamic_cast<Sheet *>(sheet);
+    fullSheet->fullCellStorage()->setBinding(region, binding);
     return binding.model();
 }
 
@@ -51,11 +53,12 @@ bool BindingManager::removeModel(const QAbstractItemModel* model)
     const QList<SheetBase*> sheets = d->map->sheetList();
     for (int i = 0; i < sheets.count(); ++i) {
         SheetBase* const sheet = sheets[i];
-        bindings = sheet->cellStorage()->bindingStorage()->intersectingPairs(Region(rect, sheet));
+        Sheet *fullSheet = dynamic_cast<Sheet *>(sheet);
+        bindings = fullSheet->fullCellStorage()->bindingStorage()->intersectingPairs(Region(rect, sheet));
         for (int j = 0; j < bindings.count(); ++j) {
             if (bindings[j].second.model() == model) {
                 const Region region(bindings[j].first.toRect(), sheet);
-                sheet->cellStorage()->removeBinding(region, bindings[j].second);
+                fullSheet->fullCellStorage()->removeBinding(region, bindings[j].second);
                 return true;
             }
         }
@@ -71,13 +74,13 @@ bool BindingManager::isCellRegionValid(const QString& regionName) const
 
 void BindingManager::regionChanged(const Region& region)
 {
-    SheetBase* sheet;
     QVector< QPair<QRectF, Binding> > bindings;
     Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it = region.constBegin(); it != end; ++it) {
-        sheet = (*it)->sheet();
+        SheetBase *sheet = (*it)->sheet();
+        Sheet *fullSheet = dynamic_cast<Sheet *>(sheet);
         const Region changedRegion((*it)->rect(), sheet);
-        bindings = sheet->cellStorage()->bindingStorage()->intersectingPairs(changedRegion);
+        bindings = fullSheet->fullCellStorage()->bindingStorage()->intersectingPairs(changedRegion);
         for (int j = 0; j < bindings.count(); ++j)
             bindings[j].second.update(changedRegion);
     }
@@ -89,8 +92,10 @@ void BindingManager::updateAllBindings()
     const QRect rect(QPoint(1, 1), QPoint(KS_colMax, KS_rowMax));
     const QList<SheetBase*> sheets = d->map->sheetList();
     for (int i = 0; i < sheets.count(); ++i) {
-        bindings = sheets[i]->cellStorage()->bindingStorage()->intersectingPairs(Region(rect, sheets[i]));
+        Sheet *fullSheet = dynamic_cast<Sheet *>(sheets[i]);
+        bindings = fullSheet->fullCellStorage()->bindingStorage()->intersectingPairs(Region(rect, sheets[i]));
         for (int j = 0; j < bindings.count(); ++j)
             bindings[j].second.update(Region(bindings[j].first.toRect(), sheets[i]));
     }
 }
+

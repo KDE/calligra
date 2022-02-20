@@ -4,18 +4,15 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include "Filter.h"
+#include "DataFilter.h"
 
-#include <QList>
-#include <QRect>
+#include "engine/CellBaseStorage.h"
+#include "engine/Region.h"
+#include "engine/SheetBase.h"
+#include "engine/Value.h"
+#include "engine/ValueConverter.h"
 
-#include "CellStorage.h"
 #include "Database.h"
-#include "Map.h"
-#include "Region.h"
-#include "Sheet.h"
-#include "Value.h"
-#include "ValueConverter.h"
 
 using namespace Calligra::Sheets;
 
@@ -196,7 +193,7 @@ AbstractCondition::Type Filter::Condition::type() const {
 }
 
 bool Filter::Condition::evaluate(const Database& database, int index) const {
-    const Sheet* sheet = database.range().lastSheet();
+    const SheetBase *sheet = database.range().lastSheet();
     const QRect range = database.range().lastRange();
     const int start = database.orientation() == Qt::Vertical ? range.left() : range.top();
 //         debugSheets <<"index:" << index <<" start:" << start <<" fieldNumber:" << fieldNumber;

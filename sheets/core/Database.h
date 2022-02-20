@@ -8,6 +8,7 @@
 #define CALLIGRA_SHEETS_DATABASE
 
 #include <QSharedDataPointer>
+#include <QSharedPointer>
 
 #include "sheets_core_export.h"
 
@@ -33,6 +34,8 @@ public:
      * Creates an empty database.
      */
     Database();
+
+    Database(const QString& name);
 
     /**
      * Copy Constructor.
@@ -114,7 +117,8 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-Q_DECLARE_METATYPE(Calligra::Sheets::Database)
 Q_DECLARE_TYPEINFO(Calligra::Sheets::Database, Q_MOVABLE_TYPE);
+Q_DECLARE_METATYPE(Calligra::Sheets::Database)
+
 
 #endif // CALLIGRA_SHEETS_DATABASE
