@@ -9,7 +9,7 @@
 
 #include <QAbstractTableModel>
 
-#include "sheets_export.h"
+#include "sheets_core_export.h"
 
 class QItemSelectionRange;
 
@@ -23,7 +23,7 @@ class Sheet;
  * A model for a sheet.
  * \ingroup Model
  */
-class CALLIGRA_SHEETS_ODF_EXPORT SheetModel : public QAbstractTableModel
+class CALLIGRA_SHEETS_CORE_EXPORT SheetModel : public QAbstractTableModel
 {
 public:
     explicit SheetModel(Sheet* sheet);

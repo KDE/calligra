@@ -7,24 +7,19 @@
 #include "SheetModel.h"
 
 // Sheets
+#include "engine/Formula.h"
 #include "Binding.h"
 #include "Cell.h"
 #include "CellStorage.h"
 #include "Condition.h"
-#include "database/Database.h"
-#include "Formula.h"
+#include "Database.h"
 #include "Map.h"
 #include "ModelSupport.h"
 #include "Sheet.h"
-#include "Style.h"
-#include "Validity.h"
-#include "Value.h"
 #include "ValueFormatter.h"
 
 // Qt
-#include <QBrush>
 #include <QItemSelectionRange>
-#include <QSize>
 
 using namespace Calligra::Sheets;
 
@@ -84,7 +79,7 @@ QVariant SheetModel::data(const QModelIndex& index, int role) const
         } else if (!cell.isEmpty()) {
             // Format the value appropriately and set the display text.
             // The format of the resulting value is used below to determine the alignment.
-            Value value = d->sheet->map()->formatter()->formatText(cell.value(), style.formatType(),
+            Value value = d->sheet->fullMap()->formatter()->formatText(cell.value(), style.formatType(),
                           style.precision(), style.floatFormat(),
                           style.prefix(), style.postfix(),
                           style.currency().symbol());
@@ -109,7 +104,7 @@ QVariant SheetModel::data(const QModelIndex& index, int role) const
     }
     const int column = index.column() + 1;
     const int row = index.row() + 1;
-    CellStorage *const storage = d->sheet->cellStorage();
+    CellStorage *const storage = d->sheet->fullCellStorage();
     switch (role) {
     case UserInputRole:
         return storage->userInput(column, row);
@@ -207,7 +202,7 @@ bool SheetModel::setData(const QModelIndex& index, const QVariant& value, int ro
     const int column = index.column() + 1;
     const int row = index.row() + 1;
     Cell cell = Cell(sheet(), index.column() + 1, index.row() + 1).masterCell();
-    CellStorage *const storage = d->sheet->cellStorage();
+    CellStorage *const storage = d->sheet->fullCellStorage();
     switch (role) {
     case Qt::EditRole:
         cell.parseUserInput(value.toString());
@@ -234,7 +229,7 @@ bool SheetModel::setData(const QModelIndex& index, const QVariant& value, int ro
 bool SheetModel::setData(const QItemSelectionRange &range, const QVariant &value, int role)
 {
     const Region region(toRange(range), d->sheet);
-    CellStorage *const storage = d->sheet->cellStorage();
+    CellStorage *const storage = d->sheet->fullCellStorage();
     switch (role) {
     case CommentRole:
         storage->setComment(region, value.toString());

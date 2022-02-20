@@ -142,7 +142,7 @@ public:
      */
     void removeShiftUp(const QRect& rect) override;
 
-    QVector< QPair<QRectF, T> > &undoData();
+    const QVector< QPair<QRectF, T> > &undoData() const;
 
     void resetUndo() override;
 
@@ -561,7 +561,7 @@ void RectStorage<T>::ensureLoaded() const
 
 
 template<typename T>
-QVector< QPair<QRectF, T> > &RectStorage<T>::undoData() {
+const QVector< QPair<QRectF, T> > &RectStorage<T>::undoData() const {
     return m_undoData;
 }
 

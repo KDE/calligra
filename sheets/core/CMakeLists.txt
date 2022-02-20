@@ -11,11 +11,11 @@ set (calligrasheetscore_LIB_SRCS
     StyleStorage.cpp
     StyleManager.cpp
     CellStorage.cpp
-    Cluster.cpp
+    SheetModel.cpp
     Condition.cpp
     ConditionsStorage.cpp
     RowFormatStorage.cpp
-    RowColumnFormat.cpp
+    ColFormatStorage.cpp
     HeaderFooter.cpp
     Database.cpp
     DatabaseStorage.cpp
@@ -56,7 +56,6 @@ install( FILES
     Sheet.h
     Style.h
     CellStorage.h
-    RowColumnFormat.h
     RowFormatStorage.h
     Database.h
     DataFilter.h

@@ -30,8 +30,6 @@
 
 using namespace Calligra::Sheets;
 
-typedef RectStorage<QString> NamedAreaStorage;
-
 class Q_DECL_HIDDEN CellBaseStorage::Private : public QSharedData
 {
 public:
@@ -154,27 +152,37 @@ SheetBase* CellBaseStorage::sheet() const
 }
 
 
-const CommentStorage* CellBaseStorage::commentStorage() const
+CommentStorage* CellBaseStorage::commentStorage() const
 {
     return d->commentStorage;
 }
 
-const FormulaStorage* CellBaseStorage::formulaStorage() const
+FormulaStorage* CellBaseStorage::formulaStorage() const
 {
     return d->formulaStorage;
 }
 
-const UserInputStorage* CellBaseStorage::userInputStorage() const
+MatrixStorage* CellBaseStorage::matrixStorage() const
+{
+    return d->matrixStorage;
+}
+
+NamedAreaStorage* CellBaseStorage::namedAreaStorage() const
+{
+    return d->namedAreaStorage;
+}
+
+UserInputStorage* CellBaseStorage::userInputStorage() const
 {
     return d->userInputStorage;
 }
 
-const ValidityStorage* CellBaseStorage::validityStorage() const
+ValidityStorage* CellBaseStorage::validityStorage() const
 {
     return d->validityStorage;
 }
 
-const ValueStorage* CellBaseStorage::valueStorage() const
+ValueStorage* CellBaseStorage::valueStorage() const
 {
     return d->valueStorage;
 }

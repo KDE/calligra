@@ -12,7 +12,6 @@
 #include "LoadingInfo.h"
 #include "Localization.h"
 #include "NamedAreaManager.h"
-#include "RowColFormat.h"
 
 namespace Calligra {
 namespace Sheets {

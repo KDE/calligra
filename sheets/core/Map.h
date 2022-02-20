@@ -29,7 +29,7 @@ namespace Calligra
 namespace Sheets
 {
 class BindingManager;
-class ColumnFormat;
+class ColFormat;
 class DocBase;
 class LoadingInfo;
 class RowFormat;
@@ -99,12 +99,12 @@ public:
     /**
      * \return the default row format
      */
-    const ColumnFormat* defaultColumnFormat() const;
+    const ColFormat defaultColumnFormat() const;
 
     /**
      * \return the default row format
      */
-    const RowFormat* defaultRowFormat() const;
+    const RowFormat defaultRowFormat() const;
 
     /**
      * Sets the default column width to \p width.

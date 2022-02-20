@@ -987,7 +987,7 @@ StyleManager* StyleStorage::styleManager() const
     return d->map->styleManager();
 }
 
-QVector< QPair<QRectF, SharedSubStyle> > &StyleStorage::undoData()
+const QVector< QPair<QRectF, SharedSubStyle> > &StyleStorage::undoData() const
 {
     return d->m_undoData;
 }

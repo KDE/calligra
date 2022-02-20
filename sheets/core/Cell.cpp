@@ -34,11 +34,11 @@
 #include "engine/NamedAreaManager.h"
 
 #include "CellStorage.h"
+#include "ColFormatStorage.h"
 #include "Currency.h"
 #include "Condition.h"
 #include "Database.h"
 #include "Map.h"
-#include "RowColumnFormat.h"
 #include "RowFormatStorage.h"
 #include "Sheet.h"
 #include "ValueFormatter.h"
@@ -516,10 +516,7 @@ int Cell::effectiveAlignX() const
 double Cell::width() const
 {
     const int rightCol = column() + mergedXCells();
-    double width = 0.0;
-    for (int col = column(); col <= rightCol; ++col)
-        width += fullSheet()->columnFormat(col)->width();
-    return width;
+    return fullSheet()->columnFormats()->totalColWidth(column(), rightCol);
 }
 
 double Cell::height() const

@@ -26,9 +26,10 @@
 #include "BindingManager.h"
 #include "Sheet.h"
 #include "CellStorage.h"
+#include "ColFormatStorage.h"
+#include "RowFormatStorage.h"
 #include "DocBase.h"
 #include "LoadingInfo.h"
-#include "RowColumnFormat.h"
 #include "SheetAccessModel.h"
 #include "StyleManager.h"
 #include "ValueFormatter.h"
@@ -58,8 +59,8 @@ public:
     ValueFormatter* formatter;
 
     // default objects
-    ColumnFormat* defaultColumnFormat;
-    RowFormat* defaultRowFormat;
+    ColFormat defaultColumnFormat;
+    RowFormat defaultRowFormat;
 
     int syntaxVersion;
 };
@@ -100,12 +101,9 @@ Map::Map(DocBase* doc, int syntaxVersion)
     d->sheetAccessModel = new SheetAccessModel(this);
     d->formatter = new ValueFormatter(converter());
 
-    d->defaultColumnFormat = new ColumnFormat();
-    d->defaultRowFormat = new RowFormat();
-
     QFont font(KoGlobal::defaultFont());
-    d->defaultRowFormat->setHeight(font.pointSizeF() + 4);
-    d->defaultColumnFormat->setWidth((font.pointSizeF() + 4) * 5);
+    d->defaultRowFormat.height = font.pointSizeF() + 4;
+    d->defaultColumnFormat.width = (font.pointSizeF() + 4) * 5;
 
     // default document properties
     d->syntaxVersion = syntaxVersion;
@@ -128,9 +126,6 @@ Map::~Map()
 
     delete d->sheetAccessModel;
     delete d->formatter;
-
-    delete d->defaultColumnFormat;
-    delete d->defaultRowFormat;
 
     delete d;
 }
@@ -212,24 +207,24 @@ SheetAccessModel *Map::sheetAccessModel() const
     return d->sheetAccessModel;
 }
 
-const ColumnFormat* Map::defaultColumnFormat() const
+const ColFormat Map::defaultColumnFormat() const
 {
     return d->defaultColumnFormat;
 }
 
-const RowFormat* Map::defaultRowFormat() const
+const RowFormat Map::defaultRowFormat() const
 {
     return d->defaultRowFormat;
 }
 
 void Map::setDefaultColumnWidth(double width)
 {
-    d->defaultColumnFormat->setWidth(width);
+    d->defaultColumnFormat.width = width;
 }
 
 void Map::setDefaultRowHeight(double height)
 {
-    d->defaultRowFormat->setHeight(height);
+    d->defaultRowFormat.height = height;
 }
 
 Sheet* Map::createSheet(const QString& name)

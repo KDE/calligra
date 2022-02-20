@@ -839,7 +839,7 @@ public:
         return (m_rows == o.m_rows && m_cols == o.m_cols && m_data == o.m_data);
     }
 
-    QVector< QPair<QPoint, T> > &undoData() {
+    const QVector< QPair<QPoint, T> > &undoData() const {
         return m_undoData;
     }
 

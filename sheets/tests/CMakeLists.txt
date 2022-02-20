@@ -236,6 +236,13 @@ sheets_add_unit_test(RowFormatStorage
 
 ########### next target ###############
 
+sheets_add_unit_test(ColFormatStorage
+    TestColFormatStorage.cpp
+    LINK_LIBRARIES calligrasheetscommon Qt5::Test
+)
+
+########### next target ###############
+
 sheets_add_unit_test(DatabaseFilter
     TestDatabaseFilter.cpp
     LINK_LIBRARIES calligrasheetscommon Qt5::Test

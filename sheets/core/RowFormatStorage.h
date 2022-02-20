@@ -14,6 +14,26 @@ namespace Sheets {
 
 class Sheet;
 
+
+
+/** Convenience class for formats */
+class CALLIGRA_SHEETS_CORE_EXPORT RowFormat
+{
+public:
+    RowFormat() {
+        hidden = false;
+        filtered = false;
+        hasPageBreak = false;
+        height = 0;
+    }
+
+    double height;
+    bool hidden;
+    bool filtered;
+    bool hasPageBreak;
+};
+
+
 /** first and last row are both inclusive in all functions */
 class CALLIGRA_SHEETS_CORE_EXPORT RowFormatStorage
 {
@@ -23,6 +43,7 @@ public:
 
     Sheet* sheet() const;
 
+    /** Height of the given row. firstRow and lastRow are set to the first and last row that share the same height. */
     double rowHeight(int row, int* lastRow = 0, int* firstRow = 0) const;
     void setRowHeight(int firstRow, int lastRow, double height);
 
@@ -43,6 +64,9 @@ public:
 
     bool hasPageBreak(int row, int* lastRow = 0, int* firstRow = 0) const;
     void setPageBreak(int firstRow, int lastRow, bool pageBreak);
+
+    /** Convenience function - sets everything at once. */
+    void setRowFormat (int firstRow, int lastRow, const RowFormat &f);
 
     bool isDefaultRow(int row, int* lastRow = 0, int* firstRow = 0) const;
     void setDefault(int firstRow, int lastRow);
@@ -69,6 +93,7 @@ private:
     class Private;
     Private * const d;
 };
+
 
 
 } // namespace Sheets

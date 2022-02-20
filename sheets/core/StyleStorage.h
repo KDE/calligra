@@ -183,7 +183,7 @@ public:
      */
     void invalidateCache();
 
-    QVector< QPair<QRectF, SharedSubStyle> > &undoData();
+    const QVector< QPair<QRectF, SharedSubStyle> > &undoData() const;
 
     void resetUndo() override;
 

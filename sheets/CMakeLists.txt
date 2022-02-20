@@ -262,7 +262,6 @@ endif()
 set (calligrasheetsodf_LIB_SRCS
 
     ApplicationSettings.cpp
-    SheetModel.cpp
 
 
     ${odf_DIR_SRCS}

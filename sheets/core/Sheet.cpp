@@ -23,16 +23,17 @@
 #include "engine/ValueStorage.h"
 
 #include "CellStorage.h"
+#include "ColFormatStorage.h"
 #include "Condition.h"
 #include "Database.h"
-#include "Cluster.h"
 #include "HeaderFooter.h"
 #include "Map.h"
 #include "PrintSettings.h"
-#include "RowColumnFormat.h"
 #include "RowFormatStorage.h"
 #include "ShapeApplicationData.h"
+#include "SheetModel.h"
 #include "DataFilter.h"
+
 
 namespace Calligra
 {
@@ -55,10 +56,11 @@ static QString createObjectName(const QString &sheetName)
 class Q_DECL_HIDDEN Sheet::Private
 {
 public:
-    Private(Sheet* sheet) : rows(sheet), canvasOffsetX(0), canvasOffsetY(0) {}
+    Private(Sheet* sheet) : rows(sheet), columns(sheet), canvasOffsetX(0), canvasOffsetY(0) {}
 
     // We store this here even though MapBase also has a copy, so that we don't need to recast from MapBase to Map in main app.
     Map* workbook;
+    SheetModel *model;
 
     Qt::LayoutDirection layoutDirection;
 
@@ -79,7 +81,7 @@ public:
     // A better solution may be needed here, but for now this'll do.
     CellStorage* cellStorage;
     RowFormatStorage rows;
-    ColumnCluster columns;
+    ColFormatStorage columns;
     QList<KoShape*> shapes;
 
     HeaderFooter *headerFooter;
@@ -116,10 +118,10 @@ Sheet::Sheet(Map* map, const QString &sheetName)
 
     d->cellStorage = new CellStorage(this);
     setCellStorage(d->cellStorage);
-    d->columns.setAutoDelete(true);
+    d->model = new SheetModel(this);
 
-    d->documentSize = QSizeF(KS_colMax * d->workbook->defaultColumnFormat()->width(),
-                             KS_rowMax * d->workbook->defaultRowFormat()->height());
+    d->documentSize = QSizeF(KS_colMax * d->workbook->defaultColumnFormat().width,
+                             KS_rowMax * d->workbook->defaultRowFormat().height);
 
     d->hide = false;
     d->showGrid = true;
@@ -169,6 +171,7 @@ Sheet::Sheet(const Sheet &other)
     d->cellStorage = new CellStorage(*other.d->cellStorage, this);
     d->headerFooter = new HeaderFooter(*other.d->headerFooter);
     setCellStorage(d->cellStorage);
+    d->model = new SheetModel(this);
 
     d->rows = other.d->rows;
     d->columns = other.d->columns;
@@ -208,6 +211,7 @@ Sheet::~Sheet()
     // cellStorage will be deleted in the parent class destructor, and we must not do it here.
     d->cellStorage = nullptr;
 
+    delete d->model;
     delete d->printSettings;
     delete d->headerFooter;
     qDeleteAll(d->shapes);
@@ -347,21 +351,6 @@ bool Sheet::isShowPageOutline() const
     return d->showPageOutline;
 }
 
-const ColumnFormat* Sheet::columnFormat(int _column) const
-{
-    const ColumnFormat *p = d->columns.lookup(_column);
-    if (p != 0)
-        return p;
-
-    return fullMap()->defaultColumnFormat();
-}
-
-// needed in loading code
-ColumnFormat *Sheet::nextColumn(int col) const
-{
-    return d->columns.next(col);
-}
-
 CellStorage* Sheet::fullCellStorage() const
 {
     return d->cellStorage;
@@ -467,23 +456,15 @@ void Sheet::adjustCellAnchoredShapesY(double delta, int firstRow, int lastRow)
 
 int Sheet::leftColumn(double _xpos, double &_left) const
 {
-    _left = 0.0;
-    int col = 1;
-    double x = columnFormat(col)->visibleWidth();
-    while (x < _xpos && col < KS_colMax) {
-        _left += columnFormat(col)->visibleWidth();
-        x += columnFormat(++col)->visibleWidth();
-    }
+    double left;
+    int col = columnFormats()->colForPosition(_xpos, &left);
+    _left = left;
     return col;
 }
 
 int Sheet::rightColumn(double _xpos) const
 {
-    int col = 1;
-    double x = columnFormat(col)->visibleWidth();
-    while (x <= _xpos && col < KS_colMax)
-        x += columnFormat(++col)->visibleWidth();
-    return col;
+    return columnFormats()->colForPosition(_xpos+1e-9);
 }
 
 int Sheet::topRow(double _ypos, double & _top) const
@@ -504,7 +485,7 @@ QRectF Sheet::cellCoordinatesToDocument(const QRect& cellRange) const
     // TODO Stefan: Rewrite to save some iterations over the columns/rows.
     QRectF rect;
     rect.setLeft(columnPosition(cellRange.left()));
-    rect.setRight(columnPosition(cellRange.right()) + columnFormat(cellRange.right())->width());
+    rect.setRight(columnPosition(cellRange.right()) + columnFormats()->colWidth(cellRange.right()));
     rect.setTop(rowPosition(cellRange.top()));
     rect.setBottom(rowPosition(cellRange.bottom()) + rowFormats()->rowHeight(cellRange.bottom()));
     return rect;
@@ -512,13 +493,8 @@ QRectF Sheet::cellCoordinatesToDocument(const QRect& cellRange) const
 
 QRect Sheet::documentToCellCoordinates(const QRectF &area) const
 {
-    double width = 0.0;
-    int left = 0;
-    while (width <= area.left())
-        width += columnFormat(++left)->visibleWidth();
-    int right = left;
-    while (width < area.right())
-        width += columnFormat(++right)->visibleWidth();
+    int left = columnFormats()->colForPosition(area.left());
+    int right = columnFormats()->colForPosition(area.right());
     int top = rowFormats()->rowForPosition(area.top());
     int bottom = rowFormats()->rowForPosition(area.bottom());
     return QRect(left, top, right - left + 1, bottom - top + 1);
@@ -527,10 +503,7 @@ QRect Sheet::documentToCellCoordinates(const QRectF &area) const
 double Sheet::columnPosition(int _col) const
 {
     const int max = qMin(_col, KS_colMax);
-    double x = 0.0;
-    for (int col = 1; col < max; ++col)
-        x += columnFormat(col)->visibleWidth();
-    return x;
+    return columnFormats()->totalVisibleColWidth(1, max-1);
 }
 
 
@@ -538,27 +511,6 @@ double Sheet::rowPosition(int _row) const
 {
     const int max = qMin(_row, KS_rowMax+1);
     return rowFormats()->totalVisibleRowHeight(1, max-1);
-}
-
-ColumnFormat* Sheet::firstCol() const
-{
-    return d->columns.first();
-}
-
-ColumnFormat* Sheet::nonDefaultColumnFormat(int _column, bool force_creation)
-{
-    Q_ASSERT(_column >= 1 && _column <= KS_colMax);
-    ColumnFormat *p = d->columns.lookup(_column);
-    if (p != 0 || !force_creation)
-        return p;
-
-    p = new ColumnFormat(*fullMap()->defaultColumnFormat());
-    p->setSheet(this);
-    p->setColumn(_column);
-
-    d->columns.insertElement(p, _column);
-
-    return p;
 }
 
 void Sheet::insertShiftRight(const QRect& rect)
@@ -583,14 +535,7 @@ void Sheet::removeShiftLeft(const QRect& rect)
 
 void Sheet::insertColumns(int col, int number)
 {
-    double deltaWidth = 0.0;
-    for (int i = 0; i < number; i++) {
-        deltaWidth -= columnFormat(KS_colMax)->width();
-        d->columns.insertColumn(col);
-        deltaWidth += columnFormat(col + i)->width();
-    }
-    // Adjust document width (plus widths of new columns; minus widths of removed columns).
-    adjustDocumentWidth(deltaWidth);
+    d->columns.insertCols(col, number);
 
     changeNameCellRefs(QRect(QPoint(col, 1), QPoint(col + number - 1, KS_colMax)), true, Sheet::ColumnInsert);
 
@@ -608,14 +553,7 @@ void Sheet::insertRows(int row, int number)
 
 void Sheet::removeColumns(int col, int number)
 {
-    double deltaWidth = 0.0;
-    for (int i = 0; i < number; ++i) {
-        deltaWidth -= columnFormat(col)->width();
-        d->columns.removeColumn(col);
-        deltaWidth += columnFormat(KS_colMax)->width();
-    }
-    // Adjust document width (plus widths of new columns; minus widths of removed columns).
-    adjustDocumentWidth(deltaWidth);
+    d->columns.removeCols(col, number);
 
     changeNameCellRefs(QRect(QPoint(col, 1), QPoint(col + number - 1, KS_colMax)), true, Sheet::ColumnRemove);
 
@@ -729,14 +667,7 @@ QRect Sheet::usedArea(bool onlyContent) const
 
     if (!onlyContent) {
         maxRows = qMax(maxRows, d->rows.lastNonDefaultRow());
-
-        const ColumnFormat* col = firstCol();
-        while (col) {
-            if (col->column() > maxCols)
-                maxCols = col->column();
-
-            col = col->next();
-        }
+        maxCols = qMax(maxCols, d->columns.lastNonDefaultCol());
     }
 
     // flake
@@ -783,35 +714,31 @@ void Sheet::setBackgroundImageProperties(const Sheet::BackgroundImageProperties&
     d->backgroundProperties = properties;
 }
 
-void Sheet::insertColumnFormat(ColumnFormat *l)
+void Sheet::setColumnFormat(int col, const ColFormat &f)
 {
-    d->columns.insertElement(l, l->column());
+    d->columns.setColFormat(col, col, f);
     if (!map()->isLoading()) {
         map()->addDamage(new SheetDamage(this, SheetDamage::ColumnsChanged));
     }
 }
 
-void Sheet::insertRowFormat(RowFormat *l)
+void Sheet::setRowFormat(int row, const RowFormat &f)
 {
-    const int row = l->row();
-    d->rows.setRowHeight(row, row, l->height());
-    d->rows.setHidden(row, row, l->isHidden());
-    d->rows.setFiltered(row, row, l->isFiltered());
-    d->rows.setPageBreak(row, row, l->hasPageBreak());
+    d->rows.setRowFormat(row, row, f);
     if (!map()->isLoading()) {
         map()->addDamage(new SheetDamage(this, SheetDamage::RowsChanged));
     }
 }
 
-void Sheet::deleteColumnFormat(int column)
+void Sheet::clearColumnFormat(int column)
 {
-    d->columns.removeElement(column);
+    d->columns.setDefault(column, column);
     if (!map()->isLoading()) {
         map()->addDamage(new SheetDamage(this, SheetDamage::ColumnsChanged));
     }
 }
 
-void Sheet::deleteRowFormat(int row)
+void Sheet::clearRowFormat(int row)
 {
     d->rows.setDefault(row, row);
     if (!map()->isLoading()) {
@@ -829,6 +756,17 @@ const RowFormatStorage* Sheet::rowFormats() const
 {
     return &d->rows;
 }
+
+ColFormatStorage* Sheet::columnFormats()
+{
+    return &d->columns;
+}
+
+const ColFormatStorage* Sheet::columnFormats() const
+{
+    return &d->columns;
+}
+
 
 void Sheet::showStatusMessage(const QString &message, int timeout) const
 {
@@ -888,7 +826,7 @@ void Sheet::applyDatabaseFilter(const Database &database)
         if (database.orientation() == Qt::Vertical) {
             sheet->rowFormats()->setFiltered(i, i, isFiltered);
         } else { // database.orientation() == Qt::Horizontal
-            sheet->nonDefaultColumnFormat(i)->setFiltered(isFiltered);
+            sheet->columnFormats()->setFiltered(i, i, isFiltered);
         }
     }
     if (database.orientation() == Qt::Vertical)

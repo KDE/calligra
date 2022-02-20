@@ -6,12 +6,11 @@
 
 #include "RowFormatStorage.h"
 
-#include "calligra_sheets_limits.h"
+#include "engine/calligra_sheets_limits.h"
 #include "3rdparty/mdds/flat_segment_tree.hpp"
 
-#include "engine/MapBase.h"
-#include "RowColumnFormat.h"
-#include "engine/SheetBase.h"
+// #include "engine/MapBase.h"
+// #include "engine/SheetBase.h"
 
 using namespace Calligra::Sheets;
 
@@ -62,7 +61,7 @@ double RowFormatStorage::rowHeight(int row, int *lastRow, int *firstRow) const
 {
     double v = d->rawRowHeight(row, lastRow, firstRow);
     if (v == -1) {
-        return d->sheet->map()->defaultRowFormat()->height();
+        return d->sheet->fullMap()->defaultRowFormat()->height();
     } else {
         return v;
     }
@@ -225,6 +224,15 @@ void RowFormatStorage::setPageBreak(int firstRow, int lastRow, bool pageBreak)
 {
     d->hasPageBreak.insert_back(firstRow, lastRow+1, pageBreak);
 }
+
+void RowFormatStorage::setRowFormat (int firstRow, int lastRow, const RowFormat &f)
+{
+    setRowWidth(firstRow, lastRow, f.height);
+    setHidden (firstRow, lastRow, f.hidden);
+    setFiltered (firstRow, lastRow, f.filtered);
+    setPageBreak (firstRow, lastRow, f.hasPageBreak);
+}
+
 
 int RowFormatStorage::lastNonDefaultRow() const
 {

@@ -10,6 +10,7 @@
 
 #include "sheets_engine_export.h"
 #include "PointStorage.h"
+#include "RectStorage.h"
 
 
 #ifdef CALLIGRA_SHEETS_MT
@@ -25,6 +26,7 @@ namespace Sheets
 class CommentStorage;
 class Formula;
 class FormulaStorage;
+class MatrixStorage;
 class Region;
 class SheetBase;
 class UserInputStorage;
@@ -33,6 +35,7 @@ class ValueStorage;
 class Validity;
 class ValidityStorage;
 
+typedef RectStorage<QString> NamedAreaStorage;
 
 /**
  * \ingroup Storage
@@ -184,12 +187,13 @@ public:
     void insertShiftDown(const QRect& rect);
 
 
-
-    const CommentStorage* commentStorage() const;
-    const FormulaStorage* formulaStorage() const;
-    const UserInputStorage* userInputStorage() const;
-    const ValidityStorage* validityStorage() const;
-    const ValueStorage* valueStorage() const;
+    CommentStorage* commentStorage() const;
+    FormulaStorage* formulaStorage() const;
+    MatrixStorage* matrixStorage() const;
+    NamedAreaStorage* namedAreaStorage() const;
+    UserInputStorage* userInputStorage() const;
+    ValidityStorage* validityStorage() const;
+    ValueStorage* valueStorage() const;
 protected:
     void fillStorages();
 

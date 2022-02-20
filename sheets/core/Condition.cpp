@@ -7,21 +7,19 @@
 // Local
 #include "Condition.h"
 
-#include <float.h>
+#include "engine/CalculationSettings.h"
+#include "engine/Formula.h"
+#include "engine/NamedAreaManager.h"
+#include "engine/Region.h"
+#include "engine/ValueConverter.h"
+#include "engine/ValueCalc.h"
 
-#include "SheetsDebug.h"
-#include "CalculationSettings.h"
 #include "Cell.h"
-#include "Formula.h"
 #include "Map.h"
-#include "NamedAreaManager.h"
-#include "Region.h"
 #include "Sheet.h"
 #include "Style.h"
 #include "StyleManager.h"
-#include "ValueCalc.h"
-#include "ValueConverter.h"
-#include "ValueParser.h"
+
 
 
 using namespace Calligra::Sheets;
@@ -32,12 +30,12 @@ using namespace Calligra::Sheets;
 //
 /////////////////////////////////////////////////////////////////////////////
 
-Validity::Conditional()
-    : cond(None)
+Conditional::Conditional()
+    : cond(Validity::None)
 {
 }
 
-bool Validity::operator==(const Conditional &other) const
+bool Conditional::operator==(const Conditional &other) const
 {
     if (cond != other.cond) {
         return false;
@@ -86,7 +84,7 @@ Style Conditions::testConditions( const Cell& cell ) const
 {
     Conditional condition;
     if (currentCondition(cell, condition)) {
-        StyleManager *const styleManager = cell.sheet()->map()->styleManager();
+        StyleManager *const styleManager = cell.fullSheet()->fullMap()->styleManager();
         Style *const style = styleManager->style(condition.styleName);
         if (style)
             return *style;
@@ -94,7 +92,7 @@ Style Conditions::testConditions( const Cell& cell ) const
     return d->defaultStyle;
 }
 
-bool Conditions::currentCondition(const Cell& cell, Conditional & condition) const
+bool Conditions::currentCondition(const CellBase& cell, Conditional & condition) const
 {
     /* for now, the first condition that is true is the one that will be used */
 
@@ -177,13 +175,13 @@ bool Conditions::currentCondition(const Cell& cell, Conditional & condition) con
     return false;
 }
 
-bool Conditions::isTrueFormula(const Cell &cell, const QString &formula, const QString &baseCellAddress) const
+bool Conditions::isTrueFormula(const CellBase &cell, const QString &formula, const QString &baseCellAddress) const
 {
-    Map* const map = cell.sheet()->map();
+    MapBase* const map = cell.sheet()->map();
     ValueCalc *const calc = map->calc();
     Formula f(cell.sheet(), cell);
     f.setExpression('=' + formula);
-    Region r(baseCellAddress, map, cell.sheet());
+    Region r = map->regionFromName(baseCellAddress, cell.sheet());
     if (r.isValid() && r.isSingular()) {
         QPoint basePoint = static_cast<Region::Point*>(*r.constBegin())->pos();
         QString newFormula('=');
@@ -195,7 +193,7 @@ bool Conditions::isTrueFormula(const Cell &cell, const QString &formula, const Q
                     newFormula.append(token.text());
                     continue;
                 }
-                const Region region(token.text(), map, cell.sheet());
+                const Region region = map->regionFromName(token.text(), cell.sheet());
                 if (!region.isValid() || !region.isContiguous()) {
                     newFormula.append(token.text());
                     continue;

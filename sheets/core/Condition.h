@@ -21,6 +21,7 @@ namespace Calligra
 {
 namespace Sheets
 {
+class CellBase;
 class Cell;
 class Style;
 class ValueConverter;
@@ -134,9 +135,9 @@ private:
      *
      * \return true if one of the conditions is true, false if not.
      */
-    bool currentCondition(const Cell& cell, Conditional & condition) const;
+    bool currentCondition(const CellBase& cell, Conditional & condition) const;
 
-    bool isTrueFormula(const Cell& cell, const QString& formula, const QString& baseCellAddress) const;
+    bool isTrueFormula(const CellBase& cell, const QString& formula, const QString& baseCellAddress) const;
 
     class Private;
     QSharedDataPointer<Private> d;

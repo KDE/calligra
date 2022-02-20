@@ -13,6 +13,7 @@
 
 #include "engine/CellBaseStorage.h"
 #include "engine/calligra_sheets_limits.h"
+#include "engine/Region.h"
 
 #include "sheets_core_export.h"
 #include "Cell.h"
@@ -237,14 +238,14 @@ public:
      */
     CellStorage subStorage(const Region& region) const;
 
-    const BindingStorage* bindingStorage() const;
-    const ConditionsStorage* conditionsStorage() const;
-    const FusionStorage* fusionStorage() const;
-    const LinkStorage* linkStorage() const;
-    const StyleStorage* styleStorage() const;
+    BindingStorage* bindingStorage() const;
+    ConditionsStorage* conditionsStorage() const;
+    FusionStorage* fusionStorage() const;
+    LinkStorage* linkStorage() const;
+    StyleStorage* styleStorage() const;
 
-    void loadConditions(const QList<QPair<QRegion, Conditions> >& conditions);
-    void loadStyles(const QList<QPair<QRegion, Style> >& styles);
+    void loadConditions(const QList<QPair<Region, Conditions> >& conditions);
+    void loadStyles(const QList<QPair<Region, Style> >& styles);
 
     void invalidateStyleCache();
 
@@ -274,6 +275,8 @@ protected:
 private:
     // do not allow assignment
     CellStorage& operator=(const CellStorage&);
+
+    void createCommand(KUndo2Command *parent) const;
 
 #ifdef CALLIGRA_SHEETS_MT
     QReadWriteLock bigUglyLock;

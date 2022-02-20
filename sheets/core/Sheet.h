@@ -28,7 +28,8 @@ namespace Sheets
 {
 class Cell;
 class CellStorage;
-class ColumnFormat;
+class ColFormat;
+class ColFormatStorage;
 class CommentStorage;
 class ConditionsStorage;
 class Database;
@@ -43,6 +44,7 @@ class Region;
 class RowFormat;
 class RowFormatStorage;
 class Sheet;
+class SheetModel;
 class Style;
 class StyleStorage;
 class Validity;
@@ -86,6 +88,8 @@ public:
      * \return the document this sheet belongs to.
      */
     DocBase* doc() const;
+
+    SheetModel *model() const;
 
     // KoShapeBasedDocumentBase interface
     void addShape(KoShape* shape) override;
@@ -274,6 +278,19 @@ public:
     const RowFormatStorage* rowFormats() const;
     RowFormatStorage* rowFormats();
 
+    /**
+     * \ingroup ColumnRowFormat
+     * Sets the format for row \p row
+     */
+    void setRowFormat(int row, const RowFormat &rowFormat);
+
+    /**
+     * \ingroup ColumnRowFormat
+     * Removed the row format at \p row (changes the format of that row to be the default format).
+     */
+    void clearRowFormat(int row);
+
+
     //
     //END Methods related to row formats
     //
@@ -284,30 +301,23 @@ public:
 
     /**
      * \ingroup ColumnRowFormat
-     * \return the column format of column \p _column . The default column format,
-     * if no special one exists.
+     * \return the column format storage for this sheet.
      */
-    const ColumnFormat* columnFormat(int _column) const;
+    const ColFormatStorage* columnFormats() const;
+    ColFormatStorage* columnFormats();
 
     /**
      * \ingroup ColumnRowFormat
-     * If no special ColumnFormat exists for this column, then a new one is created.
-     *
-     * @return a non default ColumnFormat for this column.
+     * Sets the format for column \p col
      */
-    ColumnFormat* nonDefaultColumnFormat(int _column, bool force_creation = true);
+    void setColumnFormat(int col, const ColFormat &columnFormat);
 
     /**
      * \ingroup ColumnRowFormat
-     * \return the first non-default row format
+     * Deletes the column format at \p column.
      */
-    ColumnFormat* firstCol() const;
-    ColumnFormat *nextColumn(int col) const;
+    void clearColumnFormat(int column);
 
-    /**
-     * \ingroup ColumnRowFormat
-     */
-    void setDefaultWidth(double width);
 
     //
     //END Methods related to column formats
@@ -557,30 +567,6 @@ public:
     //
 
     void hideSheet(bool _hide);
-
-    /**
-     * \ingroup ColumnRowFormat
-     * Insert the non-default column format \p columnFormat.
-     */
-    void insertColumnFormat(ColumnFormat* columnFormat);
-
-    /**
-     * \ingroup ColumnRowFormat
-     * Inserts the non-default row format \p rowFormat.
-     */
-    void insertRowFormat(RowFormat* rowFormat);
-
-    /**
-     * \ingroup ColumnRowFormat
-     * Deletes the column format at \p column.
-     */
-    void deleteColumnFormat(int column);
-
-    /**
-     * \ingroup ColumnRowFormat
-     * Deletes the row format at \p row (changes the format of that row to be the default format).
-     */
-    void deleteRowFormat(int row);
 
     //
     //END UNSORTED METHODS
