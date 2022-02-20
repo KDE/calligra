@@ -11,8 +11,8 @@
 
 #include "3rdparty/mdds/flat_segment_tree.hpp"
 
-// #include "engine/MapBase.h"
-// #include "engine/SheetBase.h"
+#include "Map.h"
+#include "Sheet.h"
 
 using namespace Calligra::Sheets;
 
@@ -63,7 +63,7 @@ double ColFormatStorage::colWidth(int col, int *lastCol, int *firstCol) const
 {
     double v = d->rawColWidth(col, lastCol, firstCol);
     if (v == -1) {
-        return d->sheet->fullMap()->defaultColFormat()->width();
+        return d->sheet->fullMap()->defaultColumnFormat().width;
     } else {
         return v;
     }
@@ -72,7 +72,8 @@ double ColFormatStorage::colWidth(int col, int *lastCol, int *firstCol) const
 double ColFormatStorage::Private::rawColWidth(int col, int *lastCol, int *firstCol) const
 {
     double v;
-    if (!colWidths.search(col, v, firstCol, lastCol)) {
+    auto res = colWidths.search(col, v, firstCol, lastCol);
+    if (!res.second) {
         if (firstCol) *firstCol = col;
         if (lastCol) *lastCol = col;
         return -1;
@@ -158,7 +159,8 @@ int ColFormatStorage::colForPosition(double ypos, double *topOfCol) const
 bool ColFormatStorage::isHidden(int col, int *lastCol, int *firstCol) const
 {
     bool v;
-    if (!d->hidden.search(col, v, firstCol, lastCol)) {
+    auto res = d->hidden.search(col, v, firstCol, lastCol);
+    if (!res.second) {    // not found
         if (firstCol) *firstCol = col;
         if (lastCol) *lastCol = col;
         return false;
@@ -180,7 +182,8 @@ void ColFormatStorage::setHidden(int firstCol, int lastCol, bool hidden)
 bool ColFormatStorage::isFiltered(int col, int* lastCol, int *firstCol) const
 {
     bool v;
-    if (!d->filtered.search(col, v, firstCol, lastCol)) {
+    auto res = d->filtered.search(col, v, firstCol, lastCol);
+    if (!res.second) {    // not found
         if (firstCol) *firstCol = col;
         if (lastCol) *lastCol = col;
         return false;
@@ -212,7 +215,8 @@ bool ColFormatStorage::isHiddenOrFiltered(int col, int* lastCol, int* firstCol) 
 bool ColFormatStorage::hasPageBreak(int col, int* lastCol, int* firstCol) const
 {
     bool v;
-    if (!d->hasPageBreak.search(col, v, firstCol, lastCol)) {
+    auto res = d->hasPageBreak.search(col, v, firstCol, lastCol);
+    if (!res.second) {    // not found
         if (lastCol) *lastCol = col;
         if (firstCol) *firstCol = col;
         return false;

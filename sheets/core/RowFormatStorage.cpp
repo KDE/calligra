@@ -9,8 +9,8 @@
 #include "engine/calligra_sheets_limits.h"
 #include "3rdparty/mdds/flat_segment_tree.hpp"
 
-// #include "engine/MapBase.h"
-// #include "engine/SheetBase.h"
+#include "Map.h"
+#include "Sheet.h"
 
 using namespace Calligra::Sheets;
 
@@ -61,7 +61,7 @@ double RowFormatStorage::rowHeight(int row, int *lastRow, int *firstRow) const
 {
     double v = d->rawRowHeight(row, lastRow, firstRow);
     if (v == -1) {
-        return d->sheet->fullMap()->defaultRowFormat()->height();
+        return d->sheet->fullMap()->defaultRowFormat().height;
     } else {
         return v;
     }
@@ -70,7 +70,8 @@ double RowFormatStorage::rowHeight(int row, int *lastRow, int *firstRow) const
 double RowFormatStorage::Private::rawRowHeight(int row, int *lastRow, int *firstRow) const
 {
     double v;
-    if (!rowHeights.search(row, v, firstRow, lastRow)) {
+    auto res = rowHeights.search(row, v, firstRow, lastRow);
+    if (!res.second) {    // not found
         if (firstRow) *firstRow = row;
         if (lastRow) *lastRow = row;
         return -1;
@@ -156,7 +157,8 @@ int RowFormatStorage::rowForPosition(double ypos, double *topOfRow) const
 bool RowFormatStorage::isHidden(int row, int *lastRow, int *firstRow) const
 {
     bool v;
-    if (!d->hidden.search(row, v, firstRow, lastRow)) {
+    auto res = d->hidden.search(row, v, firstRow, lastRow);
+    if (!res.second) {   // failed to find
         if (firstRow) *firstRow = row;
         if (lastRow) *lastRow = row;
         return false;
@@ -178,7 +180,8 @@ void RowFormatStorage::setHidden(int firstRow, int lastRow, bool hidden)
 bool RowFormatStorage::isFiltered(int row, int* lastRow, int *firstRow) const
 {
     bool v;
-    if (!d->filtered.search(row, v, firstRow, lastRow)) {
+    auto res = d->filtered.search(row, v, firstRow, lastRow);
+    if (!res.second) {   // failed to find
         if (firstRow) *firstRow = row;
         if (lastRow) *lastRow = row;
         return false;
@@ -210,7 +213,8 @@ bool RowFormatStorage::isHiddenOrFiltered(int row, int* lastRow, int* firstRow) 
 bool RowFormatStorage::hasPageBreak(int row, int* lastRow, int* firstRow) const
 {
     bool v;
-    if (!d->hasPageBreak.search(row, v, firstRow, lastRow)) {
+    auto res = d->hasPageBreak.search(row, v, firstRow, lastRow);
+    if (!res.second) {   // failed to find
         if (lastRow) *lastRow = row;
         if (firstRow) *firstRow = row;
         return false;
@@ -227,7 +231,7 @@ void RowFormatStorage::setPageBreak(int firstRow, int lastRow, bool pageBreak)
 
 void RowFormatStorage::setRowFormat (int firstRow, int lastRow, const RowFormat &f)
 {
-    setRowWidth(firstRow, lastRow, f.height);
+    setRowHeight (firstRow, lastRow, f.height);
     setHidden (firstRow, lastRow, f.hidden);
     setFiltered (firstRow, lastRow, f.filtered);
     setPageBreak (firstRow, lastRow, f.hasPageBreak);
