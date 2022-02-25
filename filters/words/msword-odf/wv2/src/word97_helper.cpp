@@ -921,7 +921,7 @@ S16 PAP::applyPAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
             std::vector<TabDescriptor>::iterator newEnd = rgdxaTab.end();
             for ( U8 i = 0; i < itbdDelMax; ++i ) {
                 newEnd = std::remove_if ( rgdxaTab.begin(), newEnd,
-                                          std::bind2nd( InZone(), Zone( myPtr, i, itbdDelMax ) ) );
+                                          std::bind( InZone(), std::placeholders::_2, Zone( myPtr, i, itbdDelMax ) ) );
             }
             rgdxaTab.erase( newEnd, rgdxaTab.end() ); // really get rid of them
             myPtr += itbdDelMax * 4;
@@ -2382,7 +2382,7 @@ S16 TAP::applyTAPSPRM( const U8* ptr, const Style* style, const StyleSheet* styl
         ++itcFirst;
         std::transform( rgdxaCenter.begin() + itcFirst, rgdxaCenter.end(),
                         rgdxaCenter.begin() + itcFirst, 
-                        std::bind2nd( std::minus<S16>(), shift ) );
+                        std::bind( std::minus<S16>(), std::placeholders::_2, shift ) );
         break;
     }
     case SPRM::sprmTMerge:
