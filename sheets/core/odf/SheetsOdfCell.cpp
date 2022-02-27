@@ -22,33 +22,33 @@
 #include "SheetsOdfPrivate.h"
 
 #include <KoGenStyles.h>
-#include <KoParagraphStyle.h>
+#include <KoCharacterStyle.h>
 #include <KoShape.h>
 #include <KoShapeRegistry.h>
 #include <KoStyleManager.h>
 #include <KoTextDocument.h>
 #include <KoTextLoader.h>
-#include <KoTextSharedLoadingData.h>
 #include <KoTextWriter.h>
 #include <KoUnit.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 
+#include "engine/CalculationSettings.h"
+#include "engine/Formula.h"
+#include "engine/Localization.h"
+#include "engine/Util.h"
+#include "engine/Value.h"
+#include "engine/ValueConverter.h"
+
 #include "Cell.h"
 #include "CellStorage.h"
+#include "ColFormatStorage.h"
 #include "Condition.h"
 #include "Map.h"
-#include "RowColumnFormat.h"
 #include "RowFormatStorage.h"
 #include "Sheet.h"
-#include "Style.h"
 #include "StyleManager.h"
-#include "Util.h"
-#include "Validity.h"
-#include "Value.h"
-#include "ValueConverter.h"
 #include "ValueFormatter.h"
-#include "GenValidationStyle.h"
 #include "ShapeApplicationData.h"
 
 #include <float.h>
@@ -369,6 +369,7 @@ bool Odf::saveCell(Cell *cell, int &repeated, OdfSavingContext& tableContext)
 
     int row = cell->row();
     int column = cell->column();
+    Sheet *sheet = cell->fullSheet();
 
     // see: OpenDocument, 8.1.3 Table Cell
     if (!cell->isPartOfMerged())
@@ -412,23 +413,23 @@ bool Odf::saveCell(Cell *cell, int &repeated, OdfSavingContext& tableContext)
     // group empty cells with the same style
     const QString comment = cell->comment();
     if (cell->isEmpty() && comment.isEmpty() && !cell->isPartOfMerged() && !cell->doesMergeCells() &&
-            !tableContext.cellHasAnchoredShapes(cell->sheet(), row, column)) {
+            !tableContext.cellHasAnchoredShapes(sheet, row, column)) {
         bool refCellIsDefault = cell->isDefault();
         int j = column + 1;
-        Cell nextCell = cell->sheet()->cellStorage()->nextInRow(column, row);
+        Cell nextCell = sheet->fullCellStorage()->nextInRow(column, row);
         while (!nextCell.isNull()) {
             // if
             //   the next cell is not the adjacent one
             // or
             //   the next cell is not empty
-            if (nextCell.column() != j || (!nextCell.isEmpty() || tableContext.cellHasAnchoredShapes(cell->sheet(), row, column))) {
+            if (nextCell.column() != j || (!nextCell.isEmpty() || tableContext.cellHasAnchoredShapes(sheet, row, column))) {
                 if (refCellIsDefault) {
                     // if the origin cell was a default cell,
                     // we count the default cells
                     repeated = nextCell.column() - j + 1;
 
                     // check if any of the empty/default cells we skipped contained anchored shapes
-                    int shapeColumn = tableContext.nextAnchoredShape(cell->sheet(), row, column);
+                    int shapeColumn = tableContext.nextAnchoredShape(sheet, row, column);
                     if (shapeColumn) {
                         repeated = qMin(repeated, shapeColumn - column);
                     }
@@ -440,13 +441,13 @@ bool Odf::saveCell(Cell *cell, int &repeated, OdfSavingContext& tableContext)
             }
 
             if (nextCell.isPartOfMerged() || nextCell.doesMergeCells() ||
-                    !nextCell.comment().isEmpty() || tableContext.cellHasAnchoredShapes(cell->sheet(), row, nextCell.column()) ||
+                    !nextCell.comment().isEmpty() || tableContext.cellHasAnchoredShapes(sheet, row, nextCell.column()) ||
                     !(nextCell.style() == cellStyle && nextCell.conditions() == cell->conditions())) {
                 break;
             }
             ++repeated;
             // get the next cell and set the index to the adjacent cell
-            nextCell = cell->sheet()->cellStorage()->nextInRow(j++, row);
+            nextCell = sheet->fullCellStorage()->nextInRow(j++, row);
         }
         //debugSheetsODF << "Odf::saveCell: empty cell in column" << column
         //<< "repeated" << repeated << "time(s)" << endl;
@@ -457,7 +458,7 @@ bool Odf::saveCell(Cell *cell, int &repeated, OdfSavingContext& tableContext)
 
     Validity validity = cell->validity();
     if (!validity.isEmpty()) {
-        GenValidationStyle styleVal(&validity, cell->sheet()->map()->converter());
+        GenValidationStyle styleVal(&validity, sheet->map()->converter());
         xmlwriter.addAttribute("table:validation-name", tableContext.valStyle.insert(styleVal));
     }
     if (cell->isFormula()) {
@@ -499,7 +500,7 @@ bool Odf::saveCell(Cell *cell, int &repeated, OdfSavingContext& tableContext)
         QSharedPointer<QTextDocument> doc = cell->richText();
         if (doc) {
             QTextCharFormat format = cell->style().asCharFormat();
-            ((KoCharacterStyle *)cell->sheet()->map()->textStyleManager()->defaultParagraphStyle())->copyProperties(format);
+            ((KoCharacterStyle *) sheet->fullMap()->textStyleManager()->defaultParagraphStyle())->copyProperties(format);
 
             KoTextWriter writer(tableContext.shapeContext);
 
@@ -515,17 +516,17 @@ bool Odf::saveCell(Cell *cell, int &repeated, OdfSavingContext& tableContext)
     // Save shapes that are anchored to this cell.
     // see: OpenDocument, 2.3.1 Text Documents
     // see: OpenDocument, 9.2 Drawing Shapes
-    if (tableContext.cellHasAnchoredShapes(cell->sheet(), row, column)) {
-        const QList<KoShape*> shapes = tableContext.cellAnchoredShapes(cell->sheet(), row, column);
+    if (tableContext.cellHasAnchoredShapes(sheet, row, column)) {
+        const QList<KoShape*> shapes = tableContext.cellAnchoredShapes(sheet, row, column);
         for (int i = 0; i < shapes.count(); ++i) {
             KoShape* const shape = shapes[i];
             const QPointF bottomRight = shape->boundingRect().bottomRight();
             qreal endX = 0.0;
             qreal endY = 0.0;
-            const int scol = cell->sheet()->leftColumn(bottomRight.x(), endX);
-            const int srow = cell->sheet()->topRow(bottomRight.y(), endY);
-            qreal offsetX = cell->sheet()->columnPosition(column);
-            qreal offsetY = cell->sheet()->rowPosition(row);
+            const int scol = sheet->leftColumn(bottomRight.x(), endX);
+            const int srow = sheet->topRow(bottomRight.y(), endY);
+            qreal offsetX = sheet->columnPosition(column);
+            qreal offsetY = sheet->rowPosition(row);
             tableContext.shapeContext.addShapeOffset(shape, QTransform::fromTranslate(-offsetX, -offsetY));
             shape->setAdditionalAttribute("table:end-cell-address", saveRegion(Region(QPoint(scol, srow)).name()));
             shape->setAdditionalAttribute("table:end-x", QString::number(bottomRight.x() - endX) + "pt");
@@ -694,22 +695,23 @@ void Odf::loadCellText(Cell *cell, const KoXmlElement& parent, OdfLoadingContext
             // this is because they would currently be loaded twice, once by the KoTextLoader
             // and later properly by the cell itself
 
+            Map *map = cell->fullSheet()->fullMap();
             Style style; style.setDefault();
             if (!cellStyleName.isEmpty()) {
                 if (autoStyles.contains(cellStyleName))
                     style.merge(autoStyles[cellStyleName]);
                 else {
-                    const CustomStyle* namedStyle = cell->sheet()->map()->styleManager()->style(cellStyleName);
+                    const CustomStyle* namedStyle = map->styleManager()->style(cellStyleName);
                     if (namedStyle)
                         style.merge(*namedStyle);
                 }
             }
 
             QTextCharFormat format = style.asCharFormat();
-            ((KoCharacterStyle *)cell->sheet()->map()->textStyleManager()->defaultParagraphStyle())->copyProperties(format);
+            ((KoCharacterStyle *) map->textStyleManager()->defaultParagraphStyle())->copyProperties(format);
 
             QSharedPointer<QTextDocument> doc(new QTextDocument);
-            KoTextDocument(doc.data()).setStyleManager(cell->sheet()->map()->textStyleManager());
+            KoTextDocument(doc.data()).setStyleManager(map->textStyleManager());
 
             Q_ASSERT(tableContext.shapeContext);
             KoTextLoader loader(*tableContext.shapeContext);
@@ -783,7 +785,8 @@ Odf::ShapeLoadingData Odf::loadObject(Cell *cell, const KoXmlElement &element, K
         return data;
     }
 
-    cell->sheet()->addShape(shape);
+    Sheet *sheet = cell->fullSheet();
+    sheet->addShape(shape);
 
     // The position is relative to the upper left sheet corner until now. Move it.
     QPointF position = shape->position();
@@ -791,9 +794,9 @@ Odf::ShapeLoadingData Odf::loadObject(Cell *cell, const KoXmlElement &element, K
     double offsetX = position.x();
     double offsetY = position.y();
     for (int col = 1; col < cell->column(); ++col)
-        position += QPointF(cell->sheet()->columnFormat(col)->width(), 0.0);
+        position += QPointF(sheet->columnFormats()->colWidth(col), 0.0);
     if (cell->row() > 1)
-        position += QPointF(0.0, cell->sheet()->rowFormats()->totalRowHeight(1, cell->row() - 1));
+        position += QPointF(0.0, sheet->rowFormats()->totalRowHeight(1, cell->row() - 1));
     shape->setPosition(position);
 
     dynamic_cast<ShapeApplicationData*>(shape->applicationData())->setAnchoredToCell(true);
@@ -807,8 +810,8 @@ Odf::ShapeLoadingData Odf::loadObject(Cell *cell, const KoXmlElement &element, K
         return data;
     }
 
-    Region endCell(loadRegion(shape->additionalAttribute("table:end-cell-address")),
-                   cell->sheet()->map(), cell->sheet());
+    Region endCell = cell->sheet()->map()->regionFromName (loadRegion(shape->additionalAttribute("table:end-cell-address")),
+            cell->sheet());
     if (!endCell.isValid() || !endCell.isSingular())
         return data;
 
@@ -835,9 +838,9 @@ Odf::ShapeLoadingData Odf::loadObject(Cell *cell, const KoXmlElement &element, K
     // at the top-left corner of this cell, but the shape can have an offset to that corner
     QSizeF size = QSizeF(endX - offsetX, endY - offsetY);
     for (int col = cell->column(); col < endCell.firstRange().left(); ++col)
-        size += QSizeF(cell->sheet()->columnFormat(col)->width(), 0.0);
+        size += QSizeF(sheet->columnFormats()->colWidth(col), 0.0);
     if (endCell.firstRange().top() > cell->row())
-        size += QSizeF(0.0, cell->sheet()->rowFormats()->totalRowHeight(cell->row(), endCell.firstRange().top() - 1));
+        size += QSizeF(0.0, sheet->rowFormats()->totalRowHeight(cell->row(), endCell.firstRange().top() - 1));
     shape->setSize(size);
 
     return data;
@@ -872,7 +875,7 @@ QString Odf::saveCellStyle(Cell *cell, KoGenStyle &currentCellStyle, KoGenStyles
         saveConditions(&conditions, currentCellStyle, cell->sheet()->map()->converter());
     }
     Style style = cell->style();
-    return saveStyle(&style, currentCellStyle, mainStyles, cell->sheet()->map()->styleManager());
+    return saveStyle(&style, currentCellStyle, mainStyles, cell->fullSheet()->fullMap()->styleManager(), cell->sheet()->map()->calculationSettings()->locale());
 }
 
 void Odf::saveCellValue(Cell *cell, KoXmlWriter &xmlWriter)
@@ -883,7 +886,7 @@ void Odf::saveCellValue(Cell *cell, KoXmlWriter &xmlWriter)
     // LO does it, so we need to stay compatible
     Format::Type shownFormat = cell->style().formatType();
     if (shownFormat == Format::Generic)
-        shownFormat = cell->sheet()->map()->formatter()->determineFormatting(value, shownFormat);
+        shownFormat = cell->fullSheet()->fullMap()->formatter()->determineFormatting(value, shownFormat);
     Value::Format saveFormat = Value::fmt_None;
     Value::Format valueFormat = value.format();
     if (valueFormat == Value::fmt_Boolean)
@@ -957,7 +960,7 @@ void Odf::saveCellValue(Cell *cell, KoXmlWriter &xmlWriter)
 }
 
 
-QString Odf::decodeFormula(const QString& expression_, const KLocale *locale, const QString &namespacePrefix)
+QString Odf::decodeFormula(const QString& expression_, const Localization *locale, const QString &namespacePrefix)
 {
     // parsing state
     enum { Start, InNumber, InString, InIdentifier, InReference, InSheetName } state = Start;
@@ -1143,7 +1146,7 @@ QString Odf::decodeFormula(const QString& expression_, const KLocale *locale, co
     return result;
 }
 
-QString Odf::encodeFormula(const QString& expr, const KLocale* locale)
+QString Odf::encodeFormula(const QString& expr, const Localization* locale)
 {
     // use locale settings
     const QString decimal = locale ? locale->decimalSymbol() : ".";
@@ -1283,7 +1286,7 @@ QString Odf::convertMSOOXMLFormula(const QString& formula)
                 if (sheetOrAreaNameDelimiterCount >= 2)
                     result.remove(i + 1, sheetOrAreaNameDelimiterCount - 1);
                 state = InSheetOrAreaName;
-            } else if (isCellnameCharacter(ch)) {
+            } else if (Util::isCellnameCharacter(ch)) {
                 state = InCellReference;
                 cellReferenceStart = i;
             } else if (ch == ',')
@@ -1338,7 +1341,7 @@ QString Odf::convertMSOOXMLFormula(const QString& formula)
             }
             break;
         case InCellReference:
-            if (!isCellnameCharacter(ch)) {
+            if (!Util::isCellnameCharacter(ch)) {
                 if (ch != '(') /* skip formula-names */ {
                     // Excel is able to use only the column-name to define a column
                     // where all rows are selected. Since that is not supported in

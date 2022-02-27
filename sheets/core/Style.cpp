@@ -783,7 +783,7 @@ bool Style::operator==(const Style& other) const
 uint Calligra::Sheets::qHash(const Style& style)
 {
     uint hash = 0;
-    foreach (const SharedSubStyle& ss, style.subStyles()) {
+    for (const SharedSubStyle& ss : style.subStyles()) {
         hash ^= ss->koHash();
     }
     return hash;

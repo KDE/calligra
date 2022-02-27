@@ -4,10 +4,17 @@
 // Copyright 1999- 2006 The KSpread Team <calligra-devel@kde.org>
 // SPDX-License-Identifier: LGPL-2.0-or-later
 
+#include "SheetsKsp.h"
+#include "SheetsKspPrivate.h"
+
+#include "engine/CalculationSettings.h"
 
 #include "DocBase.h"
-
 #include "Map.h"
+
+#include <KoProgressUpdater.h>
+#include <KoUpdater.h>
+#include <KoXmlReader.h>
 
 namespace Calligra {
 namespace Sheets {
@@ -42,13 +49,6 @@ bool Ksp::loadDoc(DocBase *obj, const KoXmlDocument& doc)
             obj->setErrorMessage("USER_CANCELED");
             return false;
         }
-    }
-
-    // <locale>
-    KoXmlElement loc = spread.namedItem("locale").toElement();
-    if (!loc.isNull()) {
-        Localization *l = static_cast<Localization*>(obj->map()->calculationSettings()->locale());
-        loadLocalization (l, eoc);
     }
 
     if (updater) updater->setProgress(5);
@@ -152,7 +152,7 @@ QDomDocument Ksp::saveDoc(DocBase *document)
     document->setModified(false);
 
     return doc;
-
+}
 
 
 
@@ -225,74 +225,6 @@ QDomElement Ksp::saveNamedAreas(NamedAreaManager *manager, QDomDocument& doc)
         e.appendChild(rect);
         element.appendChild(e);
     }
-    return element;
-}
-
-void Ksp::loadLocalization (Localization *l, const KoXmlElement& element)
-{
-    if (element.hasAttribute("weekStartsMonday")) {
-        QString c = element.attribute("weekStartsMonday");
-        if (c != "False") {
-            l->setWeekStartDay(1 /*Monday*/);
-        }
-    }
-    if (element.hasAttribute("decimalSymbol"))
-        l->setDecimalSymbol(element.attribute("decimalSymbol"));
-    if (element.hasAttribute("thousandsSeparator"))
-        l->setThousandsSeparator(element.attribute("thousandsSeparator"));
-    if (element.hasAttribute("currencySymbol"))
-        l->setCurrencySymbol(element.attribute("currencySymbol"));
-    if (element.hasAttribute("monetaryDecimalSymbol"))
-        l->setMonetaryDecimalSymbol(element.attribute("monetaryDecimalSymbol"));
-    if (element.hasAttribute("monetaryThousandsSeparator"))
-        l->setMonetaryThousandsSeparator(element.attribute("monetaryThousandsSeparator"));
-    if (element.hasAttribute("positiveSign"))
-        l->setPositiveSign(element.attribute("positiveSign"));
-    if (element.hasAttribute("negativeSign"))
-        l->setNegativeSign(element.attribute("negativeSign"));
-    if (element.hasAttribute("fracDigits"))
-        l->setMonetaryDecimalPlaces(element.attribute("fracDigits").toInt());
-    if (element.hasAttribute("positivePrefixCurrencySymbol")) {
-        QString c = element.attribute("positivePrefixCurrencySymbol");
-        l->setPositivePrefixCurrencySymbol(c == "True");
-    }
-    if (element.hasAttribute("negativePrefixCurrencySymbol")) {
-        QString c = element.attribute("negativePrefixCurrencySymbol");
-        l->setNegativePrefixCurrencySymbol(c == "True");
-    }
-    if (element.hasAttribute("positiveMonetarySignPosition"))
-        l->setPositiveMonetarySignPosition((SignPosition)element.attribute("positiveMonetarySignPosition").toInt());
-    if (element.hasAttribute("negativeMonetarySignPosition"))
-        l->setNegativeMonetarySignPosition((SignPosition)element.attribute("negativeMonetarySignPosition").toInt());
-    if (element.hasAttribute("timeFormat"))
-        l->setTimeFormat(element.attribute("timeFormat"));
-    if (element.hasAttribute("dateFormat"))
-        l->setDateFormat(element.attribute("dateFormat"));
-    if (element.hasAttribute("dateFormatShort"))
-        l->setDateFormatShort(element.attribute("dateFormatShort"));
-}
-
-QDomElement saveLocalization (Localization *l, QDomDocument& doc)
-{
-    QDomElement element = doc.createElement("locale");
-
-    element.setAttribute("weekStartsMonday", (l->weekStartDay() == 1) ? "True" : "False");
-    element.setAttribute("decimalSymbol", l->decimalSymbol());
-    element.setAttribute("thousandsSeparator", l->thousandsSeparator());
-    element.setAttribute("currencySymbol", l->currencySymbol());
-    element.setAttribute("monetaryDecimalSymbol", l->monetaryDecimalSymbol());
-    element.setAttribute("monetaryThousandsSeparator", l->monetaryThousandsSeparator());
-    element.setAttribute("positiveSign", l->positiveSign());
-    element.setAttribute("negativeSign", l->negativeSign());
-    element.setAttribute("fracDigits", QString::number(l->monetaryDecimalPlaces()));
-    element.setAttribute("positivePrefixCurrencySymbol", l->positivePrefixCurrencySymbol() ? "True" : "False");
-    element.setAttribute("negativePrefixCurrencySymbol", l->negativePrefixCurrencySymbol() ? "True" : "False");
-    element.setAttribute("positiveMonetarySignPosition", QString::number((int)l->positiveMonetarySignPosition()));
-    element.setAttribute("negativeMonetarySignPosition", QString::number((int)l->negativeMonetarySignPosition()));
-    element.setAttribute("timeFormat", l->timeFormat());
-    element.setAttribute("dateFormat", l->dateFormat());
-    element.setAttribute("dateFormatShort", l->dateFormatShort());
-
     return element;
 }
 

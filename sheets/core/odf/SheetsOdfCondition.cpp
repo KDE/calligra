@@ -9,12 +9,12 @@
 #include "SheetsOdf.h"
 #include "SheetsOdfPrivate.h"
 
+#include "engine/Validity.h"
+#include "engine/ValueConverter.h"
+#include "engine/ValueParser.h"
+
 #include "Condition.h"
-#include "Validity.h"
-#include "Util.h"
 #include "StyleManager.h"
-#include "ValueConverter.h"
-#include "ValueParser.h"
 
 #include <KoGenStyles.h>
 #include <KoXmlNS.h>

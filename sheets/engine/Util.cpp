@@ -112,7 +112,7 @@ bool Calligra::Sheets::Util::localReferenceAnchor(const QString &_ref)
 }
 
 
-static bool isCellnameCharacter(const QChar &c)
+bool Calligra::Sheets::Util::isCellnameCharacter(const QChar &c)
 {
     return c.isDigit() || c.isLetter() || c == '$';
 }

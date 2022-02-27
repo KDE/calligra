@@ -23,12 +23,12 @@
 
 // This should only be included by files inside the ksp/ subdir
 
-#include <KoXmlNS.h>
-#include <KoXmlReader.h>
+// Make sure an appropriate DTD is available in www/calligra/DTD if changing this value
+static const char CURRENT_DTD_VERSION[] = "1.2";
 
-#include "KoXmlReaderForward.h"
+#include <QDomElement>
 
-#include "Global.h"
+class KoXmlElement;
 
 namespace Calligra {
 namespace Sheets {
@@ -37,23 +37,26 @@ class Cell;
 class Conditions;
 class CustomStyle;
 class Localization;
+class Map;
+class NamedAreaManager;
 class ProtectableObject;
 class Sheet;
 class Style;
+class StyleManager;
 class Validity;
 class ValueConverter;
 class ValueParser;
 
 namespace Ksp {
     bool loadValidity(Validity *validity, Cell* const cell, const KoXmlElement& validityElement);
-    QDomElement saveValidityXML(QDomDocument& doc, Validity *validity, const ValueConverter *converter);
+    QDomElement saveValidity(QDomDocument& doc, Validity *validity, const ValueConverter *converter);
     void loadConditions(Conditions *conditions, const KoXmlElement &element, const ValueParser *parser);
     QDomElement saveConditions(Conditions *conditions, QDomDocument &doc, ValueConverter *converter);
 
     // styles
     QDomElement saveStyles(StyleManager *manager, QDomDocument & doc);
     bool loadStyles(StyleManager *manager, KoXmlElement const & styles);
-    void saveStyle(Style *style, QDomDocument& doc, QDomElement& format, const StyleManager* styleManager);
+    void saveStyle(const Style &style, QDomDocument& doc, QDomElement& format, const StyleManager* styleManager);
     void saveCustomStyle(CustomStyle *s, QDomDocument& doc, QDomElement& styles, const StyleManager* styleManager);
     bool loadCustomStyle(CustomStyle *s, KoXmlElement const & style, QString const & name);
 
@@ -61,8 +64,6 @@ namespace Ksp {
     void loadProtection(ProtectableObject *prot, const KoXmlElement& element);
     void loadNamedAreas(NamedAreaManager *manager, Map *map, const KoXmlElement& parent);
     QDomElement saveNamedAreas(NamedAreaManager *manager, QDomDocument& doc);
-    void loadLocalization (Localization *l, const KoXmlElement& element);
-    QDomElement saveLocalization (Localization *l, QDomDocument& doc);
 
     // map
     QDomElement saveMap(Map *map, QDomDocument& doc);

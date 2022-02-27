@@ -31,9 +31,6 @@
 #include "OdfLoadingContext.h"
 #include "OdfSavingContext.h"
 
-#include "database/Database.h"
-#include "database/Filter.h"
-
 namespace Calligra {
 namespace Sheets {
 
@@ -41,8 +38,17 @@ class CalculationSettings;
 class NamedAreaManager;
 class Conditions;
 class Conditional;
+class Cell;
+class CellBase;
 class Map;
+class MapBase;
 class Sheet;
+class Database;
+class Filter;
+class Validity;
+class AbstractCondition;
+class ValueConverter;
+class ValueParser;
 
 namespace Odf {
 
@@ -94,10 +100,10 @@ namespace Odf {
     Styles loadAutoStyles(StyleManager *styles, KoOdfStylesReader& stylesReader,
                              QHash<QString, Conditions>& conditionalStyles,
                              const ValueParser *parser);
-    void loadStyleTemplate(StyleManager *styles, KoOdfStylesReader& stylesReader, Map* map = 0);
-    void saveStyles(StyleManager *manager, KoGenStyles &mainStyles);
+    void loadStyleTemplate(StyleManager *styles, KoOdfStylesReader& stylesReader, MapBase* map = 0);
+    void saveStyles(StyleManager *manager, KoGenStyles &mainStyles, Localization *locale);
     QString saveStyle(const Style *style, KoGenStyle& xmlstyle, KoGenStyles& mainStyles,
-                       const StyleManager* manager);
+                       const StyleManager* manager, Localization *locale);
 
     void loadDataStyle(Style *style, KoOdfStylesReader& stylesReader, const KoXmlElement& element,
                              Conditions& conditions, const StyleManager* styleManager,
@@ -110,7 +116,7 @@ namespace Odf {
     void saveConditions(const Conditions *conditions, KoGenStyle &currentCellStyle, ValueConverter *converter);
 
     // SheetsOdfValidity
-    void loadValidation(Validity *validity, Cell* const cell, const QString& validationName, OdfLoadingContext& tableContext);
+    void loadValidation(Validity *validity, CellBase* const cell, const QString& validationName, OdfLoadingContext& tableContext);
 
 }
 

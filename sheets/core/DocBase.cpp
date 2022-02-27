@@ -18,19 +18,20 @@
 */
 #include "DocBase.h"
 
-// #include <KoDocumentResourceManager.h>
-// #include <KoPart.h>
+#include <QAbstractItemModel>
+#include <QDomDocument>
+#include <QPointer>
+#include <QUrl>
 
-// #include "calligra_sheets_limits.h"
-// #include "CalculationSettings.h"
-// #include "Map.h"
+#include <KoCanvasResourceIdentities.h>
+#include <KoDocumentResourceManager.h>
 
-// #include "ElapsedTime_p.h"
-// #include "odf/SheetsOdf.h"
-// #include "ksp/SheetsKsp.h"
+#include "engine/ElapsedTime_p.h"
+#include "engine/CalculationSettings.h"
+#include "Map.h"
 
-// #include "part/View.h" // TODO: get rid of this dependency
-static const int CURRENT_SYNTAX_VERSION = 1;
+#include "odf/SheetsOdf.h"
+#include "ksp/SheetsKsp.h"
 
 namespace Calligra {
 namespace Sheets {
@@ -101,11 +102,6 @@ void DocBase::setReadWrite(bool readwrite)
 Map *DocBase::map() const
 {
     return d->map;
-}
-
-int DocBase::syntaxVersion() const
-{
-    return d->map->syntaxVersion();
 }
 
 KoDocumentResourceManager* DocBase::resourceManager() const

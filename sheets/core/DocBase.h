@@ -70,11 +70,6 @@ public:
     Map *map() const;
 
     /**
-     * Returns the syntax version of the currently opened file
-     */
-    int syntaxVersion() const;
-
-    /**
      * Return a pointer to the resource manager associated with the
      * document. The resource manager contains
      * document wide resources * such as variable managers, the image

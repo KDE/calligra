@@ -4,6 +4,13 @@
 // Copyright 1999- 2006 The KSpread Team <calligra-devel@kde.org>
 // SPDX-License-Identifier: LGPL-2.0-or-later
 
+#include "SheetsKsp.h"
+#include "SheetsKspPrivate.h"
+
+#include <KoXmlReader.h>
+
+#include "engine/ValueConverter.h"
+#include "engine/ValueParser.h"
 
 #include "Condition.h"
 
@@ -20,8 +27,8 @@ QDomElement Ksp::saveConditions(Conditions *conds, QDomDocument &doc, ValueConve
 
     const QLinkedList<Conditional> list = conds->conditionList();
     QLinkedList<Conditional>::const_iterator it;
-    for (it = list.begin(); it != list.end(); ++it, ++i) {
-        Conditional conditional = *it;
+    for (it = list.begin(); it != list.end(); ++it) {
+        Conditional condition = *it;
 
         /* the name of the element will be "condition<n>"
             * This is unimportant now but in older versions three conditions were

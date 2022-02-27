@@ -7,12 +7,13 @@
 #ifndef KSPREAD_ODF_LOADING_CONTEXT
 #define KSPREAD_ODF_LOADING_CONTEXT
 
-#include <KoOdfLoadingContext.h>
+// #include <KoOdfLoadingContext.h>
 
-#include <QHash>
+// #include <QHash>
 
-#include "Region.h"
+#include "engine/Region.h"
 
+class KoOdfLoadingContext;
 class KoShapeLoadingContext;
 class KoShape;
 

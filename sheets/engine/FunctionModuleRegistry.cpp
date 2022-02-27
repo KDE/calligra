@@ -78,7 +78,7 @@ FunctionModuleRegistry::FunctionModuleRegistry()
 
 FunctionModuleRegistry::~FunctionModuleRegistry()
 {
-    foreach(const QString &id, keys()) {
+    for (const QString &id : keys()) {
         get(id)->deleteLater();
     }
     qDeleteAll(doubleEntries());
@@ -97,7 +97,7 @@ void FunctionModuleRegistry::loadFunctionModules()
     debugSheetsFormula << offers.count() << "function modules found.";
 
     const KConfigGroup pluginsConfigGroup = KSharedConfig::openConfig()->group("Plugins");
-    foreach (QPluginLoader *loader, offers) {
+    for (QPluginLoader *loader : offers) {
 
         QJsonObject metaData = loader->metaData().value("MetaData").toObject();
         int version = metaData.value("X-CalligraSheets-InterfaceVersion").toInt();

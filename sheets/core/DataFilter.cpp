@@ -359,7 +359,7 @@ void Filter::addCondition(Composition composition,
 QList<AbstractCondition*> Filter::copyList(const QList<AbstractCondition*>& list)
 {
     QList<AbstractCondition*> out;
-    foreach (AbstractCondition* c, list) {
+    for (AbstractCondition* c : list) {
         if (!c) {
             continue;
         } else if (c->type() == AbstractCondition::And) {

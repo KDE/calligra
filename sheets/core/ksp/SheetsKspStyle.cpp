@@ -7,13 +7,13 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include "SheetsKsp.h"
-#include "SheetsKspPrivate.h"
+// #include "SheetsKsp.h"
+// #include "SheetsKspPrivate.h"
 
-#include "Currency.h"
+// #include "Currency.h"
 
-#include "Style.h"
-#include "StyleManager.h"
+// #include "Style.h"
+// #include "StyleManager.h"
 
 namespace Calligra {
 namespace Sheets {
@@ -98,7 +98,7 @@ bool Ksp::loadStyles (StyleManager *manager, KoXmlElement const & styles)
 }
 
 
-void Ksp::saveStyle(Style *style, QDomDocument& doc, QDomElement& format, const StyleManager* styleManager) const
+void Ksp::saveStyle(const Style &style, QDomDocument& doc, QDomElement& format, const StyleManager* styleManager) const
 {
     QSet<Style::Key> keysToStore = style->definedKeys(styleManager);
 

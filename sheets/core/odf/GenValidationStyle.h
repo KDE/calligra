@@ -9,7 +9,7 @@
 #ifndef CALLIGRA_SHEETS_GENVALIDATIONSTYLE
 #define CALLIGRA_SHEETS_GENVALIDATIONSTYLE
 
-#include "sheets_odf_export.h"
+#include "sheets_core_export.h"
 
 #include <QMap>
 #include <QString>
@@ -75,7 +75,7 @@ private:
  * \class GenValidationStyles
  * \ingroup OpenDocument
  */
-class CALLIGRA_SHEETS_ODF_EXPORT GenValidationStyles
+class CALLIGRA_SHEETS_CORE_EXPORT GenValidationStyles
 {
 public:
     GenValidationStyles();

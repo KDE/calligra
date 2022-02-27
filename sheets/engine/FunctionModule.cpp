@@ -45,7 +45,7 @@ bool FunctionModule::isRemovable()
             d->functions.append(weakPointer.toStrongRef());
             // The failing on was used, so we do not put it in twice.
             checkedFunctions.removeLast();
-            foreach(Function* function, checkedFunctions) {
+            for (Function* function : checkedFunctions) {
                 // It is okay to recreate the shared pointers, as they were not used.
                 d->functions.append(QSharedPointer<Function>(function));
             }

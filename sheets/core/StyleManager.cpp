@@ -197,7 +197,7 @@ QString StyleManager::openDocumentName(const QString& name) const
 void StyleManager::dump() const
 {
     debugSheetsStyle << "Custom styles:";
-    foreach(const QString &name, m_styles.keys()) {
+    for (const QString &name : m_styles.keys()) {
         debugSheetsStyle << name;
     }
 }

@@ -21,21 +21,23 @@
 #include "SheetsOdf.h"
 #include "SheetsOdfPrivate.h"
 
-#include "CalculationSettings.h"
+#include "engine/NamedAreaManager.h"
+#include "engine/CalculationSettings.h"
+
 #include "CellStorage.h"
 #include "DocBase.h"
+#include "Condition.h"
 #include "LoadingInfo.h"
 #include "Map.h"
-#include "NamedAreaManager.h"
-#include "RowColumnFormat.h"
+#include "ColFormatStorage.h"
+#include "RowFormatStorage.h"
 #include "Sheet.h"
 #include "StyleManager.h"
-#include "Validity.h"
+#include "Database.h"
+#include "DataFilter.h"
 
-#include <QHash>
 
 #include <KoCharacterStyle.h>
-#include <KoDocumentResourceManager.h>
 #include <KoGenStyles.h>
 #include <KoStyleManager.h>
 #include <KoStyleStack.h>
@@ -93,7 +95,7 @@ bool Odf::loadMap(Map *map, const KoXmlElement& body, KoOdfLoadingContext& odfCo
     loadStyleTemplate(map->styleManager(), odfContext.stylesReader(), map);
 
     OdfLoadingContext tableContext(odfContext);
-    tableContext.validities = Validity::preloadValidities(body); // table:content-validations
+    tableContext.validities = Odf::preloadValidities(body); // table:content-validations
 
     // load text styles for rich-text content and TOS
     KoShapeLoadingContext shapeContext(tableContext.odfContext, map->resourceManager());
@@ -102,10 +104,10 @@ bool Odf::loadMap(Map *map, const KoXmlElement& body, KoOdfLoadingContext& odfCo
     sharedData->loadOdfStyles(shapeContext, map->textStyleManager());
 
     fixupStyle((KoCharacterStyle*)map->textStyleManager()->defaultParagraphStyle());
-    foreach (KoCharacterStyle* style, sharedData->characterStyles(true)) {
+    for (KoCharacterStyle* style : sharedData->characterStyles(true)) {
         fixupStyle(style);
     }
-    foreach (KoCharacterStyle* style, sharedData->characterStyles(false)) {
+    for (KoCharacterStyle* style : sharedData->characterStyles(false)) {
         fixupStyle(style);
     }
     shapeContext.addSharedData(KOTEXT_SHARED_LOADING_ID, sharedData);
@@ -204,9 +206,10 @@ bool Odf::loadMap(Map *map, const KoXmlElement& body, KoOdfLoadingContext& odfCo
             if (sheetElement.nodeName() == "table:table") {
                 if (!sheetElement.attributeNS(KoXmlNS::table, "name", QString()).isEmpty()) {
                     QString name = sheetElement.attributeNS(KoXmlNS::table, "name", QString());
-                    Sheet* sheet = map->findSheet(name);
-                    if (sheet)
-                        loadSheet(sheet, sheetElement, tableContext, autoStyles, conditionalStyles);
+                    SheetBase* sheet = map->findSheet(name);
+                    Sheet *fullSheet = sheet ? dynamic_cast<Sheet *>(sheet) : nullptr;
+                    if (fullSheet)
+                        loadSheet(fullSheet, sheetElement, tableContext, autoStyles, conditionalStyles);
                 }
             }
         }
@@ -241,8 +244,9 @@ void Odf::loadMapSettings(Map *map, const KoOasisSettings &settings)
     KoOasisSettings::NamedMap sheetsMap = firstView.namedMap("Tables");
     debugSheets << " loadMapSettings( KoOasisSettings &settings ) exist :" << !sheetsMap.isNull();
     if (!sheetsMap.isNull()) {
-        foreach(Sheet* sheet, map->sheetList()) {
-            loadSheetSettings(sheet, sheetsMap);
+        for (SheetBase* sheet : map->sheetList()) {
+            Sheet *fullSheet = dynamic_cast<Sheet *>(sheet);
+            loadSheetSettings(fullSheet, sheetsMap);
         }
     }
 
@@ -258,17 +262,17 @@ void Odf::loadMapSettings(Map *map, const KoOasisSettings &settings)
 bool Odf::saveMap(Map *map, KoXmlWriter & xmlWriter, KoShapeSavingContext & savingContext)
 {
     // Saving the custom cell styles including the default cell style.
-    saveStyles(map->styleManager(), savingContext.mainStyles());
+    saveStyles(map->styleManager(), savingContext.mainStyles(), map->calculationSettings()->locale());
 
     // Saving the default column style
     KoGenStyle defaultColumnStyle(KoGenStyle::TableColumnStyle, "table-column");
-    defaultColumnStyle.addPropertyPt("style:column-width", map->defaultColumnFormat()->width());
+    defaultColumnStyle.addPropertyPt("style:column-width", map->defaultColumnFormat().width);
     defaultColumnStyle.setDefaultStyle(true);
     savingContext.mainStyles().insert(defaultColumnStyle, "Default", KoGenStyles::DontAddNumberToName);
 
     // Saving the default row style
     KoGenStyle defaultRowStyle(KoGenStyle::TableRowStyle, "table-row");
-    defaultRowStyle.addPropertyPt("style:row-height", map->defaultRowFormat()->height());
+    defaultRowStyle.addPropertyPt("style:row-height", map->defaultRowFormat().height);
     defaultRowStyle.setDefaultStyle(true);
     savingContext.mainStyles().insert(defaultRowStyle, "Default", KoGenStyles::DontAddNumberToName);
 
@@ -284,8 +288,9 @@ bool Odf::saveMap(Map *map, KoXmlWriter & xmlWriter, KoShapeSavingContext & savi
 
     OdfSavingContext tableContext(savingContext);
 
-    foreach(Sheet* sheet, map->sheetList()) {
-        saveSheet(sheet, tableContext);
+    for (SheetBase* sheet : map->sheetList()) {
+        Sheet *fullSheet = dynamic_cast<Sheet *>(sheet);
+        saveSheet(fullSheet, tableContext);
     }
 
     tableContext.valStyle.writeStyle(xmlWriter);
@@ -304,7 +309,7 @@ bool Odf::loadTableShape(Sheet *sheet, const KoXmlElement &element, KoShapeLoadi
     KoOdfLoadingContext& odfContext = context.odfLoadingContext();
     OdfLoadingContext tableContext(odfContext);
     QHash<QString, Conditions> conditionalStyles;
-    Map *const map = sheet->map();
+    Map *map = sheet->fullMap();
     StyleManager *const styleManager = map->styleManager();
     ValueParser *const parser = map->parser();
     Styles autoStyles = loadAutoStyles(styleManager, odfContext.stylesReader(), conditionalStyles, parser);
@@ -315,26 +320,26 @@ bool Odf::loadTableShape(Sheet *sheet, const KoXmlElement &element, KoShapeLoadi
     bool result = loadSheet(sheet, element, tableContext, autoStyles, conditionalStyles);
 
     // delete any styles which were not used
-    sheet->map()->styleManager()->clearOasisStyles();
+    map->styleManager()->clearOasisStyles();
 
     return result;
 }
 
 void Odf::saveTableShape(Sheet *sheet, KoShapeSavingContext &context)
 {
-    const Map* map = sheet->map();
+    const Map* map = sheet->fullMap();
     // Saving the custom cell styles including the default cell style.
-    saveStyles(map->styleManager(), context.mainStyles());
+    saveStyles(map->styleManager(), context.mainStyles(), sheet->map()->calculationSettings()->locale());
 
     // Saving the default column style
     KoGenStyle defaultColumnStyle(KoGenStyle::TableColumnStyle, "table-column");
-    defaultColumnStyle.addPropertyPt("style:column-width", map->defaultColumnFormat()->width());
+    defaultColumnStyle.addPropertyPt("style:column-width", map->defaultColumnFormat().width);
     defaultColumnStyle.setDefaultStyle(true);
     context.mainStyles().insert(defaultColumnStyle, "Default", KoGenStyles::DontAddNumberToName);
 
     // Saving the default row style
     KoGenStyle defaultRowStyle(KoGenStyle::TableRowStyle, "table-row");
-    defaultRowStyle.addPropertyPt("style:row-height", map->defaultRowFormat()->height());
+    defaultRowStyle.addPropertyPt("style:row-height", map->defaultRowFormat().height);
     defaultRowStyle.setDefaultStyle(true);
     context.mainStyles().insert(defaultRowStyle, "Default", KoGenStyles::DontAddNumberToName);
 
@@ -364,9 +369,9 @@ void Odf::loadNamedAreas(NamedAreaManager *manager, const KoXmlElement& body)
 
             // Handle the case where the table:base-cell-address does contain the referenced sheetname
             // while it's missing in the table:cell-range-address. See bug #194386 for an example.
-            Sheet* fallbackSheet = 0;
+            SheetBase* fallbackSheet = 0;
             if (!base.isEmpty()) {
-                Region region(loadRegion(base), manager->map());
+                Region region = manager->map()->regionFromName(loadRegion(base));
                 fallbackSheet = region.lastSheet();
             }
             
@@ -374,7 +379,7 @@ void Odf::loadNamedAreas(NamedAreaManager *manager, const KoXmlElement& body)
             const QString range = element.attributeNS(KoXmlNS::table, "cell-range-address", QString());
             debugSheetsODF << "Named area found, name:" << name << ", area:" << range;
 
-            Region region(Odf::loadRegion(range), manager->map(), fallbackSheet);
+            Region region = manager->map()->regionFromName(loadRegion(range), fallbackSheet);
             if (!region.isValid() || !region.lastSheet()) {
                 debugSheetsODF << "invalid area";
                 continue;
@@ -422,10 +427,11 @@ bool Odf::loadDatabaseRanges(Map *map, const KoXmlElement& body)
             const Region region = database.range();
             if (!region.isValid())
                 continue;
-            const Sheet* sheet = region.lastSheet();
+            SheetBase* sheet = region.lastSheet();
             if (!sheet)
                 continue;
-            sheet->cellStorage()->setDatabase(region, database);
+            Sheet *fullSheet = dynamic_cast<Sheet *>(sheet);
+            fullSheet->fullCellStorage()->setDatabase(region, database);
         }
     }
     return true;
@@ -433,11 +439,13 @@ bool Odf::loadDatabaseRanges(Map *map, const KoXmlElement& body)
 
 void Odf::saveDatabaseRanges(Map *map, KoXmlWriter& xmlWriter)
 {
-    QList< QPair<QRectF, Database> > databases;
+    QVector< QPair<QRectF, Database> > databases;
     const Region region(QRect(QPoint(1, 1), QPoint(KS_colMax, KS_rowMax)));
-    const QList<Sheet*>& sheets = map->sheetList();
-    for (int i = 0; i < sheets.count(); ++i)
-        databases << sheets[i]->cellStorage()->databases(region);
+    const QList<SheetBase*>& sheets = map->sheetList();
+    for (int i = 0; i < sheets.count(); ++i) {
+        Sheet *fullSheet = dynamic_cast<Sheet *>(sheets[i]);
+        databases << fullSheet->fullCellStorage()->databases(region);
+    }
     if (databases.isEmpty())
         return;
 
@@ -456,8 +464,8 @@ Database Odf::loadDatabase(const KoXmlElement& element, const Map* map, bool *ok
 {
     *ok = true;
     Database db;
-    if (element.hasAttributeNS(KoXmlNS::table, "name"))
-        db.setName (element.attributeNS(KoXmlNS::table, "name", QString()));
+//    if (element.hasAttributeNS(KoXmlNS::table, "name"))
+//        db.setName (element.attributeNS(KoXmlNS::table, "name", QString()));
     if (element.hasAttributeNS(KoXmlNS::table, "is-selection")) {
         bool val = (element.attributeNS(KoXmlNS::table, "is-selection", "false") == "true");
         db.setIsSelection(val);
@@ -491,7 +499,7 @@ Database Odf::loadDatabase(const KoXmlElement& element, const Map* map, bool *ok
     if (element.hasAttributeNS(KoXmlNS::table, "target-range-address")) {
         const QString address = element.attributeNS(KoXmlNS::table, "target-range-address", QString());
         // only absolute addresses allowed; no fallback sheet needed
-        Region range = Region(Odf::loadRegion(address), map);
+        Region range = map->regionFromName(Odf::loadRegion(address));
         if (!range.isValid()) {
             *ok = false;
             return db;
@@ -538,8 +546,8 @@ void Odf::saveDatabase(const Database &database, KoXmlWriter& xmlWriter)
     if (database.range().isEmpty())
         return;
     xmlWriter.startElement("table:database-range");
-    if (!database.name().isNull())
-        xmlWriter.addAttribute("table:name", database.name());
+//    if (!database.name().isNull())
+//        xmlWriter.addAttribute("table:name", database.name());
     if (database.isSelection())
         xmlWriter.addAttribute("table:is-selection", "true");
     if (database.onUpdateKeepStyles())
@@ -590,7 +598,7 @@ Filter Odf::loadDatabaseFilter(const KoXmlElement& element, const Map* map, bool
     if (element.hasAttributeNS(KoXmlNS::table, "target-range-address")) {
         const QString address = element.attributeNS(KoXmlNS::table, "target-range-address", QString());
         // only absolute addresses allowed; no fallback sheet needed
-        Region r = Region(loadRegion(address), map);
+        Region r = map->regionFromName(loadRegion(address));
         if (!r.isValid())
             return res;
         res.setTargetRangeAddress(r);
@@ -602,7 +610,7 @@ Filter Odf::loadDatabaseFilter(const KoXmlElement& element, const Map* map, bool
     if (element.hasAttributeNS(KoXmlNS::table, "condition-source-range-address")) {
         const QString address = element.attributeNS(KoXmlNS::table, "condition-source-range-address", QString());
         // only absolute addresses allowed; no fallback sheet needed
-        Region r = Region(loadRegion(address), map);
+        Region r = map->regionFromName(loadRegion(address));
         res.setSourceRangeAddress(r);
     }
     if (element.hasAttributeNS(KoXmlNS::table, "display-duplicates")) {

@@ -300,7 +300,7 @@ bool Conditions::operator==(const Conditions& other) const
 uint Calligra::Sheets::qHash(const Conditions &c)
 {
     uint res = qHash(c.defaultStyle());
-    foreach (const Conditional& co, c.conditionList()) {
+    for (const Conditional& co : c.conditionList()) {
         res ^= qHash(co);
     }
     return res;

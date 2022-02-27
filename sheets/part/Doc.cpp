@@ -112,9 +112,6 @@ public:
     KoDocumentResourceManager *resourceManager;
 };
 
-// Make sure an appropriate DTD is available in www/calligra/DTD if changing this value
-static const char CURRENT_DTD_VERSION[] = "1.2";
-
 /*****************************************************************************
  *
  * Doc

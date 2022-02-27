@@ -40,20 +40,20 @@ void DependencyManager::Private::dump() const
         debugSheetsFormula << cell.name() << " consumes values of:" << debugStr.join(",");
     }
 
-    foreach(SheetBase* sheet, consumers.keys()) {
+    for(SheetBase* sheet : consumers.keys()) {
         const QList< QPair<QRectF, CellBase> > pairs = consumers[sheet]->intersectingPairs(QRect(1, 1, KS_colMax, KS_rowMax)).values();
         QHash<QString, QString> table;
         for (int i = 0; i < pairs.count(); ++i) {
             Region tmpRange(pairs[i].first.toRect(), sheet);
             table.insertMulti(tmpRange.name(), pairs[i].second.name());
         }
-        foreach(const QString &uniqueKey, table.uniqueKeys()) {
+        for(const QString &uniqueKey : table.uniqueKeys()) {
             QStringList debugStr(table.values(uniqueKey));
             debugSheetsFormula << uniqueKey << " provides values for:" << debugStr.join(",");
         }
     }
 
-    foreach(const CellBase &cell, depths.keys()) {
+    for(const CellBase &cell : depths.keys()) {
         QString cellName = cell.name();
         while (cellName.count() < 4) cellName.prepend(' ');
         debugSheetsFormula << "depth(" << cellName << " ) =" << depths[cell];
@@ -129,7 +129,7 @@ void DependencyManager::addSheet(SheetBase *sheet)
     //               of the way the providers are stored. Now: only by cell.
     //               Future: QHash<SheetBase*, QHash<CellBase, Region> >
     const QList<CellBase> consumers = d->providers.keys();
-    foreach(const CellBase& cell, consumers) {
+    for (const CellBase& cell : consumers) {
         if (cell.sheet() == sheet) {
             // Those cells may had got providing regions. Clear them first.
             // TODO
@@ -174,7 +174,7 @@ void DependencyManager::updateAllDependencies(const MapBase* map, Updater *updat
     if (updater) {
         updater->setProgress(0);
 
-        foreach(const SheetBase* sheet, map->sheetList())
+        for (const SheetBase* sheet : map->sheetList())
             cellsCount += sheet->formulaStorage()->count();
     }
 
@@ -253,7 +253,7 @@ void DependencyManager::regionMoved(const Region& movedRegion, const CellBase& d
             continue;
 
         QList<CellBase> dependentLocations = cit.value()->intersects((*it)->rect());
-        foreach(const CellBase &c, dependentLocations) {
+        for (const CellBase &c : dependentLocations) {
             updateFormula(c, (*it), locationOffset);
         }
     }
@@ -279,7 +279,7 @@ void DependencyManager::updateFormula(const CellBase& cell, const Region::Elemen
 
     QString expression('=');
     SheetBase* sheet = cell.sheet();
-    foreach(const Token &token, tokens) {
+    for (const Token &token : tokens) {
         //parse each cell/range and put it to our expression
         if (token.type() == Token::Cell || token.type() == Token::Range) {
             // FIXME Stefan: Special handling for named areas
@@ -319,7 +319,7 @@ Calligra::Sheets::Region DependencyManager::Private::consumingRegion(const CellB
     const QList<CellBase> consumers = cit.value()->contains(cell.cellPosition());
 
     Region region;
-    foreach(const CellBase& c, consumers) 
+    for (const CellBase& c : consumers) 
         region.add(c.cellPosition(), c.sheet());
     return region;
 }
@@ -336,7 +336,7 @@ void DependencyManager::Private::namedAreaModified(const QString& name)
 
     Region region;
     const QList<CellBase> namedAreaConsumersList = it.value();
-    foreach(const CellBase &c, namedAreaConsumersList) {
+    for (const CellBase &c : namedAreaConsumersList) {
         generateDependencies(c, c.formula());
         region.add(c.cellPosition(), c.sheet());
     }
@@ -388,7 +388,7 @@ void DependencyManager::Private::removeDepths(const CellBase& cell)
         return;
     depths.erase(dit);
     const QList<CellBase> consumers = cit.value()->contains(cell.cellPosition());
-    foreach(const CellBase &c, consumers)
+    for (const CellBase &c : consumers)
         removeDepths(c);
 }
 
@@ -465,7 +465,7 @@ void DependencyManager::Private::generateDepths(CellBase cell, QSet<CellBase>& c
         return;
     }
     const QList<CellBase> consumers = cit.value()->contains(cell.cellPosition());
-    foreach (const CellBase &c, consumers) {
+    for (const CellBase &c : consumers) {
         generateDepths(c, computedDepths);
     }
 

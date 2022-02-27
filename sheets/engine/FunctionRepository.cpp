@@ -52,7 +52,7 @@ FunctionRepository* FunctionRepository::self()
         }
         if (missingDescriptions.count() > 0) {
             debugSheetsUI << "No function descriptions found for:";
-            foreach(const QString& missingDescription, missingDescriptions) {
+            for (const QString& missingDescription : missingDescriptions) {
                 debugSheetsUI << "\t" << missingDescription;
             }
         }
@@ -117,7 +117,7 @@ QStringList FunctionRepository::functionNames(const QString& group)
 {
     QStringList lst;
 
-    foreach(FunctionDescription* description, d->descriptions) {
+    for (FunctionDescription* description : d->descriptions) {
         if (group.isNull() || (description->group() == group))
             lst.append(description->name());
     }

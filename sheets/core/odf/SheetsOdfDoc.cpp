@@ -21,13 +21,15 @@
 #include "SheetsOdf.h"
 #include "SheetsOdfPrivate.h"
 
-#include "DocBase.h"
+#include "engine/CalculationSettings.h"
+
 #include "BindingModel.h"
-#include "CalculationSettings.h"
-#include "Map.h"
-#include "SheetsDebug.h"
+// #include "SheetsDebug.h"
 #include "SheetAccessModel.h"
-#include "calligra_sheets_limits.h"
+// #include "calligra_sheets_limits.h"
+#include "DocBase.h"
+#include "Map.h"
+#include "Sheet.h"
 
 #include <KoGenStyles.h>
 #include <KoOdfReadStore.h>
@@ -37,12 +39,12 @@
 #include <KoStoreDevice.h>
 #include <KoUnit.h>
 #include <KoUpdater.h>
-#include <KoXmlReader.h>
+// #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 
 #include <KCodecs>
-#include <QBuffer>
+// #include <QBuffer>
 
 // This file contains functionality to load/save a DocBase
 
@@ -115,9 +117,9 @@ bool Odf::loadDocument(DocBase *doc, KoOdfReadStore &odfStore)
     doc->initConfig();
 
     //update plugins that rely on bindings, as loading order can mess up the data of the plugins
-    SheetAccessModel* sheetModel = doc->sheetAccessModel();
-    QList< Sheet* > sheets = doc->map()->sheetList();
-    Q_FOREACH( Sheet* sheet, sheets ){
+    SheetAccessModel* sheetModel = doc->map()->sheetAccessModel();
+    QList< SheetBase* > sheets = doc->map()->sheetList();
+    Q_FOREACH( SheetBase* sheet, sheets ){
         // This region contains the entire sheet
         const QRect region (0, 0, KS_colMax - 1, KS_rowMax - 1);
         QModelIndex index = sheetModel->index( 0, doc->map()->indexOf( sheet ) );
@@ -236,10 +238,11 @@ void Odf::saveSettings(DocBase *doc, KoXmlWriter &settingsWriter)
     //<config:config-item-map-named config:name="Tables">
     settingsWriter.startElement("config:config-item-map-named");
     settingsWriter.addAttribute("config:name", "Tables");
-    foreach (Sheet *sheet, doc->map()->sheetList()) {
+    foreach (SheetBase *sheet, doc->map()->sheetList()) {
         settingsWriter.startElement("config:config-item-map-entry");
         settingsWriter.addAttribute("config:name", sheet->sheetName());
-        saveSheetSettings(sheet, settingsWriter);
+        Sheet *fullSheet = dynamic_cast<Sheet *>(sheet);
+        saveSheetSettings(fullSheet, settingsWriter);
         settingsWriter.endElement();
     }
     settingsWriter.endElement();

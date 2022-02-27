@@ -30,10 +30,21 @@
 #include "SheetsKsp.h"
 #include "SheetsKspPrivate.h"
 
+#include <QDomDocument>
+
+#include <KoXmlReader.h>
+
+#include "engine/calligra_sheets_limits.h"
+#include "engine/CalculationSettings.h"
+#include "engine/Localization.h"
+
 #include "Cell.h"
 #include "Condition.h"
+#include "Map.h"
 #include "Sheet.h"
-#include "Validity.h"
+// #include "Validity.h"
+
+#include "float.h"
 
 namespace Calligra {
 namespace Sheets {
@@ -101,7 +112,7 @@ Cell Ksp::loadCell(const KoXmlElement & cell, Sheet *sheet)
         }
 
         if (mergedXCells != 0 || mergedYCells != 0)
-            res.mergeCells(column, >row, mergedXCells, mergedYCells);
+            res.mergeCells(column, row, mergedXCells, mergedYCells);
 
         Style style;
         if (!loadStyle(&style, formatElement))
@@ -115,7 +126,7 @@ Cell Ksp::loadCell(const KoXmlElement & cell, Sheet *sheet)
     KoXmlElement conditionsElement = cell.namedItem("condition").toElement();
     if (!conditionsElement.isNull()) {
         Conditions conditions;
-        Map *const map = sheet->map();
+        MapBase *const map = sheet->map();
         ValueParser *const valueParser = map->parser();
         loadConditions(&conditions, conditionsElement, valueParser);
         if (!conditions.isEmpty())
@@ -125,7 +136,7 @@ Cell Ksp::loadCell(const KoXmlElement & cell, Sheet *sheet)
     KoXmlElement validityElement = cell.namedItem("validity").toElement();
     if (!validityElement.isNull()) {
         Validity validity;
-        if (loadValidity(&validity, this, validityElement))
+        if (loadValidity(&validity, &res, validityElement))
             res.setValidity(validity);
     }
 
@@ -231,7 +242,7 @@ bool Ksp::loadCellData(Cell *cell, const KoXmlElement & text, const QString &_da
     QString t = text.text();
     t = t.trimmed();
 
-    CalculationSettings *sett = obj->sheet()->map()->calculationSettings();
+    CalculationSettings *sett = cell->sheet()->map()->calculationSettings();
 
     // A formula like =A1+A2 ?
     if ((!t.isEmpty()) && (t[0] == '=')) {
@@ -285,9 +296,9 @@ bool Ksp::loadCellData(Cell *cell, const KoXmlElement & text, const QString &_da
                 dataType = text.attribute("dataType");
             } else { // old docs: do the ugly solution of parsing the text
                 // ...except for date/time
-                if (isDate() && (t.count('/') == 2))
+                if (cell->isDate() && (t.count('/') == 2))
                     dataType = "Date";
-                else if (isTime() && (t.count(':') == 2))
+                else if (cell->isTime() && (t.count(':') == 2))
                     dataType = "Time";
                 else {
                     cell->parseUserInput(t);
@@ -297,6 +308,7 @@ bool Ksp::loadCellData(Cell *cell, const KoXmlElement & text, const QString &_da
         }
 
         if (newStyleLoading) {
+            Localization* locale = sett->locale();
             // boolean ?
             if (dataType == "Bool")
                 cell->setValue(Value(t.toLower() == "true"));
@@ -307,12 +319,11 @@ bool Ksp::loadCellData(Cell *cell, const KoXmlElement & text, const QString &_da
                 if (t.contains('.'))
                     cell->setValue(Value(t.toDouble(&ok)));      // We save in non-localized format
                 else
-                    cell->setValue(Value(t.toLongLong(&ok)));
+                    cell->setValue(Value((int64_t) t.toLongLong(&ok)));
                 if (!ok) {
                     warnSheets << "Couldn't parse '" << t << "' as number.";
                 }
                 /* We will need to localize the text version of the number */
-                KLocale* locale = sett->locale();
 
                 /* KLocale::formatNumber requires the precision we want to return.
                 */
@@ -320,15 +331,15 @@ bool Ksp::loadCellData(Cell *cell, const KoXmlElement & text, const QString &_da
 
                 if (cell->style().formatType() == Format::Percentage) {
                     if (cell->value().isInteger())
-                        t = locale->formatNumber(value().asInteger() * 100);
+                        t = locale->formatNumber(cell->value().asInteger() * 100);
                     else
-                        t = locale->formatNumber(numToDouble(value().asFloat() * 100.0), precision);
+                        t = locale->formatNumber(numToDouble(cell->value().asFloat() * 100.0), precision);
                     cell->setUserInput(t + "%");
                 } else {
                     if (cell->value().isInteger())
-                        t = locale->formatLong(value().asInteger());
+                        t = locale->formatNumber(cell->value().asInteger(), 0);
                     else
-                        t = locale->formatNumber(numToDouble(value().asFloat()), precision);
+                        t = locale->formatNumber(numToDouble(cell->value().asFloat()), precision);
                     cell->setUserInput(t);
                 }
             }
@@ -340,9 +351,9 @@ bool Ksp::loadCellData(Cell *cell, const KoXmlElement & text, const QString &_da
                 int pos1 = t.indexOf('/', pos + 1);
                 int month = t.midRef(pos + 1, ((pos1 - 1) - pos)).toInt();
                 int day = t.rightRef(t.length() - pos1 - 1).toInt();
-                cell->setValue(Value(QDate(year, month, day), siett));
+                cell->setValue(Value(QDate(year, month, day), sett));
                 if (cell->value().asDate(sett).isValid())   // Should always be the case for new docs
-                    cell->setUserInput(locale()->formatDate(cell->value().asDate(sett), KLocale::ShortDate));
+                    cell->setUserInput(locale->formatDate(cell->value().asDate(sett), false));
                 else { // This happens with old docs, when format is set wrongly to date
                     cell->parseUserInput(t);
                 }
@@ -361,7 +372,7 @@ bool Ksp::loadCellData(Cell *cell, const KoXmlElement & text, const QString &_da
                 second = t.rightRef(t.length() - pos1 - 1).toInt();
                 cell->setValue(Value(QTime(hours, minutes, second)));
                 if (cell->value().asTime().isValid())    // Should always be the case for new docs
-                    cell->setUserInput(locale()->formatTime(cell->value().asTime(), true));
+                    cell->setUserInput(locale->formatTime(cell->value().asTime(), true));
                 else { // This happens with old docs, when format is set wrongly to time
                     cell->parseUserInput(t);
                 }
@@ -370,13 +381,13 @@ bool Ksp::loadCellData(Cell *cell, const KoXmlElement & text, const QString &_da
             else {
                 // Set the cell's text
                 cell->setUserInput(t);
-                cell->setValue(Value(userInput()));
+                cell->setValue(Value(cell->userInput()));
             }
         }
     }
 
-    if (!cell->sheet()->isLoading())
-        cell->parseUserInput(userInput());
+    if (!cell->sheet()->map()->isLoading())
+        cell->parseUserInput(cell->userInput());
 
     return true;
 }
@@ -386,14 +397,14 @@ QDomElement Ksp::saveCell(Cell *obj, QDomDocument& doc, int xOffset, int yOffset
 {
     // Save the position of this cell
     QDomElement cell = doc.createElement("cell");
-    cell.setAttribute("row", QString::number(row() - yOffset));
-    cell.setAttribute("column", QString::number(column() - xOffset));
+    cell.setAttribute("row", QString::number(obj->row() - yOffset));
+    cell.setAttribute("column", QString::number(obj->column() - xOffset));
 
     //
     // Save the formatting information
     //
     QDomElement formatElement(doc.createElement("format"));
-    saveStyle (&obj->style(), doc, formatElement, obj->sheet()->map()->styleManager());
+    saveStyle (obj->style(), doc, formatElement, obj->fullSheet()->fullMap()->styleManager());
     if (formatElement.hasChildNodes() || formatElement.attributes().length())   // don't save empty tags
         cell.appendChild(formatElement);
 
@@ -411,9 +422,9 @@ QDomElement Ksp::saveCell(Cell *obj, QDomDocument& doc, int xOffset, int yOffset
             cell.appendChild(conditionElement);
     }
 
-    Validity validity = objj->validity();
+    Validity validity = obj->validity();
     if (!validity.isEmpty()) {
-        QDomElement validityElement = saveValidity (&validity, doc, obj->sheet()->map()->converter());
+        QDomElement validityElement = saveValidity (doc, &validity, obj->sheet()->map()->converter());
         if (!validityElement.isNull())
             cell.appendChild(validityElement);
     }
@@ -439,7 +450,7 @@ QDomElement Ksp::saveCell(Cell *obj, QDomDocument& doc, int xOffset, int yOffset
 
             /* we still want to save the results of the formula */
             QDomElement formulaResult = doc.createElement("result");
-            saveCellResult(doc, formulaResult, displayText());
+            saveCellResult(obj, doc, formulaResult, obj->displayText());
             cell.appendChild(formulaResult);
 
         } else if (!obj->link().isEmpty()) {
@@ -452,7 +463,7 @@ QDomElement Ksp::saveCell(Cell *obj, QDomDocument& doc, int xOffset, int yOffset
         } else {
             // Save the cell contents (in a locale-independent way)
             QDomElement txt = doc.createElement("text");
-            saveCellResult(doc, txt, obj->userInput());
+            saveCellResult(obj, doc, txt, obj->userInput());
             cell.appendChild(txt);
         }
     }
@@ -467,16 +478,16 @@ bool Ksp::saveCellResult(Cell *cell, QDomDocument& doc, QDomElement& result, QSt
 {
     QString dataType = "Other"; // fallback
 
-    Value val = obj->value();
-    CalculationSettings *sett = obj->sheet()->map()->calculationSettings();
+    Value val = cell->value();
+    CalculationSettings *sett = cell->sheet()->map()->calculationSettings();
     if (val.isNumber()) {
-        if (obj->isDate()) {
+        if (cell->isDate()) {
             // serial number of date
             QDate dd = val.asDateTime(sett).date();
             dataType = "Date";
             str = "%1/%2/%3";
             str = str.arg(dd.year()).arg(dd.month()).arg(dd.day());
-        } else if (isTime()) {
+        } else if (cell->isTime()) {
             // serial number of time
             dataType = "Time";
             str = val.asDateTime(sett).time().toString();

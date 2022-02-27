@@ -12,8 +12,8 @@
 #include <KoXmlWriter.h>
 
 // Sheets
-#include "Validity.h"
-#include "ValueConverter.h"
+#include "engine/Validity.h"
+#include "engine/ValueConverter.h"
 
 using namespace Calligra::Sheets;
 
@@ -67,7 +67,7 @@ void GenValidationStyles::writeStyle(KoXmlWriter& writer) const
             writer.addAttribute("table:display", it.key().displayValidationInformation);
 
             const QStringList helpLines = it.key().messageInfo.split('\n', QString::SkipEmptyParts);
-            foreach(const QString& helpLine, helpLines) {
+            for (const QString& helpLine : helpLines) {
                 writer.startElement("text:p");
                 writer.addTextNode(helpLine);
                 writer.endElement();
@@ -81,7 +81,7 @@ void GenValidationStyles::writeStyle(KoXmlWriter& writer) const
             writer.addAttribute("table:display", it.key().displayMessage);
 
             const QStringList errorLines = it.key().message.split('\n', QString::SkipEmptyParts);
-            foreach(const QString& errorLine, errorLines) {
+            for (const QString& errorLine : errorLines) {
                 writer.startElement("text:p");
                 writer.addTextNode(errorLine);
                 writer.endElement();

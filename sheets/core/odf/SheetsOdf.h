@@ -22,7 +22,7 @@
 #define SHEETS_ODF
 
 #include <KoDocument.h>
-#include "sheets_odf_export.h"
+#include "sheets_core_export.h"
 
 #include "Style.h"
 
@@ -40,6 +40,7 @@ namespace Sheets {
 class Cell;
 class Conditions;
 class DocBase;
+class Localization;
 class Map;
 class ProtectableObject;
 class Region;
@@ -49,28 +50,28 @@ namespace Odf {
     class OdfLoadingContext;
     struct ShapeLoadingData;
 
-    CALLIGRA_SHEETS_ODF_EXPORT bool loadDocument(DocBase *doc, KoOdfReadStore &odfStore);
-    CALLIGRA_SHEETS_ODF_EXPORT bool saveDocument(DocBase *doc, KoDocument::SavingContext &documentContext);
+    CALLIGRA_SHEETS_CORE_EXPORT bool loadDocument(DocBase *doc, KoOdfReadStore &odfStore);
+    CALLIGRA_SHEETS_CORE_EXPORT bool saveDocument(DocBase *doc, KoDocument::SavingContext &documentContext);
 
-    CALLIGRA_SHEETS_ODF_EXPORT bool loadTableShape(Sheet *sheet, const KoXmlElement &element, KoShapeLoadingContext &context);
-    CALLIGRA_SHEETS_ODF_EXPORT void saveTableShape(Sheet *sheet, KoShapeSavingContext &context);
+    CALLIGRA_SHEETS_CORE_EXPORT bool loadTableShape(Sheet *sheet, const KoXmlElement &element, KoShapeLoadingContext &context);
+    CALLIGRA_SHEETS_CORE_EXPORT void saveTableShape(Sheet *sheet, KoShapeSavingContext &context);
 
-    CALLIGRA_SHEETS_ODF_EXPORT ShapeLoadingData loadObject(Cell *cell, const KoXmlElement &element, KoShapeLoadingContext &shapeContext);
-    CALLIGRA_SHEETS_ODF_EXPORT void loadCellText(Cell *cell, const KoXmlElement& parent, OdfLoadingContext& tableContext, const Styles& autoStyles, const QString& cellStyleName);
+    CALLIGRA_SHEETS_CORE_EXPORT ShapeLoadingData loadObject(Cell *cell, const KoXmlElement &element, KoShapeLoadingContext &shapeContext);
+    CALLIGRA_SHEETS_CORE_EXPORT void loadCellText(Cell *cell, const KoXmlElement& parent, OdfLoadingContext& tableContext, const Styles& autoStyles, const QString& cellStyleName);
 
-    CALLIGRA_SHEETS_ODF_EXPORT void loadProtection(ProtectableObject *prot, const KoXmlElement& element);
-    CALLIGRA_SHEETS_ODF_EXPORT void loadSheetObject(Sheet *sheet, const KoXmlElement& element, KoShapeLoadingContext& shapeContext);
+    CALLIGRA_SHEETS_CORE_EXPORT void loadProtection(ProtectableObject *prot, const KoXmlElement& element);
+    CALLIGRA_SHEETS_CORE_EXPORT void loadSheetObject(Sheet *sheet, const KoXmlElement& element, KoShapeLoadingContext& shapeContext);
 
-    CALLIGRA_SHEETS_ODF_EXPORT bool paste(QBuffer &buffer, Map *map);
+    CALLIGRA_SHEETS_CORE_EXPORT bool paste(QBuffer &buffer, Map *map);
 
     // styles
-    CALLIGRA_SHEETS_ODF_EXPORT void loadDataStyle(Style *style, KoOdfStylesReader &stylesReader, const QString &styleName, Conditions &conditions, const StyleManager *styleManager, const ValueParser *parser);
+    CALLIGRA_SHEETS_CORE_EXPORT void loadDataStyle(Style *style, KoOdfStylesReader &stylesReader, const QString &styleName, Conditions &conditions, const StyleManager *styleManager, const ValueParser *parser);
 
     // regions
-    CALLIGRA_SHEETS_ODF_EXPORT QString loadRegion(const QString& expression);
-    CALLIGRA_SHEETS_ODF_EXPORT void loadRegion(const QChar *&data, const QChar *&end, QChar *&out);
-    CALLIGRA_SHEETS_ODF_EXPORT QString saveRegion(const QString& expression);
-    CALLIGRA_SHEETS_ODF_EXPORT QString saveRegion(Region *region);
+    CALLIGRA_SHEETS_CORE_EXPORT QString loadRegion(const QString& expression);
+    CALLIGRA_SHEETS_CORE_EXPORT void loadRegion(const QChar *&data, const QChar *&end, QChar *&out);
+    CALLIGRA_SHEETS_CORE_EXPORT QString saveRegion(const QString& expression);
+    CALLIGRA_SHEETS_CORE_EXPORT QString saveRegion(Region *region);
 
 
 /**
@@ -80,7 +81,7 @@ namespace Odf {
  * @param namespacePrefix The namespace prefix.
  * \note Use Odf::loadRegion() for plain cell references.
  */
-    CALLIGRA_SHEETS_ODF_EXPORT QString decodeFormula(const QString& expression_, const KLocale *locale = 0, const QString &namespacePrefix = QString());
+    CALLIGRA_SHEETS_CORE_EXPORT QString decodeFormula(const QString& expression_, const Localization *locale = 0, const QString &namespacePrefix = QString());
 
 /**
  * Converts a localized formula to an OpenDocument representation of a formula.
@@ -88,15 +89,15 @@ namespace Odf {
  * @param locale The locale from which the expression should be converted.
  * \note Use Odf::saveRegion() for plain cell references.
  */
-    CALLIGRA_SHEETS_ODF_EXPORT QString encodeFormula(const QString& expr, const KLocale* locale = 0);
+    CALLIGRA_SHEETS_CORE_EXPORT QString encodeFormula(const QString& expr, const Localization* locale = 0);
 
     // These are used in filters.
-    CALLIGRA_SHEETS_ODF_EXPORT QString convertRefToRange(const QString & sheet, const QRect & rect);
-    CALLIGRA_SHEETS_ODF_EXPORT QString convertRefToBase(const QString & sheet, const QRect & rect);
-    CALLIGRA_SHEETS_ODF_EXPORT QString convertRangeToRef(const QString & sheetName, const QRect & _area);
+    CALLIGRA_SHEETS_CORE_EXPORT QString convertRefToRange(const QString & sheet, const QRect & rect);
+    CALLIGRA_SHEETS_CORE_EXPORT QString convertRefToBase(const QString & sheet, const QRect & rect);
+    CALLIGRA_SHEETS_CORE_EXPORT QString convertRangeToRef(const QString & sheetName, const QRect & _area);
 
     // used in cell loading and filters
-    CALLIGRA_SHEETS_ODF_EXPORT QString convertMSOOXMLFormula(const QString& formula);
+    CALLIGRA_SHEETS_CORE_EXPORT QString convertMSOOXMLFormula(const QString& formula);
 }
 
 }  // namespace Sheets

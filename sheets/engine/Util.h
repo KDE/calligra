@@ -55,6 +55,7 @@ CALLIGRA_SHEETS_ENGINE_EXPORT QString adjustFormulaReference(const QString& form
 //Return true when it's a reference to cell from sheet.
 CALLIGRA_SHEETS_ENGINE_EXPORT bool localReferenceAnchor(const QString &_ref);
 
+CALLIGRA_SHEETS_ENGINE_EXPORT bool isCellnameCharacter(const QChar &c);
 
 } // namespace Util
 

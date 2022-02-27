@@ -5,13 +5,16 @@
 // SPDX-License-Identifier: LGPL-2.0-or-later
 
 
-#include "Map.h"
+#include "SheetsKsp.h"
+#include "SheetsKspPrivate.h"
 
-#include "CalculationSettings.h"
-#include "DocBase.h"
-#include "LoadingInfo.h"
-#include "Localization.h"
-#include "NamedAreaManager.h"
+// #include "Map.h"
+
+// #include "CalculationSettings.h"
+// #include "DocBase.h"
+// #include "LoadingInfo.h"
+// #include "Localization.h"
+// #include "NamedAreaManager.h"
 
 namespace Calligra {
 namespace Sheets {
@@ -20,10 +23,6 @@ namespace Sheets {
 QDomElement Ksp::saveMap(Map *map, QDomDocument& doc)
 {
     QDomElement spread = doc.documentElement();
-
-    Localization *l = static_cast<Localization*>(obj->map()->calculationSettings()->locale());
-    QDomElement locale = saveLocalization (l, doc);
-    spread.appendChild(locale);
 
     QDomElement areaname = saveNamedAreas (map->namedAreaManager(), doc);
     spread.appendChild(areaname);

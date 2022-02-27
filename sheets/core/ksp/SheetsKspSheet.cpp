@@ -8,15 +8,15 @@
 */
 
 
-#include "Sheet.h"
+// #include "Sheet.h"
 
-#include <KoPageLayout>
+// #include <KoPageLayout>
 
-#include "DocBase.h"
-#include "LoadingInfo.h"
-#include "Map.h"
-#include "PrintSettings.h"
-#include "SheetPrint.h"
+// #include "DocBase.h"
+// #include "LoadingInfo.h"
+// #include "Map.h"
+// #include "PrintSettings.h"
+// #include "SheetPrint.h"
 
 namespace Calligra {
 namespace Sheets {
@@ -533,7 +533,7 @@ QDomElement Ksp::saveRowFormat(RowFormat *f, QDomDocument& doc, Sheet *sheet, in
     if (!style.isEmpty()) {
         debugSheetsODF << "saving cell style of row" << f->row();
         QDomElement format;
-        saveStyle (&style, doc, format, sheet->map()->styleManager());
+        saveStyle (style, doc, format, sheet->map()->styleManager());
         row.appendChild(format);
     }
 
@@ -599,7 +599,7 @@ QDomElement Ksp::saveColFormat(ColumnFormat *f, QDomDocument& doc, Sheet *sheet,
     if (!style.isEmpty()) {
         debugSheetsODF << "saving cell style of column" << f->column();
         QDomElement format(doc.createElement("format"));
-        saveStyle (&style, doc, format, sheet->map()->styleManager());
+        saveStyle (style, doc, format, sheet->map()->styleManager());
         col.appendChild(format);
     }
 

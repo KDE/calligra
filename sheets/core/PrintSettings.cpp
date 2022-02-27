@@ -277,11 +277,6 @@ void PrintSettings::addPrintRange(const QRect& range)
     d->printRegion.add(range);
 }
 
-void PrintSettings::removePrintRange(const QRect& range)
-{
-    d->printRegion.sub(range, 0);
-}
-
 double PrintSettings::zoom() const
 {
     return d->zoom;

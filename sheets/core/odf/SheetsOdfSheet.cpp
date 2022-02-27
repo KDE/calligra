@@ -35,7 +35,9 @@
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 
+#include "engine/CalculationSettings.h"
 #include "CellStorage.h"
+#include "ColFormatStorage.h"
 #include "Condition.h"
 #include "DocBase.h"
 #include "Formula.h"
@@ -43,14 +45,11 @@
 #include "LoadingInfo.h"
 #include "Map.h"
 #include "PrintSettings.h"
-#include "RowColumnFormat.h"
 #include "RowFormatStorage.h"
 #include "Sheet.h"
-#include "SheetPrint.h"
 #include "ShapeApplicationData.h"
 #include "StyleManager.h"
 #include "StyleStorage.h"
-#include "Validity.h"
 
 // This file contains functionality to load/save a Sheet
 
@@ -89,11 +88,11 @@ namespace Odf {
      * The region is restricted to \p usedArea .
      */
     void loadSheetInsertStyles(Sheet *sheet, const Styles& autoStyles,
-                             const QHash<QString, QRegion>& styleRegions,
+                             const QHash<QString, Region>& styleRegions,
                              const QHash<QString, Conditions>& conditionalStyles,
                              const QRect& usedArea,
-                             QList<QPair<QRegion, Style> >& outStyleRegions,
-                             QList<QPair<QRegion, Conditions> >& outConditionalStyles);
+                             QList<QPair<Region, Style> >& outStyleRegions,
+                             QList<QPair<Region, Conditions> >& outConditionalStyles);
 
     bool loadStyleFormat(Sheet *sheet, KoXmlElement *style);
     void loadMasterLayoutPage(Sheet *sheet, KoStyleStack &styleStack);
@@ -101,8 +100,8 @@ namespace Odf {
                             int& rowIndex,
                             int& maxColumn,
                             OdfLoadingContext& tableContext,
-                            QHash<QString, QRegion>& rowStyleRegions,
-                            QHash<QString, QRegion>& cellStyleRegions,
+                            QHash<QString, Region>& rowStyleRegions,
+                            QHash<QString, Region>& cellStyleRegions,
                             const IntervalMap<QString>& columnStyles,
                             const Styles& autoStyles,
                             QList<ShapeLoadingData>& shapeData);
@@ -110,15 +109,15 @@ namespace Odf {
                             int& indexCol,
                             int& maxColumn,
                             KoOdfLoadingContext& odfContext,
-                            QHash<QString, QRegion>& columnStyleRegions,
+                            QHash<QString, Region>& columnStyleRegions,
                             IntervalMap<QString>& columnStyles);
     bool loadColumnFormat(Sheet *sheet, const KoXmlElement& column,
                              const KoOdfStylesReader& stylesReader, int & indexCol,
-                             QHash<QString, QRegion>& columnStyleRegions, IntervalMap<QString>& columnStyles);
+                             QHash<QString, Region>& columnStyleRegions, IntervalMap<QString>& columnStyles);
     int loadRowFormat(Sheet *sheet, const KoXmlElement& row, int &rowIndex,
                           OdfLoadingContext& tableContext,
-                          QHash<QString, QRegion>& rowStyleRegions,
-                          QHash<QString, QRegion>& cellStyleRegions,
+                          QHash<QString, Region>& rowStyleRegions,
+                          QHash<QString, Region>& cellStyleRegions,
                           const IntervalMap<QString>& columnStyles,
                           const Styles& autoStyles,
                           QList<ShapeLoadingData>& shapeData);
@@ -285,11 +284,11 @@ bool Odf::loadSheet(Sheet *sheet, const KoXmlElement& sheetElement, OdfLoadingCo
     }
 
     // Cell style regions
-    QHash<QString, QRegion> cellStyleRegions;
+    QHash<QString, Region> cellStyleRegions;
     // Cell style regions (row defaults)
-    QHash<QString, QRegion> rowStyleRegions;
+    QHash<QString, Region> rowStyleRegions;
     // Cell style regions (column defaults)
-    QHash<QString, QRegion> columnStyleRegions;
+    QHash<QString, Region> columnStyleRegions;
     IntervalMap<QString> columnStyles;
 
     // List of shapes that need to have their size recalculated after loading is complete
@@ -357,7 +356,7 @@ bool Odf::loadSheet(Sheet *sheet, const KoXmlElement& sheetElement, OdfLoadingCo
 
         rowNode = rowNode.nextSibling();
 
-        int count = sheet->map()->increaseLoadedRowsCounter();
+        int count = sheet->fullMap()->increaseLoadedRowsCounter();
         if (updater && count >= 0) updater->setProgress(count);
     }
 
@@ -365,16 +364,17 @@ bool Odf::loadSheet(Sheet *sheet, const KoXmlElement& sheetElement, OdfLoadingCo
     foreach (const ShapeLoadingData& sd, shapeData) {
         // subtract offset because the accumulated width and height we calculate below starts
         // at the top-left corner of this cell, but the shape can have an offset to that corner
+        QRect end = sd.endCell.firstRange();
         QSizeF size = QSizeF( sd.endPoint.x() - sd.offset.x(), sd.endPoint.y() - sd.offset.y());
-        for (int col = sd.startCell.x(); col < sd.endCell.firstRange().left(); ++col)
-            size += QSizeF(sheet->columnFormat(col)->width(), 0.0);
-        if (sd.endCell.firstRange().top() > sd.startCell.y())
-            size += QSizeF(0.0, sheet->rowFormats()->totalRowHeight(sd.startCell.y(), sd.endCell.firstRange().top() - 1));
+        if (sd.startCell.x() < end.left())
+            size += QSizeF(sheet->columnFormats()->totalColWidth(sd.startCell.x(), end.left() - 1), 0.0);
+        if (end.top() > sd.startCell.y())
+            size += QSizeF(0.0, sheet->rowFormats()->totalRowHeight(sd.startCell.y(), end.top() - 1));
         sd.shape->setSize(size);
     }
 
-    QList<QPair<QRegion, Style> > styleRegions;
-    QList<QPair<QRegion, Conditions> > conditionRegions;
+    QList<QPair<Region, Style> > styleRegions;
+    QList<QPair<Region, Conditions> > conditionRegions;
     // insert the styles into the storage (column defaults)
     debugSheetsODF << "Inserting column default cell styles ...";
     loadSheetInsertStyles(sheet, autoStyles, columnStyleRegions, conditionalStyles,
@@ -388,13 +388,13 @@ bool Odf::loadSheet(Sheet *sheet, const KoXmlElement& sheetElement, OdfLoadingCo
     loadSheetInsertStyles(sheet, autoStyles, cellStyleRegions, conditionalStyles,
                         QRect(1, 1, maxColumn, rowIndex - 1), styleRegions, conditionRegions);
 
-    sheet->cellStorage()->loadStyles(styleRegions);
-    sheet->cellStorage()->loadConditions(conditionRegions);
+    sheet->fullCellStorage()->loadStyles(styleRegions);
+    sheet->fullCellStorage()->loadConditions(conditionRegions);
 
     if (sheetElement.hasAttributeNS(KoXmlNS::table, "print-ranges")) {
         // e.g.: Sheet4.A1:Sheet4.E28
         QString range = sheetElement.attributeNS(KoXmlNS::table, "print-ranges", QString());
-        Region region(loadRegion(range));
+        Region region = sheet->map()->regionFromName(loadRegion(range), sheet);
         if (!region.firstSheet() || sheet->sheetName() == region.firstSheet()->sheetName())
             sheet->printSettings()->setPrintRegion(region);
     }
@@ -418,8 +418,8 @@ void Odf::loadRowNodes(Sheet *sheet, const KoXmlElement& parent,
                             int& rowIndex,
                             int& maxColumn,
                             OdfLoadingContext& tableContext,
-                            QHash<QString, QRegion>& rowStyleRegions,
-                            QHash<QString, QRegion>& cellStyleRegions,
+                            QHash<QString, Region>& rowStyleRegions,
+                            QHash<QString, Region>& cellStyleRegions,
                             const IntervalMap<QString>& columnStyles,
                             const Styles& autoStyles,
                             QList<ShapeLoadingData>& shapeData
@@ -447,7 +447,7 @@ void Odf::loadColumnNodes(Sheet *sheet, const KoXmlElement& parent,
                             int& indexCol,
                             int& maxColumn,
                             KoOdfLoadingContext& odfContext,
-                            QHash<QString, QRegion>& columnStyleRegions,
+                            QHash<QString, Region>& columnStyleRegions,
                             IntervalMap<QString>& columnStyles
                             )
 {
@@ -468,20 +468,21 @@ void Odf::loadColumnNodes(Sheet *sheet, const KoXmlElement& parent,
 
 
 void Odf::loadSheetInsertStyles(Sheet *sheet, const Styles& autoStyles,
-                             const QHash<QString, QRegion>& styleRegions,
+                             const QHash<QString, Region>& styleRegions,
                              const QHash<QString, Conditions>& conditionalStyles,
                              const QRect& usedArea,
-                             QList<QPair<QRegion, Style> >& outStyleRegions,
-                             QList<QPair<QRegion, Conditions> >& outConditionalStyles)
+                             QList<QPair<Region, Style> >& outStyleRegions,
+                             QList<QPair<Region, Conditions> >& outConditionalStyles)
 {
     const QList<QString> styleNames = styleRegions.keys();
+    StyleManager *manager = sheet->fullMap()->styleManager();
     for (int i = 0; i < styleNames.count(); ++i) {
-        if (!autoStyles.contains(styleNames[i]) && !sheet->map()->styleManager()->style(styleNames[i])) {
+        if (!autoStyles.contains(styleNames[i]) && !manager->style(styleNames[i])) {
             warnSheetsODF << "\t" << styleNames[i] << " not used";
             continue;
         }
         const bool hasConditions = conditionalStyles.contains(styleNames[i]);
-        const QRegion styleRegion = styleRegions[styleNames[i]] & QRegion(usedArea);
+        const Region styleRegion = styleRegions[styleNames[i]].intersected(Region(usedArea));
         if (hasConditions)
             outConditionalStyles.append(qMakePair(styleRegion, conditionalStyles[styleNames[i]]));
         if (autoStyles.contains(styleNames[i])) {
@@ -491,7 +492,7 @@ void Odf::loadSheetInsertStyles(Sheet *sheet, const Styles& autoStyles,
             style.merge(autoStyles[styleNames[i]]);
             outStyleRegions.append(qMakePair(styleRegion, style));
         } else {
-            const CustomStyle* namedStyle = sheet->map()->styleManager()->style(styleNames[i]);
+            const CustomStyle* namedStyle = manager->style(styleNames[i]);
             //debugSheetsODF << "\tcustom:" << namedStyle->name() << " at" << styleRegion.rectCount() << "rects";
             Style style;
             style.setDefault(); // "overwrite" existing style
@@ -622,7 +623,7 @@ bool Odf::loadStyleFormat(Sheet *sheet, KoXmlElement *style)
         fleft.append(getPart(footer));
     }
 
-    sheet->print()->headerFooter()->setHeadFootLine(hleft, hmiddle, hright,
+    sheet->headerFooter()->setHeadFootLine(hleft, hmiddle, hright,
             fleft, fmiddle, fright);
     return true;
 }
@@ -696,7 +697,7 @@ void Odf::loadMasterLayoutPage(Sheet *sheet, KoStyleStack &styleStack)
             //TODO implement it into kspread
         }
         if (str.contains("grid")) {
-            sheet->print()->settings()->setPrintGrid(true);
+            sheet->printSettings()->setPrintGrid(true);
         }
         if (str.contains("annotations")) {
             //TODO it's not implemented
@@ -730,12 +731,12 @@ void Odf::loadMasterLayoutPage(Sheet *sheet, KoStyleStack &styleStack)
             debugSheetsODF << " table-centering unknown :" << str;
 #endif
     }
-    sheet->print()->settings()->setPageLayout(pageLayout);
+    sheet->printSettings()->setPageLayout(pageLayout);
 }
 
 bool Odf::loadColumnFormat(Sheet *sheet, const KoXmlElement& column,
                              const KoOdfStylesReader& stylesReader, int & indexCol,
-                             QHash<QString, QRegion>& columnStyleRegions, IntervalMap<QString>& columnStyles)
+                             QHash<QString, Region>& columnStyleRegions, IntervalMap<QString>& columnStyles)
 {
 //   debugSheetsODF<<"bool Odf::loadColumnFormat(const KoXmlElement& column, const KoOdfStylesReader& stylesReader, unsigned int & indexCol ) index Col :"<<indexCol;
 
@@ -756,7 +757,7 @@ bool Odf::loadColumnFormat(Sheet *sheet, const KoXmlElement& column,
     if (column.hasAttributeNS(KoXmlNS::table, "default-cell-style-name")) {
         const QString styleName = column.attributeNS(KoXmlNS::table, "default-cell-style-name", QString());
         if (!styleName.isEmpty()) {
-            columnStyleRegions[styleName] += QRect(indexCol, 1, number, KS_rowMax);
+            columnStyleRegions[styleName].add(QRect(indexCol, 1, number, KS_rowMax));
             columnStyles.insert(indexCol, indexCol+number-1, styleName);
         }
     }
@@ -810,34 +811,24 @@ bool Odf::loadColumnFormat(Sheet *sheet, const KoXmlElement& column,
         return true;
     }
 
-    for (int i = 0; i < number; ++i) {
-        //debugSheetsODF << " insert new column: pos :" << indexCol << " width :" << width << " hidden ?" << visibility;
-
-        if (isNonDefaultColumn) {
-            ColumnFormat* cf = sheet->nonDefaultColumnFormat(indexCol);
-
-            if (width != -1.0)   //safe
-                cf->setWidth(width);
-            if (insertPageBreak) {
-                cf->setPageBreak(true);
-            }
-            if (visibility == Collapsed)
-                cf->setHidden(true);
-            else if (visibility == Filtered)
-                cf->setFiltered(true);
-
-            cf->setPageBreak(insertPageBreak);
-        }
-        ++indexCol;
+    if (isNonDefaultColumn) {
+        ColFormatStorage *cf = sheet->columnFormats();
+        cf->setPageBreak(indexCol, indexCol + number - 1, insertPageBreak);
+        if (width != -1.0)   //safe
+            cf->setColWidth(indexCol, indexCol + number - 1, width);
+        if (visibility == Collapsed)
+            cf->setHidden(indexCol, indexCol + number - 1, true);
+        else if (visibility == Filtered)
+            cf->setFiltered(indexCol, indexCol + number - 1, true);
     }
-//     debugSheetsODF<<" after index column !!!!!!!!!!!!!!!!!! :"<<indexCol;
+
     return true;
 }
 
 int Odf::loadRowFormat(Sheet *sheet, const KoXmlElement& row, int &rowIndex,
                           OdfLoadingContext& tableContext,
-                          QHash<QString, QRegion>& rowStyleRegions,
-                          QHash<QString, QRegion>& cellStyleRegions,
+                          QHash<QString, Region>& rowStyleRegions,
+                          QHash<QString, Region>& cellStyleRegions,
                           const IntervalMap<QString>& columnStyles,
                           const Styles& autoStyles,
                           QList<ShapeLoadingData>& shapeData)
@@ -884,7 +875,7 @@ int Odf::loadRowFormat(Sheet *sheet, const KoXmlElement& row, int &rowIndex,
     if (row.hasAttributeNS(KoXmlNS::table, sDefaultCellStyleName)) {
         rowCellStyleName = row.attributeNS(KoXmlNS::table, sDefaultCellStyleName, QString());
         if (!rowCellStyleName.isEmpty()) {
-            rowStyleRegions[rowCellStyleName] += QRect(1, rowIndex, KS_colMax, number);
+            rowStyleRegions[rowCellStyleName].add(QRect(1, rowIndex, KS_colMax, number));
         }
     }
 
@@ -920,13 +911,14 @@ int Odf::loadRowFormat(Sheet *sheet, const KoXmlElement& row, int &rowIndex,
 
 //     debugSheetsODF<<" create non defaultrow format :"<<rowIndex<<" repeate :"<<number<<" height :"<<height;
     if (isNonDefaultRow) {
+        RowFormatStorage *rf = sheet->rowFormats();
         if (height != -1.0)
-            sheet->rowFormats()->setRowHeight(rowIndex, rowIndex + number - 1, height);
-        sheet->rowFormats()->setPageBreak(rowIndex, rowIndex + number - 1, insertPageBreak);
+            rf->setRowHeight(rowIndex, rowIndex + number - 1, height);
+        rf->setPageBreak(rowIndex, rowIndex + number - 1, insertPageBreak);
         if (visibility == Collapsed)
-            sheet->rowFormats()->setHidden(rowIndex, rowIndex + number - 1, true);
+            rf->setHidden(rowIndex, rowIndex + number - 1, true);
         else if (visibility == Filtered)
-            sheet->rowFormats()->setFiltered(rowIndex, rowIndex + number - 1, true);
+            rf->setFiltered(rowIndex, rowIndex + number - 1, true);
     }
 
     int columnIndex = 1;
@@ -951,7 +943,7 @@ int Odf::loadRowFormat(Sheet *sheet, const KoXmlElement& row, int &rowIndex,
         // Styles are inserted at the end of the loading process, so check the XML directly here.
         const QString styleName = cellElement.attributeNS(KoXmlNS::table , sStyleName, QString());
         if (!styleName.isEmpty())
-            cellStyleRegions[styleName] += QRect(columnIndex, rowIndex, numberColumns, number);
+            cellStyleRegions[styleName].add(QRect(columnIndex, rowIndex, numberColumns, number));
 
         // figure out exact cell style for loading of cell content
         QString cellStyleName = styleName;
@@ -966,7 +958,7 @@ int Odf::loadRowFormat(Sheet *sheet, const KoXmlElement& row, int &rowIndex,
         if (!cell.comment().isEmpty())
             sheet->cellStorage()->setComment(Region(columnIndex, rowIndex, numberColumns, number, sheet), cell.comment());
         if (!cell.conditions().isEmpty())
-            sheet->cellStorage()->setConditions(Region(columnIndex, rowIndex, numberColumns, number, sheet), cell.conditions());
+            sheet->fullCellStorage()->setConditions(Region(columnIndex, rowIndex, numberColumns, number, sheet), cell.conditions());
         if (!cell.validity().isEmpty())
             sheet->cellStorage()->setValidity(Region(columnIndex, rowIndex, numberColumns, number, sheet), cell.validity());
 
@@ -988,8 +980,6 @@ int Odf::loadRowFormat(Sheet *sheet, const KoXmlElement& row, int &rowIndex,
         }
         columnIndex += numberColumns;
     }
-
-    sheet->cellStorage()->setRowsRepeated(rowIndex, number);
 
     rowIndex += number;
     return columnMaximal;
@@ -1112,12 +1102,12 @@ void Odf::saveColRowCell(Sheet *sheet, int maxCols, int maxRows, OdfSavingContex
     maxRows = qMin(KS_rowMax, qMax(1, maxRows));
     maxMaxRows = maxMaxRows;
     debugSheetsODF << "\t Sheet dimension:" << maxCols << " x" << maxRows;
+    Localization *locale = sheet->map()->calculationSettings()->locale();
 
     // saving the columns
     //
     int i = 1;
     while (i <= maxCols) {
-        const ColumnFormat* column = sheet->columnFormat(i);
 //         debugSheetsODF << "Odf::saveColRowCell: first col loop:"
 //                       << "i:" << i
 //                       << "column:" << (column ? column->column() : 0)
@@ -1129,66 +1119,36 @@ void Odf::saveColRowCell(Sheet *sheet, int maxCols, int maxRows, OdfSavingContex
         int j = i;
         int count = 1;
 
+        ColFormatStorage *cf = sheet->columnFormats();
+        const bool colIsDefault = cf->isDefaultCol(i);
         while (j <= maxCols) {
-            const ColumnFormat* nextColumn = sheet->nextColumn(j);
-            const int nextColumnIndex = nextColumn ? nextColumn->column() : 0;
-            const QMap<int, Style>::iterator nextColumnDefaultStyle = tableContext.columnDefaultStyles.upperBound(j);
-            const int nextStyleColumnIndex = nextColumnDefaultStyle == tableContext.columnDefaultStyles.end()
-                                             ? 0 : nextColumnDefaultStyle.key();
-            // j becomes the index of the adjacent column
-            ++j;
-
-//           debugSheetsODF <<"Odf::saveColRowCell: second col loop:"
-//                         << "j:" << j
-//                         << "next column:" << (nextColumn ? nextColumn->column() : 0)
-//                         << "next styled column:" << nextStyleColumnIndex;
-
-            // no next or not the adjacent column?
-            if ((!nextColumn && !nextStyleColumnIndex) ||
-                    (nextColumnIndex != j && nextStyleColumnIndex != j)) {
-                // if the origin column was a default column,
-                if (column->isDefault() && style.isDefault()) {
-                    // we count the default columns
-                    if (!nextColumn && !nextStyleColumnIndex)
-                        count = maxCols - i + 1;
-                    else if (nextColumn && (!nextStyleColumnIndex || nextColumn->column() <= nextStyleColumnIndex))
-                        count = nextColumn->column() - i;
-                    else
-                        count = nextStyleColumnIndex - i;
-                }
-                // otherwise we just stop here to process the adjacent
-                // column in the next iteration of the outer loop
-                break;
-            }
-
-            // stop, if the next column differs from the current one
-            if ((nextColumn && (*column != *nextColumn)) || (!nextColumn && !column->isDefault()))
-                break;
-            if (style != tableContext.columnDefaultStyles.value(j))
-                break;
+            j++;
+            if (!cf->colsAreEqual(i, j)) break;
+            if (j > cf->lastNonDefaultCol()) break;
+            if (style != tableContext.columnDefaultStyles.value(j)) break;
             ++count;
         }
 
         xmlWriter.startElement("table:table-column");
-        if (!column->isDefault()) {
+        if (!colIsDefault) {
             KoGenStyle currentColumnStyle(KoGenStyle::TableColumnAutoStyle, "table-column");
-            currentColumnStyle.addPropertyPt("style:column-width", column->width());
-            if (column->hasPageBreak()) {
+            currentColumnStyle.addPropertyPt("style:column-width", cf->colWidth(i));
+            if (cf->hasPageBreak(i)) {
                 currentColumnStyle.addProperty("fo:break-before", "page");
             }
             xmlWriter.addAttribute("table:style-name", mainStyles.insert(currentColumnStyle, "co"));
         }
-        if (!column->isDefault() || !style.isDefault()) {
+        if (!colIsDefault || !style.isDefault()) {
             if (!style.isDefault()) {
                 KoGenStyle currentDefaultCellStyle; // the type is determined in saveOdfStyle
                 const QString name = saveStyle(&style, currentDefaultCellStyle, mainStyles,
-                                                   sheet->map()->styleManager());
+                                                   sheet->fullMap()->styleManager(), locale);
                 xmlWriter.addAttribute("table:default-cell-style-name", name);
             }
 
-            if (column->isHidden())
+            if (cf->isHidden(i))
                 xmlWriter.addAttribute("table:visibility", "collapse");
-            else if (column->isFiltered())
+            else if (cf->isFiltered(i))
                 xmlWriter.addAttribute("table:visibility", "filter");
         }
         if (count > 1)
@@ -1221,7 +1181,7 @@ void Odf::saveColRowCell(Sheet *sheet, int maxCols, int maxRows, OdfSavingContex
 
         int repeated = 1;
         // empty row?
-        if (!sheet->cellStorage()->firstInRow(i) && !tableContext.rowHasCellAnchoredShapes(sheet, i)) { // row is empty
+        if (!sheet->fullCellStorage()->firstInRow(i) && !tableContext.rowHasCellAnchoredShapes(sheet, i)) { // row is empty
 //             debugSheetsODF <<"Odf::saveColRowCell: first row loop:"
 //                           << " i: " << i
 //                           << " row: " << row->row();
@@ -1231,7 +1191,7 @@ void Odf::saveColRowCell(Sheet *sheet, int maxCols, int maxRows, OdfSavingContex
             //   next non-empty row
             // or
             //   next row with different Format
-            while (j <= maxRows && !sheet->cellStorage()->firstInRow(j) && !tableContext.rowHasCellAnchoredShapes(sheet, j)) {
+            while (j <= maxRows && !sheet->fullCellStorage()->firstInRow(j) && !tableContext.rowHasCellAnchoredShapes(sheet, j)) {
 //               debugSheetsODF <<"Odf::saveColRowCell: second row loop:"
 //                         << " j: " << j
 //                         << " row: " << nextRow->row();
@@ -1261,7 +1221,7 @@ void Odf::saveColRowCell(Sheet *sheet, int maxCols, int maxRows, OdfSavingContex
             if (!style.isDefault()) {
                 KoGenStyle currentDefaultCellStyle; // the type is determined in saveCellStyle
                 const QString name = saveStyle(&style, currentDefaultCellStyle, mainStyles,
-                                                   sheet->map()->styleManager());
+                                                   sheet->fullMap()->styleManager(), locale);
                 xmlWriter.addAttribute("table:default-cell-style-name", name);
             }
             if (sheet->rowFormats()->isHidden(i))   // never true for the default row
@@ -1291,7 +1251,7 @@ void Odf::saveColRowCell(Sheet *sheet, int maxCols, int maxRows, OdfSavingContex
             if (!style.isDefault()) {
                 KoGenStyle currentDefaultCellStyle; // the type is determined in saveCellStyle
                 const QString name = saveStyle(&style, currentDefaultCellStyle, mainStyles,
-                                                   sheet->map()->styleManager());
+                                                   sheet->fullMap()->styleManager(), locale);
                 xmlWriter.addAttribute("table:default-cell-style-name", name);
             }
             if (sheet->rowFormats()->isHidden(i))   // never true for the default row
@@ -1341,7 +1301,7 @@ void Odf::saveCells(Sheet *sheet, int row, int maxCols, OdfSavingContext& tableC
 
     int i = 1;
     Cell cell(sheet, i, row);
-    Cell nextCell = sheet->cellStorage()->nextInRow(i, row);
+    Cell nextCell = sheet->fullCellStorage()->nextInRow(i, row);
     // handle situations where the row contains shapes and nothing else
     if (cell.isDefault() && nextCell.isNull()) {
         int nextShape = tableContext.nextAnchoredShape(sheet, row, i);
@@ -1373,7 +1333,7 @@ void Odf::saveCells(Sheet *sheet, int row, int maxCols, OdfSavingContext& tableC
             i = nextShape;
         }
 
-        nextCell = sheet->cellStorage()->nextInRow(i, row);
+        nextCell = sheet->fullCellStorage()->nextInRow(i, row);
     } while (!cell.isDefault() || tableContext.cellHasAnchoredShapes(sheet, cell.row(), cell.column()) || !nextCell.isNull());
 
     // Fill the row with empty cells, if there's a row default cell style.
@@ -1556,7 +1516,7 @@ void Odf::convertPart(Sheet *sheet, const QString & part, KoXmlWriter & xmlWrite
 
 void Odf::saveHeaderFooter(Sheet *sheet, KoXmlWriter &xmlWriter)
 {
-    HeaderFooter *hf = sheet->print()->headerFooter();
+    HeaderFooter *hf = sheet->headerFooter();
     QString headerLeft = hf->headLeft();
     QString headerCenter = hf->headMid();
     QString headerRight = hf->headRight();
@@ -1674,7 +1634,7 @@ bool Odf::compareRows(Sheet *sheet, int row1, int row2, int maxCols, OdfSavingCo
     if (tableContext.rowHasCellAnchoredShapes(sheet, row1) != tableContext.rowHasCellAnchoredShapes(sheet, row2)) {
         return false;
     }
-    return compareCellsInRows(sheet->cellStorage(), row1, row2, maxCols);
+    return compareCellsInRows(sheet->fullCellStorage(), row1, row2, maxCols);
 }
 
 
@@ -1696,7 +1656,7 @@ void Odf::loadSheetSettings(Sheet *sheet, const KoOasisSettings::NamedMap &setti
 
     int cursorX = qMin(KS_colMax, qMax(1, items.parseConfigItemInt("CursorPositionX") + 1));
     int cursorY = qMin(KS_rowMax, qMax(1, items.parseConfigItemInt("CursorPositionY") + 1));
-    sheet->map()->loadingInfo()->setCursorPosition(sheet, QPoint(cursorX, cursorY));
+    sheet->fullMap()->loadingInfo()->setCursorPosition(sheet, QPoint(cursorX, cursorY));
 
     int offsetX = items.parseConfigItemInt("xOffset");
     int offsetY = items.parseConfigItemInt("yOffset");

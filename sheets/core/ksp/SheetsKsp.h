@@ -21,21 +21,25 @@
 #ifndef SHEETS_KSP
 #define SHEETS_KSP
 
-#include <KoDocument.h>
-#include "sheets_odf_export.h"
+#include "sheets_core_export.h"
 
-class KoStore;
+static const int CURRENT_SYNTAX_VERSION = 1;
+
+class KoXmlDocument;
+class KoXmlElement;
+class QDomDocument;
 
 namespace Calligra {
 namespace Sheets {
 
 class DocBase;
+class Style;
 
 namespace Ksp {
-    bool loadDoc(DocBase *obj, const KoXmlDocument& doc);
-    QDomDocument saveDoc(DocBase *document);
+    CALLIGRA_SHEETS_CORE_EXPORT bool loadDoc(DocBase *obj, const KoXmlDocument& doc);
+    CALLIGRA_SHEETS_CORE_EXPORT QDomDocument saveDoc(DocBase *document);
 
-    bool loadStyle(Style *style, KoXmlElement& format);
+    CALLIGRA_SHEETS_CORE_EXPORT bool loadStyle(Style *style, KoXmlElement& format);
 
 }
 

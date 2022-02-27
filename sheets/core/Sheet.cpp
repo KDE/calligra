@@ -420,7 +420,7 @@ void Sheet::adjustDocumentHeight(double deltaHeight)
 
 void Sheet::adjustCellAnchoredShapesX(double minX, double maxX, double delta)
 {
-    foreach (KoShape* s, d->shapes) {
+    for (KoShape* s : d->shapes) {
         if (dynamic_cast<ShapeApplicationData*>(s->applicationData())->isAnchoredToCell()) {
             if (s->position().x() >= minX && s->position().x() < maxX) {
                 QPointF p = s->position();
@@ -438,7 +438,7 @@ void Sheet::adjustCellAnchoredShapesX(double delta, int firstCol, int lastCol)
 
 void Sheet::adjustCellAnchoredShapesY(double minY, double maxY, double delta)
 {
-    foreach (KoShape* s, d->shapes) {
+    for (KoShape* s : d->shapes) {
         if (dynamic_cast<ShapeApplicationData*>(s->applicationData())->isAnchoredToCell()) {
             if (s->position().y() >= minY && s->position().y() < maxY) {
                 QPointF p = s->position();

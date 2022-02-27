@@ -176,7 +176,6 @@ public:
     const Region& printRegion() const;
     void setPrintRegion(const Region& region);
     void addPrintRange(const QRect& range);
-    void removePrintRange(const QRect& range);
 
     double zoom() const;
     void setZoom(double zoom);

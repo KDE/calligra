@@ -101,7 +101,7 @@ void StyleStorageLoaderJob::run()
         d->cache.clear();
     }
     typedef QPair<Region, Style> StyleRegion;
-    foreach (const StyleRegion& styleArea, m_styles) {
+    for (const StyleRegion& styleArea : m_styles) {
         const Region& reg = styleArea.first;
         const Style& style = styleArea.second;
         if (style.isEmpty()) continue;
@@ -109,7 +109,7 @@ void StyleStorageLoaderJob::run()
         // update used areas
         QRect bound = reg.boundingRect();
         if ((bound.top() == 1 && bound.bottom() >= KS_rowMax) || (bound.left() == 1 && bound.right() >= KS_colMax)) {
-            foreach (const QRect& rect, reg.rects()) {
+            for (const QRect& rect : reg.rects()) {
                 if (rect.top() == 1 && rect.bottom() >= KS_rowMax) {
                     for (int i = rect.left(); i <= rect.right(); ++i) {
                         d->usedColumns.insert(i, true);
@@ -127,7 +127,7 @@ void StyleStorageLoaderJob::run()
         }
 
         // find substyles
-        foreach(const SharedSubStyle& subStyle, style.subStyles()) {
+        for (const SharedSubStyle& subStyle : style.subStyles()) {
             bool foundShared = false;
             typedef const QList< SharedSubStyle> StoredSubStyleList;
             StoredSubStyleList& storedSubStyles(d->subStyles.value(subStyle->type()));
@@ -430,7 +430,7 @@ void StyleStorage::insert(const Region& region, const Style& style)
       st.setDefault();
       subs = style.subStyles();
     }
-    foreach(const SharedSubStyle& subStyle, subs) {
+    for (const SharedSubStyle& subStyle : subs) {
         Region::ConstIterator end(region.constEnd());
         for (Region::ConstIterator it(region.constBegin()); it != end; ++it) {
             // insert substyle
@@ -841,7 +841,7 @@ void StyleStorage::invalidateCache(const QRect& rect)
 //     debugSheetsStyle <<"StyleStorage: Invalidating" << rect;
     const Region region = d->cachedArea.intersected(Region(rect));
     d->cachedArea.removeIntersects(rect, nullptr);
-    foreach(const QRect& rect, region.rects()) {
+    for (const QRect& rect : region.rects()) {
         for (int col = rect.left(); col <= rect.right(); ++col) {
             for (int row = rect.top(); row <= rect.bottom(); ++row) {
 //                 debugSheetsStyle <<"StyleStorage: Removing cached style for" << Cell::name( col, row );

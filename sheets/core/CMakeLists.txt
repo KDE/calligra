@@ -1,4 +1,28 @@
 
+
+set (odf_DIR_SRCS
+    odf/SheetsOdfDoc.cpp
+    odf/SheetsOdfMap.cpp
+    odf/SheetsOdfSheet.cpp
+    odf/SheetsOdfCell.cpp
+    odf/SheetsOdfStyle.cpp
+    odf/SheetsOdfRegion.cpp
+    odf/SheetsOdfCondition.cpp
+    odf/SheetsOdfValidity.cpp
+    odf/GenValidationStyle.cpp
+    )
+
+set (ksp_DIR_SRCS
+    ksp/SheetsKspCell.cpp
+    ksp/SheetsKspConditions.cpp
+    ksp/SheetsKspDoc.cpp
+    ksp/SheetsKspMap.cpp
+    ksp/SheetsKspSheet.cpp
+    ksp/SheetsKspStyle.cpp
+    ksp/SheetsKspValidity.cpp
+)
+
+
 set (calligrasheetscore_LIB_SRCS
     Currency.cpp
     Format.cpp
@@ -27,6 +51,9 @@ set (calligrasheetscore_LIB_SRCS
     PrintSettings.cpp
     DocBase.cpp
     ShapeApplicationData.cpp
+
+    ${odf_DIR_SRCS}
+    ${ksp_DIR_SRCS}
 )
 
 add_library(calligrasheetscore SHARED ${calligrasheetscore_LIB_SRCS})

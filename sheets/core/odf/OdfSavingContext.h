@@ -7,15 +7,8 @@
 #ifndef KSPREAD_ODF_SAVING_CONTEXT
 #define KSPREAD_ODF_SAVING_CONTEXT
 
-#include "Cell.h"
 #include "GenValidationStyle.h"
-#include "Sheet.h"
-#include "calligra_sheets_limits.h"
-
-#include <KoShapeSavingContext.h>
-
-#include <QMap>
-#include <QMultiHash>
+#include "engine/calligra_sheets_limits.h"
 
 class KoShape;
 
@@ -23,6 +16,9 @@ namespace Calligra
 {
 namespace Sheets
 {
+
+class Sheet;
+
 namespace Odf
 {
 
