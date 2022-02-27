@@ -49,7 +49,7 @@
   <summary xml:lang="fr">Graphisme vectoriel</summary>
   <summary xml:lang="gl">Gráficos de tamaño variábel</summary>
   <summary xml:lang="ia">Graphicos scalabile</summary>
-  <summary xml:lang="id">Grafik Dapat Diskala</summary>
+  <summary xml:lang="id">Grafik Berskala</summary>
   <summary xml:lang="it">Grafica scalabile</summary>
   <summary xml:lang="ja">画像の寸法</summary>
   <summary xml:lang="ko">확장 가능한 그래픽</summary>
@@ -82,7 +82,7 @@
     <p xml:lang="fi">Karbon on vektorigrafiikkasovellus, jonka käyttöliittymä on helppo ja laajasti mukautettavissa ja laajennettavissa. Karbon on näin loistava sovellus vektorigrafiikan maailmaan vasta tutustuville käyttäjille samoin kuin henkeäsalpaavaa vektoritaidetta luoville taiteilijoille.</p>
     <p xml:lang="fr">Karbon est une application de dessin vectoriel avec une interface facile à utiliser, personnalisable et extensible. Cela fait de Karbon une application majeure pour les utilisateurs s'initiant au dessin vectoriel et pour les artistes voulant créer des œuvres à couper le souffle.</p>
     <p xml:lang="gl">Karbon é unha aplicación de debuxo vectorial cunha interface de usuario fácil de usar, personalizar e ampliar. Iso fai de Karbon unha gran aplicación para usuarios que comezan a explorar o mundo das imaxes vectoriais, pero tamén para artistas que queren crear impresionantes obras de arte vectoriais.</p>
-    <p xml:lang="id">Karbon adalah aplikasi menggambar vektor dengan antarmuka pengguna yang mudah digunakan, sangat dapat disesuaikan, dan dapat dikekstensi. Itu membuat Karbon adalah aplikasi yang bagus untuk pengguna yang mulai menjelajahi dunia grafis vektor dan juga bagi para seniman yang ingin membuat seni vektor yang menakjubkan.</p>
+    <p xml:lang="id">Karbon adalah aplikasi menggambar vektor dengan antarmuka pengguna yang mudah digunakan, sangat dapat disesuaikan, dan dapat diekstensi. Itu membuat Karbon adalah aplikasi yang bagus untuk pengguna yang mulai menjelajahi dunia grafis vektor dan juga bagi para seniman yang ingin membuat seni vektor yang menakjubkan.</p>
     <p xml:lang="it">Karbon è un'applicazione di disegno vettoriale con un'interfaccia utente facile da utilizzare, altamente personalizzabile ed estendibile. Ciò rende Karbon un'ottima applicazione per gli utenti che iniziano a esplorare il mondo della grafica vettoriale così come per gli artisti che vogliono creare straordinarie opere vettoriali. </p>
     <p xml:lang="ko">Karbon은 사용하기 쉽고 원하는 대로 그릴 수 있는 확장성이 뛰어난 사용자 인터페이스를 갖춘 벡터 그리기 프로그램입니다. 이로 인해 Karbon은 벡터 그래픽의 세계를 탐험하기 시작하는 사용자들과 놀랄 만큼 아름다운 벡터 아트를 만들고자 하는 예술가들에게 훌륭한 프로그램이 되었습니다.</p>
     <p xml:lang="nl">Karbon is een toepassing voor tekenen met vectoren met een gebruikersinterface dat gemakkelijk is te gebruiken, zeer goed aan te passen en uit te breiden. Dit maakt Karbon een geweldige toepassing voor gebruikers die de wereld van grafiek met vectoren aan het verkennen zijn evenals voor kunstenaars die adembenemende vectorkunst willen maken.</p>
@@ -172,7 +172,7 @@
       <li xml:lang="fr">Écriture des formats ODG, SVG, PNG, PDF, WMF</li>
       <li xml:lang="gl">Posibilidade de xerar ODG, SVG, PNG, PDF e WMF.</li>
       <li xml:lang="ia">Supporto de scriber pro ODG, SVG, PNG, PDF, WMF</li>
-      <li xml:lang="id">Dukungan penilisan untuk ODG, SVG, PNG, PDF, WMF</li>
+      <li xml:lang="id">Dukungan penulisan untuk ODG, SVG, PNG, PDF, WMF</li>
       <li xml:lang="it">Supporto per la scrittura di ODG, SVG, PNG, PDF, WMF</li>
       <li xml:lang="ja">書き込み可能な形式: ODG, SVG, PNG, PDF, WMF</li>
       <li xml:lang="ko">ODG, SVG, PNG, PDF, WMF 파일 쓰기 지원</li>
@@ -441,7 +441,7 @@
       <li xml:lang="fi">Laajennettavissa kirjoittamalla liitännäisiä uusille työkaluille, muodoille ja telakoille</li>
       <li xml:lang="fr">Extensible par l'écriture de modules pour de nouveaux outils, formes et conteneurs</li>
       <li xml:lang="gl">Permite ampliar as súas funcionalidades mediante complementos de ferramentas novas, de formas e de docas.</li>
-      <li xml:lang="id">Dapat diekstensi dengan plugin penulisan untuk alat, shape, dan docker baru</li>
+      <li xml:lang="id">Dapat diekstensi dengan plugin penulisan untuk alat, bentuk, dan docker baru</li>
       <li xml:lang="it">Espandibile tramite la scrittura di estensioni per nuovi strumenti, forme e aree di aggancio</li>
       <li xml:lang="ko">새로운 도구, 모양 및 고정 표시 도구용 플러그인을 작성하여 확장 가능</li>
       <li xml:lang="nl">Uit te breiden door het schrijven van plug-ins voor nieuwe hulpmiddelen, vormen en verankering</li>
