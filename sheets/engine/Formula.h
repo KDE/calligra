@@ -379,6 +379,29 @@ public:
 
     QString dump() const;
 
+    /**
+     * helper function: return true for valid identifier character
+     */
+    static bool isIdentifier(QChar ch);
+
+    /**
+     * helper function: return operator of given token text
+     * e.g. "*" yields Operator::Asterisk, and so on
+     */
+    static Token::Op matchOperator(const QString& text);
+
+    /**
+     * helper function to parse operator
+     *
+     * If a operator is found the data and out pointer are advanced by the number
+     * of chars the operators consist of.
+     * @param data pointer into the input string 
+     * @param out pointer into the out string, The out string needs to be big enough
+     * 
+     * @returns true if a operator was found, false otherwise.
+     */
+    static bool parseOperator(const QChar *&data, QChar *&out);
+
 protected:
 
     void compile(const Tokens& tokens) const;
@@ -404,29 +427,6 @@ private:
  */
 QTextStream& operator<<(QTextStream& ts, Formula formula);
 
-
-/**
- * helper function: return operator of given token text
- * e.g. "*" yields Operator::Asterisk, and so on
- */
-Token::Op matchOperator(const QString& text);
-
-/**
- * helper function to parse operator
- *
- * If a operator is found the data and out pointer are advanced by the number
- * of chars the operators consist of.
- * @param data pointer into the input string 
- * @param out pointer into the out string, The out string needs to be big enough
- * 
- * @returns true if a operator was found, false otherwise.
- */
-bool parseOperator(const QChar *&data, QChar *&out);
-
-/**
- * helper function: return true for valid identifier character
- */
-bool isIdentifier(QChar ch);
 
 /***************************************************************************
   QHash/QSet support

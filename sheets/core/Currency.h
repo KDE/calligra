@@ -75,9 +75,7 @@ private:
 } // namespace Sheets
 } // namespace Calligra
 
-uint qHash(const Calligra::Sheets::Currency& cur) {
-    return ::qHash(cur.code());
-}
+uint qHash(const Calligra::Sheets::Currency& cur);
 
 Q_DECLARE_METATYPE(Calligra::Sheets::Currency)
 Q_DECLARE_TYPEINFO(Calligra::Sheets::Currency, Q_MOVABLE_TYPE);

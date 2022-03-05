@@ -1006,7 +1006,7 @@ QString Odf::decodeFormula(const QString& expression_, const Localization *local
                 ++out;
                 ++data;
             }
-            else if (isIdentifier(*data)) {
+            else if (Formula::isIdentifier(*data)) {
                 // beginning with alphanumeric ?
                 // could be identifier, cell, range, or function...
                 state = InIdentifier;
@@ -1038,7 +1038,7 @@ QString Odf::decodeFormula(const QString& expression_, const Localization *local
                         out += 14;
                     }
                 }
-                else if (namespacePrefix == "oooc:" && expression.midRef(i, 5).compare(QLatin1String("TABLE")) == 0 && !isIdentifier(expression[i+5])) {
+                else if (namespacePrefix == "oooc:" && expression.midRef(i, 5).compare(QLatin1String("TABLE")) == 0 && !Formula::isIdentifier(expression[i+5])) {
                     int outPos = out - outStart;
                     result.replace(outPos, 19, multipleOperations);
                     data += 5;
@@ -1067,7 +1067,7 @@ QString Odf::decodeFormula(const QString& expression_, const Localization *local
                     break;
                 default:
                     const QChar *operatorStart = data;
-                    if (!parseOperator(data, out)) {
+                    if (!Formula::parseOperator(data, out)) {
                         *out++ = *data++;
                     }
                     else if (*operatorStart == QChar('=', 0) && data - operatorStart == 1) { // only one =
@@ -1104,7 +1104,7 @@ QString Odf::decodeFormula(const QString& expression_, const Localization *local
             *out++ = *data++;
             break;
         case InIdentifier: {
-            if (isIdentifier(*data) || data->isDigit()) {
+            if (Formula::isIdentifier(*data) || data->isDigit()) {
                 *out++ = *data++;
             }
             else {

@@ -137,7 +137,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(SheetDamage::Changes)
  * \ingroup Damages
  * A workbook damage.
  */
-class WorkbookDamage : public Damage
+class CALLIGRA_SHEETS_ENGINE_EXPORT WorkbookDamage : public Damage
 {
 public:
     enum Change {

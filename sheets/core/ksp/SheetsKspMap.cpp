@@ -8,13 +8,21 @@
 #include "SheetsKsp.h"
 #include "SheetsKspPrivate.h"
 
-// #include "Map.h"
+#include "ColFormatStorage.h"
+#include "Map.h"
+#include "RowFormatStorage.h"
+#include "Sheet.h"
 
 // #include "CalculationSettings.h"
-// #include "DocBase.h"
-// #include "LoadingInfo.h"
+#include "DocBase.h"
+#include "LoadingInfo.h"
 // #include "Localization.h"
 // #include "NamedAreaManager.h"
+
+#include <KoXmlReader.h>
+
+#include <kcodecs.h>
+#include <KLocalizedString>
 
 namespace Calligra {
 namespace Sheets {
@@ -28,8 +36,8 @@ QDomElement Ksp::saveMap(Map *map, QDomDocument& doc)
     spread.appendChild(areaname);
 
     QDomElement defaults = doc.createElement("defaults");
-    defaults.setAttribute("row-height", QString::number(map->defaultRowFormat()->height()));
-    defaults.setAttribute("col-width", QString::number(map->defaultColumnFormat()->width()));
+    defaults.setAttribute("row-height", QString::number(map->defaultRowFormat().height));
+    defaults.setAttribute("col-width", QString::number(map->defaultColumnFormat().width));
     spread.appendChild(defaults);
 
     QDomElement s = saveStyles (map->styleManager(), doc);
@@ -47,8 +55,9 @@ QDomElement Ksp::saveMap(Map *map, QDomDocument& doc)
         }
     }
 
-    foreach(Sheet* sheet, d->lstSheets) {
-        QDomElement e = saveSheet (sheet, doc);
+    for(SheetBase* sheet : map->sheetList()) {
+        Sheet *fullSheet = dynamic_cast<Sheet *>(sheet);
+        QDomElement e = saveSheet (fullSheet, doc);
         if (e.isNull())
             return e;
         mymap.appendChild(e);
@@ -59,12 +68,12 @@ QDomElement Ksp::saveMap(Map *map, QDomDocument& doc)
 bool Ksp::loadMap(Map *map, const KoXmlElement& mymap)
 {
     map->setLoading (true);
-    loadingInfo()->setFileFormat(LoadingInfo::NativeFormat);
+    map->loadingInfo()->setFileFormat(LoadingInfo::NativeFormat);
     const QString activeSheet = mymap.attribute("activeTable");
     const QPoint marker(mymap.attribute("markerColumn").toInt(), mymap.attribute("markerRow").toInt());
-    loadingInfo()->setCursorPosition(findSheet(activeSheet), marker);
+    map->loadingInfo()->setCursorPosition(map->findSheet(activeSheet), marker);
     const QPointF offset(mymap.attribute("xOffset").toDouble(), mymap.attribute("yOffset").toDouble());
-    loadingInfo()->setScrollingOffset(findSheet(activeSheet), offset);
+    map->loadingInfo()->setScrollingOffset(map->findSheet(activeSheet), offset);
 
     KoXmlNode n = mymap.firstChild();
     if (n.isNull()) {
@@ -89,7 +98,7 @@ bool Ksp::loadMap(Map *map, const KoXmlElement& mymap)
 
     if (!activeSheet.isEmpty()) {
         // Used by View's constructor
-        loadingInfo()->setInitialActiveSheet(findSheet(activeSheet));
+        map->loadingInfo()->setInitialActiveSheet(map->findSheet(activeSheet));
     }
 
     map->setLoading (false);

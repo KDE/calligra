@@ -122,138 +122,6 @@ using namespace Calligra::Sheets;
 // for null token
 const Token Token::null;
 
-// helper function: return operator of given token text
-// e.g. '*' yields Operator::Asterisk, and so on
-Token::Op Calligra::Sheets::matchOperator(const QString& text)
-{
-    Token::Op result = Token::InvalidOp;
-
-    if (text.length() == 1) {
-        QChar p = text[0];
-        switch (p.unicode()) {
-        case '+': result = Token::Plus; break;
-        case '-': result = Token::Minus; break;
-        case '*': result = Token::Asterisk; break;
-        case '/': result = Token::Slash; break;
-        case '^': result = Token::Caret; break;
-        case ',': result = Token::Comma; break;
-        case ';': result = Token::Semicolon; break;
-        case ' ': result = Token::Intersect; break;
-        case '(': result = Token::LeftPar; break;
-        case ')': result = Token::RightPar; break;
-        case '&': result = Token::Ampersand; break;
-        case '=': result = Token::Equal; break;
-        case '<': result = Token::Less; break;
-        case '>': result = Token::Greater; break;
-        case '%': result = Token::Percent; break;
-        case '~': result = Token::Union; break;
-#ifdef CALLIGRA_SHEETS_INLINE_ARRAYS
-        case '{': result = Token::CurlyBra; break;
-        case '}': result = Token::CurlyKet; break;
-        case '|': result = Token::Pipe; break;
-#endif
-#ifdef CALLIGRA_SHEETS_UNICODE_OPERATORS
-        case 0x2212: result = Token::Minus; break;
-        case 0x00D7: result = Token::Asterisk; break;
-        case 0x00F7: result = Token::Slash; break;
-        case 0x2215: result = Token::Slash; break;
-#endif
-        default : result = Token::InvalidOp; break;
-        }
-    }
-
-    if (text.length() == 2) {
-        if (text == "<>") result = Token::NotEqual;
-        if (text == "!=") result = Token::NotEqual;
-        if (text == "<=") result = Token::LessEqual;
-        if (text == ">=") result = Token::GreaterEqual;
-        if (text == "==") result = Token::Equal;
-    }
-
-    return result;
-}
-
-bool Calligra::Sheets::parseOperator(const QChar *&data, QChar *&out)
-{
-    bool retval = true;
-    switch(data->unicode()) {
-    case '+':
-    case '-':
-    case '*':
-    case '/':
-    case '^':
-    case ',':
-    case ';':
-    case ' ':
-    case '(':
-    case ')':
-    case '&':
-    case '%':
-    case '~':
-#ifdef CALLIGRA_SHEETS_INLINE_ARRAYS
-    case '{':
-    case '}':
-    case '|':
-#endif
-#ifdef CALLIGRA_SHEETS_UNICODE_OPERATORS
-    case 0x2212:
-    case 0x00D7:
-    case 0x00F7:
-    case 0x2215:
-#endif
-        *out = *data;
-        ++out;
-        ++data;
-        break;
-    case '<':
-        *out = *data;
-        ++out;
-        ++data;
-        if (!data->isNull()) {
-            if (*data == QChar('>', 0) || *data == QChar('=', 0)) {
-                *out = *data;
-                ++out;
-                ++data;
-            }
-        }
-        break;
-    case '>':
-        *out = *data;
-        ++out;
-        ++data;
-        if (!data->isNull() && *data == QChar('=', 0)) {
-            *out = *data;
-            ++out;
-            ++data;
-        }
-        break;
-    case '=':
-        *out++ = *data++;
-        if (!data->isNull() && *data == QChar('=', 0)) {
-            *out++ = *data++;
-        }
-        break;
-    case '!': {
-        const QChar * next = data + 1;
-        if (!next->isNull() && *next == QChar('=', 0)) {
-            *out = *data;
-            ++out;
-            ++data;
-            *out = *data;
-            ++out;
-            ++data;
-        }
-        else {
-            retval = false;
-        }
-    }   break;
-    default:
-        retval = false;
-        break;
-    }
-    return retval;
-}
-
 // helper function: give operator precedence
 // e.g. '+' is 1 while '*' is 3
 static int opPrecedence(Token::Op op)
@@ -396,7 +264,7 @@ QString Token::asError() const
 
 Token::Op Token::asOperator() const
 {
-    if (isOperator()) return matchOperator(m_text);
+    if (isOperator()) return Formula::matchOperator(m_text);
     else return InvalidOp;
 }
 
@@ -480,19 +348,6 @@ const Token& TokenStack::top(unsigned index)
 /**********************
     FormulaPrivate
  **********************/
-
-// helper function: return true for valid identifier character
-bool Calligra::Sheets::isIdentifier(QChar ch)
-{
-    switch(ch.unicode()) {
-    case '_':
-    case '$':
-    case '.':
-        return true;
-    default:
-        return ch.isLetter();
-    }
-}
 
 
 
@@ -1949,6 +1804,152 @@ QString Formula::dump() const
 
     return result;
 }
+
+// helper function: return true for valid identifier character
+bool Formula::isIdentifier(QChar ch)
+{
+    switch(ch.unicode()) {
+    case '_':
+    case '$':
+    case '.':
+        return true;
+    default:
+        return ch.isLetter();
+    }
+}
+
+// helper function: return operator of given token text
+// e.g. '*' yields Operator::Asterisk, and so on
+Token::Op Formula::matchOperator(const QString& text)
+{
+    Token::Op result = Token::InvalidOp;
+
+    if (text.length() == 1) {
+        QChar p = text[0];
+        switch (p.unicode()) {
+        case '+': result = Token::Plus; break;
+        case '-': result = Token::Minus; break;
+        case '*': result = Token::Asterisk; break;
+        case '/': result = Token::Slash; break;
+        case '^': result = Token::Caret; break;
+        case ',': result = Token::Comma; break;
+        case ';': result = Token::Semicolon; break;
+        case ' ': result = Token::Intersect; break;
+        case '(': result = Token::LeftPar; break;
+        case ')': result = Token::RightPar; break;
+        case '&': result = Token::Ampersand; break;
+        case '=': result = Token::Equal; break;
+        case '<': result = Token::Less; break;
+        case '>': result = Token::Greater; break;
+        case '%': result = Token::Percent; break;
+        case '~': result = Token::Union; break;
+#ifdef CALLIGRA_SHEETS_INLINE_ARRAYS
+        case '{': result = Token::CurlyBra; break;
+        case '}': result = Token::CurlyKet; break;
+        case '|': result = Token::Pipe; break;
+#endif
+#ifdef CALLIGRA_SHEETS_UNICODE_OPERATORS
+        case 0x2212: result = Token::Minus; break;
+        case 0x00D7: result = Token::Asterisk; break;
+        case 0x00F7: result = Token::Slash; break;
+        case 0x2215: result = Token::Slash; break;
+#endif
+        default : result = Token::InvalidOp; break;
+        }
+    }
+
+    if (text.length() == 2) {
+        if (text == "<>") result = Token::NotEqual;
+        if (text == "!=") result = Token::NotEqual;
+        if (text == "<=") result = Token::LessEqual;
+        if (text == ">=") result = Token::GreaterEqual;
+        if (text == "==") result = Token::Equal;
+    }
+
+    return result;
+}
+
+bool Formula::parseOperator(const QChar *&data, QChar *&out)
+{
+    bool retval = true;
+    switch(data->unicode()) {
+    case '+':
+    case '-':
+    case '*':
+    case '/':
+    case '^':
+    case ',':
+    case ';':
+    case ' ':
+    case '(':
+    case ')':
+    case '&':
+    case '%':
+    case '~':
+#ifdef CALLIGRA_SHEETS_INLINE_ARRAYS
+    case '{':
+    case '}':
+    case '|':
+#endif
+#ifdef CALLIGRA_SHEETS_UNICODE_OPERATORS
+    case 0x2212:
+    case 0x00D7:
+    case 0x00F7:
+    case 0x2215:
+#endif
+        *out = *data;
+        ++out;
+        ++data;
+        break;
+    case '<':
+        *out = *data;
+        ++out;
+        ++data;
+        if (!data->isNull()) {
+            if (*data == QChar('>', 0) || *data == QChar('=', 0)) {
+                *out = *data;
+                ++out;
+                ++data;
+            }
+        }
+        break;
+    case '>':
+        *out = *data;
+        ++out;
+        ++data;
+        if (!data->isNull() && *data == QChar('=', 0)) {
+            *out = *data;
+            ++out;
+            ++data;
+        }
+        break;
+    case '=':
+        *out++ = *data++;
+        if (!data->isNull() && *data == QChar('=', 0)) {
+            *out++ = *data++;
+        }
+        break;
+    case '!': {
+        const QChar * next = data + 1;
+        if (!next->isNull() && *next == QChar('=', 0)) {
+            *out = *data;
+            ++out;
+            ++data;
+            *out = *data;
+            ++out;
+            ++data;
+        }
+        else {
+            retval = false;
+        }
+    }   break;
+    default:
+        retval = false;
+        break;
+    }
+    return retval;
+}
+
 
 QTextStream& operator<<(QTextStream& ts, Formula formula)
 {

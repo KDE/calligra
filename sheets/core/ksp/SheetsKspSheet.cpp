@@ -7,35 +7,46 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
+#include "SheetsKsp.h"
+#include "SheetsKspPrivate.h"
 
-// #include "Sheet.h"
+#include "engine/SheetsDebug.h"
 
-// #include <KoPageLayout>
+#include "CellStorage.h"
+#include "ColFormatStorage.h"
+#include "DocBase.h"
+#include "HeaderFooter.h"
+#include "LoadingInfo.h"
+#include "Map.h"
+#include "PrintSettings.h"
+#include "RowFormatStorage.h"
+#include "Sheet.h"
+#include "StyleStorage.h"
 
-// #include "DocBase.h"
-// #include "LoadingInfo.h"
-// #include "Map.h"
-// #include "PrintSettings.h"
-// #include "SheetPrint.h"
+#include <KoUnit.h>
+#include <KoXmlReader.h>
+
+#include <kcodecs.h>
+
 
 namespace Calligra {
 namespace Sheets {
 
 
 namespace Ksp {
-    QDomElement saveRowFormat(RowFormat *f, QDomDocument&, Sheet *sheet, int yshift = 0);
-    bool loadRowFormat(RowFormat *f, const KoXmlElement& row, Sheet *sheet);
+    QDomElement saveRowFormat(int row, QDomDocument&, Sheet *sheet);
+    bool loadRowFormat(const KoXmlElement& row, Sheet *sheet);
 
-    QDomElement saveColFormat(ColumnFormat *f, QDomDocument&, Sheet *sheet, int xshift = 0) const;
-    bool loadColFormat(ColumnFormat *f, const KoXmlElement& row, Sheet *sheet);
+    QDomElement saveColFormat(int col, QDomDocument&, Sheet *sheet);
+    bool loadColFormat(const KoXmlElement& row, Sheet *sheet);
 }
 
 
 bool Ksp::loadSheet(Sheet *obj, const KoXmlElement& sheet)
 {
     bool ok = false;
-    QString sname = sheetName();
-    if (!obj->map()->loadingInfo()->loadTemplate()) {
+    QString sname = obj->sheetName();
+    if (!obj->fullMap()->loadingInfo()->loadTemplate()) {
         sname = sheet.attribute("name");
         if (sname.isEmpty()) {
             obj->doc()->setErrorMessage(i18n("Invalid document. Sheet name is empty."));
@@ -103,15 +114,15 @@ bool Ksp::loadSheet(Sheet *obj, const KoXmlElement& sheet)
         // we just ignore 'ok' - if it didn't work, go on
     }
     if (sheet.hasAttribute("printGrid")) {
-        obj->print()->settings()->setPrintGrid((bool)sheet.attribute("printGrid").toInt(&ok));
+        obj->printSettings()->setPrintGrid((bool)sheet.attribute("printGrid").toInt(&ok));
         // we just ignore 'ok' - if it didn't work, go on
     }
     if (sheet.hasAttribute("printCommentIndicator")) {
-        obj->print()->settings()->setPrintCommentIndicator((bool)sheet.attribute("printCommentIndicator").toInt(&ok));
+        obj->printSettings()->setPrintCommentIndicator((bool)sheet.attribute("printCommentIndicator").toInt(&ok));
         // we just ignore 'ok' - if it didn't work, go on
     }
     if (sheet.hasAttribute("printFormulaIndicator")) {
-        obj->print()->settings()->setPrintFormulaIndicator((bool)sheet.attribute("printFormulaIndicator").toInt(&ok));
+        obj->printSettings()->setPrintFormulaIndicator((bool)sheet.attribute("printFormulaIndicator").toInt(&ok));
         // we just ignore 'ok' - if it didn't work, go on
     }
     if (sheet.hasAttribute("hide")) {
@@ -176,7 +187,7 @@ bool Ksp::loadSheet(Sheet *obj, const KoXmlElement& sheet)
             pageLayout.topMargin    = MM_TO_POINT(borders.attribute("top").toFloat());
             pageLayout.bottomMargin = MM_TO_POINT(borders.attribute("bottom").toFloat());
         }
-        obj->print()->settings()->setPageLayout(pageLayout);
+        obj->printSettings()->setPageLayout(pageLayout);
 
         QString hleft, hright, hcenter;
         QString fleft, fright, fcenter;
@@ -206,7 +217,7 @@ bool Ksp::loadSheet(Sheet *obj, const KoXmlElement& sheet)
             if (!right.isNull())
                 fright = right.text();
         }
-        obj->print()->headerFooter()->setHeadFootLine(hleft, hcenter, hright, fleft, fcenter, fright);
+        obj->headerFooter()->setHeadFootLine(hleft, hcenter, hright, fleft, fcenter, fright);
     }
 
     // load print range
@@ -248,7 +259,7 @@ bool Ksp::loadSheet(Sheet *obj, const KoXmlElement& sheet)
     if (sheet.hasAttribute("printPageLimitY")) {
         int pageLimit = sheet.attribute("printPageLimitY").toInt(&ok);
         if (ok) {
-            const int horizontalLimit = printSettings()->pageLimits().width();
+            const int horizontalLimit = obj->printSettings()->pageLimits().width();
             obj->printSettings()->setPageLimits(QSize(horizontalLimit, pageLimit));
         }
     }
@@ -262,18 +273,9 @@ bool Ksp::loadSheet(Sheet *obj, const KoXmlElement& sheet)
             if (tagName == "cell")
                 loadCell(e, obj);
             else if (tagName == "row") {
-                RowFormat *rl = new RowFormat();
-                rl->setSheet(obj);
-                if (loadRowFormat (rl, e, obj))
-                    obj->insertRowFormat(rl);
-                delete rl;
+                loadRowFormat (e, obj);
             } else if (tagName == "column") {
-                ColumnFormat *cl = new ColumnFormat();
-                cl->setSheet(obj);
-                if (loadColFormat (cl, e, obj))
-                    obj->insertColumnFormat(cl);
-                else
-                    delete cl;
+                loadColFormat (e, obj);
             }
 #if 0 // CALLIGRA_SHEETS_KOPART_EMBEDDING
             else if (tagName == "object") {
@@ -343,9 +345,9 @@ QDomElement Ksp::saveSheet(Sheet *obj, QDomDocument& dd)
     sheet.setAttribute("hidezero", QString::number((int)obj->getHideZero()));
     sheet.setAttribute("firstletterupper", QString::number((int)obj->getFirstLetterUpper()));
     sheet.setAttribute("grid", QString::number((int)obj->getShowGrid()));
-    sheet.setAttribute("printGrid", QString::number((int)obj->print()->settings()->printGrid()));
-    sheet.setAttribute("printCommentIndicator", QString::number((int)obj->print()->settings()->printCommentIndicator()));
-    sheet.setAttribute("printFormulaIndicator", QString::number((int)obj->print()->settings()->printFormulaIndicator()));
+    sheet.setAttribute("printGrid", QString::number((int)obj->printSettings()->printGrid()));
+    sheet.setAttribute("printCommentIndicator", QString::number((int)obj->printSettings()->printCommentIndicator()));
+    sheet.setAttribute("printFormulaIndicator", QString::number((int)obj->printSettings()->printFormulaIndicator()));
     sheet.setAttribute("showFormula", QString::number((int)obj->getShowFormula()));
     sheet.setAttribute("showFormulaIndicator", QString::number((int)obj->getShowFormulaIndicator()));
     sheet.setAttribute("showCommentIndicator", QString::number((int)obj->getShowCommentIndicator()));
@@ -368,7 +370,7 @@ QDomElement Ksp::saveSheet(Sheet *obj, QDomDocument& dd)
     sheet.appendChild(paper);
 
     QDomElement borders = dd.createElement("borders");
-    KoPageLayout pageLayout = obj->print()->settings()->pageLayout();
+    KoPageLayout pageLayout = obj->printSettings()->pageLayout();
     borders.setAttribute("left", QString::number(pageLayout.leftMargin));
     borders.setAttribute("top", QString::number(pageLayout.topMargin));
     borders.setAttribute("right", QString::number(pageLayout.rightMargin));
@@ -377,37 +379,37 @@ QDomElement Ksp::saveSheet(Sheet *obj, QDomDocument& dd)
 
     QDomElement head = dd.createElement("head");
     paper.appendChild(head);
-    if (!obj->print()->headerFooter()->headLeft().isEmpty()) {
+    if (!obj->headerFooter()->headLeft().isEmpty()) {
         QDomElement left = dd.createElement("left");
         head.appendChild(left);
-        left.appendChild(dd.createTextNode(obj->print()->headerFooter()->headLeft()));
+        left.appendChild(dd.createTextNode(obj->headerFooter()->headLeft()));
     }
-    if (!obj->print()->headerFooter()->headMid().isEmpty()) {
+    if (!obj->headerFooter()->headMid().isEmpty()) {
         QDomElement center = dd.createElement("center");
         head.appendChild(center);
-        center.appendChild(dd.createTextNode(obj->print()->headerFooter()->headMid()));
+        center.appendChild(dd.createTextNode(obj->headerFooter()->headMid()));
     }
-    if (!obj->print()->headerFooter()->headRight().isEmpty()) {
+    if (!obj->headerFooter()->headRight().isEmpty()) {
         QDomElement right = dd.createElement("right");
         head.appendChild(right);
-        right.appendChild(dd.createTextNode(obj->print()->headerFooter()->headRight()));
+        right.appendChild(dd.createTextNode(obj->headerFooter()->headRight()));
     }
     QDomElement foot = dd.createElement("foot");
     paper.appendChild(foot);
-    if (!obj->print()->headerFooter()->footLeft().isEmpty()) {
+    if (!obj->headerFooter()->footLeft().isEmpty()) {
         QDomElement left = dd.createElement("left");
         foot.appendChild(left);
-        left.appendChild(dd.createTextNode(obj->print()->headerFooter()->footLeft()));
+        left.appendChild(dd.createTextNode(obj->headerFooter()->footLeft()));
     }
-    if (!obj->print()->headerFooter()->footMid().isEmpty()) {
+    if (!obj->headerFooter()->footMid().isEmpty()) {
         QDomElement center = dd.createElement("center");
         foot.appendChild(center);
-        center.appendChild(dd.createTextNode(obj->print()->headerFooter()->footMid()));
+        center.appendChild(dd.createTextNode(obj->headerFooter()->footMid()));
     }
-    if (!obj->print()->headerFooter()->footRight().isEmpty()) {
+    if (!obj->headerFooter()->footRight().isEmpty()) {
         QDomElement right = dd.createElement("right");
         foot.appendChild(right);
-        right.appendChild(dd.createTextNode(obj->print()->headerFooter()->footRight()));
+        right.appendChild(dd.createTextNode(obj->headerFooter()->footRight()));
     }
 
     // print range
@@ -456,12 +458,12 @@ QDomElement Ksp::saveSheet(Sheet *obj, QDomDocument& dd)
     // Save all cells.
     const QRect usedArea = obj->usedArea();
     for (int row = 1; row <= usedArea.height(); ++row) {
-        Cell cell = obj->cellStorage()->firstInRow(row);
+        Cell cell = obj->fullCellStorage()->firstInRow(row);
         while (!cell.isNull()) {
             QDomElement e = saveCell (&cell, dd);
             if (!e.isNull())
                 sheet.appendChild(e);
-            cell = obj->cellStorage()->nextInRow(cell.column(), row);
+            cell = obj->fullCellStorage()->nextInRow(cell.column(), row);
         }
     }
 
@@ -472,17 +474,13 @@ QDomElement Ksp::saveSheet(Sheet *obj, QDomDocument& dd)
         int lastRow;
         bool isDefault = obj->rowFormats()->isDefaultRow(rowFormatRow, &lastRow);
         if (isDefault && styleIndex <= lastRow) {
-            RowFormat rowFormat(*obj->map()->defaultRowFormat());
-            rowFormat.setSheet(obj);
-            rowFormat.setRow(styleIndex);
-            QDomElement e = saveRowFormat (rowFormat, dd, obj);
+            QDomElement e = saveRowFormat (styleIndex, dd, obj);
             if (e.isNull())
                 return QDomElement();
             sheet.appendChild(e);
             styleIndex = obj->styleStorage()->nextRowStyleIndex(styleIndex);
         } else if (!isDefault) {
-            RowFormat rowFormat(rowFormats(), rowFormatRow);
-            QDomElement e = saveRowFormat (rowFormat, dd, obj);
+            QDomElement e = saveRowFormat (rowFormatRow, dd, obj);
             if (e.isNull())
                 return QDomElement();
             sheet.appendChild(e);
@@ -494,83 +492,84 @@ QDomElement Ksp::saveSheet(Sheet *obj, QDomDocument& dd)
     }
 
     // Save all ColumnFormat objects.
-    ColumnFormat* columnFormat = obj->firstCol();
     styleIndex = obj->styleStorage()->nextColumnStyleIndex(0);
-    while (columnFormat || styleIndex) {
-        if (columnFormat && (!styleIndex || columnFormat->column() <= styleIndex)) {
-            QDomElement e = columnFormat->save(dd);
+    int colFormatCol = 0, lastColFormatCol = obj->columnFormats()->lastNonDefaultCol();
+    while (styleIndex || colFormatCol <= lastColFormatCol) {
+        int lastCol;
+        bool isDefault = obj->columnFormats()->isDefaultCol(colFormatCol, &lastCol);
+        if (isDefault && styleIndex <= lastCol) {
+            QDomElement e = saveColFormat (styleIndex, dd, obj);
             if (e.isNull())
                 return QDomElement();
             sheet.appendChild(e);
-            if (columnFormat->column() == styleIndex)
+            styleIndex = obj->styleStorage()->nextColumnStyleIndex(styleIndex);
+        } else if (!isDefault) {
+            QDomElement e = saveColFormat (colFormatCol, dd, obj);
+            if (e.isNull())
+                return QDomElement();
+            sheet.appendChild(e);
+            if (styleIndex == colFormatCol)
                 styleIndex = obj->styleStorage()->nextColumnStyleIndex(styleIndex);
-            columnFormat = columnFormat->next();
-        } else if (styleIndex) {
-            ColumnFormat columnFormat(*obj->map()->defaultColumnFormat());
-            columnFormat.setSheet(obj);
-            columnFormat.setColumn(styleIndex);
-            QDomElement e = saveColFormat (columnFormat, dd);
-            if (e.isNull())
-                return QDomElement();
-            sheet.appendChild(e);
-            styleIndex = styleStorage()->nextColumnStyleIndex(styleIndex);
         }
+        if (isDefault) colFormatCol = qMin(lastCol+1, styleIndex == 0 ? KS_colMax : styleIndex);
+        else colFormatCol++;
     }
+
     return sheet;
 }
 
 
 
-QDomElement Ksp::saveRowFormat(RowFormat *f, QDomDocument& doc, Sheet *sheet, int yshift)
+QDomElement Ksp::saveRowFormat(int rowID, QDomDocument& doc, Sheet *sheet)
 {
-    QDomElement row = doc.createElement("row");
-    row.setAttribute("height", QString::number(f->height()));
-    row.setAttribute("row", QString::number(f->row() - yshift));
-    if (f->isHidden())
-        row.setAttribute("hide", QString::number((int) f->isHidden()));
+    RowFormatStorage *rows = sheet->rowFormats();
 
-    const Style style = sheet->cellStorage()->style(QRect(1, f->row(), KS_colMax, 1));
+    QDomElement row = doc.createElement("row");
+    row.setAttribute("height", QString::number(rows->rowHeight(rowID)));
+    row.setAttribute("row", QString::number(rowID));
+    if (rows->isHidden(rowID))
+        row.setAttribute("hide", "1");
+
+    const Style style = sheet->fullCellStorage()->style(QRect(1, rowID, KS_colMax, 1));
     if (!style.isEmpty()) {
-        debugSheetsODF << "saving cell style of row" << f->row();
-        QDomElement format;
-        saveStyle (style, doc, format, sheet->map()->styleManager());
+        debugSheetsODF << "saving cell style of row" << rowID;
+        QDomElement format(doc.createElement("format"));
+        saveStyle (style, doc, format, sheet->fullMap()->styleManager());
         row.appendChild(format);
     }
 
     return row;
 }
 
-bool Ksp::loadRowFormat (RowFormat *f, const KoXmlElement & row, Sheet *sheet, int yshift)
+bool Ksp::loadRowFormat (const KoXmlElement & row, Sheet *sheet)
 {
     bool ok;
 
-    f->setRow (row.attribute("row").toInt(&ok));
-    if (!ok)
+    RowFormatStorage *rows = sheet->rowFormats();
+
+    int rowID = row.attribute("row").toInt(&ok);
+    if (rowID < 1 || rowID > KS_rowMax) {
+        debugSheets << "Value row=" << rowID << " out of range";
         return false;
+    }
 
     if (row.hasAttribute("height")) {
         double h = row.attribute("height").toDouble(&ok);
-        if (sheet->map()->syntaxVersion() < 1) //compatibility with old format - was in millimeter
-            h = qRound(MM_TO_POINT(h));
-        f->setHeight (h);
-
         if (!ok) return false;
-    }
+        if (h < 0) {
+            debugSheets << "Value height=" << h << " out of range";
+            return false;
+        }
 
-    // Validation
-    if (f->height() < 0) {
-        debugSheets << "Value height=" << f->height() << " out of range";
-        return false;
-    }
-    if (f->row() < 1 || f->row() > KS_rowMax) {
-        debugSheets << "Value row=" << f->row() << " out of range";
-        return false;
+        if (sheet->fullMap()->syntaxVersion() < 1) //compatibility with old format - was in millimeter
+            h = qRound(MM_TO_POINT(h));
+        rows->setRowHeight (rowID, rowID, h);
     }
 
     if (row.hasAttribute("hide")) {
-        f->setHidden((int) row.attribute("hide").toInt(&ok));
-        if (!ok)
-            return false;
+        bool hide = (bool) row.attribute("hide").toInt(&ok);
+        if (!ok) return false;
+        rows->setHidden (rowID, rowID, hide);
     }
 
     KoXmlElement el(row.namedItem("format").toElement());
@@ -579,64 +578,64 @@ bool Ksp::loadRowFormat (RowFormat *f, const KoXmlElement & row, Sheet *sheet, i
         Style style;
         if (!loadStyle (&style, el))
             return false;
-        sheet->cellStorage()->setStyle(Region(QRect(1, f->row(), KS_colMax, 1)), style);
+        sheet->fullCellStorage()->setStyle(Region(QRect(1, rowID, KS_colMax, 1)), style);
         return true;
     }
 
     return true;
 }
 
-QDomElement Ksp::saveColFormat(ColumnFormat *f, QDomDocument& doc, Sheet *sheet, int xshift) const
+QDomElement Ksp::saveColFormat(int colID, QDomDocument& doc, Sheet *sheet)
 {
+    ColFormatStorage *cols = sheet->columnFormats();
+
     QDomElement col(doc.createElement("column"));
-    col.setAttribute("width", QString::number(f->width()));
-    col.setAttribute("column", QString::number(f->column() - xshift));
+    col.setAttribute("width", QString::number(cols->colWidth(colID)));
+    col.setAttribute("column", QString::number(colID));
 
-    if (f->isHidden())
-        col.setAttribute("hide", QString::number((int) f->isHidden()));
+    if (cols->isHidden(colID))
+        col.setAttribute("hide", "1");
 
-    const Style style = sheet->cellStorage()->style(QRect(f->column(), 1, 1, KS_rowMax));
+    const Style style = sheet->fullCellStorage()->style(QRect(colID, 1, 1, KS_rowMax));
     if (!style.isEmpty()) {
-        debugSheetsODF << "saving cell style of column" << f->column();
+        debugSheetsODF << "saving cell style of column" << colID;
         QDomElement format(doc.createElement("format"));
-        saveStyle (style, doc, format, sheet->map()->styleManager());
+        saveStyle (style, doc, format, sheet->fullMap()->styleManager());
         col.appendChild(format);
     }
 
     return col;
 }
 
-bool Ksp::loadColFormat(ColumnFormat *f, const KoXmlElement & col, Sheet *sheet)
+bool Ksp::loadColFormat(const KoXmlElement & col, Sheet *sheet)
 {
     bool ok;
+
+    ColFormatStorage *cols = sheet->columnFormats();
+
+    int colID = col.attribute("col").toInt(&ok);
+    if (colID < 1 || colID > KS_colMax) {
+        debugSheets << "Value col=" << colID << " out of range";
+        return false;
+    }
+
     if (col.hasAttribute("width")) {
-        double w = row.attribute("width").toDouble(&ok);
-        if (sheet->map()->syntaxVersion() < 1) //compatibility with old format - was in millimeter
+        double w = col.attribute("width").toDouble(&ok);
+        if (!ok) return false;
+        if (w < 0) {
+            debugSheets << "Value width=" << w << " out of range";
+            return false;
+        }
+
+        if (sheet->fullMap()->syntaxVersion() < 1) //compatibility with old format - was in millimeter
             w = qRound(MM_TO_POINT(w));
-        f->setWidth (w);
-
-        if (!ok)
-            return false;
+        cols->setColWidth (colID, colID, w);
     }
 
-    f->setColumn(col.attribute("column").toInt(&ok));
-
-    if (!ok)
-        return false;
-
-    // Validation
-    if (f->width() < 0) {
-        debugSheets << "Value width=" << f->width() << " out of range";
-        return false;
-    }
-    if (f->column() < 1 || f->column() > KS_colMax) {
-        debugSheets << "Value col=" << f->column() << " out of range";
-        return false;
-    }
     if (col.hasAttribute("hide")) {
-        f->setHidden((int) col.attribute("hide").toInt(&ok));
-        if (!ok)
-            return false;
+        bool hide = (bool) col.attribute("hide").toInt(&ok);
+        if (!ok) return false;
+        cols->setHidden (colID, colID, hide);
     }
 
     KoXmlElement el(col.namedItem("format").toElement());
@@ -645,7 +644,7 @@ bool Ksp::loadColFormat(ColumnFormat *f, const KoXmlElement & col, Sheet *sheet)
         Style style;
         if (!loadStyle (&style, el))
             return false;
-        sheet->cellStorage()->setStyle(Region(QRect(f->column(), 1, 1, KS_rowMax)), style);
+        sheet->fullCellStorage()->setStyle(Region(QRect(colID, 1, 1, KS_rowMax)), style);
         return true;
     }
 

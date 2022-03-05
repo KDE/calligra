@@ -7,13 +7,15 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-// #include "SheetsKsp.h"
-// #include "SheetsKspPrivate.h"
+#include "SheetsKsp.h"
+#include "SheetsKspPrivate.h"
 
-// #include "Currency.h"
+#include "Style.h"
+#include "StyleManager.h"
 
-// #include "Style.h"
-// #include "StyleManager.h"
+#include <KoXmlReader.h>
+
+#include <QFont>
 
 namespace Calligra {
 namespace Sheets {
@@ -98,86 +100,86 @@ bool Ksp::loadStyles (StyleManager *manager, KoXmlElement const & styles)
 }
 
 
-void Ksp::saveStyle(const Style &style, QDomDocument& doc, QDomElement& format, const StyleManager* styleManager) const
+void Ksp::saveStyle(const Style &style, QDomDocument& doc, QDomElement& format, const StyleManager* styleManager)
 {
-    QSet<Style::Key> keysToStore = style->definedKeys(styleManager);
+    QSet<Style::Key> keysToStore = style.definedKeys(styleManager);
 
-    if (keysToStore.contains(Style::HorizontalAlignment) && style->halign() != HAlignUndefined)
-        format.setAttribute(type() == AUTO ? "align" : "alignX", (int) style->halign());
+    if (keysToStore.contains(Style::HorizontalAlignment) && style.halign() != Style::HAlignUndefined)
+        format.setAttribute(style.type() == Style::AUTO ? "align" : "alignX", (int) style.halign());
 
-    if (keysToStore.contains(Style::VerticalAlignment) && style->valign() != VAlignUndefined)
-        format.setAttribute("alignY", QString::number((int) style->valign()));
+    if (keysToStore.contains(Style::VerticalAlignment) && style.valign() != Style::VAlignUndefined)
+        format.setAttribute("alignY", QString::number((int) style.valign()));
 
-    if (keysToStore.contains(Style::BackgroundColor) && style->backgroundColor().isValid())
-        format.setAttribute("bgcolor", style->backgroundColor().name());
+    if (keysToStore.contains(Style::BackgroundColor) && style.backgroundColor().isValid())
+        format.setAttribute("bgcolor", style.backgroundColor().name());
 
-    if (keysToStore.contains(Style::MultiRow) && style->wrapText())
+    if (keysToStore.contains(Style::MultiRow) && style.wrapText())
         format.setAttribute("multirow", "yes");
 
-    if (keysToStore.contains(Style::VerticalText) && style->verticalText())
+    if (keysToStore.contains(Style::VerticalText) && style.verticalText())
         format.setAttribute("verticaltext", "yes");
 
-    if (keysToStore.contains(Style::ShrinkToFit) && style->shrinkToFit())
+    if (keysToStore.contains(Style::ShrinkToFit) && style.shrinkToFit())
         format.setAttribute("shrinktofit", "yes");
 
     if (keysToStore.contains(Style::Precision))
-        format.setAttribute("precision", QString::number(style->precision()));
+        format.setAttribute("precision", QString::number(style.precision()));
 
-    if (keysToStore.contains(Style::Prefix) && !style->prefix().isEmpty())
-        format.setAttribute("prefix", style->prefix());
+    if (keysToStore.contains(Style::Prefix) && !style.prefix().isEmpty())
+        format.setAttribute("prefix", style.prefix());
 
-    if (keysToStore.contains(Style::Postfix) && !style->postfix().isEmpty())
-        format.setAttribute("postfix", style->postfix());
+    if (keysToStore.contains(Style::Postfix) && !style.postfix().isEmpty())
+        format.setAttribute("postfix", style.postfix());
 
     if (keysToStore.contains(Style::FloatFormatKey))
-        format.setAttribute("float", QString::number((int) style->floatFormat()));
+        format.setAttribute("float", QString::number((int) style.floatFormat()));
 
     if (keysToStore.contains(Style::FloatColorKey))
-        format.setAttribute("floatcolor", QString::number((int)style->floatColor()));
+        format.setAttribute("floatcolor", QString::number((int)style.floatColor()));
 
     if (keysToStore.contains(Style::FormatTypeKey))
-        format.setAttribute("format", QString::number((int) style->formatType()));
+        format.setAttribute("format", QString::number((int) style.formatType()));
 
-    if (keysToStore.contains(Style::CustomFormat) && !style->customFormat().isEmpty())
-        format.setAttribute("custom", style->customFormat());
+    if (keysToStore.contains(Style::CustomFormat) && !style.customFormat().isEmpty())
+        format.setAttribute("custom", style.customFormat());
 
-    if (keysToStore.contains(Style::FormatTypeKey) && style->formatType() == Format::Money) {
-        format.setAttribute("type", (int) style->currency().index());
-        format.setAttribute("symbol", style->currency().symbol());
+    if (keysToStore.contains(Style::FormatTypeKey) && style.formatType() == Format::Money) {
+        format.setAttribute("type", (int) style.currency().index());
+        format.setAttribute("symbol", style.currency().symbol());
     }
 
     if (keysToStore.contains(Style::Angle))
-        format.setAttribute("angle", QString::number(style->angle()));
+        format.setAttribute("angle", QString::number(style.angle()));
 
     if (keysToStore.contains(Style::Indentation))
-        format.setAttribute("indent", QString::number(style->indentation()));
+        format.setAttribute("indent", QString::number(style.indentation()));
 
     if (keysToStore.contains(Style::DontPrintText))
-        format.setAttribute("dontprinttext", style->printText() ? "no" : "yes");
+        format.setAttribute("dontprinttext", style.printText() ? "no" : "yes");
 
     if (keysToStore.contains(Style::NotProtected))
-        format.setAttribute("noprotection", style->notProtected() ? "yes" : "no");
+        format.setAttribute("noprotection", style.notProtected() ? "yes" : "no");
 
     if (keysToStore.contains(Style::HideAll))
-        format.setAttribute("hideall", style->hideAll() ? "yes" : "no");
+        format.setAttribute("hideall", style.hideAll() ? "yes" : "no");
 
     if (keysToStore.contains(Style::HideFormula))
-        format.setAttribute("hideformula", style->hideFormula() ? "yes" : "no");
+        format.setAttribute("hideformula", style.hideFormula() ? "yes" : "no");
 
-    if (type() == AUTO) {
+    if (style.type() == Style::AUTO) {
         if (keysToStore.contains(Style::FontFamily) ||
                 keysToStore.contains(Style::FontSize) ||
                 keysToStore.contains(Style::FontBold) ||
                 keysToStore.contains(Style::FontItalic) ||
                 keysToStore.contains(Style::FontStrike) ||
                 keysToStore.contains(Style::FontUnderline)) {
-            format.appendChild(createElement("font", style->font(), doc));
+            format.appendChild(createElement("font", style.font(), doc));
         }
     } else { // custom style
         if (keysToStore.contains(Style::FontFamily))
-            format.setAttribute("font-family", style->fontFamily());
+            format.setAttribute("font-family", style.fontFamily());
         if (keysToStore.contains(Style::FontSize))
-            format.setAttribute("font-size", QString::number(style->fontSize()));
+            format.setAttribute("font-size", QString::number(style.fontSize()));
         if (keysToStore.contains(Style::FontBold) || keysToStore.contains(Style::FontItalic) ||
                 keysToStore.contains(Style::FontUnderline) || keysToStore.contains(Style::FontStrike)) {
             enum FontFlags {
@@ -187,71 +189,67 @@ void Ksp::saveStyle(const Style &style, QDomDocument& doc, QDomElement& format, 
                 FStrike    = 0x08
             };
             int fontFlags = 0;
-            fontFlags |= style->bold()      ? FBold      : 0;
-            fontFlags |= style->italic()    ? FItalic    : 0;
-            fontFlags |= style->underline() ? FUnderline : 0;
-            fontFlags |= style->strikeOut() ? FStrike    : 0;
+            fontFlags |= style.bold()      ? FBold      : 0;
+            fontFlags |= style.italic()    ? FItalic    : 0;
+            fontFlags |= style.underline() ? FUnderline : 0;
+            fontFlags |= style.strikeOut() ? FStrike    : 0;
             format.setAttribute("font-flags", QString::number(fontFlags));
         }
     }
 
-    if (keysToStore.contains(Style::FontColor) && style->fontColor().isValid())
-        format.appendChild(createElement("pen", style->fontColor(), doc));
+    if (keysToStore.contains(Style::FontColor) && style.fontColor().isValid())
+        format.appendChild(createElement("pen", style.fontColor(), doc));
 
     if (keysToStore.contains(Style::BackgroundBrush)) {
-        format.setAttribute("brushcolor", style->backgroundBrush().color().name());
-        format.setAttribute("brushstyle", QString::number((int) style->backgroundBrush().style()));
+        format.setAttribute("brushcolor", style.backgroundBrush().color().name());
+        format.setAttribute("brushstyle", QString::number((int) style.backgroundBrush().style()));
     }
 
     if (keysToStore.contains(Style::LeftPen)) {
         QDomElement left = doc.createElement("left-border");
-        left.appendChild(createElement("pen", style->leftBorderPen(), doc));
+        left.appendChild(createElement("pen", style.leftBorderPen(), doc));
         format.appendChild(left);
     }
 
     if (keysToStore.contains(Style::TopPen)) {
         QDomElement top = doc.createElement("top-border");
-        top.appendChild(createElement("pen", style->topBorderPen(), doc));
+        top.appendChild(createElement("pen", style.topBorderPen(), doc));
         format.appendChild(top);
     }
 
     if (keysToStore.contains(Style::RightPen)) {
         QDomElement right = doc.createElement("right-border");
-        right.appendChild(createElement("pen", style->rightBorderPen(), doc));
+        right.appendChild(createElement("pen", style.rightBorderPen(), doc));
         format.appendChild(right);
     }
 
     if (keysToStore.contains(Style::BottomPen)) {
         QDomElement bottom = doc.createElement("bottom-border");
-        bottom.appendChild(createElement("pen", style->bottomBorderPen(), doc));
+        bottom.appendChild(createElement("pen", style.bottomBorderPen(), doc));
         format.appendChild(bottom);
     }
 
     if (keysToStore.contains(Style::FallDiagonalPen)) {
         QDomElement fallDiagonal  = doc.createElement("fall-diagonal");
-        fallDiagonal.appendChild(createElement("pen", style->fallDiagonalPen(), doc));
+        fallDiagonal.appendChild(createElement("pen", style.fallDiagonalPen(), doc));
         format.appendChild(fallDiagonal);
     }
 
     if (keysToStore.contains(Style::GoUpDiagonalPen)) {
         QDomElement goUpDiagonal = doc.createElement("up-diagonal");
-        goUpDiagonal.appendChild(createElement("pen", style->goUpDiagonalPen(), doc));
+        goUpDiagonal.appendChild(createElement("pen", style.goUpDiagonalPen(), doc));
         format.appendChild(goUpDiagonal);
     }
 }
 
 bool Ksp::loadStyle(Style *style, KoXmlElement& format)
 {
-    if (format.hasAttribute("style-name")) {
-        // Simply set the style name and we are done.
-        style->insertSubStyle(Style::NamedStyleKey, format.attribute("style-name"));
-        return true;
-    } else if (format.hasAttribute("parent"))
-        style->insertSubStyle(Style::NamedStyleKey, format.attribute("parent"));
+    if (format.hasAttribute("parent"))
+        style->setParentName(format.attribute("parent"));
 
     bool ok;
-    if (format.hasAttribute(style->type() == AUTO ? "align" : "alignX")) {
-        HAlign a = (HAlign) format.attribute(type() == AUTO ? "align" : "alignX").toInt(&ok);
+    if (format.hasAttribute(style->type() == Style::AUTO ? "align" : "alignX")) {
+        Style::HAlign a = (Style::HAlign) format.attribute(style->type() == Style::AUTO ? "align" : "alignX").toInt(&ok);
         if (!ok)
             return false;
         if ((unsigned int) a >= 1 && (unsigned int) a <= 4) {
@@ -289,11 +287,11 @@ bool Ksp::loadStyle(Style *style, KoXmlElement& format)
         }
         // special handling for precision
         // The Style default (-1) and the storage default (0) differ.
-        if (style->type() == AUTO && i == -1)
+        if (style->type() == Style::AUTO && i == -1)
             i = 0;
         // The maximum is 10. Replace the Style value 0 with -11, which always results
         // in a storage value < 0 and is interpreted as Style value 0.
-        else if (type() == AUTO && i == 0)
+        else if (style->type() == Style::AUTO && i == 0)
             i = -11;
         style->setPrecision(i);
     }
@@ -363,7 +361,7 @@ bool Ksp::loadStyle(Style *style, KoXmlElement& format)
         style->setHideFormula(true);
     }
 
-    if (type() == AUTO) {
+    if (style->type() == Style::AUTO) {
         KoXmlElement fontElement = format.namedItem("font").toElement();
         if (!fontElement.isNull()) {
             QFont font(toFont(fontElement));
@@ -485,12 +483,12 @@ void Ksp::saveCustomStyle(CustomStyle *s, QDomDocument& doc, QDomElement& styles
 
     QDomElement style(doc.createElement("style"));
     style.setAttribute("type", QString::number((int) s->type()));
-    if (!parentName().isNull())
-        style.setAttribute("parent", parentName());
-    style.setAttribute("name", name());
+    if (!s->parentName().isNull())
+        style.setAttribute("parent", s->parentName());
+    style.setAttribute("name", s->name());
 
     QDomElement format(doc.createElement("format"));
-    saveStyle(s, doc, format, styleManager);
+    saveStyle(*s, doc, format, styleManager);
     style.appendChild(format);
 
     styles.appendChild(style);

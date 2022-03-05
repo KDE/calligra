@@ -473,3 +473,9 @@ QString Currency::chooseString(int type, bool & ok)
         return ret;
     }
 }
+
+uint qHash(const Calligra::Sheets::Currency& cur) {
+    return ::qHash(cur.code());
+}
+
+

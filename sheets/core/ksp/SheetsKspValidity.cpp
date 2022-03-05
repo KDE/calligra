@@ -6,23 +6,20 @@
 */
 
 
-// #include "SheetsKsp.h"
-// #include "SheetsKspPrivate.h"
+#include "SheetsKsp.h"
+#include "SheetsKspPrivate.h"
 
-// #include "engine/Validity.h"
+#include "engine/Validity.h"
+#include "engine/ValueConverter.h"
+#include "engine/ValueParser.h"
 
-// #include "engine/CellBase.h"
-// #include "engine/MapBase.h"
-// #include "engine/SheetBase.h"
-// #include "engine/ValueConverter.h"
-// #include "engine/ValueParser.h"
+#include <KoXmlReader.h>
 
 
 namespace Calligra {
 namespace Sheets {
 
-bool Ksp::loadValidity(Validity *v, Cell* const cell, const KoXmlElement& validityElement) {
-    ValueParser *const parser = cell->sheet()->map()->parser();
+bool Ksp::loadValidity(Validity *v, ValueParser *parser, const KoXmlElement& validityElement) {
     bool ok = false;
     KoXmlElement param = validityElement.namedItem("param").toElement();
     if (!param.isNull()) {
@@ -133,7 +130,7 @@ QDomElement Ksp::saveValidity(QDomDocument& doc, Validity *v, const ValueConvert
 
     Validity::Restriction rr = v->restriction();
     QString tmp;
-    if (rr == Time) {
+    if (rr == Validity::Time) {
         QDomElement timeMinElement = doc.createElement("timemin");
         tmp = converter->asString(v->minimumValue()).asString();
         timeMinElement.appendChild(doc.createTextNode(tmp));
@@ -147,7 +144,7 @@ QDomElement Ksp::saveValidity(QDomDocument& doc, Validity *v, const ValueConvert
         }
     }
 
-    if (rr == Date) {
+    if (rr == Validity::Date) {
         QDomElement dateMinElement = doc.createElement("datemin");
         const QDate minDate = v->minimumValue().asDate(converter->settings());
         QString tmp("%1/%2/%3");

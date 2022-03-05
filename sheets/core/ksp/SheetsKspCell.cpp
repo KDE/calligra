@@ -123,11 +123,11 @@ Cell Ksp::loadCell(const KoXmlElement & cell, Sheet *sheet)
     //
     // Load the condition section of a cell.
     //
+    MapBase *const map = sheet->map();
+    ValueParser *const valueParser = map->parser();
     KoXmlElement conditionsElement = cell.namedItem("condition").toElement();
     if (!conditionsElement.isNull()) {
         Conditions conditions;
-        MapBase *const map = sheet->map();
-        ValueParser *const valueParser = map->parser();
         loadConditions(&conditions, conditionsElement, valueParser);
         if (!conditions.isEmpty())
             res.setConditions(conditions);
@@ -136,7 +136,7 @@ Cell Ksp::loadCell(const KoXmlElement & cell, Sheet *sheet)
     KoXmlElement validityElement = cell.namedItem("validity").toElement();
     if (!validityElement.isNull()) {
         Validity validity;
-        if (loadValidity(&validity, &res, validityElement))
+        if (loadValidity(&validity, valueParser, validityElement))
             res.setValidity(validity);
     }
 

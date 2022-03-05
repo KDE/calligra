@@ -8,6 +8,9 @@
 #include "SheetsKspPrivate.h"
 
 #include "engine/CalculationSettings.h"
+#include "engine/NamedAreaManager.h"
+#include "engine/Region.h"
+#include "engine/SheetBase.h"
 
 #include "DocBase.h"
 #include "Map.h"
@@ -15,6 +18,9 @@
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 #include <KoXmlReader.h>
+
+#include <kcodecs.h>
+#include <kmessagebox.h>
 
 namespace Calligra {
 namespace Sheets {
@@ -172,7 +178,7 @@ void Ksp::loadNamedAreas(NamedAreaManager *manager, Map *map, const KoXmlElement
     KoXmlElement element;
     forEachElement(element, parent) {
         if (element.tagName() == "reference") {
-            Sheet* sheet = 0;
+            SheetBase* sheet = 0;
             QString refname;
             int left = 0;
             int right = 0;
@@ -198,7 +204,7 @@ void Ksp::loadNamedAreas(NamedAreaManager *manager, Map *map, const KoXmlElement
                 if (rect.hasAttribute("bottom-rect"))
                     bottom = rect.attribute("bottom-rect").toInt(&ok);
             }
-            insert(Region(QRect(QPoint(left, top), QPoint(right, bottom)), sheet), refname);
+            manager->insert(Region(QRect(QPoint(left, top), QPoint(right, bottom)), sheet), refname);
         }
     }
 }
@@ -206,22 +212,22 @@ void Ksp::loadNamedAreas(NamedAreaManager *manager, Map *map, const KoXmlElement
 QDomElement Ksp::saveNamedAreas(NamedAreaManager *manager, QDomDocument& doc)
 {
     QDomElement element = doc.createElement("areaname");
-    const QList<NamedArea> namedAreas = d->namedAreas.values();
-    for (int i = 0; i < namedAreas.count(); ++i) {
+    for (const QString &name : manager->areaNames()) {
         QDomElement e = doc.createElement("reference");
         QDomElement tabname = doc.createElement("tabname");
-        tabname.appendChild(doc.createTextNode(namedAreas[i].sheet->sheetName()));
+        tabname.appendChild(doc.createTextNode(manager->sheet(name)->sheetName()));
         e.appendChild(tabname);
 
         QDomElement refname = doc.createElement("refname");
-        refname.appendChild(doc.createTextNode(namedAreas[i].name));
+        refname.appendChild(doc.createTextNode(name));
         e.appendChild(refname);
 
         QDomElement rect = doc.createElement("rect");
-        rect.setAttribute("left-rect", QString::number((namedAreas[i].range).left()));
-        rect.setAttribute("right-rect", QString::number((namedAreas[i].range).right()));
-        rect.setAttribute("top-rect", QString::number((namedAreas[i].range).top()));
-        rect.setAttribute("bottom-rect", QString::number((namedAreas[i].range).bottom()));
+        QRect r = manager->namedArea(name).boundingRect();
+        rect.setAttribute("left-rect", QString::number(r.left()));
+        rect.setAttribute("right-rect", QString::number(r.right()));
+        rect.setAttribute("top-rect", QString::number(r.top()));
+        rect.setAttribute("bottom-rect", QString::number(r.bottom()));
         e.appendChild(rect);
         element.appendChild(e);
     }

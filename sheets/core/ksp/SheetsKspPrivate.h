@@ -48,7 +48,7 @@ class ValueConverter;
 class ValueParser;
 
 namespace Ksp {
-    bool loadValidity(Validity *validity, Cell* const cell, const KoXmlElement& validityElement);
+    bool loadValidity(Validity *validity, ValueParser *parser, const KoXmlElement& validityElement);
     QDomElement saveValidity(QDomDocument& doc, Validity *validity, const ValueConverter *converter);
     void loadConditions(Conditions *conditions, const KoXmlElement &element, const ValueParser *parser);
     QDomElement saveConditions(Conditions *conditions, QDomDocument &doc, ValueConverter *converter);

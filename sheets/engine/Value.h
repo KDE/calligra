@@ -497,7 +497,7 @@ private:
   QHash/QSet support
 ****************************************************************************/
 
-uint qHash(const Value& value);
+uint CALLIGRA_SHEETS_ENGINE_EXPORT qHash(const Value& value);
 
 } // namespace Sheets
 } // namespace Calligra

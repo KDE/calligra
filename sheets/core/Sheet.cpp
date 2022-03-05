@@ -401,6 +401,11 @@ HeaderFooter *Sheet::headerFooter() const
     return d->headerFooter;
 }
 
+SheetModel *Sheet::model() const
+{
+    return d->model;
+}
+
 QSizeF Sheet::documentSize() const
 {
     return d->documentSize;
