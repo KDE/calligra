@@ -8,16 +8,10 @@
 
 #include "EngineeringModule.h"
 
-#include "Function.h"
-#include "FunctionModuleRegistry.h"
-#include "ValueCalc.h"
-#include "ValueConverter.h"
+#include "engine/Function.h"
+#include "engine/ValueCalc.h"
+#include "engine/ValueConverter.h"
 
-// used by the CONVERT function
-#include <QMap>
-
-// these are needed for complex functions, while we handle them in the old way
-#include <math.h>
 
 #ifndef M_LN2l
 #define M_LN2l 0.6931471805599453094172321214581766L

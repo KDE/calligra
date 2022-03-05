@@ -295,6 +295,10 @@ public:
     Value stddevP(QVector<Value> range, Value avg,
                   bool full = true);
 
+    int days360(int day1, int month1, int year1, bool leapYear1, int day2, int month2, int year2, bool leapYear2, bool usaMethod);
+    int days360(const QDate& _date1, const QDate& _date2, bool european);
+    Value yearFrac(const QDate& startDate, const QDate& endDate, int basis);
+
     /**
       This method parses the condition in string text to the condition cond.
       It sets the condition's type and value.

@@ -2550,3 +2550,133 @@ bool ValueCalc::matches(const Condition &cond, Value val)
     return false;
 }
 
+// the days360 method does implement the 30/360days method as used in e.g. the YEARFRAC function
+// TODO this duplicates the func_days360, maybe merge the algorithms?
+int ValueCalc::days360(int day1, int month1, int year1, bool leapYear1,
+                     int day2, int month2, int year2, bool leapYear2,
+                     bool usaMethod)
+{
+    if (usaMethod) { // US method
+        if (day1 == 31) {
+            day1 = 30;
+            if (day2 == 31) {
+                day2 = 30;
+            }
+        }
+        else if (day1 == 30 && day2 == 31) {
+            day2 = 30;
+        }
+        else if (month1 == 2 && (day1 == 29 || (day1 == 28 && ! leapYear1))) {
+            day1 = 30;
+            if (month2 == 2 && (day2 == 29 || (day2 == 28 && ! leapYear2))) {
+                day2 = 30;
+            }
+        }
+    } else { // European method
+        if (day1 == 31) {
+            day1 = 30;
+        }
+        if (day2 == 31) {
+            day2 = 30;
+        }
+    }
+    return day2 + month2 * 30 + year2 * 360 - day1 - month1 * 30 - year1 * 360;
+}
+
+
+// days360
+int ValueCalc::days360(const QDate& _date1, const QDate& _date2, bool european)
+{
+    int day1, month1, year1, day2, month2, year2;
+
+    day1 = _date1.day();
+    month1 = _date1.month();
+    year1 = _date1.year();
+
+    day2 = _date2.day();
+    month2 = _date2.month();
+    year2 = _date2.year();
+
+    return days360(day1, month1, year1, QDate::isLeapYear(_date1.year()), day2, month2, year2, QDate::isLeapYear(_date2.year()), !european);
+}
+
+
+
+Value ValueCalc::yearFrac(const QDate& startDate, const QDate& endDate, int basis)
+{
+    QDate date1 = startDate;
+    QDate date2 = endDate;
+
+    //
+    // calculation
+    //
+
+    if (date2 < date1) {
+        // exchange dates
+        QDate Temp1 = date1;
+        date1 = date2;
+        date2 = Temp1;
+    }
+
+    int days = date1.daysTo(date2);
+
+//   debugSheetsFormula <<"date1 =" << date1 <<"    date2 =" << date2 <<"    days =" << days <<"    basis =" << basis;
+
+    long double res = 0;
+    long double peryear = 0;
+    int nYears = 0;
+
+    switch (basis) {
+    case 1: {
+        nYears = date2.year() - date1.year() + 1;
+        for (int y = date1.year(); y <= date2.year(); ++y) {
+            peryear += QDate::isLeapYear(y) ? 366 : 365;
+        }
+        // less than one year - even if it does span two consequentive years ...
+        if (QDate(date1.year() + 1, date1.month(), date1.day()) >= date2) {
+            nYears = 1;
+            peryear = 365;
+            if (QDate::isLeapYear(date1.year()) && date1.month() <= 2) peryear = 366;
+            else if (QDate::isLeapYear(date2.year()) && date2.month() > 2) peryear = 366;
+            else if (date2.month() == 2 && date2.day() == 29) peryear = 366;
+        }
+        peryear = peryear / (long double) nYears;
+        nYears = 0;
+        break;
+    }
+    case 2: {
+        // Actual/360
+        peryear = 360;
+        break;
+    }
+    case 3: {
+        // Actual/365
+        peryear = 365;
+        break;
+    }
+    case 4: {
+        // 30/360 Europe
+
+        // calc datedif360 (start, end, Europe)
+        days = days360(date1, date2, 1);
+
+        peryear = 360;
+        break;
+    }
+    default: {
+        // NASD 30/360
+        //basis = 0;
+
+        // calc datedif360 (start, end, US)
+        days = days360(date1, date2, 0);
+
+        peryear = 360;
+    }
+    }
+
+    res = (long double)(nYears) + (long double)days / (long double) peryear;
+//   debugSheetsFormula<<"getYearFrac res="<<res;
+    return Value(res);
+}
+
+

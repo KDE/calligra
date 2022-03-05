@@ -17,6 +17,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/interfaces
                     ${EIGEN3_INCLUDE_DIR} )
 
 add_subdirectory( engine )
+add_subdirectory( functions )
 add_subdirectory( core )
 
 # have their own translation domain
@@ -33,7 +34,6 @@ if(BUILD_TESTING)
     add_subdirectory( tests )
 endif()
 add_subdirectory( dtd )
-add_subdirectory( functions )
 
 #add_definitions(-DCALLIGRA_SHEETS_MT)
 
@@ -144,10 +144,6 @@ ki18n_wrap_ui(dialogs_DIR_SRCS
 
     )
 
-set (functions_DIR_SRCS
-    functions/helper.cpp
-    )
-
 if(Qt5DBus_FOUND)
 set (interfaces_DIR_SRCS
     interfaces/MapAdaptor.cpp
@@ -225,7 +221,6 @@ set (calligrasheetscommon_LIB_SRCS
     ${commands_DIR_SRCS}
     ${database_DIR_SRCS}
     ${dialogs_DIR_SRCS}
-    ${functions_DIR_SRCS}
     ${part_DIR_SRCS}
     ${ui_DIR_SRCS}
     )

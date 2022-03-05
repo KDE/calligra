@@ -7,12 +7,9 @@
 
 #include "ConversionModule.h"
 
-#include "Function.h"
-#include "FunctionModuleRegistry.h"
-#include "ValueCalc.h"
-#include "ValueConverter.h"
-
-#include <QByteArray>
+#include "engine/Function.h"
+#include "engine/ValueCalc.h"
+#include "engine/ValueConverter.h"
 
 using namespace Calligra::Sheets;
 
@@ -267,3 +264,4 @@ Value func_ToString(valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 #include "conversion.moc"
+

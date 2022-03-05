@@ -7,30 +7,31 @@
 
 #include "InformationModule.h"
 
-#include <CalligraVersionWrapper.h>
+// #include <CalligraVersionWrapper.h>
 #ifdef Q_OS_WIN
-#include <windows.h>
+// #include <windows.h>
 #else
-#include <sys/utsname.h>
+// #include <sys/utsname.h>
 #endif
 
-#include <QDir>
-#include <KLocalizedString>
+#include "engine/ValueCalc.h"
+#include "engine/ValueConverter.h"
 
-#include "SheetsDebug.h"
-#include "CalculationSettings.h"
-#include "Function.h"
-#include "FunctionModuleRegistry.h"
-#include "ValueCalc.h"
-#include "ValueConverter.h"
-#include "Sheet.h"
-#include "Region.h"
-#include "Cell.h"
-#include "Formula.h"
-#include "CellStorage.h"
+// #include <QDir>
+// #include <KLocalizedString>
 
-#include <KoPart.h>
-#include <KoApplication.h>
+// #include "SheetsDebug.h"
+// #include "CalculationSettings.h"
+// #include "Function.h"
+// #include "FunctionModuleRegistry.h"
+// #include "Sheet.h"
+// #include "Region.h"
+// #include "Cell.h"
+// #include "Formula.h"
+// #include "CellStorage.h"
+
+// #include <KoPart.h>
+// #include <KoApplication.h>
 
 using namespace Calligra::Sheets;
 

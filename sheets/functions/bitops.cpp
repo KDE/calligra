@@ -7,10 +7,7 @@
 
 #include "BitOpsModule.h"
 
-#include "Function.h"
-#include "FunctionModuleRegistry.h"
-#include "ValueCalc.h"
-#include "ValueConverter.h"
+#include "engine/Function.h"
 
 using namespace Calligra::Sheets;
 

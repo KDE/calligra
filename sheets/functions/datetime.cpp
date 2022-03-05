@@ -7,14 +7,14 @@
 
 #include "DateTimeModule.h"
 
-#include "CalculationSettings.h"
-#include "Function.h"
-#include "FunctionModuleRegistry.h"
-#include "functions/helper.h"
-#include "ValueCalc.h"
-#include "ValueConverter.h"
+#include "engine/Function.h"
+#include "engine/CalculationSettings.h"
+// #include "FunctionModuleRegistry.h"
+#include "engine/Localization.h"
+#include "engine/ValueCalc.h"
+#include "engine/ValueConverter.h"
 
-#include <kcalendarsystem.h>
+// #include <kcalendarsystem.h>
 
 using namespace Calligra::Sheets;
 
@@ -513,7 +513,7 @@ Value func_days(valVector args, ValueCalc *calc, FuncExtra *)
     if (!date1.isValid() || !date2.isValid())
         return Value::errorVALUE();
 
-    return Value(date2.daysTo(date1));
+    return Value((long)date2.daysTo(date1));
 }
 
 // Function: DATE
@@ -903,9 +903,7 @@ Value func_yearFrac(valVector args, ValueCalc *calc, FuncExtra *)
     if (basis < 0 || basis > 4)
         return Value::errorVALUE();
 
-    QDate date0 = calc->settings()->referenceDate(); // referenceDate
-
-    return Value(yearFrac(date0, date1, date2, basis));
+    return Value(calc->yearFrac(date1, date2, basis));
 }
 
 // Function: WORKDAY
@@ -994,7 +992,7 @@ Value func_workday(valVector args, ValueCalc *calc, FuncExtra *e)
         // exclude weekends and holidays
         do {
             enddate = enddate.addDays(1 * sign);
-        } while (enddate.dayOfWeek() > 5 || holidays.contains(Value(date0.daysTo(enddate))));
+        } while (enddate.dayOfWeek() > 5 || holidays.contains(Value((long)date0.daysTo(enddate))));
 
         days--;
     }
@@ -1084,7 +1082,7 @@ Value func_networkday(valVector args, ValueCalc *calc, FuncExtra *e)
     // count days
     //
     while (startdate != enddate) {
-        if (startdate.dayOfWeek() > 5 || holidays.contains(Value(date0.daysTo(startdate)))) {
+        if (startdate.dayOfWeek() > 5 || holidays.contains(Value((long) date0.daysTo(startdate)))) {
             startdate = startdate.addDays(1 * sign);
             continue;
         }

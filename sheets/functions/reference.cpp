@@ -6,18 +6,18 @@
 // built-in reference functions
 #include "ReferenceModule.h"
 
-#include "Cell.h"
-#include "Region.h"
-#include "Sheet.h"
-#include "Value.h"
-#include "Map.h"
-#include "CalculationSettings.h"
-#include "CellStorage.h"
-#include "Formula.h"
-#include "Function.h"
-#include "FunctionModuleRegistry.h"
-#include "ValueCalc.h"
-#include "ValueConverter.h"
+#include "engine/Function.h"
+#include "engine/ValueCalc.h"
+#include "engine/ValueConverter.h"
+// #include "Cell.h"
+// #include "Region.h"
+// #include "Sheet.h"
+// #include "Value.h"
+// #include "Map.h"
+// #include "CalculationSettings.h"
+// #include "CellStorage.h"
+// #include "Formula.h"
+// #include "FunctionModuleRegistry.h"
 
 using namespace Calligra::Sheets;
 

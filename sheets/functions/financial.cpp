@@ -14,16 +14,15 @@
 
 #include "FinancialModule.h"
 
-#include "CalculationSettings.h"
-#include "Function.h"
-#include "FunctionModuleRegistry.h"
-#include "functions/helper.h"
-#include "ValueCalc.h"
-#include "ValueConverter.h"
+#include "engine/Function.h"
+// #include "CalculationSettings.h"
+// #include "FunctionModuleRegistry.h"
+#include "engine/ValueCalc.h"
+#include "engine/ValueConverter.h"
 
-#include <kcalendarsystem.h>
+// #include <kcalendarsystem.h>
 
-#include <math.h>
+// #include <math.h>
 
 using namespace Calligra::Sheets;
 
@@ -346,6 +345,83 @@ QString FinancialModule::descriptionFileName() const
 }
 
 
+// helper
+/* 0: US 30 / 360
+ * 1: real days
+ * 2: real days / 360
+ * 3: real days / 365
+ * 4: European 30 / 360
+ */
+
+int daysBetweenDates(QDate const & date1, QDate const & date2, int basis)
+{
+    int day1, day2, month1, month2, year1, year2;
+    bool isLeapYear = false;
+    int days, months, years;
+
+    day1   = date1.day();
+    month1 = date1.month();
+    year1  = date1.year();
+    day2   = date2.day();
+    month2 = date2.month();
+    year2  = date2.year();
+
+    years  = year2  - year1;
+    months = month2 - month1 + years * 12;
+    days   = day2   - day1;
+
+    isLeapYear = QDate::isLeapYear(year1);
+
+    switch (basis) {
+    case 0:
+        if (month1 == 2 && month2 != 2 && year1 == year2) {
+            if (isLeapYear)
+                return months * 30 + days - 1;
+            else
+                return months * 30 + days - 2;
+        }
+        return months * 30 + days;
+
+    case 1: // TODO: real days for difference between months!
+        //    return ( month2 - month1 ) * 30 + years * 360 + days;
+
+    case 2: // TODO: real days for difference between months!
+        //    return ( month2 - month1 ) * 30 + years * 365 + days;
+
+    case 3:
+        return date1.daysTo(date2);
+
+    case 4:
+        return months * 30 + days;
+    }
+
+    return -1;
+}
+
+int daysPerYear(QDate const & date, int basis)
+{
+    switch (basis) {
+    case 0:
+        return 360;
+
+    case 1:
+        if (QDate::isLeapYear(date.year()))
+            return 366;
+        return 365;
+
+    case 2:
+        return 360;
+    case 3:
+        return 365;
+    case 4:
+        return 360;
+    }
+
+    return -1;
+}
+
+
+
 ///////////////////////////////////////////////////////////////////////////
 
 //
@@ -359,6 +435,25 @@ void awNpv(ValueCalc *c, Value &res, Value val, Value rate)
     res.setElement(0, 0, c->add(result, c->div(value, c->pow(c->add(Value(1.0), rate), i))));
     res.setElement(1, 0, c->add(i, Value(1.0)));     // increment counter
 }
+
+// pow1p calculate (1+x)^y accurately
+static long double pow1p(const long double& x, const long double& y)
+{
+    if (fabs(x) > 0.5)
+        return pow(1 + x, y);
+    else
+        return exp(y * log1p(x));
+}
+
+// pow1pm1 calculate ((1+x)^y)-1 accurately
+static long double pow1pm1(const long double& x, const long double& y)
+{
+    if (x <= -1)
+        return pow(1 + x, y) - 1;
+    else
+        return expm1(y * log1p(x));
+}
+
 
 //
 // helper: calc_fvifa
@@ -713,10 +808,8 @@ Value func_amordegrc(valVector args, ValueCalc *calc, FuncExtra *)
     else
         amorCoeff = 2.5;
 
-    QDate date0 = calc->settings()->referenceDate(); // referenceDat
-
     rate *= amorCoeff;
-    nRate = ROUND(yearFrac(date0, purchaseDate, firstPeriodEndDate, basis) * rate * cost, 0);
+    nRate = ROUND(calc->mul(calc->mul(calc->yearFrac(purchaseDate, firstPeriodEndDate, basis), rate), cost), 0);
     cost -= nRate;
     rest = cost - salvage;
 
@@ -759,11 +852,9 @@ Value func_amorlinc(valVector args, ValueCalc *calc, FuncExtra *)
     if (args.count() > 6)
         basis = calc->conv()->asInteger(args[6]).asInteger();
 
-    QDate date0 = calc->settings()->referenceDate(); // referenceDate
-
     double oneRate = cost * rate;
     double costDelta = cost - salvage;
-    double nullRate = yearFrac(date0, purchaseDate, firstPeriodEndDate, basis) * rate * cost;
+    double nullRate = calc->yearFrac(purchaseDate, firstPeriodEndDate, basis) * rate * cost;
     int numOfFullPeriods = (cost - salvage - nullRate) / oneRate;
 
     double res ;
@@ -1314,10 +1405,8 @@ Value func_disc(valVector args, ValueCalc *calc, FuncExtra *)
       if ( y <= 0 || d <= 0 || basis < 0 || basis > 4 || calc->isZero (redemp) )
         return Value(false);*/
 
-    QDate date0 = calc->settings()->referenceDate(); // referenceDate
-
     // res=(1-(price/redemption)/yearfrac)
-    return Value((1.0 - par.asFloat() / redemp.asFloat()) / yearFrac(date0, settlement, maturity, basis));
+    return Value((1.0 - par.asFloat() / redemp.asFloat()) / calc->yearFrac(settlement, maturity, basis));
 }
 
 
@@ -1364,6 +1453,46 @@ Value func_dollarfr(valVector args, ValueCalc *calc, FuncExtra *)
     return Value(res);
 }
 
+
+// helper
+long double duration(const QDate& settlement, const QDate& maturity,
+                              const long double& coup_, const long double& yield_, const int& freq, const int& basis, const long double& numOfCoups)
+{
+    long double yield = yield_;
+    long double coup = coup_;
+
+//   debugSheetsFormula<<"DURATION_HELPER";
+//   debugSheetsFormula<<"sett ="<<settlement<<" mat ="<<maturity<<" coup ="<<coup<<" yield ="<<yield<<" freq ="<<freq<<" basis ="<<basis;
+
+
+    long double yearfrac = calc->yearFrac(settlement, maturity, basis);
+    long double res = 0.0l;
+    const long double f100 = 100.0l;
+    coup *= f100 / (long double)(freq);
+
+    yield /= freq;
+    yield += 1.0;
+
+    long double diff = yearfrac * freq - numOfCoups;
+
+    long double t;
+
+    for (t = 1.0l ; t < numOfCoups ; t += 1.0l)
+        res += (t + diff) * (coup) / pow(yield, t + diff);
+
+    res += (numOfCoups + diff) * (coup + f100) / pow(yield, numOfCoups + diff);
+
+    long double p = 0.0l;
+    for (t = 1.0l ; t < numOfCoups ; t += 1.0l)
+        p += coup / pow(yield, t + diff);
+
+    p += (coup + f100) / pow(yield, numOfCoups + diff);
+
+    res /= p;
+    res /= (long double)(freq);
+
+    return(res);
+}
 
 //
 // Function: DURATION
@@ -1414,8 +1543,6 @@ Value func_duration_add(valVector args, ValueCalc *calc, FuncExtra *)
     if (coup < 0.0 || yield < 0.0)
         return Value::errorVALUE();
 
-    QDate date0 = calc->settings()->referenceDate(); // referenceDate
-
     valVector param;
     param.append(args[0]);
     param.append(args[1]);
@@ -1428,7 +1555,7 @@ Value func_duration_add(valVector args, ValueCalc *calc, FuncExtra *)
     debugSheetsFormula << "numOfCoup =" << numOfCoups;
 
 
-    return Value(duration(date0, settlement, maturity, coup, yield, freq, basis, numOfCoups));
+    return Value(duration(settlement, maturity, coup, yield, freq, basis, numOfCoups));
 }
 
 
@@ -1696,8 +1823,6 @@ Value func_mduration(valVector args, ValueCalc *calc, FuncExtra *)
     if (coup < 0.0 || yield < 0.0)
         return Value::errorVALUE();
 
-    QDate date0 = calc->settings()->referenceDate(); // referenceDate
-
     valVector param;
     param.append(args[0]);
     param.append(args[1]);
@@ -1706,7 +1831,7 @@ Value func_mduration(valVector args, ValueCalc *calc, FuncExtra *)
 
     int numOfCoups = Value(func_coupnum(param, calc, 0)).asInteger();
 
-    double res = duration(date0, settlement, maturity, coup, yield, freq, basis, numOfCoups);
+    double res = duration(settlement, maturity, coup, yield, freq, basis, numOfCoups);
     res /= 1.0 + (yield / double(freq));
 
     return Value(res);
@@ -2286,6 +2411,7 @@ Value func_syd(valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 
+
 //
 // Function: TBILLEQ
 //
@@ -2296,7 +2422,7 @@ Value func_tbilleq(valVector args, ValueCalc *calc, FuncExtra *)
     double discount = calc->conv()->asFloat(args[2]).asFloat();
 
     maturity = maturity.addDays(1);
-    int days = days360(settlement, maturity, false);  // false -> US
+    int days = calc->days360(settlement, maturity, false);  // false -> US
 
     if (settlement >= maturity || discount <= 0.0 || days > 360)
         return Value::errorVALUE();
@@ -2316,9 +2442,7 @@ Value func_tbillprice(valVector args, ValueCalc *calc, FuncExtra *)
     QDate maturity = calc->conv()->asDate(args[1]).asDate(calc->settings());
     Value discount = args[2];
 
-    QDate date0 = calc->settings()->referenceDate(); // referenceDate
-
-    double fraction = yearFrac(date0, settlement, maturity.addDays(1), 0); // basis: USA 30/360
+    double fraction = calc->yearFrac(settlement, maturity.addDays(1), 0); // basis: USA 30/360
     double dummy;
 
     if (modf(fraction, &dummy) == 0.0)
@@ -2342,7 +2466,7 @@ Value func_tbillyield(valVector args, ValueCalc *calc, FuncExtra *)
     QDate maturity = calc->conv()->asDate(args[1]).asDate(calc->settings());
     double price = calc->conv()->asFloat(args[2]).asFloat();
 
-    double days = days360(settlement, maturity, false);  // false -> US
+    double days = calc->days360(settlement, maturity, false);  // false -> US
     ++days;
 
     if (settlement >= maturity || days > 360 || price <= 0.0)
@@ -2539,10 +2663,8 @@ Value func_yielddisc(valVector args, ValueCalc *calc, FuncExtra *)
     if (price <= 0.0 || redemp <= 0.0 || settlement >= maturity)
         return Value::errorVALUE();
 
-    QDate date0 = calc->settings()->referenceDate(); // referenceDate
-
     double res = (redemp / price) - 1.0;
-    res /= yearFrac(date0, settlement, maturity, basis);
+    res /= calc->yearFrac(settlement, maturity, basis);
 
     return Value(res);
 }
@@ -2567,11 +2689,9 @@ Value func_yieldmat(valVector args, ValueCalc *calc, FuncExtra *)
     if (price <= 0.0 || rate <= 0.0 || settlement >= maturity)
         return Value::errorVALUE();
 
-    QDate date0 = calc->settings()->referenceDate(); // referenceDate
-
-    long double issMat = yearFrac(date0, issue, maturity, basis);
-    long double issSet = yearFrac(date0, issue, settlement, basis);
-    long double setMat = yearFrac(date0, settlement, maturity, basis);
+    long double issMat = calc->yearFrac(issue, maturity, basis);
+    long double issSet = calc->yearFrac(issue, settlement, basis);
+    long double setMat = calc->yearFrac(settlement, maturity, basis);
 
     long double res = 1.0l + issMat * rate;
     res /= price / 100.0l + issSet * rate;

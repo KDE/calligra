@@ -6,9 +6,8 @@
 // built-in trigonometric functions
 #include "TrigonometryModule.h"
 
-#include "Function.h"
-#include "FunctionModuleRegistry.h"
-#include "ValueCalc.h"
+#include "engine/Function.h"
+#include "engine/ValueCalc.h"
 
 using namespace Calligra::Sheets;
 

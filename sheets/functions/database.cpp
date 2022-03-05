@@ -7,10 +7,9 @@
 
 #include "DatabaseModule.h"
 
-#include "Function.h"
-#include "FunctionModuleRegistry.h"
-#include "ValueCalc.h"
-#include "ValueConverter.h"
+#include "engine/Function.h"
+#include "engine/ValueCalc.h"
+#include "engine/ValueConverter.h"
 
 using namespace Calligra::Sheets;
 

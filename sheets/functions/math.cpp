@@ -11,20 +11,20 @@
 #include "MathModule.h"
 
 // needed for RANDBINOM and so
-#include <math.h>
-#include <qmath.h>
+// #include <math.h>
+// #include <qmath.h>
 
-#include "SheetsDebug.h"
-#include "FunctionModuleRegistry.h"
-#include "Function.h"
-#include "FunctionRepository.h"
-#include "ValueCalc.h"
-#include "ValueConverter.h"
+// #include "SheetsDebug.h"
+// #include "FunctionModuleRegistry.h"
+#include "engine/Function.h"
+// #include "FunctionRepository.h"
+#include "engine/ValueCalc.h"
+#include "engine/ValueConverter.h"
 
 // needed for SUBTOTAL:
-#include "Cell.h"
-#include "RowFormatStorage.h"
-#include "Sheet.h"
+// #include "Cell.h"
+// #include "RowFormatStorage.h"
+// #include "Sheet.h"
 
 // needed by MDETERM and MINVERSE
 // Don't show this warning: it's an issue in eigen

@@ -5,7 +5,7 @@
 #ifndef KSPREAD_BITOPS_MODULE
 #define KSPREAD_BITOPS_MODULE
 
-#include "FunctionModule.h"
+#include "engine/FunctionModule.h"
 
 #include <QVariantList>
 

@@ -7,19 +7,20 @@
 // built-in text functions
 #include "TextModule.h"
 
-#include <math.h>
+#include "engine/Function.h"
+#include "engine/ValueCalc.h"
+#include "engine/ValueConverter.h"
 
-#include <QRegExp>
+// #include <math.h>
 
-#include <klocale.h>
+// #include <QRegExp>
 
-#include "SheetsDebug.h"
-#include "CalculationSettings.h"
-#include "Function.h"
-#include "FunctionModuleRegistry.h"
-#include "ValueCalc.h"
-#include "ValueConverter.h"
-#include "ValueFormatter.h"
+// #include <klocale.h>
+
+// #include "SheetsDebug.h"
+// #include "CalculationSettings.h"
+// #include "FunctionModuleRegistry.h"
+// #include "ValueFormatter.h"
 
 using namespace Calligra::Sheets;
 

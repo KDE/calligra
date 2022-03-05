@@ -7,19 +7,19 @@
 // built-in statistical functions
 #include "StatisticalModule.h"
 
-#include "Function.h"
-#include "FunctionModuleRegistry.h"
-#include "ValueCalc.h"
-#include "ValueConverter.h"
-#include "SheetsDebug.h"
+#include "engine/Function.h"
+// #include "FunctionModuleRegistry.h"
+#include "engine/ValueCalc.h"
+#include "engine/ValueConverter.h"
+// #include "SheetsDebug.h"
 
-#include <Formula.h>
+// #include <Formula.h>
 
 // needed for MODE
-#include <QList>
-#include <QMap>
+// #include <QList>
+// #include <QMap>
 
-#include <algorithm>
+// #include <algorithm>
 
 using namespace Calligra::Sheets;
 
