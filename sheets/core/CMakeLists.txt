@@ -88,6 +88,8 @@ install( FILES
     DataFilter.h
     DocBase.h
     PrintSettings.h
+    odf/OdfLoadingContext.h
+
 DESTINATION ${INCLUDE_INSTALL_DIR}/sheets COMPONENT Devel)
 
 endif()

@@ -1,4 +1,5 @@
 // This file is part of the KDE project
+// SPDX-FileCopyrightText: 2022 Tomas Mecir <mecirt@gmail.com>
 // SPDX-FileCopyrightText: 2007 David Faure <faure@kde.org>
 // SPDX-License-Identifier: LGPL-2.0-or-later
 

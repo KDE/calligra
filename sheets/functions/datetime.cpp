@@ -214,7 +214,7 @@ Value func_edate(valVector args, ValueCalc *calc, FuncExtra *)
     QDate date = calc->conv()->asDate(args[0]).asDate(calc->settings());
     int months = calc->conv()->asInteger(args[1]).asInteger();
 
-    date = calc->settings()->locale()->calendar()->addMonths(date, months);
+    date = date.addMonths(months);
 
     if (!date.isValid())
         return Value::errorVALUE();
@@ -494,7 +494,7 @@ Value func_weeks(valVector args, ValueCalc *calc, FuncExtra *)
         return Value((int)(days / 7));
 
     // the number of full weeks between starting on mondays
-    int weekStartDay = calc->settings()->locale()->weekStartDay();
+    int weekStartDay = calc->settings()->locale()->firstDayOfWeek();
 
     int dow1 = date1.dayOfWeek();
     int dow2 = date2.dayOfWeek();
@@ -540,7 +540,7 @@ Value func_dayname(valVector args, ValueCalc *calc, FuncExtra *)
 {
     int number = calc->conv()->asInteger(args[0]).asInteger();
 
-    QString weekName = calc->settings()->locale()->calendar()->weekDayName(number);
+    QString weekName = calc->settings()->locale()->dayName(number);
     if (weekName.isNull())
         return Value::errorVALUE();
     return Value(weekName);
@@ -551,8 +551,7 @@ Value func_monthname(valVector args, ValueCalc *calc, FuncExtra *)
 {
     int number = calc->conv()->asInteger(args[0]).asInteger();
 
-    QString monthName = calc->settings()->locale()->calendar()->monthName(number,
-                        QDate::currentDate().year());
+    QString monthName = calc->settings()->locale()->monthName(number);
     if (monthName.isNull())
         return Value::errorVALUE();
     return Value(monthName);

@@ -16,13 +16,13 @@
 
 // #include "SheetsDebug.h"
 // #include "FunctionModuleRegistry.h"
+#include "engine/CellBase.h"
 #include "engine/Function.h"
 // #include "FunctionRepository.h"
 #include "engine/ValueCalc.h"
 #include "engine/ValueConverter.h"
 
 // needed for SUBTOTAL:
-// #include "Cell.h"
 // #include "RowFormatStorage.h"
 // #include "Sheet.h"
 
@@ -560,7 +560,7 @@ Value func_sumif(valVector args, ValueCalc *calc, FuncExtra *e)
     calc->getCond(cond, Value(condition));
 
     if (args.count() == 3) {
-        Cell sumRangeStart(e->regions[2].firstSheet(), e->regions[2].firstRange().topLeft());
+        CellBase sumRangeStart(e->regions[2].firstSheet(), e->regions[2].firstRange().topLeft());
         return calc->sumIf(sumRangeStart, checkRange, cond);
     } else {
         return calc->sumIf(checkRange, cond);
@@ -585,7 +585,7 @@ Value func_sumifs(valVector args, ValueCalc *calc, FuncExtra *e)
         calc->getCond(c, Value(condition.last()));
         cond.append(c);
     }
-    Cell sumRangeStart(e->sheet, e->ranges[2].col1, e->ranges[2].row1);
+    CellBase sumRangeStart(e->sheet, e->ranges[2].col1, e->ranges[2].row1);
     return calc->sumIfs(sumRangeStart, c_Range, cond, lim);
 }
 
@@ -1060,7 +1060,7 @@ Value func_countifs(valVector args, ValueCalc *calc, FuncExtra *e)
         calc->getCond(c, Value(condition.last()));
         cond.append(c);
     }
-    Cell cntRangeStart(e->sheet, e->ranges[2].col1, e->ranges[2].row1);
+    CellBase cntRangeStart(e->sheet, e->ranges[2].col1, e->ranges[2].row1);
     return calc->countIfs(cntRangeStart, c_Range, cond, lim);
 }
 
@@ -1276,7 +1276,7 @@ Value func_subtotal(valVector args, ValueCalc *calc, FuncExtra *e)
                     range.setElement(c - c1, r - r1, empty);
                     continue;
                 }
-                Cell cell(e->sheet, c, r);
+                CellBase cell(e->sheet, c, r);
                 // put an empty value to the place of all occurrences of the SUBTOTAL function
                 if (!cell.isDefault() && cell.isFormula() && cell.userInput().indexOf("SUBTOTAL", 0, Qt::CaseInsensitive) != -1)
                     range.setElement(c - c1, r - r1, empty);

@@ -77,6 +77,10 @@ public:
     QString timeSeparator() const { return timeSep; }
     bool timeWithAMPM() const { return includesAMPM; }
     QString dateSeparator(bool longDate) const { return longDate ? dateSepLong : dateSepShort; }
+    int firstDayOfWeek() const;
+    QString dayName(int day) const;
+    /** Name of month, 1-12 */
+    QString monthName(int month) const;
 
     QString formatBool(bool val) const;
 

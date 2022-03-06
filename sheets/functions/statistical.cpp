@@ -8,18 +8,10 @@
 #include "StatisticalModule.h"
 
 #include "engine/Function.h"
-// #include "FunctionModuleRegistry.h"
 #include "engine/ValueCalc.h"
 #include "engine/ValueConverter.h"
-// #include "SheetsDebug.h"
+#include "engine/CellBase.h"
 
-// #include <Formula.h>
-
-// needed for MODE
-// #include <QList>
-// #include <QMap>
-
-// #include <algorithm>
 
 using namespace Calligra::Sheets;
 
@@ -780,7 +772,7 @@ Value func_averageif(valVector args, ValueCalc *calc, FuncExtra *e)
     calc->getCond(cond, Value(condition));
 
     if (args.count() == 3) {
-        Cell avgRangeStart(e->sheet, e->ranges[2].col1, e->ranges[2].row1);
+        CellBase avgRangeStart(e->sheet, e->ranges[2].col1, e->ranges[2].row1);
         return calc->averageIf(avgRangeStart, checkRange, cond);
     } else {
         return calc->averageIf(checkRange, cond);
@@ -807,7 +799,7 @@ Value func_averageifs(valVector args, ValueCalc *calc, FuncExtra *e)
         calc->getCond(c, Value(condition.last()));
         cond.append(c);
     }
-    Cell avgRangeStart(e->sheet, e->ranges[2].col1, e->ranges[2].row1);
+    CellBase avgRangeStart(e->sheet, e->ranges[2].col1, e->ranges[2].row1);
     return calc->averageIfs(avgRangeStart, c_Range, cond, lim);
 }
 

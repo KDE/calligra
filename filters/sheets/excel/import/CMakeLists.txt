@@ -45,7 +45,7 @@ set(excelimport_PART_SRCS excelimporttoods.cc ImportUtils.cpp ODrawClient.cpp ${
 add_library(excelimport MODULE ${excelimport_PART_SRCS})
 
 
-target_link_libraries(excelimport calligrasheetsodf komsooxml komain mso koodf)
+target_link_libraries(excelimport calligrasheetscore komsooxml komain mso koodf)
 
 #install(TARGETS excelimport  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
 

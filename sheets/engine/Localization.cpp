@@ -126,6 +126,21 @@ QString Localization::currencySymbol() const
     return locale.currencySymbol();
 }
 
+int Localization::firstDayOfWeek() const
+{
+    return (int) locale.firstDayOfWeek();
+}
+
+QString Localization::dayName(int day) const
+{
+    return locale.dayName(day);
+}
+
+QString Localization::monthName(int month) const
+{
+    return locale.monthName(month);
+}
+
 
 QString Localization::translateString(KLocalizedString str) const
 {
