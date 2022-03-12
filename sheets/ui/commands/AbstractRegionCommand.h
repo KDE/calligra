@@ -9,9 +9,9 @@
 
 #include <kundo2command.h>
 
-#include "Region.h"
+#include "engine/Region.h"
 
-#include "sheets_common_export.h"
+#include "../sheets_ui_export.h"
 
 class KoCanvasBase;
 
@@ -26,7 +26,7 @@ class Sheet;
  * \ingroup Commands
  * \brief Abstract base class for all region related operations.
  */
-class CALLIGRA_SHEETS_COMMON_EXPORT AbstractRegionCommand : public Region, public KUndo2Command
+class CALLIGRA_SHEETS_UI_EXPORT AbstractRegionCommand : public Region, public KUndo2Command
 {
 public:
     /**

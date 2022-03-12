@@ -8,16 +8,13 @@
 #ifndef CALLIGRA_SHEETS_SELECTION
 #define CALLIGRA_SHEETS_SELECTION
 
-#include <QColor>
-#include <QList>
+#include "sheets_ui_export.h"
 
 #include <KoToolSelection.h>
+#include "engine/Region.h"
 
-#include "SheetsDebug.h"
-
-#include <sheets/Region.h>
-
-#include "sheets_common_export.h"
+#include <QColor>
+#include <QList>
 
 class KoCanvasBase;
 
@@ -25,6 +22,9 @@ namespace Calligra
 {
 namespace Sheets
 {
+
+class Cell;
+class Sheet;
 
 /**
  * \class Selection
@@ -34,7 +34,7 @@ namespace Sheets
  * \author Torben Weis <weis@kde.org>
  * \author Stefan Nikolaus <stefan.nikolaus@kdemail.net>
  */
-class CALLIGRA_SHEETS_COMMON_EXPORT Selection : public KoToolSelection, public Region
+class CALLIGRA_SHEETS_UI_EXPORT Selection : public KoToolSelection, public Region
 {
     Q_OBJECT
 
@@ -129,7 +129,7 @@ public:
      * @param point the point's location
      * @param sheet the sheet the point belongs to
      */
-    Element* eor(const QPoint& point, Sheet* sheet = 0) override;
+    Element* eor(const QPoint& point, SheetBase* sheet = 0) override;
 
     /**
      * The anchor is the starting point of a range. For points marker and anchor are the same

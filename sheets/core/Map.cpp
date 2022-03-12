@@ -23,6 +23,7 @@
 #include "engine/SheetBase.h"
 #include "engine/Updater.h"
 
+#include "ApplicationSettings.h"
 #include "BindingManager.h"
 #include "Sheet.h"
 #include "CellStorage.h"
@@ -51,6 +52,7 @@ public:
     LoadingInfo* loadingInfo;
     bool readwrite;
 
+    ApplicationSettings *settings;
     BindingManager* bindingManager;
     StyleManager* styleManager;
     KoStyleManager* textStyleManager;
@@ -97,6 +99,7 @@ Map::Map(DocBase* doc, int syntaxVersion)
     d->bindingManager = new BindingManager(this);
     d->styleManager = new StyleManager();
     d->textStyleManager = new KoStyleManager(this);
+    d->settings = new ApplicationSettings;
 
     d->sheetAccessModel = new SheetAccessModel(this);
     d->formatter = new ValueFormatter(converter());
@@ -121,6 +124,7 @@ Map::~Map()
 
     deleteLoadingInfo();
 
+    delete d->settings;
     delete d->bindingManager;
     delete d->styleManager;
 
@@ -179,6 +183,11 @@ bool Map::completeSaving(KoStore *store, KoXmlWriter *manifestWriter, KoShapeSav
     Q_UNUSED(manifestWriter);
     Q_UNUSED(context);
     return true;
+}
+
+ApplicationSettings* Map::applicationSettings() const
+{
+    return d->settings;
 }
 
 BindingManager* Map::bindingManager() const

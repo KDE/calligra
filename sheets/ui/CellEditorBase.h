@@ -7,7 +7,7 @@
 #ifndef CALLIGRA_SHEETS_CELLEDITORBASE_H
 #define CALLIGRA_SHEETS_CELLEDITORBASE_H
 
-#include "sheets_common_export.h"
+#include "sheets_ui_export.h"
 
 class QFont;
 class KoViewConverter;
@@ -19,7 +19,7 @@ namespace Calligra
 namespace Sheets
 {
 
-class CALLIGRA_SHEETS_COMMON_EXPORT CellEditorBase
+class CALLIGRA_SHEETS_UI_EXPORT CellEditorBase
 {
 public:
     CellEditorBase();

@@ -6,14 +6,14 @@
 
 #include "AutoFilterCommand.h"
 
-#include <KLocalizedString>
+// #include <KLocalizedString>
 
-#include "CellStorage.h"
-#include "Damages.h"
-#include "Map.h"
-#include "Sheet.h"
+// #include "CellStorage.h"
+// #include "Damages.h"
+// #include "Map.h"
+// #include "Sheet.h"
 
-#include "database/Database.h"
+// #include "database/Database.h"
 
 using namespace Calligra::Sheets;
 

@@ -16,10 +16,10 @@
 
 #include "DataManipulators.h"
 
-#include <QList>
-#include <QRect>
-#include <QString>
-#include <QStringList>
+// #include <QList>
+// #include <QRect>
+// #include <QString>
+// #include <QStringList>
 
 namespace Calligra
 {

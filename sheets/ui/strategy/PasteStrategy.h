@@ -8,7 +8,7 @@
 #define CALLIGRA_SHEETS_PASTE_STRATEGY
 
 #include "SelectionStrategy.h"
-#include "sheets_common_export.h"
+#include "../sheets_ui_export.h"
 
 namespace Calligra
 {
@@ -22,7 +22,7 @@ namespace Sheets
  *
  * \see QClipboard::Selection
  */
-class CALLIGRA_SHEETS_COMMON_EXPORT PasteStrategy : public SelectionStrategy
+class CALLIGRA_SHEETS_UI_EXPORT PasteStrategy : public SelectionStrategy
 {
 public:
     /**

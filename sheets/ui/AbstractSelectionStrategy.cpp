@@ -6,16 +6,19 @@
 
 #include "AbstractSelectionStrategy.h"
 
+#include "engine/calligra_sheets_limits.h"
+
+#include "core/ColFormatStorage.h"
+#include "core/RowFormatStorage.h"
+#include "core/Sheet.h"
+
 #include "CellToolBase.h"
-#include "calligra_sheets_limits.h"
-#include "RowColumnFormat.h"
-#include "RowFormatStorage.h"
+// #include "RowColumnFormat.h"
 #include "Selection.h"
-#include "Sheet.h"
 
 #include <KoCanvasBase.h>
-#include <KoSelection.h>
-#include <KoShapeManager.h>
+// #include <KoSelection.h>
+// #include <KoShapeManager.h>
 #include <KoViewConverter.h>
 
 using namespace Calligra::Sheets;
@@ -110,7 +113,7 @@ bool AbstractSelectionStrategy::hitTestSelectionSizeGrip(KoCanvasBase *canvas,
 
     const double xpos = sheet->columnPosition(column);
     const double ypos = sheet->rowPosition(row);
-    const double width = sheet->columnFormat(column)->width();
+    const double width = sheet->columnFormats()->colWidth(column);
     const double height = sheet->rowFormats()->rowHeight(row);
     return gripArea.translated(xpos + width, ypos + height).contains(position);
 }
@@ -132,7 +135,7 @@ bool AbstractSelectionStrategy::hitTestReferenceSizeGrip(KoCanvasBase *canvas,
     // Iterate over the referenced ranges.
     const Region::ConstIterator end(selection->constEnd());
     for (Region::ConstIterator it(selection->constBegin()); it != end; ++it) {
-        Sheet *const sheet = (*it)->sheet();
+        Sheet *const sheet = dynamic_cast<Sheet *>((*it)->sheet());
         // Only check the ranges on the active sheet.
         if (sheet != selection->activeSheet()) {
             continue;

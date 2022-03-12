@@ -23,11 +23,11 @@
 #include <QExplicitlySharedDataPointer>
 
 // Sheets
-#include "Style.h"
-#include "sheets_common_export.h"
+#include "sheets_ui_export.h"
 
+#include <QRegion>
 class QFontMetricsF;
-class QRectF;
+class QPainter;
 
 namespace Calligra
 {
@@ -45,7 +45,7 @@ class Style;
  * corresponding SheetView. If the content of a Cell has changed, the CellView
  * will be destroyed and a new one will be created.
  */
-class CALLIGRA_SHEETS_COMMON_EXPORT CellView
+class CALLIGRA_SHEETS_UI_EXPORT CellView
 {
     friend class SheetView;
     friend class PixmapCachingSheetView;

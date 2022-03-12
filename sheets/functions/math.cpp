@@ -10,21 +10,13 @@
 // built-in math functions
 #include "MathModule.h"
 
-// needed for RANDBINOM and so
-// #include <math.h>
-// #include <qmath.h>
-
-// #include "SheetsDebug.h"
-// #include "FunctionModuleRegistry.h"
 #include "engine/CellBase.h"
 #include "engine/Function.h"
-// #include "FunctionRepository.h"
+#include "engine/FunctionRepository.h"
+#include "engine/SheetBase.h"
 #include "engine/ValueCalc.h"
 #include "engine/ValueConverter.h"
 
-// needed for SUBTOTAL:
-// #include "RowFormatStorage.h"
-// #include "Sheet.h"
 
 // needed by MDETERM and MINVERSE
 // Don't show this warning: it's an issue in eigen
@@ -988,10 +980,10 @@ Value func_trunc(valVector args, ValueCalc *calc, FuncExtra *)
     Q_UNUSED(calc)
     Number result = args[0].asFloat();
     if (args.count() == 2)
-        result = result * ::qPow(10, (int)args[1].asInteger());
+        result = result * calc->pow(Value(10), args[1]).asInteger();
     result = (args[0].asFloat() < 0) ? -(int64_t)(-result) : (int64_t)result;
     if (args.count() == 2)
-        result = result * ::qPow(10, -(int)args[1].asInteger());
+        result = result * calc->pow(Value(10), calc->mul(-1, args[1])).asInteger();
     return Value(result);
 }
 
@@ -1269,7 +1261,7 @@ Value func_subtotal(valVector args, ValueCalc *calc, FuncExtra *e)
     Value empty;
     if ((r1 > 0) && (c1 > 0) && (r2 > 0) && (c2 > 0)) {
         for (int r = r1; r <= r2; ++r) {
-            const bool setAllEmpty = excludeHiddenRows && e->sheet->rowFormats()->isHidden(r);
+            const bool setAllEmpty = excludeHiddenRows && e->sheet->rowIsHidden(r);
             for (int c = c1; c <= c2; ++c) {
                 // put an empty value to all cells in a hidden row
                 if(setAllEmpty) {
@@ -1278,7 +1270,7 @@ Value func_subtotal(valVector args, ValueCalc *calc, FuncExtra *e)
                 }
                 CellBase cell(e->sheet, c, r);
                 // put an empty value to the place of all occurrences of the SUBTOTAL function
-                if (!cell.isDefault() && cell.isFormula() && cell.userInput().indexOf("SUBTOTAL", 0, Qt::CaseInsensitive) != -1)
+                if (cell.isFormula() && cell.userInput().indexOf("SUBTOTAL", 0, Qt::CaseInsensitive) != -1)
                     range.setElement(c - c1, r - r1, empty);
             }
         }

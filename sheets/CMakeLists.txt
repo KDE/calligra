@@ -1,10 +1,5 @@
 project(calligra-sheets)
 
-# TEMPORARY: for  Qt5/KF5 build porting phase deprecation warnings are only annoying noise
-if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_GNUC)
-    add_definitions(-Wno-deprecated -Wno-deprecated-declarations)
-endif ()
-
 list(APPEND CMAKE_AUTOMOC_MACRO_NAMES "CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE")
 
 if (SHOULD_BUILD_PART_SHEETS)
@@ -101,7 +96,6 @@ set (calligrasheetscommon_LIB_SRCS
     MapModel.cpp
     PageManager.cpp
     RegionModel.cpp
-    tests/inspector.cpp
     ${chart_DIR_SRCS}
     ${commands_DIR_SRCS}
     ${dialogs_DIR_SRCS}
@@ -116,12 +110,6 @@ set (calligrasheetscommon_LIB_SRCS
     )
 endif()
 
-set (calligrasheetsodf_LIB_SRCS
-
-    ApplicationSettings.cpp
-    SheetPrint.cpp
-    SheetPrint_p.cpp
-    )
 
 
 ########### install files ###############

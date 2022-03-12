@@ -7,8 +7,8 @@
 #ifndef CALLIGRA_SHEETS_SELECTION_STRATEGY
 #define CALLIGRA_SHEETS_SELECTION_STRATEGY
 
-#include "AbstractSelectionStrategy.h"
-#include "sheets_common_export.h"
+#include "../AbstractSelectionStrategy.h"
+#include "../sheets_ui_export.h"
 
 namespace Calligra
 {
@@ -25,7 +25,7 @@ namespace Sheets
  *
  * \see AbstractSelectionStrategy
  */
-class CALLIGRA_SHEETS_COMMON_EXPORT SelectionStrategy : public AbstractSelectionStrategy
+class CALLIGRA_SHEETS_UI_EXPORT SelectionStrategy : public AbstractSelectionStrategy
 {
 public:
     /**

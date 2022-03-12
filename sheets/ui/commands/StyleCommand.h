@@ -7,9 +7,6 @@
 #ifndef CALLIGRA_SHEETS_STYLE_COMMAND
 #define CALLIGRA_SHEETS_STYLE_COMMAND
 
-#include <QPair>
-#include <QPen>
-
 #include "AbstractRegionCommand.h"
 #include "Style.h"
 

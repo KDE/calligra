@@ -8,12 +8,13 @@
 
 #include "CopyCommand.h"
 
-#include "CellStorage.h"
-#include "Map.h"
-#include "Region.h"
-#include "RowColumnFormat.h"
-#include "RowFormatStorage.h"
-#include "Sheet.h"
+// #include "CellStorage.h"
+// #include "Map.h"
+// #include "Region.h"
+// #include "RowColumnFormat.h"
+// #include "RowFormatStorage.h"
+// #include "Sheet.h
+// #include <QDomDocument>
 
 using namespace Calligra::Sheets;
 

@@ -29,12 +29,10 @@
 
 // Qt
 #include <QApplication>
-#include <QColor>
 #include <QPainter>
-#include <QRectF>
+#include <QPrinter>
 #include <QStyleOptionComboBox>
 #include <QTextLayout>
-#include <QTextCursor>
 #include <QAbstractTextDocumentLayout>
 #ifdef CALLIGRA_SHEETS_MT
 #include <QMutex>
@@ -46,26 +44,27 @@
 #include <kcolorutils.h>
 
 // Calligra
+#include <KoViewConverter.h>
 #include <KoPostscriptPaintDevice.h>
-#include <KoZoomHandler.h>
 
 // Sheets
-#include "ApplicationSettings.h"
-#include "CalculationSettings.h"
-#include "CellStorage.h"
-#include "Condition.h"
-#include "Localization.h"
-#include "Map.h"
-#include "PrintSettings.h"
-#include "RowColumnFormat.h"
-#include "RowFormatStorage.h"
-#include "Selection.h"
-#include "Sheet.h"
-#include "SheetPrint.h"
+#include "engine/Value.h"
+#include "engine/CalculationSettings.h"
+#include "engine/Localization.h"
+#include "engine/Region.h"
+#include "core/ApplicationSettings.h"
+#include "core/Cell.h"
+#include "core/Condition.h"
+#include "core/Database.h"
+#include "core/Map.h"
+#include "core/StyleManager.h"
+#include "core/PrintSettings.h"
+#include "core/ColFormatStorage.h"
+#include "core/RowFormatStorage.h"
+#include "core/Sheet.h"
+#include "core/SheetPrint.h"
+
 #include "SheetView.h"
-#include "StyleManager.h"
-#include "Value.h"
-#include "ValueFormatter.h"
 
 using namespace Calligra::Sheets;
 
@@ -161,9 +160,9 @@ QFont CellView::Private::calculateFont() const
 }
 
 CellView::CellView(SheetView* sheetView)
-        : d(new Private(sheetView->sheet()->map()->styleManager()->defaultStyle(),
-                        sheetView->sheet()->map()->defaultColumnFormat()->width(),
-                        sheetView->sheet()->map()->defaultRowFormat()->height()))
+        : d(new Private(sheetView->sheet()->fullMap()->styleManager()->defaultStyle(),
+                        sheetView->sheet()->fullMap()->defaultColumnFormat().width,
+                        sheetView->sheet()->fullMap()->defaultRowFormat().height))
 {
 }
 
@@ -174,7 +173,7 @@ CellView::CellView(SheetView* sheetView, int col, int row)
     Q_ASSERT(1 <= col && col <= KS_colMax);
     Q_ASSERT(1 <= row && row <= KS_rowMax);
 
-    const Sheet* sheet = sheetView->sheet();
+    Sheet* sheet = sheetView->sheet();
     Cell cell(sheet, col, row);
 
     // create the effective style
@@ -196,20 +195,20 @@ CellView::CellView(SheetView* sheetView, int col, int row)
         }
     }
 
-    if (cell.width() != sheetView->sheet()->map()->defaultColumnFormat()->width())
+    if (cell.width() != sheet->fullMap()->defaultColumnFormat().width)
         d->width = cell.width();
-    if (cell.height() != sheetView->sheet()->map()->defaultRowFormat()->height())
+    if (cell.height() != sheet->fullMap()->defaultRowFormat().height)
         d->height = cell.height();
 
-    if (cell.sheet()->layoutDirection() == Qt::RightToLeft && cell.doesMergeCells()) {
+    if (sheet->layoutDirection() == Qt::RightToLeft && cell.doesMergeCells()) {
         for (int i = 1; i <= cell.mergedXCells(); i++) {
-            d->rtlOffset += cell.sheet()->columnFormat(cell.column() + i)->width();
+            d->rtlOffset += sheet->columnFormats()->colWidth(cell.column() + i);
         }
     }
 
-    if (sheet->columnFormat(col)->isHiddenOrFiltered() ||
+    if (sheet->columnFormats()->isHiddenOrFiltered(col) ||
             sheet->rowFormats()->isHiddenOrFiltered(row) ||
-            (sheet->columnFormat(col)->width() <= sheetView->viewConverter()->viewToDocumentY(2)) ||
+            (sheet->columnFormats()->colWidth(col) <= sheetView->viewConverter()->viewToDocumentY(2)) ||
             (sheet->rowFormats()->rowHeight(row) <= sheetView->viewConverter()->viewToDocumentY(2))) {
         d->hidden = true;
         d->height = 0.0;
@@ -224,8 +223,8 @@ CellView::CellView(SheetView* sheetView, int col, int row)
 
     Value value;
     // Display a formula if warranted.  If not, simply display the value.
-    if (cell.isFormula() && cell.sheet()->getShowFormula() &&
-            !(cell.sheet()->isProtected() && d->style.hideFormula())) {
+    if (cell.isFormula() && sheet->getShowFormula() &&
+            !(sheet->isProtected() && d->style.hideFormula())) {
         d->displayText = cell.userInput();
         value.setFormat(Value::fmt_String);
     } else if (!cell.isEmpty()) {
@@ -259,7 +258,7 @@ CellView::CellView(SheetView* sheetView, int col, int row)
             d->style.setHAlign(Style::Center);
         // if the style does not define a specific format, align it according to the sheet layout
         else
-            d->style.setHAlign(cell.sheet()->layoutDirection() == Qt::RightToLeft ? Style::Left : Style::Right);
+            d->style.setHAlign(sheet->layoutDirection() == Qt::RightToLeft ? Style::Left : Style::Right);
     }
     // force left alignment, if there's a formula and it should be shown
     if (cell.isFormula() && sheet->getShowFormula() && !(sheet->isProtected() && d->style.hideFormula()))
@@ -325,7 +324,7 @@ QString CellView::testAnchor(SheetView* sheetView, const Cell& cell, qreal x, qr
 {
     if (sheetView->isObscured(cell.cellPosition())) {
         QPoint obscuringCell = sheetView->obscuringCell(cell.cellPosition());
-        Sheet* sheet = cell.sheet();
+        Sheet* sheet = cell.fullSheet();
         Cell otherCell = Cell(sheet, obscuringCell.x(), obscuringCell.y());
         const CellView& otherView = sheetView->cellView(otherCell.column(), otherCell.row());
         if (cell.column() != otherCell.column()) x += sheet->columnPosition(cell.column()) - sheet->columnPosition(otherCell.column());
@@ -348,7 +347,7 @@ bool CellView::hitTestFilterButton(const Cell& cell, const QRect& cellRect, cons
         return false;
 
     QStyleOptionComboBox options;
-    options.direction = cell.sheet()->layoutDirection();
+    options.direction = cell.fullSheet()->layoutDirection();
     options.editable = true;
 //     options.fontMetrics = painter.fontMetrics();
     options.frame = false;
@@ -404,12 +403,12 @@ void CellView::paintCellContents(const QRectF& /*paintRect*/, QPainter& painter,
 
     // 1. Paint possible comment indicator.
     if (!dynamic_cast<QPrinter*>(painter.device())
-            || cell.sheet()->printSettings()->printCommentIndicator())
+            || cell.fullSheet()->printSettings()->printCommentIndicator())
         paintCommentIndicator(painter, coordinate, cell);
 
     // 2. Paint possible formula indicator.
     if (!dynamic_cast<QPrinter*>(painter.device())
-            || cell.sheet()->printSettings()->printFormulaIndicator()) {
+            || cell.fullSheet()->printSettings()->printFormulaIndicator()) {
         paintFormulaIndicator(painter, coordinate, cell);
         paintMatrixElementIndicator(painter, coordinate, cell);
     }
@@ -423,7 +422,7 @@ void CellView::paintCellContents(const QRectF& /*paintRect*/, QPainter& painter,
     //  c) the sheet is protected and the cell is hidden.
     if (!d->displayText.isEmpty()
             && (!dynamic_cast<QPrinter*>(painter.device()) || style().printText())
-            && !(cell.sheet()->isProtected()
+            && !(cell.fullSheet()->isProtected()
                  && style().hideAll())) {
         paintText(painter, coordinate, cell);
     }
@@ -433,7 +432,7 @@ void CellView::Private::calculateCellBorders(const Cell& cell, SheetView* sheetV
 {
     const int col = cell.column();
     const int row = cell.row();
-    const Sheet* sheet = sheetView->sheet();
+    Sheet* sheet = sheetView->sheet();
 
     if (col != 1) {
         Style otherStyle = Cell(sheet, col - 1, row).style();
@@ -590,7 +589,7 @@ void CellView::paintDefaultBorders(QPainter& painter, const QRegion &clipRegion,
 {
     const QPointF coordinate(coord.x() - d->rtlOffset, coord.y());
     // Should the default borders be shown?
-    if (!cell.sheet()->getShowGrid())
+    if (!cell.fullSheet()->getShowGrid())
         return;
     // Does the cell intersect the clipped painting region?
     if (!clipRegion.intersects(QRectF(coordinate, QSizeF(d->width, d->height)).toRect()))
@@ -721,7 +720,7 @@ void CellView::paintDefaultBorders(QPainter& painter, const QRegion &clipRegion,
         paintBorder &= ~BottomBorder;
 
     // Check if we're in right-to-left mode, and if so swap left and right border bits
-    if (cell.sheet()->layoutDirection() == Qt::RightToLeft) {
+    if (cell.fullSheet()->layoutDirection() == Qt::RightToLeft) {
         Borders lrBorder = paintBorder & (LeftBorder | RightBorder);
         paintBorder &= ~(LeftBorder | RightBorder);
         if (lrBorder & LeftBorder) {
@@ -734,7 +733,7 @@ void CellView::paintDefaultBorders(QPainter& painter, const QRegion &clipRegion,
 
     // Set the single-pixel width pen for drawing the borders with.
     // NOTE Stefan: Use a cosmetic pen (width = 0), because we want the grid always one pixel wide
-    painter.setPen(QPen(cell.sheet()->map()->settings()->gridColor(), 0, Qt::SolidLine));
+    painter.setPen(QPen(cell.fullSheet()->fullMap()->applicationSettings()->gridColor(), 0, Qt::SolidLine));
 
     QLineF line;
 
@@ -900,8 +899,8 @@ void CellView::paintCommentIndicator(QPainter& painter,
     if ((!cell.comment().isEmpty())
             && d->width > 10.0
             && d->height > 10.0
-            && (cell.sheet()->printSettings()->printCommentIndicator()
-                || (!dynamic_cast<QPrinter*>(painter.device()) && cell.sheet()->getShowCommentIndicator()))) {
+            && (cell.fullSheet()->printSettings()->printCommentIndicator()
+                || (!dynamic_cast<QPrinter*>(painter.device()) && cell.fullSheet()->getShowCommentIndicator()))) {
         QColor penColor = Qt::red;
 
         // If background has high red part, switch to blue.
@@ -914,7 +913,7 @@ void CellView::paintCommentIndicator(QPainter& painter,
         // Get the triangle.
         QPolygonF polygon(3);
         polygon.clear();
-        if (cell.sheet()->layoutDirection() == Qt::RightToLeft) {
+        if (cell.fullSheet()->layoutDirection() == Qt::RightToLeft) {
             polygon << QPointF(coordinate.x() + 6.0, coordinate.y());
             polygon << QPointF(coordinate.x(), coordinate.y());
             polygon << QPointF(coordinate.x(), coordinate.y() + 6.0);
@@ -939,7 +938,7 @@ void CellView::paintFormulaIndicator(QPainter& painter,
                                      const Cell& cell) const
 {
     if (cell.isFormula() &&
-            cell.sheet()->getShowFormulaIndicator() &&
+            cell.fullSheet()->getShowFormulaIndicator() &&
             d->width  > 10.0 &&
             d->height > 10.0) {
         QColor penColor = Qt::blue;
@@ -953,7 +952,7 @@ void CellView::paintFormulaIndicator(QPainter& painter,
         // Get the triangle...
         QPolygonF polygon(3);
         polygon.clear();
-        if (cell.sheet()->layoutDirection() == Qt::RightToLeft) {
+        if (cell.fullSheet()->layoutDirection() == Qt::RightToLeft) {
             polygon << QPointF(coordinate.x() + d->width - 6.0, coordinate.y() + d->height);
             polygon << QPointF(coordinate.x() + d->width, coordinate.y() + d->height);
             polygon << QPointF(coordinate.x() + d->width, coordinate.y() + d->height - 6.0);
@@ -978,7 +977,7 @@ void CellView::paintMatrixElementIndicator(QPainter& painter,
         const Cell& cell) const
 {
     if (cell.isLocked() &&
-            cell.sheet()->getShowFormulaIndicator() &&
+            cell.fullSheet()->getShowFormulaIndicator() &&
             d->width  > 10.0 &&
             d->height > 10.0) {
         QColor penColor = Qt::blue;
@@ -992,7 +991,7 @@ void CellView::paintMatrixElementIndicator(QPainter& painter,
         // Get the triangle...
         QPolygonF polygon(3);
         polygon.clear();
-        if (cell.sheet()->layoutDirection() == Qt::RightToLeft) {
+        if (cell.fullSheet()->layoutDirection() == Qt::RightToLeft) {
             polygon << QPointF(coordinate.x() + d->width - 6.0, coordinate.y());
             polygon << QPointF(coordinate.x() + d->width, coordinate.y());
             polygon << QPointF(coordinate.x() + d->width, coordinate.y() + 6.0);
@@ -1084,8 +1083,8 @@ void CellView::paintText(QPainter& painter,
 
     // Check for red font color for negative values.
     if (cell.value().isNumber()
-            && !(cell.sheet()->getShowFormula()
-                 && !(cell.sheet()->isProtected()
+            && !(cell.fullSheet()->getShowFormula()
+                 && !(cell.fullSheet()->isProtected()
                       && style().hideFormula()))) {
         if (style().floatColor() == Style::NegRed && cell.value().asFloat() < 0.0)
             tmpPen.setColor(Qt::red);
@@ -1244,12 +1243,14 @@ void CellView::paintPageBorders(QPainter& painter, const QPointF& coordinate,
     if (dynamic_cast<QPrinter*>(painter.device()))
         return;
 
-    if (! cell.sheet()->isShowPageOutline())
+    Sheet *sheet = cell.fullSheet();
+    if (! sheet->isShowPageOutline())
         return;
 
-    SheetPrint* const print = cell.sheet()->print();
-    const PrintSettings *const settings = cell.sheet()->printSettings();
+    SheetPrint* const print = cell.fullSheet()->print();
+    const PrintSettings *const settings = cell.fullSheet()->printSettings();
     const QRect printRange = settings->printRegion().lastRange();
+    const ApplicationSettings *appSettings = sheet->fullMap()->applicationSettings();
 
     // Draw page borders
     QLineF line;
@@ -1260,9 +1261,9 @@ void CellView::paintPageBorders(QPainter& painter, const QPointF& coordinate,
             && cell.row() <= printRange.bottom() + 1) {
         if (print->isColumnOnNewPage(cell.column())
                 && cell.row() <= printRange.bottom()) {
-            painter.setPen(QPen(cell.sheet()->map()->settings()->pageOutlineColor(), 0));
+            painter.setPen(QPen(appSettings->pageOutlineColor(), 0));
 
-            if (cell.sheet()->layoutDirection() == Qt::RightToLeft)
+            if (sheet->layoutDirection() == Qt::RightToLeft)
                 line = QLineF(coordinate.x() + d->width, coordinate.y(),
                               coordinate.x() + d->width, coordinate.y() + d->height);
             else
@@ -1273,7 +1274,7 @@ void CellView::paintPageBorders(QPainter& painter, const QPointF& coordinate,
 
         if (print->isRowOnNewPage(cell.row()) &&
                 (cell.column() <= printRange.right())) {
-            painter.setPen(QPen(cell.sheet()->map()->settings()->pageOutlineColor(), 0));
+            painter.setPen(QPen(appSettings->pageOutlineColor(), 0));
             line = QLineF(coordinate.x(),  coordinate.y(),
                           coordinate.x() + d->width, coordinate.y());
             painter.drawLine(line);
@@ -1282,9 +1283,9 @@ void CellView::paintPageBorders(QPainter& painter, const QPointF& coordinate,
         if (paintBorder & RightBorder) {
             if (print->isColumnOnNewPage(cell.column() + 1)
                     && cell.row() <= printRange.bottom()) {
-                painter.setPen(QPen(cell.sheet()->map()->settings()->pageOutlineColor(), 0));
+                painter.setPen(QPen(appSettings->pageOutlineColor(), 0));
 
-                if (cell.sheet()->layoutDirection() == Qt::RightToLeft)
+                if (sheet->layoutDirection() == Qt::RightToLeft)
                     line = QLineF(coordinate.x(), coordinate.y(),
                                   coordinate.x(), coordinate.y() + d->height);
                 else
@@ -1297,7 +1298,7 @@ void CellView::paintPageBorders(QPainter& painter, const QPointF& coordinate,
         if (paintBorder & BottomBorder) {
             if (print->isRowOnNewPage(cell.row() + 1)
                     && cell.column() <= printRange.right()) {
-                painter.setPen(QPen(cell.sheet()->map()->settings()->pageOutlineColor(), 0));
+                painter.setPen(QPen(appSettings->pageOutlineColor(), 0));
                 line = QLineF(coordinate.x(),  coordinate.y() + d->height,
                               coordinate.x() + d->width, coordinate.y() + d->height);
                 painter.drawLine(line);
@@ -1461,7 +1462,7 @@ void CellView::paintFilterButton(QPainter& painter, const QPointF& coordinate,
 {
     Q_UNUSED(cell);
     QStyleOptionComboBox options;
-    options.direction = cell.sheet()->layoutDirection();
+    options.direction = cell.fullSheet()->layoutDirection();
     options.editable = true;
     options.fontMetrics = painter.fontMetrics();
     options.frame = false;
@@ -1562,7 +1563,7 @@ QString CellView::textDisplaying(const QFontMetricsF& fm, const Cell& cell)
             if (fm.width(tmp) + tmpIndent < len - 4.0 - 1.0) {
                 if (style().angle() != 0) {
                     QString tmp2;
-                    const qreal rowHeight = cell.sheet()->rowFormats()->rowHeight(cell.row());
+                    const qreal rowHeight = cell.fullSheet()->rowFormats()->rowHeight(cell.row());
                     if (d->textHeight > rowHeight) {
                         for (int j = d->displayText.length(); j != 0; j--) {
                             tmp2 = d->displayText.left(j);
@@ -1581,7 +1582,7 @@ QString CellView::textDisplaying(const QFontMetricsF& fm, const Cell& cell)
     } else if (style().verticalText()) {
         // Vertical text.
 
-        const qreal rowHeight = cell.sheet()->rowFormats()->rowHeight(cell.row());
+        const qreal rowHeight = cell.fullSheet()->rowFormats()->rowHeight(cell.row());
         qreal      tmpIndent = 0.0;
 
         // Not enough space but align to left.
@@ -1899,7 +1900,7 @@ void CellView::obscureHorizontalCells(SheetView* sheetView, const Cell& masterCe
         // Find free cells to the right of this one.
         enum { Undefined, EnoughSpace, NotEnoughSpace } status = Undefined;
         while (status == Undefined) {
-            Cell nextCell = Cell(masterCell.sheet(), col + 1, masterCell.row()).masterCell();
+            Cell nextCell = Cell(masterCell.fullSheet(), col + 1, masterCell.row()).masterCell();
 
             if (nextCell.isEmpty()) {
                 extraWidth += nextCell.width();
@@ -1966,13 +1967,14 @@ void CellView::obscureVerticalCells(SheetView* sheetView, const Cell& masterCell
 
         // Find free cells bottom to this one
         enum { Undefined, EnoughSpace, NotEnoughSpace } status = Undefined;
+        Sheet *sheet = masterCell.fullSheet();
         while (status == Undefined) {
-            Cell nextCell = Cell(masterCell.sheet(), masterCell.column(), row + 1).masterCell();
+            Cell nextCell = Cell(sheet, masterCell.column(), row + 1).masterCell();
 
             bool isEmpty = true;
 
             for (int col = 0; col < masterCell.mergedXCells() + d->obscuredCellsX+1; col++) {
-                Cell cellNext = Cell(masterCell.sheet(), masterCell.column() + col, row + 1).masterCell();
+                Cell cellNext = Cell(sheet, masterCell.column() + col, row + 1).masterCell();
                 if (!cellNext.isEmpty()) {
                     isEmpty = false;
                     break;

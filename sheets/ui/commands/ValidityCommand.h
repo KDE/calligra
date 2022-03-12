@@ -7,9 +7,8 @@
 #ifndef CALLIGRA_SHEETS_VALIDITY_COMMAND
 #define CALLIGRA_SHEETS_VALIDITY_COMMAND
 
-#include "Validity.h"
-
 #include "AbstractRegionCommand.h"
+#include "engine/Validity.h"
 
 namespace Calligra
 {

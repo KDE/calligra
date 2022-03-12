@@ -90,7 +90,6 @@ set (strategy_DIR_SRCS
     strategy/HyperlinkStrategy.cpp
     strategy/MergeStrategy.cpp
     strategy/PasteStrategy.cpp
-    strategy/RightToLeftPaintingStrategy.cpp
     strategy/SelectionStrategy.cpp
     )
 
@@ -99,13 +98,14 @@ set (calligrasheetsui_LIB_SRCS
     ActionOptionWidget.cpp
     CellEditorBase.cpp
     CellEditor.cpp
-    CellEditorDocker.cpp
     CellToolBase.cpp
     CellToolBase_p.cpp
     CellView.cpp
+    FilterPopup.cpp
     FormulaEditorHighlighter.cpp
     FunctionCompletion.cpp
     ExternalEditor.cpp
+    inspector.cpp
     LocationComboBox.cpp
     MapViewModel.cpp
     PixmapCachingSheetView.cpp
@@ -132,7 +132,7 @@ target_include_directories( calligrasheetsui
 
 generate_export_header(calligrasheetsui
     EXPORT_FILE_NAME sheets_ui_generated_export.h
-    BASE_NAME CALLIGRA_SHEETS_CORE
+    BASE_NAME CALLIGRA_SHEETS_UI
 )
 if (SHOULD_BUILD_DEVEL_HEADERS)
 
@@ -163,6 +163,8 @@ target_link_libraries(calligrasheetsui
         calligrasheetsengine
         calligrasheetscore
         komain
+        KF5::GuiAddons
+        KF5::SonnetCore
 )
 if(Qt5Sql_FOUND)
     target_link_libraries(calligrasheetsui PRIVATE Qt5::Sql)

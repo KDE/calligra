@@ -10,9 +10,10 @@
 #define PIVOTMAIN_H
 
 #include <KoDialog.h>
-#include<QListWidgetItem>
 
-#include <sheets/Sheet.h>
+// #include<QListWidgetItem>
+// #include <sheets/Sheet.h>
+
 namespace Calligra{
   namespace Sheets{
 

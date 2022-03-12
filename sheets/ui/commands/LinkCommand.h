@@ -11,7 +11,7 @@
 #include <QString>
 #include <kundo2command.h>
 
-#include <Cell.h>
+// #include <Cell.h>
 
 namespace Calligra
 {

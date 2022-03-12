@@ -6,17 +6,17 @@
 
 #include "ApplyFilterCommand.h"
 
-#include <KLocalizedString>
+// #include <KLocalizedString>
 
-#include "CellStorage.h"
-#include "Damages.h"
-#include "Map.h"
-#include "Sheet.h"
-#include "RowColumnFormat.h"
-#include "RowFormatStorage.h"
+// #include "CellStorage.h"
+// #include "Damages.h"
+// #include "Map.h"
+// #include "Sheet.h"
+// #include "RowColumnFormat.h"
+// #include "RowFormatStorage.h"
 
-#include "core/Database.h"
-#include "core/DataFilter.h"
+// #include "core/Database.h"
+// #include "core/DataFilter.h"
 
 using namespace Calligra::Sheets;
 

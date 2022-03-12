@@ -14,28 +14,28 @@
 // Local
 #include "AutoFormatDialog.h"
 
-#include <QFile>
-#include <QLabel>
-#include <QPixmap>
-#include <QVBoxLayout>
+// #include <QFile>
+// #include <QLabel>
+// #include <QPixmap>
+// #include <QVBoxLayout>
 
-#include <kcombobox.h>
-#include <kconfig.h>
-#include <kmessagebox.h>
+// #include <kcombobox.h>
+// #include <kconfig.h>
+// #include <kmessagebox.h>
 
-#include <KoResourcePaths.h>
+// #include <KoResourcePaths.h>
 
-#include <KoXmlReader.h>
+// #include <KoXmlReader.h>
 
-#include "Cell.h"
-#include "CellStorage.h"
-#include "Localization.h"
-#include "ui/Selection.h"
-#include "Sheet.h"
-#include "Style.h"
-#include "StyleManager.h"
+// #include "Cell.h"
+// #include "CellStorage.h"
+// #include "Localization.h"
+// #include "ui/Selection.h"
+// #include "Sheet.h"
+// #include "Style.h"
+// #include "StyleManager.h"
 
-#include "commands/AutoFormatCommand.h"
+// #include "commands/AutoFormatCommand.h"
 
 using namespace Calligra::Sheets;
 

@@ -9,8 +9,6 @@
 
 #include <QSizeF>
 
-#include <Style.h>
-
 #include "AbstractRegionCommand.h"
 
 namespace Calligra
@@ -19,13 +17,14 @@ namespace Sheets
 {
 class ColumnFormat;
 class RowFormat;
+class Style;
 
 /**
  * \class ResizeColumnManipulator
  * \ingroup Commands
  * \brief Resizes a column.
  */
-class CALLIGRA_SHEETS_COMMON_EXPORT ResizeColumnManipulator : public AbstractRegionCommand
+class CALLIGRA_SHEETS_UI_EXPORT ResizeColumnManipulator : public AbstractRegionCommand
 {
 public:
     explicit ResizeColumnManipulator(KUndo2Command *parent = 0);
@@ -49,7 +48,7 @@ private:
  * \ingroup Commands
  * \brief Resizes a row.
  */
-class CALLIGRA_SHEETS_COMMON_EXPORT ResizeRowManipulator : public AbstractRegionCommand
+class CALLIGRA_SHEETS_UI_EXPORT ResizeRowManipulator : public AbstractRegionCommand
 {
 public:
     explicit ResizeRowManipulator(KUndo2Command *parent = 0);
@@ -73,7 +72,7 @@ private:
  * \ingroup Commands
  * \brief Optimizes the height and the width of rows and columns, respectively.
  */
-class CALLIGRA_SHEETS_COMMON_EXPORT AdjustColumnRowManipulator : public AbstractRegionCommand
+class CALLIGRA_SHEETS_UI_EXPORT AdjustColumnRowManipulator : public AbstractRegionCommand
 {
 public:
     explicit AdjustColumnRowManipulator(KUndo2Command *parent = 0);
@@ -113,7 +112,7 @@ private:
  * \ingroup Commands
  * \brief Hides/Shows columns and/or rows.
  */
-class CALLIGRA_SHEETS_COMMON_EXPORT HideShowManipulator : public AbstractRegionCommand
+class CALLIGRA_SHEETS_UI_EXPORT HideShowManipulator : public AbstractRegionCommand
 {
 public:
     explicit HideShowManipulator(KUndo2Command *parent = 0);
@@ -145,7 +144,7 @@ private:
  * \ingroup Commands
  * \brief Inserts/Removes columns.
  */
-class CALLIGRA_SHEETS_COMMON_EXPORT InsertDeleteColumnManipulator : public AbstractRegionCommand
+class CALLIGRA_SHEETS_UI_EXPORT InsertDeleteColumnManipulator : public AbstractRegionCommand
 {
 public:
     explicit InsertDeleteColumnManipulator(KUndo2Command *parent = 0);
@@ -173,7 +172,7 @@ private:
  * \ingroup Commands
  * \brief Inserts/Removes rows.
  */
-class CALLIGRA_SHEETS_COMMON_EXPORT InsertDeleteRowManipulator : public AbstractRegionCommand
+class CALLIGRA_SHEETS_UI_EXPORT InsertDeleteRowManipulator : public AbstractRegionCommand
 {
 public:
     explicit InsertDeleteRowManipulator(KUndo2Command *parent = 0);

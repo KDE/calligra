@@ -10,28 +10,28 @@
 // Local
 #include "CSVDialog.h"
 
-#include <KoFileDialog.h>
+// #include <KoFileDialog.h>
 
-#include <QApplication>
-#include <QByteArray>
-#include <QMimeData>
-#include <QString>
-#include <QTimer>
+// #include <QApplication>
+// #include <QByteArray>
+// #include <QMimeData>
+// #include <QString>
+// #include <QTimer>
 
 
-#include <KoCanvasBase.h>
+// #include <KoCanvasBase.h>
 
-#include <KLocalizedString>
-#include <kmessagebox.h>
+// #include <KLocalizedString>
+// #include <kmessagebox.h>
 
-#include "Cell.h"
-#include "CellStorage.h"
-#include "Damages.h"
-#include "Map.h"
-#include "ui/Selection.h"
-#include "Sheet.h"
+// #include "Cell.h"
+// #include "CellStorage.h"
+// #include "Damages.h"
+// #include "Map.h"
+// #include "ui/Selection.h"
+// #include "Sheet.h"
 
-#include "commands/CSVDataCommand.h"
+// #include "commands/CSVDataCommand.h"
 
 using namespace Calligra::Sheets;
 

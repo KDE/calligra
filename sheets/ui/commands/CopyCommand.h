@@ -7,7 +7,7 @@
 #ifndef CALLIGRA_SHEETS_COPY_COMMAND
 #define CALLIGRA_SHEETS_COPY_COMMAND
 
-#include <QDomDocument>
+class QDomDocument;
 
 namespace Calligra
 {

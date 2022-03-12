@@ -9,29 +9,29 @@
 
 
 #include "ConditionalDialog.h"
-#include "Condition.h"
-#include "Validity.h"
 
-#include "Cell.h"
-#include "Map.h"
-#include "ui/Selection.h"
-#include "Sheet.h"
-#include "StyleManager.h"
-#include "ValueConverter.h"
-#include "ValueParser.h"
-#include "SheetsDebug.h"
+// #include "Validity.h"
+
+// #include "Cell.h"
+// #include "Map.h"
+// #include "ui/Selection.h"
+// #include "Sheet.h"
+// #include "StyleManager.h"
+// #include "ValueConverter.h"
+// #include "ValueParser.h"
+// #include "SheetsDebug.h"
 
 // commands
-#include "commands/ConditionCommand.h"
+// #include "commands/ConditionCommand.h"
 
-#include <kcombobox.h>
-#include <klineedit.h>
-#include <KLocalizedString>
-#include <kmessagebox.h>
+// #include <kcombobox.h>
+// #include <klineedit.h>
+// #include <KLocalizedString>
+// #include <kmessagebox.h>
 
-#include <QGroupBox>
-#include <QLabel>
-#include <QGridLayout>
+// #include <QGroupBox>
+// #include <QLabel>
+// #include <QGridLayout>
 
 using namespace Calligra::Sheets;
 

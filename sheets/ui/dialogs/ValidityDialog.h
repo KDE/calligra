@@ -13,8 +13,6 @@
 
 #include <kpagedialog.h>
 
-#include "Validity.h"
-
 class QLabel;
 class KLineEdit;
 class KTextEdit;

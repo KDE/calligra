@@ -7,12 +7,12 @@
 // Local
 #include "PrecisionCommand.h"
 
-#include <KLocalizedString>
+// #include <KLocalizedString>
 
-#include "Cell.h"
-#include "CellStorage.h"
-#include "Sheet.h"
-#include "Style.h"
+// #include "Cell.h"
+// #include "CellStorage.h"
+// #include "Sheet.h"
+// #include "Style.h"
 
 using namespace Calligra::Sheets;
 

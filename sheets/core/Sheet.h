@@ -45,6 +45,7 @@ class RowFormat;
 class RowFormatStorage;
 class Sheet;
 class SheetModel;
+class SheetPrint;
 class Style;
 class StyleStorage;
 class Validity;
@@ -198,6 +199,9 @@ public:
      * Hides or shows this sheets
      */
     void setHidden(bool hidden);
+
+    /** Returns whether a row is hidden. */
+    virtual bool rowIsHidden(int row) const override;
 
     /**
      * @return a flag that indicates whether the sheet should paint the page breaks.
@@ -589,6 +593,8 @@ public:
      * Print settings.
      */
     PrintSettings* printSettings() const;
+
+    SheetPrint* print() const;
 
     /**
      * \ingroup Page

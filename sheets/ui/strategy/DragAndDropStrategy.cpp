@@ -6,25 +6,25 @@
 
 #include "DragAndDropStrategy.h"
 
-#include "Cell.h"
-#include "calligra_sheets_limits.h"
-#include "Selection.h"
-#include "Sheet.h"
-#include "CellToolBase.h"
+// #include "Cell.h"
+// #include "calligra_sheets_limits.h"
+// #include "Selection.h"
+// #include "Sheet.h"
+// #include "CellToolBase.h"
 
-#include <KoCanvasBase.h>
-#include <KoToolBase.h>
-#include <KoShape.h>
-#include <KoSelection.h>
-#include <KoShapeManager.h>
+// #include <KoCanvasBase.h>
+// #include <KoToolBase.h>
+// #include <KoShape.h>
+// #include <KoSelection.h>
+// #include <KoShapeManager.h>
 
-#include <QBuffer>
-#include <QDomDocument>
-#include <QDrag>
-#include <QMimeData>
-#include <QTextStream>
+// #include <QBuffer>
+// #include <QDomDocument>
+// #include <QDrag>
+// #include <QMimeData>
+// #include <QTextStream>
 
-#include "commands/CopyCommand.h"
+// #include "commands/CopyCommand.h"
 
 using namespace Calligra::Sheets;
 

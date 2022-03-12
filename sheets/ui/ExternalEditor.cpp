@@ -7,21 +7,21 @@
 #include "ExternalEditor.h"
 
 // Sheets
-#include "CellEditor.h"
-#include "CellToolBase.h"
-#include "FormulaEditorHighlighter.h"
-#include "Map.h"
-#include "Sheet.h"
-#include "SheetsDebug.h"
+// #include "CellEditor.h"
+// #include "CellToolBase.h"
+// #include "FormulaEditorHighlighter.h"
+// #include "Map.h"
+// #include "Sheet.h"
+// #include "SheetsDebug.h"
 
 // Calligra
-#include <KoIcon.h>
+// #include <KoIcon.h>
 
 // Qt
-#include <QApplication>
-#include <QFontDatabase>
-#include <QFocusEvent>
-#include <QKeyEvent>
+// #include <QApplication>
+// #include <QFontDatabase>
+// #include <QFocusEvent>
+// #include <QKeyEvent>
 
 using namespace Calligra::Sheets;
 

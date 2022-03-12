@@ -9,9 +9,10 @@
 
 #include "SheetPrint_p.h"
 
+#include "engine/Region.h"
+
+#include "ColFormatStorage.h"
 #include "PrintSettings.h"
-#include "Region.h"
-#include "RowColumnFormat.h"
 #include "RowFormatStorage.h"
 #include "Sheet.h"
 
@@ -19,13 +20,14 @@ using namespace Calligra::Sheets;
 
 void SheetPrint::Private::calculateHorizontalPageParameters(int _column)
 {
+    PrintSettings *settings = m_pSheet->printSettings();
     // Zoom the print width ONCE here, instead for each column width.
-    const double printWidth = m_settings->printWidth() / m_settings->zoom();
+    const double printWidth = settings->printWidth() / settings->zoom();
 
     float offset = 0.0;
 
     //Are these the edges of the print range?
-    const QRect printRange = m_settings->printRegion().lastRange();
+    const QRect printRange = settings->printRegion().lastRange();
 #if 0
     if (_column == printRange.left() || _column == printRange.right()) {
         if (_column > m_maxCheckedNewPageX)
@@ -46,7 +48,7 @@ void SheetPrint::Private::calculateHorizontalPageParameters(int _column)
 #endif
 
     // Check if the pre-calculated width matches the repeated columns setting.
-    const bool repetitions = m_settings->repeatedColumns().first != 0;
+    const bool repetitions = settings->repeatedColumns().first != 0;
     if (repetitions != (m_dPrintRepeatColumnsWidth == 0.0)) {
         // Existing column repetitions, but their pre-calculated width is zero?
         // Must be the first run. Or the other way around? Seem to be orphaned.
@@ -62,13 +64,13 @@ void SheetPrint::Private::calculateHorizontalPageParameters(int _column)
             _column > m_maxCheckedNewPageX) { //this columns hasn't been calculated before
         int startCol = end + 1;
         int col = startCol;
-        double x = m_pSheet->columnFormat(col)->width();
+        double x = m_pSheet->columnFormats()->colWidth(col);
 
         // Add a new page.
         m_lnewPageListX.append(PrintNewPageEntry(startCol));
 
         //Add repeated column width, when necessary
-        const QPair<int, int> repeatedColumns = m_settings->repeatedColumns();
+        const QPair<int, int> repeatedColumns = settings->repeatedColumns();
         if (col > repeatedColumns.first) {
             x += m_dPrintRepeatColumnsWidth;
             offset = m_dPrintRepeatColumnsWidth;
@@ -80,16 +82,16 @@ void SheetPrint::Private::calculateHorizontalPageParameters(int _column)
             debugSheets << "loop:" << "startCol:" << startCol << "col:" << col
                      << "x:" << x << "offset:" << offset;
             // end of page?
-            if (x > printWidth || m_pSheet->columnFormat(col)->hasPageBreak()) {
+            if (x > printWidth || m_pSheet->columnFormats()->hasPageBreak(col)) {
                 //Now store into the previous entry the enditem and the width
                 m_lnewPageListX.last().setEndItem(col - 1);
-                m_lnewPageListX.last().setSize(x - m_pSheet->columnFormat(col)->width());
+                m_lnewPageListX.last().setSize(x - m_pSheet->columnFormats()->colWidth(col));
                 m_lnewPageListX.last().setOffset(offset);
 
                 //start a new page
                 m_lnewPageListX.append(PrintNewPageEntry(col));
                 startCol = col;
-                x = m_pSheet->columnFormat(col)->width();
+                x = m_pSheet->columnFormats()->colWidth(col);
                 if (col >= repeatedColumns.first) {
                     debugSheets << "col >= repeatedColumns.first:" << col << repeatedColumns.first;
                     x += m_dPrintRepeatColumnsWidth;
@@ -97,17 +99,17 @@ void SheetPrint::Private::calculateHorizontalPageParameters(int _column)
                 }
             }
             col++;
-            x += m_pSheet->columnFormat(col)->width();
+            x += m_pSheet->columnFormats()->colWidth(col);
         }
 
         // Iterate to the end of the page.
         while (m_lnewPageListX.last().endItem() == 0) {
             debugSheets << "loop to end" << "col:" << col << "x:" << x << "offset:" << offset
                         << "m_maxCheckedNewPageX:" << m_maxCheckedNewPageX;
-            if (x > printWidth || m_pSheet->columnFormat(col)->hasPageBreak()) {
+            if (x > printWidth || m_pSheet->columnFormats()->hasPageBreak(col)) {
                 // Now store into the previous entry the enditem and the width
                 m_lnewPageListX.last().setEndItem(col - 1);
-                m_lnewPageListX.last().setSize(x - m_pSheet->columnFormat(col)->width());
+                m_lnewPageListX.last().setSize(x - m_pSheet->columnFormats()->colWidth(col));
                 m_lnewPageListX.last().setOffset(offset);
 
                 if (col - 1 > m_maxCheckedNewPageX) {
@@ -116,7 +118,7 @@ void SheetPrint::Private::calculateHorizontalPageParameters(int _column)
                 return;
             }
             ++col;
-            x += m_pSheet->columnFormat(col)->width();
+            x += m_pSheet->columnFormats()->colWidth(col);
         }
     }
 
@@ -129,13 +131,14 @@ void SheetPrint::Private::calculateHorizontalPageParameters(int _column)
 
 void SheetPrint::Private::calculateVerticalPageParameters(int _row)
 {
+    PrintSettings *settings = m_pSheet->printSettings();
     // Zoom the print height ONCE here, instead for each row height.
-    const double printHeight = m_settings->printHeight() / m_settings->zoom();
+    const double printHeight = settings->printHeight() / settings->zoom();
 
     float offset = 0.0;
 
     //Are these the edges of the print range?
-    const QRect printRange = m_settings->printRegion().lastRange();
+    const QRect printRange = settings->printRegion().lastRange();
 #if 0
     if (_row == printRange.top() || _row == printRange.bottom()) {
         if (_row > m_maxCheckedNewPageY)
@@ -156,7 +159,7 @@ void SheetPrint::Private::calculateVerticalPageParameters(int _row)
 #endif
 
     // Check if the pre-calculated height matches the repeated rows setting.
-    const bool repetitions = m_settings->repeatedRows().first != 0;
+    const bool repetitions = settings->repeatedRows().first != 0;
     if (repetitions != (m_dPrintRepeatRowsHeight == 0.0)) {
         // Existing row repetitions, but their pre-calculated height is zero?
         // Must be the first run. Or the other way around? Seem to be orphaned.
@@ -178,7 +181,7 @@ void SheetPrint::Private::calculateVerticalPageParameters(int _row)
         m_lnewPageListY.append(PrintNewPageEntry(startRow));
 
         //Add repeated row height, when necessary
-        const QPair<int, int> repeatedRows = m_settings->repeatedRows();
+        const QPair<int, int> repeatedRows = settings->repeatedRows();
         if (row > repeatedRows.first) {
             y += m_dPrintRepeatRowsHeight;
             offset = m_dPrintRepeatRowsHeight;
@@ -232,15 +235,16 @@ void SheetPrint::Private::calculateVerticalPageParameters(int _row)
 void SheetPrint::Private::calculateZoomForPageLimitX()
 {
     debugSheets << "Calculating zoom for X limit";
-    const int horizontalPageLimit = m_settings->pageLimits().width();
+    PrintSettings *settings = m_pSheet->printSettings();
+    const int horizontalPageLimit = settings->pageLimits().width();
     if (horizontalPageLimit == 0)
         return;
 
-    const double origZoom = m_settings->zoom();
+    const double origZoom = settings->zoom();
 
-    if (m_settings->zoom() < 1.0) {
+    if (settings->zoom() < 1.0) {
         q->updateHorizontalPageParameters(0);   // clear all parameters
-        m_settings->setZoom(1.0);
+        settings->setZoom(1.0);
     }
 
     QRect printRange = m_pSheet->usedArea(true);
@@ -253,19 +257,19 @@ void SheetPrint::Private::calculateZoomForPageLimitX()
     //calculating a factor for scaling the zoom down makes it lots faster
     double factor = (double)horizontalPageLimit / (double)currentPages +
                     1 - (double)currentPages / ((double)currentPages + 1); //add possible error;
-    debugSheets << "Calculated factor for scaling m_settings->zoom():" << factor;
-    m_settings->setZoom(m_settings->zoom()*factor);
+    debugSheets << "Calculated factor for scaling settings->zoom():" << factor;
+    settings->setZoom(settings->zoom()*factor);
 
-    debugSheets << "New exact zoom:" << m_settings->zoom();
+    debugSheets << "New exact zoom:" << settings->zoom();
 
-    if (m_settings->zoom() < 0.01)
-        m_settings->setZoom(0.01);
-    if (m_settings->zoom() > 1.0)
-        m_settings->setZoom(1.0);
+    if (settings->zoom() < 0.01)
+        settings->setZoom(0.01);
+    if (settings->zoom() > 1.0)
+        settings->setZoom(1.0);
 
-    m_settings->setZoom((((int)(m_settings->zoom()*100 + 0.5)) / 100.0));
+    settings->setZoom((((int)(settings->zoom()*100 + 0.5)) / 100.0));
 
-    debugSheets << "New rounded zoom:" << m_settings->zoom();
+    debugSheets << "New rounded zoom:" << settings->zoom();
 
     q->updateHorizontalPageParameters(0);   // clear all parameters
     calculateHorizontalPageParameters(printRange.right());
@@ -273,34 +277,35 @@ void SheetPrint::Private::calculateZoomForPageLimitX()
 
     debugSheets << "Number of pages with this zoom:" << currentPages;
 
-    while ((currentPages > horizontalPageLimit) && (m_settings->zoom() > 0.01)) {
-        m_settings->setZoom(m_settings->zoom() - 0.01);
+    while ((currentPages > horizontalPageLimit) && (settings->zoom() > 0.01)) {
+        settings->setZoom(settings->zoom() - 0.01);
         q->updateHorizontalPageParameters(0);   // clear all parameters
         calculateHorizontalPageParameters(printRange.right());
         currentPages = m_lnewPageListX.count();
-        debugSheets << "Looping -0.01; current zoom:" << m_settings->zoom();
+        debugSheets << "Looping -0.01; current zoom:" << settings->zoom();
     }
 
-    if (m_settings->zoom() < origZoom) {
+    if (settings->zoom() < origZoom) {
         // Trigger an update of the vertical page parameters.
         q->updateVerticalPageParameters(0); // clear all parameters
         calculateVerticalPageParameters(printRange.bottom());
     } else
-        m_settings->setZoom(origZoom);
+        settings->setZoom(origZoom);
 }
 
 void SheetPrint::Private::calculateZoomForPageLimitY()
 {
     debugSheets << "Calculating zoom for Y limit";
-    const int verticalPageLimit = m_settings->pageLimits().height();
+    PrintSettings *settings = m_pSheet->printSettings();
+    const int verticalPageLimit = settings->pageLimits().height();
     if (verticalPageLimit == 0)
         return;
 
-    const double origZoom = m_settings->zoom();
+    const double origZoom = settings->zoom();
 
-    if (m_settings->zoom() < 1.0) {
+    if (settings->zoom() < 1.0) {
         q->updateVerticalPageParameters(0);   // clear all parameters
-        m_settings->setZoom(1.0);
+        settings->setZoom(1.0);
     }
 
     QRect printRange = m_pSheet->usedArea(true);
@@ -312,19 +317,19 @@ void SheetPrint::Private::calculateZoomForPageLimitY()
 
     double factor = (double)verticalPageLimit / (double)currentPages +
                     1 - (double)currentPages / ((double)currentPages + 1); //add possible error
-    debugSheets << "Calculated factor for scaling m_settings->zoom():" << factor;
-    m_settings->setZoom(m_settings->zoom()*factor);
+    debugSheets << "Calculated factor for scaling settings->zoom():" << factor;
+    settings->setZoom(settings->zoom()*factor);
 
-    debugSheets << "New exact zoom:" << m_settings->zoom();
+    debugSheets << "New exact zoom:" << settings->zoom();
 
-    if (m_settings->zoom() < 0.01)
-        m_settings->setZoom(0.01);
-    if (m_settings->zoom() > 1.0)
-        m_settings->setZoom(1.0);
+    if (settings->zoom() < 0.01)
+        settings->setZoom(0.01);
+    if (settings->zoom() > 1.0)
+        settings->setZoom(1.0);
 
-    m_settings->setZoom((((int)(m_settings->zoom()*100 + 0.5)) / 100.0));
+    settings->setZoom((((int)(settings->zoom()*100 + 0.5)) / 100.0));
 
-    debugSheets << "New rounded zoom:" << m_settings->zoom();
+    debugSheets << "New rounded zoom:" << settings->zoom();
 
     q->updateVerticalPageParameters(0);   // clear all parameters
     calculateVerticalPageParameters(printRange.bottom());
@@ -332,37 +337,36 @@ void SheetPrint::Private::calculateZoomForPageLimitY()
 
     debugSheets << "Number of pages with this zoom:" << currentPages;
 
-    while ((currentPages > verticalPageLimit) && (m_settings->zoom() > 0.01)) {
-        m_settings->setZoom(m_settings->zoom() - 0.01);
+    while ((currentPages > verticalPageLimit) && (settings->zoom() > 0.01)) {
+        settings->setZoom(settings->zoom() - 0.01);
         q->updateVerticalPageParameters(0);   // clear all parameters
         calculateVerticalPageParameters(printRange.bottom());
         currentPages = m_lnewPageListY.count();
-        debugSheets << "Looping -0.01; current zoom:" << m_settings->zoom();
+        debugSheets << "Looping -0.01; current zoom:" << settings->zoom();
     }
 
-    if (m_settings->zoom() < origZoom) {
+    if (settings->zoom() < origZoom) {
         // Trigger an update of the horizontal page parameters.
         q->updateHorizontalPageParameters(0); // clear all parameters
         calculateHorizontalPageParameters(printRange.right());
     } else
-        m_settings->setZoom(origZoom);
+        settings->setZoom(origZoom);
 }
 
 void SheetPrint::Private::updateRepeatedColumnsWidth()
 {
+    PrintSettings *settings = m_pSheet->printSettings();
     m_dPrintRepeatColumnsWidth = 0.0;
-    const QPair<int, int> repeatedColumns = m_settings->repeatedColumns();
-    if (repeatedColumns.first != 0) {
-        for (int i = repeatedColumns.first; i <= repeatedColumns.second; i++) {
-            m_dPrintRepeatColumnsWidth += m_pSheet->columnFormat(i)->width();
-        }
-    }
+    const QPair<int, int> repeatedColumns = settings->repeatedColumns();
+    if (repeatedColumns.first != 0)
+        m_dPrintRepeatColumnsWidth = m_pSheet->columnFormats()->totalColWidth(repeatedColumns.first, repeatedColumns.second);
 }
 
 void SheetPrint::Private::updateRepeatedRowsHeight()
 {
+    PrintSettings *settings = m_pSheet->printSettings();
     m_dPrintRepeatRowsHeight = 0.0;
-    const QPair<int, int> repeatedRows = m_settings->repeatedRows();
+    const QPair<int, int> repeatedRows = settings->repeatedRows();
     if (repeatedRows.first != 0) {
         m_dPrintRepeatRowsHeight += m_pSheet->rowFormats()->totalRowHeight(repeatedRows.first, repeatedRows.second);
     }

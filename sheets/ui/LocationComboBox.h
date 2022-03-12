@@ -10,8 +10,7 @@
 #define CALLIGRA_SHEETS_LOCATION_COMBOBOX
 
 #include <kcombobox.h>
-
-#include "sheets_common_export.h"
+#include "sheets_ui_export.h"
 
 class QKeyEvent;
 
@@ -30,7 +29,7 @@ class Sheet;
  * Depending on the sheet settings the address is displayed in normal form
  * (e.g. A1 or B1:C3) or in LC (Line/Column) form (e.g. L1xC1 or 3Lx2C).
  */
-class LocationComboBox : public KComboBox
+class CALLIGRA_SHEETS_UI_EXPORT LocationComboBox : public KComboBox
 {
     Q_OBJECT
 public:

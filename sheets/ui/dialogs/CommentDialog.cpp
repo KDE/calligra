@@ -11,18 +11,18 @@
 // Local
 #include "CommentDialog.h"
 
-#include <QPushButton>
-#include <QVBoxLayout>
+// #include <QPushButton>
+// #include <QVBoxLayout>
 
-#include <KLocalizedString>
-#include <ktextedit.h>
+// #include <KLocalizedString>
+// #include <ktextedit.h>
 
 // Sheets
-#include "Cell.h"
-#include "ui/Selection.h"
-#include "Sheet.h"
+// #include "Cell.h"
+// #include "ui/Selection.h"
+// #include "Sheet.h"
 
-#include "commands/CommentCommand.h"
+// #include "commands/CommentCommand.h"
 
 using namespace Calligra::Sheets;
 

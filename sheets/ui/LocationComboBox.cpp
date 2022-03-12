@@ -7,18 +7,18 @@
 #include "LocationComboBox.h"
 
 // Sheets
-#include "CellStorage.h"
-#include "Map.h"
-#include "NamedAreaManager.h"
-#include "Selection.h"
-#include "Sheet.h"
-#include "SheetsDebug.h"
+// #include "CellStorage.h"
+// #include "Map.h"
+// #include "NamedAreaManager.h"
+// #include "Selection.h"
+// #include "Sheet.h"
+// #include "SheetsDebug.h"
 
-#include "commands/NamedAreaCommand.h"
+// #include "commands/NamedAreaCommand.h"
 
 // Qt
-#include <QKeyEvent>
-#include <QLineEdit>
+// #include <QKeyEvent>
+// #include <QLineEdit>
 
 using namespace Calligra::Sheets;
 

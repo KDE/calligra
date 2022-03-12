@@ -7,14 +7,14 @@
 // Local
 #include "MergeCommand.h"
 
-#include <KLocalizedString>
-#include <kmessagebox.h>
+// #include <KLocalizedString>
+// #include <kmessagebox.h>
 
-#include "Cell.h"
-#include "Damages.h"
-#include "Map.h"
-#include "ui/Selection.h" // FIXME detach from ui
-#include "Sheet.h"
+// #include "Cell.h"
+// #include "Damages.h"
+// #include "Map.h"
+// #include "ui/Selection.h" // FIXME detach from ui
+// #include "Sheet.h"
 
 using namespace Calligra::Sheets;
 

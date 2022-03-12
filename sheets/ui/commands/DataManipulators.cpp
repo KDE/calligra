@@ -2,23 +2,22 @@
 // SPDX-FileCopyrightText: 2006 Tomas Mecir <mecirt@gmail.com>
 // SPDX-License-Identifier: LGPL-2.0-only
 
-#include <algorithm>
-
 #include "DataManipulators.h"
 
-#include <KLocalizedString>
+// #include <algorithm>
+// #include <KLocalizedString>
 
-#include "Cell.h"
-#include "CellStorage.h"
-#include "Damages.h"
-#include "Formula.h"
-#include "Map.h"
-#include "Sheet.h"
-#include "ValueCalc.h"
-#include "ValueConverter.h"
+// #include "Cell.h"
+// #include "CellStorage.h"
+// #include "Damages.h"
+// #include "Formula.h"
+// #include "Map.h"
+// #include "Sheet.h"
+// #include "ValueCalc.h"
+// #include "ValueConverter.h"
 
-#include <float.h>
-#include <math.h>
+// #include <float.h>
+// #include <math.h>
 
 using namespace Calligra::Sheets;
 

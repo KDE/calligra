@@ -7,10 +7,10 @@
 #ifndef CALLIGRA_SHEETS_CONDITION_COMMAND
 #define CALLIGRA_SHEETS_CONDITION_COMMAND
 
-#include <QLinkedList>
-
 #include "AbstractRegionCommand.h"
-#include "Condition.h"
+#include "core/Condition.h"
+
+#include <QLinkedList>
 
 namespace Calligra
 {

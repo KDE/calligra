@@ -11,8 +11,6 @@
 
 #include <QObject>
 
-#include "sheets_common_export.h"
-
 class QListWidgetItem;
 
 namespace Calligra

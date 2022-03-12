@@ -7,15 +7,15 @@
 // Local
 #include "BorderColorCommand.h"
 
-#include <QPen>
+// #include <QPen>
 
-#include <KLocalizedString>
+// #include <KLocalizedString>
 
-#include "Cell.h"
-#include "CellStorage.h"
-#include "Sheet.h"
-#include "Style.h"
-#include "StyleStorage.h"
+// #include "Cell.h"
+// #include "CellStorage.h"
+// #include "Sheet.h"
+// #include "Style.h"
+// #include "StyleStorage.h"
 
 using namespace Calligra::Sheets;
 

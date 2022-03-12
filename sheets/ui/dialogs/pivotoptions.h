@@ -10,8 +10,8 @@
 
 #include <KoDialog.h>
 
-#include<QListWidgetItem>
-#include<QObject>
+// #include<QListWidgetItem>
+// #include<QObject>
 
 namespace Calligra{
   namespace Sheets{

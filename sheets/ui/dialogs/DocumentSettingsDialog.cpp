@@ -15,25 +15,25 @@
 // Local
 #include "DocumentSettingsDialog.h"
 
-#include <QCheckBox>
-#include <QGridLayout>
-#include <QGroupBox>
-#include <QLabel>
-#include <QPushButton>
-#include <QScrollBar>
-#include <QComboBox>
-#include <QSpinBox>
+// #include <QCheckBox>
+// #include <QGridLayout>
+// #include <QGroupBox>
+// #include <QLabel>
+// #include <QPushButton>
+// #include <QScrollBar>
+// #include <QComboBox>
+// #include <QSpinBox>
 
-#include <KoVBox.h>
+// #include <KoVBox.h>
 
-#include <sonnet/configwidget.h>
+// #include <sonnet/configwidget.h>
 
-#include <KoIcon.h>
-#include "CalculationSettings.h"
-#include "Localization.h"
-#include "Map.h"
-#include "ui/Selection.h"
-#include "Sheet.h"
+// #include <KoIcon.h>
+// #include "CalculationSettings.h"
+// #include "Localization.h"
+// #include "Map.h"
+// #include "ui/Selection.h"
+// #include "Sheet.h"
 
 using namespace Calligra::Sheets;
 

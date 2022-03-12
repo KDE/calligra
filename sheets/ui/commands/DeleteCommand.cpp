@@ -6,14 +6,14 @@
 
 #include "DeleteCommand.h"
 
-#include "CellStorage.h"
-#include "Region.h"
-#include "RowColumnFormat.h"
-#include "RowFormatStorage.h"
-#include "Sheet.h"
-#include "Validity.h"
+// #include "CellStorage.h"
+// #include "Region.h"
+// #include "RowColumnFormat.h"
+// #include "RowFormatStorage.h"
+// #include "Sheet.h"
+// #include "Validity.h"
 
-#include <KLocalizedString>
+// #include <KLocalizedString>
 
 using namespace Calligra::Sheets;
 

@@ -6,18 +6,18 @@
 
 #include "MapViewModel.h"
 
-#include "Map.h"
-#include "ModelSupport.h"
-#include "Sheet.h"
+// #include "Map.h"
+// #include "ModelSupport.h"
+// #include "Sheet.h"
 
-#include "commands/SheetCommands.h"
+// #include "commands/SheetCommands.h"
 
-#include <KoCanvasBase.h>
-#include <KoShapeManager.h>
-#include <KoShape.h>
-#include <KoIcon.h>
+// #include <KoCanvasBase.h>
+// #include <KoShapeManager.h>
+// #include <KoShape.h>
+// #include <KoIcon.h>
 
-#include <kxmlguiclient.h>
+// #include <kxmlguiclient.h>
 
 using namespace Calligra::Sheets;
 

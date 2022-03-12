@@ -8,11 +8,11 @@
 #include "CommentCommand.h"
 
 
-#include <KLocalizedString>
+// #include <KLocalizedString>
 
-#include "CellStorage.h"
-#include "Sheet.h"
-#include "RectStorage.h"
+// #include "CellStorage.h"
+// #include "Sheet.h"
+// #include "RectStorage.h"
 
 using namespace Calligra::Sheets;
 

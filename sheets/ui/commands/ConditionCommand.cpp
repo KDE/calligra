@@ -7,11 +7,11 @@
 // Local
 #include "ConditionCommand.h"
 
-#include <KLocalizedString>
+// #include <KLocalizedString>
 
-#include "CellStorage.h"
-#include "ConditionsStorage.h"
-#include "Sheet.h"
+// #include "CellStorage.h"
+// #include "ConditionsStorage.h"
+// #include "Sheet.h"
 
 using namespace Calligra::Sheets;
 

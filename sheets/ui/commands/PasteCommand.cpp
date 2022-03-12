@@ -8,18 +8,18 @@
 
 #include "PasteCommand.h"
 
-#include <QApplication>
-#include <QMimeData>
+// #include <QApplication>
+// #include <QMimeData>
 
-#include "CellStorage.h"
-#include "commands/DataManipulators.h"
-#include "commands/DeleteCommand.h"
-#include "commands/PageBreakCommand.h"
-#include "commands/RowColumnManipulators.h"
-#include "DependencyManager.h"
-#include "Map.h"
-#include "RowColumnFormat.h"
-#include "Sheet.h"
+// #include "CellStorage.h"
+// #include "commands/DataManipulators.h"
+// #include "commands/DeleteCommand.h"
+// #include "commands/PageBreakCommand.h"
+// #include "commands/RowColumnManipulators.h"
+// #include "DependencyManager.h"
+// #include "Map.h"
+// #include "RowColumnFormat.h"
+// #include "Sheet.h"
 
 // TODO
 // - Extract the pasting code from Cell.

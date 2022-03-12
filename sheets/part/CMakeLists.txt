@@ -21,6 +21,7 @@ set (calligrasheetsprivate_LIB_SRCS
     CanvasBase.cpp
     Canvas.cpp
     CanvasItem.cpp
+    CellEditorDocker.cpp
     CellTool.cpp
     CellToolFactory.cpp
     Doc.cpp
@@ -31,6 +32,7 @@ set (calligrasheetsprivate_LIB_SRCS
     HeaderWidgets.cpp
     HeaderItems.cpp
     PrintJob.cpp
+    RightToLeftPaintingStrategy.cpp
     ToolRegistry.cpp
     TabBar.cpp
     View.cpp

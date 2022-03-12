@@ -11,12 +11,12 @@
 
 #ifndef QT_NO_SQL
 
-#include <QRect>
-#include <QFrame>
-#include <QLabel>
+// #include <QRect>
+// #include <QFrame>
+// #include <QLabel>
 
-#include <kassistantdialog.h>
 #include <QSqlDatabase>
+#include <kassistantdialog.h>
 
 class QCheckBox;
 class QFrame;

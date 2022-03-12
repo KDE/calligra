@@ -8,31 +8,23 @@
 #define KSPREADAPPLICATIONSETTINGS
 
 #include <KCompletion>
-
 #include <QColor>
-#include <QObject>
 
-#include "Global.h"
-#include "sheets_export.h"
+#include "sheets_core_export.h"
 
 namespace Calligra
 {
 namespace Sheets
 {
 
+enum MoveTo { Bottom, Left, Top, Right, BottomFirst, NoMovement };
+enum MethodOfCalc { SumOfNumber, Min, Max, Average, Count, NoneCalc, CountA };
+
 /**
  * Visual settings.
  */
-class CALLIGRA_SHEETS_ODF_EXPORT ApplicationSettings : public QObject
+class CALLIGRA_SHEETS_CORE_EXPORT ApplicationSettings
 {
-    Q_OBJECT
-    Q_PROPERTY(bool showVerticalScrollBar READ showVerticalScrollBar WRITE setShowVerticalScrollBar)
-    Q_PROPERTY(bool showHorizontalScrollBar READ showHorizontalScrollBar WRITE setShowHorizontalScrollBar)
-    Q_PROPERTY(bool showColumnHeader READ showColumnHeader WRITE setShowColumnHeader)
-    Q_PROPERTY(bool showRowHeader READ showRowHeader WRITE setShowRowHeader)
-    Q_PROPERTY(bool showStatusBar READ showStatusBar WRITE setShowStatusBar)
-    Q_PROPERTY(bool showTabBar READ showTabBar WRITE setShowTabBar)
-
 public:
     /**
      * Constructor.
@@ -42,10 +34,7 @@ public:
     /**
      * Destructor.
      */
-    ~ApplicationSettings() override;
-
-    void load();
-    void save() const;
+    ~ApplicationSettings();
 
     /**
      * If \c enable is true, vertical scrollbar is visible, otherwise

@@ -14,19 +14,19 @@
 // Local
 #include "InsertDialog.h"
 
-#include <QRadioButton>
-#include <QGroupBox>
-#include <QVBoxLayout>
+// #include <QRadioButton>
+// #include <QGroupBox>
+// #include <QVBoxLayout>
 
-#include <KLocalizedString>
+// #include <KLocalizedString>
 
-#include "SheetsDebug.h"
-#include "ui/Selection.h"
-#include "Sheet.h"
+// #include "SheetsDebug.h"
+// #include "ui/Selection.h"
+// #include "Sheet.h"
 
 // commands
-#include "commands/DataManipulators.h"
-#include "commands/RowColumnManipulators.h"
+// #include "commands/DataManipulators.h"
+// #include "commands/RowColumnManipulators.h"
 
 using namespace Calligra::Sheets;
 

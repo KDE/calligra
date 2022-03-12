@@ -7,17 +7,16 @@
 // Local
 #include "StyleCommand.h"
 
-#include <QBrush>
+// #include <QBrush>
 
-#include <KLocalizedString>
+// #include <KLocalizedString>
 
-#include "Cell.h"
-#include "CellStorage.h"
-#include "Damages.h"
-#include "Map.h"
-#include "Sheet.h"
-#include "Style.h"
-#include "StyleStorage.h"
+// #include "Cell.h"
+// #include "CellStorage.h"
+// #include "Damages.h"
+// #include "Map.h"
+// #include "Sheet.h"
+// #include "StyleStorage.h"
 
 using namespace Calligra::Sheets;
 

@@ -8,7 +8,6 @@
 
 // Qt
 #include <QGridLayout>
-#include <QResizeEvent>
 #include <QToolButton>
 
 // KF5
@@ -19,12 +18,11 @@
 #include <KoToolManager.h>
 
 // Calligra Sheets
-#include "SheetsDebug.h"
-#include "CellToolBase.h"
-#include "ExternalEditor.h"
-#include "LocationComboBox.h"
-#include "SheetView.h"
-#include "part/CanvasBase.h"
+#include "ui/CellToolBase.h"
+#include "ui/ExternalEditor.h"
+#include "ui/LocationComboBox.h"
+
+#include "CanvasBase.h"
 
 using namespace Calligra::Sheets;
 

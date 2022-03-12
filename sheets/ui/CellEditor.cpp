@@ -7,39 +7,26 @@
 #include "CellEditor.h"
 
 // Sheets
-#include "ApplicationSettings.h"
+#include "engine/Formula.h"
+#include "engine/MapBase.h"
+#include "core/Sheet.h"
+
 #include "CellToolBase.h"
-#include "Formula.h"
 #include "FormulaEditorHighlighter.h"
-#include "Function.h"
-#include "FunctionRepository.h"
 #include "FunctionCompletion.h"
 #include "Selection.h"
-#include "Sheet.h"
-#include "Style.h"
-#include "Cell.h"
-#include "ValueConverter.h"
-#include "RectStorage.h"
-#include "Map.h"
-#include "Value.h"
-#include "CellStorage.h"
-#include "SheetsDebug.h"
 
 // Calligra
 #include <KoDpi.h>
 #include <KoUnit.h>
 #include <KoViewConverter.h>
-// KF5
-#include <ktextedit.h>
 
 // Qt
-#include <QFocusEvent>
-#include <QKeyEvent>
 #include <QCompleter>
 #include <QAbstractItemView>
 #include <QStringListModel>
 #include <QScrollBar>
-#include <QList>
+#include <QTimer>
 
 using namespace Calligra::Sheets;
 
@@ -380,7 +367,7 @@ void CellEditor::Private::rebuildSelection()
     selectionChangedLocked = true;
 
     Sheet *const originSheet = selection->originSheet();
-    Map *const map = originSheet->map();
+    MapBase *const map = originSheet->map();
 
     // Rebuild the reference selection by using the formula tokens.
     Tokens tokens = highlighter->formulaTokens();
@@ -398,7 +385,7 @@ void CellEditor::Private::rebuildSelection()
         const Token::Type type = token.type();
 
         if (type == Token::Cell || type == Token::Range) {
-            const Region region(token.text(), map, originSheet);
+            const Region region = map->regionFromName(token.text(), originSheet);
 
             if (!region.isValid() || region.isEmpty()) {
                 continue;
@@ -409,7 +396,7 @@ void CellEditor::Private::rebuildSelection()
             alreadyUsedRegions.insert(region.name());
 
             const QRect range = region.firstRange();
-            Sheet *const sheet = region.firstSheet();
+            Sheet *const sheet = dynamic_cast<Sheet *>(region.firstSheet());
 
             selection->initialize(range, sheet);
             // Always append the next range by pointing behind the last item.
@@ -432,7 +419,7 @@ void CellEditor::setEditorFont(QFont const & font, bool updateSize, const KoView
 
     if (updateSize) {
         QFontMetrics fontMetrics(this->font());
-        int width = fontMetrics.width(toPlainText()) + fontMetrics.averageCharWidth();
+        int width = fontMetrics.horizontalAdvance(toPlainText()) + fontMetrics.averageCharWidth();
         // don't make it smaller: then we would have to repaint the obscured cells
         if (width < this->width())
             width = this->width();
@@ -441,11 +428,6 @@ void CellEditor::setEditorFont(QFont const & font, bool updateSize, const KoView
             height = this->height();
         setGeometry(x(), y(), width, height);
     }
-}
-
-void CellEditor::slotCompletionModeChanged(KCompletion::CompletionMode _completion)
-{
-    selection()->activeSheet()->map()->settings()->setCompletionMode(_completion);
 }
 
 void CellEditor::slotTextChanged()
@@ -789,11 +771,11 @@ void CellEditor::permuteFixation()
     }
 
     const Token token = tokens[index];
-    Map *const map = d->selection->activeSheet()->map();
+    MapBase *const map = d->selection->activeSheet()->map();
     QString regionName = token.text();
     // Filter sheet; truncates regionName; range without sheet name resides.
-    Sheet *const sheet = map->filterSheetName(regionName);
-    const Region region(regionName, map, 0);
+    SheetBase *const sheet = map->filterSheetName(regionName);
+    const Region region = map->regionFromName(regionName, nullptr);
     // TODO Stefan: Skip named areas.
     if (!region.isValid()) {
         return;

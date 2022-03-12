@@ -11,7 +11,6 @@
 #include <QHBoxLayout>
 #include <QToolButton>
 #include <QWidgetAction>
-
 #include <QStyle>
 
 // KF5
@@ -163,7 +162,7 @@ QLayoutItem *GroupFlowLayout::takeAt(int index)
 
 Qt::Orientations GroupFlowLayout::expandingDirections() const
 {
-    return 0;
+    return Qt::Orientations();
 }
 
 bool GroupFlowLayout::hasHeightForWidth() const

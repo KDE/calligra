@@ -8,18 +8,18 @@
 // Local
 #include "AbstractRegionCommand.h"
 
-#include <QApplication>
+// #include <QApplication>
 
-#include <KLocalizedString>
-#include <kpassivepopup.h>
+// #include <KLocalizedString>
+// #include <kpassivepopup.h>
 
-#include <KoCanvasBase.h>
+// #include <KoCanvasBase.h>
 
-#include "Cell.h"
-#include "CellStorage.h"
-#include "Damages.h"
-#include "Map.h"
-#include "Sheet.h"
+// #include "Cell.h"
+// #include "CellStorage.h"
+// #include "Damages.h"
+// #include "Map.h"
+// #include "Sheet.h"
 
 using namespace Calligra::Sheets;
 

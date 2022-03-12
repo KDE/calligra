@@ -58,7 +58,7 @@ install(FILES financial.xml DESTINATION ${DATA_INSTALL_DIR}/calligrasheets/funct
 add_library(kspreadinformationmodule MODULE InformationModule.h information.cpp)
 target_include_directories( kspreadinformationmodule PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../ )
 calligrasheets_plugin_desktop_to_json(kspreadinformationmodule kspreadinformationmodule.desktop)
-target_link_libraries(kspreadinformationmodule calligrasheetsengine)
+target_link_libraries(kspreadinformationmodule calligrasheetsengine koversion)
 install(TARGETS kspreadinformationmodule DESTINATION ${PLUGIN_INSTALL_DIR}/calligrasheets/functions)
 install(FILES information.xml DESTINATION ${DATA_INSTALL_DIR}/calligrasheets/functions)
 

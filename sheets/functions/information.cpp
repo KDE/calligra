@@ -7,31 +7,25 @@
 
 #include "InformationModule.h"
 
-// #include <CalligraVersionWrapper.h>
 #ifdef Q_OS_WIN
-// #include <windows.h>
+#include <windows.h>
 #else
-// #include <sys/utsname.h>
+#include <sys/utsname.h>
 #endif
 
+#include <CalligraVersionWrapper.h>
+
+#include <QDir>
+#include <KLocalizedString>
+
+#include "engine/CalculationSettings.h"
+#include "engine/CellBase.h"
+#include "engine/CellBaseStorage.h"
+#include "engine/Formula.h"
+#include "engine/Function.h"
+#include "engine/SheetBase.h"
 #include "engine/ValueCalc.h"
 #include "engine/ValueConverter.h"
-
-// #include <QDir>
-// #include <KLocalizedString>
-
-// #include "SheetsDebug.h"
-// #include "CalculationSettings.h"
-// #include "Function.h"
-// #include "FunctionModuleRegistry.h"
-// #include "Sheet.h"
-// #include "Region.h"
-// #include "Cell.h"
-// #include "Formula.h"
-// #include "CellStorage.h"
-
-// #include <KoPart.h>
-// #include <KoApplication.h>
 
 using namespace Calligra::Sheets;
 
@@ -179,6 +173,7 @@ Value func_info(valVector args, ValueCalc *calc, FuncExtra *)
         return Value(CalligraVersionWrapper::versionString());
 
     if (type == "numfile") {
+/*
         KoApplication *app = qobject_cast<KoApplication*>(qApp);
         if(! app) {
            return Value(0);
@@ -186,11 +181,13 @@ Value func_info(valVector args, ValueCalc *calc, FuncExtra *)
 
             QSet<QString> nameList;
             QList<KoPart*> parts = app->partList();
-            foreach(KoPart* part, parts) {
+            for(KoPart* part : parts) {
                 nameList.insert(part->document()->objectName());
             }
             return Value(nameList.size());
         }
+*/
+        return Value::errorVALUE();   // let's just declare this unsupported for now
     }
 
     if (type == "recalc") {
@@ -342,7 +339,7 @@ Value func_isformula(valVector args, ValueCalc *calc, FuncExtra *e)
     Q_UNUSED(calc)
     const Calligra::Sheets::Region &region = e->regions[0];
     QPoint p = region.firstRange().topLeft();
-    CellStorage *s = region.firstSheet()->cellStorage();
+    CellBaseStorage *s = region.firstSheet()->cellStorage();
     Formula formula = s->formula(p.x(), p.y());
     return Value(formula.isValid());
 }
@@ -396,7 +393,7 @@ Value func_formula(valVector, ValueCalc *, FuncExtra *e)
 {
     if(e->ranges[0].col1 < 1 || e->ranges[0].row1 < 1)
         return Value::errorVALUE();
-    const Calligra::Sheets::Cell c(e->sheet, e->ranges[0].col1, e->ranges[0].row1);
+    const Calligra::Sheets::CellBase c(e->sheet, e->ranges[0].col1, e->ranges[0].row1);
     if (c.isNull())
         return Value::errorVALUE();
     if (!c.isFormula())

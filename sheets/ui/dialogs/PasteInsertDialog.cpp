@@ -10,18 +10,18 @@
 // Local
 #include "PasteInsertDialog.h"
 
-#include <QApplication>
-#include <QGroupBox>
-#include <QVBoxLayout>
-#include <KLocalizedString>
+// #include <QApplication>
+// #include <QGroupBox>
+// #include <QVBoxLayout>
+// #include <KLocalizedString>
 
-#include <QRadioButton>
-#include <QCheckBox>
+// #include <QRadioButton>
+// #include <QCheckBox>
 
-#include "commands/PasteCommand.h"
-#include "Map.h"
-#include "ui/Selection.h"
-#include "Sheet.h"
+// #include "commands/PasteCommand.h"
+// #include "Map.h"
+// #include "ui/Selection.h"
+// #include "Sheet.h"
 
 using namespace Calligra::Sheets;
 

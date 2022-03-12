@@ -8,20 +8,20 @@
 // Local
 #include "Selection.h"
 
-#include <KoCanvasBase.h>
-#include <KoCanvasController.h>
-#include <KoViewConverter.h>
+// #include <KoCanvasBase.h>
+// #include <KoCanvasController.h>
+// #include <KoViewConverter.h>
 
-#include "SheetsDebug.h"
-#include "Cell.h"
-#include "CellStorage.h"
-#include "RowColumnFormat.h"
-#include "RowFormatStorage.h"
-#include "Sheet.h"
+// #include "SheetsDebug.h"
+// #include "Cell.h"
+// #include "CellStorage.h"
+// #include "RowColumnFormat.h"
+// #include "RowFormatStorage.h"
+// #include "Sheet.h"
 
-#include "commands/DataManipulators.h"
+// #include "commands/DataManipulators.h"
 
-#include "ui/CellEditor.h"
+// #include "ui/CellEditor.h"
 
 using namespace Calligra::Sheets;
 

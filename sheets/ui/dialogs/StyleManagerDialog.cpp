@@ -8,23 +8,23 @@
 
 #include "StyleManagerDialog.h"
 
-#include <QMap>
-#include <QTreeWidget>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
+// #include <QMap>
+// #include <QTreeWidget>
+// #include <QHBoxLayout>
+// #include <QVBoxLayout>
 
-#include <kcombobox.h>
-#include "SheetsDebug.h"
-#include <KLocalizedString>
+// #include <kcombobox.h>
+// #include "SheetsDebug.h"
+// #include <KLocalizedString>
 
-#include "Cell.h"
-#include "LayoutDialog.h"
-#include "ui/Selection.h"
-#include "Sheet.h"
-#include "Style.h"
-#include "StyleManager.h"
+// #include "Cell.h"
+// #include "LayoutDialog.h"
+// #include "ui/Selection.h"
+// #include "Sheet.h"
+// #include "Style.h"
+// #include "StyleManager.h"
 
-#include "commands/StyleCommand.h"
+// #include "commands/StyleCommand.h"
 
 using namespace Calligra::Sheets;
 

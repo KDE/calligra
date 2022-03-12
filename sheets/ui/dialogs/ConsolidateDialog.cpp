@@ -18,34 +18,34 @@
 #include "ConsolidateDialog.h"
 
 //Qt Includes
-#include <QCheckBox>
-#include <QGridLayout>
-#include <QLabel>
-#include <QPushButton>
-#include <QListWidget>
+// #include <QCheckBox>
+// #include <QGridLayout>
+// #include <QLabel>
+// #include <QPushButton>
+// #include <QListWidget>
 
 // KF5
-#include <kmessagebox.h>
+// #include <kmessagebox.h>
 
-#include <KoIcon.h>
+// #include <KoIcon.h>
 
 // Sheets
-#include "SheetsDebug.h"
-#include "calligra_sheets_limits.h"
-#include <Localization.h>
-#include <Map.h>
-#include "ui/Selection.h"
-#include <Sheet.h>
-#include <Util.h>
+// #include "SheetsDebug.h"
+// #include "calligra_sheets_limits.h"
+// #include <Localization.h>
+// #include <Map.h>
+// #include "ui/Selection.h"
+// #include <Sheet.h>
+// #include <Util.h>
 
-#include <Formula.h>
-#include <ValueConverter.h>
-#include <Cell.h>
+// #include <Formula.h>
+// #include <ValueConverter.h>
+// #include <Cell.h>
 
-#include "commands/DataManipulators.h"
+// #include "commands/DataManipulators.h"
 
-#include "ui_ConsolidateWidget.h"
-#include "ui_ConsolidateDetailsWidget.h"
+// #include "ui_ConsolidateWidget.h"
+// #include "ui_ConsolidateDetailsWidget.h"
 
 using namespace Calligra::Sheets;
 

@@ -17,26 +17,26 @@
 #include "SortDialog.h"
 
 // Sheets
-#include "Map.h"
-#include "ui/Selection.h"
-#include "Sheet.h"
-#include "ValueConverter.h"
+// #include "Map.h"
+// #include "ui/Selection.h"
+// #include "Sheet.h"
+// #include "ValueConverter.h"
 
 // commands
-#include "commands/SortManipulator.h"
+// #include "commands/SortManipulator.h"
 
-#include <KoIcon.h>
+// #include <KoIcon.h>
 
 // ui
-#include "ui_SortWidget.h"
-#include "ui_SortDetailsWidget.h"
+// #include "ui_SortWidget.h"
+// #include "ui_SortDetailsWidget.h"
 
-#include <KSharedConfig>
+// #include <KSharedConfig>
 
 // Qt
-#include <QStyledItemDelegate>
+// #include <QStyledItemDelegate>
 
-#include <algorithm>
+// #include <algorithm>
 
 using namespace Calligra::Sheets;
 

@@ -133,6 +133,11 @@ bool SheetBase::setSheetName(const QString& name)
     return true;
 }
 
+bool SheetBase::rowIsHidden(int /*row*/) const
+{
+    return false;
+}
+
 void SheetBase::changeCellTabName(QString const & old_name, QString const & new_name)
 {
     const FormulaStorage *fs = formulaStorage();

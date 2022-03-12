@@ -6,14 +6,14 @@
 
 #include "NamedAreaCommand.h"
 
-#include "KLocalizedString"
+// #include "KLocalizedString"
 
-#include "Damages.h"
-#include "FormulaStorage.h"
-#include "calligra_sheets_limits.h"
-#include "Map.h"
-#include "NamedAreaManager.h"
-#include "Sheet.h"
+// #include "Damages.h"
+// #include "FormulaStorage.h"
+// #include "calligra_sheets_limits.h"
+// #include "Map.h"
+// #include "NamedAreaManager.h"
+// #include "Sheet.h"
 
 using namespace Calligra::Sheets;
 

@@ -7,12 +7,12 @@
 #ifndef CALLIGRA_SHEETS_SHEET_VIEW
 #define CALLIGRA_SHEETS_SHEET_VIEW
 
-#include <QObject>
-#include <QPoint>
-#include <QPointF>
-#include <QRect>
+// #include <QObject>
+// #include <QPoint>
+// #include <QPointF>
+// #include <QRect>
 
-#include "sheets_common_export.h"
+#include "sheets_ui_export.h"
 
 class QPainter;
 class QRect;
@@ -37,7 +37,7 @@ class CanvasBase;
  * The SheetView controls the painting of the sheets' cells.
  * It caches a set of CellViews.
  */
-class CALLIGRA_SHEETS_COMMON_EXPORT SheetView : public QObject
+class CALLIGRA_SHEETS_UI_EXPORT SheetView : public QObject
 {
     Q_OBJECT
 
@@ -47,7 +47,7 @@ public:
     /**
      * Constructor.
      */
-    explicit SheetView(const Sheet* sheet);
+    explicit SheetView(Sheet* sheet);
 
     /**
      * Destructor.
@@ -57,7 +57,7 @@ public:
     /**
      * \return the Sheet
      */
-    const Sheet* sheet() const;
+    Sheet* sheet() const;
 
     /**
      * Sets the KoViewConverter used by this SheetView.

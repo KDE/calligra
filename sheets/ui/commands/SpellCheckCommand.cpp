@@ -6,20 +6,20 @@
 
 #include "SpellCheckCommand.h"
 
-#include "Cell.h"
-#include "CellStorage.h"
-#include "Map.h"
-#include "Sheet.h"
-#include "Region.h"
-#include "ValueStorage.h"
+// #include "Cell.h"
+// #include "CellStorage.h"
+// #include "Map.h"
+// #include "Sheet.h"
+// #include "Region.h"
+// #include "ValueStorage.h"
 
-#include "commands/DataManipulators.h"
+// #include "commands/DataManipulators.h"
 
-#include <KoCanvasBase.h>
+// #include <KoCanvasBase.h>
 
-#include <kmessagebox.h>
-#include <sonnet/dialog.h>
-#include <sonnet/speller.h>
+// #include <kmessagebox.h>
+// #include <sonnet/dialog.h>
+// #include <sonnet/speller.h>
 
 using namespace Calligra::Sheets;
 

@@ -12,13 +12,13 @@
 #include "SpecialPasteDialog.h"
 
 
-#include <KLocalizedString>
+// #include <KLocalizedString>
 
-#include "commands/PasteCommand.h"
-#include "Global.h"
-#include "Map.h"
-#include "ui/Selection.h"
-#include "Sheet.h"
+// #include "commands/PasteCommand.h"
+// #include "Global.h"
+// #include "Map.h"
+// #include "ui/Selection.h"
+// #include "Sheet.h"
 
 using namespace Calligra::Sheets;
 

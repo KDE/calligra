@@ -6,21 +6,21 @@
 
 #include "HyperlinkStrategy.h"
 
-#include "Selection.h"
-#include "Sheet.h"
-#include "Util.h"
-#include "CellToolBase.h"
+// #include "Selection.h"
+// #include "Sheet.h"
+// #include "Util.h"
+// #include "CellToolBase.h"
 
-#include <KoCanvasBase.h>
-#include <KoSelection.h>
-#include <KoToolBase.h>
+// #include <KoCanvasBase.h>
+// #include <KoSelection.h>
+// #include <KoToolBase.h>
 
-#include <kmessagebox.h>
-#include <krun.h>
+// #include <kmessagebox.h>
+// #include <krun.h>
 
-#include <QMimeDatabase>
-#include <QTimer>
-#include <QUrl>
+// #include <QMimeDatabase>
+// #include <QTimer>
+// #include <QUrl>
 
 using namespace Calligra::Sheets;
 

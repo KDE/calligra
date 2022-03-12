@@ -15,31 +15,31 @@
 #include "NamedAreaDialog.h"
 
 // Qt
-#include <QGridLayout>
-#include <QLabel>
-#include <QList>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
-#include <QListWidget>
-#include <QPushButton>
+// #include <QGridLayout>
+// #include <QLabel>
+// #include <QList>
+// #include <QHBoxLayout>
+// #include <QVBoxLayout>
+// #include <QListWidget>
+// #include <QPushButton>
 
 // KF5
-#include <kcombobox.h>
-#include <klineedit.h>
-#include <kmessagebox.h>
-#include <kstandardguiitem.h>
+// #include <kcombobox.h>
+// #include <klineedit.h>
+// #include <kmessagebox.h>
+// #include <kstandardguiitem.h>
 
-#include <KoCanvasBase.h>
+// #include <KoCanvasBase.h>
 
 // Sheets
-#include "Localization.h"
-#include "Map.h"
-#include "NamedAreaManager.h"
-#include "ui/Selection.h"
-#include "Sheet.h"
-#include "Util.h"
+// #include "Localization.h"
+// #include "Map.h"
+// #include "NamedAreaManager.h"
+// #include "ui/Selection.h"
+// #include "Sheet.h"
+// #include "Util.h"
 
-#include "commands/NamedAreaCommand.h"
+// #include "commands/NamedAreaCommand.h"
 
 using namespace Calligra::Sheets;
 

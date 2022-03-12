@@ -11,11 +11,13 @@
 #include "ui_pivotmain.h"
 #include "pivotmain.h"
 
-#include <QApplication>
-#include <QMessageBox>
+// #include <QApplication>
+// #include <QMessageBox>
 
-#include <sheets/Sheet.h>
-#include <sheets/ui/Selection.h>
+// #include <sheets/Sheet.h>
+// #include <sheets/ui/Selection.h>
+
+
 using namespace Calligra::Sheets;
 
 class Pivot::Private

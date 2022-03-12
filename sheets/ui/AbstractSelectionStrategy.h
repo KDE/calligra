@@ -8,7 +8,7 @@
 #define CALLIGRA_SHEETS_ABSTRACT_SELECTION_STRATEGY
 
 #include <KoInteractionStrategy.h>
-#include "sheets_common_export.h"
+#include "sheets_ui_export.h"
 
 #include <Qt>
 
@@ -30,7 +30,7 @@ class Selection;
  *
  * \see SelectionStrategy
  */
-class CALLIGRA_SHEETS_COMMON_EXPORT AbstractSelectionStrategy : public KoInteractionStrategy
+class CALLIGRA_SHEETS_UI_EXPORT AbstractSelectionStrategy : public KoInteractionStrategy
 {
 public:
     /**

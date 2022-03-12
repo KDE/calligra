@@ -41,7 +41,13 @@ QString Localization::thousandsSeparator() const
     return locale.groupSeparator();
 }
 
-QDateTime Localization::readDateTime(const QString &str, bool *ok)
+
+double Localization::readNumber(const QString &str, bool *ok) const
+{
+    return locale.toDouble(str, ok);
+}
+
+QDateTime Localization::readDateTime(const QString &str, bool *ok) const
 {
     if (ok) *ok = false;
     QDateTime res = locale.toDateTime(str, QLocale::LongFormat);
@@ -50,7 +56,7 @@ QDateTime Localization::readDateTime(const QString &str, bool *ok)
     return res;
 }
 
-QDateTime Localization::readDateTime(const QString &str, const QString &format, bool *ok)
+QDateTime Localization::readDateTime(const QString &str, const QString &format, bool *ok) const
 {
     if (ok) *ok = false;
     QDateTime res = locale.toDateTime(str, format);
@@ -58,7 +64,7 @@ QDateTime Localization::readDateTime(const QString &str, const QString &format, 
     return res;
 }
 
-QDate Localization::readDate(const QString &str, bool *ok)
+QDate Localization::readDate(const QString &str, bool *ok) const
 {
     if (ok) *ok = false;
     QDate res = locale.toDate(str, QLocale::LongFormat);
@@ -67,7 +73,7 @@ QDate Localization::readDate(const QString &str, bool *ok)
     return res;
 }
 
-QDate Localization::readDate(const QString &str, const QString &format, bool *ok)
+QDate Localization::readDate(const QString &str, const QString &format, bool *ok) const
 {
     if (ok) *ok = false;
     QDate res = locale.toDate(str, format);
@@ -75,7 +81,7 @@ QDate Localization::readDate(const QString &str, const QString &format, bool *ok
     return res;
 }
 
-QTime Localization::readTime(const QString &str, bool *ok)
+QTime Localization::readTime(const QString &str, bool *ok) const
 {
     if (ok) *ok = false;
     QTime res = locale.toTime(str, QLocale::LongFormat);
@@ -84,7 +90,7 @@ QTime Localization::readTime(const QString &str, bool *ok)
     return res;
 }
 
-QTime Localization::readTime(const QString &str, const QString &format, bool *ok)
+QTime Localization::readTime(const QString &str, const QString &format, bool *ok) const
 {
     if (ok) *ok = false;
     QTime res = locale.toTime(str, format);
@@ -154,13 +160,13 @@ QString Localization::formatBool(bool val) const
     return translateString(str).toLower();
 }
 
-QString Localization::formatNumber(double num, int precision)
+QString Localization::formatNumber(double num, int precision) const
 {
     if (precision < 0) precision = 2;
     return locale.toString(num, 'g', precision);
 }
 
-QString Localization::formatCurrency(double num, const QString &currencySymbol, int precision)
+QString Localization::formatCurrency(double num, const QString &currencySymbol, int precision) const
 {
     if (precision < 0) precision = 2;
     return locale.toCurrencyString(num, currencySymbol, precision);
@@ -177,32 +183,32 @@ QString Localization::formatDoubleNoSep(double val) const
 }
 
 
-QString Localization::formatDateTime(const QDateTime &datetime, bool longFormat)
+QString Localization::formatDateTime(const QDateTime &datetime, bool longFormat) const
 {
     return locale.toString(datetime, longFormat ? QLocale::LongFormat : QLocale::ShortFormat);
 }
 
-QString Localization::formatDateTime(const QDateTime &datetime, const QString &format)
+QString Localization::formatDateTime(const QDateTime &datetime, const QString &format) const
 {
     return locale.toString(datetime, format);
 }
 
-QString Localization::formatDate(const QDate &date, bool longFormat)
+QString Localization::formatDate(const QDate &date, bool longFormat) const
 {
     return locale.toString(date, longFormat ? QLocale::LongFormat : QLocale::ShortFormat);
 }
 
-QString Localization::formatDate(const QDate &date, const QString &format)
+QString Localization::formatDate(const QDate &date, const QString &format) const
 {
     return locale.toString(date, format);
 }
 
-QString Localization::formatTime(const QTime &time, bool longFormat)
+QString Localization::formatTime(const QTime &time, bool longFormat) const
 {
     return locale.toString(time, longFormat ? QLocale::LongFormat : QLocale::ShortFormat);
 }
 
-QString Localization::formatTime(const QTime &time, const QString &format)
+QString Localization::formatTime(const QTime &time, const QString &format) const
 {
     return locale.toString(time, format);
 }

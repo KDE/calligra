@@ -19,51 +19,51 @@
 // Local
 #include "LayoutDialog.h"
 
-#include <stdlib.h>
-#include <math.h>
+// #include <stdlib.h>
+// #include <math.h>
 
-#include <QIntValidator>
-#include <QButtonGroup>
-#include <QCheckBox>
-#include <QFrame>
-#include <QLabel>
-#include <QListWidget>
-#include <QFontDatabase>
-#include <QPainter>
-#include <QRadioButton>
-#include <QPaintEvent>
-#include <QMouseEvent>
-#include <QVBoxLayout>
-#include <QGridLayout>
-#include <QPixmap>
-#include <QSpinBox>
+// #include <QIntValidator>
+// #include <QButtonGroup>
+// #include <QCheckBox>
+// #include <QFrame>
+// #include <QLabel>
+// #include <QListWidget>
+// #include <QFontDatabase>
+// #include <QPainter>
+// #include <QRadioButton>
+// #include <QPaintEvent>
+// #include <QMouseEvent>
+// #include <QVBoxLayout>
+// #include <QGridLayout>
+// #include <QPixmap>
+// #include <QSpinBox>
 
-#include <kcolorbutton.h>
-#include <kcombobox.h>
-#include <klineedit.h>
+// #include <kcolorbutton.h>
+// #include <kcombobox.h>
+// #include <klineedit.h>
 
-#include <KoIcon.h>
-#include <KoCanvasBase.h>
-#include <KoUnitDoubleSpinBox.h>
-#include <KoUnit.h>
+// #include <KoIcon.h>
+// #include <KoCanvasBase.h>
+// #include <KoUnitDoubleSpinBox.h>
+// #include <KoUnit.h>
 
-#include "SheetsDebug.h"
-#include "CalculationSettings.h"
-#include "Cell.h"
-#include "CellStorage.h"
-#include "Localization.h"
-#include "Map.h"
-#include "RowFormatStorage.h"
-#include "ui/Selection.h"
-#include "Sheet.h"
-#include "Style.h"
-#include "StyleManager.h"
-#include "StyleStorage.h"
-#include "ValueFormatter.h"
+// #include "SheetsDebug.h"
+// #include "CalculationSettings.h"
+// #include "Cell.h"
+// #include "CellStorage.h"
+// #include "Localization.h"
+// #include "Map.h"
+// #include "RowFormatStorage.h"
+// #include "ui/Selection.h"
+// #include "Sheet.h"
+// #include "Style.h"
+// #include "StyleManager.h"
+// #include "StyleStorage.h"
+// #include "ValueFormatter.h"
 
-#include "commands/MergeCommand.h"
-#include "commands/StyleCommand.h"
-#include "commands/RowColumnManipulators.h"
+// #include "commands/MergeCommand.h"
+// #include "commands/StyleCommand.h"
+// #include "commands/RowColumnManipulators.h"
 
 using namespace Calligra::Sheets;
 

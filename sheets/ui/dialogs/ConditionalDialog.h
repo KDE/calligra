@@ -12,7 +12,7 @@
 
 #include <KoDialog.h>
 
-#include "Condition.h"
+#include "core/Condition.h"
 
 class KComboBox;
 class KLineEdit;

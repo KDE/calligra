@@ -6,8 +6,8 @@
 
 #include "MergeStrategy.h"
 
-#include "commands/MergeCommand.h"
-#include "Selection.h"
+#include "../commands/MergeCommand.h"
+#include "../Selection.h"
 
 using namespace Calligra::Sheets;
 

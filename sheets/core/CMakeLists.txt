@@ -50,7 +50,10 @@ set (calligrasheetscore_LIB_SRCS
     BindingStorage.cpp
     PrintSettings.cpp
     DocBase.cpp
+    ApplicationSettings.cpp
     ShapeApplicationData.cpp
+    SheetPrint.cpp
+    SheetPrint_p.cpp
 
     ${odf_DIR_SRCS}
     ${ksp_DIR_SRCS}

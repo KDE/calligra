@@ -6,14 +6,14 @@
 
 #include "AutoFormatCommand.h"
 
-#include "CellStorage.h"
-#include "Sheet.h"
-#include "Style.h"
-#include "Region.h"
+// #include "CellStorage.h"
+// #include "Sheet.h"
+// #include "Style.h"
+// #include "Region.h"
 
-#include <KLocalizedString>
+// #include <KLocalizedString>
 
-#include <QPen>
+// #include <QPen>
 
 using namespace Calligra::Sheets;
 

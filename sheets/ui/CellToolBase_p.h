@@ -16,15 +16,15 @@
 
 // Sheets
 #include "CellToolBase.h"
-#include "Global.h"
+// #include "Global.h"
 
 // dialogs
 #include "dialogs/FindDialog.h"
 #include "dialogs/FormulaDialog.h"
 
 // Qt
-#include <QAction>
-#include <QHash>
+// #include <QAction>
+// #include <QHash>
 
 class KUndo2Command;
 class KFind;

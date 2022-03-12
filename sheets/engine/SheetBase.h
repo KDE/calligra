@@ -90,6 +90,8 @@ public:
     const ValueStorage* valueStorage() const;
 
 
+    /** Returns whether a row is hidden. The base version does nothing, it's here because of the SUBTOTAL function. */
+    virtual bool rowIsHidden(int row) const;
 
     /**
      * \ingroup Value

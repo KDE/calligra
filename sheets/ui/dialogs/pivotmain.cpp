@@ -7,28 +7,28 @@
 // Local
 
 #include "pivotmain.h"
-#include "pivotoptions.h"
-#include "pivotfilters.h"
-#include "ui_pivotmain.h"
+// #include "pivotoptions.h"
+// #include "pivotfilters.h"
+// #include "ui_pivotmain.h"
 
-#include<QTimer>
-#include<QObject>
-#include<QColor>
-#include<QPen>
-#include<QMessageBox>
-#include<QListWidgetItem>
-#include<QListWidget>
+// #include<QTimer>
+// #include<QObject>
+// #include<QColor>
+// #include<QPen>
+// #include<QMessageBox>
+// #include<QListWidgetItem>
+// #include<QListWidget>
 
-#include <sheets/Value.h>
-#include <sheets/ValueCalc.h>
-#include <sheets/ValueConverter.h>
-#include <sheets/Map.h>
-#include <sheets/DocBase.h>
-#include <sheets/Cell.h>
-#include <sheets/Style.h>
-#include <sheets/Sheet.h>
-#include <sheets/ui/Selection.h>
-#include <sheets/CellStorage.h>
+// #include <sheets/Value.h>
+// #include <sheets/ValueCalc.h>
+// #include <sheets/ValueConverter.h>
+// #include <sheets/Map.h>
+// #include <sheets/DocBase.h>
+// #include <sheets/Cell.h>
+// #include <sheets/Style.h>
+// #include <sheets/Sheet.h>
+// #include <sheets/ui/Selection.h>
+// #include <sheets/CellStorage.h>
 
 
 using namespace Calligra::Sheets;

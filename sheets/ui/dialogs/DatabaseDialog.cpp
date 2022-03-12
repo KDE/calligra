@@ -11,38 +11,38 @@
 
 #ifndef QT_NO_SQL
 
-#include "Cell.h"
-#include "ui/Selection.h"
-#include "Sheet.h"
-#include "Util.h"
-#include "SheetsDebug.h"
+// #include "Cell.h"
+// #include "ui/Selection.h"
+// #include "Sheet.h"
+// #include "Util.h"
+// #include "SheetsDebug.h"
 
-#include "commands/DataManipulators.h"
+// #include "commands/DataManipulators.h"
 
-#include <KoCanvasBase.h>
+// #include <KoCanvasBase.h>
 
-#include <kcombobox.h>
-#include <klineedit.h>
-#include <KLocalizedString>
-#include <kmessagebox.h>
-#include <ktextedit.h>
+// #include <kcombobox.h>
+// #include <klineedit.h>
+// #include <KLocalizedString>
+// #include <kmessagebox.h>
+// #include <ktextedit.h>
 
-#include <QIntValidator>
-#include <QCheckBox>
-#include <QFrame>
-#include <QGridLayout>
-#include <QHBoxLayout>
-#include <QLabel>
-#include <QPushButton>
-#include <QRadioButton>
-#include <QSqlDatabase>
-#include <QSqlError>
-#include <QSqlField>
-#include <QSqlQuery>
-#include <QSqlRecord>
-#include <QVariant>
-#include <QListWidget>
-#include <QTreeWidget>
+// #include <QIntValidator>
+// #include <QCheckBox>
+// #include <QFrame>
+// #include <QGridLayout>
+// #include <QHBoxLayout>
+// #include <QLabel>
+// #include <QPushButton>
+// #include <QRadioButton>
+// #include <QSqlDatabase>
+// #include <QSqlError>
+// #include <QSqlField>
+// #include <QSqlQuery>
+// #include <QSqlRecord>
+// #include <QVariant>
+// #include <QListWidget>
+// #include <QTreeWidget>
 
 using namespace Calligra::Sheets;
 

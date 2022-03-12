@@ -7,13 +7,13 @@
 #include "FormulaEditorHighlighter.h"
 
 // Sheets
-#include "Formula.h"
-#include "Selection.h"
-#include "Sheet.h"
+// #include "Formula.h"
+// #include "Selection.h"
+// #include "Sheet.h"
 
 // Qt
-#include <QApplication>
-#include <QTextEdit>
+// #include <QApplication>
+// #include <QTextEdit>
 
 using namespace Calligra::Sheets;
 

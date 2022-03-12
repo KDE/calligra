@@ -29,27 +29,21 @@
 #include "CellToolBase.h"
 
 // Sheets
-#include "ApplicationSettings.h"
-#include "CalculationSettings.h"
-#include "CellStorage.h"
-#include "Map.h"
-#include "RowColumnFormat.h"
-#include "RowFormatStorage.h"
-#include "Selection.h"
-#include "Sheet.h"
-
-// commands
-#include "commands/DataManipulators.h"
-#include "commands/StyleCommand.h"
+#include "engine/CalculationSettings.h"
+#include "core/ApplicationSettings.h"
+#include "core/CellStorage.h"
+#include "core/Map.h"
+#include "core/ColFormatStorage.h"
+#include "core/RowFormatStorage.h"
+#include "core/Sheet.h"
 
 // ui
-#include "ui/CellEditor.h"
-#include "ui/ExternalEditor.h"
-#include "ui/SheetView.h"
+#include "CellEditor.h"
+#include "ExternalEditor.h"
+#include "commands/StyleCommand.h"
 
 // Calligra
 #include <KoCanvasBase.h>
-#include <KoCanvasController.h>
 #include <KoCanvasResourceManager.h>
 #include <KoViewConverter.h>
 #include <KoColor.h>
@@ -58,13 +52,10 @@
 // KF5
 #include <kfontaction.h>
 #include <kfontsizeaction.h>
-#include <klocale.h>
 
 // Qt
 #include <QApplication>
-#include <QGridLayout>
 #include <QPainter>
-#include <QToolButton>
 
 using namespace Calligra::Sheets;
 
@@ -193,7 +184,7 @@ void CellToolBase::Private::processEnterKey(QKeyEvent* event)
     /* use the configuration setting to see which direction we're supposed to move
         when enter is pressed.
     */
-    Calligra::Sheets::MoveTo direction = q->selection()->activeSheet()->map()->settings()->moveToValue();
+    Calligra::Sheets::MoveTo direction = q->selection()->activeSheet()->fullMap()->applicationSettings()->moveToValue();
 
 //if shift Button clicked inverse move direction
     if (event->modifiers() & Qt::ShiftModifier) {
@@ -314,9 +305,9 @@ bool CellToolBase::Private::processHomeKey(QKeyEvent* event)
         } else {
             QPoint marker = q->selection()->marker();
 
-            Cell cell = sheet->cellStorage()->firstInRow(marker.y(), CellStorage::VisitContent);
+            Cell cell = sheet->fullCellStorage()->firstInRow(marker.y(), CellStorage::VisitContent);
             while (!cell.isNull() && cell.column() < marker.x() && cell.isEmpty()) {
-                cell = sheet->cellStorage()->nextInRow(cell.column(), cell.row(), CellStorage::VisitContent);
+                cell = sheet->fullCellStorage()->nextInRow(cell.column(), cell.row(), CellStorage::VisitContent);
             }
 
             int col = (!cell.isNull() ? cell.column() : 1);
@@ -357,7 +348,7 @@ bool CellToolBase::Private::processEndKey(QKeyEvent *event)
         // move to the last used cell in the row
         int col = 1;
 
-        CellStorage *cells = sheet->cellStorage();
+        CellStorage *cells = sheet->fullCellStorage();
         cell = cells->lastInRow(marker.y(), CellStorage::VisitContent);
         while (!cell.isNull() && cell.column() > q->selection()->marker().x() && cell.isEmpty()) {
             cell = cells->prevInRow(cell.column(), cell.row(), CellStorage::VisitContent);
@@ -428,7 +419,7 @@ void CellToolBase::Private::processOtherKey(QKeyEvent *event)
      Sheet * const sheet = q->selection()->activeSheet();
 
     // No null character ...
-    if (event->text().isEmpty() || !q->selection()->activeSheet()->map()->isReadWrite() ||
+    if (event->text().isEmpty() || !q->selection()->activeSheet()->fullMap()->isReadWrite() ||
             !sheet || sheet->isProtected()) {
         event->accept(); // QKeyEvent
     } else {
@@ -457,7 +448,7 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
     int col;
 
     QPoint marker = q->selection()->marker();
-    CellStorage *cells = sheet->cellStorage();
+    CellStorage *cells = sheet->fullCellStorage();
 
     /* here, we want to move to the first or last cell in the given direction that is
         actually being used.  Ignore empty cells and cells on hidden rows/columns */
@@ -555,7 +546,7 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
                 col = marker.x() + 1;
                 cell = Cell(sheet, col, cell.row());
                 while ((!cell.isNull()) && (col < q->maxCol()) && (!cell.isEmpty())) {
-                    if (!(sheet->columnFormat(cell.column())->isHiddenOrFiltered())) {
+                    if (!(sheet->columnFormats()->isHiddenOrFiltered(cell.column()))) {
                         lastCell = cell;
                         searchThroughEmpty = false;
                     }
@@ -568,7 +559,7 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
                 cell = cells->nextInRow(marker.x(), marker.y(), CellStorage::VisitContent);
 
                 while ((!cell.isNull()) &&
-                        (cell.isEmpty() || (sheet->columnFormat(cell.column())->isHiddenOrFiltered()))) {
+                        (cell.isEmpty() || (sheet->columnFormats()->isHiddenOrFiltered(cell.column())))) {
                     cell = cells->nextInRow(cell.column(), cell.row(), CellStorage::VisitContent);
                 }
             }
@@ -578,7 +569,7 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
             else
                 col = cell.column();
 
-            while (sheet->columnFormat(col)->isHiddenOrFiltered()) {
+            while (sheet->columnFormats()->isHiddenOrFiltered(col)) {
                 col--;
             }
 
@@ -591,7 +582,7 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
                 col = marker.x() - 1;
                 cell = Cell(sheet, col, cell.row());
                 while ((!cell.isNull()) && (col > 0) && (!cell.isEmpty())) {
-                    if (!(sheet->columnFormat(cell.column())->isHiddenOrFiltered())) {
+                    if (!(sheet->columnFormats()->isHiddenOrFiltered(cell.column()))) {
                         lastCell = cell;
                         searchThroughEmpty = false;
                     }
@@ -605,7 +596,7 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
                 cell = cells->prevInRow(marker.x(), marker.y(), CellStorage::VisitContent);
 
                 while ((!cell.isNull()) &&
-                        (cell.isEmpty() || (sheet->columnFormat(cell.column())->isHiddenOrFiltered()))) {
+                        (cell.isEmpty() || (sheet->columnFormats()->isHiddenOrFiltered(cell.column())))) {
                     cell = cells->prevInRow(cell.column(), cell.row(), CellStorage::VisitContent);
                 }
             }
@@ -615,7 +606,7 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
             else
                 col = cell.column();
 
-            while (sheet->columnFormat(col)->isHiddenOrFiltered()) {
+            while (sheet->columnFormats()->isHiddenOrFiltered(col)) {
                 col++;
             }
 
@@ -634,7 +625,7 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
                 col = marker.x() - 1;
                 cell = Cell(sheet, col, cell.row());
                 while ((!cell.isNull()) && (col > 0) && (!cell.isEmpty())) {
-                    if (!(sheet->columnFormat(cell.column())->isHiddenOrFiltered())) {
+                    if (!(sheet->columnFormats()->isHiddenOrFiltered(cell.column()))) {
                         lastCell = cell;
                         searchThroughEmpty = false;
                     }
@@ -648,7 +639,7 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
                 cell = cells->prevInRow(marker.x(), marker.y(), CellStorage::VisitContent);
 
                 while ((!cell.isNull()) &&
-                        (cell.isEmpty() || (sheet->columnFormat(cell.column())->isHiddenOrFiltered()))) {
+                        (cell.isEmpty() || (sheet->columnFormats()->isHiddenOrFiltered(cell.column())))) {
                     cell = cells->prevInRow(cell.column(), cell.row(), CellStorage::VisitContent);
                 }
             }
@@ -658,7 +649,7 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
             else
                 col = cell.column();
 
-            while (sheet->columnFormat(col)->isHiddenOrFiltered()) {
+            while (sheet->columnFormats()->isHiddenOrFiltered(col)) {
                 col++;
             }
 
@@ -671,7 +662,7 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
                 col = marker.x() + 1;
                 cell = Cell(sheet, col, cell.row());
                 while ((!cell.isNull()) && (col < q->maxCol()) && (!cell.isEmpty())) {
-                    if (!(sheet->columnFormat(cell.column())->isHiddenOrFiltered())) {
+                    if (!(sheet->columnFormats()->isHiddenOrFiltered(cell.column()))) {
                         lastCell = cell;
                         searchThroughEmpty = false;
                     }
@@ -684,7 +675,7 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
                 cell = cells->nextInRow(marker.x(), marker.y(), CellStorage::VisitContent);
 
                 while ((!cell.isNull()) &&
-                        (cell.isEmpty() || (sheet->columnFormat(cell.column())->isHiddenOrFiltered()))) {
+                        (cell.isEmpty() || (sheet->columnFormats()->isHiddenOrFiltered(cell.column())))) {
                     cell = cells->nextInRow(cell.column(), cell.row(), CellStorage::VisitContent);
                 }
             }
@@ -694,7 +685,7 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
             else
                 col = cell.column();
 
-            while (sheet->columnFormat(col)->isHiddenOrFiltered()) {
+            while (sheet->columnFormats()->isHiddenOrFiltered(col)) {
                 col--;
             }
 
@@ -742,7 +733,6 @@ bool CellToolBase::Private::formatKeyPress(QKeyEvent * _ev)
     case Qt::Key_Dollar:
         command->setText(kundo2_i18n("Currency Format"));
         command->setFormatType(Format::Money);
-        command->setPrecision(q->selection()->activeSheet()->map()->calculationSettings()->locale()->monetaryDecimalPlaces());
         break;
 
     case Qt::Key_Percent:
@@ -809,7 +799,6 @@ QRect CellToolBase::Private::moveDirection(Calligra::Sheets::MoveTo direction, b
 
     /* how many cells must we move to get to the next cell? */
     int offset = 0;
-    const ColumnFormat *cl = 0;
     switch (direction)
         /* for each case, figure out how far away the next cell is and then keep
             going one row/col at a time after that until a visible row/col is found
@@ -834,19 +823,15 @@ QRect CellToolBase::Private::moveDirection(Calligra::Sheets::MoveTo direction, b
         break;
     case Left:
         offset = (cellCorner.x() - cursor.x()) - 1;
-        cl = sheet->columnFormat(cursor.x() + offset);
-        while (((cursor.x() + offset) >= 1) && cl->isHiddenOrFiltered()) {
+        while (((cursor.x() + offset) >= 1) && sheet->columnFormats()->isHiddenOrFiltered(cursor.x() + offset)) {
             offset--;
-            cl = sheet->columnFormat(cursor.x() + offset);
         }
         destination = QPoint(qMax(cursor.x() + offset, 1), cursor.y());
         break;
     case Right:
         offset = cell.mergedXCells() - (cursor.x() - cellCorner.x()) + 1;
-        cl = sheet->columnFormat(cursor.x() + offset);
-        while (((cursor.x() + offset) <= q->maxCol()) && cl->isHiddenOrFiltered()) {
+        while (((cursor.x() + offset) <= q->maxCol()) && sheet->columnFormats()->isHiddenOrFiltered(cursor.x() + offset)) {
             offset++;
-            cl = sheet->columnFormat(cursor.x() + offset);
         }
         destination = QPoint(qMin(cursor.x() + offset, q->maxCol()), cursor.y());
         break;
@@ -1041,7 +1026,7 @@ void CellToolBase::Private::paintReferenceSelection(QPainter &painter, const QRe
     // Iterate over the referenced ranges.
     const Region::ConstIterator end(q->selection()->constEnd());
     for (Region::ConstIterator it(q->selection()->constBegin()); it != end; ++it) {
-        Sheet *const sheet = (*it)->sheet();
+        Sheet *const sheet = dynamic_cast<Sheet *>((*it)->sheet());
         // Only paint ranges or cells on the current sheet
         if (sheet != q->selection()->activeSheet()) {
             index++;
@@ -1067,7 +1052,7 @@ void CellToolBase::Private::paintReferenceSelection(QPainter &painter, const QRe
         const QColor color = colors[index++ % colors.size()];
 
         // Paint the reference range's outline.
-        if ((*it)->sheet()->layoutDirection() == Qt::RightToLeft) {
+        if (sheet->layoutDirection() == Qt::RightToLeft) {
             // See comment in paintSelection().
             const qreal offset = /*2 * viewRect.left() +*/ viewRect.width();
             const qreal left = offset - area.right();
@@ -1128,7 +1113,7 @@ QList<QAction*> CellToolBase::Private::popupActionList() const
 {
     QList<QAction*> actions;
     const Cell cell = Cell(q->selection()->activeSheet(), q->selection()->marker());
-    const bool isProtected = !q->selection()->activeSheet()->map()->isReadWrite() ||
+    const bool isProtected = !q->selection()->activeSheet()->fullMap()->isReadWrite() ||
                              (q->selection()->activeSheet()->isProtected() &&
                               !(cell.style().notProtected() && q->selection()->isSingular()));
     if (!isProtected) {
@@ -1160,14 +1145,13 @@ QList<QAction*> CellToolBase::Private::popupActionList() const
             actions.append(q->action("hideColumn"));
 
             q->action("showSelColumns")->setEnabled(false);
-            const ColumnFormat* columnFormat;
+            const ColFormatStorage *columnFormats = q->selection()->activeSheet()->columnFormats();
             Region::ConstIterator endOfList = q->selection()->constEnd();
             for (Region::ConstIterator it = q->selection()->constBegin(); it != endOfList; ++it) {
                 QRect range = (*it)->rect();
                 int col;
                 for (col = range.left(); col < range.right(); ++col) {
-                    columnFormat = q->selection()->activeSheet()->columnFormat(col);
-                    if (columnFormat->isHidden()) {
+                    if (columnFormats->isHidden(col)) {
                         q->action("showSelColumns")->setEnabled(true);
                         actions.append(q->action("showSelColumns"));
                         break;
@@ -1176,8 +1160,7 @@ QList<QAction*> CellToolBase::Private::popupActionList() const
                 if (range.left() > 1 && col == range.right()) {
                     bool allHidden = true;
                     for (col = 1; col < range.left(); ++col) {
-                        columnFormat = q->selection()->activeSheet()->columnFormat(col);
-                        allHidden &= columnFormat->isHidden();
+                        allHidden &= columnFormats->isHidden(col);
                     }
                     if (allHidden) {
                         q->action("showSelColumns")->setEnabled(true);
@@ -1295,9 +1278,9 @@ void CellToolBase::Private::createPopupMenuActions()
 
 bool CellToolBase::Private::testListChoose(Selection *selection) const
 {
-    const Sheet *const sheet = selection->activeSheet();
+    Sheet *sheet = selection->activeSheet();
     const Cell cursorCell(sheet, selection->cursor());
-    const CellStorage *const storage = sheet->cellStorage();
+    const CellStorage *const storage = sheet->fullCellStorage();
 
     const Region::ConstIterator end(selection->constEnd());
     for (Region::ConstIterator it(selection->constBegin()); it != end; ++it) {

@@ -16,9 +16,10 @@
 
 #include <KoInteractionTool.h>
 
-#include <sheets/Cell.h>
-#include "sheets_common_export.h"
+#include "sheets_ui_export.h"
 #include "Selection.h"
+#include "core/Cell.h"
+#include "core/ApplicationSettings.h"
 
 class KoColor;
 
@@ -26,14 +27,19 @@ namespace Calligra
 {
 namespace Sheets
 {
+
+class Cell;
+class Region;
+class Sheet;
 class ExternalEditor;
+class Selection;
 class SheetView;
 class CellEditorBase;
 
 /**
  * Abstract tool providing actions acting on cell ranges.
  */
-class CALLIGRA_SHEETS_COMMON_EXPORT CellToolBase : public KoInteractionTool
+class CALLIGRA_SHEETS_UI_EXPORT CellToolBase : public KoInteractionTool
 {
     Q_OBJECT
 

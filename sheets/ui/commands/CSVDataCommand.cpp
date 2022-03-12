@@ -6,13 +6,13 @@
 
 #include "CSVDataCommand.h"
 
-#include <klocale.h>
+// #include <klocale.h>
 
-#include "CalculationSettings.h"
-#include "Map.h"
-#include "Sheet.h"
-#include "Value.h"
-#include "ValueConverter.h"
+// #include "CalculationSettings.h"
+// #include "Map.h"
+// #include "Sheet.h"
+// #include "Value.h"
+// #include "ValueConverter.h"
 
 using namespace Calligra::Sheets;
 

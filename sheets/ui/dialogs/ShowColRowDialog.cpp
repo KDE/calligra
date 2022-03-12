@@ -11,26 +11,26 @@
 #include "ShowColRowDialog.h"
 
 // Qt
-#include <QLabel>
-#include <QVBoxLayout>
-#include <QListWidget>
+// #include <QLabel>
+// #include <QVBoxLayout>
+// #include <QListWidget>
 
 // KF5
-#include <KLocalizedString>
+// #include <KLocalizedString>
 
 // Sheets
-#include "calligra_sheets_limits.h"
-#include "Region.h"
-#include "RowColumnFormat.h"
-#include "RowFormatStorage.h"
-#include "ui/Selection.h"
-#include "Sheet.h"
+// #include "calligra_sheets_limits.h"
+// #include "Region.h"
+// #include "RowColumnFormat.h"
+// #include "RowFormatStorage.h"
+// #include "ui/Selection.h"
+// #include "Sheet.h"
 
 // commands
-#include "commands/RowColumnManipulators.h"
+// #include "commands/RowColumnManipulators.h"
 
 // Other
-#include <algorithm>
+// #include <algorithm>
 
 using namespace Calligra::Sheets;
 

@@ -32,6 +32,7 @@
 #include "RowFormatStorage.h"
 #include "ShapeApplicationData.h"
 #include "SheetModel.h"
+#include "SheetPrint.h"
 #include "DataFilter.h"
 
 
@@ -86,6 +87,7 @@ public:
 
     HeaderFooter *headerFooter;
     PrintSettings* printSettings;
+    SheetPrint* sheetPrint;
 
     // Indicates whether the sheet should paint the page breaks.
     // Doing so costs some time, so by default it should be turned off.
@@ -135,6 +137,7 @@ Sheet::Sheet(Map* map, const QString &sheetName)
     d->hideZero = false;
 
     d->printSettings = new PrintSettings();
+    d->sheetPrint = new SheetPrint(this);
     d->headerFooter = new HeaderFooter(this);
 
     // document size changes always trigger a visible size change
@@ -193,6 +196,7 @@ Sheet::Sheet(const Sheet &other)
 #endif // CALLIGRA_SHEETS_WIP_COPY_SHEET_(SHAPES)
 
     d->printSettings = other.d->printSettings;
+    d->sheetPrint = other.d->sheetPrint;
 
     d->showPageOutline = other.d->showPageOutline;
     d->documentSize = other.d->documentSize;
@@ -213,6 +217,7 @@ Sheet::~Sheet()
 
     delete d->model;
     delete d->printSettings;
+    delete d->sheetPrint;
     delete d->headerFooter;
     qDeleteAll(d->shapes);
     delete d;
@@ -386,9 +391,15 @@ PrintSettings* Sheet::printSettings() const
     return d->printSettings;
 }
 
+SheetPrint* Sheet::print() const
+{
+    return d->sheetPrint;
+}
+
 void Sheet::setPrintSettings(const PrintSettings &settings, bool forcePaint)
 {
     *(d->printSettings) = settings;
+    d->sheetPrint->setSettings(settings, forcePaint);
     // Repaint, if page borders are shown and this is the active sheet.
     if (isShowPageOutline() || forcePaint) {
         // Just repaint everything visible; no need to invalidate the visual cache.
@@ -772,6 +783,10 @@ const ColFormatStorage* Sheet::columnFormats() const
     return &d->columns;
 }
 
+bool Sheet::rowIsHidden(int row) const
+{
+    return rowFormats()->isHidden(row);
+}
 
 void Sheet::showStatusMessage(const QString &message, int timeout) const
 {

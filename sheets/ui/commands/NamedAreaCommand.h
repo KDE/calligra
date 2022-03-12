@@ -8,7 +8,6 @@
 #define CALLIGRA_SHEETS_NAMED_AREA_COMMAND
 
 #include "AbstractRegionCommand.h"
-#include "Region.h"
 
 namespace Calligra
 {

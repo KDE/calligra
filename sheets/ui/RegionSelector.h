@@ -11,7 +11,7 @@
 
 #include <QWidget>
 
-#include "sheets_common_export.h"
+#include "sheets_ui_export.h"
 
 class KTextEdit;
 
@@ -29,7 +29,7 @@ class Selection;
  * A minimizable line edit for choosing cell regions.
  * \author Stefan Nikolaus <stefan.nikolaus@kdemail.net>
  */
-class CALLIGRA_SHEETS_COMMON_EXPORT RegionSelector : public QWidget
+class CALLIGRA_SHEETS_UI_EXPORT RegionSelector : public QWidget
 {
     Q_OBJECT
 

@@ -11,19 +11,19 @@
 // Local
 #include "AddNamedAreaDialog.h"
 
-#include <QLabel>
-#include <QVBoxLayout>
+// #include <QLabel>
+// #include <QVBoxLayout>
 
-#include <klineedit.h>
-#include <kmessagebox.h>
+// #include <klineedit.h>
+// #include <kmessagebox.h>
 
-#include "Localization.h"
-#include "Map.h"
-#include "NamedAreaManager.h"
-#include "ui/Selection.h"
-#include "Sheet.h"
+// #include "Localization.h"
+// #include "Map.h"
+// #include "NamedAreaManager.h"
+// #include "ui/Selection.h"
+// #include "Sheet.h"
 
-#include "commands/NamedAreaCommand.h"
+// #include "commands/NamedAreaCommand.h"
 
 using namespace Calligra::Sheets;
 

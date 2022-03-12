@@ -7,10 +7,12 @@
 #ifndef CALLIGRA_SHEETS_BORDER_COLOR_COMMAND
 #define CALLIGRA_SHEETS_BORDER_COLOR_COMMAND
 
-#include <QPair>
-#include <QColor>
 #include "AbstractRegionCommand.h"
-#include "Style.h"
+
+// #include <QPair>
+// #include <QColor>
+
+#include "core/Style.h"
 
 namespace Calligra
 {

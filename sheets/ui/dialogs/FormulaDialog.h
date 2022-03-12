@@ -14,16 +14,15 @@
 #ifndef CALLIGRA_SHEETS_FORMULA_DIALOG
 #define CALLIGRA_SHEETS_FORMULA_DIALOG
 
-#include <QCloseEvent>
-#include <QLabel>
-#include <QEvent>
-#include <QListView>
-
 #include <kcompletion.h>
 #include <KoDialog.h>
 
+#include <QModelIndex>
+
+class QCloseEvent;
 class QUrl;
 class QLabel;
+class QListView;
 class QPushButton;
 class QTabWidget;
 class QTextBrowser;

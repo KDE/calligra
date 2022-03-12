@@ -6,14 +6,14 @@
 
 // Local
 #include "pivotfilters.h"
-#include "ui_pivotfilters.h"
-#include "pivotmain.h"
+// #include "ui_pivotfilters.h"
+// #include "pivotmain.h"
 
-#include<QtGui>
-#include<QString>
+// #include<QtGui>
+// #include<QString>
 
-#include <sheets/Sheet.h>
-#include <sheets/ui/Selection.h>
+// #include <sheets/Sheet.h>
+// #include <sheets/ui/Selection.h>
 
 using namespace Calligra::Sheets;
 

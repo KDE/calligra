@@ -8,11 +8,11 @@
 #include "ValidityCommand.h"
 
 
-#include <KLocalizedString>
+// #include <KLocalizedString>
 
-#include "CellStorage.h"
-#include "Sheet.h"
-#include "ValidityStorage.h"
+// #include "CellStorage.h"
+// #include "Sheet.h"
+// #include "ValidityStorage.h"
 
 using namespace Calligra::Sheets;
 

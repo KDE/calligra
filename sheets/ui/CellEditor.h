@@ -11,15 +11,14 @@
 
 #include <KCompletion>
 #include <ktextedit.h>
-
-#include "sheets_common_export.h"
 #include "CellEditorBase.h"
 
-#include <QCompleter>
-#include <QAbstractItemModel>
-#include <QThread>
 #include <QHash>
+
 class KoViewConverter;
+
+class QAbstractItemModel;
+class QCompleter;
 
 namespace Calligra
 {
@@ -91,7 +90,6 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void  slotTextChanged();
-    void  slotCompletionModeChanged(KCompletion::CompletionMode _completion);
     void  slotCursorPositionChanged();
     void insertCompletion(const QString &completion);
 

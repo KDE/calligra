@@ -47,14 +47,6 @@ ApplicationSettings::~ApplicationSettings()
     delete d;
 }
 
-void ApplicationSettings::load()
-{
-}
-
-void ApplicationSettings::save() const
-{
-}
-
 void ApplicationSettings::setShowVerticalScrollBar(bool show)
 {
     d->verticalScrollBar = show;

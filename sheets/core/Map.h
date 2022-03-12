@@ -28,6 +28,7 @@ namespace Calligra
 {
 namespace Sheets
 {
+class ApplicationSettings;
 class BindingManager;
 class ColFormat;
 class DocBase;
@@ -75,6 +76,11 @@ public:
     // KoDataCenterBase interface
     bool completeLoading(KoStore *store) override;
     bool completeSaving(KoStore *store, KoXmlWriter *manifestWriter, KoShapeSavingContext * context) override;
+
+    /**
+     * \return a pointer to the application settings
+     */
+    ApplicationSettings* applicationSettings() const;
 
     /**
      * \return a pointer to the binding manager

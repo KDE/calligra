@@ -12,28 +12,28 @@
 
 #include "GoalSeekDialog.h"
 
-#include <ktextedit.h>
-#include <klocale.h>
+// #include <ktextedit.h>
+// #include <klocale.h>
 
-#include "CalculationSettings.h"
-#include "Cell.h"
-#include "ui/RegionSelector.h"
-#include "Formula.h"
-#include "Map.h"
-#include "ui/Selection.h"
-#include "Sheet.h"
-#include "Util.h"
+// #include "CalculationSettings.h"
+// #include "Cell.h"
+// #include "ui/RegionSelector.h"
+// #include "Formula.h"
+// #include "Map.h"
+// #include "ui/Selection.h"
+// #include "Sheet.h"
+// #include "Util.h"
 
 // commands
-#include "commands/DataManipulators.h"
+// #include "commands/DataManipulators.h"
 
-#include "ui_GoalSeekWidget.h"
+// #include "ui_GoalSeekWidget.h"
 
-#include <kmessagebox.h>
+// #include <kmessagebox.h>
 
-#include <QCloseEvent>
+// #include <QCloseEvent>
 
-#include <math.h>
+// #include <math.h>
 
 using namespace Calligra::Sheets;
 

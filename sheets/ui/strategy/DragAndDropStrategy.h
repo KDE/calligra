@@ -7,8 +7,8 @@
 #ifndef CALLIGRA_SHEETS_DRAG_AND_DROP_STRATEGY
 #define CALLIGRA_SHEETS_DRAG_AND_DROP_STRATEGY
 
-#include "AbstractSelectionStrategy.h"
-#include "sheets_common_export.h"
+#include "../AbstractSelectionStrategy.h"
+#include "../sheets_ui_export.h"
 
 namespace Calligra
 {
@@ -21,7 +21,7 @@ namespace Sheets
  * The drag starts, if the mouse leaves the cell, where the mouse press occurred.
  * If this cell is not left, the cell becomes selected.
  */
-class CALLIGRA_SHEETS_COMMON_EXPORT DragAndDropStrategy : public AbstractSelectionStrategy
+class CALLIGRA_SHEETS_UI_EXPORT DragAndDropStrategy : public AbstractSelectionStrategy
 {
 public:
     /**

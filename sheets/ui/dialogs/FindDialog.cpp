@@ -6,14 +6,14 @@
 
 #include "FindDialog.h"
 
-#include <QCheckBox>
-#include <QHBoxLayout>
-#include <QLabel>
-#include <QPushButton>
-#include <QVBoxLayout>
+// #include <QCheckBox>
+// #include <QHBoxLayout>
+// #include <QLabel>
+// #include <QPushButton>
+// #include <QVBoxLayout>
 
-#include <kcombobox.h>
-#include <KLocalizedString>
+// #include <kcombobox.h>
+// #include <KLocalizedString>
 
 using namespace Calligra::Sheets;
 

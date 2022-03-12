@@ -12,19 +12,19 @@
 // Local
 #include "ShowDialog.h"
 
-#include <QLabel>
-#include <QListWidget>
-#include <QVBoxLayout>
+// #include <QLabel>
+// #include <QListWidget>
+// #include <QVBoxLayout>
 
-#include <KLocalizedString>
+// #include <KLocalizedString>
 
-#include "Damages.h"
-#include "Map.h"
-#include "ui/Selection.h"
-#include "Sheet.h"
+// #include "Damages.h"
+// #include "Map.h"
+// #include "ui/Selection.h"
+// #include "Sheet.h"
 
 // commands
-#include "commands/SheetCommands.h"
+// #include "commands/SheetCommands.h"
 
 using namespace Calligra::Sheets;
 

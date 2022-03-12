@@ -6,26 +6,26 @@
 
 #include "FilterPopup.h"
 
-#include <QButtonGroup>
-#include <QCheckBox>
-#include <QHash>
-#include <QList>
-#include <QScrollArea>
-#include <QVBoxLayout>
+// #include <QButtonGroup>
+// #include <QCheckBox>
+// #include <QHash>
+// #include <QList>
+// #include <QScrollArea>
+// #include <QVBoxLayout>
 
-#include <KLocalizedString>
+// #include <KLocalizedString>
 
-#include "CellStorage.h"
-#include "Database.h"
-#include "Filter.h"
-#include "Map.h"
-#include "RowColumnFormat.h"
-#include "Sheet.h"
-#include "ValueConverter.h"
+// #include "CellStorage.h"
+// #include "Database.h"
+// #include "Filter.h"
+// #include "Map.h"
+// #include "RowColumnFormat.h"
+// #include "Sheet.h"
+// #include "ValueConverter.h"
 
-#include "commands/ApplyFilterCommand.h"
+// #include "commands/ApplyFilterCommand.h"
 
-#include <algorithm>
+// #include <algorithm>
 
 using namespace Calligra::Sheets;
 

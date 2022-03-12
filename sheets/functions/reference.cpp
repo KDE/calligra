@@ -6,18 +6,16 @@
 // built-in reference functions
 #include "ReferenceModule.h"
 
+#include "engine/CalculationSettings.h"
+#include "engine/CellBase.h"
+#include "engine/CellBaseStorage.h"
+#include "engine/Formula.h"
 #include "engine/Function.h"
+#include "engine/MapBase.h"
+#include "engine/Region.h"
+#include "engine/SheetBase.h"
 #include "engine/ValueCalc.h"
 #include "engine/ValueConverter.h"
-// #include "Cell.h"
-// #include "Region.h"
-// #include "Sheet.h"
-// #include "Value.h"
-// #include "Map.h"
-// #include "CalculationSettings.h"
-// #include "CellStorage.h"
-// #include "Formula.h"
-// #include "FunctionModuleRegistry.h"
 
 using namespace Calligra::Sheets;
 
@@ -191,7 +189,7 @@ Value func_address(valVector args, ValueCalc *calc, FuncExtra *)
         if (abs)
             result += '$';
 
-        result += Cell::columnName(col);
+        result += CellBase::columnName(col);
 
         abs = false;
         if (absNum == 1 || absNum == 2)
@@ -232,7 +230,8 @@ Value func_areas(valVector args, ValueCalc *calc, FuncExtra *e)
     QString ref;
     for (int i = 1; i < l; ++i) {
         if (s[i] == ',' || s[i] == ')') {
-            if (!Calligra::Sheets::Region(ref).isValid())
+            Calligra::Sheets::Region region = e->sheet->map()->regionFromName (ref, e->sheet);
+            if (!region.isValid())
                 return Value::errorVALUE();
             else {
                 ++num;
@@ -271,9 +270,9 @@ Value func_cell(valVector args, ValueCalc *calc, FuncExtra *e)
         QString s;
         if (region.firstSheet() && region.firstSheet() != e->sheet)
             s += '\'' + region.firstSheet()->sheetName() + "'!";
-        s += '$' + Cell::columnName(region.firstRange().x()) + '$' + QString::number(region.firstRange().y());
+        s += '$' + CellBase::columnName(region.firstRange().x()) + '$' + QString::number(region.firstRange().y());
         if (region.firstRange() != region.lastRange())
-            s += ":$" + Cell::columnName(region.lastRange().x()) + '$' + QString::number(region.lastRange().y());
+            s += ":$" + CellBase::columnName(region.lastRange().x()) + '$' + QString::number(region.lastRange().y());
         return Value(s);
     }
     if (type == "filename") {
@@ -404,11 +403,11 @@ Value func_indirect(valVector args, ValueCalc *calc, FuncExtra *e)
         ref = ref;
     }
 
-    const Calligra::Sheets::Region region(ref, e->sheet->map(), e->sheet);
+    const Calligra::Sheets::Region region = e->sheet->map()->regionFromName (ref, e->sheet);
     if (!region.isValid() || !region.isSingular())
         return Value::errorVALUE();
 
-    const Cell cell(region.firstSheet(), region.firstRange().topLeft());
+    const CellBase cell(region.firstSheet(), region.firstRange().topLeft());
     if (!cell.isNull())
         return cell.value();
     return Value::errorVALUE();
@@ -520,7 +519,7 @@ Value func_multiple_operations(valVector args, ValueCalc *, FuncExtra *e)
             return Value::errorVALUE();
     }
 
-    CellStorage *s = e->sheet->cellStorage();
+    CellBaseStorage *s = e->sheet->cellStorage();
 
     // get formula to evaluate
     int formulaCol = e->ranges[0].col1;
@@ -530,9 +529,9 @@ Value func_multiple_operations(valVector args, ValueCalc *, FuncExtra *e)
         return Value::errorVALUE();
 
     CellIndirection cellIndirections;
-    cellIndirections.insert(Cell(e->sheet, e->ranges[1].col1, e->ranges[1].row1), Cell(e->sheet, e->ranges[2].col1, e->ranges[2].row1));
+    cellIndirections.insert(CellBase(e->sheet, e->ranges[1].col1, e->ranges[1].row1), CellBase(e->sheet, e->ranges[2].col1, e->ranges[2].row1));
     if (args.count() > 3) {
-        cellIndirections.insert(Cell(e->sheet, e->ranges[3].col1, e->ranges[3].row1), Cell(e->sheet, e->ranges[4].col1, e->ranges[4].row1));
+        cellIndirections.insert(CellBase(e->sheet, e->ranges[3].col1, e->ranges[3].row1), CellBase(e->sheet, e->ranges[4].col1, e->ranges[4].row1));
     }
 
     return formula.eval(cellIndirections);
@@ -563,7 +562,7 @@ Value func_offset(valVector args, ValueCalc *calc, FuncExtra *e)
         return Value::errorVALUE();
 
     QPoint p = region.firstRange().topLeft() + QPoint(colPlus, rowPlus);
-    const Cell cell(region.firstSheet(), p);
+    const CellBase cell(region.firstSheet(), p);
     if (!cell.isNull())
         return cell.value();
 
@@ -601,7 +600,7 @@ Value func_rows(valVector, ValueCalc *, FuncExtra *e)
 //
 Value func_sheet(valVector /*args*/, ValueCalc *, FuncExtra *e)
 {
-    Sheet *sheet = e->sheet;
+    SheetBase *sheet = e->sheet;
     if (!e->regions.isEmpty()) {
         const Calligra::Sheets::Region &region = e->regions[0];
         if (region.isValid())
@@ -618,7 +617,7 @@ Value func_sheets(valVector /*args*/, ValueCalc *, FuncExtra *e)
     if (!e->regions.isEmpty()) {
         const Calligra::Sheets::Region &region = e->regions[0];
         if (region.isValid()) {
-            QList<Calligra::Sheets::Sheet*> sheets;
+            QList<Calligra::Sheets::SheetBase *> sheets;
             Calligra::Sheets::Region::ConstIterator it(region.constBegin()), end(region.constEnd());
             for(; it != end; ++it)
                 if (!sheets.contains((*it)->sheet()))

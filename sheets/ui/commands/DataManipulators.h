@@ -7,10 +7,7 @@
 #define CALLIGRA_SHEETS_DATA_MANIPULATORS
 
 #include "AbstractRegionCommand.h"
-#include "Style.h"
-#include "Value.h"
-
-#include "sheets_common_export.h"
+#include "engine/Value.h"
 
 
 namespace Calligra
@@ -18,11 +15,13 @@ namespace Calligra
 namespace Sheets
 {
 
+class Style;
+
 /**
  * \ingroup Commands
  * \brief Abstract command for setting values.
  */
-class CALLIGRA_SHEETS_COMMON_EXPORT AbstractDataManipulator : public AbstractRegionCommand
+class CALLIGRA_SHEETS_UI_EXPORT AbstractDataManipulator : public AbstractRegionCommand
 {
 public:
     explicit AbstractDataManipulator(KUndo2Command *parent = 0);

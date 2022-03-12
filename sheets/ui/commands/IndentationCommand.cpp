@@ -7,14 +7,14 @@
 // Local
 #include "IndentationCommand.h"
 
-#include <KLocalizedString>
+// #include <KLocalizedString>
 
-#include "ApplicationSettings.h"
-#include "Cell.h"
-#include "CellStorage.h"
-#include "Map.h"
-#include "Sheet.h"
-#include "Style.h"
+// #include "ApplicationSettings.h"
+// #include "Cell.h"
+// #include "CellStorage.h"
+// #include "Map.h"
+// #include "Sheet.h"
+// #include "Style.h"
 
 using namespace Calligra::Sheets;
 

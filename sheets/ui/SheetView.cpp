@@ -7,28 +7,28 @@
 // Local
 #include "SheetView.h"
 
-#include <QCache>
-#include <QRect>
-#include <QPainter>
-#include <QPainterPath>
+// #include <QCache>
+// #include <QRect>
+// #include <QPainter>
+// #include <QPainterPath>
 #ifdef CALLIGRA_SHEETS_MT
-#include <QMutex>
-#include <QMutexLocker>
-#include <QReadWriteLock>
-#include <QReadLocker>
-#include <QWriteLocker>
+// #include <QMutex>
+// #include <QMutexLocker>
+// #include <QReadWriteLock>
+// #include <QReadLocker>
+// #include <QWriteLocker>
 #endif
 
-#include <KoViewConverter.h>
+// #include <KoViewConverter.h>
 
-#include "CellView.h"
-#include "calligra_sheets_limits.h"
-#include "PointStorage.h"
-#include "RectStorage.h"
-#include "Region.h"
-#include "RowColumnFormat.h"
-#include "RowFormatStorage.h"
-#include "Sheet.h"
+// #include "CellView.h"
+// #include "calligra_sheets_limits.h"
+// #include "PointStorage.h"
+// #include "RectStorage.h"
+// #include "Region.h"
+// #include "RowColumnFormat.h"
+// #include "RowFormatStorage.h"
+// #include "Sheet.h"
 
 using namespace Calligra::Sheets;
 
@@ -52,7 +52,7 @@ public:
         : cacheMutex(QMutex::Recursive)
 #endif
     {}
-    const Sheet* sheet;
+    Sheet* sheet;
     const KoViewConverter* viewConverter;
     QRect visibleRect;
     QCache<QPoint, CellView> cache;
@@ -167,7 +167,7 @@ const CellView& SheetView::Private::cellViewToProcess(Cell& cell, QPointF& coord
 }
 
 
-SheetView::SheetView(const Sheet* sheet)
+SheetView::SheetView(Sheet* sheet)
         : QObject(const_cast<Sheet*>(sheet))
         , d(new Private)
 {
@@ -190,7 +190,7 @@ SheetView::~SheetView()
     delete d;
 }
 
-const Sheet* SheetView::sheet() const
+Sheet* SheetView::sheet() const
 {
     return d->sheet;
 }

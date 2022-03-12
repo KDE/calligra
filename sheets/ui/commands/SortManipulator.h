@@ -5,7 +5,6 @@
 #ifndef CALLIGRA_SHEETS_SORT_MANIPULATOR
 #define CALLIGRA_SHEETS_SORT_MANIPULATOR
 
-#include "CellStorage.h"
 #include "DataManipulators.h"
 
 namespace Calligra
@@ -18,7 +17,7 @@ class CellStorage;
  * \ingroup Commands
  * \brief Sorts the values in a cell range.
  */
-class CALLIGRA_SHEETS_COMMON_EXPORT SortManipulator : public AbstractDFManipulator
+class CALLIGRA_SHEETS_UI_EXPORT SortManipulator : public AbstractDFManipulator
 {
 public:
     SortManipulator();

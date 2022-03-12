@@ -7,8 +7,8 @@
 #ifndef CALLIGRA_SHEETS_AUTOFILL_STRATEGY
 #define CALLIGRA_SHEETS_AUTOFILL_STRATEGY
 
-#include "AbstractSelectionStrategy.h"
-#include "sheets_common_export.h"
+#include "../AbstractSelectionStrategy.h"
+#include "../sheets_ui_export.h"
 
 namespace Calligra
 {
@@ -21,7 +21,7 @@ namespace Sheets
  * Created, when the user presses the left mouse button on the selection handle.
  * Nothing happens, if the selection did not change.
  */
-class CALLIGRA_SHEETS_COMMON_EXPORT AutoFillStrategy : public AbstractSelectionStrategy
+class CALLIGRA_SHEETS_UI_EXPORT AutoFillStrategy : public AbstractSelectionStrategy
 {
 public:
     /**

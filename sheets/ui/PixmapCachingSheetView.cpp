@@ -6,19 +6,19 @@
 
 #include "PixmapCachingSheetView.h"
 
-#include "CellView.h"
-#include "SheetsDebug.h"
+// #include "CellView.h"
+// #include "SheetsDebug.h"
 
-#include "../Sheet.h"
-#include "../part/CanvasBase.h"
+// #include "../Sheet.h"
+// #include "../part/CanvasBase.h"
 
-#include <QCache>
-#include <QPainter>
+// #include <QCache>
+// #include <QPainter>
 
 
 #ifdef CALLIGRA_SHEETS_MT
-#include <ThreadWeaver/Job>
-#include <ThreadWeaver/Weaver>
+// #include <ThreadWeaver/Job>
+// #include <ThreadWeaver/Weaver>
 #endif
 
 using namespace Calligra::Sheets;

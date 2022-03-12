@@ -12,18 +12,18 @@
 // Local
 #include "GotoDialog.h"
 
-#include <QLabel>
-#include <QVBoxLayout>
+// #include <QLabel>
+// #include <QVBoxLayout>
 
-#include <kcombobox.h>
+// #include <kcombobox.h>
 
-#include "Cell.h"
-#include "Localization.h"
-#include "Map.h"
-#include "NamedAreaManager.h"
-#include "ui/Selection.h"
-#include "Sheet.h"
-#include "Util.h"
+// #include "Cell.h"
+// #include "Localization.h"
+// #include "Map.h"
+// #include "NamedAreaManager.h"
+// #include "ui/Selection.h"
+// #include "Sheet.h"
+// #include "Util.h"
 
 using namespace Calligra::Sheets;
 

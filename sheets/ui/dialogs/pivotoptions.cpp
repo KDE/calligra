@@ -9,13 +9,13 @@
 #include "ui_pivotoptions.h"
 
 
-#include<QtGui>
-#include<QListWidgetItem>
-#include<QListWidget>
-#include<QObject>
+// #include<QtGui>
+// #include<QListWidgetItem>
+// #include<QListWidget>
+// #include<QObject>
 
-#include <sheets/Sheet.h>
-#include <sheets/ui/Selection.h>
+// #include <sheets/Sheet.h>
+// #include <sheets/ui/Selection.h>
 
 using namespace Calligra::Sheets;
 

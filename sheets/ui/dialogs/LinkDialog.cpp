@@ -11,27 +11,27 @@
 
 #include "LinkDialog.h"
 
-#include "Cell.h"
-#include "Map.h"
-#include "NamedAreaManager.h"
-#include "ui/Selection.h"
-#include "Sheet.h"
+// #include "Cell.h"
+// #include "Map.h"
+// #include "NamedAreaManager.h"
+// #include "ui/Selection.h"
+// #include "Sheet.h"
 
-#include <KoIcon.h>
+// #include <KoIcon.h>
 
-#include <QLabel>
-#include <QUrl>
-#include <QUrlQuery>
-#include <QVBoxLayout>
+// #include <QLabel>
+// #include <QUrl>
+// #include <QUrlQuery>
+// #include <QVBoxLayout>
 
-#include <kcombobox.h>
-#include <kdesktopfile.h>
-#include <klineedit.h>
-#include <kmessagebox.h>
-#include <KLocalizedString>
-#include <krecentdocument.h>
-#include <kurlrequester.h>
-#include <kurlcompletion.h>
+// #include <kcombobox.h>
+// #include <kdesktopfile.h>
+// #include <klineedit.h>
+// #include <kmessagebox.h>
+// #include <KLocalizedString>
+// #include <krecentdocument.h>
+// #include <kurlrequester.h>
+// #include <kurlcompletion.h>
 
 using namespace Calligra::Sheets;
 

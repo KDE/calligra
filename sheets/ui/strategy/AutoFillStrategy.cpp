@@ -6,8 +6,8 @@
 
 #include "AutoFillStrategy.h"
 
-#include "commands/AutoFillCommand.h"
-#include "Selection.h"
+#include "../commands/AutoFillCommand.h"
+#include "../Selection.h"
 
 using namespace Calligra::Sheets;
 

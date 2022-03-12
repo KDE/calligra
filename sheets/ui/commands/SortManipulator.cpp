@@ -4,12 +4,12 @@
 
 #include "SortManipulator.h"
 
-#include "Map.h"
-#include "Sheet.h"
-#include "ValueCalc.h"
-#include "ValueConverter.h"
+// #include "Map.h"
+// #include "Sheet.h"
+// #include "ValueCalc.h"
+// #include "ValueConverter.h"
 
-#include <KLocalizedString>
+// #include <KLocalizedString>
 
 using namespace Calligra::Sheets;
 

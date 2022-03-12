@@ -15,34 +15,32 @@
 #include "CellToolBase_p.h"
 
 // Sheets
+#include "engine/CalculationSettings.h"
+#include "engine/Damages.h"
+#include "engine/Localization.h"
+#include "engine/ValueConverter.h"
+
+#include "core/CellStorage.h"
+#include "core/ColFormatStorage.h"
+#include "core/Database.h"
+#include "core/Map.h"
+#include "core/RowFormatStorage.h"
+#include "core/Sheet.h"
+#include "core/StyleManager.h"
+#include "core/odf/SheetsOdf.h"
+
 #include "ActionOptionWidget.h"
-#include "ApplicationSettings.h"
-#include "AutoFillStrategy.h"
-#include "CalculationSettings.h"
-#include "Cell.h"
 #include "CellEditor.h"
 #include "CellView.h"
-#include "Damages.h"
-#include "database/Database.h"
-#include "database/FilterPopup.h"
-#include "DragAndDropStrategy.h"
 #include "ExternalEditor.h"
-#include "HyperlinkStrategy.h"
-#include "tests/inspector.h"
-#include "LocationComboBox.h"
-#include "Map.h"
-#include "MergeStrategy.h"
-#include "NamedAreaManager.h"
-#include "PasteStrategy.h"
-#include "RowFormatStorage.h"
-#include "SelectionStrategy.h"
-#include "Sheet.h"
+#include "FilterPopup.h"
+#include "inspector.h"
 #include "SheetView.h"
-#include "StyleManager.h"
-#include "CellStorage.h"
-#include "Value.h"
-#include "ValueConverter.h"
-#include "odf/SheetsOdf.h"
+// #include "ApplicationSettings.h"
+// #include "Cell.h"
+// #include "LocationComboBox.h"
+// #include "NamedAreaManager.h"
+// #include "Value.h"
 
 // commands
 #include "commands/AutoFilterCommand.h"
@@ -93,12 +91,20 @@
 #include "dialogs/ValidityDialog.h"
 #include "dialogs/pivot.h"
 
+// strategies
+#include "strategy/AutoFillStrategy.h"
+#include "strategy/DragAndDropStrategy.h"
+#include "strategy/HyperlinkStrategy.h"
+#include "strategy/MergeStrategy.h"
+#include "strategy/PasteStrategy.h"
+#include "strategy/SelectionStrategy.h"
+
 // Calligra
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
 #include <KoColorPopupAction.h>
 #include <KoPointerEvent.h>
-#include <KoSelection.h>
+// #include <KoSelection.h>
 #include <KoShape.h>
 #include <KoViewConverter.h>
 #include <KoColor.h>
@@ -108,7 +114,7 @@
 #include <kfind.h>
 #include <kfontaction.h>
 #include <kfontsizeaction.h>
-#include <klocale.h>
+// #include <klocale.h>
 #include <kmessagebox.h>
 #include <kreplace.h>
 #include <kstandardaction.h>
@@ -116,18 +122,22 @@
 
 // Qt
 #include <QStandardPaths>
+#include <QClipboard>
 #include <QInputDialog>
 #include <QBuffer>
-#include <QHash>
+#include <QMimeData>
+// #include <QHash>
 #include <QMenu>
 #include <QPainter>
+// TODO - copy/paste should be done differently, not via these weird XML snippets
+#include <QDomDocument>
 #ifndef QT_NO_SQL
-#include <QSqlDatabase>
+// #include <QSqlDatabase>
 #endif
 
 #ifndef NDEBUG
-#include <QTableView>
-#include "SheetModel.h"
+// #include <QTableView>
+// #include "SheetModel.h"
 #endif
 
 using namespace Calligra::Sheets;
@@ -1093,7 +1103,7 @@ void CellToolBase::activate(ToolActivation toolActivation, const QSet<KoShape*> 
     selection()->update();
     populateWordCollection();
     // Initialize cell style selection action.
-    const StyleManager* styleManager = selection()->activeSheet()->map()->styleManager();
+    const StyleManager* styleManager = selection()->activeSheet()->fullMap()->styleManager();
     static_cast<KSelectAction*>(this->action("setStyle"))->setItems(styleManager->styleNames());
 
     // Establish connections.
@@ -1288,14 +1298,12 @@ void CellToolBase::selectionChanged(const Region& region)
     bool rowBreakEnabled = false;
     const Region::ConstIterator end(selection()->constEnd());
     for (Region::ConstIterator it = selection()->constBegin(); it != end; ++it) {
-        const Sheet *const sheet = (*it)->sheet();
-        if (!sheet) {
-            continue;
-        }
+        const Sheet *const sheet = dynamic_cast<Sheet *>((*it)->sheet());
+        if (!sheet) continue;
         const QRect range = (*it)->rect();
         const int column = range.left();
         const int row = range.top();
-        columnBreakChecked |= sheet->columnFormat(column)->hasPageBreak();
+        columnBreakChecked |= sheet->columnFormats()->hasPageBreak(column);
         columnBreakEnabled |= (column != 1);
         rowBreakChecked |= sheet->rowFormats()->hasPageBreak(row);
         rowBreakEnabled |= (row != 1);
@@ -1475,8 +1483,7 @@ bool CellToolBase::createEditor(bool clear, bool focus, bool captureArrows)
 
 void CellToolBase::populateWordCollection()
 {
-  const CellStorage* cellstore=selection()->activeSheet()->cellStorage();
-  ValueConverter *conv=0,*conv2=0;
+  const CellStorage* cellstore=selection()->activeSheet()->fullCellStorage();
   int lastrow=cellstore->rows();
   int lastcolumn=cellstore->columns();
   if( lastrow < 2000 && lastcolumn < 20) {
@@ -1484,8 +1491,7 @@ void CellToolBase::populateWordCollection()
     for (int i=1; i<=lastrow ; i++) {
       Value val=Cell( selection()->activeSheet(), j, i).value();
       if(val.isString()) {
-	QString value=conv->toString( conv2->asString(val) );
-	
+          QString value = val.asString();
 	if(!d->wordCollection.values(j).contains(value)){
 	    d->wordCollection.insertMulti(j, value);
 	  }
@@ -1601,11 +1607,6 @@ void CellToolBase::applyUserInput(const QString &userInput, bool expandMatrix)
 
     if (expandMatrix && selection()->isSingular())
         selection()->initialize(*command);
-
-    Cell cell = Cell(selection()->activeSheet(), selection()->marker());
-    if (cell.value().isString() && !text.isEmpty() && !text.at(0).isDigit() && !cell.isFormula()) {
-        selection()->activeSheet()->map()->addStringCompletion(text);
-    }
 }
 
 void CellToolBase::documentReadWriteToggled(bool readWrite)
@@ -1636,7 +1637,7 @@ void CellToolBase::setDefaultStyle()
 
 void CellToolBase::styleDialog()
 {
-    Map* const map = selection()->activeSheet()->map();
+    Map* const map = selection()->activeSheet()->fullMap();
     StyleManager* const styleManager = map->styleManager();
     QPointer<StyleManagerDialog> dialog = new StyleManagerDialog(canvas()->canvasWidget(), selection(), styleManager);
     dialog->exec();
@@ -1651,7 +1652,7 @@ void CellToolBase::styleDialog()
 void CellToolBase::setStyle(const QString& stylename)
 {
     debugSheets << "CellToolBase::setStyle(" << stylename << ")";
-    if (selection()->activeSheet()->map()->styleManager()->style(stylename)) {
+    if (selection()->activeSheet()->fullMap()->styleManager()->style(stylename)) {
         StyleCommand* command = new StyleCommand();
         command->setSheet(selection()->activeSheet());
         command->setParentName(stylename);
@@ -1683,7 +1684,7 @@ void CellToolBase::createStyleFromCell()
             continue;
         }
 
-        if (selection()->activeSheet()->map()->styleManager()->style(styleName) != 0) {
+        if (selection()->activeSheet()->fullMap()->styleManager()->style(styleName) != 0) {
             KMessageBox::sorry(canvas()->canvasWidget(), i18n("A style with this name already exists."));
             continue;
         }
@@ -1694,7 +1695,7 @@ void CellToolBase::createStyleFromCell()
     CustomStyle*  style = new CustomStyle(styleName);
     style->merge(cellStyle);
 
-    selection()->activeSheet()->map()->styleManager()->insertStyle(style);
+    selection()->activeSheet()->fullMap()->styleManager()->insertStyle(style);
     cell.setStyle(*style);
     QStringList functionList(static_cast<KSelectAction*>(action("setStyle"))->items());
     functionList.push_back(styleName);
@@ -2060,7 +2061,6 @@ void CellToolBase::currency(bool enable)
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Format Money"));
     command->setFormatType(enable ? Format::Money : Format::Generic);
-    command->setPrecision(enable ?  selection()->activeSheet()->map()->calculationSettings()->locale()->monetaryDecimalPlaces() : 0);
 
     command->add(*selection());
     command->execute(canvas());
@@ -2131,7 +2131,7 @@ void CellToolBase::mergeCells()
     if (selection()->activeSheet()->isProtected()) {
         return;
     }
-    if (selection()->activeSheet()->map()->isProtected()) {
+    if (selection()->activeSheet()->fullMap()->isProtected()) {
         return;
     }
     MergeCommand* const command = new MergeCommand();
@@ -2149,7 +2149,7 @@ void CellToolBase::mergeCellsHorizontal()
     if (selection()->activeSheet()->isProtected()) {
         return;
     }
-    if (selection()->activeSheet()->map()->isProtected()) {
+    if (selection()->activeSheet()->fullMap()->isProtected()) {
         return;
     }
     MergeCommand* const command = new MergeCommand();
@@ -2167,7 +2167,7 @@ void CellToolBase::mergeCellsVertical()
     if (selection()->activeSheet()->isProtected()) {
         return;
     }
-    if (selection()->activeSheet()->map()->isProtected()) {
+    if (selection()->activeSheet()->fullMap()->isProtected()) {
         return;
     }
     MergeCommand* const command = new MergeCommand();
@@ -2185,7 +2185,7 @@ void CellToolBase::dissociateCells()
     if (selection()->activeSheet()->isProtected()) {
         return;
     }
-    if (selection()->activeSheet()->map()->isProtected()) {
+    if (selection()->activeSheet()->fullMap()->isProtected()) {
         return;
     }
     MergeCommand* const command = new MergeCommand();
@@ -2266,12 +2266,11 @@ void CellToolBase::equalizeColumn()
         KMessageBox::error(canvas()->canvasWidget(), i18n("Area is too large."));
     else {
         const QRect range = selection()->lastRange();
-        const ColumnFormat* columnFormat = selection()->activeSheet()->columnFormat(range.left());
-        double size = columnFormat->width();
+        double size = selection()->activeSheet()->columnFormats()->colWidth(range.left());
         if (range.left() == range.right())
             return;
         for (int i = range.left() + 1; i <= range.right(); ++i)
-            size = qMax(selection()->activeSheet()->columnFormat(i)->width(), size);
+            size = qMax(selection()->activeSheet()->columnFormats()->colWidth(i), size);
 
         if (size != 0.0) {
             ResizeColumnManipulator* command = new ResizeColumnManipulator();
@@ -2776,7 +2775,7 @@ void CellToolBase::specialChar(QChar character, const QString& fontName)
     if (style.fontFamily() != fontName) {
         Style newStyle;
         newStyle.setFontFamily(fontName);
-        selection()->activeSheet()->cellStorage()->setStyle(Region(selection()->marker()), newStyle);
+        selection()->activeSheet()->fullCellStorage()->setStyle(Region(selection()->marker()), newStyle);
     }
     QKeyEvent keyEvent(QEvent::KeyPress, 0, Qt::NoModifier, QString(character));
     if (!editor()) {
@@ -3014,7 +3013,7 @@ void CellToolBase::copy() const
 
 bool CellToolBase::paste()
 {
-    if (!selection()->activeSheet()->map()->isReadWrite()) // don't paste into a read only document
+    if (!selection()->activeSheet()->fullMap()->isReadWrite()) // don't paste into a read only document
         return false;
 
     const QMimeData* mimeData = QApplication::clipboard()->mimeData(QClipboard::Clipboard);
@@ -3025,7 +3024,7 @@ bool CellToolBase::paste()
         if (arr.isEmpty())
             return false;
         QBuffer buffer(&arr);
-        Map *map = selection()->activeSheet()->map();
+        Map *map = selection()->activeSheet()->fullMap();
         if (!Odf::paste(buffer, map)) return false;
     }
 
@@ -3135,7 +3134,7 @@ void CellToolBase::initFindReplace()
 
     QRect region = (d->findOptions & KFind::SelectedText)
                    ? selection()->lastRange()
-                   : QRect(1, 1, currentSheet->cellStorage()->columns(), currentSheet->cellStorage()->rows()); // All cells
+                   : QRect(1, 1, currentSheet->fullCellStorage()->columns(), currentSheet->fullCellStorage()->rows()); // All cells
 
     int colStart = !bck ? region.left() : region.right();
     int colEnd = !bck ? region.right() : region.left();
@@ -3217,9 +3216,10 @@ void CellToolBase::findNext()
     }
     else if (!cell.isNull()) {
         // move to the cell
-        if (cell.sheet() != selection()->activeSheet())
-            selection()->emitVisibleSheetRequested(cell.sheet());
-        selection()->initialize (Region (cell.column(), cell.row(), cell.sheet()), cell.sheet());
+        Sheet *sheet = dynamic_cast<Sheet *>(cell.sheet());
+        if (sheet != selection()->activeSheet())
+            selection()->emitVisibleSheetRequested(sheet);
+        selection()->initialize (Region (cell.column(), cell.row(), cell.sheet()), sheet);
         scrollToCell (selection()->cursor());
     }
 }
@@ -3244,7 +3244,7 @@ Cell CellToolBase::findNextCell()
     bool forw = !(d->findOptions & KFind::FindBackwards);
     int col = d->findPos.x();
     int row = d->findPos.y();
-    int maxRow = sheet->cellStorage()->rows();
+    int maxRow = sheet->fullCellStorage()->rows();
 //     warnSheets <<"findNextCell starting at" << col << ',' << row <<"   forw=" << forw;
 
     if (d->directionValue == FindOption::Row) {
@@ -3438,17 +3438,17 @@ void CellToolBase::sheetFormat()
 
 void CellToolBase::listChoosePopupMenu()
 {
-    if (!selection()->activeSheet()->map()->isReadWrite()) {
+    if (!selection()->activeSheet()->fullMap()->isReadWrite()) {
         return;
     }
 
     delete d->popupListChoose;
     d->popupListChoose = new QMenu();
 
-    const Sheet *const sheet = selection()->activeSheet();
+    Sheet *const sheet = selection()->activeSheet();
     const Cell cursorCell(sheet, selection()->cursor());
     const QString text = cursorCell.userInput();
-    const CellStorage *const storage = sheet->cellStorage();
+    const CellStorage *const storage = sheet->fullCellStorage();
 
     QStringList itemList;
     const Region::ConstIterator end(selection()->constEnd());

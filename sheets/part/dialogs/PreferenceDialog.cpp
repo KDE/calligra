@@ -44,7 +44,6 @@
 #include "part/Doc.h"
 #include "part/Factory.h"
 #include "FunctionModuleRegistry.h"
-#include "Global.h"
 #include "Localization.h"
 #include "Map.h"
 #include "Sheet.h"

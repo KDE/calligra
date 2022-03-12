@@ -9,11 +9,7 @@
 
 #include "AbstractRegionCommand.h"
 
-#include <KoXmlReader.h>
-
-#include "Global.h"
-
-#include "sheets_common_export.h"
+#include "../sheets_ui_export.h"
 
 class QMimeData;
 class KoXmlDocument;
@@ -24,10 +20,44 @@ namespace Sheets
 {
 
 /**
+ * This namespace collects enumerations related to
+ * pasting operations.
+ */
+namespace Paste
+{
+/**
+ * The pasted content
+ */
+enum Mode {
+    Normal /** Everything */,
+    Text /** Text only */,
+    Format /** Format only */,
+    NoBorder /** not the borders */,
+    Comment /** Comment only */,
+    Result /** Result only, no formula */,
+    NormalAndTranspose /** */,
+    TextAndTranspose /** */,
+    FormatAndTranspose /** */,
+    NoBorderAndTranspose /** */
+};
+/**
+ * The current cell value treatment.
+ */
+enum Operation {
+    OverWrite /** Overwrite */,
+    Add /** Add */,
+    Mul /** Multiply */,
+    Sub /** Subtract */,
+    Div /** Divide */
+};
+} // namespace Paste
+
+
+/**
  * \ingroup Commands
  * \brief Command to paste cell data.
  */
-class CALLIGRA_SHEETS_COMMON_TEST_EXPORT PasteCommand : public AbstractRegionCommand
+class CALLIGRA_SHEETS_UI_TEST_EXPORT PasteCommand : public AbstractRegionCommand
 {
 public:
     PasteCommand(KUndo2Command *parent = 0);

@@ -12,7 +12,7 @@
 #include <QObject>
 #include <QRectF>
 
-#include "sheets_export.h"
+#include "sheets_core_export.h"
 
 
 namespace Calligra
@@ -21,6 +21,7 @@ namespace Sheets
 {
 class HeaderFooter;
 class Sheet;
+class PrintSettings;
 
 /**
  * \class SheetPrint
@@ -29,7 +30,7 @@ class Sheet;
  * zooming, page limits and column/row repetitions.
  * \ingroup Printing
  */
-class CALLIGRA_SHEETS_ODF_EXPORT SheetPrint : public QObject
+class CALLIGRA_SHEETS_CORE_EXPORT SheetPrint : public QObject
 {
 Q_OBJECT
 public:

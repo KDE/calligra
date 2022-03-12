@@ -4,26 +4,25 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include <algorithm>
-
 // Local
 #include "RowColumnManipulators.h"
 
-#include <float.h>
+// #include <float.h>
+// #include <algorithm>
 
-#include <QFontMetricsF>
-#include <QWidget>
-#include <QPen>
+// #include <QFontMetricsF>
+// #include <QWidget>
+// #include <QPen>
 
-#include <KLocalizedString>
+// #include <KLocalizedString>
 
-#include "CellStorage.h"
-#include "Damages.h"
-#include "Map.h"
-#include "RowColumnFormat.h"
-#include "RowFormatStorage.h"
-#include "Sheet.h"
-#include "Value.h"
+// #include "CellStorage.h"
+// #include "Damages.h"
+// #include "Map.h"
+// #include "RowColumnFormat.h"
+// #include "RowFormatStorage.h"
+// #include "Sheet.h"
+// #include "Value.h"
 
 using namespace Calligra::Sheets;
 

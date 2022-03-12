@@ -11,9 +11,9 @@
 
 #include <KoDialog.h>
 
-#include<QtGui>
-#include<QString>
-#include<QVector>
+// #include<QtGui>
+// #include<QString>
+// #include<QVector>
 
 class QComboBox;
 

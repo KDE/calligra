@@ -13,27 +13,27 @@
 // Local
 #include "Resize2Dialog.h"
 
-#include <float.h>
+// #include <float.h>
 
 // Qt
-#include <QGridLayout>
-#include <QLabel>
+// #include <QGridLayout>
+// #include <QLabel>
 
 // Calligra
-#include <KoCanvasBase.h>
-#include <KoUnit.h>
-#include <KoUnitDoubleSpinBox.h>
+// #include <KoCanvasBase.h>
+// #include <KoUnit.h>
+// #include <KoUnitDoubleSpinBox.h>
 
 // Sheets
-#include <Localization.h>
-#include "Map.h"
-#include "RowColumnFormat.h"
-#include "RowFormatStorage.h"
-#include "ui/Selection.h"
-#include <Sheet.h>
+// #include <Localization.h>
+// #include "Map.h"
+// #include "RowColumnFormat.h"
+// #include "RowFormatStorage.h"
+// #include "ui/Selection.h"
+// #include <Sheet.h>
 
 // commands
-#include "commands/RowColumnManipulators.h"
+// #include "commands/RowColumnManipulators.h"
 
 using namespace Calligra::Sheets;
 

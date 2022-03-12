@@ -14,9 +14,6 @@
 #ifndef CALLIGRA_SHEETS_DOCUMENT_SETTINGS_DIALOG
 #define CALLIGRA_SHEETS_DOCUMENT_SETTINGS_DIALOG
 
-#include <QGroupBox>
-#include <QLabel>
-
 #include <kpagedialog.h>
 
 class KoVBox;
@@ -25,6 +22,7 @@ class QCheckBox;
 class QSpinBox;
 class QComboBox;
 class QPushButton;
+class QLabel;
 
 namespace Sonnet
 {

@@ -12,29 +12,29 @@
 // Local
 #include "ValidityDialog.h"
 
-#include <QIntValidator>
-#include <QDoubleValidator>
-#include <QCheckBox>
-#include <QPushButton>
-#include <QLabel>
-#include <QGridLayout>
-#include <QFrame>
+// #include <QIntValidator>
+// #include <QDoubleValidator>
+// #include <QCheckBox>
+// #include <QPushButton>
+// #include <QLabel>
+// #include <QGridLayout>
+// #include <QFrame>
 
-#include <kcombobox.h>
-#include "SheetsDebug.h"
-#include <klineedit.h>
-#include <kmessagebox.h>
-#include <ktextedit.h>
+// #include <kcombobox.h>
+// #include "SheetsDebug.h"
+// #include <klineedit.h>
+// #include <kmessagebox.h>
+// #include <ktextedit.h>
 
-#include "CalculationSettings.h"
-#include "Localization.h"
-#include "Map.h"
-#include "ui/Selection.h"
-#include "Sheet.h"
-#include "ValueParser.h"
+// #include "CalculationSettings.h"
+// #include "Localization.h"
+// #include "Map.h"
+// #include "ui/Selection.h"
+// #include "Sheet.h"
+// #include "ValueParser.h"
 
 // commands
-#include "commands/ValidityCommand.h"
+// #include "commands/ValidityCommand.h"
 
 using namespace Calligra::Sheets;
 

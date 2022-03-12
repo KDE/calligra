@@ -7,7 +7,9 @@
 // built-in text functions
 #include "TextModule.h"
 
+#include "engine/CalculationSettings.h"
 #include "engine/Function.h"
+#include "engine/Localization.h"
 #include "engine/ValueCalc.h"
 #include "engine/ValueConverter.h"
 
@@ -15,10 +17,7 @@
 
 // #include <QRegExp>
 
-// #include <klocale.h>
-
 // #include "SheetsDebug.h"
-// #include "CalculationSettings.h"
 // #include "FunctionModuleRegistry.h"
 // #include "ValueFormatter.h"
 
@@ -288,8 +287,8 @@ Value func_dollar(valVector args, ValueCalc *calc, FuncExtra *)
     // do round, because formatMoney doesn't
     value = floor(value * pow(10.0, precision) + 0.5) / pow(10.0, precision);
 
-    const KLocale *locale = calc->settings()->locale();
-    QString s = locale->formatMoney(value, locale->currencySymbol(), precision);
+    const Localization *locale = calc->settings()->locale();
+    QString s = locale->formatCurrency(value, locale->currencySymbol(), precision);
 
     return Value(s);
 }
@@ -346,7 +345,7 @@ Value func_fixed(valVector args, ValueCalc *calc, FuncExtra *)
         no_commas = calc->conv()->asBoolean(args[2]).asBoolean();
 
     QString result;
-    const KLocale *locale = calc->settings()->locale();
+    const Localization *locale = calc->settings()->locale();
 
     // unfortunately, we can't just use KLocale::formatNumber because
     // * if decimals < 0, number is rounded
@@ -439,24 +438,9 @@ Value func_numbervalue(valVector args, ValueCalc *calc, FuncExtra *)
 {
     QString text = calc->conv()->asString(args[0]).asString();
 
-    QString decimalPoint = calc->conv()->asString(args[1]).asString();
-
-    QString thousandsSeparator;
-    if (args.count() >= 3)
-        thousandsSeparator = calc->conv()->asString(args[2]).asString();
-    else if (decimalPoint == ".")
-        thousandsSeparator = ',';
-    else if (decimalPoint == ",")
-        thousandsSeparator = '.';
-
-    KLocale l(*KLocale::global());
-    l.setDecimalSymbol(decimalPoint);
-    l.setThousandsSeparator(thousandsSeparator);
-    l.setPositiveSign("+");
-    l.setNegativeSign("-");
-
+    const Localization *locale = calc->settings()->locale();
     bool ok;
-    double v = l.readNumber(text, &ok);
+    double v = locale->readNumber(text, &ok);
     return ok ? Value(v) : Value::errorVALUE();
 }
 
@@ -682,11 +666,8 @@ Value func_t (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: TEXT
 Value func_text(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    ValueFormatter fmt(calc->conv());
-
-    return Value(fmt.formatText(args[0], Format::Generic, -1, Style::OnlyNegSigned,
-                            QString(), QString(), QString(),
-                            calc->conv()->asString(args[1]).asString()));
+    QString s = calc->conv()->asString(args[0]).asString();
+    return Value(QString(s));
 }
 
 // Function: TOGGLE

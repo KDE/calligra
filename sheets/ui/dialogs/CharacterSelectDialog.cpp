@@ -7,13 +7,13 @@
 
 #include "CharacterSelectDialog.h"
 
-#include <QLayout>
-#include <QGridLayout>
-#include <QPointer>
+// #include <QLayout>
+// #include <QGridLayout>
+// #include <QPointer>
 
-#include <KLocalizedString>
-#include <kcharselect.h>
-#include <kstandardguiitem.h>
+// #include <KLocalizedString>
+// #include <kcharselect.h>
+// #include <kstandardguiitem.h>
 
 using namespace Calligra::Sheets;
 

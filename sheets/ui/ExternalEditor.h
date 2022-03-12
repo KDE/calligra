@@ -11,8 +11,6 @@
 
 #include <ktextedit.h>
 
-#include "sheets_common_export.h"
-
 class QFocusEvent;
 class QKeyEvent;
 class QWidget;

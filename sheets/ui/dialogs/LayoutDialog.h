@@ -17,19 +17,19 @@
 #ifndef CALLIGRA_SHEETS_LAYOUT_DIALOG
 #define CALLIGRA_SHEETS_LAYOUT_DIALOG
 
-#include <QCheckBox>
-#include <QFrame>
-#include <QLabel>
-#include <QMouseEvent>
-#include <QPixmap>
-#include <QPaintEvent>
-#include <QPushButton>
+// #include <QCheckBox>
+// #include <QFrame>
+// #include <QLabel>
+// #include <QMouseEvent>
+// #include <QPixmap>
+// #include <QPaintEvent>
+// #include <QPushButton>
 
-#include <kpagedialog.h>
+// #include <kpagedialog.h>
 
-#include "RowColumnFormat.h"
-#include "Style.h"
-#include "Value.h"
+// #include "RowColumnFormat.h"
+// #include "Style.h"
+// #include "Value.h"
 
 #include "ui_FontWidget.h"
 #include "ui_PositionWidget.h"

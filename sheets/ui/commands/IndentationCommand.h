@@ -9,7 +9,6 @@
 
 
 #include "AbstractRegionCommand.h"
-#include "Style.h"
 
 namespace Calligra
 {

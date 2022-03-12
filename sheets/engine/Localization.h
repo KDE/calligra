@@ -35,12 +35,13 @@ public:
     QString positiveSign() const;
     QString thousandsSeparator() const;
 
-    QDateTime readDateTime(const QString &str, bool *ok);
-    QDateTime readDateTime(const QString &str, const QString &format, bool *ok);
-    QDate readDate(const QString &str, bool *ok);
-    QDate readDate(const QString &str, const QString &format, bool *ok);
-    QTime readTime(const QString &str, bool *ok);
-    QTime readTime(const QString &str, const QString &format, bool *ok);
+    double readNumber(const QString &str, bool *ok) const;
+    QDateTime readDateTime(const QString &str, bool *ok) const;
+    QDateTime readDateTime(const QString &str, const QString &format, bool *ok) const;
+    QDate readDate(const QString &str, bool *ok) const;
+    QDate readDate(const QString &str, const QString &format, bool *ok) const;
+    QTime readTime(const QString &str, bool *ok) const;
+    QTime readTime(const QString &str, const QString &format, bool *ok) const;
 
     /**
      * Uses these date/time formats:
@@ -84,17 +85,17 @@ public:
 
     QString formatBool(bool val) const;
 
-    QString formatNumber(double num, int precision = -1);
-    QString formatCurrency(double num, const QString &currencySymbol, int precision = -1);
+    QString formatNumber(double num, int precision = -1) const;
+    QString formatCurrency(double num, const QString &currencySymbol, int precision = -1) const;
 
     /** Formats using the correct decimal point, but no thousands separators */
     QString formatDoubleNoSep(double val) const;
-    QString formatDateTime(const QDateTime &datetime, bool longFormat = true);
-    QString formatDateTime(const QDateTime &datetime, const QString &format);
-    QString formatDate(const QDate &date, bool longFormat = true);
-    QString formatDate(const QDate &date, const QString &format);
-    QString formatTime(const QTime &time, bool longFormat = true);
-    QString formatTime(const QTime &time, const QString &format);
+    QString formatDateTime(const QDateTime &datetime, bool longFormat = true) const;
+    QString formatDateTime(const QDateTime &datetime, const QString &format) const;
+    QString formatDate(const QDate &date, bool longFormat = true) const;
+    QString formatDate(const QDate &date, const QString &format) const;
+    QString formatTime(const QTime &time, bool longFormat = true) const;
+    QString formatTime(const QTime &time, const QString &format) const;
 
     QString translateString(KLocalizedString str) const;
 

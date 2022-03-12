@@ -15,39 +15,39 @@
 // Local
 #include "FormulaDialog.h"
 
-#include <QTabWidget>
-#include <QApplication>
-#include <QCloseEvent>
-#include <QGridLayout>
-#include <QVBoxLayout>
+// #include <QTabWidget>
+// #include <QApplication>
+// #include <QCloseEvent>
+// #include <QGridLayout>
+// #include <QVBoxLayout>
 
-#include "CalculationSettings.h"
-#include "Cell.h"
-#include "Function.h"
-#include "FunctionDescription.h"
-#include "FunctionRepository.h"
-#include "Util.h"
-#include "ui/CellEditor.h"
-#include "Localization.h"
-#include "Map.h"
-#include "ui/Selection.h"
-#include "Sheet.h"
-#include "SheetsDebug.h"
+// #include "CalculationSettings.h"
+// #include "Cell.h"
+// #include "Function.h"
+// #include "FunctionDescription.h"
+// #include "FunctionRepository.h"
+// #include "Util.h"
+// #include "ui/CellEditor.h"
+// #include "Localization.h"
+// #include "Map.h"
+// #include "ui/Selection.h"
+// #include "Sheet.h"
+// #include "SheetsDebug.h"
 
-#include <KoIcon.h>
+// #include <KoIcon.h>
 
-#include <kcombobox.h>
-#include <klineedit.h>
+// #include <kcombobox.h>
+// #include <klineedit.h>
 
-#include <QDoubleValidator>
-#include <QEvent>
-#include <QTextBrowser>
-#include <QLabel>
-#include <QPushButton>
-#include <QLayout>
-#include <QStringListModel>
-#include <QSortFilterProxyModel>
-#include <QItemSelectionModel>
+// #include <QDoubleValidator>
+// #include <QEvent>
+// #include <QTextBrowser>
+// #include <QLabel>
+// #include <QPushButton>
+// #include <QLayout>
+// #include <QStringListModel>
+// #include <QSortFilterProxyModel>
+// #include <QItemSelectionModel>
 
 using namespace Calligra::Sheets;
 

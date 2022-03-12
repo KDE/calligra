@@ -13,21 +13,21 @@
 #include "ui_SubtotalsDetailsWidget.h"
 
 // Qt
-#include <QCheckBox>
-#include <QListWidget>
-#include <QVector>
+// #include <QCheckBox>
+// #include <QListWidget>
+// #include <QVector>
 
 // KF5
-#include "SheetsDebug.h"
-#include <KLocalizedString>
-#include <kmessagebox.h>
+// #include "SheetsDebug.h"
+// #include <KLocalizedString>
+// #include <kmessagebox.h>
 
 // Sheets
-#include "ui/Selection.h"
-#include "Sheet.h"
+// #include "ui/Selection.h"
+// #include "Sheet.h"
 
 // commands
-#include "commands/DataManipulators.h"
+// #include "commands/DataManipulators.h"
 
 using namespace Calligra::Sheets;
 

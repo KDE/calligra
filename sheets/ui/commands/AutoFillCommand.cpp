@@ -15,21 +15,21 @@
 
 #include "AutoFillCommand.h"
 
-#include "Localization.h"
-#include "Map.h"
-#include "Sheet.h"
-#include "Value.h"
-#include "ValueConverter.h"
-#include "SheetsDebug.h"
+// #include "Localization.h"
+// #include "Map.h"
+// #include "Sheet.h"
+// #include "Value.h"
+// #include "ValueConverter.h"
+// #include "SheetsDebug.h"
 
-#include <KSharedConfig>
-#include <kconfig.h>
-#include <kconfiggroup.h>
+// #include <KSharedConfig>
+// #include <kconfig.h>
+// #include <kconfiggroup.h>
 
-#include <QList>
-#include <QRegExp>
+// #include <QList>
+// #include <QRegExp>
 
-#include <math.h>
+// #include <math.h>
 
 using namespace Calligra::Sheets;
 
