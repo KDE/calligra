@@ -7,28 +7,28 @@
 // Local
 #include "SheetView.h"
 
-// #include <QCache>
-// #include <QRect>
-// #include <QPainter>
-// #include <QPainterPath>
+#include <QCache>
+#include <QPainter>
+#include <QPainterPath>
 #ifdef CALLIGRA_SHEETS_MT
-// #include <QMutex>
-// #include <QMutexLocker>
-// #include <QReadWriteLock>
-// #include <QReadLocker>
-// #include <QWriteLocker>
+#include <QMutex>
+#include <QMutexLocker>
+#include <QReadWriteLock>
+#include <QReadLocker>
+#include <QWriteLocker>
 #endif
 
 // #include <KoViewConverter.h>
 
-// #include "CellView.h"
+#include "engine/PointStorage.h"
+#include "engine/RectStorage.h"
+#include "core/Cell.h"
+#include "core/ColFormatStorage.h"
+#include "core/RowFormatStorage.h"
+#include "core/Sheet.h"
+#include "CellView.h"
 // #include "calligra_sheets_limits.h"
-// #include "PointStorage.h"
-// #include "RectStorage.h"
 // #include "Region.h"
-// #include "RowColumnFormat.h"
-// #include "RowFormatStorage.h"
-// #include "Sheet.h"
 
 using namespace Calligra::Sheets;
 
@@ -109,10 +109,10 @@ Cell SheetView::Private::cellToProcess(int col, int row, QPointF& coordinate,
         // take the coordinate of the master cell
         if (sheet->layoutDirection() == Qt::RightToLeft) {
             for (int c = cell.column()+1; c <= col; ++c)
-                coordinate.setX(coordinate.x() + sheet->columnFormat(c)->width());
+                coordinate.setX(coordinate.x() + sheet->columnFormats()->colWidth(c));
         } else {
             for (int c = cell.column(); c < col; ++c)
-                coordinate.setX(coordinate.x() - sheet->columnFormat(c)->width());
+                coordinate.setX(coordinate.x() - sheet->columnFormats()->colWidth(c));
         }
         for (int r = cell.row(); r < row; ++r)
             coordinate.setY(coordinate.y() - sheet->rowFormats()->rowHeight(r));
@@ -153,10 +153,10 @@ const CellView& SheetView::Private::cellViewToProcess(Cell& cell, QPointF& coord
         // take the coordinate of the obscuring cell
         if (sheet->layoutDirection() == Qt::RightToLeft) {
             for (int c = cell.column()+1; c <= col; ++c)
-                coordinate.setX(coordinate.x() + sheet->columnFormat(c)->width());
+                coordinate.setX(coordinate.x() + sheet->columnFormats()->colWidth(c));
         } else {
             for (int c = cell.column(); c < col; ++c)
-                coordinate.setX(coordinate.x() - sheet->columnFormat(c)->width());
+                coordinate.setX(coordinate.x() - sheet->columnFormats()->colWidth(c));
         }
         for (int r = cell.row(); r < row; ++r)
             coordinate.setY(coordinate.y() - sheet->rowFormats()->rowHeight(r));
@@ -349,11 +349,12 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
     QSet<Cell> processedMergedCells;
     QSet<Cell> processedObscuredCells;
     QList<CellPaintData> cached_cells;
+    ColFormatStorage *cf = d->sheet->columnFormats();
     for (int col = visRect.left(); col <= visRect.right(); ++col) {
-        if (d->sheet->columnFormat(col)->isHiddenOrFiltered())
+        if (cf->isHiddenOrFiltered(col))
             continue;
         if (rightToLeft)
-            coordinate.setX(coordinate.x() - d->sheet->columnFormat(col)->width());
+            coordinate.setX(coordinate.x() - cf->colWidth(col));
 // debugSheets <<"coordinate:" << coordinate;
         for (int row = visRect.top(); row <= visRect.bottom(); ++row) {
             int lastHiddenRow;
@@ -379,7 +380,7 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
         }
         coordinate.setY(topLeft.y());
         if (!rightToLeft)
-            coordinate.setX(coordinate.x() + d->sheet->columnFormat(col)->width());
+            coordinate.setX(coordinate.x() + cf->colWidth(col));
     }
 
     // 2. Paint the cell content including markers (formula, comment, ...)
@@ -391,10 +392,10 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
     coordinate = startCoordinate;
     processedMergedCells.clear();
     for (int col = visRect.left(); col <= visRect.right(); ++col) {
-        if (d->sheet->columnFormat(col)->isHiddenOrFiltered())
+        if (cf->isHiddenOrFiltered(col))
             continue;
         if (rightToLeft)
-            coordinate.setX(coordinate.x() - d->sheet->columnFormat(col)->width());
+            coordinate.setX(coordinate.x() - cf->colWidth(col));
         for (int row = visRect.top(); row <= visRect.bottom(); ++row) {
             int lastHiddenRow;
             if (d->sheet->rowFormats()->isHiddenOrFiltered(row, &lastHiddenRow)) {
@@ -423,7 +424,7 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
         }
         coordinate.setY(topLeft.y());
         if (!rightToLeft)
-            coordinate.setX(coordinate.x() + d->sheet->columnFormat(col)->width());
+            coordinate.setX(coordinate.x() + cf->colWidth(col));
     }
 
     // 4. Paint the custom borders, diagonal lines and page borders
@@ -431,10 +432,10 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
     processedMergedCells.clear();
     processedObscuredCells.clear();
     for (int col = visRect.left(); col <= visRect.right(); ++col) {
-        if (d->sheet->columnFormat(col)->isHiddenOrFiltered())
+        if (cf->isHiddenOrFiltered(col))
             continue;
         if (rightToLeft)
-            coordinate.setX(coordinate.x() - d->sheet->columnFormat(col)->width());
+            coordinate.setX(coordinate.x() - cf->colWidth(col));
         for (int row = visRect.top(); row <= visRect.bottom(); ++row) {
             int lastHiddenRow;
             if (d->sheet->rowFormats()->isHiddenOrFiltered(row, &lastHiddenRow)) {
@@ -469,7 +470,7 @@ void SheetView::paintCells(QPainter& painter, const QRectF& paintRect, const QPo
         }
         coordinate.setY(topLeft.y());
         if (!rightToLeft)
-            coordinate.setX(coordinate.x() + d->sheet->columnFormat(col)->width());
+            coordinate.setX(coordinate.x() + cf->colWidth(col));
     }
 
     // 5. Paint cell highlighting
@@ -653,7 +654,7 @@ void SheetView::updateAccessedCellRange(const QPoint& location)
         d->accessedCellRange = cellRange;
         const int col = qMin(KS_colMax, cellRange.width() + 10);
         const int row = qMin(KS_rowMax, cellRange.height() + 10);
-        const double width = sheet()->columnPosition(col) + sheet()->columnFormat(col)->width();
+        const double width = sheet()->columnPosition(col) + sheet()->columnFormats()->colWidth(col);
         const double height = sheet()->rowPosition(row) + sheet()->rowFormats()->rowHeight(row);
         emit visibleSizeChanged(QSizeF(width, height));
     }

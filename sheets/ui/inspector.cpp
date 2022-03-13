@@ -6,20 +6,20 @@
 
 // Qt
 #include <QFrame>
-#include <QLayout>
-#include <QTextStream>
+// #include <QLayout>
+// #include <QTextStream>
 #include <QTreeWidget>
 #include <QVBoxLayout>
-#include <QPen>
+// #include <QPen>
 
 // Sheets
-#include "Cell.h"
-#include "DependencyManager.h"
-#include "Map.h"
-#include "Region.h"
-#include "Sheet.h"
-#include "Style.h"
-#include "Value.h"
+#include "engine/DependencyManager.h"
+#include "engine/MapBase.h"
+#include "engine/Region.h"
+#include "core/Cell.h"
+#include "core/Sheet.h"
+// #include "Style.h"
+// #include "Value.h"
 
 namespace Calligra
 {
@@ -171,7 +171,7 @@ Inspector::Inspector(const Cell& cell)
 
     d->cell = cell;
     d->style = cell.style();
-    d->sheet = cell.sheet();
+    d->sheet = cell.fullSheet();
 
     QFrame* cellPage = new QFrame();
     addPage(cellPage, QString("Cell"));

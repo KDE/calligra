@@ -15,21 +15,13 @@
 
 #include "AutoFillCommand.h"
 
-// #include "Localization.h"
-// #include "Map.h"
-// #include "Sheet.h"
-// #include "Value.h"
-// #include "ValueConverter.h"
-// #include "SheetsDebug.h"
+#include "engine/MapBase.h"
+#include "engine/SheetBase.h"
+#include "engine/ValueConverter.h"
+#include "core/Cell.h"
 
-// #include <KSharedConfig>
-// #include <kconfig.h>
-// #include <kconfiggroup.h>
-
-// #include <QList>
-// #include <QRegExp>
-
-// #include <math.h>
+#include <KSharedConfig>
+#include <kconfiggroup.h>
 
 using namespace Calligra::Sheets;
 
@@ -248,7 +240,11 @@ Value AutoFillSequenceItem::delta(AutoFillSequenceItem *seq, bool *ok) const
             *ok = (m_value == seq->value());
             return Value();
         }
+        default:
+            *ok = false;
+            return Value();
         }
+
     }
     case MONTH: {
         const int i = AutoFillCommand::month->indexOf(m_value.asString());

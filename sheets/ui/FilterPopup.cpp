@@ -6,26 +6,23 @@
 
 #include "FilterPopup.h"
 
-// #include <QButtonGroup>
-// #include <QCheckBox>
-// #include <QHash>
-// #include <QList>
-// #include <QScrollArea>
-// #include <QVBoxLayout>
+#include <QButtonGroup>
+#include <QCheckBox>
+#include <QScrollArea>
+#include <QVBoxLayout>
 
-// #include <KLocalizedString>
+#include <KLocalizedString>
 
-// #include "CellStorage.h"
-// #include "Database.h"
-// #include "Filter.h"
-// #include "Map.h"
-// #include "RowColumnFormat.h"
-// #include "Sheet.h"
-// #include "ValueConverter.h"
+#include "engine/CellBase.h"
+#include "engine/CellBaseStorage.h"
+#include "engine/Region.h"
+#include "engine/ValueConverter.h"
 
-// #include "commands/ApplyFilterCommand.h"
+#include "core/Database.h"
+#include "core/DataFilter.h"
+#include "core/Sheet.h"
 
-// #include <algorithm>
+#include "commands/ApplyFilterCommand.h"
 
 using namespace Calligra::Sheets;
 
@@ -41,10 +38,10 @@ public:
     bool dirty;
 
 public:
-    void initGUI(FilterPopup* parent, const Cell& cell, const Database* database);
+    void initGUI(FilterPopup* parent, const CellBase& cell, const Database* database);
 };
 
-void FilterPopup::Private::initGUI(FilterPopup* parent, const Cell& cell, const Database* database)
+void FilterPopup::Private::initGUI(FilterPopup* parent, const CellBase & cell, const Database* database)
 {
     QButtonGroup* buttonGroup = new QButtonGroup(parent);
     buttonGroup->setExclusive(false);
@@ -68,7 +65,7 @@ void FilterPopup::Private::initGUI(FilterPopup* parent, const Cell& cell, const 
     layout->addWidget(notEmptyCheckbox);
     layout->addSpacing(3);
 
-    const Sheet* sheet = cell.sheet();
+    const SheetBase* sheet = cell.sheet();
     const QRect range = database->range().lastRange();
     const bool isRowFilter = database->orientation() == Qt::Vertical;
     const int start = isRowFilter ? range.top() : range.left();
@@ -93,7 +90,7 @@ void FilterPopup::Private::initGUI(FilterPopup* parent, const Cell& cell, const 
     const bool defaultCheckState = conditions.isEmpty() ? true
                                    : !(conditions[conditions.keys()[0]] == AbstractCondition::Match ||
                                        conditions[conditions.keys()[0]] == AbstractCondition::Empty);
-    QList<QString> sortedItems = items.toList();
+    QList<QString> sortedItems = items.values();
     std::sort(sortedItems.begin(), sortedItems.end());
     bool isAll = true;
     QCheckBox* item;
@@ -116,7 +113,7 @@ void FilterPopup::Private::initGUI(FilterPopup* parent, const Cell& cell, const 
 }
 
 
-FilterPopup::FilterPopup(QWidget* parent, const Cell& cell, Database* database)
+FilterPopup::FilterPopup(QWidget* parent, const CellBase &cell, Database* database)
         : QFrame(parent, Qt::Popup)
         , d(new Private)
 {
@@ -185,7 +182,8 @@ void FilterPopup::closeEvent(QCloseEvent* event)
         // any real change?
         if (d->database.filter() != filter) {
             ApplyFilterCommand* command = new ApplyFilterCommand();
-            command->setSheet(d->database.range().lastSheet());
+            Sheet *sheet = dynamic_cast<Sheet *>(d->database.range().lastSheet());
+            command->setSheet(sheet);
             command->add(d->database.range());
             command->setOldFilter(d->database.filter());
             d->database.setFilter(filter);
@@ -235,7 +233,7 @@ void FilterPopup::buttonClicked(QAbstractButton* button)
     }
 }
 
-void FilterPopup::showPopup(QWidget *parent, const Cell &cell, const QRect &cellRect, Database *database)
+void FilterPopup::showPopup(QWidget *parent, const CellBase &cell, const QRect &cellRect, Database *database)
 {
     FilterPopup* popup = new FilterPopup(parent, cell, database);
     const QPoint position(database->orientation() == Qt::Vertical ? cellRect.bottomLeft() : cellRect.topRight());

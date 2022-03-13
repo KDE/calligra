@@ -6,17 +6,12 @@
 
 #include "ApplyFilterCommand.h"
 
-// #include <KLocalizedString>
-
-// #include "CellStorage.h"
-// #include "Damages.h"
-// #include "Map.h"
-// #include "Sheet.h"
-// #include "RowColumnFormat.h"
-// #include "RowFormatStorage.h"
-
-// #include "core/Database.h"
-// #include "core/DataFilter.h"
+#include "engine/Damages.h"
+#include "engine/MapBase.h"
+#include "core/CellStorage.h"
+#include "core/ColFormatStorage.h"
+#include "core/RowFormatStorage.h"
+#include "core/Sheet.h"
 
 using namespace Calligra::Sheets;
 
@@ -35,7 +30,7 @@ void ApplyFilterCommand::redo()
     m_undoData.clear();
     Database database = m_database;
 
-    Sheet* const sheet = database.range().lastSheet();
+    Sheet* sheet = dynamic_cast<Sheet *>(database.range().lastSheet());
     const QRect range = database.range().lastRange();
     const int start = database.orientation() == Qt::Vertical ? range.top() : range.left();
     const int end = database.orientation() == Qt::Vertical ? range.bottom() : range.right();
@@ -46,8 +41,8 @@ void ApplyFilterCommand::redo()
             m_undoData[i] = sheet->rowFormats()->isFiltered(i);
             sheet->rowFormats()->setFiltered(i, i, isFiltered);
         } else { // database.orientation() == Qt::Horizontal
-            m_undoData[i] = sheet->columnFormat(i)->isFiltered();
-            sheet->nonDefaultColumnFormat(i)->setFiltered(isFiltered);
+            m_undoData[i] = sheet->columnFormats()->isFiltered(i);
+            sheet->columnFormats()->setFiltered(i, i, isFiltered);
         }
     }
     if (database.orientation() == Qt::Vertical)
@@ -55,8 +50,8 @@ void ApplyFilterCommand::redo()
     else // database.orientation() == Qt::Horizontal
         sheet->map()->addDamage(new SheetDamage(sheet, SheetDamage::ColumnsChanged));
 
-    m_sheet->cellStorage()->setDatabase(*this, Database());
-    m_sheet->cellStorage()->setDatabase(*this, database);
+    m_sheet->fullCellStorage()->setDatabase(*this, Database());
+    m_sheet->fullCellStorage()->setDatabase(*this, database);
     m_sheet->map()->addDamage(new CellDamage(m_sheet, *this, CellDamage::Appearance));
 }
 
@@ -65,7 +60,7 @@ void ApplyFilterCommand::undo()
     Database database = m_database;
     database.setFilter(m_oldFilter);
 
-    Sheet* const sheet = database.range().lastSheet();
+    Sheet* sheet = dynamic_cast<Sheet *>(database.range().lastSheet());
     const QRect range = database.range().lastRange();
     const int start = database.orientation() == Qt::Vertical ? range.top() : range.left();
     const int end = database.orientation() == Qt::Vertical ? range.bottom() : range.right();
@@ -73,15 +68,15 @@ void ApplyFilterCommand::undo()
         if (database.orientation() == Qt::Vertical)
             sheet->rowFormats()->setFiltered(i, i, m_undoData[i]);
         else // database.orientation() == Qt::Horizontal
-            sheet->nonDefaultColumnFormat(i)->setFiltered(m_undoData[i]);
+            sheet->columnFormats()->setFiltered(i, i, m_undoData[i]);
     }
     if (database.orientation() == Qt::Vertical)
         sheet->map()->addDamage(new SheetDamage(sheet, SheetDamage::RowsChanged));
     else // database.orientation() == Qt::Horizontal
         sheet->map()->addDamage(new SheetDamage(sheet, SheetDamage::ColumnsChanged));
 
-    m_sheet->cellStorage()->setDatabase(*this, Database());
-    m_sheet->cellStorage()->setDatabase(*this, database);
+    m_sheet->fullCellStorage()->setDatabase(*this, Database());
+    m_sheet->fullCellStorage()->setDatabase(*this, database);
     m_sheet->map()->addDamage(new CellDamage(m_sheet, *this, CellDamage::Appearance));
 }
 

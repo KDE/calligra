@@ -16,11 +16,6 @@
 
 #include "DataManipulators.h"
 
-// #include <QList>
-// #include <QRect>
-// #include <QString>
-// #include <QStringList>
-
 namespace Calligra
 {
 namespace Sheets

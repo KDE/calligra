@@ -7,13 +7,14 @@
 #include "FormulaEditorHighlighter.h"
 
 // Sheets
-// #include "Formula.h"
-// #include "Selection.h"
-// #include "Sheet.h"
+#include "engine/Formula.h"
+#include "engine/MapBase.h"
+#include "core/Sheet.h"
+#include "Selection.h"
 
 // Qt
-// #include <QApplication>
-// #include <QTextEdit>
+#include <QApplication>
+#include <QTextEdit>
 
 using namespace Calligra::Sheets;
 
@@ -74,7 +75,7 @@ void FormulaEditorHighlighter::highlightBlock(const QString& text)
     QList<QString> alreadyFoundRanges;
 
     Sheet *const originSheet = d->selection->originSheet();
-    Map *const map = originSheet->map();
+    MapBase *const map = originSheet->map();
 
     for (int i = 0; i < d->tokens.count(); ++i) {
         Token token = d->tokens[i];
@@ -88,7 +89,7 @@ void FormulaEditorHighlighter::highlightBlock(const QString& text)
                 d->rangeChanged = true;
             }
 
-            const Region newRange(token.text(), map, originSheet);
+            const Region newRange = map->regionFromName(token.text(), originSheet);
             if (!newRange.isValid()) {
                 continue;
             }

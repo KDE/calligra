@@ -48,7 +48,6 @@ class Style;
 class CALLIGRA_SHEETS_UI_EXPORT CellView
 {
     friend class SheetView;
-    friend class PixmapCachingSheetView;
 
 public:
     CellView(SheetView* sheetView, int col, int row);

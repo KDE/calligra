@@ -7,21 +7,21 @@
 #include "ExternalEditor.h"
 
 // Sheets
-// #include "CellEditor.h"
-// #include "CellToolBase.h"
-// #include "FormulaEditorHighlighter.h"
-// #include "Map.h"
-// #include "Sheet.h"
-// #include "SheetsDebug.h"
+#include "CellEditor.h"
+#include "CellToolBase.h"
+#include "FormulaEditorHighlighter.h"
+#include "core/Map.h"
+#include "core/Sheet.h"
 
 // Calligra
-// #include <KoIcon.h>
+#include <KoIcon.h>
+
+// KDE
+#include <KLocalizedString>
 
 // Qt
-// #include <QApplication>
-// #include <QFontDatabase>
-// #include <QFocusEvent>
-// #include <QKeyEvent>
+#include <QAction>
+#include <QApplication>
 
 using namespace Calligra::Sheets;
 
@@ -128,7 +128,7 @@ void ExternalEditor::setCursorPosition(int pos)
 void ExternalEditor::keyPressEvent(QKeyEvent *event)
 {
     Q_ASSERT(d->cellTool);
-    if (!d->cellTool->selection()->activeSheet()->map()->isReadWrite()) {
+    if (!d->cellTool->selection()->activeSheet()->fullMap()->isReadWrite()) {
         return;
     }
 

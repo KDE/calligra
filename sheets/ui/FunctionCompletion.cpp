@@ -7,20 +7,19 @@
 #include "FunctionCompletion.h"
 
 // Sheets
-// #include "CellEditor.h"
-// #include "Function.h"
-// #include "FunctionDescription.h"
-// #include "FunctionRepository.h"
+#include "CellEditor.h"
+#include "FunctionDescription.h"
+#include "FunctionRepository.h"
 
 // Qt
-// #include <QApplication>
-// #include <QDesktopWidget>
-// #include <QKeyEvent>
-// #include <QLabel>
-// #include <QListWidget>
-// #include <QScrollBar>
-// #include <QToolTip>
-// #include <QVBoxLayout>
+#include <QApplication>
+#include <QDesktopWidget>
+#include <QFrame>
+#include <QLabel>
+#include <QListWidget>
+#include <QScrollBar>
+#include <QToolTip>
+#include <QVBoxLayout>
 
 using namespace Calligra::Sheets;
 

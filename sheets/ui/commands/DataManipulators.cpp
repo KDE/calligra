@@ -4,20 +4,14 @@
 
 #include "DataManipulators.h"
 
-// #include <algorithm>
-// #include <KLocalizedString>
+#include "engine/Damages.h"
+#include "engine/Formula.h"
+#include "engine/ValueCalc.h"
+#include "core/Cell.h"
+#include "core/CellStorage.h"
+#include "core/Sheet.h"
 
-// #include "Cell.h"
-// #include "CellStorage.h"
-// #include "Damages.h"
-// #include "Formula.h"
-// #include "Map.h"
-// #include "Sheet.h"
-// #include "ValueCalc.h"
-// #include "ValueConverter.h"
-
-// #include <float.h>
-// #include <math.h>
+#include <float.h>
 
 using namespace Calligra::Sheets;
 
@@ -76,7 +70,7 @@ bool AbstractDataManipulator::preProcessing()
     // not the first run - data already stored ...
     if (!m_firstrun)
         return true;
-    m_sheet->cellStorage()->startUndoRecording();
+    m_sheet->fullCellStorage()->startUndoRecording();
     return AbstractRegionCommand::preProcessing();
 }
 
@@ -95,7 +89,7 @@ bool AbstractDataManipulator::postProcessing()
     // not the first run - data already stored ...
     if (!m_firstrun)
         return true;
-    m_sheet->cellStorage()->stopUndoRecording(this);
+    m_sheet->fullCellStorage()->stopUndoRecording(this);
     return true;
 }
 
@@ -466,7 +460,7 @@ bool ShiftManipulator::preProcessing()
                 command->setDirection(m_direction);
             }
         } else { // contiguous selection
-            m_sheet->cellStorage()->startUndoRecording();
+            m_sheet->fullCellStorage()->startUndoRecording();
         }
     }
     return AbstractRegionCommand::preProcessing();
@@ -491,7 +485,7 @@ bool ShiftManipulator::postProcessing()
         return true;
     }
     if (m_firstrun) {
-        m_sheet->cellStorage()->stopUndoRecording(this);
+        m_sheet->fullCellStorage()->stopUndoRecording(this);
     }
     CellDamage *damage = 0;
     if (m_direction == ShiftBottom) {

@@ -7,18 +7,18 @@
 #include "LocationComboBox.h"
 
 // Sheets
-// #include "CellStorage.h"
-// #include "Map.h"
-// #include "NamedAreaManager.h"
-// #include "Selection.h"
-// #include "Sheet.h"
+#include "engine/CellBaseStorage.h"
+#include "engine/MapBase.h"
+#include "engine/NamedAreaManager.h"
+#include "core/Sheet.h"
+#include "Selection.h"
 // #include "SheetsDebug.h"
 
-// #include "commands/NamedAreaCommand.h"
+#include "commands/NamedAreaCommand.h"
 
 // Qt
-// #include <QKeyEvent>
-// #include <QLineEdit>
+#include <QKeyEvent>
+#include <QLineEdit>
 
 using namespace Calligra::Sheets;
 
@@ -41,7 +41,7 @@ void LocationComboBox::setSelection(Selection *selection)
     clear();
     if (m_selection) {
         if (m_selection->activeSheet()) {
-            Map *const oldMap = m_selection->activeSheet()->map();
+            MapBase *const oldMap = m_selection->activeSheet()->map();
             disconnect(oldMap->namedAreaManager(), &NamedAreaManager::namedAreaAdded, this, &LocationComboBox::slotAddAreaName);
             disconnect(oldMap->namedAreaManager(), &NamedAreaManager::namedAreaRemoved, this, &LocationComboBox::slotRemoveAreaName);
         }
@@ -69,13 +69,13 @@ void LocationComboBox::slotActiveSheetChanged(Sheet *sheet)
     if (!sheet) return;
     disconnect(this, SLOT(slotActiveSheetChanged(Sheet*)));
 
-    Map *const map = sheet->map();
-    const QList<QString> areaNames = map->namedAreaManager()->areaNames();
+    NamedAreaManager *manager = sheet->map()->namedAreaManager();
+    const QList<QString> areaNames = manager->areaNames();
     for (int i = 0; i < areaNames.count(); ++i)
         slotAddAreaName(areaNames[i]);
 
-    connect(map->namedAreaManager(), &NamedAreaManager::namedAreaAdded, this, &LocationComboBox::slotAddAreaName);
-    connect(map->namedAreaManager(), &NamedAreaManager::namedAreaRemoved, this, &LocationComboBox::slotRemoveAreaName);
+    connect(manager, &NamedAreaManager::namedAreaAdded, this, &LocationComboBox::slotAddAreaName);
+    connect(manager, &NamedAreaManager::namedAreaRemoved, this, &LocationComboBox::slotRemoveAreaName);
 }
 
 void LocationComboBox::updateAddress()
@@ -86,7 +86,7 @@ void LocationComboBox::updateAddress()
     Selection *const selection = m_selection;
     Sheet *const sheet = m_selection->activeSheet();
     if (sheet) {
-        const QList< QPair<QRectF, QString> > names = sheet->cellStorage()->namedAreas(*selection);
+        const QVector< QPair<QRectF, QString> > names = sheet->cellStorage()->namedAreas(*selection);
         {
             QRect range;
             if (selection->isSingular()) range = QRect(selection->marker(), QSize(1, 1));
@@ -164,24 +164,18 @@ bool LocationComboBox::activateItem()
     parentWidget()->setFocus();
 
     const QString text = lineEdit()->text();
+    Sheet *activeSheet = selection->activeSheet();
     // check whether an already existing named area was entered
-    Region region = selection->activeSheet()->map()->namedAreaManager()->namedArea(text);
-    if (region.isValid()) {
-        // TODO Stefan: Merge the sheet change into Selection.
-        if (region.firstSheet() != selection->activeSheet()) {
-            selection->emitVisibleSheetRequested(region.firstSheet());
-        }
-        selection->initialize(region);
-        return true;
-    }
+    Region region = activeSheet->map()->namedAreaManager()->namedArea(text);
+    if (!region.isValid())
+        // no - check whether a valid cell region was entered
+        region = activeSheet->map()->regionFromName(text, activeSheet);
 
-    // check whether a valid cell region was entered
-    region = Region(text, selection->activeSheet()->map(), selection->activeSheet());
     if (region.isValid()) {
+        Sheet *actualSheet = dynamic_cast<Sheet *>(region.firstSheet());
         // TODO Stefan: Merge the sheet change into Selection.
-        if (region.firstSheet() != selection->activeSheet()) {
-            selection->emitVisibleSheetRequested(region.firstSheet());
-        }
+        if (actualSheet != activeSheet)
+            selection->emitVisibleSheetRequested(actualSheet);
         selection->initialize(region);
         return true;
     }

@@ -9,6 +9,7 @@
 
 #include <QAbstractItemModel>
 #include <QItemSelection>
+#include <QRect>
 
 namespace Calligra
 {

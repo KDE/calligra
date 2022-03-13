@@ -133,7 +133,6 @@
 #include "ui/RightToLeftPaintingStrategy.h"
 #include "ui/Selection.h"
 #include "ui/SheetView.h"
-#include "ui/PixmapCachingSheetView.h"
 
 // D-Bus
 #ifndef QT_NO_DBUS

@@ -8,20 +8,17 @@
 // Local
 #include "Selection.h"
 
-// #include <KoCanvasBase.h>
-// #include <KoCanvasController.h>
-// #include <KoViewConverter.h>
+#include <KoCanvasBase.h>
+#include <KoCanvasController.h>
+#include <KoViewConverter.h>
 
-// #include "SheetsDebug.h"
-// #include "Cell.h"
-// #include "CellStorage.h"
-// #include "RowColumnFormat.h"
-// #include "RowFormatStorage.h"
-// #include "Sheet.h"
+#include <QWidget>
 
-// #include "commands/DataManipulators.h"
+#include "core/CellStorage.h"
+#include "core/ColFormatStorage.h"
+#include "core/RowFormatStorage.h"
+#include "core/Sheet.h"
 
-// #include "ui/CellEditor.h"
 
 using namespace Calligra::Sheets;
 
@@ -370,7 +367,8 @@ void Selection::update(const QPoint& point)
         d->activeElement = subRegionEnd - 1;
     }
 
-    Sheet* sheet = cells()[d->activeElement]->sheet();
+    SheetBase* basesheet = cells()[d->activeElement]->sheet();
+    Sheet *sheet = dynamic_cast<Sheet *>(basesheet);
     if (sheet != d->activeSheet) {
         extend(point);
         d->activeElement = cells().count();
@@ -612,11 +610,12 @@ void Selection::extend(const Region& region)
     for (ConstIterator it = region.constBegin(); it != end; ++it) {
         Element *element = *it;
         if (!element) continue;
+        Sheet *sheet = dynamic_cast<Sheet *>(element->sheet());
         if (element->type() == Element::Point) {
             Point* point = static_cast<Point*>(element);
-            extend(point->pos(), element->sheet());
+            extend(point->pos(), sheet);
         } else {
-            extend(element->rect(), element->sheet());
+            extend(element->rect(), sheet);
         }
     }
 
@@ -625,7 +624,7 @@ void Selection::extend(const Region& region)
     emitChanged(*this);
 }
 
-Selection::Element* Selection::eor(const QPoint& point, Sheet* sheet)
+Selection::Element* Selection::eor(const QPoint& point, SheetBase* sheet)
 {
     // The selection always has to contain one location/range at least.
     if (isSingular()) {
@@ -995,7 +994,6 @@ void Selection::emitChanged(const Region& region)
         Element* element = *it;
         QRect area = element->rect();
 
-        const ColumnFormat *col;
         //look at if column is hiding.
         //if it's hiding refreshing column+1 (or column -1 )
         int left = area.left();
@@ -1017,15 +1015,27 @@ void Selection::emitChanged(const Region& region)
         if (right < KS_colMax) {
             do {
                 right++;
-                col = sheet->columnFormat(right);
-            } while (col->isHiddenOrFiltered() && right != KS_colMax);
+                int lastHidden;
+                if (sheet->columnFormats()->isHiddenOrFiltered(right, &lastHidden)) {
+                    right = lastHidden;
+                } else {
+                    break;
+                }
+            } while (right != KS_colMax);
         }
+
         if (left > 1) {
             do {
                 left--;
-                col = sheet->columnFormat(left);
-            } while (col->isHiddenOrFiltered() && left != 1);
+                int firstHidden;
+                if (sheet->columnFormats()->isHiddenOrFiltered(left, 0, &firstHidden)) {
+                    left = firstHidden;
+                } else {
+                    break;
+                }
+            } while (left != 1);
         }
+
 
         if (bottom < KS_rowMax) {
             do {
@@ -1059,7 +1069,7 @@ void Selection::emitChanged(const Region& region)
         extendedRegion.add(area, element->sheet());
     }
 
-    const QList<Cell> masterCells = sheet->cellStorage()->masterCells(extendedRegion);
+    const QList<Cell> masterCells = sheet->fullCellStorage()->masterCells(extendedRegion);
     for (int i = 0; i < masterCells.count(); ++i)
         extendedRegion.add(masterCells[i].cellPosition(), sheet);
 

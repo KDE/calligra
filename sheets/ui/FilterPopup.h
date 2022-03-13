@@ -16,7 +16,7 @@ namespace Calligra
 {
 namespace Sheets
 {
-class Cell;
+class CellBase;
 class Database;
 class Filter;
 
@@ -27,9 +27,9 @@ public:
     /**
      * Constructor.
      */
-    FilterPopup(QWidget* parent, const Cell& cell, Database* database);
+    FilterPopup(QWidget* parent, const CellBase& cell, Database* database);
 
-    static void showPopup(QWidget* parent, const Cell& cell, const QRect& cellRect, Database* database);
+    static void showPopup(QWidget* parent, const CellBase& cell, const QRect& cellRect, Database* database);
 
     /**
      * Destructor.

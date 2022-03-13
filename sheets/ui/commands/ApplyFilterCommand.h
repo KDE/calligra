@@ -8,14 +8,13 @@
 #define CALLIGRA_SHEETS_APPLYFILTER_COMMAND
 
 #include "AbstractRegionCommand.h"
+#include "core/Database.h"
+#include "core/DataFilter.h"
 
 namespace Calligra
 {
 namespace Sheets
 {
-
-class Database;
-class DataFilter;
 
 /**
  * \ingroup Commands
@@ -38,11 +37,11 @@ public:
     void undo() override;
 
     void setDatabase(const Database& database);
-    void setOldFilter(const DataFilter& filter);
+    void setOldFilter(const Filter& filter);
 
 private:
     Database m_database;
-    DataFilter m_oldFilter;
+    Filter m_oldFilter;
     QHash<int, bool> m_undoData;
 };
 

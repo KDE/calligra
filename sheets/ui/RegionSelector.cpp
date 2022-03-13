@@ -7,22 +7,20 @@
 #include "RegionSelector.h"
 
 // Sheets
-// #include "FormulaEditorHighlighter.h"
-// #include "Selection.h"
-// #include "SheetsDebug.h"
+#include "FormulaEditorHighlighter.h"
+#include "Selection.h"
 
 // Calligra
-// #include <KoIcon.h>
-// #include <KoDialog.h>
+#include <KoIcon.h>
+#include <KoDialog.h>
 
 // KF5
-// #include <KLocalizedString>
-// #include <ktextedit.h>
+#include <KLocalizedString>
+#include <ktextedit.h>
 
 // Qt
-// #include <QEvent>
-// #include <QHBoxLayout>
-// #include <QToolButton>
+#include <QHBoxLayout>
+#include <QToolButton>
 
 using namespace Calligra::Sheets;
 

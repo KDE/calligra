@@ -7,15 +7,12 @@
 #ifndef CALLIGRA_SHEETS_SHEET_VIEW
 #define CALLIGRA_SHEETS_SHEET_VIEW
 
-// #include <QObject>
-// #include <QPoint>
-// #include <QPointF>
-// #include <QRect>
+#include <QObject>
+#include <QRect>
 
 #include "sheets_ui_export.h"
 
 class QPainter;
-class QRect;
 class QRectF;
 class QSize;
 class QSizeF;

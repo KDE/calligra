@@ -1,6 +1,7 @@
 
 set (commands_DIR_SRCS
     commands/AbstractRegionCommand.cpp
+    commands/DataManipulators.cpp
     commands/ApplyFilterCommand.cpp
     commands/AutoFillCommand.cpp
     commands/AutoFilterCommand.cpp
@@ -10,7 +11,6 @@ set (commands_DIR_SRCS
     commands/ConditionCommand.cpp
     commands/CopyCommand.cpp
     commands/CSVDataCommand.cpp
-    commands/DataManipulators.cpp
     commands/DeleteCommand.cpp
     commands/IndentationCommand.cpp
     commands/LinkCommand.cpp
@@ -101,14 +101,13 @@ set (calligrasheetsui_LIB_SRCS
     CellToolBase.cpp
     CellToolBase_p.cpp
     CellView.cpp
+    ExternalEditor.cpp
     FilterPopup.cpp
     FormulaEditorHighlighter.cpp
     FunctionCompletion.cpp
-    ExternalEditor.cpp
     inspector.cpp
     LocationComboBox.cpp
     MapViewModel.cpp
-    PixmapCachingSheetView.cpp
     RegionSelector.cpp
     Selection.cpp
     SheetView.cpp
@@ -164,7 +163,9 @@ target_link_libraries(calligrasheetsui
         calligrasheetscore
         komain
         KF5::GuiAddons
+        KF5::Notifications
         KF5::SonnetCore
+
 )
 if(Qt5Sql_FOUND)
     target_link_libraries(calligrasheetsui PRIVATE Qt5::Sql)

@@ -6,18 +6,18 @@
 
 #include "MapViewModel.h"
 
-// #include "Map.h"
-// #include "ModelSupport.h"
-// #include "Sheet.h"
+#include "core/Map.h"
+#include "core/ModelSupport.h"
+#include "core/Sheet.h"
 
-// #include "commands/SheetCommands.h"
+#include "commands/SheetCommands.h"
 
-// #include <KoCanvasBase.h>
-// #include <KoShapeManager.h>
-// #include <KoShape.h>
-// #include <KoIcon.h>
+#include <KoCanvasBase.h>
+#include <KoShapeManager.h>
+#include <KoShape.h>
+#include <KoIcon.h>
 
-// #include <kxmlguiclient.h>
+#include <kxmlguiclient.h>
 
 using namespace Calligra::Sheets;
 
@@ -44,9 +44,10 @@ MapViewModel::MapViewModel(Map *map, KoCanvasBase *canvas, KXMLGUIClient *xmlGui
             this, &MapViewModel::gotoSheetActionTriggered);
 
     // Add the initial controlled sheets.
-    const QList<Sheet *> sheets = map->sheetList();
+    const QList<SheetBase *> sheets = map->sheetList();
     for (int i = 0; i < sheets.count(); ++i) {
-        addSheet(sheets[i]);
+        Sheet *sheet = dynamic_cast<Sheet *>(sheets[i]);
+        if (sheet) addSheet(sheet);
     }
 }
 
@@ -70,7 +71,8 @@ QVariant MapViewModel::data(const QModelIndex &index, int role) const
     if (index.row() >= map()->count()) {
         return QVariant();
     }
-    const Sheet* const sheet = map()->sheet(index.row());
+    SheetBase* basesheet = map()->sheet(index.row());
+    Sheet *sheet = dynamic_cast<Sheet *>(basesheet);
     return QVariant(sheet == d->activeSheet);
 }
 
@@ -104,7 +106,8 @@ bool MapViewModel::setData(const QModelIndex &index, const QVariant &value, int 
     if (index.row() >= map()->count()) {
         return false;
     }
-    Sheet* const sheet(map()->sheet(index.row()));
+    SheetBase* basesheet (map()->sheet(index.row()));
+    Sheet *sheet = dynamic_cast<Sheet *>(basesheet);
     setActiveSheet(sheet);
     return true;
 }
@@ -119,7 +122,7 @@ void MapViewModel::setActiveSheet(Sheet* sheet)
     if (d->activeSheet == sheet) {
         return;
     }
-    const QList<Sheet*> list = map()->sheetList();
+    const QList<SheetBase*> list = map()->sheetList();
     const int oldRow = list.indexOf(d->activeSheet);
     const int newRow = list.indexOf(sheet);
 
@@ -231,7 +234,8 @@ void MapViewModel::gotoSheetActionTriggered(QAction *action)
     const QList<QAction *> actions = d->gotoSheetActionGroup->actions();
     for (int i = 0; i < actions.count(); ++i) {
         if (actions[i]->text() == action->text()) {
-            Sheet *const sheet = map()->findSheet(action->iconText());
+            SheetBase *basesheet = map()->findSheet(action->iconText());
+            Sheet *sheet = basesheet ? dynamic_cast<Sheet *>(basesheet) : nullptr;
             if (sheet) {
                 setActiveSheet(sheet);
             } else { // should not happen

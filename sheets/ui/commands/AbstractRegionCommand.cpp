@@ -8,18 +8,17 @@
 // Local
 #include "AbstractRegionCommand.h"
 
-// #include <QApplication>
+#include <QApplication>
 
-// #include <KLocalizedString>
-// #include <kpassivepopup.h>
+#include <KLocalizedString>
+#include <KPassivePopup>
 
-// #include <KoCanvasBase.h>
+#include <KoCanvasBase.h>
 
-// #include "Cell.h"
-// #include "CellStorage.h"
-// #include "Damages.h"
-// #include "Map.h"
-// #include "Sheet.h"
+#include "engine/Damages.h"
+#include "core/CellStorage.h"
+#include "core/Map.h"
+#include "core/Sheet.h"
 
 using namespace Calligra::Sheets;
 
@@ -65,7 +64,7 @@ bool AbstractRegionCommand::execute(KoCanvasBase* canvas)
         return false;
     // registering in undo history?
     if (m_register)
-        canvas ? canvas->addCommand(this) : m_sheet->map()->addCommand(this);
+        canvas ? canvas->addCommand(this) : m_sheet->fullMap()->addCommand(this);
     else
         redo();
     return m_success;
@@ -133,7 +132,7 @@ bool AbstractRegionCommand::isApproved() const
     const QList<Element *> elements = cells();
     const int begin = m_reverse ? elements.count() - 1 : 0;
     const int end = m_reverse ? -1 : elements.count();
-    if (m_checkLock && m_sheet->cellStorage()->hasLockedCells(*this)) {
+    if (m_checkLock && m_sheet->fullCellStorage()->hasLockedCells(*this)) {
         KPassivePopup::message(i18n("Processing is not possible, because some "
                                     "cells are locked as elements of a matrix."),
                                QApplication::activeWindow());
