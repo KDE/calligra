@@ -138,6 +138,17 @@ public:
     void unlockCells(int column, int row);
     QRect lockedCells(int column, int row) const;
 
+    /**
+     * The maximum occupied column, i.e. the horizontal storage dimension.
+     * \return the maximum column
+     */
+    virtual int columns(bool includeStyles = true) const;
+
+    /**
+     * The maximum occupied row, i.e. the vertical storage dimension.
+     * \return the maximum row
+     */
+    virtual int rows(bool includeStyles = true) const;
 
 
     /**

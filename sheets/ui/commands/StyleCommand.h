@@ -14,7 +14,6 @@ namespace Calligra
 {
 namespace Sheets
 {
-class Style;
 
 /**
  * \class StyleCommand
@@ -80,7 +79,7 @@ public:
     }
     void setFallDiagonalPen(const QPen& pen) {
         m_style->setFallDiagonalPen(pen);
-    }
+   }
     void setGoUpDiagonalPen(const QPen& pen) {
         m_style->setGoUpDiagonalPen(pen);
     }
@@ -165,7 +164,6 @@ private:
     bool m_verticalPenChanged;
 
     Style* m_style;
-    QList< QPair<QRectF, SharedSubStyle> > m_undoData;
 };
 
 } // namespace Sheets

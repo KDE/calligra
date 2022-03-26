@@ -67,6 +67,7 @@ public:
 
     /** Convenience function - sets everything at once. */
     void setRowFormat (int firstRow, int lastRow, const RowFormat &f);
+    RowFormat getRowFormat(int row) const;
 
     bool isDefaultRow(int row, int* lastRow = 0, int* firstRow = 0) const;
     void setDefault(int firstRow, int lastRow);

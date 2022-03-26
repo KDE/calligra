@@ -15,7 +15,8 @@ namespace Calligra
 {
 namespace Sheets
 {
-class ColumnFormat;
+class Cell;
+class ColFormat;
 class RowFormat;
 class Style;
 
@@ -150,7 +151,7 @@ public:
     explicit InsertDeleteColumnManipulator(KUndo2Command *parent = 0);
     ~InsertDeleteColumnManipulator() override;
 
-    void setTemplate(const ColumnFormat &columnFormat);
+    void setTemplate(const ColFormat &columnFormat);
     void setReverse(bool reverse) override;
 
 protected:
@@ -162,7 +163,7 @@ protected:
 private:
     enum Mode { Insert, Delete };
     Mode m_mode;
-    ColumnFormat *m_template;
+    ColFormat *m_template;
 };
 
 

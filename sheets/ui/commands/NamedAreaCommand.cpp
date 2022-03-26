@@ -6,14 +6,11 @@
 
 #include "NamedAreaCommand.h"
 
-// #include "KLocalizedString"
-
-// #include "Damages.h"
-// #include "FormulaStorage.h"
-// #include "calligra_sheets_limits.h"
-// #include "Map.h"
-// #include "NamedAreaManager.h"
-// #include "Sheet.h"
+#include "engine/Damages.h"
+#include "engine/FormulaStorage.h"
+#include "engine/MapBase.h"
+#include "engine/NamedAreaManager.h"
+#include "core/Sheet.h"
 
 using namespace Calligra::Sheets;
 
@@ -76,13 +73,13 @@ bool NamedAreaCommand::mainProcessing()
 bool NamedAreaCommand::postProcessing()
 {
     // update formulas containing either the new or the old name
-    Map* const map = m_sheet->map();
-    foreach(Sheet* sheet, map->sheetList()) {
+    MapBase* const map = m_sheet->map();
+    foreach(SheetBase* sheet, map->sheetList()) {
         const QString tmp = '\'' + m_areaName + '\'';
         const FormulaStorage* const storage = sheet->formulaStorage();
         for (int c = 0; c < storage->count(); ++c) {
             if (storage->data(c).expression().contains(tmp)) {
-                Cell cell(sheet, storage->col(c), storage->row(c));
+                CellBase cell(sheet, storage->col(c), storage->row(c));
                 if (cell.isFormula()) {
                     // recalculate cells
                     map->addDamage(new CellDamage(cell, CellDamage::Appearance | CellDamage::Binding |

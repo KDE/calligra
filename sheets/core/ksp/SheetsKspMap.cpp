@@ -13,11 +13,8 @@
 #include "RowFormatStorage.h"
 #include "Sheet.h"
 
-// #include "CalculationSettings.h"
 #include "DocBase.h"
 #include "LoadingInfo.h"
-// #include "Localization.h"
-// #include "NamedAreaManager.h"
 
 #include <KoXmlReader.h>
 

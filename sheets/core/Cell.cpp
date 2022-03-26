@@ -32,6 +32,7 @@
 #include "engine/CalculationSettings.h"
 #include "engine/Formula.h"
 #include "engine/NamedAreaManager.h"
+#include "engine/ValueCalc.h"
 
 #include "CellStorage.h"
 #include "ColFormatStorage.h"
@@ -244,35 +245,55 @@ void Cell::setRichText(QSharedPointer<QTextDocument> text)
 // FIXME: Continue commenting and cleaning here (ingwa)
 
 
-void Cell::copyFormat(const Cell& cell)
+// copy/paste
+
+void Cell::copyFormat(const Cell& cell, Paste::Mode mode)
 {
     Q_ASSERT(!isNull());   // trouble ahead...
     Q_ASSERT(!cell.isNull());
+
     Value value = this->value();
     value.setFormat(cell.value().format());
-    sheet()->cellStorage()->setValue(column(), row(), value);
-    if (!style().isDefault() || !cell.style().isDefault())
-        setStyle(cell.style());
+    setValue(value);
+    if (!style().isDefault() || !cell.style().isDefault()) {
+        Style style = cell.style();
+        if (mode == Paste::NoBorder) {
+            // We do not want to include borders.
+            style.clearAttribute(Style::LeftPen);
+            style.clearAttribute(Style::RightPen);
+            style.clearAttribute(Style::TopPen);
+            style.clearAttribute(Style::BottomPen);
+        }
+        setStyle(style);
+    }
     if (!conditions().isEmpty() || !cell.conditions().isEmpty())
         setConditions(cell.conditions());
 }
 
-void Cell::copyAll(const Cell& cell)
+void Cell::copyContent(const Cell& cell, Paste::Mode mode, Paste::Operation op)
 {
     Q_ASSERT(!isNull());   // trouble ahead...
     Q_ASSERT(!cell.isNull());
-    copyFormat(cell);
-    copyContent(cell);
-    if (!comment().isEmpty() || !cell.comment().isEmpty())
-        setComment(cell.comment());
-    if (!validity().isEmpty() || !cell.validity().isEmpty())
-        setValidity(cell.validity());
-}
 
-void Cell::copyContent(const Cell& cell)
-{
-    Q_ASSERT(!isNull());   // trouble ahead...
-    Q_ASSERT(!cell.isNull());
+    // Do we want values instead of the regular operation?
+    if (mode == Paste::Result) {
+        setCellValue (cell.value());
+        return;
+    }
+
+    Value val = cell.value();
+    // Do we want to adjust the value somehow? Only applies if one of the values is numeric.
+    if ((op != Paste::OverWrite) && (value().isNumber() || val.isNumber())) {
+        Value cur = value();
+        ValueCalc *calc = sheet()->map()->calc();
+        if (op == Paste::Add) val = calc->add (cur, val);
+        else if (op == Paste::Mul) val = calc->mul (cur, val);
+        else if (op == Paste::Sub) val = calc->sub (cur, val);
+        else if (op == Paste::Div) val = calc->div (cur, val);
+        setCellValue (cell.value());
+        return;
+    }
+
     if (cell.isFormula()) {
         // change all the references, e.g. from A1 to A3 if copying
         // from e.g. B2 to B4
@@ -280,12 +301,52 @@ void Cell::copyContent(const Cell& cell)
         formula.setExpression(decodeFormula(cell.encodeFormula()));
         setFormula(formula);
     } else {
-        // copy the user input
+        // copy the user input - we don't parse anything, just call it
         sheet()->cellStorage()->setUserInput(column(), row(), cell.userInput());
+        setValue(val);
     }
-    // copy the value in both cases
-    sheet()->cellStorage()->setValue(column(), row(), cell.value());
+    if (!cell.richText().isNull())
+        setRichText(cell.richText());
+
 }
+
+void Cell::copyAll(const Cell& cell, Paste::Mode mode, Paste::Operation op)
+{
+    Q_ASSERT(!isNull());   // trouble ahead...
+    Q_ASSERT(!cell.isNull());
+
+    bool wantContent = true;
+    bool wantFormat = true;
+    bool wantComment = true;
+    bool wantValidity = true;
+    if ((mode == Paste::Text) || (mode == Paste::Result)) {
+        wantFormat = false;
+        wantComment = false;
+        wantValidity = false;
+    }
+    if (mode == Paste::Format) {
+        wantContent = false;
+        wantComment = false;
+        wantValidity = false;
+    }
+    if (mode == Paste::Comment) {
+        wantContent = false;
+        wantFormat = false;
+        wantValidity = false;
+    }
+
+    if (wantFormat) copyFormat(cell, mode);
+    if (wantContent) copyContent(cell, mode, op);
+
+    if (wantComment && (!comment().isEmpty() || !cell.comment().isEmpty()))
+        setComment(cell.comment());
+    if (wantValidity && (!validity().isEmpty() || !cell.validity().isEmpty()))
+        setValidity(cell.validity());
+}
+
+
+// end of copy/paste
+
 
 bool Cell::needsPrinting() const
 {

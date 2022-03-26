@@ -7,14 +7,14 @@
 // Local
 #include "MergeCommand.h"
 
-// #include <KLocalizedString>
-// #include <kmessagebox.h>
+#include <KLocalizedString>
+#include <kmessagebox.h>
 
-// #include "Cell.h"
-// #include "Damages.h"
-// #include "Map.h"
-// #include "ui/Selection.h" // FIXME detach from ui
-// #include "Sheet.h"
+#include "engine/Damages.h"
+#include "core/Cell.h"
+#include "core/Map.h"
+#include "core/Sheet.h"
+#include "ui/Selection.h"
 
 using namespace Calligra::Sheets;
 
@@ -42,7 +42,7 @@ bool MergeCommand::process(Element* element)
     }
 
     // sanity check
-    if (m_sheet->isProtected() || m_sheet->map()->isProtected()) {
+    if (m_sheet->isProtected() || m_sheet->fullMap()->isProtected()) {
         return false;
     }
 

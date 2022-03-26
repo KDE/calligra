@@ -24,9 +24,7 @@
 #include "engine/CalculationSettings.h"
 
 #include "BindingModel.h"
-// #include "SheetsDebug.h"
 #include "SheetAccessModel.h"
-// #include "calligra_sheets_limits.h"
 #include "DocBase.h"
 #include "Map.h"
 #include "Sheet.h"
@@ -39,12 +37,10 @@
 #include <KoStoreDevice.h>
 #include <KoUnit.h>
 #include <KoUpdater.h>
-// #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 
 #include <KCodecs>
-// #include <QBuffer>
 
 // This file contains functionality to load/save a DocBase
 

@@ -491,7 +491,7 @@ void CanvasBase::focusIn(QFocusEvent *event)
 bool CanvasBase::dragEnter(const QMimeData* mimeData)
 {
     if (mimeData->hasText() ||
-            mimeData->hasFormat("application/x-kspread-snippet")) {
+            mimeData->hasFormat("application/x-calligra-sheets-snippet")) {
         return true;
     }
     return false;
@@ -504,20 +504,20 @@ bool CanvasBase::dragMove(const QMimeData* mimeData, const QPointF& eventPos, co
         return false;
     }
 
-    if (mimeData->hasText() || mimeData->hasFormat("application/x-kspread-snippet")) {
+    if (mimeData->hasText() || mimeData->hasFormat("application/x-calligra-sheets-snippet")) {
         // acceptProposedAction
     } else {
         return false;
     }
 #if 0 // TODO Stefan: implement drag marking rectangle
     QRect dragMarkingRect;
-    if (mimeData->hasFormat("application/x-kspread-snippet")) {
+    if (mimeData->hasFormat("application/x-calligra-sheets-snippet")) {
         if (source == canvasWidget()) {
             debugSheetsUI << "source == this";
             dragMarkingRect = selection()->boundingRect();
         } else {
             debugSheetsUI << "source != this";
-            QByteArray data = mimeData->data("application/x-kspread-snippet");
+            QByteArray data = mimeData->data("application/x-calligra-sheets-snippet");
             QString errorMsg;
             int errorLine;
             int errorColumn;

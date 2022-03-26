@@ -7,12 +7,8 @@
 // Local
 #include "ValidityCommand.h"
 
-
-// #include <KLocalizedString>
-
-// #include "CellStorage.h"
-// #include "Sheet.h"
-// #include "ValidityStorage.h"
+#include "core/CellStorage.h"
+#include "core/Sheet.h"
 
 using namespace Calligra::Sheets;
 
@@ -21,25 +17,27 @@ ValidityCommand::ValidityCommand()
 {
 }
 
+bool ValidityCommand::preProcessing()
+{
+    if (!m_firstrun)
+        return true;
+    m_sheet->fullCellStorage()->startUndoRecording();
+    return AbstractRegionCommand::preProcessing();
+}
+
 bool ValidityCommand::process(Element* element)
 {
     if (!m_reverse) {
-        // create undo
-        if (m_firstrun)
-            m_undoData += m_sheet->validityStorage()->undoData(Region(element->rect()));
         m_sheet->cellStorage()->setValidity(Region(element->rect()), m_validity);
     }
     return true;
 }
 
-bool ValidityCommand::mainProcessing()
+bool ValidityCommand::postProcessing()
 {
-    if (m_reverse) {
-        m_sheet->cellStorage()->setValidity(*this, Validity());
-        for (int i = 0; i < m_undoData.count(); ++i)
-            m_sheet->cellStorage()->setValidity(Region(m_undoData[i].first.toRect()), m_undoData[i].second);
-    }
-    return AbstractRegionCommand::mainProcessing();
+    if (m_firstrun)
+        m_sheet->fullCellStorage()->stopUndoRecording(this);
+    return true;
 }
 
 void ValidityCommand::setValidity(Validity validity)

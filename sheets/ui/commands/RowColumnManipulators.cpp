@@ -7,22 +7,16 @@
 // Local
 #include "RowColumnManipulators.h"
 
-// #include <float.h>
-// #include <algorithm>
+#include <float.h>
 
-// #include <QFontMetricsF>
-// #include <QWidget>
-// #include <QPen>
-
-// #include <KLocalizedString>
-
-// #include "CellStorage.h"
-// #include "Damages.h"
-// #include "Map.h"
-// #include "RowColumnFormat.h"
-// #include "RowFormatStorage.h"
-// #include "Sheet.h"
-// #include "Value.h"
+#include "engine/Damages.h"
+#include "engine/MapBase.h"
+#include "core/Cell.h"
+#include "core/CellStorage.h"
+#include "core/ColFormatStorage.h"
+#include "core/RowFormatStorage.h"
+#include "core/Sheet.h"
+#include "core/Style.h"
 
 using namespace Calligra::Sheets;
 
@@ -43,18 +37,28 @@ ResizeColumnManipulator::~ResizeColumnManipulator()
 bool ResizeColumnManipulator::process(Element* element)
 {
     QRect range = element->rect();
-    for (int col = range.right(); col >= range.left(); --col) {
-        ColumnFormat *format = m_sheet->nonDefaultColumnFormat(col);
-        if (m_firstrun)
-            m_oldSizes[col] = format->width();
-        qreal delta = format->width();
-        format->setWidth(m_reverse ? m_oldSizes[col] : qMax(2.0, m_newSize));
-        delta = format->width() - delta;
+    // TODO: more efficiently store old sizes
+    if (m_firstrun) {
+        for (int col = range.right(); col >= range.left(); --col) {
+            m_oldSizes[col] = m_sheet->columnFormats()->colWidth(col);
+        }
+    }
+    if (m_reverse) {
+        for (int col = range.right(); col >= range.left(); --col) {
+            m_sheet->columnFormats()->setColWidth(col, col, m_oldSizes[col]);
+        }
+    } else {
+        m_sheet->columnFormats()->setColWidth(range.left(), range.right(), qMax(2.0, m_newSize));
+    }
+    // TODO: more efficiently update positions of cell-anchored shapes
+    for (int col = range.left(); col <= range.right(); ++col) {
+        qreal delta = m_newSize - m_oldSizes[col];
+        if (m_reverse) delta = -delta;
         m_sheet->adjustCellAnchoredShapesX(delta, col+1);
     }
     // Just repaint everything visible; no need to invalidate the visual cache.
     m_sheet->map()->addDamage(new SheetDamage(m_sheet, SheetDamage::ContentChanged));
-    // TODO: only invalidate the cells that are actually effected by this resize (so everythin in this column, and everything that covers something in this column)
+    // TODO: only invalidate the cells that are actually effected by this resize (so everythin in this row, and everything that covers something in this row)
     m_sheet->map()->addDamage(new CellDamage(m_sheet, Region(1, 1, KS_colMax, KS_rowMax, m_sheet), CellDamage::Appearance));
     return true;
 }
@@ -124,11 +128,10 @@ bool HideShowManipulator::process(Element* element)
 {
     QRect range = element->rect();
     if (m_manipulateColumns) {
-        for (int col = range.left(); col <= range.right(); ++col) {
-            ColumnFormat* format = m_sheet->nonDefaultColumnFormat(col);
-            format->setHidden(!m_reverse);
-            m_sheet->adjustCellAnchoredShapesX(m_reverse ? format->width() : -format->width(), col);
-        }
+        m_sheet->columnFormats()->setHidden(range.left(), range.right(), !m_reverse);
+        qreal delta = m_sheet->columnFormats()->totalColWidth(range.left(), range.right());
+        if (!m_reverse) delta = -delta;
+        m_sheet->adjustCellAnchoredShapesX(delta, range.left());
     }
     if (m_manipulateRows) {
         m_sheet->rowFormats()->setHidden(range.top(), range.bottom(), !m_reverse);
@@ -152,7 +155,7 @@ bool HideShowManipulator::preProcessing()
                 if (range.left() > 1) {
                     int col;
                     for (col = 1; col < range.left(); ++col) {
-                        if (!m_sheet->columnFormat(col)->isHidden())
+                        if (!m_sheet->columnFormats()->isHidden(col))
                             break;
                     }
                     if (col == range.left()) {
@@ -160,7 +163,7 @@ bool HideShowManipulator::preProcessing()
                     }
                 }
                 for (int col = range.left(); col <= range.right(); ++col) {
-                    if (m_sheet->columnFormat(col)->isHidden()) {
+                    if (m_sheet->columnFormats()->isHidden(col)) {
                         region.add(QRect(col, 1, 1, KS_rowMax));
                     }
                 }
@@ -258,30 +261,31 @@ bool AdjustColumnRowManipulator::process(Element* element)
         widths = m_newWidths;
     }
 
+    CellStorage *cs = sheet->fullCellStorage();
     QRect range = element->rect();
     if (m_adjustColumn) {
         if (element->isRow()) {
             for (int row = range.top(); row <= range.bottom(); ++row) {
-                Cell cell = sheet->cellStorage()->firstInRow(row);
+                Cell cell = cs->firstInRow(row);
                 while (!cell.isNull()) {
                     int col = cell.column();
                     if (!cell.isEmpty() && !cell.isPartOfMerged()) {
                         if (widths.contains(col) && widths[col] != -1.0) {
-                            ColumnFormat* format = sheet->nonDefaultColumnFormat(col);
-                            if (qAbs(format->width() - widths[col]) > DBL_EPSILON) {
-                                format->setWidth(qMax(2.0, widths[col]));
+                            double w = sheet->columnFormats()->colWidth(col);
+                            if (qAbs(w - widths[col]) > DBL_EPSILON) {
+                                sheet->columnFormats()->setColWidth(col, col, qMax(2.0, widths[col]));
                             }
                         }
                     }
-                    cell = sheet->cellStorage()->nextInRow(col, row);
+                    cell = cs->nextInRow(col, row);
                 }
             }
         } else {
             for (int col = range.left(); col <= range.right(); ++col) {
                 if (widths.contains(col) && widths[col] != -1.0) {
-                    ColumnFormat* format = sheet->nonDefaultColumnFormat(col);
-                    if (qAbs(format->width() - widths[col]) > DBL_EPSILON) {
-                        format->setWidth(qMax(2.0, widths[col]));
+                    double w = sheet->columnFormats()->colWidth(col);
+                    if (qAbs(w - widths[col]) > DBL_EPSILON) {
+                        sheet->columnFormats()->setColWidth(col, col, qMax(2.0, widths[col]));
                     }
                 }
             }
@@ -290,7 +294,7 @@ bool AdjustColumnRowManipulator::process(Element* element)
     if (m_adjustRow) {
         if (element->isColumn()) {
             for (int col = range.left(); col <= range.right(); ++col) {
-                Cell cell = sheet->cellStorage()->firstInColumn(col);
+                Cell cell = cs->firstInColumn(col);
                 while (!cell.isNull()) {
                     int row = cell.row();
                     if (!cell.isEmpty() && !cell.isPartOfMerged()) {
@@ -298,7 +302,7 @@ bool AdjustColumnRowManipulator::process(Element* element)
                             sheet->rowFormats()->setRowHeight(row, row, heights[row]);
                         }
                     }
-                    cell = sheet->cellStorage()->nextInColumn(col, row);
+                    cell = cs->nextInColumn(col, row);
                 }
             }
         } else {
@@ -329,19 +333,20 @@ bool AdjustColumnRowManipulator::preProcessing()
         }
 //     createUndo();
 
+        CellStorage *cs = m_sheet->fullCellStorage();
         ConstIterator endOfList(cells().constEnd());
         for (ConstIterator it = cells().constBegin(); it != endOfList; ++it) {
             Element* element = *it;
             QRect range = element->rect();
             if (element->isColumn()) {
                 for (int col = range.left(); col <= range.right(); ++col) {
-                    Cell cell = m_sheet->cellStorage()->firstInColumn(col);
+                    Cell cell = cs->firstInColumn(col);
                     while (!cell.isNull()) {
                         int row = cell.row();
                         if (m_adjustColumn) {
                             if (!m_newWidths.contains(col)) {
                                 m_newWidths[col] = -1.0;
-                                m_oldWidths[col] = m_sheet->columnFormat(col)->width();
+                                m_oldWidths[col] = m_sheet->columnFormats()->colWidth(col);
                             }
                             if (!cell.isEmpty() && !cell.isPartOfMerged()) {
                                 m_newWidths[col] = qMax(adjustColumnHelper(cell),
@@ -358,18 +363,18 @@ bool AdjustColumnRowManipulator::preProcessing()
                                                          m_newHeights[row]);
                             }
                         }
-                        cell = m_sheet->cellStorage()->nextInColumn(col, row);
+                        cell = cs->nextInColumn(col, row);
                     }
                 }
             } else if (element->isRow()) {
                 for (int row = range.top(); row <= range.bottom(); ++row) {
-                    Cell cell = m_sheet->cellStorage()->firstInRow(row);
+                    Cell cell = cs->firstInRow(row);
                     while (!cell.isNull()) {
                         int col = cell.column();
                         if (m_adjustColumn) {
                             if (!m_newWidths.contains(col)) {
                                 m_newWidths[col] = -1.0;
-                                m_oldWidths[col] = m_sheet->columnFormat(col)->width();
+                                m_oldWidths[col] = m_sheet->columnFormats()->colWidth(col);
                             }
                             if (!cell.isEmpty() && !cell.isPartOfMerged()) {
                                 m_newWidths[col] = qMax(adjustColumnHelper(cell),
@@ -386,7 +391,7 @@ bool AdjustColumnRowManipulator::preProcessing()
                                                          m_newHeights[row]);
                             }
                         }
-                        cell = m_sheet->cellStorage()->nextInRow(col, row);
+                        cell = cs->nextInRow(col, row);
                     }
                 }
             } else {
@@ -397,7 +402,7 @@ bool AdjustColumnRowManipulator::preProcessing()
                         if (m_adjustColumn) {
                             if (!m_newWidths.contains(col)) {
                                 m_newWidths[col] = -1.0;
-                                m_oldWidths[col] = m_sheet->columnFormat(col)->width();
+                                m_oldWidths[col] = m_sheet->columnFormats()->colWidth(col);
                             }
                             if (!cell.isEmpty() && !cell.isPartOfMerged()) {
                                 m_newWidths[col] = qMax(adjustColumnHelper(cell),
@@ -518,10 +523,8 @@ double AdjustColumnRowManipulator::adjustColumnHelper(const Cell& cell)
         // this is not perfect, but at least should work in 90% of the cases
         const int mergedXCount = cell.mergedXCells();
         if (mergedXCount > 0) {
-            for (int col = 1; col <= mergedXCount; col++) {
-                double cw = cell.sheet()->columnFormat(cell.column() + col)->width();
-                long_max -= cw;
-            }
+            double cw = cell.fullSheet()->columnFormats()->totalVisibleColWidth(cell.column() + 1, cell.column() + mergedXCount);
+            long_max -= cw;
         }
     }
     // add 4 because long_max is the length of the text
@@ -575,10 +578,10 @@ InsertDeleteColumnManipulator::~InsertDeleteColumnManipulator()
     delete m_template;
 }
 
-void InsertDeleteColumnManipulator::setTemplate(const ColumnFormat &columnFormat)
+void InsertDeleteColumnManipulator::setTemplate(const ColFormat &columnFormat)
 {
     delete m_template;
-    m_template = new ColumnFormat(columnFormat);
+    m_template = new ColFormat(columnFormat);
 }
 
 void InsertDeleteColumnManipulator::setReverse(bool reverse)
@@ -600,12 +603,8 @@ bool InsertDeleteColumnManipulator::process(Element* element)
         // insert rows
         m_sheet->insertColumns(pos, num);
         if (m_template) {
-            m_template->setSheet(m_sheet);
             const int end = pos + num - 1;
-            for (int col = pos; col <= end; ++col) {
-                m_template->setColumn(col);
-                m_sheet->insertColumnFormat(m_template);
-            }
+            m_sheet->columnFormats()->setColFormat (pos, end, *m_template);
         }
         m_sheet->cellStorage()->insertColumns(pos, num);
 
@@ -649,7 +648,7 @@ bool InsertDeleteColumnManipulator::preProcessing()
                 }
             }
         } else { // contiguous selection
-            m_sheet->cellStorage()->startUndoRecording();
+            m_sheet->fullCellStorage()->startUndoRecording();
         }
     }
     return AbstractRegionCommand::preProcessing();
@@ -674,7 +673,7 @@ bool InsertDeleteColumnManipulator::postProcessing()
         return true;
     }
     if (m_firstrun) {
-        m_sheet->cellStorage()->stopUndoRecording(this);
+        m_sheet->fullCellStorage()->stopUndoRecording(this);
     }
     const QRect rect(QPoint(boundingRect().left(), 1), QPoint(KS_colMax, KS_rowMax));
     m_sheet->map()->addDamage(new CellDamage(m_sheet, Region(rect, m_sheet), CellDamage::Appearance));
@@ -723,12 +722,8 @@ bool InsertDeleteRowManipulator::process(Element* element)
         // insert rows
         m_sheet->insertRows(pos, num);
         if (m_template) {
-            m_template->setSheet(m_sheet);
             const int end = pos + num - 1;
-            for (int row = pos; row <= end; ++row) {
-                m_template->setRow(row);
-                m_sheet->insertRowFormat(m_template);
-            }
+            m_sheet->rowFormats()->setRowFormat (pos, end, *m_template);
         }
         m_sheet->cellStorage()->insertRows(pos, num);
 
@@ -772,7 +767,7 @@ bool InsertDeleteRowManipulator::preProcessing()
                 }
             }
         } else { // contiguous selection
-            m_sheet->cellStorage()->startUndoRecording();
+            m_sheet->fullCellStorage()->startUndoRecording();
         }
     }
     return AbstractRegionCommand::preProcessing();
@@ -797,7 +792,7 @@ bool InsertDeleteRowManipulator::postProcessing()
         return true;
     }
     if (m_firstrun) {
-        m_sheet->cellStorage()->stopUndoRecording(this);
+        m_sheet->fullCellStorage()->stopUndoRecording(this);
     }
     const QRect rect(QPoint(1, boundingRect().top()), QPoint(KS_colMax, KS_rowMax));
     m_sheet->map()->addDamage(new CellDamage(m_sheet, Region(rect, m_sheet), CellDamage::Appearance));

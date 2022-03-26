@@ -68,6 +68,7 @@ public:
 
     /** Convenience function - sets everything at once. */
     void setColFormat (int firstCol, int lastCol, const ColFormat &f);
+    ColFormat getColFormat(int col) const;
 
     bool isDefaultCol(int col, int* lastCol = 0, int* firstCol = 0) const;
     void setDefault(int firstCol, int lastCol);

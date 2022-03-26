@@ -8,10 +8,9 @@
 // Local
 #include "LinkCommand.h"
 
-// #include "Damages.h"
-// #include "Localization.h"
-// #include "Map.h"
-// #include "Sheet.h"
+#include "engine/Damages.h"
+#include "engine/MapBase.h"
+#include "engine/SheetBase.h"
 
 using namespace Calligra::Sheets;
 

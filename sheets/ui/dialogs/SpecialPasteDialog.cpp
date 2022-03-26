@@ -78,10 +78,12 @@ void SpecialPasteDialog::slotOk()
     if (divisionButton->isChecked())
         op = Paste::Div;
 
+    QClipboard *clipboard = QApplication::clipboard();
     PasteCommand *const command = new PasteCommand();
     command->setSheet(m_selection->activeSheet());
     command->add(*m_selection);
-    command->setMimeData(QApplication::clipboard()->mimeData());
+    command->setMimeData(clipboard->mimeData());
+    command->setSameApp(clipboard->ownsClipboard());
     command->setMode(sp);
     command->setOperation(op);
     m_selection->activeSheet()->map()->addCommand(command);

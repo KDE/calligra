@@ -30,18 +30,13 @@ void PasteCommandTest::testKSpreadSnippet()
     selection.initialize(QPoint(2, 4), sheet);
 
     QMimeData *mimedata = new QMimeData();
-    mimedata->setData("application/x-kspread-snippet",
-                      "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-                      "<!DOCTYPE spreadsheet-snippet>\n"
-                      "<spreadsheet-snippet rows=\"1\" columns=\"1\">\n"
-                      " <cell row=\"1\" column=\"1\">\n"
-                      "  <text outStr=\"3\" dataType=\"Num\">3</text>\n"
-                      " </cell>\n"
-                      "</spreadsheet-snippet>\n");
+    mimedata->setData("application/x-calligra-sheets-snippet",
+                      "range 1 3 1 3 Sheet1\n");
 
     PasteCommand *command = new PasteCommand();
     command->setSheet(selection.activeSheet());
     command->add(selection);
+    command->setSameApp(true);
     command->setMimeData(mimedata);
     command->setPasteFC(true);
     command->execute(&canvas);

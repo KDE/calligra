@@ -9,14 +9,15 @@
 
 #include "DataManipulators.h"
 
-#include <QSet>
+#include "core/ColFormatStorage.h"
+#include "core/RowFormatStorage.h"
+
+#include <QMap>
 
 namespace Calligra
 {
 namespace Sheets
 {
-class ColumnFormat;
-class RowFormat;
 
 /**
  * \ingroup Commands
@@ -56,8 +57,8 @@ protected:
     }
 
 protected:
-    QSet<ColumnFormat*> m_columnFormats;
-    QSet<RowFormat*>   m_rowFormats;
+    QMap<int, ColFormat> m_columnFormats;
+    QMap<int, RowFormat> m_rowFormats;
     Mode m_mode;
 };
 

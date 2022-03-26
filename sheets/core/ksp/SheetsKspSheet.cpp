@@ -34,12 +34,13 @@ namespace Sheets {
 
 
 namespace Ksp {
+    // formats
     QDomElement saveRowFormat(int row, QDomDocument&, Sheet *sheet);
     bool loadRowFormat(const KoXmlElement& row, Sheet *sheet);
-
     QDomElement saveColFormat(int col, QDomDocument&, Sheet *sheet);
     bool loadColFormat(const KoXmlElement& row, Sheet *sheet);
-}
+
+};
 
 
 bool Ksp::loadSheet(Sheet *obj, const KoXmlElement& sheet)

@@ -11,6 +11,8 @@
 
 #include "../sheets_ui_export.h"
 
+#include "core/Cell.h"
+
 class QMimeData;
 class KoXmlDocument;
 
@@ -19,39 +21,7 @@ namespace Calligra
 namespace Sheets
 {
 
-/**
- * This namespace collects enumerations related to
- * pasting operations.
- */
-namespace Paste
-{
-/**
- * The pasted content
- */
-enum Mode {
-    Normal /** Everything */,
-    Text /** Text only */,
-    Format /** Format only */,
-    NoBorder /** not the borders */,
-    Comment /** Comment only */,
-    Result /** Result only, no formula */,
-    NormalAndTranspose /** */,
-    TextAndTranspose /** */,
-    FormatAndTranspose /** */,
-    NoBorderAndTranspose /** */
-};
-/**
- * The current cell value treatment.
- */
-enum Operation {
-    OverWrite /** Overwrite */,
-    Add /** Add */,
-    Mul /** Multiply */,
-    Sub /** Subtract */,
-    Div /** Divide */
-};
-} // namespace Paste
-
+class SheetBase;
 
 /**
  * \ingroup Commands
@@ -79,6 +49,7 @@ public:
     void setMode(Paste::Mode mode);
     void setOperation(Paste::Operation operation);
     void setPasteFC(bool force);
+    void setSameApp(bool same);
 
     virtual bool isApproved() const;
 
@@ -105,22 +76,22 @@ protected:
     bool postProcessing() override;
 
     /**
-     * Creates sub-commands for the region \p element by parsing XML \p data.
+     * Creates sub-commands for the region \p element. \p data.
      */
-    bool processXmlData(Element *element, KoXmlDocument *data);
+    bool processSnippetData(Element *element, QRect sourceRect, SheetBase *sourceSheet, bool isCut);
 
     /**
      * Creates sub-commands for the region \p element by parsing plain text.
      */
-    bool processTextPlain(Element *element);
+    bool processTextPlain(Element *element, const QString &data);
 
 private:
     const QMimeData *   m_mimeData;
-    KoXmlDocument *     m_xmlDocument;
     InsertionMode       m_insertMode;
     Paste::Mode         m_pasteMode;
     Paste::Operation    m_operation;
     bool                m_pasteFC;
+    bool                m_sameApp;
 };
 
 } // namespace Sheets

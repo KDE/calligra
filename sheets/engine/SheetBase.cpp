@@ -31,6 +31,9 @@ public:
     MapBase *workbook;
     QString name;
 
+    // true if sheet is hidden
+    bool hide;
+
     bool autoCalc;
     bool firstLetterUpper;
 
@@ -53,6 +56,7 @@ SheetBase::SheetBase(MapBase* map, const QString &sheetName) :
     d->name = sheetName;
     d->cellStorage = new CellBaseStorage(this);
 
+    d->hide = false;
     d->autoCalc = true;
     d->firstLetterUpper = false;
 }
@@ -62,6 +66,7 @@ SheetBase::SheetBase(const SheetBase &other)
 {
     d->workbook = other.d->workbook;
 
+    d->hide = other.d->hide;
     d->autoCalc = other.d->autoCalc;
     d->firstLetterUpper = other.d->firstLetterUpper;
 
@@ -136,6 +141,25 @@ bool SheetBase::setSheetName(const QString& name)
 bool SheetBase::rowIsHidden(int /*row*/) const
 {
     return false;
+}
+
+bool SheetBase::isHidden() const
+{
+    return d->hide;
+}
+
+void SheetBase::setHidden(bool hidden)
+{
+    d->hide = hidden;
+}
+
+void SheetBase::hideSheet(bool _hide)
+{
+    setHidden(_hide);
+    if (_hide)
+        map()->addDamage(new SheetDamage(this, SheetDamage::Hidden));
+    else
+        map()->addDamage(new SheetDamage(this, SheetDamage::Shown));
 }
 
 void SheetBase::changeCellTabName(QString const & old_name, QString const & new_name)

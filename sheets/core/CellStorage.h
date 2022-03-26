@@ -224,13 +224,13 @@ public:
      * The maximum occupied column, i.e. the horizontal storage dimension.
      * \return the maximum column
      */
-    int columns(bool includeStyles = true) const;
+    virtual int columns(bool includeStyles = true) const override;
 
     /**
      * The maximum occupied row, i.e. the vertical storage dimension.
      * \return the maximum row
      */
-    int rows(bool includeStyles = true) const;
+    virtual int rows(bool includeStyles = true) const override;
 
     /**
      * Creates a substorage consisting of the values in \p region.

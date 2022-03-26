@@ -7,20 +7,16 @@
 // Local
 #include "IndentationCommand.h"
 
-// #include <KLocalizedString>
-
-// #include "ApplicationSettings.h"
-// #include "Cell.h"
-// #include "CellStorage.h"
-// #include "Map.h"
-// #include "Sheet.h"
-// #include "Style.h"
+#include "core/CellStorage.h"
+#include "core/Sheet.h"
+#include "core/Style.h"
 
 using namespace Calligra::Sheets;
 
 IndentationCommand::IndentationCommand()
         : AbstractRegionCommand()
 {
+    m_indent = 0;
     setText(kundo2_i18n("Increase Indentation"));
 }
 
@@ -29,18 +25,23 @@ bool IndentationCommand::mainProcessing()
     Style style;
     if (!m_reverse) {
         // increase the indentation
-        style.setIndentation(m_sheet->map()->settings()->indentValue());
+        style.setIndentation(m_indent);
     } else { // m_reverse
         // decrease the indentation
-        style.setIndentation(-m_sheet->map()->settings()->indentValue());
+        style.setIndentation(-1 * m_indent);
     }
-    m_sheet->cellStorage()->setStyle(*this, style);
+    m_sheet->fullCellStorage()->setStyle(*this, style);
     return true;
 }
 
 bool IndentationCommand::postProcessing()
 {
     return true;
+}
+
+void IndentationCommand::setIndent(double val)
+{
+    m_indent = val;
 }
 
 void IndentationCommand::setReverse(bool reverse)
@@ -51,3 +52,4 @@ void IndentationCommand::setReverse(bool reverse)
     else
         setText(kundo2_i18n("Decrease Indentation"));
 }
+

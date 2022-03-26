@@ -65,9 +65,6 @@ public:
 
     Qt::LayoutDirection layoutDirection;
 
-    // true if sheet is hidden
-    bool hide;
-
     bool showGrid;
     bool showFormula;
     bool showFormulaIndicator;
@@ -125,7 +122,6 @@ Sheet::Sheet(Map* map, const QString &sheetName)
     d->documentSize = QSizeF(KS_colMax * d->workbook->defaultColumnFormat().width,
                              KS_rowMax * d->workbook->defaultRowFormat().height);
 
-    d->hide = false;
     d->showGrid = true;
     d->showFormula = false;
     d->showFormulaIndicator = false;
@@ -162,7 +158,6 @@ Sheet::Sheet(const Sheet &other)
     setObjectName(createObjectName(sheetName()));
 
     d->layoutDirection = other.d->layoutDirection;
-    d->hide = other.d->hide;
     d->showGrid = other.d->showGrid;
     d->showFormula = other.d->showFormula;
     d->showFormulaIndicator = other.d->showFormulaIndicator;
@@ -269,16 +264,6 @@ Qt::LayoutDirection Sheet::layoutDirection() const
 void Sheet::setLayoutDirection(Qt::LayoutDirection dir)
 {
     d->layoutDirection = dir;
-}
-
-bool Sheet::isHidden() const
-{
-    return d->hide;
-}
-
-void Sheet::setHidden(bool hidden)
-{
-    d->hide = hidden;
 }
 
 bool Sheet::getShowGrid() const
@@ -791,15 +776,6 @@ bool Sheet::rowIsHidden(int row) const
 void Sheet::showStatusMessage(const QString &message, int timeout) const
 {
     emit statusMessage(message, timeout);
-}
-
-void Sheet::hideSheet(bool _hide)
-{
-    setHidden(_hide);
-    if (_hide)
-        map()->addDamage(new SheetDamage(this, SheetDamage::Hidden));
-    else
-        map()->addDamage(new SheetDamage(this, SheetDamage::Shown));
 }
 
 bool Sheet::setSheetName(const QString& name)

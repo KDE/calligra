@@ -87,7 +87,6 @@ namespace Ksp {
      */
     QDomElement saveCell(Cell *cell, QDomDocument& doc, int xOffset = 0, int yOffset = 0, bool era = false);
 
-
 }
 
 }

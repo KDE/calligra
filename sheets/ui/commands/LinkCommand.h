@@ -11,12 +11,14 @@
 #include <QString>
 #include <kundo2command.h>
 
-// #include <Cell.h>
+#include "core/Cell.h"
 
 namespace Calligra
 {
 namespace Sheets
 {
+
+class Cell;
 
 /**
  * \ingroup Commands

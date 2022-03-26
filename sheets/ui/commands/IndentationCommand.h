@@ -24,11 +24,14 @@ class IndentationCommand : public AbstractRegionCommand
 public:
     IndentationCommand();
 
+    void setIndent(double val);
     void setReverse(bool reverse) override;
 
 protected:
     bool mainProcessing() override;
     bool postProcessing() override;
+private:
+    double m_indent;
 };
 
 } // namespace Sheets

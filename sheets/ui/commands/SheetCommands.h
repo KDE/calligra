@@ -15,7 +15,7 @@ namespace Calligra
 {
 namespace Sheets
 {
-class Map;
+class MapBase;
 class Sheet;
 
 /**
@@ -50,7 +50,7 @@ public:
     void undo() override;
 
 protected:
-    Map* map;
+    MapBase* map;
     QString sheetName;
 };
 
@@ -68,7 +68,7 @@ public:
     void undo() override;
 
 protected:
-    Map* map;
+    MapBase* map;
     QString sheetName;
 };
 
@@ -126,7 +126,7 @@ public:
 
 protected:
     Sheet* sheet;
-    Map* map;
+    MapBase* map;
 };
 
 
@@ -155,7 +155,7 @@ public:
 
 protected:
     Sheet* sheet;
-    Map* map;
+    MapBase* map;
     Qt::LayoutDirection oldDirection, newDirection;
     bool oldAutoCalc, newAutoCalc;
     bool oldShowGrid, newShowGrid;

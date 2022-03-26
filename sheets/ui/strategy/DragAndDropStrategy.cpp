@@ -84,19 +84,10 @@ void DragAndDropStrategy::handleMouseMove(const QPointF& documentPos, Qt::Keyboa
         debugSheetsUI << "col or row is out of range:" << "col:" << col << " row:" << row;
     } else if (d->cell == Cell(selection()->activeSheet(), col, row)) {
     } else {
-        QDomDocument doc = CopyCommand::saveAsXml(*selection(), true);
-
-        // Save to buffer
-        QBuffer buffer;
-        buffer.open(QIODevice::WriteOnly);
-        QTextStream str(&buffer);
-        str.setCodec("UTF-8");
-        str << doc;
-        buffer.close();
-
         QMimeData* mimeData = new QMimeData();
         mimeData->setText(CopyCommand::saveAsPlainText(*selection()));
-        mimeData->setData("application/x-kspread-snippet", buffer.buffer());
+        QString snippet = CopyCommand::saveAsSnippet(*selection());
+        mimeData->setData("application/x-calligra-sheets-snippet", snippet.toUtf8());
 
         QDrag *drag = new QDrag(tool()->canvas()->canvasWidget());
         drag->setMimeData(mimeData);

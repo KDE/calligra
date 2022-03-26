@@ -6,14 +6,9 @@
 
 #include "AutoFormatCommand.h"
 
-// #include "CellStorage.h"
-// #include "Sheet.h"
-// #include "Style.h"
-// #include "Region.h"
-
-// #include <KLocalizedString>
-
-// #include <QPen>
+#include "core/CellStorage.h"
+#include "core/Sheet.h"
+#include "core/Style.h"
 
 using namespace Calligra::Sheets;
 
@@ -33,16 +28,17 @@ void AutoFormatCommand::setStyles(const QList<Style>& styles)
 
 bool AutoFormatCommand::preProcessing()
 {
+    CellStorage *cs = m_sheet->fullCellStorage();
     if (m_firstrun)
-        m_sheet->cellStorage()->startUndoRecording();
+        cs->startUndoRecording();
     // always reset the style of the processed region
     Style defaultStyle;
     defaultStyle.setDefault();
     Region::ConstIterator end(constEnd());
     for (Region::ConstIterator it = constBegin(); it != end; ++it)
-        m_sheet->cellStorage()->setStyle(Region((*it)->rect()), defaultStyle);
+        cs->setStyle(Region((*it)->rect()), defaultStyle);
     if (m_firstrun)
-        m_sheet->cellStorage()->stopUndoRecording(this);
+        cs->stopUndoRecording(this);
     return true;
 }
 
@@ -58,10 +54,11 @@ bool AutoFormatCommand::mainProcessing()
 bool AutoFormatCommand::process(Element* element)
 {
     const QRect rect = element->rect();
+    CellStorage *cs = m_sheet->fullCellStorage();
 
     // Top left corner
     if (!m_styles[0].isDefault())
-        m_sheet->cellStorage()->setStyle(Region(rect.topLeft()), m_styles[0]);
+        cs->setStyle(Region(rect.topLeft()), m_styles[0]);
     // Top row
     for (int col = rect.left() + 1; col <= rect.right(); ++col) {
         int pos = 1 + ((col - rect.left() - 1) % 2);
@@ -75,7 +72,7 @@ bool AutoFormatCommand::process(Element* element)
             if (!tmpStyle.isDefault())
                 style.setLeftBorderPen(tmpStyle.leftBorderPen());
 
-            m_sheet->cellStorage()->setStyle(Region(col, rect.top()), style);
+            cs->setStyle(Region(col, rect.top()), style);
         }
     }
 
@@ -92,7 +89,7 @@ bool AutoFormatCommand::process(Element* element)
             if (!tmpStyle.isDefault())
                 style.setTopBorderPen(tmpStyle.topBorderPen());
 
-            m_sheet->cellStorage()->setStyle(Region(rect.left(), row), style);
+            cs->setStyle(Region(rect.left(), row), style);
         }
     }
 
@@ -103,7 +100,7 @@ bool AutoFormatCommand::process(Element* element)
             Cell cell(m_sheet, col, row);
             if (!cell.isPartOfMerged()) {
                 if (!m_styles[pos].isDefault())
-                    m_sheet->cellStorage()->setStyle(Region(col, row), m_styles[pos]);
+                    cs->setStyle(Region(col, row), m_styles[pos]);
 
                 Style style;
                 if (col == rect.left() + 1)
@@ -114,7 +111,7 @@ bool AutoFormatCommand::process(Element* element)
                 if (!style.isDefault()) {
                     Style tmpStyle;
                     tmpStyle.setLeftBorderPen(style.leftBorderPen());
-                    m_sheet->cellStorage()->setStyle(Region(col, row), tmpStyle);
+                    cs->setStyle(Region(col, row), tmpStyle);
                 }
 
                 if (row == rect.top() + 1)
@@ -125,7 +122,7 @@ bool AutoFormatCommand::process(Element* element)
                 if (!style.isDefault()) {
                     Style tmpStyle;
                     tmpStyle.setTopBorderPen(style.topBorderPen());
-                    m_sheet->cellStorage()->setStyle(Region(col, row), tmpStyle);
+                    cs->setStyle(Region(col, row), tmpStyle);
                 }
             }
         }
@@ -139,19 +136,19 @@ bool AutoFormatCommand::process(Element* element)
                 if (!m_styles[3].isDefault()) {
                     Style tmpStyle;
                     tmpStyle.setRightBorderPen(m_styles[3].leftBorderPen());
-                    m_sheet->cellStorage()->setStyle(Region(rect.right(), row), tmpStyle);
+                    cs->setStyle(Region(rect.right(), row), tmpStyle);
                 }
             } else if (row == rect.right()) {
                 if (!m_styles[11].isDefault()) {
                     Style tmpStyle;
                     tmpStyle.setRightBorderPen(m_styles[11].leftBorderPen());
-                    m_sheet->cellStorage()->setStyle(Region(rect.right(), row), tmpStyle);
+                    cs->setStyle(Region(rect.right(), row), tmpStyle);
                 }
             } else {
                 if (!m_styles[7].isDefault()) {
                     Style tmpStyle;
                     tmpStyle.setRightBorderPen(m_styles[7].leftBorderPen());
-                    m_sheet->cellStorage()->setStyle(Region(rect.right(), row), tmpStyle);
+                    cs->setStyle(Region(rect.right(), row), tmpStyle);
                 }
             }
         }
@@ -165,22 +162,23 @@ bool AutoFormatCommand::process(Element* element)
                 if (!m_styles[12].isDefault()) {
                     Style tmpStyle;
                     tmpStyle.setBottomBorderPen(m_styles[12].topBorderPen());
-                    m_sheet->cellStorage()->setStyle(Region(col, rect.bottom()), tmpStyle);
+                    cs->setStyle(Region(col, rect.bottom()), tmpStyle);
                 }
             } else if (col == rect.right()) {
                 if (!m_styles[14].isDefault()) {
                     Style tmpStyle;
                     tmpStyle.setBottomBorderPen(m_styles[14].topBorderPen());
-                    m_sheet->cellStorage()->setStyle(Region(col, rect.bottom()), tmpStyle);
+                    cs->setStyle(Region(col, rect.bottom()), tmpStyle);
                 }
             } else {
                 if (!m_styles[13].isDefault()) {
                     Style tmpStyle;
                     tmpStyle.setBottomBorderPen(m_styles[13].topBorderPen());
-                    m_sheet->cellStorage()->setStyle(Region(col, rect.bottom()), tmpStyle);
+                    cs->setStyle(Region(col, rect.bottom()), tmpStyle);
                 }
             }
         }
     }
     return true;
 }
+

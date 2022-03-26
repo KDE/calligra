@@ -7,12 +7,9 @@
 // Local
 #include "PrecisionCommand.h"
 
-// #include <KLocalizedString>
-
-// #include "Cell.h"
-// #include "CellStorage.h"
-// #include "Sheet.h"
-// #include "Style.h"
+#include "core/CellStorage.h"
+#include "core/Sheet.h"
+#include "core/Style.h"
 
 using namespace Calligra::Sheets;
 
@@ -32,7 +29,7 @@ bool PrecisionCommand::mainProcessing()
         // decrease the precision
         style.setPrecision(-1);
     }
-    m_sheet->cellStorage()->setStyle(*this, style);
+    m_sheet->fullCellStorage()->setStyle(*this, style);
     return true;
 }
 

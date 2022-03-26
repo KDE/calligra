@@ -13,11 +13,7 @@
 #include "Localization.h"
 #include "ValueConverter.h"
 
-// #include <kcalendarsystem.h>
-// #include <KLocalizedString>
-
 #include <float.h>
-// #include <math.h>
 
 using namespace Calligra::Sheets;
 

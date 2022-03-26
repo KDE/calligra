@@ -89,6 +89,16 @@ public:
     const ValidityStorage* validityStorage() const;
     const ValueStorage* valueStorage() const;
 
+    /**
+     * @return true if this sheet is hidden
+     */
+    bool isHidden()const;
+
+    /**
+     * Hides or shows this sheets
+     */
+    void setHidden(bool hidden);
+    void hideSheet(bool _hide);
 
     /** Returns whether a row is hidden. The base version does nothing, it's here because of the SUBTOTAL function. */
     virtual bool rowIsHidden(int row) const;

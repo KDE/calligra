@@ -7,10 +7,6 @@
 #ifndef KSPREAD_ODF_LOADING_CONTEXT
 #define KSPREAD_ODF_LOADING_CONTEXT
 
-// #include <KoOdfLoadingContext.h>
-
-// #include <QHash>
-
 #include "engine/Region.h"
 
 class KoOdfLoadingContext;

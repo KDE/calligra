@@ -36,11 +36,6 @@
 #include "FilterPopup.h"
 #include "inspector.h"
 #include "SheetView.h"
-// #include "ApplicationSettings.h"
-// #include "Cell.h"
-// #include "LocationComboBox.h"
-// #include "NamedAreaManager.h"
-// #include "Value.h"
 
 // commands
 #include "commands/AutoFilterCommand.h"
@@ -104,7 +99,6 @@
 #include <KoCanvasController.h>
 #include <KoColorPopupAction.h>
 #include <KoPointerEvent.h>
-// #include <KoSelection.h>
 #include <KoShape.h>
 #include <KoViewConverter.h>
 #include <KoColor.h>
@@ -114,7 +108,6 @@
 #include <kfind.h>
 #include <kfontaction.h>
 #include <kfontsizeaction.h>
-// #include <klocale.h>
 #include <kmessagebox.h>
 #include <kreplace.h>
 #include <kstandardaction.h>
@@ -126,18 +119,16 @@
 #include <QInputDialog>
 #include <QBuffer>
 #include <QMimeData>
-// #include <QHash>
 #include <QMenu>
 #include <QPainter>
-// TODO - copy/paste should be done differently, not via these weird XML snippets
 #include <QDomDocument>
 #ifndef QT_NO_SQL
 // #include <QSqlDatabase>
 #endif
 
 #ifndef NDEBUG
-// #include <QTableView>
-// #include "SheetModel.h"
+#include <QTableView>
+#include "core/SheetModel.h"
 #endif
 
 using namespace Calligra::Sheets;
@@ -2023,6 +2014,8 @@ void CellToolBase::increaseIndentation()
 {
     IndentationCommand* command = new IndentationCommand();
     command->setSheet(selection()->activeSheet());
+    double val = selection()->activeSheet()->fullMap()->applicationSettings()->indentValue();
+    command->setIndent(val);
     command->add(*selection());
     if (!command->execute())
         delete command;
@@ -2032,6 +2025,8 @@ void CellToolBase::decreaseIndentation()
 {
     IndentationCommand* command = new IndentationCommand();
     command->setSheet(selection()->activeSheet());
+    double val = selection()->activeSheet()->fullMap()->applicationSettings()->indentValue();
+    command->setIndent(-1 * val);
     command->setReverse(true);
     command->add(*selection());
     if (!command->execute())
@@ -2960,30 +2955,14 @@ void CellToolBase::cut()
         return;
     }
 
-    QDomDocument doc = CopyCommand::saveAsXml(*selection(), true);
-    doc.documentElement().setAttribute("cut", selection()->Region::name());
-
-    // Save to buffer
-    QBuffer buffer;
-    buffer.open(QIODevice::WriteOnly);
-    QTextStream str(&buffer);
-    str.setCodec("UTF-8");
-    str << doc;
-    buffer.close();
+    QString snippet = CopyCommand::saveAsSnippet(*selection());
+    snippet = "CUT\n" + snippet;
 
     QMimeData* mimeData = new QMimeData();
     mimeData->setText(CopyCommand::saveAsPlainText(*selection()));
-    mimeData->setData("application/x-kspread-snippet", buffer.buffer());
+    mimeData->setData("application/x-calligra-sheets-snippet", snippet.toUtf8());
 
     QApplication::clipboard()->setMimeData(mimeData);
-
-    DeleteCommand* command = new DeleteCommand();
-    command->setText(kundo2_i18n("Cut"));
-    command->setSheet(selection()->activeSheet());
-    command->add(*selection());
-    command->execute();
-
-    selection()->emitModified();
 }
 
 void CellToolBase::copy() const
@@ -2994,19 +2973,11 @@ void CellToolBase::copy() const
         return;
     }
 
-    QDomDocument doc = CopyCommand::saveAsXml(*selection);
-
-    // Save to buffer
-    QBuffer buffer;
-    buffer.open(QIODevice::WriteOnly);
-    QTextStream str(&buffer);
-    str.setCodec("UTF-8");
-    str << doc;
-    buffer.close();
+    QString snippet = CopyCommand::saveAsSnippet(*selection);
 
     QMimeData* mimeData = new QMimeData();
     mimeData->setText(CopyCommand::saveAsPlainText(*selection));
-    mimeData->setData("application/x-kspread-snippet", buffer.buffer());
+    mimeData->setData("application/x-calligra-sheets-snippet", snippet.toUtf8());
 
     QApplication::clipboard()->setMimeData(mimeData);
 }
@@ -3016,7 +2987,8 @@ bool CellToolBase::paste()
     if (!selection()->activeSheet()->fullMap()->isReadWrite()) // don't paste into a read only document
         return false;
 
-    const QMimeData* mimeData = QApplication::clipboard()->mimeData(QClipboard::Clipboard);
+    QClipboard *clipboard = QApplication::clipboard();
+    const QMimeData* mimeData = clipboard->mimeData(QClipboard::Clipboard);
 
     if (mimeData->hasFormat("application/vnd.oasis.opendocument.spreadsheet")) {
         QByteArray returnedTypeMime = "application/vnd.oasis.opendocument.spreadsheet";
@@ -3030,7 +3002,7 @@ bool CellToolBase::paste()
 
     if (!editor()) {
         const QMimeData* mimedata = QApplication::clipboard()->mimeData();
-        if (!mimedata->hasFormat("application/x-kspread-snippet") &&
+        if (!mimedata->hasFormat("application/x-calligra-sheets-snippet") &&
             !mimedata->hasHtml() && mimedata->hasText() &&
             mimeData->text().split('\n').count() >= 2 )
         {
@@ -3041,6 +3013,7 @@ bool CellToolBase::paste()
             command->setSheet(selection()->activeSheet());
             command->add(*selection());
             command->setMimeData(mimedata);
+            command->setSameApp(clipboard->ownsClipboard());
             command->setPasteFC(true);
             command->execute(canvas());
         }
@@ -3063,12 +3036,14 @@ void CellToolBase::specialPaste()
 
 void CellToolBase::pasteWithInsertion()
 {
-    const QMimeData *const mimeData = QApplication::clipboard()->mimeData();
+    QClipboard *clipboard = QApplication::clipboard();
+    const QMimeData *const mimeData = clipboard->mimeData();
     if (!PasteCommand::unknownShiftDirection(mimeData)) {
         PasteCommand *const command = new PasteCommand();
         command->setSheet(selection()->activeSheet());
         command->add(*selection());
         command->setMimeData(mimeData);
+        command->setSameApp(clipboard->ownsClipboard());
         command->setInsertionMode(PasteCommand::ShiftCells);
         command->execute(canvas());
     } else {

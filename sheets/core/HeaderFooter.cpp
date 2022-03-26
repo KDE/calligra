@@ -11,19 +11,12 @@
 
 #include "engine/SheetsDebug.h"
 
-// #include "part/Doc.h" // FIXME detach from part
 #include "DocBase.h"
 #include "Sheet.h"
-// #include "SheetPrint.h"
 
 #include <KoDocumentInfo.h>
 
 #include <KLocalizedString>
-// #include <kmessagebox.h>
-
-// #include <QDate>
-// #include <QPainter>
-// #include <QTime>
 #include <QUrl>
 
 #include <pwd.h>

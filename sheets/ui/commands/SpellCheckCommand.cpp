@@ -6,20 +6,19 @@
 
 #include "SpellCheckCommand.h"
 
-// #include "Cell.h"
-// #include "CellStorage.h"
-// #include "Map.h"
-// #include "Sheet.h"
-// #include "Region.h"
-// #include "ValueStorage.h"
+#include "engine/CellBase.h"
+#include "engine/MapBase.h"
+#include "engine/Region.h"
+#include "engine/ValueStorage.h"
+#include "core/Sheet.h"
 
-// #include "commands/DataManipulators.h"
+#include "DataManipulators.h"
 
-// #include <KoCanvasBase.h>
+#include <KoCanvasBase.h>
 
-// #include <kmessagebox.h>
-// #include <sonnet/dialog.h>
-// #include <sonnet/speller.h>
+#include <kmessagebox.h>
+#include <sonnet/dialog.h>
+#include <sonnet/speller.h>
 
 using namespace Calligra::Sheets;
 
@@ -29,8 +28,8 @@ public:
     KoCanvasBase* canvasBase;
     int index;
     Region region;
-    Cell currentCell;
-    Sheet* currentSheet;
+    CellBase currentCell;
+    SheetBase *currentSheet;
     ValueStorage storage;
     Sonnet::Speller speller;
     Sonnet::Dialog* dialog;
@@ -78,7 +77,7 @@ QString SpellCheckCommand::fetchMoreText()
         const Value value = d->storage.data(d->index);
         if (value.isString()) {
             text = value.asString();
-            d->currentCell = Cell(d->currentSheet, d->storage.col(d->index), d->storage.row(d->index));
+            d->currentCell = CellBase(d->currentSheet, d->storage.col(d->index), d->storage.row(d->index));
         }
         d->index++;
     }
@@ -90,7 +89,7 @@ QString SpellCheckCommand::fetchMoreText()
         // Ask whether we should continue on the next sheet.
         const QString question = i18n("Do you want to check the spelling in the next sheet?");
         if (KMessageBox::questionYesNo(d->canvasBase->canvasWidget(), question) == KMessageBox::Yes) {
-            const Map* map = d->currentSheet->map();
+            const MapBase *map = d->currentSheet->map();
             if (d->currentSheet == map->sheet(map->count() - 1)) {
                 // Switch from the last to the first sheet.
                 d->currentSheet = map->sheet(0);
@@ -120,7 +119,8 @@ void SpellCheckCommand::finishedCurrentFeed()
         d->command = new KUndo2Command(kundo2_i18n("Correct Misspelled Words"));
     }
     DataManipulator* command = new DataManipulator(d->command);
-    command->setSheet(d->currentSheet);
+    Sheet *sheet = dynamic_cast<Sheet *>(d->currentSheet);
+    command->setSheet(sheet);
     command->setValue(Value(d->dialog->buffer()));
     command->setParsing(false);
     command->add(QPoint(d->currentCell.column(), d->currentCell.row()));

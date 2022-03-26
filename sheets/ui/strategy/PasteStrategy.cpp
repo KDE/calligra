@@ -37,6 +37,8 @@ KUndo2Command* PasteStrategy::createCommand()
     PasteCommand *const command = new PasteCommand();
     command->setSheet(selection()->activeSheet());
     command->add(*selection());
-    command->setMimeData(QApplication::clipboard()->mimeData(QClipboard::Selection));
+    QClipboard *clipboard = QApplication::clipboard();
+    command->setSameApp(clipboard->ownsSelection());
+    command->setMimeData(clipboard->mimeData(QClipboard::Selection));
     return command;
 }

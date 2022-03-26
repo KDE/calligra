@@ -8,10 +8,9 @@
 // Local
 #include "SheetCommands.h"
 
-// #include "Damages.h"
-// #include "Localization.h"
-// #include "Map.h"
-// #include "Sheet.h"
+#include "engine/Damages.h"
+#include "engine/MapBase.h"
+#include "core/Sheet.h"
 
 using namespace Calligra::Sheets;
 
@@ -50,7 +49,7 @@ HideSheetCommand::HideSheetCommand(Sheet* sheet)
 
 void HideSheetCommand::redo()
 {
-    Sheet* sheet = map->findSheet(sheetName);
+    SheetBase* sheet = map->findSheet(sheetName);
     if (!sheet) return;
 
     sheet->hideSheet(true);
@@ -58,7 +57,7 @@ void HideSheetCommand::redo()
 
 void HideSheetCommand::undo()
 {
-    Sheet* sheet = map->findSheet(sheetName);
+    SheetBase* sheet = map->findSheet(sheetName);
     if (!sheet) return;
 
     sheet->hideSheet(false);
@@ -78,7 +77,7 @@ ShowSheetCommand::ShowSheetCommand(Sheet* sheet, KUndo2Command* parent)
 
 void ShowSheetCommand::redo()
 {
-    Sheet* sheet = map->findSheet(sheetName);
+    SheetBase* sheet = map->findSheet(sheetName);
     if (!sheet) return;
 
     sheet->hideSheet(false);
@@ -86,7 +85,7 @@ void ShowSheetCommand::redo()
 
 void ShowSheetCommand::undo()
 {
-    Sheet* sheet = map->findSheet(sheetName);
+    SheetBase* sheet = map->findSheet(sheetName);
     if (!sheet) return;
 
     sheet->hideSheet(true);

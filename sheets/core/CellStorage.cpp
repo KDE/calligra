@@ -573,15 +573,11 @@ int CellStorage::columns(bool includeStyles) const
 #ifdef CALLIGRA_SHEETS_MT
     QReadLocker rl(&bigUglyLock);
 #endif
-    int max = 0;
-    max = qMax(max, commentStorage()->usedArea().right());
+    int max = CellBaseStorage::columns(includeStyles);
     max = qMax(max, d->conditionsStorage->usedArea().right());
     max = qMax(max, d->fusionStorage->usedArea().right());
     if (includeStyles) max = qMax(max, d->styleStorage->usedArea().right());
-    max = qMax(max, validityStorage()->usedArea().right());
-    max = qMax(max, formulaStorage()->columns());
     max = qMax(max, d->linkStorage->columns());
-    max = qMax(max, valueStorage()->columns());
 
     // don't include bindings cause the bindingStorage does only listen to all cells in the sheet.
     //max = qMax(max, d->bindingStorage->usedArea().right());
@@ -594,15 +590,11 @@ int CellStorage::rows(bool includeStyles) const
 #ifdef CALLIGRA_SHEETS_MT
     QReadLocker rl(&bigUglyLock);
 #endif
-    int max = 0;
-    max = qMax(max, commentStorage()->usedArea().bottom());
+    int max = CellBaseStorage::rows(includeStyles);
     max = qMax(max, d->conditionsStorage->usedArea().bottom());
     max = qMax(max, d->fusionStorage->usedArea().bottom());
     if (includeStyles) max = qMax(max, d->styleStorage->usedArea().bottom());
-    max = qMax(max, validityStorage()->usedArea().bottom());
-    max = qMax(max, formulaStorage()->rows());
     max = qMax(max, d->linkStorage->rows());
-    max = qMax(max, valueStorage()->rows());
 
     // don't include bindings cause the bindingStorage does only listen to all cells in the sheet.
     //max = qMax(max, d->bindingStorage->usedArea().bottom());

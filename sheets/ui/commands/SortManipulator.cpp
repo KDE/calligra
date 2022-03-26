@@ -4,12 +4,10 @@
 
 #include "SortManipulator.h"
 
-// #include "Map.h"
-// #include "Sheet.h"
-// #include "ValueCalc.h"
-// #include "ValueConverter.h"
-
-// #include <KLocalizedString>
+#include "engine/ValueCalc.h"
+#include "engine/ValueConverter.h"
+#include "core/CellStorage.h"
+#include "core/Sheet.h"
 
 using namespace Calligra::Sheets;
 
@@ -52,7 +50,7 @@ bool SortManipulator::preProcessing()
     if (m_reverse)
         return AbstractDFManipulator::preProcessing();
 
-    m_cellStorage = new CellStorage(m_sheet->cellStorage()->subStorage(*this));
+    m_cellStorage = new CellStorage(m_sheet->fullCellStorage()->subStorage(*this));
 
     Region::ConstIterator endOfList(cells().constEnd());
     for (Region::ConstIterator it = cells().constBegin(); it != endOfList; ++it) {

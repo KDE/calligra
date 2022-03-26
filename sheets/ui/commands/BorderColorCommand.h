@@ -9,9 +9,6 @@
 
 #include "AbstractRegionCommand.h"
 
-// #include <QPair>
-// #include <QColor>
-
 #include "core/Style.h"
 
 namespace Calligra
@@ -38,7 +35,8 @@ protected:
 
 private:
     QColor m_color;
-    QList< QPair<QRectF, SharedSubStyle> > m_undoData;
+
+    QVector< QPair<QRectF, SharedSubStyle> > m_undoData;
 };
 
 } // namespace Sheets

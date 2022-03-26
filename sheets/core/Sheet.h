@@ -190,16 +190,6 @@ public:
 
     void setHideZero(bool _hideZero);
 
-    /**
-     * @return true if this sheet is hidden
-     */
-    bool isHidden()const;
-
-    /**
-     * Hides or shows this sheets
-     */
-    void setHidden(bool hidden);
-
     /** Returns whether a row is hidden. */
     virtual bool rowIsHidden(int row) const override;
 
@@ -564,16 +554,6 @@ public:
 
     //
     //END Methods related column/row operations
-    //
-    //////////////////////////////////////////////////////////////////////////
-    //
-    //BEGIN UNSORTED METHODS !!!
-    //
-
-    void hideSheet(bool _hide);
-
-    //
-    //END UNSORTED METHODS
     //
     //////////////////////////////////////////////////////////////////////////
     //

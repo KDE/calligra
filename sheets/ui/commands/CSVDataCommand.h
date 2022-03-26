@@ -41,8 +41,6 @@ public:
 protected:
     Value newValue(Element* element, int col, int row, bool* parse, Format::Type* fmtType) override;
     bool wantChange(Element* element, int col, int row) override;
-    bool preProcessing() override;
-    bool postProcessing() override;
 
 private:
     QList<KoCsvImportDialog::DataType> m_dataTypes;

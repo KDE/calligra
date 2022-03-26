@@ -600,6 +600,36 @@ void CellBaseStorage::insertShiftDown(const QRect& rect)
     d->recalcFormulas(invalidRegion);
 }
 
+int CellBaseStorage::columns(bool /*includeStyles*/) const
+{
+#ifdef CALLIGRA_SHEETS_MT
+    QReadLocker rl(&bigUglyLock);
+#endif
+    int max = 0;
+    max = qMax(max, d->commentStorage->usedArea().right());
+    max = qMax(max, d->validityStorage->usedArea().right());
+    max = qMax(max, d->formulaStorage->columns());
+    max = qMax(max, d->valueStorage->columns());
+
+    // don't include bindings cause the bindingStorage does only listen to all cells in the sheet.
+    //max = qMax(max, d->bindingStorage->usedArea().right());
+
+    return max;
+}
+
+int CellBaseStorage::rows(bool /*includeStyles*/) const
+{
+#ifdef CALLIGRA_SHEETS_MT
+    QReadLocker rl(&bigUglyLock);
+#endif
+    int max = 0;
+    max = qMax(max, d->commentStorage->usedArea().bottom());
+    max = qMax(max, d->validityStorage->usedArea().bottom());
+    max = qMax(max, d->formulaStorage->rows());
+    max = qMax(max, d->valueStorage->rows());
+
+    return max;
+}
 
 
 

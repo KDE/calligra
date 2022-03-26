@@ -28,19 +28,21 @@ static const int CURRENT_SYNTAX_VERSION = 1;
 class KoXmlDocument;
 class KoXmlElement;
 class QDomDocument;
+class QDomElement;
 
 namespace Calligra {
 namespace Sheets {
 
 class DocBase;
 class Style;
+class Sheet;
+class Cell;
 
 namespace Ksp {
     CALLIGRA_SHEETS_CORE_EXPORT bool loadDoc(DocBase *obj, const KoXmlDocument& doc);
     CALLIGRA_SHEETS_CORE_EXPORT QDomDocument saveDoc(DocBase *document);
 
     CALLIGRA_SHEETS_CORE_EXPORT bool loadStyle(Style *style, KoXmlElement& format);
-
 }
 
 }  // namespace Sheets

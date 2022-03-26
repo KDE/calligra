@@ -46,6 +46,43 @@ class CellTest;
 class Localization;
 class CellStorage;
 
+
+
+/**
+ * This namespace collects enumerations related to
+ * pasting operations.
+ */
+namespace Paste
+{
+/**
+ * The pasted content
+ */
+enum Mode {
+    Normal /** Everything */,
+    Text /** Text only */,
+    Format /** Format only */,
+    NoBorder /** not the borders */,
+    Comment /** Comment only */,
+    Result /** Result only, no formula */,
+    NormalAndTranspose /** */,
+    TextAndTranspose /** */,
+    FormatAndTranspose /** */,
+    NoBorderAndTranspose /** */
+};
+/**
+ * The current cell value treatment.
+ */
+enum Operation {
+    OverWrite /** Overwrite */,
+    Add /** Add */,
+    Mul /** Multiply */,
+    Sub /** Subtract */,
+    Div /** Divide */
+};
+} // namespace Paste
+
+
+
 /**
  * An accessor to the actual cell data.
  * The Cell object acts as accessor to the actual data stored in the separate
@@ -183,14 +220,14 @@ public:
      *
      * @see copyAll(Cell *cell)
      */
-    void copyFormat(const Cell& cell);
+    void copyFormat(const Cell& cell, Paste::Mode mode);
 
     /**
      * Copies the content from \p cell .
      *
      * @see copyAll(Cell *cell)
      */
-    void copyContent(const Cell& cell);
+    void copyContent(const Cell& cell, Paste::Mode mode, Paste::Operation op);
 
     /**
      * Copies the format and the content from \p cell .
@@ -198,7 +235,7 @@ public:
      * @see copyContent( const Cell& cell )
      * @see copyFormat( const Cell& cell )
      */
-    void copyAll(const Cell& cell);
+    void copyAll(const Cell& cell, Paste::Mode mode, Paste::Operation op);
 
     /**
      * @return the width of this cell as double

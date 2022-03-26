@@ -6,14 +6,11 @@
 
 #include "AutoFilterCommand.h"
 
-// #include <KLocalizedString>
-
-// #include "CellStorage.h"
-// #include "Damages.h"
-// #include "Map.h"
-// #include "Sheet.h"
-
-// #include "database/Database.h"
+#include "engine/Damages.h"
+#include "engine/MapBase.h"
+#include "core/CellStorage.h"
+#include "core/Sheet.h"
+#include "core/Database.h"
 
 using namespace Calligra::Sheets;
 
@@ -29,15 +26,15 @@ AutoFilterCommand::~AutoFilterCommand()
 
 void AutoFilterCommand::redo()
 {
-    Database database();
+    Database database;
     database.setDisplayFilterButtons(true);
     database.setRange(*this);
-    m_sheet->cellStorage()->setDatabase(*this, database);
+    m_sheet->fullCellStorage()->setDatabase(*this, database);
     m_sheet->map()->addDamage(new CellDamage(m_sheet, *this, CellDamage::Appearance));
 }
 
 void AutoFilterCommand::undo()
 {
-    m_sheet->cellStorage()->setDatabase(*this, Database());
+    m_sheet->fullCellStorage()->setDatabase(*this, Database());
     m_sheet->map()->addDamage(new CellDamage(m_sheet, *this, CellDamage::Appearance));
 }

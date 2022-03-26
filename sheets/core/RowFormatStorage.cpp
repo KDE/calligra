@@ -237,6 +237,16 @@ void RowFormatStorage::setRowFormat (int firstRow, int lastRow, const RowFormat 
     setPageBreak (firstRow, lastRow, f.hasPageBreak);
 }
 
+RowFormat RowFormatStorage::getRowFormat(int row) const
+{
+    RowFormat res;
+    res.height = rowHeight(row);
+    res.hidden = isHidden(row);
+    res.filtered = isFiltered(row);
+    res.hasPageBreak = hasPageBreak(row);
+    return res;
+}
+
 
 int RowFormatStorage::lastNonDefaultRow() const
 {

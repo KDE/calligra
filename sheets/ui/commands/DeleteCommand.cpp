@@ -6,14 +6,10 @@
 
 #include "DeleteCommand.h"
 
-// #include "CellStorage.h"
-// #include "Region.h"
-// #include "RowColumnFormat.h"
-// #include "RowFormatStorage.h"
-// #include "Sheet.h"
-// #include "Validity.h"
-
-// #include <KLocalizedString>
+#include "engine/Validity.h"
+#include "core/CellStorage.h"
+#include "core/Condition.h"
+#include "core/Sheet.h"
 
 using namespace Calligra::Sheets;
 
@@ -27,8 +23,6 @@ DeleteCommand::DeleteCommand(KUndo2Command *parent)
 
 DeleteCommand::~DeleteCommand()
 {
-    qDeleteAll(m_columnFormats);
-    qDeleteAll(m_rowFormats);
 }
 
 void DeleteCommand::setMode(Mode mode)
@@ -44,81 +38,81 @@ bool DeleteCommand::process(Element* element)
     if (!element->sheet())
         element->setSheet(m_sheet);
 
+    CellStorage *cs = m_sheet->fullCellStorage();
+    ColFormatStorage *cols = m_sheet->columnFormats();
+    RowFormatStorage *rows = m_sheet->rowFormats();
     const QRect range = element->rect();
 
     if (element->isColumn()) {
         // column-wise processing
         for (int col = range.left(); col <= range.right(); ++col) {
-            Cell cell = m_sheet->cellStorage()->firstInColumn(col);
+            Cell cell = cs->firstInColumn(col);
             while (!cell.isNull()) {
-                m_sheet->cellStorage()->take(col, cell.row());
-                cell = m_sheet->cellStorage()->nextInColumn(col, cell.row());
+                cs->take(col, cell.row());
+                cell = cs->nextInColumn(col, cell.row());
             }
-            if (m_mode == OnlyCells) {
+            if (m_mode == OnlyCells)
                 continue;
-            }
 
-            const ColumnFormat* columnFormat = m_sheet->columnFormat(col);
-            if (m_firstrun && !columnFormat->isDefault()) {
-                ColumnFormat* oldColumnFormat = new ColumnFormat(*columnFormat);
-                oldColumnFormat->setNext(0);
-                oldColumnFormat->setPrevious(0);
-                m_columnFormats.insert(oldColumnFormat);
+            if (m_firstrun && (!cols->isDefaultCol(col))) {
+                ColFormat cf = cols->getColFormat(col);
+                m_columnFormats[col] = cf;
             }
-            m_sheet->deleteColumnFormat(col);
+            m_sheet->clearColumnFormat(col);
         }
     } else if (element->isRow()) {
         // row-wise processing
         for (int row = range.top(); row <= range.bottom(); ++row) {
-            Cell cell = m_sheet->cellStorage()->firstInRow(row);
+            Cell cell = cs->firstInRow(row);
             while (!cell.isNull()) {
-                m_sheet->cellStorage()->take(cell.column(), row);
-                cell = m_sheet->cellStorage()->nextInRow(cell.column(), row);
+                cs->take(cell.column(), row);
+                cell = cs->nextInRow(cell.column(), row);
             }
             if (m_mode == OnlyCells) {
                 continue;
             }
-            // TODO: better storing of row formats
-            if (m_firstrun && !m_sheet->rowFormats()->isDefaultRow(row)) {
-                m_rowFormats.insert(new RowFormat(m_sheet->rowFormats(), row));
+            if (m_firstrun && (!rows->isDefaultRow(row))) {
+                RowFormat rf = rows->getRowFormat(row);
+                m_rowFormats[row] = rf;
             }
-            m_sheet->deleteRowFormat(row);
+            m_sheet->clearRowFormat(row);
         }
     } else {
         // row-wise processing
         for (int row = range.top(); row <= range.bottom(); ++row) {
-            Cell cell = m_sheet->cellStorage()->firstInRow(row);
+            Cell cell = cs->firstInRow(row);
             if (!cell.isNull() && cell.column() < range.left())
-                cell = m_sheet->cellStorage()->nextInRow(range.left() - 1, row);
+                cell = cs->nextInRow(range.left() - 1, row);
             while (!cell.isNull()) {
                 if (cell.column() > range.right())
                     break;
 
-                m_sheet->cellStorage()->take(cell.column(), row);
-                cell = m_sheet->cellStorage()->nextInRow(cell.column(), row);
+                cs->take(cell.column(), row);
+                cell = cs->nextInRow(cell.column(), row);
             }
         }
     }
 
     // the rect storages
-    m_sheet->cellStorage()->setComment(Region(range, element->sheet()), QString());
-    m_sheet->cellStorage()->setConditions(Region(range, element->sheet()), Conditions());
+    cs->setComment(Region(range, element->sheet()), QString());
+    cs->setConditions(Region(range, element->sheet()), Conditions());
     Style style;
     style.setDefault();
-    m_sheet->cellStorage()->setStyle(Region(range, element->sheet()), style);
-    m_sheet->cellStorage()->setValidity(Region(range, element->sheet()), Validity());
+    cs->setStyle(Region(range, element->sheet()), style);
+    cs->setValidity(Region(range, element->sheet()), Validity());
     return true;
 }
 
 bool DeleteCommand::mainProcessing()
 {
     if (m_reverse) {
-        foreach(ColumnFormat* columnFormat, m_columnFormats) {
-            m_sheet->insertColumnFormat(new ColumnFormat(*columnFormat));
+        for (int col : m_columnFormats.keys()) {
+            m_sheet->columnFormats()->setColFormat(col, col, m_columnFormats.value(col));
         }
-        foreach(RowFormat* rowFormat, m_rowFormats) {
-            m_sheet->insertRowFormat(rowFormat);
+        for (int row : m_rowFormats.keys()) {
+            m_sheet->rowFormats()->setRowFormat(row, row, m_rowFormats.value(row));
         }
     }
     return AbstractDataManipulator::mainProcessing();
 }
+

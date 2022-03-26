@@ -27,11 +27,11 @@ public:
 
 protected:
     bool process(Element* element) override;
-    bool mainProcessing() override;
+    bool preProcessing() override;
+    bool postProcessing() override;
 
 private:
     QString m_comment;
-    QList< QPair<QRectF, QString> > m_undoData;
 };
 
 } // namespace Sheets

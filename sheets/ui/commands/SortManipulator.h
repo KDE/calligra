@@ -6,6 +6,7 @@
 #define CALLIGRA_SHEETS_SORT_MANIPULATOR
 
 #include "DataManipulators.h"
+#include "core/Cell.h"
 
 namespace Calligra
 {

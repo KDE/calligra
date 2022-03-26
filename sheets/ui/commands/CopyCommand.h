@@ -7,7 +7,7 @@
 #ifndef CALLIGRA_SHEETS_COPY_COMMAND
 #define CALLIGRA_SHEETS_COPY_COMMAND
 
-class QDomDocument;
+#include <QString>
 
 namespace Calligra
 {
@@ -22,13 +22,10 @@ class Region;
 namespace CopyCommand
 {
 /**
- * Saves the cell \p region as XML.
+ * Saves the cell \p region as a text with coordinates - used for copy/pasting.
  * \param region the cell region to process
- * \param era set this to true if you want to encode relative references
- *            absolutely (they will be switched back to relative
- *            references during decoding) - used for cut to clipboard
  */
-QDomDocument saveAsXml(const Region&, bool era = false);
+QString saveAsSnippet(const Region&);
 
 /**
  * Saves the cell \p region as plain text.
@@ -36,16 +33,7 @@ QDomDocument saveAsXml(const Region&, bool era = false);
  */
 QString saveAsPlainText(const Region &region);
 
-/**
- * Saves the cell \p region as HTML.
- */
-QDomDocument saveAsHtml(const Region& region);
-
-/**
- * Saves the cell \p region as CSV data.
- */
-QString saveAsCSV(const Region& region);
-}
+} // namespace CopyCommand
 
 } // namespace Sheets
 } // namespace Calligra

@@ -7,11 +7,8 @@
 // Local
 #include "ConditionCommand.h"
 
-// #include <KLocalizedString>
-
-// #include "CellStorage.h"
-// #include "ConditionsStorage.h"
-// #include "Sheet.h"
+#include "core/CellStorage.h"
+#include "core/Sheet.h"
 
 using namespace Calligra::Sheets;
 
@@ -20,25 +17,28 @@ ConditionCommand::ConditionCommand()
 {
 }
 
+bool ConditionCommand::preProcessing()
+{
+    if (!m_firstrun)
+        return true;
+    m_sheet->fullCellStorage()->startUndoRecording();
+    return AbstractRegionCommand::preProcessing();
+}
+
+
 bool ConditionCommand::process(Element* element)
 {
     if (!m_reverse) {
-        // create undo
-        if (m_firstrun)
-            m_undoData += m_sheet->conditionsStorage()->undoData(Region(element->rect()));
-        m_sheet->cellStorage()->setConditions(Region(element->rect()), m_conditions);
+        m_sheet->fullCellStorage()->setConditions(Region(element->rect()), m_conditions);
     }
     return true;
 }
 
-bool ConditionCommand::mainProcessing()
+bool ConditionCommand::postProcessing()
 {
-    if (m_reverse) {
-        m_sheet->cellStorage()->setConditions(*this, Conditions());
-        for (int i = 0; i < m_undoData.count(); ++i)
-            m_sheet->cellStorage()->setConditions(Region(m_undoData[i].first.toRect()), m_undoData[i].second);
-    }
-    return AbstractRegionCommand::mainProcessing();
+    if (m_firstrun)
+        m_sheet->fullCellStorage()->stopUndoRecording(this);
+    return true;
 }
 
 void ConditionCommand::setConditionList(const QLinkedList<Conditional>& list)

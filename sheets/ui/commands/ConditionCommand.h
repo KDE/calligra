@@ -30,11 +30,11 @@ public:
 
 protected:
     bool process(Element* element) override;
-    bool mainProcessing() override;
+    bool preProcessing() override;
+    bool postProcessing() override;
 
 private:
     Conditions m_conditions;
-    QList< QPair<QRectF, Conditions> > m_undoData;
 };
 
 } // namespace Sheets

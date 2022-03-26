@@ -73,7 +73,6 @@ namespace Odf {
     CALLIGRA_SHEETS_CORE_EXPORT QString saveRegion(const QString& expression);
     CALLIGRA_SHEETS_CORE_EXPORT QString saveRegion(Region *region);
 
-
 /**
  * Converts an OpenDocument representation of a formula to a localized formula.
  * @param expression_ The expression to convert from OpenDocument format.

@@ -239,6 +239,17 @@ void ColFormatStorage::setColFormat (int firstCol, int lastCol, const ColFormat 
     setPageBreak (firstCol, lastCol, f.hasPageBreak);
 }
 
+ColFormat ColFormatStorage::getColFormat(int col) const
+{
+    ColFormat res;
+    res.width = colWidth(col);
+    res.hidden = isHidden(col);
+    res.filtered = isFiltered(col);
+    res.hasPageBreak = hasPageBreak(col);
+    return res;
+}
+
+
 int ColFormatStorage::lastNonDefaultCol() const
 {
     int col = KS_colMax;

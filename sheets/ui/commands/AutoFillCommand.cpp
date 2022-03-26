@@ -654,7 +654,7 @@ static void fillSequence(const QList<Cell>& _srcList,
 
         // copy the style of the source cell
         //
-        cell.copyFormat(_srcList.at(s));
+        cell.copyFormat(_srcList.at(s), Paste::NoBorder);
 
         // next/previous cell
         if (down) {

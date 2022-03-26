@@ -21,10 +21,7 @@
 #include "SheetsOdf.h"
 #include "SheetsOdfPrivate.h"
 
-// #include <KoGenStyle.h>
 #include <KoGenStyles.h>
-// #include <KoOdfStylesReader.h>
-// #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 #include <KoOdfGraphicStyles.h>
 #include <KoOdfWorkaround.h>

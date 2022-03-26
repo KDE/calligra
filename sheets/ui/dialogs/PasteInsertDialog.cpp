@@ -52,10 +52,12 @@ PasteInsertDialog::PasteInsertDialog(QWidget* parent, Selection* selection)
 
 void PasteInsertDialog::slotOk()
 {
+    QClipboard *clipboard = QApplication::clipboard()
     PasteCommand *const command = new PasteCommand();
     command->setSheet(m_selection->activeSheet());
     command->add(*m_selection);
-    command->setMimeData(QApplication::clipboard()->mimeData());
+    command->setMimeData(clipboard->mimeData());
+    command->setSameApp (clipboard->ownsClipboard());
     if (rb1->isChecked()) {
         command->setInsertionMode(PasteCommand::ShiftCellsRight);
     } else if (rb2->isChecked()) {

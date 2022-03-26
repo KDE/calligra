@@ -174,7 +174,7 @@ void CSVDialog::accept()
 
     const QMimeData* mimedata = QApplication::clipboard()->mimeData();
     if (m_mode == Clipboard &&
-        !mimedata->hasFormat("application/x-kspread-snippet") &&
+        !mimedata->hasFormat("application/x-calligra-sheets-snippet") &&
         !mimedata->hasHtml() && mimedata->hasText() &&
         mimedata->text().split('\n').count() >= 2 )
     {

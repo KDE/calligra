@@ -8,11 +8,8 @@
 #include "CommentCommand.h"
 
 
-// #include <KLocalizedString>
-
-// #include "CellStorage.h"
-// #include "Sheet.h"
-// #include "RectStorage.h"
+#include "core/CellStorage.h"
+#include "core/Sheet.h"
 
 using namespace Calligra::Sheets;
 
@@ -21,25 +18,27 @@ CommentCommand::CommentCommand(KUndo2Command* parent)
 {
 }
 
+bool CommentCommand::preProcessing()
+{
+    if (!m_firstrun)
+        return true;
+    m_sheet->fullCellStorage()->startUndoRecording();
+    return AbstractRegionCommand::preProcessing();
+}
+
 bool CommentCommand::process(Element* element)
 {
     if (!m_reverse) {
-        // create undo
-        if (m_firstrun)
-            m_undoData += m_sheet->commentStorage()->undoData(Region(element->rect()));
         m_sheet->cellStorage()->setComment(Region(element->rect()), m_comment);
     }
     return true;
 }
 
-bool CommentCommand::mainProcessing()
+bool CommentCommand::postProcessing()
 {
-    if (m_reverse) {
-        m_sheet->cellStorage()->setComment(*this, QString());
-        for (int i = 0; i < m_undoData.count(); ++i)
-            m_sheet->cellStorage()->setComment(Region(m_undoData[i].first.toRect()), m_undoData[i].second);
-    }
-    return AbstractRegionCommand::mainProcessing();
+    if (m_firstrun)
+        m_sheet->fullCellStorage()->stopUndoRecording(this);
+    return true;
 }
 
 void CommentCommand::setComment(const QString& comment)

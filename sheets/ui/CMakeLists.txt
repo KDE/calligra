@@ -9,7 +9,6 @@ set (commands_DIR_SRCS
     commands/BorderColorCommand.cpp
     commands/CommentCommand.cpp
     commands/ConditionCommand.cpp
-    commands/CopyCommand.cpp
     commands/CSVDataCommand.cpp
     commands/DeleteCommand.cpp
     commands/IndentationCommand.cpp
@@ -17,7 +16,6 @@ set (commands_DIR_SRCS
     commands/MergeCommand.cpp
     commands/NamedAreaCommand.cpp
     commands/PageBreakCommand.cpp
-    commands/PasteCommand.cpp
     commands/PrecisionCommand.cpp
     commands/RowColumnManipulators.cpp
     commands/SheetCommands.cpp
@@ -25,6 +23,8 @@ set (commands_DIR_SRCS
     commands/SpellCheckCommand.cpp
     commands/StyleCommand.cpp
     commands/ValidityCommand.cpp
+    commands/CopyCommand.cpp
+    commands/PasteCommand.cpp
     )
 
 

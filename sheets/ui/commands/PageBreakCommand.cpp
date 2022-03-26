@@ -6,12 +6,12 @@
 
 #include "PageBreakCommand.h"
 
-// #include "Damages.h"
-// #include "Map.h"
-// #include "RowColumnFormat.h"
-// #include "RowFormatStorage.h"
-// #include "Sheet.h"
-// #include "SheetPrint.h"
+#include "engine/Damages.h"
+#include "engine/MapBase.h"
+#include "core/ColFormatStorage.h"
+#include "core/RowFormatStorage.h"
+#include "core/Sheet.h"
+#include "core/SheetPrint.h"
 
 using namespace Calligra::Sheets;
 
@@ -34,10 +34,10 @@ bool PageBreakCommand::process(Element *element)
 {
     // No reverse means setting; reverse means unsetting.
     const bool enable = !m_reverse;
-    Sheet *const sheet = element->sheet();
+    Sheet *sheet = dynamic_cast<Sheet *>(element->sheet());
     const QRect range = element->rect();
     if (m_mode == BreakBeforeColumn && range.left() > 1) {
-        sheet->nonDefaultColumnFormat(range.left())->setPageBreak(enable);
+        sheet->columnFormats()->setPageBreak(range.left(), range.left(), enable);
     } else if (m_mode == BreakBeforeRow && range.top() > 1) {
         sheet->rowFormats()->setPageBreak(range.top(), range.top(), enable);
     }
