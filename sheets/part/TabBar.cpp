@@ -11,21 +11,12 @@
 
 #include "TabBar.h"
 
-#include <QList>
+#include <QFontDatabase>
 #include <QMouseEvent>
-#include <QPaintEvent>
 #include <QPainter>
-#include <QPolygon>
-#include <QPixmap>
-#include <QResizeEvent>
-#include <QString>
-#include <QStringList>
 #include <QStyle>
 #include <QTimer>
 #include <QToolButton>
-#include <QWidget>
-#include <QWheelEvent>
-#include <QFontDatabase>
 
 // TODO
 // improvement possibilities
@@ -189,7 +180,7 @@ void TabBarPrivate::layoutTabs()
             QRect rect;
             if (c >= firstTab - 1) {
                 QString text = tabs[ c ];
-                int tw = fm.width(text) + 4;
+                int tw = fm.horizontalAdvance(text) + 4;
                 rect = QRect(x, 0, tw + 20, tabbar->height());
                 x = x + tw + 20;
             }
@@ -209,7 +200,7 @@ void TabBarPrivate::layoutTabs()
             QRect rect;
             if (c >= firstTab - 1) {
                 QString text = tabs[ c ];
-                int tw = fm.width(text) + 4;
+                int tw = fm.horizontalAdvance(text) + 4;
                 rect = QRect(x - tw - 20, 0, tw + 20, tabbar->height());
                 x = x - tw - 20;
             }
@@ -281,7 +272,7 @@ void TabBarPrivate::drawTab(QPainter& painter, QRect& rect, const QString& text,
     QFont f = font(active);
     painter.setFont(f);
     QFontMetrics fm = painter.fontMetrics();
-    int tx =  rect.x() + (rect.width() - fm.width(text)) / 2;
+    int tx =  rect.x() + (rect.width() - fm.horizontalAdvance(text)) / 2;
     int ty =  rect.y() + (rect.height() - fm.height()) / 2 + fm.ascent();
     painter.drawText(tx, ty, text);
 

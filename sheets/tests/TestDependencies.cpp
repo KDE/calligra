@@ -5,21 +5,22 @@
 #include "TestDependencies.h"
 
 #include <QTest>
+#include <QCoreApplication>
 
-#include "CellStorage.h"
-#include "DependencyManager.h"
-#include "DependencyManager_p.h"
-#include "Formula.h"
-#include "Map.h"
-#include "Region.h"
-#include "Sheet.h"
-#include "Value.h"
+#include "engine/CellBase.h"
+#include "engine/CellBaseStorage.h"
+#include "engine/DependencyManager.h"
+#include "engine/DependencyManager_p.h"
+#include "engine/Formula.h"
+#include "engine/Value.h"
+#include "engine/MapBase.h"
+#include "engine/SheetBase.h"
 
 using namespace Calligra::Sheets;
 
 void TestDependencies::initTestCase()
 {
-    m_map = new Map(0 /* no Doc */);
+    m_map = new MapBase;
     m_sheet = m_map->addNewSheet();
     m_sheet->setSheetName("Sheet1");
     m_storage = m_sheet->cellStorage();
@@ -31,20 +32,20 @@ void TestDependencies::testCircleRemoval()
     formula.setExpression("=A1");
     m_storage->setFormula(1, 1, formula); // A1
 
-    QApplication::processEvents(); // handle Damages
+    QCoreApplication::processEvents(); // handle Damages
 
     QCOMPARE(m_storage->value(1, 1), Value::errorCIRCLE());
     DependencyManager* manager = m_map->dependencyManager();
     QVERIFY(manager->d->consumers.count() == 1);
     QVERIFY(manager->d->providers.count() == 1);
-    QList<Cell> consumers = manager->d->consumers.value(m_sheet)->contains(QRect(1, 1, 1, 1));
+    QList<CellBase> consumers = manager->d->consumers.value(m_sheet)->contains(QRect(1, 1, 1, 1));
     QCOMPARE(consumers.count(), 1);
-    QCOMPARE(consumers.first(), Cell(m_sheet, 1, 1));
-    QCOMPARE(manager->d->providers.value(Cell(m_sheet, 1, 1)), Region(QRect(1, 1, 1, 1), m_sheet));
+    QCOMPARE(consumers.first(), CellBase(m_sheet, 1, 1));
+    QCOMPARE(manager->d->providers.value(CellBase(m_sheet, 1, 1)), Region(QRect(1, 1, 1, 1), m_sheet));
 
     m_storage->setFormula(1, 1, Formula()); // A1
 
-    QApplication::processEvents(); // handle Damages
+    QCoreApplication::processEvents(); // handle Damages
 
     QCOMPARE(m_storage->value(1, 1), Value());
     QVERIFY(manager->d->consumers.value(m_sheet)->contains(QRect(1, 1, 1, 1)).count() == 0);
@@ -61,7 +62,7 @@ void TestDependencies::testCircles()
     formula.setExpression("=A2");
     m_storage->setFormula(1, 3, formula); // A3
 
-    QApplication::processEvents(); // handle Damages
+    QCoreApplication::processEvents(); // handle Damages
 
     QCOMPARE(m_storage->value(1, 1), Value::errorCIRCLE());
     QCOMPARE(m_storage->value(1, 2), Value::errorCIRCLE());
@@ -70,21 +71,21 @@ void TestDependencies::testCircles()
 
 void TestDependencies::testDepths()
 {
-    Cell a1(m_sheet, 1, 1); a1.parseUserinput("5");
-    Cell a2(m_sheet, 1, 2); a2.parseUserinput("=A1");
-    Cell a3(m_sheet, 1, 3); a3.parseUserinput("=A2");
-    Cell a4(m_sheet, 1, 4); a4.parseUserinput("=A1 + A3");
+    CellBase a1(m_sheet, 1, 1); a1.parseUserInput("5");
+    CellBase a2(m_sheet, 1, 2); a2.parseUserInput("=A1");
+    CellBase a3(m_sheet, 1, 3); a3.parseUserInput("=A2");
+    CellBase a4(m_sheet, 1, 4); a4.parseUserInput("=A1 + A3");
 
-    QApplication::processEvents(); // handle Damages
+    QCoreApplication::processEvents(); // handle Damages
     
-    QMap<Cell, int> depths = m_map->dependencyManager()->depths();
+    QMap<CellBase, int> depths = m_map->dependencyManager()->depths();
     QCOMPARE(depths[a1], 0);
     QCOMPARE(depths[a2], 1);
     QCOMPARE(depths[a3], 2);
     QCOMPARE(depths[a4], 3);
 
-    a2.parseUserinput("");
-    QApplication::processEvents(); // handle Damages
+    a2.parseUserInput("");
+    QCoreApplication::processEvents(); // handle Damages
     
     depths = m_map->dependencyManager()->depths();
     QCOMPARE(depths[a1], 0);

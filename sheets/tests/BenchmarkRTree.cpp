@@ -15,9 +15,6 @@
 */
 #include "BenchmarkRTree.h"
 
-// #include "rtree.h"
-#include "RTree.h"
-
 #include <QTest>
 
 using namespace std;

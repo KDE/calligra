@@ -64,7 +64,7 @@ protected:
  * \ingroup Commands
  * \brief Abstract command for setting values/styles.
  */
-class AbstractDFManipulator : public AbstractDataManipulator
+class CALLIGRA_SHEETS_UI_EXPORT AbstractDFManipulator : public AbstractDataManipulator
 {
 public:
     explicit AbstractDFManipulator(KUndo2Command *parent = 0);
@@ -91,7 +91,7 @@ protected:
  * \ingroup Commands
  * \brief Sets values of a cell range.
  */
-class DataManipulator : public AbstractDataManipulator
+class CALLIGRA_SHEETS_UI_EXPORT DataManipulator : public AbstractDataManipulator
 {
 public:
     explicit DataManipulator(KUndo2Command *parent = 0);
@@ -129,7 +129,7 @@ protected:
  * \ingroup Commands
  * \brief Fills a value series into a cell range.
  */
-class SeriesManipulator : public AbstractDataManipulator
+class CALLIGRA_SHEETS_UI_EXPORT SeriesManipulator : public AbstractDataManipulator
 {
 public:
     enum Series { Column, Row, Linear, Geometric };
@@ -155,7 +155,7 @@ protected:
  * \ingroup Commands
  * \brief Fills values into a cell range.
  */
-class FillManipulator : public AbstractDFManipulator
+class CALLIGRA_SHEETS_UI_EXPORT FillManipulator : public AbstractDFManipulator
 {
 public:
     FillManipulator();
@@ -178,7 +178,7 @@ protected:
  * \ingroup Commands
  * \brief Converts string values to upper-/lowercase.
  */
-class CaseManipulator: public AbstractDataManipulator
+class CALLIGRA_SHEETS_UI_EXPORT CaseManipulator: public AbstractDataManipulator
 {
 public:
     CaseManipulator();
@@ -209,7 +209,7 @@ protected:
  * \ingroup Commands
  * \brief Inserts/Removes cells by shifting other cells.
  */
-class ShiftManipulator : public AbstractRegionCommand
+class CALLIGRA_SHEETS_UI_EXPORT ShiftManipulator : public AbstractRegionCommand
 {
 public:
     enum Direction { ShiftRight, ShiftBottom };

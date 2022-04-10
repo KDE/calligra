@@ -6,21 +6,20 @@
 
 #include "HyperlinkStrategy.h"
 
-// #include "Selection.h"
-// #include "Sheet.h"
-// #include "Util.h"
-// #include "CellToolBase.h"
+#include "engine/MapBase.h"
+#include "engine/Util.h"
+#include "core/Sheet.h"
+#include "../Selection.h"
+#include "../CellToolBase.h"
 
-// #include <KoCanvasBase.h>
-// #include <KoSelection.h>
-// #include <KoToolBase.h>
+#include <KoCanvasBase.h>
+#include <KoToolBase.h>
 
-// #include <kmessagebox.h>
-// #include <krun.h>
+#include <KLocalizedString>
+#include <kmessagebox.h>
+#include <krun.h>
 
-// #include <QMimeDatabase>
-// #include <QTimer>
-// #include <QUrl>
+#include <QMimeDatabase>
 
 using namespace Calligra::Sheets;
 
@@ -68,16 +67,13 @@ void HyperlinkStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 
     const QUrl url(d->url);
     if (!url.isValid() || url.isRelative()) {
-        const Region region(d->url, selection()->activeSheet()->map(), selection()->activeSheet());
+        const Region region = selection()->activeSheet()->map()->regionFromName(d->url, selection()->activeSheet());
         if (region.isValid()) {
-            if (region.firstSheet() != selection()->activeSheet()) {
-                selection()->emitVisibleSheetRequested(region.firstSheet());
+            Sheet *firstSheet = dynamic_cast<Sheet *>(region.firstSheet());
+            if (firstSheet != selection()->activeSheet()) {
+                selection()->emitVisibleSheetRequested(firstSheet);
             }
             selection()->initialize(region);
-
-            if (!region.firstRange().isNull()) {
-                const Cell cell = Cell(region.firstSheet(), region.firstRange().topLeft());
-            }
         }
     } else {
         const QString type = QMimeDatabase().mimeTypeForUrl(url).name();

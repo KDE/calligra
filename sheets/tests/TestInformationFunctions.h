@@ -8,15 +8,15 @@
 
 #include <QObject>
 
-#include <Value.h>
-#include <Cell.h>
+#include <engine/Value.h>
+#include <engine/CellBase.h>
 
 namespace Calligra
 {
 namespace Sheets
 {
-class Map;
-class Cell;
+class MapBase;
+class CellBase;
 
 class TestInformationFunctions: public QObject
 {
@@ -62,9 +62,9 @@ private Q_SLOTS:
     void cleanupTestCase();
 
 private:
-    Value evaluate(const QString&, Value& ex, const Cell &cell = Cell());
+    Value evaluate(const QString&, Value& ex, const CellBase &cell = CellBase());
 
-    Map* m_map;
+    MapBase* m_map;
 };
 
 } // namespace Sheets

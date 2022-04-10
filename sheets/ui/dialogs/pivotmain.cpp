@@ -7,28 +7,21 @@
 // Local
 
 #include "pivotmain.h"
-// #include "pivotoptions.h"
-// #include "pivotfilters.h"
-// #include "ui_pivotmain.h"
+#include "pivotfilters.h"
+#include "ui_pivotmain.h"
 
-// #include<QTimer>
-// #include<QObject>
-// #include<QColor>
-// #include<QPen>
-// #include<QMessageBox>
-// #include<QListWidgetItem>
-// #include<QListWidget>
+#include<QMessageBox>
 
-// #include <sheets/Value.h>
-// #include <sheets/ValueCalc.h>
-// #include <sheets/ValueConverter.h>
-// #include <sheets/Map.h>
+#include "engine/CellBaseStorage.h"
+#include "engine/Value.h"
+#include "engine/ValueCalc.h"
+#include "engine/ValueConverter.h"
 // #include <sheets/DocBase.h>
-// #include <sheets/Cell.h>
-// #include <sheets/Style.h>
-// #include <sheets/Sheet.h>
-// #include <sheets/ui/Selection.h>
-// #include <sheets/CellStorage.h>
+#include "core/Cell.h"
+#include "core/Map.h"
+#include "core/Style.h"
+#include "core/Sheet.h"
+#include "../Selection.h"
 
 
 using namespace Calligra::Sheets;
@@ -189,7 +182,7 @@ PivotMain::~PivotMain()
 //Function to read the title of every column and add it to Labels.
 void PivotMain::extractColumnNames()
 {
-    Sheet *const sheet = d->selection->lastSheet();
+    Sheet *const sheet = dynamic_cast<Sheet *>(d->selection->lastSheet());
     const QRect range = d->selection->lastRange();
     
     int r = range.right();
@@ -236,11 +229,11 @@ void PivotMain::on_AddFilter_clicked()
 Sheet* PivotMain::filter()
 {
   
-  Sheet *const sheet1 = d->selection->lastSheet();
+  Sheet *const sheet1 = dynamic_cast<Sheet *>(d->selection->lastSheet());
   const QRect range2 = d->selection->lastRange();
   
-  Map *mymap=sheet1->map();
-  Sheet* sheet2=mymap->createSheet("Filtered Sheet");
+  Map *mymap=sheet1->fullMap();
+  Sheet* sheet2 = dynamic_cast<Sheet *>(mymap->createSheet("Filtered Sheet"));
   
   
   int r= range2.right();
@@ -317,7 +310,7 @@ Sheet* PivotMain::filter()
 //This helps the filter function in analyzing the data(condition) received from Add Filter dialog.
 bool PivotMain::checkCondition(const QString &field , const QString &condition, const QString &value, int line)
 {
-  Sheet *const sheet1 = d->selection->lastSheet();
+  Sheet *const sheet1 = dynamic_cast<Sheet *>(d->selection->lastSheet());
   const QRect range2 = d->selection->lastRange();
   int r= range2.right();
   //int b=range2.bottom();
@@ -368,11 +361,11 @@ bool PivotMain::checkCondition(const QString &field , const QString &condition, 
 //The core function which summarizes the data and forms the pivot table.
 void PivotMain::Summarize()
 {
-  
-    
-    Map* myMap = d->selection->lastSheet()->map();
+    Sheet *const lastSheet = dynamic_cast<Sheet *>(d->selection->lastSheet());
+    if (!lastSheet) return;
+    Map* myMap = lastSheet->fullMap();
     const QRect range3=d->selection->lastRange();
-    Sheet* sheet=myMap->createSheet("Filtered Sheet");
+    Sheet* sheet = dynamic_cast<Sheet *>(myMap->createSheet("Filtered Sheet"));
     
     sheet=filter();
     if(sheet==d->selection->lastSheet())
@@ -401,7 +394,7 @@ void PivotMain::Summarize()
     
     static int z=1;
     
-    Sheet* mySheet=myMap->createSheet("Pivot Sheet"+QString::number(z++));
+    Sheet* mySheet = dynamic_cast<Sheet *>(myMap->createSheet("Pivot Sheet"+QString::number(z++)));
     
     int r = range.right();
     int row=range.top();
@@ -684,8 +677,7 @@ void PivotMain::Summarize()
 
 QVector<QString> PivotMain::ValueData(const QString &str)
 {
-  
-      Sheet *const sheet = d->selection->lastSheet();
+      SheetBase *const sheet = d->selection->lastSheet();
       const QRect range = d->selection->lastRange();
       
       int row = range.top();
@@ -695,21 +687,21 @@ QVector<QString> PivotMain::ValueData(const QString &str)
       ValueConverter *conv=0;
     
       for (int i = range.left(); i <= r; ++i) {
-	d->posVect.append(Value(Cell(sheet,i,row).value()));
+	d->posVect.append(CellBase(sheet,i,row).value());
       }
       
       int position=d->posVect.indexOf(Value(str));
      
       for(int j=row+1;j<=bottom;j++)
       {
-	if(!Cell(sheet,position+1,j).value().isString())
+	if(!CellBase(sheet,position+1,j).value().isString())
 	{
 	
-	  if(d->retVect.contains(QString::number(conv->toInteger(Value(Cell(sheet,position+1,j).value()))))==0)
-       d->retVect.append(QString::number(conv->toInteger(Value(Cell(sheet,position+1,j).value()))));
+	  if(d->retVect.contains(QString::number(conv->toInteger(CellBase(sheet,position+1,j).value())))==0)
+       d->retVect.append(QString::number(conv->toInteger(CellBase(sheet,position+1,j).value())));
 	}
-	else if(d->retVect.contains(conv->toString(Value(Cell(sheet,position+1,j).value())))==0)
-	   d->retVect.append(conv->toString(Value(Cell(sheet,position+1,j).value())));
+	else if(d->retVect.contains(conv->toString(CellBase(sheet,position+1,j).value()))==0)
+	   d->retVect.append(conv->toString(CellBase(sheet,position+1,j).value()));
       }
       return d->retVect;
 }//ValueData

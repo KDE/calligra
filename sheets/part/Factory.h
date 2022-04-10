@@ -9,7 +9,7 @@
 
 #include <kpluginfactory.h>
 
-#include "sheets_common_export.h"
+#include "sheets_part_export.h"
 
 class KAboutData;
 class KoComponentData;
@@ -19,7 +19,7 @@ namespace Calligra
 namespace Sheets
 {
 
-class CALLIGRA_SHEETS_COMMON_EXPORT Factory : public KPluginFactory
+class CALLIGRA_SHEETS_PART_EXPORT Factory : public KPluginFactory
 {
     Q_OBJECT
 public:

@@ -107,6 +107,7 @@ set (calligrasheetsui_LIB_SRCS
     FunctionCompletion.cpp
     inspector.cpp
     LocationComboBox.cpp
+    MapModel.cpp
     MapViewModel.cpp
     RegionSelector.cpp
     Selection.cpp

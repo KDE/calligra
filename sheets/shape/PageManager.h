@@ -9,8 +9,6 @@
 
 #include <Qt>
 
-#include "sheets_common_export.h"
-
 class QRect;
 class QSizeF;
 
@@ -27,7 +25,7 @@ class Sheet;
  * printing, and TablePageManager, which does the same for the table shape in
  * page based hosting apps.
  */
-class CALLIGRA_SHEETS_COMMON_EXPORT PageManager
+class PageManager
 {
 public:
     /**

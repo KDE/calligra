@@ -159,13 +159,14 @@ void MapViewModel::setActiveSheet(Sheet* sheet)
     emit activeSheetChanged(sheet);
 }
 
-void MapViewModel::addSheet(Sheet *sheet)
+void MapViewModel::addSheet(SheetBase *sheet)
 {
     MapModel::addSheet(sheet);
+    Sheet *fullSheet = dynamic_cast<Sheet *>(sheet);
 
-    connect(sheet, &Sheet::shapeAdded,
+    connect(fullSheet, &Sheet::shapeAdded,
             this, &MapViewModel::addShape);
-    connect(sheet, &Sheet::shapeRemoved,
+    connect(fullSheet, &Sheet::shapeRemoved,
             this, &MapViewModel::removeShape);
 
     if (!d->xmlGuiClient) {
@@ -185,13 +186,14 @@ void MapViewModel::addSheet(Sheet *sheet)
     d->xmlGuiClient->plugActionList("go_goto_sheet_actionlist", actions);
 }
 
-void MapViewModel::removeSheet(Sheet *sheet)
+void MapViewModel::removeSheet(SheetBase *sheet)
 {
     MapModel::removeSheet(sheet);
+    Sheet *fullSheet = dynamic_cast<Sheet *>(sheet);
 
-    disconnect(sheet, &Sheet::shapeAdded,
+    disconnect(fullSheet, &Sheet::shapeAdded,
                this, &MapViewModel::addShape);
-    disconnect(sheet, &Sheet::shapeRemoved,
+    disconnect(fullSheet, &Sheet::shapeRemoved,
                this, &MapViewModel::removeShape);
 
     if (!d->xmlGuiClient) {

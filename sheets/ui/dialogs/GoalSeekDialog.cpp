@@ -12,28 +12,21 @@
 
 #include "GoalSeekDialog.h"
 
-// #include <ktextedit.h>
-// #include <klocale.h>
+#include <ktextedit.h>
+#include <kmessagebox.h>
 
-// #include "CalculationSettings.h"
-// #include "Cell.h"
-// #include "ui/RegionSelector.h"
-// #include "Formula.h"
-// #include "Map.h"
-// #include "ui/Selection.h"
-// #include "Sheet.h"
-// #include "Util.h"
+#include "engine/CalculationSettings.h"
+#include "engine/CellBase.h"
+#include "engine/Localization.h"
+#include "engine/Formula.h"
+#include "core/Map.h"
+#include "core/Sheet.h"
+#include "../Selection.h"
 
 // commands
-// #include "commands/DataManipulators.h"
+#include "../commands/DataManipulators.h"
 
-// #include "ui_GoalSeekWidget.h"
-
-// #include <kmessagebox.h>
-
-// #include <QCloseEvent>
-
-// #include <math.h>
+#include "ui_GoalSeekWidget.h"
 
 using namespace Calligra::Sheets;
 
@@ -41,8 +34,8 @@ class GoalSeekDialog::Private
 {
 public:
     Selection   * selection;
-    Cell          sourceCell;
-    Cell          targetCell;
+    CellBase      sourceCell;
+    CellBase      targetCell;
     double        result;
     int           maxIter;
     double        oldSource;
@@ -122,7 +115,7 @@ void GoalSeekDialog::accept()
     if (!d->widget.preview->isVisible()) {
         Sheet * sheet = d->selection->activeSheet();
 
-        const Region source(d->widget.selector3->textEdit()->toPlainText(), sheet->map(), sheet);
+        const Region source = sheet->map()->regionFromName(d->widget.selector3->textEdit()->toPlainText(), sheet);
         if (!source.isValid() || !source.isSingular()) {
             KMessageBox::error(this, i18n("Cell reference is invalid."));
             d->widget.selector3->textEdit()->selectAll();
@@ -132,7 +125,7 @@ void GoalSeekDialog::accept()
             return;
         }
 
-        const Region target(d->widget.selector1->textEdit()->toPlainText(), sheet->map(), sheet);
+        const Region target = sheet->map()->regionFromName(d->widget.selector1->textEdit()->toPlainText(), sheet);
         if (!target.isValid() || !target.isSingular()) {
             KMessageBox::error(this, i18n("Cell reference is invalid."));
             d->widget.selector1->textEdit()->selectAll();
@@ -153,8 +146,8 @@ void GoalSeekDialog::accept()
             return;
         }
 
-        d->sourceCell = Cell(source.firstSheet(), source.firstRange().topLeft());
-        d->targetCell = Cell(target.firstSheet(), target.firstRange().topLeft());
+        d->sourceCell = CellBase(source.firstSheet(), source.firstRange().topLeft());
+        d->targetCell = CellBase(target.firstSheet(), target.firstRange().topLeft());
 
         if (!d->sourceCell.value().isNumber()) {
             KMessageBox::error(this, i18n("Source cell must contain a numeric value."));
@@ -192,7 +185,7 @@ void GoalSeekDialog::accept()
     command->setSheet(sheet);
     command->add(Region(d->sourceCell.cellPosition(), sheet));
     command->setValue(value);
-    sheet->map()->addCommand(command);
+    sheet->fullMap()->addCommand(command);
 
     d->selection->endReferenceSelection();
     d->selection->emitModified();

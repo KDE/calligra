@@ -6,17 +6,15 @@
 
 // Local
 #include "Factory.h"
-
-#include "SheetsDebug.h"
+#include "AboutData.h"
+#include "CellEditorDocker.h"
+#include "Doc.h"
+#include "Part.h"
 
 #include <KoDockRegistry.h>
 #include <KoComponentData.h>
 #include <KoResourcePaths.h>
 
-#include "AboutData.h"
-#include "Doc.h"
-#include "Part.h"
-#include "ui/CellEditorDocker.h"
 
 using namespace Calligra::Sheets;
 

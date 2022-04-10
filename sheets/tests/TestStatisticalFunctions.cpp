@@ -10,10 +10,10 @@
 
 #include <QTest>
 
-#include <CellStorage.h>
-#include <Formula.h>
-#include <Map.h>
-#include <Sheet.h>
+#include <engine/CellBaseStorage.h>
+#include <engine/Formula.h>
+#include <engine/MapBase.h>
+#include <engine/SheetBase.h>
 
 #include "TestKspreadCommon.h"
 
@@ -115,10 +115,10 @@ Value TestStatisticalFunctions::evaluate(const QString& formula)
 void TestStatisticalFunctions::initTestCase()
 {
     FunctionModuleRegistry::instance()->loadFunctionModules();
-    m_map = new Map(0 /*no Doc*/);
+    m_map = new MapBase;
     m_map->addNewSheet();
-    Sheet* sheet = m_map->sheet(0);
-    CellStorage* storage = sheet->cellStorage();
+    SheetBase* sheet = m_map->sheet(0);
+    CellBaseStorage* storage = sheet->cellStorage();
 
     //
     // Test case data set

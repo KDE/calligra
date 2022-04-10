@@ -101,6 +101,8 @@ public:
 
     QString toUpper(const QString &str) const;
     QString toLower(const QString &str) const;
+
+    QString languageName(bool full) const;
 private:
     void setLocale(const QLocale &l);
 

@@ -10,7 +10,6 @@
 #include <KLocalizedString>
 
 #include <KoChartInterface.h>
-
 #include "ChartDatabaseSelector.h"
 
 using namespace Calligra::Sheets;

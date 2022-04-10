@@ -7,20 +7,20 @@
 // Local
 #include "TableShapeDeferredFactory.h"
 
-#include <QStringList>
+// #include <QStringList>
 
-#include <kpluginfactory.h>
+// #include <kpluginfactory.h>
 
-#include <KoDocumentResourceManager.h>
-#include <KoToolRegistry.h>
-#include <KoShapeLoadingContext.h>
-#include <KoXmlNS.h>
+// #include <KoDocumentResourceManager.h>
+// #include <KoToolRegistry.h>
+// #include <KoShapeLoadingContext.h>
+// #include <KoXmlNS.h>
 
-#include <Map.h>
+// #include <Map.h>
 
-#include "TableShape.h"
-#include "TableToolFactory.h"
-#include "TableShapeFactory.h"
+// #include "TableShape.h"
+// #include "TableToolFactory.h"
+// #include "TableShapeFactory.h"
 
 using namespace Calligra::Sheets;
 

@@ -27,7 +27,7 @@ calligrasheets_viewplugin_desktop_to_json(sheetssolver sheetssolver.desktop)
 target_link_libraries( sheetssolver
         GSL::gsl
         GSL::gslcblas
-        calligrasheetscommon
+        calligrasheetspartlib
 )
 
 install(TARGETS sheetssolver  DESTINATION ${PLUGIN_INSTALL_DIR}/calligrasheets/extensions)

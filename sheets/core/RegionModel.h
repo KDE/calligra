@@ -9,6 +9,8 @@
 
 #include "SheetModel.h"
 
+#include "sheets_core_export.h"
+
 namespace Calligra
 {
 namespace Sheets
@@ -19,7 +21,7 @@ class Region;
  * A model for a contiguous cell region.
  * \ingroup Model
  */
-class RegionModel : public SheetModel
+class CALLIGRA_SHEETS_CORE_EXPORT RegionModel : public SheetModel
 {
 public:
     explicit RegionModel(const Region &region);

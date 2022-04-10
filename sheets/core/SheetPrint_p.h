@@ -16,7 +16,6 @@ namespace Calligra
 {
 namespace Sheets
 {
-class HeaderFooter;
 class Sheet;
 class SheetPrint;
 
@@ -112,8 +111,6 @@ public:
 public:
     SheetPrint *q;
     Sheet * m_pSheet;
-
-    HeaderFooter *m_headerFooter;
 
     /**
      * Width of repeated columns in points, stored for performance reasons

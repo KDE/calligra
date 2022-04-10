@@ -2,9 +2,9 @@
 // SPDX-FileCopyrightText: 2007 Brad Hards <bradh@frogmouth.net>
 // SPDX-License-Identifier: LGPL-2.0-only
 
-#include <Formula.h>
-#include <FunctionModuleRegistry.h>
-#include <Value.h>
+#include <engine/Formula.h>
+#include <engine/FunctionModuleRegistry.h>
+#include <engine/Value.h>
 
 #include <QTest>
 

@@ -176,7 +176,7 @@ bool Odf::loadMap(Map *map, const KoXmlElement& body, KoOdfLoadingContext& odfCo
             if (sheetElement.nodeName() == "table:table") {
                 if (!sheetElement.attributeNS(KoXmlNS::table, "name", QString()).isEmpty()) {
                     const QString sheetName = sheetElement.attributeNS(KoXmlNS::table, "name", QString());
-                    Sheet* sheet = map->addNewSheet(sheetName);
+                    SheetBase* sheet = map->addNewSheet(sheetName);
                     sheet->setSheetName(sheetName);
                     overallRowCount += KoXml::childNodesCount(sheetElement);
                 }

@@ -20,12 +20,7 @@
 #ifndef CALLIGRA_SHEETS_CANVAS_ITEM
 #define CALLIGRA_SHEETS_CANVAS_ITEM
 
-#include <QList>
 #include <QGraphicsWidget>
-
-#include <KoCanvasBase.h>
-
-#include "sheets_common_export.h"
 
 #include "CanvasBase.h"
 
@@ -52,7 +47,7 @@ class View;
 /**
  * The scrollable area showing the cells.
  */
-class CALLIGRA_SHEETS_COMMON_EXPORT CanvasItem : public QGraphicsWidget, public CanvasBase
+class CALLIGRA_SHEETS_PART_EXPORT CanvasItem : public QGraphicsWidget, public CanvasBase
 {
     friend class ColumnHeaderItem;
     friend class RowHeaderItem;
@@ -148,7 +143,7 @@ public:
     Selection* selection() const override;
     Sheet* activeSheet() const override;
     KoZoomHandler* zoomHandler() const override;
-    SheetView* sheetView(const Sheet* sheet) const override;
+    SheetView* sheetView(Sheet* sheet) const override;
 
     bool isViewLoading() const override { return false; }
     void enableAutoScroll() override {}

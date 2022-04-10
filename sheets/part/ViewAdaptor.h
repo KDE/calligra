@@ -18,7 +18,7 @@
 #include <QRect>
 #include <QString>
 #include <QDBusAbstractAdaptor>
-#include "sheets_common_export.h"
+#include "sheets_part_export.h"
 
 namespace Calligra
 {
@@ -30,7 +30,7 @@ class CellProxy;
 /**
 * The ViewAdaptor class provides access to a view on a Calligra Sheets document.
 */
-class CALLIGRA_SHEETS_COMMON_EXPORT ViewAdaptor : public QDBusAbstractAdaptor
+class CALLIGRA_SHEETS_PART_EXPORT ViewAdaptor : public QDBusAbstractAdaptor
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kde.calligra.spreadsheet.view")

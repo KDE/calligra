@@ -1,19 +1,9 @@
 add_definitions(-DTRANSLATION_DOMAIN=\"calligra_shape_spreadsheet\")
 
-include_directories(
-    ${CMAKE_SOURCE_DIR}/sheets
-    ${CMAKE_BINARY_DIR}/sheets
-    ${CMAKE_SOURCE_DIR}/sheets/ui
-    ${CMAKE_SOURCE_DIR}/sheets/database
-    ${CMAKE_SOURCE_DIR}/sheets/commands
-    ${KOMAIN_INCLUDES}
-    ${KOTEXT_INCLUDES}
-    ${TEXTLAYOUT_INCLUDES}
-)
-
 ########### Flake Plugin library ###############
 
 set (tableshape_LIB_SRCS
+    PageManager.cpp
     TablePageManager.cpp
     TableShape.cpp
     TableTool.cpp
@@ -27,9 +17,17 @@ set (tableshape_LIB_SRCS
 add_library(calligra_shape_spreadsheet MODULE ${tableshape_LIB_SRCS})
 calligra_shape_desktop_to_json(calligra_shape_spreadsheet calligra_shape_spreadsheet.desktop)
 
+target_include_directories( calligra_shape_spreadsheet
+    PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/../
+    ${CMAKE_CURRENT_BINARY_DIR}/../
+)
+
 target_link_libraries(calligra_shape_spreadsheet
     PUBLIC
-        calligrasheetscommon
+        calligrasheetsengine
+        calligrasheetscore
+        calligrasheetsui
         flake
         komain
     PRIVATE

@@ -4,8 +4,8 @@
 
 #include "TestStyleStorage.h"
 
-#include <StyleStorage.h>
-#include <Map.h>
+#include <core/StyleStorage.h>
+#include <core/Map.h>
 
 #include <QTest>
 

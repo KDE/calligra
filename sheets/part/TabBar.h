@@ -13,11 +13,6 @@
 #define TABBAR_H
 
 #include <QWidget>
-#include <QStringList>
-#include <QMouseEvent>
-#include <QWheelEvent>
-#include <QResizeEvent>
-#include <QPaintEvent>
 
 namespace Calligra
 {

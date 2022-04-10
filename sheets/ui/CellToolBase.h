@@ -123,7 +123,7 @@ protected:
 
     virtual int maxCol() const = 0;
     virtual int maxRow() const = 0;
-    virtual SheetView* sheetView(const Sheet* sheet) const = 0;
+    virtual SheetView* sheetView(Sheet* sheet) const = 0;
 
     QList<QAction*> popupMenuActionList() const;
 

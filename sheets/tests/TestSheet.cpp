@@ -5,51 +5,26 @@
 */
 #include "TestSheet.h"
 
-#include "MockPart.h"
+#include <core/Cell.h>
+#include <core/Map.h>
+#include <core/Sheet.h>
 
-#include <KoViewConverter.h>
-#include <KoShape.h>
-#include <KoShapeSavingContext.h>
-#include <KoXmlWriter.h>
-#include <KoGenStyles.h>
-#include <KoEmbeddedDocumentSaver.h>
-
-#include <part/Doc.h> // FIXME detach from part
-#include <Map.h>
-#include <Sheet.h>
-#include <CellStorage.h>
-
-#include <QPainter>
 #include <QTest>
 
 using namespace Calligra::Sheets;
 
-class MockShape : public KoShape
-{
-public:
-    MockShape() : KoShape() {}
-    void paint(QPainter &painter, const KoViewConverter &converter, KoShapePaintingContext &) override {
-        Q_UNUSED(painter);
-        Q_UNUSED(converter);
-    }
-    void saveOdf(KoShapeSavingContext &) const override {}
-    bool loadOdf(const KoXmlElement &, KoShapeLoadingContext &) override {
-        return true;
-    }
-};
-
 void SheetTest::init()
 {
-    m_doc = new Doc(new MockPart);
-    m_doc->map()->addNewSheet();
-    m_sheet = m_doc->map()->sheet(0);
-    m_sheet->map()->setDefaultRowHeight(10.0);
-    m_sheet->map()->setDefaultColumnWidth(10.0);
+    m_map = new Map(nullptr);
+    m_map->addNewSheet();
+    m_sheet = dynamic_cast<Sheet *>(m_map->sheet(0));
+    m_map->setDefaultRowHeight(10.0);
+    m_map->setDefaultColumnWidth(10.0);
 }
 
 void SheetTest::cleanup()
 {
-    delete m_doc;
+    delete m_map;
 }
 
 void SheetTest::testRemoveRows_data()
@@ -159,35 +134,5 @@ void SheetTest::testDocumentToCellCoordinates()
 
     QCOMPARE(m_sheet->documentToCellCoordinates(area), result);
 }
-
-#if 0
-// test if embedded objects are prepare taken into account (tests for bug 287997)
-void SheetTest::testCompareRows()
-{
-    CellStorage* storage = m_sheet->cellStorage();
-    storage->insertRows(1, 15);
-
-    QBuffer buf;
-    buf.open(QIODevice::ReadWrite);
-    KoXmlWriter xmlWriter(&buf);
-    KoGenStyles mainStyles;
-    KoEmbeddedDocumentSaver embeddedSaver;
-    KoShapeSavingContext shapeContext(xmlWriter, mainStyles, embeddedSaver);
-    OdfSavingContext tableContext(shapeContext);
-
-    MockShape shape;
-    tableContext.insertCellAnchoredShape(m_sheet, 20, 5, &shape);
-
-    QCOMPARE(m_sheet->compareRows(12,19,1024,tableContext), true);
-    QCOMPARE(m_sheet->compareRows(12,20,1024,tableContext), false);
-    QCOMPARE(m_sheet->compareRows(12,21,1024,tableContext), true);
-
-    storage->insertRows(1, 15);
-
-    QCOMPARE(m_sheet->compareRows(12,19,1024,tableContext), true);
-    QCOMPARE(m_sheet->compareRows(12,20,1024,tableContext), false);
-    QCOMPARE(m_sheet->compareRows(12,21,1024,tableContext), true);
-}
-#endif
 
 QTEST_MAIN(SheetTest)

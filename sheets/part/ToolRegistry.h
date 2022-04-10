@@ -9,7 +9,7 @@
 
 #include <QObject>
 
-#include "sheets_common_export.h"
+#include "sheets_part_export.h"
 
 namespace Calligra
 {
@@ -20,7 +20,7 @@ namespace Sheets
  * Registry for tools.
  * \ingroup Plugin
  */
-class CALLIGRA_SHEETS_COMMON_EXPORT ToolRegistry : public QObject
+class CALLIGRA_SHEETS_PART_EXPORT ToolRegistry : public QObject
 {
 public:
     /**

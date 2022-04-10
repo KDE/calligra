@@ -4,10 +4,10 @@
 
 #include "TestDatabaseFunctions.h"
 
-#include "CellStorage.h"
-#include "Map.h"
-#include "NamedAreaManager.h"
-#include "Sheet.h"
+#include "engine/CellBaseStorage.h"
+#include "engine/MapBase.h"
+#include "engine/NamedAreaManager.h"
+#include "engine/SheetBase.h"
 
 #include "TestKspreadCommon.h"
 
@@ -46,10 +46,10 @@ Value TestDatabaseFunctions::evaluate(const QString& formula, Value& ex)
 void TestDatabaseFunctions::initTestCase()
 {
     FunctionModuleRegistry::instance()->loadFunctionModules();
-    m_map = new Map(0 /* no Doc */);
+    m_map = new MapBase;
     m_map->addNewSheet();
-    Sheet* sheet = m_map->sheet(0);
-    CellStorage* storage = sheet->cellStorage();
+    SheetBase* sheet = m_map->sheet(0);
+    CellBaseStorage* storage = sheet->cellStorage();
 
     // TESTDB = A18:I31
     m_map->namedAreaManager()->insert(Region(QRect(QPoint(1, 18), QPoint(9, 31)), sheet), "TESTDB");

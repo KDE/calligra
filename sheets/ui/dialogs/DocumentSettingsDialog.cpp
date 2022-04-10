@@ -15,25 +15,25 @@
 // Local
 #include "DocumentSettingsDialog.h"
 
-// #include <QCheckBox>
-// #include <QGridLayout>
+#include <QCheckBox>
+#include <QHBoxLayout>
 // #include <QGroupBox>
-// #include <QLabel>
-// #include <QPushButton>
+#include <QLabel>
+#include <QPushButton>
 // #include <QScrollBar>
-// #include <QComboBox>
-// #include <QSpinBox>
+#include <QComboBox>
+#include <QSpinBox>
 
-// #include <KoVBox.h>
+#include <KoIcon.h>
+#include <KoVBox.h>
 
 // #include <sonnet/configwidget.h>
 
-// #include <KoIcon.h>
-// #include "CalculationSettings.h"
-// #include "Localization.h"
-// #include "Map.h"
-// #include "ui/Selection.h"
-// #include "Sheet.h"
+#include "engine/CalculationSettings.h"
+#include "engine/Localization.h"
+#include "engine/MapBase.h"
+#include "core/Sheet.h"
+#include "../Selection.h"
 
 using namespace Calligra::Sheets;
 
@@ -155,7 +155,7 @@ parameterLocale::parameterLocale(Selection* selection, KoVBox *box)
     m_selection = selection;
     m_bUpdateLocale = false;
 
-    KLocale* locale = selection->activeSheet()->map()->calculationSettings()->locale();
+    Localization* locale = selection->activeSheet()->map()->calculationSettings()->locale();
 
     m_language = new QLabel(box);
     m_number = new QLabel(box);
@@ -175,9 +175,10 @@ parameterLocale::parameterLocale(Selection* selection, KoVBox *box)
 void parameterLocale::apply()
 {
     if (m_bUpdateLocale) {
-        const QList<Sheet*> sheets = m_selection->activeSheet()->map()->sheetList();
-        foreach(Sheet* sheet, sheets) {
-            sheet->updateLocale();
+        const QList<SheetBase*> sheets = m_selection->activeSheet()->map()->sheetList();
+        for(SheetBase* sheet : sheets) {
+            Sheet *fullSheet = dynamic_cast<Sheet *>(sheet);
+            if (fullSheet) fullSheet->updateLocale();
         }
     }
 }
@@ -185,17 +186,17 @@ void parameterLocale::apply()
 void parameterLocale::updateDefaultSystemConfig()
 {
     m_bUpdateLocale = true;
-    KLocale* const locale = m_selection->activeSheet()->map()->calculationSettings()->locale();
+    Localization* const locale = m_selection->activeSheet()->map()->calculationSettings()->locale();
     static_cast<Localization*>(locale)->defaultSystemConfig();
     updateToMatchLocale(locale);
 }
 
-void parameterLocale::updateToMatchLocale(KLocale* locale)
+void parameterLocale::updateToMatchLocale(Localization* locale)
 {
-    m_language->setText(i18n("Language: %1", locale->language()));
+    m_language->setText(i18n("Language: %1 (%2)", locale->languageName(true), locale->languageName(false)));
     m_number->setText(i18n("Default number format: %1", locale->formatNumber(12.55)));   // krazy:exclude=i18ncheckarg
     m_date->setText(i18n("Long date format: %1", locale->formatDate(QDate::currentDate())));
-    m_shortDate->setText(i18n("Short date format: %1", locale->formatDate(QDate::currentDate() , KLocale::ShortDate)));
+    m_shortDate->setText(i18n("Short date format: %1", locale->formatDate(QDate::currentDate(), false)));
     m_time->setText(i18n("Time format: %1", locale->formatTime(QTime::currentTime())));
-    m_money->setText(i18n("Currency format: %1", locale->formatMoney(12.55)));
+    m_money->setText(i18n("Currency format: %1", locale->formatCurrency(12.55, locale->currencySymbol())));
 }

@@ -8,11 +8,8 @@
 // Local
 #include "DefinePrintRangeCommand.h"
 
-#include "Localization.h"
-#include "Map.h"
-#include "PrintSettings.h"
-#include "Sheet.h"
-#include "SheetPrint.h"
+#include "core/PrintSettings.h"
+#include "core/Sheet.h"
 
 using namespace Calligra::Sheets;
 

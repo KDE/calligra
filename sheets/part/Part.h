@@ -17,10 +17,9 @@
 #ifndef CALLIGRA_SHEETS_PART
 #define CALLIGRA_SHEETS_PART
 
-#include <KoDocument.h>
 #include <KoPart.h>
 
-#include "sheets_common_export.h"
+#include "sheets_part_export.h"
 
 class QWidget;
 class QGraphicsItem;
@@ -31,7 +30,7 @@ namespace Sheets
 {
 class Doc;
 
-class CALLIGRA_SHEETS_COMMON_EXPORT Part : public KoPart
+class CALLIGRA_SHEETS_PART_EXPORT Part : public KoPart
 {
     Q_OBJECT
 

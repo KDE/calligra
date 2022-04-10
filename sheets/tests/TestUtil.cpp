@@ -5,7 +5,8 @@
 #include "TestUtil.h"
 
 #include "TestKspreadCommon.h"
-#include <Util.h>
+#include <engine/Util.h>
+#include <core/Cell.h>
 
 using namespace Calligra::Sheets;
 
@@ -27,7 +28,7 @@ void TestUtil::testDecodeFormula()
     QFETCH(QString, string);
     QFETCH(QString, result);
 
-    QCOMPARE(Odf::decodeFormula(string), result);
+    QCOMPARE(Cell().decodeFormula(string), result);
 }
 
 QTEST_MAIN(TestUtil)

@@ -17,17 +17,9 @@
 #ifndef CALLIGRA_SHEETS_DOC
 #define CALLIGRA_SHEETS_DOC
 
-#include <QList>
-#include <QMap>
-#include <QRect>
-#include <QString>
+#include "core/DocBase.h"
 
-#include <KoDocument.h>
-#include <KoXmlReader.h>
-
-#include "../DocBase.h"
-
-#include "sheets_common_export.h"
+#include "sheets_part_export.h"
 
 class QDomDocument;
 class QPainter;
@@ -41,6 +33,7 @@ namespace Calligra
 namespace Sheets
 {
 class Sheet;
+class SheetBase;
 class Doc;
 class View;
 class Map;
@@ -48,11 +41,9 @@ class Map;
 /**
  * This class holds the data that makes up a spreadsheet.
  */
-class CALLIGRA_SHEETS_COMMON_EXPORT Doc : public DocBase
+class CALLIGRA_SHEETS_PART_EXPORT Doc : public DocBase
 {
     Q_OBJECT
-    Q_PROPERTY(int syntaxVersion READ syntaxVersion)
-
 public:
     /**
      * Creates a new document.
@@ -84,7 +75,6 @@ public:
     void addIgnoreWordAll(const QString & word);
     void clearIgnoreWordAll();
     void addIgnoreWordAllList(const QStringList & _lst);
-    QStringList spellListIgnoreAll() const ;
 
     /* Function specific when we load config from file */
     void loadConfigFromFile();
@@ -113,7 +103,7 @@ Q_SIGNALS:
     void closeEditor(bool);
 
 protected Q_SLOTS:
-    void sheetAdded(Sheet* sheet);
+    void sheetAdded(SheetBase* sheet);
 
 protected:
 

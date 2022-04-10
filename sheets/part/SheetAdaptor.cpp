@@ -18,19 +18,19 @@
 // Local
 #include "SheetAdaptor.h"
 
-#include "SheetsDebug.h"
-#include "Damages.h"
-#include "Map.h"
-#include "PrintSettings.h"
-#include "Sheet.h"
-#include "SheetPrint.h"
-#include "Region.h"
-#include "ValueConverter.h"
+#include "engine/Damages.h"
+#include "engine/MapBase.h"
+#include "engine/ValueConverter.h"
+#include "core/PrintSettings.h"
+#include "core/Cell.h"
+#include "core/Sheet.h"
+#include "core/SheetPrint.h"
 
 // commands
-#include "commands/DataManipulators.h"
-#include "commands/RowColumnManipulators.h"
+#include "ui/commands/DataManipulators.h"
+#include "ui/commands/RowColumnManipulators.h"
 
+#include <KoPageFormat.h>
 #include <KoUnit.h>
 
 using namespace Calligra::Sheets;
@@ -40,7 +40,7 @@ SheetAdaptor::SheetAdaptor(Sheet* t)
 {
     setAutoRelaySignals(false);
     m_sheet = t;
-    connect(m_sheet->map(), &Map::damagesFlushed,
+    connect(m_sheet->map(), &MapBase::damagesFlushed,
             this, &SheetAdaptor::handleDamages);
 }
 
@@ -76,7 +76,7 @@ int SheetAdaptor::cellColumn(const QString& cellname)
 
 QPoint SheetAdaptor::cellLocation(const QString& cellname)
 {
-    const Region region(cellname, m_sheet->map(), m_sheet);
+    const Region region = m_sheet->map()->regionFromName(cellname, m_sheet);
     if (region.firstRange().isNull())
         return QPoint();
     return region.firstRange().topLeft();
@@ -124,7 +124,7 @@ QVariant valueToVariant(const Calligra::Sheets::Value& value, Sheet* sheet)
     case Calligra::Sheets::Value::Boolean:
         return QVariant(value.asBoolean());
     case Calligra::Sheets::Value::Integer:
-        return static_cast<int64_t>(value.asInteger());
+        return QVariant((qlonglong)value.asInteger());
     case Calligra::Sheets::Value::Float:
         return (double) numToDouble(value.asFloat());
     case Calligra::Sheets::Value::Complex:
@@ -172,7 +172,7 @@ bool SheetAdaptor::setValue(int x, int y, const QVariant& value)
     Calligra::Sheets::Value v = cell.value();
     switch (value.type()) {
     case QVariant::Bool: v = Value(value.toBool()); break;
-    case QVariant::ULongLong: v = Value(value.toLongLong()); break;
+    case QVariant::ULongLong: v = Value((int64_t) value.toLongLong()); break;
     case QVariant::Int: v = Value(value.toInt()); break;
     case QVariant::Double: v = Value(value.toDouble()); break;
     case QVariant::String: v = Value(value.toString()); break;
@@ -344,48 +344,48 @@ void SheetAdaptor::setShowPageOutline(bool b)
 
 float SheetAdaptor::paperHeight()const
 {
-    return m_sheet->print()->settings()->pageLayout().height;
+    return m_sheet->printSettings()->pageLayout().height;
 }
 
 void SheetAdaptor::setPrinterHeight(float height)
 {
-    KoPageLayout pageLayout = m_sheet->print()->settings()->pageLayout();
+    KoPageLayout pageLayout = m_sheet->printSettings()->pageLayout();
     pageLayout.format = KoPageFormat::CustomSize;
     pageLayout.height = MM_TO_POINT(height);
-    m_sheet->print()->settings()->setPageLayout(pageLayout);
+    m_sheet->printSettings()->setPageLayout(pageLayout);
 }
 
 float SheetAdaptor::paperWidth()const
 {
-    return m_sheet->print()->settings()->pageLayout().width;
+    return m_sheet->printSettings()->pageLayout().width;
 }
 
 void SheetAdaptor::setPaperWidth(float width)
 {
-    KoPageLayout pageLayout = m_sheet->print()->settings()->pageLayout();
+    KoPageLayout pageLayout = m_sheet->printSettings()->pageLayout();
     pageLayout.format = KoPageFormat::CustomSize;
     pageLayout.width = MM_TO_POINT(width);
-    m_sheet->print()->settings()->setPageLayout(pageLayout);
+    m_sheet->printSettings()->setPageLayout(pageLayout);
 }
 
 float SheetAdaptor::paperLeftBorder()const
 {
-    return m_sheet->print()->settings()->pageLayout().leftMargin;
+    return m_sheet->printSettings()->pageLayout().leftMargin;
 }
 
 float SheetAdaptor::paperRightBorder()const
 {
-    return m_sheet->print()->settings()->pageLayout().rightMargin;
+    return m_sheet->printSettings()->pageLayout().rightMargin;
 }
 
 float SheetAdaptor::paperTopBorder()const
 {
-    return m_sheet->print()->settings()->pageLayout().topMargin;
+    return m_sheet->printSettings()->pageLayout().topMargin;
 }
 
 float SheetAdaptor::paperBottomBorder()const
 {
-    return m_sheet->print()->settings()->pageLayout().bottomMargin;
+    return m_sheet->printSettings()->pageLayout().bottomMargin;
 }
 
 QString SheetAdaptor::paperFormat() const
@@ -410,7 +410,7 @@ void SheetAdaptor::setPaperLayout(float leftBorder, float topBorder,
     pageLayout.rightMargin  = rightBorder;
     pageLayout.topMargin    = topBorder;
     pageLayout.bottomMargin = bottomBoder;
-    m_sheet->print()->settings()->setPageLayout(pageLayout);
+    m_sheet->printSettings()->setPageLayout(pageLayout);
 }
 
 #if 0
@@ -446,38 +446,38 @@ QString SheetAdaptor::printFootRight()const
 
 void SheetAdaptor::setPrintHeaderLeft(const QString & text)
 {
-    m_sheet->print()->setHeadFootLine(text,       headMid(), headRight(),
+    m_sheet->printSetHeadFootLine(text,       headMid(), headRight(),
                                       footLeft(), footMid(), footRight());
 }
 
 void SheetAdaptor::setPrintHeaderMiddle(const QString & text)
 {
-    m_sheet->print()->setHeadFootLine(headLeft(), text,      headRight(),
+    m_sheet->printSetHeadFootLine(headLeft(), text,      headRight(),
                                       footLeft(), footMid(), footRight());
 
 }
 
 void SheetAdaptor::setPrintHeaderRight(const QString & text)
 {
-    m_sheet->print()->setHeadFootLine(headLeft(), headMid(), text,
+    m_sheet->printSetHeadFootLine(headLeft(), headMid(), text,
                                       footLeft(), footMid(), footRight());
 }
 
 void SheetAdaptor::setPrintFooterLeft(const QString & text)
 {
-    m_sheet->print()->setHeadFootLine(headLeft(), headMid(), headRight(),
+    m_sheet->printSetHeadFootLine(headLeft(), headMid(), headRight(),
                                       text,       footMid(), footRight());
 }
 
 void SheetAdaptor::setPrintFooterMiddle(const QString & text)
 {
-    m_sheet->print()->setHeadFootLine(headLeft(), headMid(), headRight(),
+    m_sheet->printSetHeadFootLine(headLeft(), headMid(), headRight(),
                                       footLeft(), text,      footRight());
 }
 
 void SheetAdaptor::setPrintFooterRight(const QString & text)
 {
-    m_sheet->print()->setHeadFootLine(headLeft(), headMid(), headRight(),
+    m_sheet->printSetHeadFootLine(headLeft(), headMid(), headRight(),
                                       footLeft(), footMid(), text);
 }
 #endif

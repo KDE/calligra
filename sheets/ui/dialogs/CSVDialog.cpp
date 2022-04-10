@@ -10,28 +10,21 @@
 // Local
 #include "CSVDialog.h"
 
-// #include <KoFileDialog.h>
+#include <KoFileDialog.h>
 
-// #include <QApplication>
-// #include <QByteArray>
-// #include <QMimeData>
-// #include <QString>
-// #include <QTimer>
+#include <QApplication>
+#include <QClipboard>
+#include <QFile>
+#include <QMimeData>
+#include <QTimer>
 
+#include <kmessagebox.h>
 
-// #include <KoCanvasBase.h>
+#include "core/CellStorage.h"
+#include "../Selection.h"
+#include "core/Sheet.h"
 
-// #include <KLocalizedString>
-// #include <kmessagebox.h>
-
-// #include "Cell.h"
-// #include "CellStorage.h"
-// #include "Damages.h"
-// #include "Map.h"
-// #include "ui/Selection.h"
-// #include "Sheet.h"
-
-// #include "commands/CSVDataCommand.h"
+#include "../commands/CSVDataCommand.h"
 
 using namespace Calligra::Sheets;
 
@@ -43,7 +36,7 @@ CSVDialog::CSVDialog(QWidget* parent, Selection* selection, Mode mode)
 {
     // Limit the range
     int column = m_selection->lastRange().left();
-    Cell lastCell = m_selection->activeSheet()->cellStorage()->lastInColumn(column);
+    Cell lastCell = m_selection->activeSheet()->fullCellStorage()->lastInColumn(column);
     if (!lastCell.isNull())
         if (m_selection->lastRange().bottom() > lastCell.row())
             m_selection->lastRange().setBottom(lastCell.row());

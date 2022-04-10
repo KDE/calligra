@@ -15,39 +15,34 @@
 // Local
 #include "FormulaDialog.h"
 
-// #include <QTabWidget>
-// #include <QApplication>
-// #include <QCloseEvent>
-// #include <QGridLayout>
-// #include <QVBoxLayout>
+#include "engine/CellBase.h"
+#include "engine/CalculationSettings.h"
+#include "engine/FunctionDescription.h"
+#include "engine/FunctionRepository.h"
+#include "engine/Localization.h"
+#include "engine/MapBase.h"
+#include "core/Sheet.h"
+#include "../CellEditorBase.h"
+#include "../Selection.h"
 
-// #include "CalculationSettings.h"
-// #include "Cell.h"
-// #include "Function.h"
-// #include "FunctionDescription.h"
-// #include "FunctionRepository.h"
-// #include "Util.h"
-// #include "ui/CellEditor.h"
-// #include "Localization.h"
-// #include "Map.h"
-// #include "ui/Selection.h"
-// #include "Sheet.h"
-// #include "SheetsDebug.h"
+#include <KoIcon.h>
 
-// #include <KoIcon.h>
+#include <kcombobox.h>
+#include <klineedit.h>
+#include <KLocalizedString>
 
-// #include <kcombobox.h>
-// #include <klineedit.h>
+#include <QApplication>
+#include <QCloseEvent>
+#include <QEvent>
+#include <QGridLayout>
+#include <QLabel>
+#include <QListView>
+#include <QPushButton>
+#include <QSortFilterProxyModel>
+#include <QStringListModel>
+#include <QTabWidget>
+#include <QTextBrowser>
 
-// #include <QDoubleValidator>
-// #include <QEvent>
-// #include <QTextBrowser>
-// #include <QLabel>
-// #include <QPushButton>
-// #include <QLayout>
-// #include <QStringListModel>
-// #include <QSortFilterProxyModel>
-// #include <QItemSelectionModel>
 
 using namespace Calligra::Sheets;
 
@@ -63,7 +58,7 @@ FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditorBa
     m_focus = 0;
     m_desc = 0;
 
-    Cell cell(m_selection->activeSheet(), m_selection->marker());
+    CellBase cell(m_selection->activeSheet(), m_selection->marker());
     m_oldText = cell.userInput();
     // Make sure that there is a cell editor running.
     if (cell.userInput().isEmpty())
@@ -480,7 +475,7 @@ QString FormulaDialog::createParameter(const QString& _text, int param)
             text += tmp;
             text += '"';
         } else {
-            const Region region(_text, m_selection->activeSheet()->map());
+            const Region region = m_selection->activeSheet()->map()->regionFromName(_text, m_selection->activeSheet());
             if (!region.isValid()) {
                 text = '"';
 

@@ -8,7 +8,7 @@
 #ifndef CALLIGRA_SHEETS_PAGE_LAYOUT_COMMAND
 #define CALLIGRA_SHEETS_PAGE_LAYOUT_COMMAND
 
-#include "PrintSettings.h"
+#include "core/PrintSettings.h"
 
 #include <kundo2command.h>
 

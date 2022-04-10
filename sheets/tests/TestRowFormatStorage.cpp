@@ -8,18 +8,17 @@
 #include <QDebug>
 #include <QTest>
 
-#include "../RowFormatStorage.h"
-#include "../calligra_sheets_limits.h"
-#include "../Map.h"
-#include "../Sheet.h"
-#include "../RowColumnFormat.h"
+#include "core/RowFormatStorage.h"
+#include "engine/calligra_sheets_limits.h"
+#include "core/Map.h"
+#include "core/Sheet.h"
 
 using namespace Calligra::Sheets;
 
 void TestRowFormatStorage::initTestCase()
 {
     m_map = new Map();
-    m_sheet = m_map->addNewSheet();
+    m_sheet = dynamic_cast<Sheet *>(m_map->addNewSheet());
 }
 
 void TestRowFormatStorage::cleanupTestCase()
@@ -34,7 +33,7 @@ void TestRowFormatStorage::testRowHeight()
     s.setRowHeight(10, 100, 42.0);
 
     for (int row = 1; row < 10000; row++) {
-        QCOMPARE(s.rowHeight(row), row >= 10 && row <= 100 ? 42.0 : m_map->defaultRowFormat()->height());
+        QCOMPARE(s.rowHeight(row), row >= 10 && row <= 100 ? 42.0 : m_map->defaultRowFormat().height);
     }
     int firstRow, lastRow;
     s.rowHeight(5, &lastRow);
@@ -286,7 +285,7 @@ void TestRowFormatStorage::testInsertRows()
     s.insertRows(150, 5);
 
     for (int row = 1; row < 10000; row++) {
-        QCOMPARE(s.rowHeight(row), row >= 15 && row <= 110 ? 42.0 : m_map->defaultRowFormat()->height());
+        QCOMPARE(s.rowHeight(row), row >= 15 && row <= 110 ? 42.0 : m_map->defaultRowFormat().height);
     }
 }
 
@@ -301,7 +300,7 @@ void TestRowFormatStorage::testRemoveRows()
     s.removeRows(85, 10);
 
     for (int row = 1; row < 10000; row++) {
-        QCOMPARE(s.rowHeight(row), row >= 7 && row < 85 ? 42.0 : m_map->defaultRowFormat()->height());
+        QCOMPARE(s.rowHeight(row), row >= 7 && row < 85 ? 42.0 : m_map->defaultRowFormat().height);
     }
 }
 

@@ -29,40 +29,28 @@
 
 // Local
 #include "Headers.h"
+#include "CanvasBase.h"
 
 // Qt
 #include <QApplication>
 #include <QLabel>
 #include <QPainter>
-#include <QTextLayout>
-#include <QToolTip>
 
 // KF5
-#include <KLocalizedString>
 #include <kmessagebox.h>
 
 // Calligra
-#include <KoCanvasController.h>
-#include <KoToolProxy.h>
 #include <KoZoomHandler.h>
 #include <KoPointerEvent.h>
 #include <KoGlobal.h>
 
 // Sheets
-#include "CanvasBase.h"
-#include "Cell.h"
-#include "Doc.h"
-#include "calligra_sheets_limits.h"
-#include "RowColumnFormat.h"
-#include "RowFormatStorage.h"
-#include "Sheet.h"
-#include "ElapsedTime_p.h"
-
-// commands
-#include "commands/RowColumnManipulators.h"
-
-// ui
+#include "core/Cell.h"
+#include "core/ColFormatStorage.h"
+#include "core/RowFormatStorage.h"
+#include "core/Sheet.h"
 #include "ui/Selection.h"
+#include "ui/commands/RowColumnManipulators.h"
 
 using namespace Calligra::Sheets;
 
@@ -424,10 +412,10 @@ void RowHeader::paint(QPainter* painter, const QRectF& painterRect)
         const QRectF rect(0, converter->documentToViewY(yPos), width, height);
 
         if (selected || highlighted) {
-            painter->setPen(QPen(selectionColor.dark(150), 0));
+            painter->setPen(QPen(selectionColor.darker(150), 0));
             painter->setBrush(selectionBrush);
         } else {
-            painter->setPen(QPen(backgroundColor.dark(150), 0));
+            painter->setPen(QPen(backgroundColor.darker(150), 0));
             painter->setBrush(backgroundBrush);
         }
         painter->drawRect(rect);
@@ -557,7 +545,7 @@ void ColumnHeader::mousePress(KoPointerEvent * _ev)
 
         debugSheets << "evPos:" << ev_PosX << ", x:" << x << ", COL:" << tmpCol;
         while (ev_PosX > x && (!m_bResize) && tmpCol <= KS_colMax) {
-            double w = sheet->columnFormat(tmpCol)->width();
+            double w = sheet->columnFormats()->colWidth(tmpCol);
 
             debugSheets << "evPos:" << ev_PosX << ", x:" << x << ", w:" << w << ", COL:" << tmpCol;
 
@@ -569,7 +557,7 @@ void ColumnHeader::mousePress(KoPointerEvent * _ev)
 
             if (ev_PosX >= x + w - unzoomedPixel &&
                     ev_PosX <= x + w + unzoomedPixel &&
-                    !(sheet->columnFormat(tmpCol)->isHiddenOrFiltered() && tmpCol == 1)) {
+                    !(sheet->columnFormats()->isHiddenOrFiltered(tmpCol) && tmpCol == 1)) {
                 m_bResize = true;
             }
             x += w;
@@ -579,8 +567,8 @@ void ColumnHeader::mousePress(KoPointerEvent * _ev)
         //you mustn't resize it.
         qreal tmp2;
         tmpCol = sheet->leftColumn(dWidth - ev_PosX + 1, tmp2);
-        if (sheet->columnFormat(tmpCol)->isHiddenOrFiltered() && tmpCol == 0) {
-            debugSheets << "No resize:" << tmpCol << "," << sheet->columnFormat(tmpCol)->isHiddenOrFiltered();
+        if (sheet->columnFormats()->isHiddenOrFiltered(tmpCol) && tmpCol == 0) {
+            debugSheets << "No resize:" << tmpCol << "," << sheet->columnFormats()->isHiddenOrFiltered(tmpCol);
             m_bResize = false;
         }
 
@@ -590,13 +578,13 @@ void ColumnHeader::mousePress(KoPointerEvent * _ev)
 
         // Did the user click between two columns?
         while (x < (dWidth + m_pCanvas->xOffset()) && (!m_bResize) && col <= KS_colMax) {
-            double w = sheet->columnFormat(col)->width();
+            double w = sheet->columnFormats()->colWidth(col);
             col++;
             if (col > KS_colMax)
                 col = KS_colMax;
             if ((ev_PosX >= x + w - unzoomedPixel) &&
                     (ev_PosX <= x + w + unzoomedPixel) &&
-                    !(sheet->columnFormat(col)->isHiddenOrFiltered() && col == 1))
+                    !(sheet->columnFormats()->isHiddenOrFiltered(col) && col == 1))
                 m_bResize = true;
             x += w;
         }
@@ -605,7 +593,7 @@ void ColumnHeader::mousePress(KoPointerEvent * _ev)
         //you mustn't resize it.
         qreal tmp2;
         int tmpCol = sheet->leftColumn(ev_PosX - 1, tmp2);
-        if (sheet->columnFormat(tmpCol)->isHiddenOrFiltered() && tmpCol == 1)
+        if (sheet->columnFormats()->isHiddenOrFiltered(tmpCol) && tmpCol == 1)
             m_bResize = false;
     }
 
@@ -733,7 +721,7 @@ void ColumnHeader::mouseRelease(KoPointerEvent * _ev)
             QList<int> hiddenCols;
 
             for (i = rect.left(); i <= rect.right(); ++i) {
-                if (sheet->columnFormat(i)->isHidden()) {
+                if (sheet->columnFormats()->isHidden(i)) {
                     hiddenCols.append(i);
                 }
             }
@@ -833,9 +821,9 @@ void ColumnHeader::mouseMove(KoPointerEvent* _ev)
 
         if (sheet->layoutDirection() == Qt::RightToLeft) {
             if (_ev->pos().x() < width() - m_pCanvas->width()) {
-                const ColumnFormat *cl = sheet->columnFormat(col + 1);
+                double w = sheet->columnFormats()->colWidth(col + 1);
                 x = sheet->columnPosition(col + 1);
-                m_pCanvas->setHorizScrollBarPos(- (int)((ev_PosX + cl->width()) - dWidth));
+                m_pCanvas->setHorizScrollBarPos(- (int)((ev_PosX + w) - dWidth));
             } else if (_ev->pos().x() > width())
                 m_pCanvas->setHorizScrollBarPos(- (ev_PosX - dWidth + m_pCanvas->zoomHandler()->unzoomItX(m_pCanvas->width())));
         } else {
@@ -843,9 +831,9 @@ void ColumnHeader::mouseMove(KoPointerEvent* _ev)
                 m_pCanvas->setHorizScrollBarPos(ev_PosX);
             else if (_ev->pos().x() > m_pCanvas->width()) {
                 if (col < KS_colMax) {
-                    const ColumnFormat *cl = sheet->columnFormat(col + 1);
+                    double w = sheet->columnFormats()->colWidth(col + 1);
                     x = sheet->columnPosition(col + 1);
-                    m_pCanvas->setHorizScrollBarPos(ev_PosX + cl->width() - dWidth);
+                    m_pCanvas->setHorizScrollBarPos(ev_PosX + w - dWidth);
                 }
             }
         }
@@ -861,14 +849,14 @@ void ColumnHeader::mouseMove(KoPointerEvent* _ev)
             int tmpCol = sheet->leftColumn(m_pCanvas->xOffset(), x);
 
             while (ev_PosX > x && tmpCol <= KS_colMax) {
-                double w = sheet->columnFormat(tmpCol)->visibleWidth();
+                double w = sheet->columnFormats()->visibleWidth(tmpCol);
                 ++tmpCol;
 
                 //if col is hide and it's the first column
                 //you mustn't resize it.
                 if (ev_PosX >= x + w - unzoomedPixel &&
                         ev_PosX <= x + w + unzoomedPixel &&
-                        !(sheet->columnFormat(tmpCol)->isHiddenOrFiltered() && tmpCol == 0)) {
+                        !(sheet->columnFormats()->isHiddenOrFiltered(tmpCol) && tmpCol == 0)) {
                     setCursor(Qt::SplitHCursor);
                     return;
                 }
@@ -879,12 +867,12 @@ void ColumnHeader::mouseMove(KoPointerEvent* _ev)
             int tmpCol = sheet->leftColumn(m_pCanvas->xOffset(), x);
 
             while (x < m_pCanvas->zoomHandler()->unzoomItY(width()) + m_pCanvas->xOffset() && tmpCol <= KS_colMax) {
-                double w = sheet->columnFormat(tmpCol)->visibleWidth();
+                double w = sheet->columnFormats()->visibleWidth(tmpCol);
                 //if col is hide and it's the first column
                 //you mustn't resize it.
                 if (ev_PosX >= x + w - unzoomedPixel &&
                         ev_PosX <= x + w + unzoomedPixel &&
-                        !(sheet->columnFormat(tmpCol)->isHiddenOrFiltered() && tmpCol == 1)) {
+                        !(sheet->columnFormats()->isHiddenOrFiltered(tmpCol) && tmpCol == 1)) {
                     setCursor(Qt::SplitHCursor);
                     return;
                 }
@@ -975,7 +963,7 @@ void ColumnHeader::paint(QPainter* painter, const QRectF& painterRect)
         if (x > KS_colMax)
             x = KS_colMax;
 
-        xPos -= sheet->columnFormat(x)->width();
+        xPos -= sheet->columnFormats()->colWidth(x);
         deltaX = -1;
     }
 
@@ -984,19 +972,18 @@ void ColumnHeader::paint(QPainter* painter, const QRectF& painterRect)
         bool selected = (selectedColumns.contains(x));
         bool highlighted = (!selected && affectedColumns.contains(x));
 
-        const ColumnFormat *columnFormat = sheet->columnFormat(x);
-        if (columnFormat->isHiddenOrFiltered()) {
+        if (sheet->columnFormats()->isHiddenOrFiltered(x)) {
             ++x;
             continue;
         }
-        const qreal width = converter->documentToViewX(columnFormat->width());
+        const qreal width = converter->documentToViewX(sheet->columnFormats()->colWidth(x));
         const QRectF rect(converter->documentToViewX(xPos), 0, width, height);
 
         if (selected || highlighted) {
-            painter->setPen(QPen(selectionColor.dark(150), 0));
+            painter->setPen(QPen(selectionColor.darker(150), 0));
             painter->setBrush(selectionBrush);
         } else {
-            painter->setPen(QPen(backgroundColor.dark(150), 0));
+            painter->setPen(QPen(backgroundColor.darker(150), 0));
             painter->setBrush(backgroundBrush);
         }
         painter->drawRect(rect);
@@ -1050,7 +1037,7 @@ void ColumnHeader::paint(QPainter* painter, const QRectF& painterRect)
             painter->drawText(rect, Qt::AlignCenter, colText);
         }
 
-        xPos += columnFormat->width();
+        xPos += sheet->columnFormats()->colWidth(x);
 
         x += deltaX;
     }
@@ -1109,14 +1096,14 @@ void SelectAllButton::paint(QPainter* painter, const QRectF& painterRect)
         selectionColor.setAlpha(127);
         const QBrush selectionBrush(selectionColor);
 
-        painter->setPen(QPen(selectionColor.dark(150), 0));
+        painter->setPen(QPen(selectionColor.darker(150), 0));
         painter->setBrush(selectionBrush);
     } else {
         // background brush/color
         const QBrush backgroundBrush(palette().window());
         const QColor backgroundColor(backgroundBrush.color());
 
-        painter->setPen(QPen(backgroundColor.dark(150), 0));
+        painter->setPen(QPen(backgroundColor.darker(150), 0));
         painter->setBrush(backgroundBrush);
     }
     painter->drawRect(painterRect.adjusted(0, 0, -1, -1));

@@ -17,19 +17,10 @@
 #ifndef CALLIGRA_SHEETS_LAYOUT_DIALOG
 #define CALLIGRA_SHEETS_LAYOUT_DIALOG
 
-// #include <QCheckBox>
-// #include <QFrame>
-// #include <QLabel>
-// #include <QMouseEvent>
-// #include <QPixmap>
-// #include <QPaintEvent>
-// #include <QPushButton>
+#include <kpagedialog.h>
 
-// #include <kpagedialog.h>
-
-// #include "RowColumnFormat.h"
-// #include "Style.h"
-// #include "Value.h"
+#include "engine/Value.h"
+#include "core/Style.h"
 
 #include "ui_FontWidget.h"
 #include "ui_PositionWidget.h"
@@ -48,7 +39,6 @@ class QListWidget;
 class QCheckBox;
 class KColorButton;
 class KComboBox;
-class KLocale;
 
 namespace Calligra
 {
@@ -56,6 +46,7 @@ namespace Sheets
 {
 class Sheet;
 class CustomStyle;
+class Localization;
 class StyleManager;
 class CellFormatDialog;
 class Selection;
@@ -581,7 +572,7 @@ public:
     }
     bool checkCircle(QString const & name, QString const & parent);
 
-    KLocale * locale() const;
+    Localization *locale() const;
 
     void setOkButtonEnabled(bool enabled);
 

@@ -18,7 +18,7 @@
 #include <QDBusAbstractAdaptor>
 #include <QString>
 
-#include "sheets_common_export.h"
+#include "sheets_part_export.h"
 
 namespace Calligra
 {
@@ -27,7 +27,7 @@ namespace Sheets
 class Damage;
 class Sheet;
 
-class CALLIGRA_SHEETS_COMMON_EXPORT SheetAdaptor : public QDBusAbstractAdaptor
+class CALLIGRA_SHEETS_PART_EXPORT SheetAdaptor : public QDBusAbstractAdaptor
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kde.calligra.spreadsheet.sheet")

@@ -1,6 +1,17 @@
 
 ### Shared library with part functionality
 
+set (chart_DIR_SRCS
+    chart/ChartDatabaseSelectorFactory.cpp
+    chart/ChartDatabaseSelector.cpp
+    chart/ChartDialog.cpp
+    )
+
+ki18n_wrap_ui(chart_DIR_SRCS
+    chart/ChartDatabaseSelector.ui
+    )
+
+
 set (dialogs_DIR_SRCS
     dialogs/PageLayoutDialog.cpp
     dialogs/PreferenceDialog.cpp
@@ -16,8 +27,15 @@ ki18n_wrap_ui(dialogs_DIR_SRCS
     dialogs/SheetSelectWidget.ui
 )
 
+if(Qt5DBus_FOUND)
+set (interfaces_DIR_SRCS
+    MapAdaptor.cpp
+    SheetAdaptor.cpp
+    ViewAdaptor.cpp
+    )
+endif()
 
-set (calligrasheetsprivate_LIB_SRCS
+set (calligrasheetspartlib_LIB_SRCS
     CanvasBase.cpp
     Canvas.cpp
     CanvasItem.cpp
@@ -39,20 +57,29 @@ set (calligrasheetsprivate_LIB_SRCS
     commands/DefinePrintRangeCommand.cpp
     commands/PageLayoutCommand.cpp
 
+    ${chart_DIR_SRCS}
     ${dialogs_DIR_SRCS}
 )
 
+if(Qt5DBus_FOUND)
+set (calligrasheetspartlib_LIB_SRCS
+    ${calligrasheetspartlib_LIB_SRCS}
+    ${interfaces_DIR_SRCS}
+    )
+endif()
 
-add_library(calligrasheetsprivate SHARED ${calligrasheetsprivate_LIB_SRCS})
 
-target_include_directories( calligrasheetsprivate
+
+add_library(calligrasheetspartlib SHARED ${calligrasheetspartlib_LIB_SRCS})
+
+target_include_directories( calligrasheetspartlib
     PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/../
     ${CMAKE_CURRENT_BINARY_DIR}/../
 )
 
 
-generate_export_header(calligrasheetsprivate
+generate_export_header(calligrasheetspartlib
     EXPORT_FILE_NAME sheets_part_generated_export.h
     BASE_NAME CALLIGRA_SHEETS_PART
 )
@@ -77,18 +104,21 @@ DESTINATION ${INCLUDE_INSTALL_DIR}/sheets/part COMPONENT Devel)
 
 endif()
 
-target_link_libraries(calligrasheetsprivate
+target_link_libraries(calligrasheetspartlib
     PUBLIC
         calligrasheetsengine
         calligrasheetscore
         calligrasheetsui
         komain
+        koplugin
+        KF5::KCMUtils
+        KF5::NotifyConfig
 )
 
-set_target_properties(calligrasheetsprivate PROPERTIES
+set_target_properties(calligrasheetspartlib PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
-install(TARGETS calligrasheetsprivate ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS calligrasheetspartlib ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ### The actual part
@@ -104,7 +134,7 @@ target_link_libraries(calligrasheetspart
         calligrasheetsengine
         calligrasheetscore
         calligrasheetsui
-        calligrasheetsprivate
+        calligrasheetspartlib
 )
 
 install(TARGETS calligrasheetspart  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/parts)

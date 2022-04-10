@@ -34,7 +34,7 @@ bool Ksp::loadDoc(DocBase *obj, const KoXmlDocument& doc)
         updater->setProgress(0);
     }
 
-    obj->spellListIgnoreAll().clear();
+    obj->setSpellListIgnoreAll(QStringList());
     // <spreadsheet>
     KoXmlElement spread = doc.documentElement();
 
@@ -78,13 +78,15 @@ bool Ksp::loadDoc(DocBase *obj, const KoXmlDocument& doc)
     if (!ignoreAll.isNull()) {
         KoXmlElement spellWord = spread.namedItem("SPELLCHECKIGNORELIST").toElement();
 
+        QStringList lst;
         spellWord = spellWord.firstChild().toElement();
         while (!spellWord.isNull()) {
             if (spellWord.tagName() == "SPELLCHECKIGNOREWORD") {
-                obj->spellListIgnoreAll().append(spellWord.attribute("word"));
+                lst.append(spellWord.attribute("word"));
             }
             spellWord = spellWord.nextSibling().toElement();
         }
+        obj->setSpellListIgnoreAll(lst);
     }
 
     if (updater) updater->setProgress(40);
@@ -130,10 +132,11 @@ QDomDocument Ksp::saveDoc(DocBase *document)
     spread.setAttribute("mime", "application/x-kspread");
     spread.setAttribute("syntaxVersion", QString::number(CURRENT_SYNTAX_VERSION));
 
-    if (!document->spellListIgnoreAll().isEmpty()) {
+    QStringList lst = document->spellListIgnoreAll();
+    if (!lst.isEmpty()) {
         QDomElement spellCheckIgnore = doc.createElement("SPELLCHECKIGNORELIST");
         spread.appendChild(spellCheckIgnore);
-        for (QStringList::ConstIterator it = document->spellListIgnoreAll().constBegin(); it != document->spellListIgnoreAll().constEnd(); ++it) {
+        for (QStringList::ConstIterator it = lst.constBegin(); it != lst.constEnd(); ++it) {
             QDomElement spellElem = doc.createElement("SPELLCHECKIGNOREWORD");
             spellCheckIgnore.appendChild(spellElem);
             spellElem.setAttribute("word", *it);

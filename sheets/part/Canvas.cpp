@@ -31,70 +31,26 @@
 // Local
 #include "Canvas.h"
 #include "CanvasBase_p.h"
-
-// std
-#include <assert.h>
-#include <float.h>
-#include <stdlib.h>
+#include "HeaderWidgets.h"
+#include "View.h"
 
 // Qt
-#include <QApplication>
-#include <QBuffer>
-#include <QByteArray>
-#include <QClipboard>
-#include <QDragLeaveEvent>
-#include <QDragMoveEvent>
-#include <QDropEvent>
-#include <QEvent>
-#include <QFocusEvent>
-#include <QKeyEvent>
-#include <QLabel>
-#include <QList>
 #include <QMenu>
 #include <QMouseEvent>
 #include <QPainter>
-#include <QPaintEvent>
-#include <QPixmap>
-#include <QPoint>
 #include <QScrollBar>
-#include <QTextStream>
-#include <QToolTip>
-#include <QWidget>
 
 // KF5
 #include <kxmlguifactory.h>
 
 // Calligra
-#include <KoCanvasController.h>
 #include <KoShapeManager.h>
 #include <KoToolManager.h>
 #include <KoToolProxy.h>
 #include <KoZoomHandler.h>
-#include <KoPointerEvent.h>
 
 // Sheets
-#include "SheetsDebug.h"
-#include "CellStorage.h"
-#include "Doc.h"
-#include "HeaderWidgets.h"
-#include "Localization.h"
-#include "Map.h"
-#include "RowColumnFormat.h"
-#include "Sheet.h"
-#include "Util.h"
-#include "Validity.h"
-#include "View.h"
-
-// commands
-#include "commands/CopyCommand.h"
-#include "commands/DeleteCommand.h"
-#include "commands/PasteCommand.h"
-#include "commands/StyleCommand.h"
-
-// ui
-#include "ui/CellView.h"
-#include "ui/Selection.h"
-#include "ui/SheetView.h"
+#include "engine/SheetsDebug.h"
 
 #define MIN_SIZE 10
 
@@ -360,7 +316,7 @@ bool Canvas::isViewLoading() const
     return view()->isLoading();
 }
 
-SheetView* Canvas::sheetView(const Sheet* sheet) const
+SheetView* Canvas::sheetView(Sheet* sheet) const
 {
     return view()->sheetView(sheet);
 }

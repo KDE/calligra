@@ -30,75 +30,30 @@
 
 // Local
 #include "CanvasItem.h"
-
-// std
-#include <assert.h>
-#include <float.h>
-#include <stdlib.h>
+#include "Doc.h"
+#include "HeaderItems.h"
+#include "RightToLeftPaintingStrategy.h"
 
 // Qt
-#include <QApplication>
-#include <QBuffer>
-#include <QByteArray>
-#include <QClipboard>
-#include <QDragLeaveEvent>
-#include <QDragMoveEvent>
-#include <QDropEvent>
-#include <QEvent>
-#include <QFocusEvent>
-#include <QKeyEvent>
-#include <QLabel>
-#include <QList>
-#include <QMenu>
-#include <QMouseEvent>
-#include <QPainter>
-#include <QPaintEvent>
-#include <QPixmap>
-#include <QPoint>
-#include <QScrollBar>
-#include <QTextStream>
-#include <QToolTip>
-#include <QWidget>
 #include <QStyleOptionGraphicsItem>
 #include <QGraphicsSceneDragDropEvent>
 
 // Calligra
-#include <KoCanvasController.h>
 #include <KoShapeManager.h>
 #include <KoToolManager.h>
-#include <KoToolProxy.h>
 #include <KoZoomHandler.h>
 #include <KoPointerEvent.h>
 #include <KoShapeController.h>
-#include <KoShapeManagerPaintingStrategy.h>
 #include <KoCanvasResourceManager.h>
 
 // Sheets
-#include "SheetsDebug.h"
-#include "CalculationSettings.h"
-#include "CellStorage.h"
-#include "Damages.h"
-#include "Doc.h"
-#include "HeaderItems.h"
-#include "Localization.h"
-#include "Map.h"
-#include "RowColumnFormat.h"
-#include "Sheet.h"
-#include "Util.h"
-#include "Validity.h"
-#include "View.h"
-
-// commands
-#include "commands/CopyCommand.h"
-#include "commands/DeleteCommand.h"
-#include "commands/PasteCommand.h"
-#include "commands/StyleCommand.h"
-
-// ui
-#include "ui/CellView.h"
+#include "engine/CalculationSettings.h"
+#include "engine/Damages.h"
+#include "core/CellStorage.h"
+#include "core/Map.h"
+#include "core/Sheet.h"
 #include "ui/Selection.h"
 #include "ui/SheetView.h"
-#include "ui/RightToLeftPaintingStrategy.h"
 
 #define MIN_SIZE 10
 
@@ -140,7 +95,9 @@ CanvasItem::CanvasItem(Doc *doc, QGraphicsItem *parent)
 
     d->zoomHandler = new KoZoomHandler();
     d->activeSheet = 0;
-    setActiveSheet(doc->map()->sheet(0));
+    SheetBase *sheet = doc->map()->sheet(0);
+    Sheet *fullSheet = dynamic_cast<Sheet *>(sheet);
+    setActiveSheet(fullSheet);
 
     d->selection->setActiveSheet(activeSheet());
     connect(d->selection, &Selection::refreshSheetViews, this, &CanvasItem::refreshSheetViews);
@@ -239,7 +196,7 @@ KoZoomHandler* CanvasItem::zoomHandler() const
     return d->zoomHandler;
 }
 
-SheetView* CanvasItem::sheetView(const Sheet* sheet) const
+SheetView* CanvasItem::sheetView(Sheet* sheet) const
 {
     if (!d->sheetViews.contains(sheet)) {
         debugSheetsRender << "Creating SheetView for" << sheet->sheetName();
@@ -272,9 +229,11 @@ void CanvasItem::refreshSheetViews()
     }
     qDeleteAll(d->sheetViews);
     d->sheetViews.clear();
-    const QList<Sheet*> sheets = doc()->map()->sheetList();
-    for (int i = 0; i < sheets.count(); ++i)
-        sheets[i]->cellStorage()->invalidateStyleCache();
+    const QList<SheetBase*> sheets = doc()->map()->sheetList();
+    for (int i = 0; i < sheets.count(); ++i) {
+        Sheet *s = dynamic_cast<Sheet *>(sheets[i]);
+        if (s) s->fullCellStorage()->invalidateStyleCache();
+    }
 }
 
 void CanvasItem::setActiveSheet(Sheet* sheet)
@@ -397,7 +356,7 @@ void CanvasItem::handleDamages(const QList<Damage*>& damages)
         if (damage->type() == Damage::Cell) {
             CellDamage* cellDamage = static_cast<CellDamage*>(damage);
             debugSheetsDamage << "Processing\t" << *cellDamage;
-            Sheet* const damagedSheet = cellDamage->sheet();
+            Sheet* const damagedSheet = dynamic_cast<Sheet *>(cellDamage->sheet());
 
             if (cellDamage->changes() & CellDamage::Appearance) {
                 const Region& region = cellDamage->region();

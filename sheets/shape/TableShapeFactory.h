@@ -12,7 +12,6 @@
 #include <KoShapeFactoryBase.h>
 
 class KoShape;
-#include "KoXmlReaderForward.h"
 
 #define ClearMapId 65227212 // FIXME use number range allocated in KoDocumentResourceManager::DocumentResource
 

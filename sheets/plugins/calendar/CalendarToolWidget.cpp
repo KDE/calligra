@@ -23,14 +23,13 @@
 
 #include "CalendarToolWidget.h"
 
-#include "SheetsDebug.h"
+// #include "SheetsDebug.h"
 
-#include <KoIcon.h>
+// #include <KoIcon.h>
 
-#include <kdatepicker.h>
-
-#include <QPushButton>
-#include <QDate>
+#include <QDateEdit>
+// #include <QPushButton>
+// #include <QDate>
 
 namespace Calligra
 {
@@ -41,7 +40,6 @@ CalendarToolWidget::CalendarToolWidget(QWidget* parent)
         : QDialog(parent)
 {
     setupUi(this);
-    this->m_datePicker = 0;
 
     //we start with a default calendar for the current month;
 
@@ -53,13 +51,6 @@ CalendarToolWidget::CalendarToolWidget(QWidget* parent)
     this->m_startDateWidget->setDate(first_day_in_month);
     this->m_endDateWidget->setDate(last_day_in_month);
 
-    const QIcon calendarIcon = koIcon("x-office-calendar");
-    this->m_selectStartDateButton->setIcon(calendarIcon);
-    this->m_selectEndDateButton->setIcon(calendarIcon);
-
-    connect(this->m_selectStartDateButton, &QAbstractButton::clicked, this, &CalendarToolWidget::showStartDatePicker);
-    connect(this->m_selectEndDateButton, &QAbstractButton::clicked, this, &CalendarToolWidget::showEndDatePicker);
-
     connect(this->m_insertButton, &QAbstractButton::clicked, this, &CalendarToolWidget::emitInsertCalendar);
 }
 
@@ -67,55 +58,9 @@ CalendarToolWidget::~CalendarToolWidget()
 {
 }
 
-bool CalendarToolWidget::buildDatePickerFrame()
-{
-    delete m_datePicker; //destroyed signal is connected to datePickerDeleted()
-
-    m_datePicker = new KDatePicker();
-
-    Q_ASSERT(m_datePicker);
-
-    if (!m_datePicker)
-        return false;
-
-    connect(m_datePicker, &QObject::destroyed, this, &CalendarToolWidget::datePickerDeleted);
-
-    const QPoint position = mapToGlobal(pos());
-    m_datePicker->move(position.x() + this->width(), position.y());
-    m_datePicker->show();
-
-    return true;
-}
-
-void CalendarToolWidget::datePickerDeleted()
-{
-    debugSheets << "date picker deleted";
-    m_datePicker = 0;
-}
-
 void CalendarToolWidget::emitInsertCalendar()
 {
-    if (m_datePicker)
-        m_datePicker->deleteLater();
     emit insertCalendar(startDate(), endDate());
-}
-
-void CalendarToolWidget::showStartDatePicker()
-{
-    if (buildDatePickerFrame()) {
-        connect(m_datePicker, &KDatePicker::dateSelected, this, &CalendarToolWidget::setStartDate);
-        connect(m_datePicker, &KDatePicker::dateEntered, this, &CalendarToolWidget::setStartDate);
-        m_datePicker->setDate(startDate());
-    }
-}
-
-void CalendarToolWidget::showEndDatePicker()
-{
-    if (buildDatePickerFrame()) {
-        connect(m_datePicker, &KDatePicker::dateSelected, this, &CalendarToolWidget::setEndDate);
-        connect(m_datePicker, &KDatePicker::dateEntered, this, &CalendarToolWidget::setEndDate);
-        m_datePicker->setDate(endDate());
-    }
 }
 
 void CalendarToolWidget::setStartDate(const QDate& date)

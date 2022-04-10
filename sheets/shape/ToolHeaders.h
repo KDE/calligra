@@ -9,10 +9,6 @@
 
 #include <QWidget>
 
-#include "sheets_common_export.h"
-
-#include <KoUnit.h>
-
 class QLabel;
 class QScrollBar;
 class QRubberBand;

@@ -213,6 +213,12 @@ QString Localization::formatTime(const QTime &time, const QString &format) const
     return locale.toString(time, format);
 }
 
+QString Localization::languageName(bool full) const
+{
+    if (full) return locale.nativeLanguageName();
+    return locale.name();
+}
+
 
 QString Localization::toUpper(const QString &str) const
 {
@@ -262,4 +268,5 @@ void Localization::setLocale(const QLocale &l) {
     format = dateFormat(false);
     dateSepShort = getSeparator(format);
 }
+
 

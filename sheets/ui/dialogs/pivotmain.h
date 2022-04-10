@@ -11,13 +11,14 @@
 
 #include <KoDialog.h>
 
-// #include<QListWidgetItem>
-// #include <sheets/Sheet.h>
+class QListWidgetItem;
 
 namespace Calligra{
   namespace Sheets{
 
+class Sheet;
 class Selection;
+
 class PivotMain : public KoDialog
     {
 	Q_OBJECT

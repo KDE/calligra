@@ -16,46 +16,42 @@
 
 // Local
 #include "View.h"
+
+#include "Canvas.h"
+#include "Doc.h"
+#include "Factory.h"
+#include "HeaderWidgets.h"
+#include "PrintJob.h"
+#include "RightToLeftPaintingStrategy.h"
 #include "TabBar.h"
+#include "ToolRegistry.h"
+#include "commands/DefinePrintRangeCommand.h"
+#include "dialogs/PageLayoutDialog.h"
+#include "dialogs/PreferenceDialog.h"
+#include "dialogs/SheetPropertiesDialog.h"
 
-// standard C/C++ includes
-#include <assert.h>
-#include <stdlib.h>
-#include <time.h>
-
-// Qt includes
-#include <QBuffer>
-#include <QByteArray>
 #include <QClipboard>
-#include <QCursor>
-#include <QEvent>
-#include <QFrame>
-#include <QGridLayout>
-#include <QHBoxLayout>
+#include <QInputDialog>
 #include <QKeyEvent>
-#include <QList>
+#include <QKeyEvent>
+#include <QLineEdit>
 #include <QMenu>
-#include <QPixmap>
-#include <QResizeEvent>
-#include <QToolButton>
+#include <QMimeData>
+#include <QPointer>
 #ifndef QT_NO_SQL
-#include <QSqlDatabase>
 #endif
-#include <QSizePolicy>
 #include <QScrollBar>
 #include <QStatusBar>
-#include <QInputDialog>
 #include <QTimer>
 
 // KF5 includes
-#include <kactioncollection.h>
-#include <kconfig.h>
-
-#include <kmessagebox.h>
-#include <kstandardaction.h>
-#include <ktoggleaction.h>
+#include <KActionCollection>
+#include <KMessageBox>
+#include <KNewPasswordDialog>
+#include <KPasswordDialog>
+#include <KStandardAction>
+#include <KToggleAction>
 #include <kxmlguifactory.h>
-#include <kstandardguiitem.h>
 
 // Calligra includes
 #include <KoComponentData.h>
@@ -64,14 +60,13 @@
 #include <KoColor.h>
 #include <KoCanvasControllerWidget.h>
 #include <KoMainWindow.h>
+#include <KoPart.h>
 #include <KoShapeController.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 #include <KoDockerManager.h>
 #include <KoToolManager.h>
 #include <KoTemplateCreateDia.h>
-#include <KoXmlNS.h>
-#include <KoZoomAction.h>
 #include <KoZoomController.h>
 #include <KoZoomHandler.h>
 #include <KoToolProxy.h>
@@ -81,63 +76,34 @@
 #include <KoCanvasResourceIdentities.h>
 
 // Sheets includes
-#include "SheetsDebug.h"
-#include "ApplicationSettings.h"
-#include "BindingManager.h"
-#include "CalculationSettings.h"
-#include "CellStorage.h"
-#include "Damages.h"
-#include "DependencyManager.h"
-#include "Doc.h"
-#include "Factory.h"
-#include "HeaderFooter.h"
-#include "LoadingInfo.h"
-#include "Canvas.h"
-#include "Global.h"
-#include "Headers.h"
-#include "HeaderWidgets.h"
-#include "Localization.h"
-#include "Map.h"
-#include "NamedAreaManager.h"
-#include "PrintSettings.h"
-#include "RecalcManager.h"
-#include "RowColumnFormat.h"
-#include "ShapeApplicationData.h"
-#include "Sheet.h"
-#include "SheetPrint.h"
-#include "Style.h"
-#include "StyleManager.h"
-#include "StyleStorage.h"
-#include "ToolRegistry.h"
-#include "Util.h"
-#include "ValueCalc.h"
-#include "ValueConverter.h"
-#include "PrintJob.h"
-#include "ElapsedTime_p.h"
+#include "engine/SheetsDebug.h"
+#include "engine/CalculationSettings.h"
+#include "engine/Damages.h"
+#include "engine/ElapsedTime_p.h"
+#include "engine/RecalcManager.h"
+#include "engine/ValueCalc.h"
+#include "engine/ValueConverter.h"
 
-// commands
-#include "commands/CopyCommand.h"
-#include "commands/DefinePrintRangeCommand.h"
-#include "commands/SheetCommands.h"
-
-// dialogs
-#include "dialogs/PageLayoutDialog.h"
-#include "dialogs/PreferenceDialog.h"
-#include "dialogs/ShowDialog.h"
-
-#include "dialogs/SheetPropertiesDialog.h"
+#include "core/ApplicationSettings.h"
+#include "core/BindingManager.h"
+#include "core/CellStorage.h"
+#include "core/LoadingInfo.h"
+#include "core/Map.h"
+#include "core/ShapeApplicationData.h"
+#include "core/Sheet.h"
 
 // ui
-#include "ui/CellView.h"
 #include "ui/MapViewModel.h"
-#include "ui/RightToLeftPaintingStrategy.h"
 #include "ui/Selection.h"
 #include "ui/SheetView.h"
+#include "ui/commands/CopyCommand.h"
+#include "ui/commands/SheetCommands.h"
+#include "ui/dialogs/ShowDialog.h"
 
 // D-Bus
 #ifndef QT_NO_DBUS
-#include "interfaces/ViewAdaptor.h"
-#include <knotifyconfigwidget.h>
+#include "ViewAdaptor.h"
+#include <KNotifyConfigWidget>
 #endif
 
 using namespace Calligra::Sheets;
@@ -181,9 +147,9 @@ public:
 
     // selection/marker
     Selection* selection;
-    QMap<Sheet*, QPoint> savedAnchors;
-    QMap<Sheet*, QPoint> savedMarkers;
-    QMap<Sheet*, QPointF> savedOffsets;
+    QMap<SheetBase*, QPoint> savedAnchors;
+    QMap<SheetBase*, QPoint> savedMarkers;
+    QMap<SheetBase*, QPointF> savedOffsets;
 
     void initActions();
     void adjustActions(bool mode);
@@ -490,7 +456,7 @@ void View::Private::initActions()
     //
 
     ac->addAssociatedWidget(view->canvasWidget());
-    foreach(QAction* action, ac->actions()) {
+    for (QAction* action : ac->actions()) {
         action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
     }
 }
@@ -515,12 +481,13 @@ void View::Private::adjustActions(bool mode)
     else
         actions->renameSheet->setEnabled(false);
 
-    actions->showColumnHeader->setChecked(view->doc()->map()->settings()->showColumnHeader());
-    actions->showRowHeader->setChecked(view->doc()->map()->settings()->showRowHeader());
-    actions->showHorizontalScrollBar->setChecked(view->doc()->map()->settings()->showHorizontalScrollBar());
-    actions->showVerticalScrollBar->setChecked(view->doc()->map()->settings()->showVerticalScrollBar());
-    actions->showStatusBar->setChecked(view->doc()->map()->settings()->showStatusBar());
-    actions->showTabBar->setChecked(view->doc()->map()->settings()->showTabBar());
+    ApplicationSettings *sett = view->doc()->map()->applicationSettings();
+    actions->showColumnHeader->setChecked(sett->showColumnHeader());
+    actions->showRowHeader->setChecked(sett->showRowHeader());
+    actions->showHorizontalScrollBar->setChecked(sett->showHorizontalScrollBar());
+    actions->showVerticalScrollBar->setChecked(sett->showVerticalScrollBar());
+    actions->showStatusBar->setChecked(sett->showStatusBar());
+    actions->showTabBar->setChecked(sett->showTabBar());
 
     if (activeSheet)
         selection->update();
@@ -557,7 +524,7 @@ View::View(KoPart *part, QWidget *_parent, Doc *_doc)
     const QList<KPluginFactory *> pluginFactories =
         KoPluginLoader::instantiatePluginFactories(QStringLiteral("calligrasheets/extensions"));
 
-    foreach (KPluginFactory* factory, pluginFactories) {
+    for (KPluginFactory* factory : pluginFactories) {
         QObject *object = factory->create<QObject>(this, QVariantList());
         KXMLGUIClient *clientPlugin = dynamic_cast<KXMLGUIClient*>(object);
         if (clientPlugin) {
@@ -883,7 +850,7 @@ void View::sheetDestroyed(QObject* obj)
     }
 }
 
-SheetView* View::sheetView(const Sheet* sheet) const
+SheetView* View::sheetView(Sheet* sheet) const
 {
     SheetView *sheetView = d->sheetViews.value(sheet);
     if (!sheetView) {
@@ -911,11 +878,11 @@ void View::refreshSheetViews()
 {
     QList< QPointer<SheetView> > sheetViews = d->sheetViews.values();
 
-    foreach(const Sheet *sheet, d->sheetViews.keys()) {
+    for(const Sheet *sheet : d->sheetViews.keys()) {
         disconnect(sheet, &QObject::destroyed, this, &View::sheetDestroyed);
     }
 
-    foreach (SheetView *sheetView, sheetViews) {
+    for (SheetView *sheetView : sheetViews) {
         disconnect(sheetView, &SheetView::visibleSizeChanged,
                    d->canvas, &Canvas::setDocumentSize);
         disconnect(sheetView, &SheetView::visibleSizeChanged,
@@ -927,8 +894,9 @@ void View::refreshSheetViews()
     qDeleteAll(sheetViews);
     d->sheetViews.clear();
 
-    foreach(const Sheet *sheet, d->doc->map()->sheetList()) {
-        sheet->cellStorage()->invalidateStyleCache();
+    for (SheetBase *bsheet : d->doc->map()->sheetList()) {
+        Sheet *sheet = dynamic_cast<Sheet *>(bsheet);
+        sheet->fullCellStorage()->invalidateStyleCache();
     }
 }
 
@@ -948,21 +916,22 @@ void View::initConfig()
     KSharedConfigPtr config = Factory::global().config();
     const KConfigGroup parameterGroup = config->group("Parameters");
     const bool configFromDoc = doc()->configLoadFromFile();
+    ApplicationSettings *sett = doc()->map()->applicationSettings();
     if (!configFromDoc) {
-        doc()->map()->settings()->setShowHorizontalScrollBar(parameterGroup.readEntry("Horiz ScrollBar", true));
-        doc()->map()->settings()->setShowVerticalScrollBar(parameterGroup.readEntry("Vert ScrollBar", true));
+        sett->setShowHorizontalScrollBar(parameterGroup.readEntry("Horiz ScrollBar", true));
+        sett->setShowVerticalScrollBar(parameterGroup.readEntry("Vert ScrollBar", true));
     }
-    doc()->map()->settings()->setShowColumnHeader(parameterGroup.readEntry("Column Header", true));
-    doc()->map()->settings()->setShowRowHeader(parameterGroup.readEntry("Row Header", true));
+    sett->setShowColumnHeader(parameterGroup.readEntry("Column Header", true));
+    sett->setShowRowHeader(parameterGroup.readEntry("Row Header", true));
     if (!configFromDoc)
-        doc()->map()->settings()->setCompletionMode((KCompletion::CompletionMode)parameterGroup.readEntry("Completion Mode", (int)(KCompletion::CompletionAuto)));
-    doc()->map()->settings()->setMoveToValue((Calligra::Sheets::MoveTo)parameterGroup.readEntry("Move", (int)(Bottom)));
-    doc()->map()->settings()->setIndentValue(parameterGroup.readEntry("Indent", 10.0));
-    doc()->map()->settings()->setTypeOfCalc((MethodOfCalc)parameterGroup.readEntry("Method of Calc", (int)(SumOfNumber)));
+        sett->setCompletionMode((KCompletion::CompletionMode)parameterGroup.readEntry("Completion Mode", (int)(KCompletion::CompletionAuto)));
+    sett->setMoveToValue((Calligra::Sheets::MoveTo)parameterGroup.readEntry("Move", (int)(Bottom)));
+    sett->setIndentValue(parameterGroup.readEntry("Indent", 10.0));
+    sett->setTypeOfCalc((MethodOfCalc)parameterGroup.readEntry("Method of Calc", (int)(SumOfNumber)));
     if (!configFromDoc)
-        doc()->map()->settings()->setShowTabBar(parameterGroup.readEntry("Tabbar", true));
+        sett->setShowTabBar(parameterGroup.readEntry("Tabbar", true));
 
-    doc()->map()->settings()->setShowStatusBar(parameterGroup.readEntry("Status bar", true));
+    sett->setShowStatusBar(parameterGroup.readEntry("Status bar", true));
 
     changeNbOfRecentFiles(parameterGroup.readEntry("NbRecentFile", 10));
     //autosave value is stored as a minute.
@@ -971,8 +940,8 @@ void View::initConfig()
     doc()->setBackupFile(parameterGroup.readEntry("BackupFile", true));
 
     const KConfigGroup colorGroup = config->group("KSpread Color");
-    doc()->map()->settings()->setGridColor(colorGroup.readEntry("GridColor", QColor(Qt::lightGray)));
-    doc()->map()->settings()->changePageOutlineColor(colorGroup.readEntry("PageOutlineColor", QColor(Qt::red)));
+    sett->setGridColor(colorGroup.readEntry("GridColor", QColor(Qt::lightGray)));
+    sett->changePageOutlineColor(colorGroup.readEntry("PageOutlineColor", QColor(Qt::red)));
 
     initCalcMenu();
     calcStatusBarOp();
@@ -986,7 +955,7 @@ void View::changeNbOfRecentFiles(int _nb)
 
 void View::initCalcMenu()
 {
-    switch (doc()->map()->settings()->getTypeOfCalc()) {
+    switch (doc()->map()->applicationSettings()->getTypeOfCalc()) {
     case  SumOfNumber:
         d->actions->calcSum->setChecked(true);
         break;
@@ -1072,8 +1041,9 @@ void View::editDeleteSelection()
 void View::initialPosition()
 {
     // Loading completed, pick initial worksheet
-    foreach(Sheet* sheet, doc()->map()->sheetList()) {
-        addSheet(sheet);
+    for (SheetBase* bsheet : doc()->map()->sheetList()) {
+        Sheet *sheet = dynamic_cast<Sheet *>(bsheet);
+        if (sheet) addSheet(sheet);
     }
 
     // Set the initial X and Y offsets for the view (OpenDocument loading)
@@ -1084,19 +1054,20 @@ void View::initialPosition()
         d->savedOffsets = loadingInfo->scrollingOffsets();
     }
 
-    Sheet* sheet = loadingInfo->initialActiveSheet();
-    if (!sheet) {
+    SheetBase* bsheet = loadingInfo->initialActiveSheet();
+    if (!bsheet) {
         //activate first table which is not hiding
-        sheet = doc()->map()->visibleSheets().isEmpty() ? 0 : doc()->map()->findSheet(doc()->map()->visibleSheets().first());
-        if (!sheet) {
-            sheet = doc()->map()->sheet(0);
-            if (sheet) {
-                sheet->setHidden(false);
-                QString tabName = sheet->sheetName();
+        bsheet = doc()->map()->visibleSheets().isEmpty() ? nullptr : doc()->map()->findSheet(doc()->map()->visibleSheets().first());
+        if (!bsheet) {
+            bsheet = doc()->map()->sheet(0);
+            if (bsheet) {
+                bsheet->setHidden(false);
+                QString tabName = bsheet->sheetName();
                 d->tabBar->addTab(tabName);
             }
         }
     }
+    Sheet *sheet = dynamic_cast<Sheet *>(bsheet);
     setActiveSheet(sheet);
     d->mapViewModel->setActiveSheet(sheet);
 
@@ -1224,7 +1195,7 @@ void View::setActiveSheet(Sheet* sheet, bool updateSheet)
     }
 
     // Restore the old scrolling offset.
-    QMap<Sheet*, QPointF>::ConstIterator it3 = d->savedOffsets.constFind(d->activeSheet);
+    QMap<SheetBase*, QPointF>::ConstIterator it3 = d->savedOffsets.constFind(d->activeSheet);
     if (it3 != d->savedOffsets.constEnd()) {
         const QPoint offset = zoomHandler()->documentToView(*it3).toPoint();
         d->canvas->setDocumentOffset(offset);
@@ -1257,8 +1228,8 @@ void View::setActiveSheet(Sheet* sheet, bool updateSheet)
     }
 
     /* see if there was a previous selection on this other sheet */
-    QMap<Sheet*, QPoint>::ConstIterator it = d->savedAnchors.constFind(d->activeSheet);
-    QMap<Sheet*, QPoint>::ConstIterator it2 = d->savedMarkers.constFind(d->activeSheet);
+    QMap<SheetBase*, QPoint>::ConstIterator it = d->savedAnchors.constFind(d->activeSheet);
+    QMap<SheetBase*, QPoint>::ConstIterator it2 = d->savedMarkers.constFind(d->activeSheet);
 
     // restore the old anchor and marker
     const QPoint newAnchor = (it == d->savedAnchors.constEnd()) ? QPoint(1, 1) : *it;
@@ -1298,13 +1269,14 @@ void View::changeSheet(const QString& _name)
     if (activeSheet()->sheetName() == _name)
         return;
 
-    Sheet *t = doc()->map()->findSheet(_name);
-    if (!t) {
+    SheetBase *t = doc()->map()->findSheet(_name);
+    Sheet *sheet = t ? dynamic_cast<Sheet *>(t) : nullptr;
+    if (!sheet) {
         debugSheets << "Unknown sheet" << _name;
         return;
     }
-    setActiveSheet(t, false /* False: Endless loop because of setActiveTab() => do the visual area update manually*/);
-    d->mapViewModel->setActiveSheet(t);
+    setActiveSheet(sheet, false /* False: Endless loop because of setActiveTab() => do the visual area update manually*/);
+    d->mapViewModel->setActiveSheet(sheet);
 }
 
 void View::moveSheet(unsigned sheet, unsigned target)
@@ -1399,7 +1371,7 @@ void View::insertSheet()
     }
 
     selection()->emitCloseEditor(true); // save changes
-    Sheet * t = doc()->map()->createSheet();
+    Sheet * t = dynamic_cast<Sheet *>(doc()->map()->createSheet());
     KUndo2Command* command = new AddSheetCommand(t);
     doc()->addCommand(command);
     setActiveSheet(t);
@@ -1481,9 +1453,9 @@ void View::setShapeAnchoring(const QString& mode)
     }
 }
 
-bool View::showPasswordDialog(ProtectableObject *obj, Mode mode, const QString& title)
+bool View::showPasswordDialog(ProtectableObject *obj, ProtectableObject::Mode mode, const QString& title)
 {
-    if (mode == Lock) {
+    if (mode == ProtectableObject::Lock) {
         QPointer<KNewPasswordDialog> dlg = new KNewPasswordDialog(this);
         dlg->setPrompt(i18n("Enter a password."));
         dlg->setWindowTitle(title);
@@ -1493,10 +1465,7 @@ bool View::showPasswordDialog(ProtectableObject *obj, Mode mode, const QString& 
 
         QByteArray hash;
         QString password = dlg->password();
-        if (password.length() > 0) {
-            SHA1::getHash(password, hash);
-        }
-        obj->setProtected (hash);
+        obj->setProtected (password);
         delete dlg;
     } else { /* Unlock */
         QPointer<KPasswordDialog> dlg = new KPasswordDialog(this);
@@ -1508,10 +1477,10 @@ bool View::showPasswordDialog(ProtectableObject *obj, Mode mode, const QString& 
 
         QString password(dlg->password());
         if (!obj->checkPassword(password)) {
-            KMessageBox::error(parent, i18n("Password is incorrect."));
+            KMessageBox::error(this, i18n("Password is incorrect."));
             return false;
         }
-        m_password = QByteArray();
+        obj->setProtected (QString());
         delete dlg;
     }
     return true;
@@ -1596,33 +1565,33 @@ void View::viewZoom(KoZoomMode::Mode mode, qreal zoom)
 
 void View::showColumnHeader(bool enable)
 {
-    doc()->map()->settings()->setShowColumnHeader(enable);
+    doc()->map()->applicationSettings()->setShowColumnHeader(enable);
     d->columnHeader->setVisible(enable);
     d->selectAllButton->setVisible(enable && d->rowHeader->isVisible());
 }
 
 void View::showRowHeader(bool enable)
 {
-    doc()->map()->settings()->setShowRowHeader(enable);
+    doc()->map()->applicationSettings()->setShowRowHeader(enable);
     d->rowHeader->setVisible(enable);
     d->selectAllButton->setVisible(enable && d->columnHeader->isVisible());
 }
 
 void View::showHorizontalScrollBar(bool enable)
 {
-    doc()->map()->settings()->setShowHorizontalScrollBar(enable);
+    doc()->map()->applicationSettings()->setShowHorizontalScrollBar(enable);
     d->horzScrollBar->setVisible(enable);
 }
 
 void View::showVerticalScrollBar(bool enable)
 {
-    doc()->map()->settings()->setShowVerticalScrollBar(enable);
+    doc()->map()->applicationSettings()->setShowVerticalScrollBar(enable);
     d->vertScrollBar->setVisible(enable);
 }
 
 void View::showStatusBar(bool enable)
 {
-    doc()->map()->settings()->setShowStatusBar(enable);
+    doc()->map()->applicationSettings()->setShowStatusBar(enable);
     if (statusBar()) {
         statusBar()->setVisible(enable);
     }
@@ -1630,7 +1599,7 @@ void View::showStatusBar(bool enable)
 
 void View::showTabBar(bool enable)
 {
-    doc()->map()->settings()->setShowTabBar(enable);
+    doc()->map()->applicationSettings()->setShowTabBar(enable);
     d->tabBar->setVisible(enable);
 }
 
@@ -1649,52 +1618,56 @@ void View::preference()
 
 void View::nextSheet()
 {
-    Sheet * t = doc()->map()->nextSheet(activeSheet());
-    if (!t) {
+    SheetBase * t = doc()->map()->nextSheet(activeSheet());
+    Sheet *sheet = t ? dynamic_cast<Sheet *>(t) : nullptr;
+    if (!sheet) {
         debugSheets << "Unknown sheet";
         return;
     }
     selection()->emitCloseEditor(true); // save changes
-    setActiveSheet(t);
+    setActiveSheet(sheet);
     d->tabBar->setActiveTab(t->sheetName());
     d->tabBar->ensureVisible(t->sheetName());
 }
 
 void View::previousSheet()
 {
-    Sheet * t = doc()->map()->previousSheet(activeSheet());
-    if (!t) {
+    SheetBase * t = doc()->map()->previousSheet(activeSheet());
+    Sheet *sheet = t ? dynamic_cast<Sheet *>(t) : nullptr;
+    if (!sheet) {
         debugSheets << "Unknown sheet";
         return;
     }
     selection()->emitCloseEditor(true); // save changes
-    setActiveSheet(t);
+    setActiveSheet(sheet);
     d->tabBar->setActiveTab(t->sheetName());
     d->tabBar->ensureVisible(t->sheetName());
 }
 
 void View::firstSheet()
 {
-    Sheet *t = doc()->map()->sheet(0);
-    if (!t) {
+    SheetBase *t = doc()->map()->sheet(0);
+    Sheet *sheet = t ? dynamic_cast<Sheet *>(t) : nullptr;
+    if (!sheet) {
         debugSheets << "Unknown sheet";
         return;
     }
     selection()->emitCloseEditor(true); // save changes
-    setActiveSheet(t);
+    setActiveSheet(sheet);
     d->tabBar->setActiveTab(t->sheetName());
     d->tabBar->ensureVisible(t->sheetName());
 }
 
 void View::lastSheet()
 {
-    Sheet *t = doc()->map()->sheet(doc()->map()->count() - 1);
-    if (!t) {
+    SheetBase *t = doc()->map()->sheet(doc()->map()->count() - 1);
+    Sheet *sheet = t ? dynamic_cast<Sheet *>(t) : nullptr;
+    if (!sheet) {
         debugSheets << "Unknown sheet";
         return;
     }
     selection()->emitCloseEditor(true); // save changes
-    setActiveSheet(t);
+    setActiveSheet(sheet);
     d->tabBar->setActiveTab(t->sheetName());
     d->tabBar->ensureVisible(t->sheetName());
 }
@@ -1748,12 +1721,9 @@ void View::setHeaderMinima()
 void View::paperLayoutDlg()
 {
     selection()->emitCloseEditor(true); // save changes
-    SheetPrint* print = d->activeSheet->print();
-
-    KoPageLayout pl = print->settings()->pageLayout();
-
 
 /*
+    SheetPrint* print = d->activeSheet->print();
     const HeaderFooter *const headerFooter = print->headerFooter();
     HeadFoot hf;
     hf.headLeft  = headerFooter->localizeHeadFootLine(headerFooter->headLeft());
@@ -1880,7 +1850,7 @@ void View::calcStatusBarOp()
     Value val;
     QString prefix = "";
 
-    MethodOfCalc tmpMethod = doc()->map()->settings()->getTypeOfCalc();
+    MethodOfCalc tmpMethod = doc()->map()->applicationSettings()->getTypeOfCalc();
     if (sheet && tmpMethod != NoneCalc) {
         Value range = sheet->cellStorage()->valueRegion(*d->selection);
         switch (tmpMethod) {
@@ -1936,20 +1906,21 @@ void View::statusBarClicked(const QPoint&)
 
 void View::menuCalc(bool)
 {
+    ApplicationSettings *sett = doc()->map()->applicationSettings();
     if (d->actions->calcMin->isChecked()) {
-        doc()->map()->settings()->setTypeOfCalc(Min);
+        sett->setTypeOfCalc(Min);
     } else if (d->actions->calcMax->isChecked()) {
-        doc()->map()->settings()->setTypeOfCalc(Max);
+        sett->setTypeOfCalc(Max);
     } else if (d->actions->calcCount->isChecked()) {
-        doc()->map()->settings()->setTypeOfCalc(Count);
+        sett->setTypeOfCalc(Count);
     } else if (d->actions->calcAverage->isChecked()) {
-        doc()->map()->settings()->setTypeOfCalc(Average);
+        sett->setTypeOfCalc(Average);
     } else if (d->actions->calcSum->isChecked()) {
-        doc()->map()->settings()->setTypeOfCalc(SumOfNumber);
+        sett->setTypeOfCalc(SumOfNumber);
     } else if (d->actions->calcCountA->isChecked()) {
-        doc()->map()->settings()->setTypeOfCalc(CountA);
+        sett->setTypeOfCalc(CountA);
     } else if (d->actions->calcNone->isChecked())
-        doc()->map()->settings()->setTypeOfCalc(NoneCalc);
+        sett->setTypeOfCalc(NoneCalc);
 
     calcStatusBarOp();
 }
@@ -2009,8 +1980,9 @@ void View::updateBorderButton()
         d->actions->showPageOutline->setChecked(d->activeSheet->isShowPageOutline());
 }
 
-void View::addSheet(Sheet *sheet)
+void View::addSheet(SheetBase *bsheet)
 {
+    Sheet *sheet = dynamic_cast<Sheet *>(bsheet);
     if (!sheet->isHidden()) {
         d->tabBar->addTab(sheet->sheetName());
     }
@@ -2025,10 +1997,12 @@ void View::addSheet(Sheet *sheet)
             d->mapViewModel, &MapViewModel::removeShape);
 }
 
-void View::removeSheet(Sheet *sheet)
+void View::removeSheet(SheetBase *bsheet)
 {
+    Sheet *sheet = dynamic_cast<Sheet *>(bsheet);
     d->tabBar->removeTab(sheet->sheetName());
-    setActiveSheet(doc()->map()->sheet(0));
+    Sheet *first = dynamic_cast<Sheet *>(doc()->map()->sheet(0));
+    setActiveSheet(first);
 
     const bool state = (doc()->map()->visibleSheets().count() > 1);
     d->actions->deleteSheet->setEnabled(state);
@@ -2046,23 +2020,23 @@ QColor View::borderColor() const
 void View::updateShowSheetMenu()
 {
     if (d->activeSheet) {
-        if (d->activeSheet->map()->isProtected())
+        if (d->activeSheet->fullMap()->isProtected())
             d->actions->showSheet->setEnabled(false);
         else
             d->actions->showSheet->setEnabled(doc()->map()->hiddenSheets().count() > 0);
     }
 }
 
-QPoint View::markerFromSheet(Sheet* sheet) const
+QPoint View::markerFromSheet(SheetBase* sheet) const
 {
-    QMap<Sheet*, QPoint>::ConstIterator it = d->savedMarkers.constFind(sheet);
+    QMap<SheetBase*, QPoint>::ConstIterator it = d->savedMarkers.constFind(sheet);
     QPoint newMarker = (it == d->savedMarkers.constEnd()) ? QPoint(1, 1) : *it;
     return newMarker;
 }
 
-QPointF View::offsetFromSheet(Sheet* sheet) const
+QPointF View::offsetFromSheet(SheetBase* sheet) const
 {
-    QMap<Sheet*, QPointF>::ConstIterator it = d->savedOffsets.constFind(sheet);
+    QMap<SheetBase*, QPointF>::ConstIterator it = d->savedOffsets.constFind(sheet);
     QPointF offset = (it == d->savedOffsets.constEnd()) ? QPointF() : *it;
     return offset;
 }
@@ -2096,7 +2070,7 @@ void View::handleDamages(const QList<Damage*>& damages)
         if (damage->type() == Damage::Cell) {
             CellDamage* cellDamage = static_cast<CellDamage*>(damage);
             debugSheetsDamage << "Processing\t" << *cellDamage;
-            Sheet* const damagedSheet = cellDamage->sheet();
+            Sheet* damagedSheet = dynamic_cast<Sheet *>(cellDamage->sheet());
 
             if (cellDamage->changes() & CellDamage::Appearance) {
                 const Region& region = cellDamage->region();

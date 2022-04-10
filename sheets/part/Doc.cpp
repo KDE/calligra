@@ -17,83 +17,37 @@
 
 // Local
 #include "Doc.h"
-#include "../DocBase_p.h"
+#include "Factory.h"
+#include "chart/ChartDialog.h"
 
-#include <unistd.h>
-#include <assert.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <dirent.h>
-#include <pwd.h>
-
-#include <QApplication>
-#include <QFont>
-#include <QTimer>
-#include <QList>
 #include <QPainter>
-#include <QGraphicsItem>
 
-#include <kconfig.h>
-#include <kconfiggroup.h>
-#include <kmessagebox.h>
+#include <KSharedConfig>
+#include <KConfigGroup>
 
+#include <KoChartInterface.h>
 #include <KoComponentData.h>
-#include <KoDocumentInfo.h>
-#include <KoMainWindow.h>
-#include <KoOasisSettings.h>
-#include <KoDocumentResourceManager.h>
-#include <KoShapeConfigFactoryBase.h>
-#include <KoShapeFactoryBase.h>
 #include <KoShapeRegistry.h>
-#include <KoXmlNS.h>
-#include <KoXmlWriter.h>
 #include <KoZoomHandler.h>
-#include <KoShapeSavingContext.h>
-#include <KoUpdater.h>
-#include <KoProgressUpdater.h>
-#include <KoView.h>
 #include <KoUnit.h>
 
-#include "SheetsDebug.h"
-#include "BindingManager.h"
-#include "CalculationSettings.h"
-#include "Canvas.h"
-#include "CanvasItem.h"
-#include "DependencyManager.h"
-#include "Factory.h"
-#include "Formula.h"
-#include "Function.h"
-#include "FunctionModuleRegistry.h"
-#include "HeaderFooter.h"
-#include "LoadingInfo.h"
-#include "Localization.h"
-#include "Map.h"
-#include "NamedAreaManager.h"
-#include "PrintSettings.h"
-#include "RecalcManager.h"
-#include "Sheet.h"
-#include "SheetPrint.h"
-#include "StyleManager.h"
-#include "Util.h"
-#include "View.h"
-#include "SheetAccessModel.h"
-#include "BindingModel.h"
-#include "ksp/SheetsKsp.h"
+#include "engine/SheetsDebug.h"
+#include "engine/FunctionModuleRegistry.h"
+#include "core/Map.h"
+#include "core/PrintSettings.h"
+#include "core/Sheet.h"
+#include "core/SheetPrint.h"
+#include "core/StyleManager.h"
+
+// ui
+#include "ui/SheetView.h"
 
 // D-Bus
 #ifndef QT_NO_DBUS
-#include "interfaces/MapAdaptor.h"
-#include "interfaces/SheetAdaptor.h"
+#include "MapAdaptor.h"
+#include "SheetAdaptor.h"
 #include <QDBusConnection>
 #endif
-
-// chart shape
-#include "plugins/chartshape/ChartShape.h"
-#include "chart/ChartDialog.h"
-
-// ui
-#include "ui/Selection.h"
-#include "ui/SheetView.h"
 
 using namespace std;
 using namespace Calligra::Sheets;
@@ -107,7 +61,6 @@ public:
 
     // document properties
     bool configLoadFromFile       : 1;
-    QStringList spellListIgnoreAll;
     SheetAccessModel *sheetAccessModel;
     KoDocumentResourceManager *resourceManager;
 };
@@ -126,11 +79,11 @@ Doc::Doc(KoPart *part)
         , dd(new Private)
 {
     Q_ASSERT(part);
-    connect(d->map, &Map::sheetAdded, this, &Doc::sheetAdded);
+    connect(map(), &Map::sheetAdded, this, &Doc::sheetAdded);
 
 #ifndef QT_NO_DBUS
-    new MapAdaptor(d->map);
-    QDBusConnection::sessionBus().registerObject('/' + objectName() + '/' + d->map->objectName(), d->map);
+    new MapAdaptor(map());
+    QDBusConnection::sessionBus().registerObject('/' + objectName() + '/' + map()->objectName(), map());
 #endif
 
     KoShapeRegistry *registry = KoShapeRegistry::instance();
@@ -142,13 +95,13 @@ Doc::Doc(KoPart *part)
     // Init chart shape factory with Calligra Sheets' specific configuration panels.
     KoShapeFactoryBase *chartShape = KoShapeRegistry::instance()->value(ChartShapeId);
     if (chartShape) {
-        QList<KoShapeConfigFactoryBase*> panels = ChartDialog::panels(d->map);
+        QList<KoShapeConfigFactoryBase*> panels = ChartDialog::panels(map());
         chartShape->setOptionPanels(panels);
     } else {
         warnSheets << "chart shape factory not found";
     }
 
-    connect(d->map, &Map::commandAdded,
+    connect(map(), &Map::commandAdded,
             this, &KoDocument::addCommand);
 
     // Load the function modules.
@@ -233,12 +186,7 @@ bool Doc::completeLoading(KoStore* store)
 
 void Doc::addIgnoreWordAllList(const QStringList & _lst)
 {
-    d->spellListIgnoreAll = _lst;
-}
-
-QStringList Doc::spellListIgnoreAll() const
-{
-    return d->spellListIgnoreAll;
+    setSpellListIgnoreAll(_lst);
 }
 
 void Doc::paintContent(QPainter& painter, const QRect& rect)
@@ -251,7 +199,8 @@ void Doc::paintContent(QPainter& painter, const QRect& rect, Sheet* _sheet)
     if (rect.isEmpty()) {
         return;
     }
-    Sheet *const sheet = _sheet ? _sheet : d->map->sheet(0);
+    Sheet *firstSheet = dynamic_cast<Sheet *>(map()->sheet(0));
+    Sheet *const sheet = _sheet ? _sheet : firstSheet;
 
     const KoPageLayout pageLayout = sheet->printSettings()->pageLayout();
     QPixmap thumbnail(pageLayout.width, pageLayout.height);
@@ -281,34 +230,40 @@ void Doc::updateAllViews()
 
 void Doc::addIgnoreWordAll(const QString & word)
 {
-    if (d->spellListIgnoreAll.indexOf(word) == -1)
-        d->spellListIgnoreAll.append(word);
+    QStringList lst = spellListIgnoreAll();
+    if (lst.indexOf(word) >= 0) return;
+    
+    lst.append(word);
+    setSpellListIgnoreAll(lst);
 }
 
 void Doc::clearIgnoreWordAll()
 {
-    d->spellListIgnoreAll.clear();
+    QStringList lst;
+    setSpellListIgnoreAll(lst);
 }
 
 void Doc::loadConfigFromFile()
 {
-    d->configLoadFromFile = true;
+    dd->configLoadFromFile = true;
 }
 
 bool Doc::configLoadFromFile() const
 {
-    return d->configLoadFromFile;
+    return dd->configLoadFromFile;
 }
 
-void Doc::sheetAdded(Sheet* sheet)
+void Doc::sheetAdded(SheetBase* sheet)
 {
 #ifndef QT_NO_DBUS
-    new SheetAdaptor(sheet);
-    QString dbusPath('/' + sheet->map()->objectName() + '/' + sheet->objectName());
-    if (sheet->parent() && !sheet->parent()->objectName().isEmpty()) {
-        dbusPath.prepend('/' + sheet->parent()->objectName());
+    Sheet *fullSheet = dynamic_cast<Sheet *>(sheet);
+    if (!fullSheet) return;
+    new SheetAdaptor(fullSheet);
+    QString dbusPath('/' + fullSheet->map()->objectName() + '/' + fullSheet->objectName());
+    if (fullSheet->parent() && !fullSheet->parent()->objectName().isEmpty()) {
+        dbusPath.prepend('/' + fullSheet->parent()->objectName());
     }
-    QDBusConnection::sessionBus().registerObject(dbusPath, sheet);
+    QDBusConnection::sessionBus().registerObject(dbusPath, fullSheet);
 #endif
 }
 

@@ -11,10 +11,8 @@
 #include <QWidget>
 
 #include <KoCanvasBase.h>
-#include <KoCanvasController.h>
 #include <KoShape.h>
 #include <KoShapeManager.h>
-#include <KoViewConverter.h>
 
 using namespace Calligra::Sheets;
 

@@ -6,10 +6,10 @@
 
 #include "TestCellStorage.h"
 
-#include <sheets/CellStorage.h>
-#include <sheets/Map.h>
-#include <sheets/Sheet.h>
-#include <sheets/Value.h>
+#include <core/CellStorage.h>
+#include <core/Map.h>
+#include <core/Sheet.h>
+#include <engine/Value.h>
 
 #include <QTest>
 
@@ -18,8 +18,8 @@ using namespace Calligra::Sheets;
 void CellStorageTest::testMergedCellsInsertRowBug()
 {
     Map map;
-    Sheet* sheet = map.addNewSheet();
-    CellStorage* storage = sheet->cellStorage();
+    Sheet* sheet = dynamic_cast<Sheet *>(map.addNewSheet());
+    CellStorage* storage = sheet->fullCellStorage();
 
     // | 1 | 4 |
     // |-------|

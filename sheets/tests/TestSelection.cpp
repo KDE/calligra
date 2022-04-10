@@ -9,9 +9,9 @@
 #include <QTest>
 
 #include "part/Canvas.h"
-#include "Map.h"
+#include "core/Map.h"
 #include "ui/Selection.h"
-#include "Sheet.h"
+#include "core/Sheet.h"
 
 using namespace Calligra::Sheets;
 
@@ -40,18 +40,18 @@ void TestSelection::initialize()
     selection.initialize(QRect(3, 5, 2, 3));
     QCOMPARE(selection.name(), QString("Sheet1!C5:D7"));
 
-    Region region("A1:A4", &map, sheet2);
+    Region region = map.regionFromName("A1:A4", sheet2);
     selection.initialize(region);
     QCOMPARE(selection.name(), QString("Sheet2!A1:A4"));
 
-    region = Region("Sheet1!A2:A4", &map, sheet2);
+    region = map.regionFromName("Sheet1!A2:A4", sheet2);
     selection.initialize(region);
     QCOMPARE(selection.name(), QString("Sheet1!A2:A4"));
 
     // reference mode:
     selection.startReferenceSelection();
 
-    region = Region("Sheet1!A2:A4;B3;C5", &map, sheet2);
+    region = map.regionFromName("Sheet1!A2:A4;B3;C5", sheet2);
     selection.initialize(region);
     QCOMPARE(selection.name(), QString("A2:A4;Sheet2!B3;Sheet2!C5"));
     QCOMPARE(selection.activeSubRegionName(), QString("A2:A4;Sheet2!B3;Sheet2!C5"));
@@ -116,7 +116,7 @@ void TestSelection::update()
     QCOMPARE(selection.name(), QString("Sheet1!A6"));
 
     // init with region
-    selection.initialize(Region("A3", &map, sheet1));
+    selection.initialize(map.regionFromName("A3", sheet1));
     QCOMPARE(selection.name(), QString("Sheet1!A3"));
 
     // init with location after init with region
@@ -128,7 +128,7 @@ void TestSelection::update()
     // reference mode:
     selection.startReferenceSelection();
 
-    Region region("Sheet1!A2:A4;B3;C5", &map, sheet2);
+    Region region = map.regionFromName("Sheet1!A2:A4;B3;C5", sheet2);
     selection.initialize(region);
     QCOMPARE(selection.name(), QString("A2:A4;Sheet2!B3;Sheet2!C5"));
 
@@ -183,7 +183,7 @@ void TestSelection::extend()
     // reference mode:
     selection.startReferenceSelection();
 
-    Region region("Sheet1!A2:A4;B3;C5", &map, sheet2);
+    Region region = map.regionFromName("Sheet1!A2:A4;B3;C5", sheet2);
     selection.initialize(region);
     QCOMPARE(selection.name(), QString("A2:A4;Sheet2!B3;Sheet2!C5"));
 
@@ -289,7 +289,7 @@ void TestSelection::activeElement()
     selection.startReferenceSelection();
     QVERIFY(!selection.activeElement());
 
-    selection.initialize(Region("A3:A4;B2;C4:D5", &map, sheet1));
+    selection.initialize(map.regionFromName("A3:A4;B2;C4:D5", sheet1));
     QCOMPARE(selection.name(sheet1), QString("A3:A4;B2;C4:D5"));
     QVERIFY(!selection.activeElement());
 
@@ -359,7 +359,7 @@ void TestSelection::referenceSelectionMode()
     selection.startReferenceSelection();
     QVERIFY(selection.isEmpty());
 
-    selection.initialize(Region("A3", &map, sheet1));
+    selection.initialize(map.regionFromName("A3", sheet1));
     QCOMPARE(selection.name(), QString("A3"));
 
     // set the active sub-region beyond the last range
@@ -388,7 +388,7 @@ void TestSelection::covering()
     // normal mode:
     // covered ranges get removed
 
-    selection.initialize(Region("A3:A4;B2;C4:D5", &map, sheet1));
+    selection.initialize(map.regionFromName("A3:A4;B2;C4:D5", sheet1));
     QCOMPARE(selection.name(sheet1), QString("A3:A4;B2;C4:D5"));
 
     selection.extend(QRect(1, 1, 4, 4), sheet1);
@@ -402,7 +402,7 @@ void TestSelection::covering()
 
     selection.startReferenceSelection();
 
-    selection.initialize(Region("A3:A4;B2;C4:D5", &map, sheet1));
+    selection.initialize(map.regionFromName("A3:A4;B2;C4:D5", sheet1));
     QCOMPARE(selection.name(), QString("A3:A4;B2;C4:D5"));
 
     selection.extend(QRect(1, 1, 4, 4), sheet1);
@@ -429,7 +429,7 @@ void TestSelection::splitting()
     // normal mode:
     // ranges get split
 
-    selection.initialize(Region("A1:D5", &map, sheet1));
+    selection.initialize(map.regionFromName("A1:D5", sheet1));
     QCOMPARE(selection.name(sheet1), QString("A1:D5"));
 
     selection.extend(QPoint(2, 2), sheet1);
@@ -440,7 +440,7 @@ void TestSelection::splitting()
 
     selection.startReferenceSelection();
 
-    selection.initialize(Region("A1:D5", &map, sheet1));
+    selection.initialize(map.regionFromName("A1:D5", sheet1));
     QCOMPARE(selection.name(), QString("A1:D5"));
 
     selection.extend(QPoint(2, 2), sheet1);

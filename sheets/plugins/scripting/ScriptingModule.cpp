@@ -6,6 +6,12 @@
 
 #include "ScriptingModule.h"
 
+#include <part/Part.h>
+#include <part/View.h>
+#include <part/MapAdaptor.h>
+#include <part/SheetAdaptor.h>
+#include <part/ViewAdaptor.h>
+
 #include "ScriptingFunction.h"
 #include "ScriptingWidgets.h"
 #include "ScriptingReader.h"
@@ -17,17 +23,6 @@
 #include <QPointer>
 #include <QLayout>
 
-#include <part/Part.h>
-#include <part/Doc.h>
-#include <part/View.h>
-#include <interfaces/ViewAdaptor.h>
-#include <Sheet.h>
-#include <interfaces/SheetAdaptor.h>
-#include <Map.h>
-#include <interfaces/MapAdaptor.h>
-
-#include <KoPartAdaptor.h>
-#include <KoApplicationAdaptor.h>
 
 extern "C" {
     SHEETSSCRIPTING_EXPORT QObject* krossmodule() {
@@ -102,9 +97,10 @@ QObject* ScriptingModule::currentSheet()
 QObject* ScriptingModule::sheetByName(const QString& name)
 {
     if (kspreadDoc()->map())
-        foreach(Calligra::Sheets::Sheet* sheet, kspreadDoc()->map()->sheetList()) {
+        for(Calligra::Sheets::SheetBase* sheet : kspreadDoc()->map()->sheetList()) {
         if (sheet->sheetName() == name) {
-            return sheet->findChild< Calligra::Sheets::SheetAdaptor* >(); {
+            Calligra::Sheets::Sheet *fullSheet = dynamic_cast<Calligra::Sheets::Sheet *>(sheet);
+            return fullSheet->findChild< Calligra::Sheets::SheetAdaptor* >(); {
             }
         }
     }
@@ -114,7 +110,7 @@ QObject* ScriptingModule::sheetByName(const QString& name)
 QStringList ScriptingModule::sheetNames()
 {
     QStringList names;
-    foreach(Calligra::Sheets::Sheet* sheet, kspreadDoc()->map()->sheetList()) {
+    for(Calligra::Sheets::SheetBase* sheet : kspreadDoc()->map()->sheetList()) {
         names.append(sheet->sheetName());
     }
     return names;
@@ -138,24 +134,11 @@ QObject* ScriptingModule::function(const QString& name)
 
 QObject* ScriptingModule::createListener(const QString& sheetname, const QString& range)
 {
-    Calligra::Sheets::Sheet* sheet = kspreadDoc()->map()->findSheet(sheetname);
+    Calligra::Sheets::Sheet* sheet = dynamic_cast<Calligra::Sheets::Sheet *>(kspreadDoc()->map()->findSheet(sheetname));
     if (! sheet) return 0;
-    Calligra::Sheets::Region region(range, kspreadDoc()->map(), sheet);
+    Calligra::Sheets::Region region = kspreadDoc()->map()->regionFromName(range, sheet);
     QRect r = region.firstRange();
     return new Calligra::Sheets::ScriptingCellListener(sheet, r.isNull() ? sheet->usedArea() : r);
-}
-
-bool ScriptingModule::fromXML(const QString& xml)
-{
-    KoXmlDocument xmldoc;
-    if (! xmldoc.setContent(xml, true))
-        return false;
-    return kspreadDoc()->loadXML(xmldoc, 0);
-}
-
-QString ScriptingModule::toXML()
-{
-    return kspreadDoc()->saveXML().toString(2);
 }
 
 bool ScriptingModule::openUrl(const QString& url)

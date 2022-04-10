@@ -8,10 +8,7 @@
 #ifndef CALLIGRA_SHEETS_DEFINE_PRINT_RANGE_COMMAND
 #define CALLIGRA_SHEETS_DEFINE_PRINT_RANGE_COMMAND
 
-#include <QRect>
-#include <QString>
-
-#include "commands/AbstractRegionCommand.h"
+#include "ui/commands/AbstractRegionCommand.h"
 
 namespace Calligra
 {

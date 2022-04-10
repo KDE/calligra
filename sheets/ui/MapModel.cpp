@@ -6,10 +6,12 @@
 
 #include "MapModel.h"
 
-#include "Map.h"
-#include "ModelSupport.h"
-#include "Sheet.h"
-#include "SheetModel.h"
+#include "engine/SheetsDebug.h"
+
+#include "core/Map.h"
+#include "core/ModelSupport.h"
+#include "core/Sheet.h"
+#include "core/SheetModel.h"
 
 #include "commands/SheetCommands.h"
 
@@ -22,9 +24,16 @@ class MapModel::Private
 public:
     Map* map;
 
+    Sheet *getSheet(int idx) const;
 public:
     bool isSheetIndex(const QModelIndex& index, const MapModel* mapModel) const;
 };
+
+Sheet *MapModel::Private::getSheet(int idx) const {
+    SheetBase *sb = map->sheet(idx);
+    if (!sb) return nullptr;
+    return dynamic_cast<Sheet *>(sb);
+}
 
 bool MapModel::Private::isSheetIndex(const QModelIndex& index, const MapModel* mapModel) const
 {
@@ -43,8 +52,11 @@ bool MapModel::Private::isSheetIndex(const QModelIndex& index, const MapModel* m
     if (index.parent().row() >= map->count()) {
         return false;
     }
+
+    Sheet *sheet = getSheet(index.parent().row());
+    if (!sheet) return false;
     // The index' (the cell's) model has to match the sheet model.
-    if (index.model() != map->sheet(index.parent().row())->model()) {
+    if (index.model() != sheet->model()) {
         return false;
     }
     return true;
@@ -56,9 +68,9 @@ MapModel::MapModel(Map* map)
         , d(new Private)
 {
     d->map = map;
-    connect(d->map, &Map::sheetAdded,
+    connect(d->map, &MapBase::sheetAdded,
             this, &MapModel::addSheet);
-    connect(d->map, &Map::sheetRemoved,
+    connect(d->map, &MapBase::sheetRemoved,
             this, &MapModel::removeSheet);
 }
 
@@ -74,13 +86,14 @@ QVariant MapModel::data(const QModelIndex &index, int role) const
     }
     // Propagation to sheet model
     if (d->isSheetIndex(index, this)) {
-        return d->map->sheet(index.parent().row())->model()->data(index, role);
+        Sheet *sheet = d->getSheet(index.parent().row());
+        if (!sheet) return QVariant();
+        return sheet->model()->data(index, role);
     }
     if (index.row() >= d->map->count()) {
         return QVariant();
     }
-    //
-    const Sheet* const sheet = d->map->sheet(index.row());
+    Sheet *sheet = d->getSheet(index.row());
     switch (role) {
     case Qt::DisplayRole:
     case Qt::EditRole:
@@ -104,7 +117,8 @@ Qt::ItemFlags MapModel::flags(const QModelIndex &index) const
     }
     // Propagation to sheet model
     if (d->isSheetIndex(index, this)) {
-        return d->map->sheet(index.parent().row())->model()->flags(index);
+        Sheet *sheet = d->getSheet(index.parent().row());
+        return sheet->model()->flags(index);
     }
     if (index.row() >= d->map->count()) {
         return Qt::NoItemFlags;
@@ -113,7 +127,7 @@ Qt::ItemFlags MapModel::flags(const QModelIndex &index) const
     Qt::ItemFlags flags = Qt::ItemIsEnabled;
     if (!d->map->isProtected()) {
         flags |= Qt::ItemIsSelectable;
-        const Sheet* const sheet = d->map->sheet(index.row());
+        Sheet *sheet = d->getSheet(index.row());
         if (!sheet->isProtected()) {
             flags |= Qt::ItemIsEditable;
         }
@@ -146,7 +160,7 @@ QModelIndex MapModel::index(int row, int column, const QModelIndex &parent) cons
         if (parent.row() >= d->map->count()) {
             return QModelIndex();
         }
-        Sheet* const sheet = d->map->sheet(index.parent().row());
+        Sheet *sheet = d->getSheet(index.parent().row());
         index = sheet->model()->index(row, column, parent);
     } else {
         index = createIndex(row, column, d->map);
@@ -166,11 +180,13 @@ bool MapModel::setData(const QModelIndex &index, const QVariant &value, int role
 {
     // Propagation to sheet model
     if (d->isSheetIndex(index, this)) {
-        return d->map->sheet(index.parent().row())->model()->setData(index, value, role);
+        Sheet *sheet = d->getSheet(index.parent().row());
+        if (!sheet) return false;
+        return sheet->model()->setData(index, value, role);
     }
 
     if (index.isValid() && index.row() < d->map->count()) {
-        Sheet* const sheet(d->map->sheet(index.row()));
+        Sheet *sheet = d->getSheet(index.row());
         switch (role) {
         case Qt::EditRole: {
             const QString name(value.toString());
@@ -213,13 +229,13 @@ Map* MapModel::map() const
     return d->map;
 }
 
-void MapModel::addSheet(Sheet* sheet)
+void MapModel::addSheet(SheetBase *sheet)
 {
     debugSheets << "Added sheet:" << sheet->sheetName();
     emit layoutChanged();
 }
 
-void MapModel::removeSheet(Sheet *sheet)
+void MapModel::removeSheet(SheetBase *sheet)
 {
     debugSheets << "Removed sheet:" << sheet->sheetName();
     emit layoutChanged();

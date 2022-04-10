@@ -12,18 +12,17 @@
 // Local
 #include "GotoDialog.h"
 
-// #include <QLabel>
-// #include <QVBoxLayout>
+#include <QLabel>
+#include <QVBoxLayout>
 
-// #include <kcombobox.h>
+#include <kcombobox.h>
+#include <KLocalizedString>
 
-// #include "Cell.h"
-// #include "Localization.h"
-// #include "Map.h"
-// #include "NamedAreaManager.h"
-// #include "ui/Selection.h"
-// #include "Sheet.h"
-// #include "Util.h"
+#include "engine/CellBase.h"
+#include "engine/MapBase.h"
+#include "engine/NamedAreaManager.h"
+#include "../Selection.h"
+#include "core/Sheet.h"
 
 using namespace Calligra::Sheets;
 
@@ -47,9 +46,9 @@ GotoDialog::GotoDialog(QWidget* parent, Selection* selection)
     m_nameCell->setEditable(true);
     lay1->addWidget(m_nameCell);
 
-    const Sheet* sheet = m_selection->activeSheet();
+    Sheet* sheet = m_selection->activeSheet();
     if (sheet && selection) {
-        Cell cell(sheet, selection->cursor());
+        CellBase cell(sheet, selection->cursor());
         m_nameCell->addItem(cell.name());
         m_nameCell->addItem(cell.fullName());
     }
@@ -72,10 +71,11 @@ void GotoDialog::textChanged(const QString &_text)
 void GotoDialog::slotOk()
 {
     QString tmp_upper = m_nameCell->currentText();
-    Region region(tmp_upper, m_selection->activeSheet()->map(), m_selection->activeSheet());
+    Region region = m_selection->activeSheet()->map()->regionFromName(tmp_upper, m_selection->activeSheet());
     if (region.isValid()) {
-        if (region.firstSheet() != m_selection->activeSheet())
-            m_selection->emitVisibleSheetRequested(region.firstSheet());
+        Sheet *firstSheet = dynamic_cast<Sheet *>(region.firstSheet());
+        if (firstSheet != m_selection->activeSheet())
+            m_selection->emitVisibleSheetRequested(firstSheet);
         m_selection->initialize(region);
         accept();
     } else {

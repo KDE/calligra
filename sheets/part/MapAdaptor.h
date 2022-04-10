@@ -12,7 +12,7 @@
 #include <QStringList>
 
 #include <QDBusAbstractAdaptor>
-#include "sheets_common_export.h"
+#include "sheets_part_export.h"
 
 namespace Calligra
 {
@@ -23,7 +23,7 @@ class Map;
 /**
 * The MapAdaptor class provides additional functionality to deal with sheets.
 */
-class CALLIGRA_SHEETS_COMMON_EXPORT MapAdaptor : public QDBusAbstractAdaptor
+class CALLIGRA_SHEETS_PART_EXPORT MapAdaptor : public QDBusAbstractAdaptor
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kde.calligra.spreadsheet.map")

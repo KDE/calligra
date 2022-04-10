@@ -8,8 +8,7 @@
 #ifndef CALLIGRA_SHEETS_FIND_H
 #define CALLIGRA_SHEETS_FIND_H
 
-#include "sheets_common_export.h"
-#include "Cell.h"
+#include "sheets_part_export.h"
 
 #include <KoFindBase.h>
 
@@ -32,7 +31,7 @@ class SheetView;
  * TODO: Support searching through all Sheets in a document.
  * TODO: Search within the displayed text or the user input.
  */
-class CALLIGRA_SHEETS_COMMON_EXPORT Find : public KoFindBase
+class CALLIGRA_SHEETS_PART_EXPORT Find : public KoFindBase
 {
     Q_OBJECT
 public:

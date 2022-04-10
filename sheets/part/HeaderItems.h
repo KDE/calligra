@@ -10,7 +10,7 @@
 #include <QGraphicsWidget>
 #include "Headers.h"
 
-#include "sheets_common_export.h"
+#include "sheets_part_export.h"
 
 
 
@@ -23,7 +23,7 @@ class CanvasItem;
 /**
  * The widget above the cells showing the column headers.
  */
-class CALLIGRA_SHEETS_COMMON_EXPORT ColumnHeaderItem : public QGraphicsWidget, public ColumnHeader
+class CALLIGRA_SHEETS_PART_EXPORT ColumnHeaderItem : public QGraphicsWidget, public ColumnHeader
 {
     Q_OBJECT
 public:
@@ -62,7 +62,7 @@ protected:
 /**
  * The widget left to the cells showing the row headers.
  */
-class CALLIGRA_SHEETS_COMMON_EXPORT RowHeaderItem : public QGraphicsWidget, public RowHeader
+class CALLIGRA_SHEETS_PART_EXPORT RowHeaderItem : public QGraphicsWidget, public RowHeader
 {
     Q_OBJECT
 public:
@@ -102,7 +102,7 @@ protected:
  * The widget in the top left corner of the canvas,
  * responsible for selecting all cells in a sheet.
  */
-class CALLIGRA_SHEETS_COMMON_EXPORT SelectAllButtonItem : public QGraphicsWidget, public SelectAllButton
+class CALLIGRA_SHEETS_PART_EXPORT SelectAllButtonItem : public QGraphicsWidget, public SelectAllButton
 {
     Q_OBJECT
 public:

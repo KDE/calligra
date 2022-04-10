@@ -128,14 +128,7 @@ public:
      * The sheet is not added to the map nor added to the GUI.
      * @return a pointer to a new Sheet
      */
-    Sheet* createSheet(const QString& name = QString());
-
-    /**
-     * Creates a new sheet.
-     * Adds a new sheet to this map.
-     * @return a pointer to the new sheet
-     */
-    Sheet* addNewSheet(const QString& name = QString());
+    virtual SheetBase* createSheet(const QString& name = QString()) override;
 
     QStringList visibleSheets() const;
     QStringList hiddenSheets() const;

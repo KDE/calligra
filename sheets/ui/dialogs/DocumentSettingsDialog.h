@@ -17,7 +17,6 @@
 #include <kpagedialog.h>
 
 class KoVBox;
-class KLocale;
 class QCheckBox;
 class QSpinBox;
 class QComboBox;
@@ -34,6 +33,7 @@ namespace Sheets
 {
 class Selection;
 class CalculationSettings;
+class Localization;
 
 /**
  * \ingroup UI
@@ -68,7 +68,7 @@ protected:
     /**
      * Updates the GUI widgets to match the specified locale.
      */
-    void updateToMatchLocale(KLocale* locale);
+    void updateToMatchLocale(Localization* locale);
 
     QLabel *m_shortDate, *m_time, *m_money, *m_date, *m_language, *m_number;
     QPushButton *m_updateButton;

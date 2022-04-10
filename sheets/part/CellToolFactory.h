@@ -9,7 +9,7 @@
 
 #include <KoToolFactoryBase.h>
 
-#include "sheets_common_export.h"
+#include "sheets_part_export.h"
 
 namespace Calligra
 {
@@ -19,7 +19,7 @@ namespace Sheets
 /**
  * The Factory, that creates a CellTool.
  */
-class CALLIGRA_SHEETS_COMMON_EXPORT CellToolFactory : public KoToolFactoryBase
+class CALLIGRA_SHEETS_PART_EXPORT CellToolFactory : public KoToolFactoryBase
 {
 public:
     explicit CellToolFactory(const QString& id);

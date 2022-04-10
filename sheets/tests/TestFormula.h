@@ -6,7 +6,7 @@
 #define CALLIGRA_SHEETS_TEST_FORMULA
 
 #include <QObject>
-#include <Value.h>
+#include <engine/Value.h>
 
 namespace Calligra
 {

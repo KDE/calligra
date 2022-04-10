@@ -7,7 +7,7 @@
 
 #include "TestKspreadCommon.h"
 
-#include "CalculationSettings.h"
+#include "engine/CalculationSettings.h"
 
 
 void TestValue::testEmpty()

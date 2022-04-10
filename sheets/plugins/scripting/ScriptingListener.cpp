@@ -4,12 +4,12 @@
 
 #include "ScriptingListener.h"
 
-#include <Binding.h>
-#include <BindingModel.h>
-#include <CellStorage.h>
-#include <Sheet.h>
+#include <core/Binding.h>
+#include <core/BindingModel.h>
+#include <core/CellStorage.h>
+#include <core/Sheet.h>
 
-#include <QAbstractItemModel>
+// #include <QAbstractItemModel>
 
 using namespace Calligra::Sheets;
 
@@ -34,7 +34,7 @@ ScriptingCellListener::ScriptingCellListener(Calligra::Sheets::Sheet *sheet, con
     d->sheet = sheet;
     d->cellbinding = new Calligra::Sheets::Binding(Region(area, sheet));
     connect(d->cellbinding->model(), &BindingModel::changed, this, &ScriptingCellListener::slotChanged);
-    sheet->cellStorage()->setBinding(Region(area, sheet), *d->cellbinding);
+    sheet->fullCellStorage()->setBinding(Region(area, sheet), *d->cellbinding);
 }
 
 ScriptingCellListener::~ScriptingCellListener()

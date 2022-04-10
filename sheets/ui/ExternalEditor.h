@@ -10,6 +10,7 @@
 #define CALLIGRA_SHEETS_EXTERNAL_EDITOR
 
 #include <ktextedit.h>
+#include "sheets_ui_export.h"
 
 class QFocusEvent;
 class QKeyEvent;
@@ -21,7 +22,7 @@ namespace Sheets
 {
 class CellToolBase;
 
-class ExternalEditor : public KTextEdit
+class CALLIGRA_SHEETS_UI_EXPORT ExternalEditor : public KTextEdit
 {
     Q_OBJECT
 public:

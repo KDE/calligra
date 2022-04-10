@@ -17,35 +17,23 @@
 // Local
 #include "ConsolidateDialog.h"
 
-//Qt Includes
-// #include <QCheckBox>
-// #include <QGridLayout>
-// #include <QLabel>
-// #include <QPushButton>
-// #include <QListWidget>
-
 // KF5
-// #include <kmessagebox.h>
+#include <kmessagebox.h>
 
-// #include <KoIcon.h>
+#include <KoIcon.h>
 
 // Sheets
-// #include "SheetsDebug.h"
-// #include "calligra_sheets_limits.h"
-// #include <Localization.h>
-// #include <Map.h>
-// #include "ui/Selection.h"
-// #include <Sheet.h>
-// #include <Util.h>
+#include <engine/CellBase.h>
+#include <engine/Formula.h>
+#include <engine/ValueConverter.h>
+#include <core/Map.h>
+#include <core/Sheet.h>
+#include "../Selection.h"
 
-// #include <Formula.h>
-// #include <ValueConverter.h>
-// #include <Cell.h>
+#include "../commands/DataManipulators.h"
 
-// #include "commands/DataManipulators.h"
-
-// #include "ui_ConsolidateWidget.h"
-// #include "ui_ConsolidateDetailsWidget.h"
+#include "ui_ConsolidateWidget.h"
+#include "ui_ConsolidateDetailsWidget.h"
 
 using namespace Calligra::Sheets;
 
@@ -118,7 +106,7 @@ void ConsolidateDialog::accept()
         return;
     }
 
-    Map *const map = d->selection->activeSheet()->map();
+    Map *const map = d->selection->activeSheet()->fullMap();
     ValueConverter *const converter = map->converter();
 
     Sheet *const destinationSheet = d->selection->activeSheet();
@@ -131,7 +119,7 @@ void ConsolidateDialog::accept()
     QList<Region> ranges;
     for (int i = 0; i < d->mainWidget.m_sourceRanges->count(); ++i) {
         const QString address = d->mainWidget.m_sourceRanges->item(i)->text();
-        const Region region(address, map, destinationSheet);
+        const Region region = map->regionFromName(address, destinationSheet);
         if (!region.isValid()) {
             KMessageBox::error(this, i18n("%1 is not a valid cell range." , address));
             return;
@@ -198,7 +186,7 @@ void ConsolidateDialog::accept()
         // Check whether the destination is part of the source ...
         const QRect destinationRange(dx, dy, columns, rows);
         for (int i = 0; i < ranges.count(); ++i) {
-            Sheet *const sheet = ranges[i].firstSheet();
+            SheetBase *const sheet = ranges[i].firstSheet();
             Q_ASSERT(sheet);
             const QRect range = ranges[i].firstRange();
 
@@ -215,10 +203,10 @@ void ConsolidateDialog::accept()
                 bool novalue = true;
                 QString formula = '=' + function + '(';
                 for (int i = 0; i < ranges.count(); ++i) {
-                    Sheet *const sheet = ranges[i].firstSheet();
+                    SheetBase *const sheet = ranges[i].firstSheet();
                     Q_ASSERT(sheet);
                     const QRect range = ranges[i].firstRange();
-                    const Cell cell(sheet, col + range.left(), row + range.top());
+                    const CellBase cell(sheet, col + range.left(), row + range.top());
                     if (!cell.value().isEmpty())
                         novalue = false;
                     if (i != 0) {
@@ -235,13 +223,13 @@ void ConsolidateDialog::accept()
         }
     } else if (desc == D_COL) {
         // Get list of all descriptions in the columns
-        QHash<QString, QList<Cell> > columnHeaderCells;
+        QHash<QString, QList<CellBase> > columnHeaderCells;
         for (int i = 0; i < ranges.count(); ++i) {
-            Sheet *const sheet = ranges[i].firstSheet();
+            SheetBase *const sheet = ranges[i].firstSheet();
             Q_ASSERT(sheet);
             const QRect range = ranges[i].firstRange();
             for (int col = range.left(); col <= range.right() ; ++col) {
-                const Cell cell(sheet, col, range.top());
+                const CellBase cell(sheet, col, range.top());
                 const Value value = cell.value();
                 const QString columnHeader = converter->asString(value).asString();
                 columnHeaderCells[columnHeader].append(cell);
@@ -253,7 +241,7 @@ void ConsolidateDialog::accept()
         // Check whether the destination is part of the source ...
         const QRect destinationRange(dx, dy, columnHeaders.count(), rows);
         for (int i = 0; i < ranges.count(); ++i) {
-            Sheet *const sheet = ranges[i].firstSheet();
+            SheetBase *const sheet = ranges[i].firstSheet();
             Q_ASSERT(sheet);
             const QRect range = ranges[i].firstRange();
             if (sheet == destinationSheet && range.intersects(destinationRange)) {
@@ -269,17 +257,17 @@ void ConsolidateDialog::accept()
             const QString columnHeader = columnHeaders[col];
             d->setContent(destinationSheet, dy, dx + col, columnHeader, command);
 
-            const QList<Cell> cells = columnHeaderCells[columnHeader];
+            const QList<CellBase> cells = columnHeaderCells[columnHeader];
             for (int row = 1; row < rows; ++row) {
                 QString formula = '=' + function + '(';
                 for (int i = 0; i < cells.count(); ++i) {
                     if (i != 0) {
                         formula += ';';
                     }
-                    Sheet *const sheet = cells[i].sheet();
+                    SheetBase *const sheet = cells[i].sheet();
                     const int headerColumn = cells[i].column();
                     const int headerRow = cells[i].row();
-                    const Cell cell(sheet, headerColumn, headerRow + row);
+                    const CellBase cell(sheet, headerColumn, headerRow + row);
                     const bool fullName = sheet != destinationSheet;
                     formula += fullName ? cell.fullName() : cell.name();
                 }
@@ -290,13 +278,13 @@ void ConsolidateDialog::accept()
         }
     } else if (desc == D_ROW) {
         // Get list of all descriptions in the rows
-        QHash<QString, QList<Cell> > rowHeaderCells;
+        QHash<QString, QList<CellBase> > rowHeaderCells;
         for (int i = 0; i < ranges.count(); ++i) {
-            Sheet *const sheet = ranges[i].firstSheet();
+            SheetBase *const sheet = ranges[i].firstSheet();
             Q_ASSERT(sheet);
             const QRect range = ranges[i].firstRange();
             for (int row = range.top(); row <= range.bottom() ; ++row) {
-                const Cell cell(sheet, range.left(), row);
+                const CellBase cell(sheet, range.left(), row);
                 const Value value = cell.value();
                 const QString rowHeader = converter->asString(value).asString();
                 rowHeaderCells[rowHeader].append(cell);
@@ -308,7 +296,7 @@ void ConsolidateDialog::accept()
         // Check whether the destination is part of the source ...
         const QRect destinationRange(dx, dy, columns, rowHeaders.count());
         for (int i = 0; i < ranges.count(); ++i) {
-            Sheet *const sheet = ranges[i].firstSheet();
+            SheetBase *const sheet = ranges[i].firstSheet();
             Q_ASSERT(sheet);
             const QRect range = ranges[i].firstRange();
             if (sheet == destinationSheet && range.intersects(destinationRange)) {
@@ -324,17 +312,17 @@ void ConsolidateDialog::accept()
             const QString rowHeader = rowHeaders[row];
             d->setContent(destinationSheet, dy + row, dx, rowHeader, command);
 
-            const QList<Cell> cells = rowHeaderCells[rowHeader];
+            const QList<CellBase> cells = rowHeaderCells[rowHeader];
             for (int col = 1; col < columns; ++col) {
                 QString formula = '=' + function + '(';
                 for (int i = 0; i < cells.count(); ++i) {
                     if (i != 0) {
                         formula += ';';
                     }
-                    Sheet *const sheet = cells[i].sheet();
+                    SheetBase *const sheet = cells[i].sheet();
                     const int headerColumn = cells[i].column();
                     const int headerRow = cells[i].row();
-                    const Cell cell(sheet, headerColumn + col, headerRow);
+                    const CellBase cell(sheet, headerColumn + col, headerRow);
                     const bool fullName = sheet != destinationSheet;
                     formula += fullName ? cell.fullName() : cell.name();
                 }
@@ -347,11 +335,11 @@ void ConsolidateDialog::accept()
         // Get list of all descriptions in the rows
         QStringList rowHeaders;
         for (int i = 0; i < ranges.count(); ++i) {
-            Sheet *const sheet = ranges[i].firstSheet();
+            SheetBase *const sheet = ranges[i].firstSheet();
             Q_ASSERT(sheet);
             const QRect range = ranges[i].firstRange();
             for (int row = range.top() + 1; row <= range.bottom() ; ++row) {
-                const Value value = Cell(sheet, range.left(), row).value();
+                const Value value = CellBase(sheet, range.left(), row).value();
                 const QString rowHeader = converter->asString(value).asString();
                 if (!rowHeaders.contains(rowHeader)) {
                     rowHeaders.append(rowHeader);
@@ -363,11 +351,11 @@ void ConsolidateDialog::accept()
         // Get list of all descriptions in the columns
         QStringList columnHeaders;
         for (int i = 0; i < ranges.count(); ++i) {
-            Sheet *const sheet = ranges[i].firstSheet();
+            SheetBase *const sheet = ranges[i].firstSheet();
             Q_ASSERT(sheet);
             const QRect range = ranges[i].firstRange();
             for (int col = range.left() + 1; col <= range.right() ; ++col) {
-                const Value value = Cell(sheet, col, range.top()).value();
+                const Value value = CellBase(sheet, col, range.top()).value();
                 const QString columnHeader = converter->asString(value).asString();
                 if (!columnHeaders.contains(columnHeader)) {
                     columnHeaders.append(columnHeader);
@@ -379,7 +367,7 @@ void ConsolidateDialog::accept()
         // Check whether the destination is part of the source ...
         const QRect destinationRange(dx, dy, columnHeaders.count(), rowHeaders.count());
         for (int i = 0; i < ranges.count(); ++i) {
-            Sheet *const sheet = ranges[i].firstSheet();
+            SheetBase *const sheet = ranges[i].firstSheet();
             Q_ASSERT(sheet);
             const QRect range = ranges[i].firstRange();
             if (sheet == destinationSheet && range.intersects(destinationRange)) {
@@ -390,18 +378,18 @@ void ConsolidateDialog::accept()
         }
 
         // Fill the list with all interesting cells
-        QHash<QString /* row */, QHash<QString /* col */, QList<Cell> > > list;
+        QHash<QString /* row */, QHash<QString /* col */, QList<CellBase> > > list;
         for (int i = 0; i < ranges.count(); ++i) {
-            Sheet *const sheet = ranges[i].firstSheet();
+            SheetBase *const sheet = ranges[i].firstSheet();
             Q_ASSERT(sheet);
             const QRect range = ranges[i].firstRange();
             for (int col = range.left() + 1; col <= range.right() ; ++col) {
-                const Value columnValue = Cell(sheet, col, range.top()).value();
+                const Value columnValue = CellBase(sheet, col, range.top()).value();
                 const QString columnHeader = converter->asString(columnValue).asString();
                 for (int row = range.top() + 1; row <= range.bottom() ; ++row) {
-                    const Value rowValue = Cell(sheet, range.left(), row).value();
+                    const Value rowValue = CellBase(sheet, range.left(), row).value();
                     const QString rowHeader = converter->asString(rowValue).asString();
-                    list[rowHeader][columnHeader].append(Cell(sheet, col, row));
+                    list[rowHeader][columnHeader].append(CellBase(sheet, col, row));
                 }
             }
         }
@@ -422,7 +410,7 @@ void ConsolidateDialog::accept()
                 QString formula = '=' + function + '(';
                 const QString rowHeader = rowHeaders[row];
                 const QString columnHeader = columnHeaders[col];
-                const QList<Cell> lst = list[rowHeader][columnHeader];
+                const QList<CellBase> lst = list[rowHeader][columnHeader];
                 for (int i = 0; i < lst.count(); ++i) {
                     if (i != 0) {
                         formula += ';';
@@ -476,7 +464,7 @@ void ConsolidateDialog::slotReturnPressed()
 {
     QString txt = d->mainWidget.m_sourceRange->text();
 
-    const Region r(txt, d->selection->activeSheet()->map());
+    const Region r = d->selection->activeSheet()->map()->regionFromName(txt, d->selection->activeSheet());
     if (!r.isValid()) {
         KMessageBox::error(this, i18n("The range\n%1\n is malformed", txt));
         return;

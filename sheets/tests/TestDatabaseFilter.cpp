@@ -6,7 +6,7 @@
 
 #include "TestDatabaseFilter.h"
 
-#include <sheets/database/Filter.h>
+#include <core/DataFilter.h>
 
 #include <QTest>
 

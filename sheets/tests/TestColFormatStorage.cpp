@@ -9,18 +9,17 @@
 #include <QDebug>
 #include <QTest>
 
-#include "../ColFormatStorage.h"
-#include "../calligra_sheets_limits.h"
-#include "../Map.h"
-#include "../Sheet.h"
-#include "../ColColumnFormat.h"
+#include "core/ColFormatStorage.h"
+#include "engine/calligra_sheets_limits.h"
+#include "core/Map.h"
+#include "core/Sheet.h"
 
 using namespace Calligra::Sheets;
 
 void TestColFormatStorage::initTestCase()
 {
     m_map = new Map();
-    m_sheet = m_map->addNewSheet();
+    m_sheet = dynamic_cast<Sheet *>(m_map->addNewSheet());
 }
 
 void TestColFormatStorage::cleanupTestCase()
@@ -35,7 +34,7 @@ void TestColFormatStorage::testColWidth()
     s.setColWidth(10, 100, 42.0);
 
     for (int col = 1; col < 10000; col++) {
-        QCOMPARE(s.colWidth(col), col >= 10 && col <= 100 ? 42.0 : m_map->defaultColFormat()->width());
+        QCOMPARE(s.colWidth(col), col >= 10 && col <= 100 ? 42.0 : m_map->defaultColumnFormat().width);
     }
     int firstCol, lastCol;
     s.colWidth(5, &lastCol);
@@ -287,7 +286,7 @@ void TestColFormatStorage::testInsertCols()
     s.insertCols(150, 5);
 
     for (int col = 1; col < 10000; col++) {
-        QCOMPARE(s.colWidth(col), col >= 15 && col <= 110 ? 42.0 : m_map->defaultColFormat()->width());
+        QCOMPARE(s.colWidth(col), col >= 15 && col <= 110 ? 42.0 : m_map->defaultColumnFormat().width);
     }
 }
 
@@ -302,7 +301,7 @@ void TestColFormatStorage::testRemoveCols()
     s.removeCols(85, 10);
 
     for (int col = 1; col < 10000; col++) {
-        QCOMPARE(s.colWidth(col), col >= 7 && col < 85 ? 42.0 : m_map->defaultColFormat()->width());
+        QCOMPARE(s.colWidth(col), col >= 7 && col < 85 ? 42.0 : m_map->defaultColumnFormat().width);
     }
 }
 

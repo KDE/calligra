@@ -6,25 +6,20 @@
 
 // Local
 #include "TableTool.h"
+#include "ScreenConversions.h"
 #include "SheetsEditor.h"
+#include "TableShape.h"
+#include "ToolHeaders.h"
 
 #include <QApplication>
+#include <QAction>
 #include <QGridLayout>
 #include <QLabel>
 #include <QPainter>
-#include <QSpinBox>
-#include <QToolBar>
 #include <QPushButton>
-#include <QUrl>
 #include <QMimeDatabase>
 #include <QFileDialog>
-#include <QScrollBar>
-#include <QMarginsF>
-#include <QHBoxLayout>
 #include <QVBoxLayout>
-#include <QFontMetrics>
-#include <QMenu>
-#include <QPainterPath>
 
 #include <kcombobox.h>
 #include <KLocalizedString>
@@ -32,40 +27,14 @@
 
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
-#include <KoSelection.h>
 #include <KoIcon.h>
 #include <KoViewConverter.h>
-#include <KoShapeContainer.h>
-#include <KoShapeContainerDefaultModel.h>
-#include <KoCanvasController.h>
 #include <KoCanvasControllerWidget.h>
-#include <KoDocumentResourceManager.h>
-#include <KoShapeFactoryBase.h>
-#include <KoShapeRegistry.h>
-#include <KoTextShapeData.h>
-#include <KoShapePaintingContext.h>
-#include <KoBorder.h>
-#include <KoShapeAnchor.h>
 
-#include "SheetsDebug.h"
-#include "Cell.h"
-#include "calligra_sheets_limits.h"
-#include "Map.h"
-#include "Selection.h"
-#include "Sheet.h"
-#include "CellView.h"
-#include "Database.h"
-#include "SheetView.h"
-#include "RowColumnFormat.h"
-#include "RowFormatStorage.h"
+#include "core/Map.h"
+#include "core/Sheet.h"
+#include "ui/SheetView.h"
 
-#include "commands/DataManipulators.h"
-
-#include "TableShape.h"
-#include "ToolHeaders.h"
-#include "ScreenConversions.h"
-
-#include <algorithm>
 
 #define TextShapeId "TextShapeID"
 
@@ -587,7 +556,7 @@ void TableTool::slotSelectionChanged(const Region&)
 
 void TableTool::activate(ToolActivation toolActivation, const QSet<KoShape*> &shapes)
 {
-    foreach(KoShape* shape, shapes) {
+    for (KoShape* shape : shapes) {
         d->tableShape = dynamic_cast<TableShape*>(shape);
         if (d->tableShape)
             break;
@@ -685,7 +654,7 @@ int TableTool::maxRow() const
     return KS_rowMax;
 }
 
-SheetView* TableTool::sheetView(const Sheet* sheet) const
+SheetView* TableTool::sheetView(Sheet* sheet) const
 {
     Q_UNUSED(sheet);
     return d->tableShape->sheetView();
@@ -696,7 +665,7 @@ void TableTool::updateSheetsList()
     d->sheetComboBox->blockSignals(true);
     d->sheetComboBox->clear();
     Map *map = d->tableShape->map();
-    foreach(Sheet* sheet, map->sheetList()) {
+    for (SheetBase* sheet : map->sheetList()) {
         if (sheet->isHidden())
             continue;
         d->sheetComboBox->addItem(sheet->sheetName());
@@ -764,7 +733,7 @@ QList<QPointer<QWidget> > TableTool::createOptionWidgets()
         d->sheetComboBox = new KComboBox(d->optionWidget);
         sheetlayout->addWidget(d->sheetComboBox, 1);
         Map *map = d->tableShape->map();
-        foreach(Sheet* s, map->sheetList()) {
+        for (SheetBase *s : map->sheetList()) {
             d->sheetComboBox->addItem(s->sheetName());
             //d->sheetComboBox->setCurrentIndex( d->sheetComboBox->count()-1 );
         }
@@ -817,7 +786,7 @@ void TableTool::slotVerticalScrollBarValueChanged(int value)
 
 void TableTool::scrollToCell(const QPoint &location)
 {
-    const Sheet *sheet = d->tableShape->sheet();
+    Sheet *sheet = d->tableShape->sheet();
     const QRectF bounds(d->tableShape->topLeftOffset(), d->tableShape->size());
     const Cell cell = Cell(sheet, location).masterCell();
 

@@ -10,6 +10,7 @@
 
 #include <QString>
 #include <kundo2command.h>
+#include "../sheets_ui_export.h"
 
 namespace Calligra
 {
@@ -22,7 +23,7 @@ class Sheet;
  * \ingroup Commands
  * \brief Renames a sheet.
  */
-class RenameSheetCommand : public KUndo2Command
+class CALLIGRA_SHEETS_UI_EXPORT RenameSheetCommand : public KUndo2Command
 {
 public:
     RenameSheetCommand(Sheet* sheet, const QString &name);
@@ -41,7 +42,7 @@ protected:
  * \ingroup Commands
  * \brief Hides a sheet.
  */
-class HideSheetCommand : public KUndo2Command
+class CALLIGRA_SHEETS_UI_EXPORT HideSheetCommand : public KUndo2Command
 {
 public:
     explicit HideSheetCommand(Sheet* sheet);
@@ -59,7 +60,7 @@ protected:
  * \ingroup Commands
  * \brief Shows a hidden sheet.
  */
-class ShowSheetCommand : public KUndo2Command
+class CALLIGRA_SHEETS_UI_EXPORT ShowSheetCommand : public KUndo2Command
 {
 public:
     explicit ShowSheetCommand(Sheet* sheet, KUndo2Command* parent = 0);
@@ -77,7 +78,7 @@ protected:
  * \ingroup Commands
  * \brief Adds a sheet.
  */
-class AddSheetCommand : public KUndo2Command
+class CALLIGRA_SHEETS_UI_EXPORT AddSheetCommand : public KUndo2Command
 {
 public:
     explicit AddSheetCommand(Sheet* sheet);
@@ -95,7 +96,7 @@ protected:
  * \ingroup Commands
  * \brief Duplicates a sheet.
  */
-class DuplicateSheetCommand : public KUndo2Command
+class CALLIGRA_SHEETS_UI_EXPORT DuplicateSheetCommand : public KUndo2Command
 {
 public:
     explicit DuplicateSheetCommand();
@@ -116,7 +117,7 @@ protected:
  * \ingroup Commands
  * \brief Removes a sheet.
  */
-class RemoveSheetCommand : public KUndo2Command
+class CALLIGRA_SHEETS_UI_EXPORT RemoveSheetCommand : public KUndo2Command
 {
 public:
     explicit RemoveSheetCommand(Sheet* sheet);
@@ -134,7 +135,7 @@ protected:
  * \ingroup Commands
  * \brief Changes sheet properties.
  */
-class SheetPropertiesCommand : public KUndo2Command
+class CALLIGRA_SHEETS_UI_EXPORT SheetPropertiesCommand : public KUndo2Command
 {
 public:
     explicit SheetPropertiesCommand(Sheet *sheet);

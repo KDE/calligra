@@ -5,20 +5,16 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
+#include "ScreenConversions.h"
+
 // Calligra
 #include <KoUnit.h>
 #include <KoDpi.h>
 
-// KoChart
-#include "ScreenConversions.h"
 
 // Qt
 #include <QPainter>
 #include <QWidget>
-#include <QSize>
-#include <QSizeF>
-#include <QRectF>
-#include <QRect>
 
 using namespace Calligra::Sheets;
 

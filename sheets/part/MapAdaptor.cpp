@@ -12,9 +12,9 @@
 // Local
 #include "MapAdaptor.h"
 
-#include "SheetsDebug.h"
-#include "Map.h"
-#include "Sheet.h"
+#include "engine/SheetsDebug.h"
+#include "core/Map.h"
+#include "core/Sheet.h"
 
 using namespace Calligra::Sheets;
 
@@ -27,24 +27,26 @@ MapAdaptor::MapAdaptor(Map* map)
 
 QString MapAdaptor::sheet(const QString& name)
 {
-    Sheet* t = m_map->findSheet(name);
+    SheetBase* t = m_map->findSheet(name);
     if (!t)
         return QString();
 
-    return t->objectName();
+    Sheet *sheet = dynamic_cast<Sheet *>(t);
+    return sheet ? sheet->objectName() : QString();
 }
 
 QString MapAdaptor::sheetByIndex(int index)
 {
-    Sheet* t = m_map->sheetList().at(index);
+    SheetBase* t = m_map->sheetList().at(index);
     if (!t) {
         debugSheets << "+++++ No table found at index" << index;
         return QString();
     }
 
-    debugSheets << "+++++++ Returning table" << t->QObject::objectName();
-
-    return t->objectName();
+    Sheet *sheet = dynamic_cast<Sheet *>(t);
+    QString res = sheet ? sheet->objectName() : QString();
+    debugSheets << "+++++++ Returning table" << res;
+    return res;
 }
 
 int MapAdaptor::sheetCount() const
@@ -55,7 +57,8 @@ int MapAdaptor::sheetCount() const
 QStringList MapAdaptor::sheetNames() const
 {
     QStringList names;
-    foreach(Sheet* sheet, m_map->sheetList()) {
+    for (SheetBase* bsheet : m_map->sheetList()) {
+        Sheet *sheet = dynamic_cast<Sheet *>(bsheet);
         names.append(sheet->objectName());
     }
     return names;
@@ -64,7 +67,8 @@ QStringList MapAdaptor::sheetNames() const
 QStringList MapAdaptor::sheets()
 {
     QStringList t;
-    foreach(Sheet* sheet, m_map->sheetList()) {
+    for (SheetBase* bsheet : m_map->sheetList()) {
+        Sheet *sheet = dynamic_cast<Sheet *>(bsheet);
         t.append(sheet->objectName());
     }
     return t;
@@ -75,7 +79,7 @@ QString MapAdaptor::insertSheet(const QString& name)
     if (m_map->findSheet(name))
         return sheet(name);
 
-    Sheet* t = m_map->addNewSheet();
+    SheetBase* t = m_map->addNewSheet();
     t->setSheetName(name);
 
     return sheet(name);

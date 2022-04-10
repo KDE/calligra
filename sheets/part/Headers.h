@@ -9,7 +9,7 @@
 
 #include <QWidget>
 
-#include "sheets_common_export.h"
+#include "sheets_part_export.h"
 
 class QLabel;
 class KoPointerEvent;
@@ -24,7 +24,7 @@ class Selection;
 /**
  * Base class for the widget above the cells showing the column headers.
  */
-class CALLIGRA_SHEETS_COMMON_EXPORT ColumnHeader
+class CALLIGRA_SHEETS_PART_EXPORT ColumnHeader
 {
 public:
     explicit ColumnHeader(CanvasBase *_canvas);
@@ -117,7 +117,7 @@ protected:
 /**
  * Base class for the widget left to the cells showing the row headers.
  */
-class CALLIGRA_SHEETS_COMMON_EXPORT RowHeader
+class CALLIGRA_SHEETS_PART_EXPORT RowHeader
 {
 public:
     explicit RowHeader(CanvasBase *_canvas);

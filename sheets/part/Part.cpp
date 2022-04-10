@@ -5,18 +5,17 @@
 */
 
 #include "Part.h"
-
+#include "CanvasItem.h"
+#include "Doc.h"
 #include "Factory.h"
 #include "View.h"
-#include "Doc.h"
-#include "CanvasItem.h"
-#include "Map.h"
-#include "LoadingInfo.h"
+
+#include "core/LoadingInfo.h"
+#include "core/Map.h"
+#include "core/Sheet.h"
 
 #include "ui/Selection.h"
 
-#include <KoCanvasBase.h>
-#include <KoSelection.h>
 #include <KoToolManager.h>
 #include <KoInteractionTool.h>
 #include <KoComponentData.h>
@@ -50,7 +49,9 @@ KoView* Part::createViewInstance(KoDocument *document, QWidget* parent)
     // We need to set the active sheet, otherwise we will break various other bits of the API
     // which expect your view to actually be ready for interaction after being created (e.g.
     // printing)
-    view->setActiveSheet(qobject_cast<Sheets::Doc*>(document)->map()->sheet(0));
+    SheetBase *sheet = qobject_cast<Sheets::Doc*>(document)->map()->sheet(0);
+    Sheet *fullSheet = dynamic_cast<Sheet *>(sheet);
+    view->setActiveSheet(fullSheet);
     return view;
 }
 

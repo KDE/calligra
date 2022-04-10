@@ -10,28 +10,24 @@
 
 #include "ConditionalDialog.h"
 
-// #include "Validity.h"
-
-// #include "Cell.h"
-// #include "Map.h"
-// #include "ui/Selection.h"
-// #include "Sheet.h"
-// #include "StyleManager.h"
-// #include "ValueConverter.h"
-// #include "ValueParser.h"
-// #include "SheetsDebug.h"
+#include "engine/ValueConverter.h"
+#include "engine/ValueParser.h"
+#include "core/Cell.h"
+#include "core/Map.h"
+#include "core/Sheet.h"
+#include "core/StyleManager.h"
+#include "../Selection.h"
 
 // commands
-// #include "commands/ConditionCommand.h"
+#include "../commands/ConditionCommand.h"
 
-// #include <kcombobox.h>
-// #include <klineedit.h>
-// #include <KLocalizedString>
-// #include <kmessagebox.h>
+#include <kcombobox.h>
+#include <klineedit.h>
+#include <kmessagebox.h>
 
-// #include <QGroupBox>
-// #include <QLabel>
-// #include <QGridLayout>
+#include <QGroupBox>
+#include <QLabel>
+#include <QGridLayout>
 
 using namespace Calligra::Sheets;
 
@@ -245,7 +241,7 @@ ConditionalDialog::ConditionalDialog(QWidget* parent, Selection* selection)
     setButtons(KoDialog::Ok | KoDialog::Cancel);
     setCaption(i18n("Conditional Styles"));
 
-    QStringList list(m_selection->activeSheet()->map()->styleManager()->styleNames());
+    QStringList list(m_selection->activeSheet()->fullMap()->styleManager()->styleNames());
 
     m_dlg->m_style_1->insertItems(0, list);
     m_dlg->m_style_2->insertItems(0, list);
@@ -328,7 +324,7 @@ void ConditionalDialog::init(Conditional const & tmp, int numCondition)
     KComboBox * sb  = 0;
     KLineEdit * kl1 = 0;
     KLineEdit * kl2 = 0;
-    Map *const map = m_selection->activeSheet()->map();
+    MapBase *const map = m_selection->activeSheet()->map();
     ValueConverter *const converter = map->converter();
 
     switch (numCondition) {
@@ -489,7 +485,7 @@ bool ConditionalDialog::getCondition(Conditional & newCondition, const KComboBox
     if (newCondition.cond == Validity::None)
         return false;
 
-    Map *const map = m_selection->activeSheet()->map();
+    MapBase *const map = m_selection->activeSheet()->map();
     ValueParser *const parser = map->parser();
 
     newCondition.value1 = parser->parse(edit1->text());

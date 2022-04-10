@@ -11,21 +11,17 @@
 // Local
 #include "AngleDialog.h"
 
-// #include <QLabel>
-// #include <QPushButton>
-// #include <QSpinBox>
-// #include <QVBoxLayout>
+#include <QLabel>
+#include <QSpinBox>
+#include <QVBoxLayout>
 
-// #include <KLocalizedString>
+#include <KoCanvasBase.h>
 
-// #include <KoCanvasBase.h>
+#include "core/Cell.h"
+#include "../Selection.h"
 
-// #include "Cell.h"
-// #include "ui/Selection.h"
-// #include "Sheet.h"
-
-// #include "commands/StyleCommand.h"
-// #include "commands/RowColumnManipulators.h"
+#include "../commands/StyleCommand.h"
+#include "../commands/RowColumnManipulators.h"
 
 using namespace Calligra::Sheets;
 

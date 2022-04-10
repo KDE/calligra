@@ -28,7 +28,7 @@ namespace Sheets
  *             d->xmlGuiClient->plugActionList("go_goto_sheet_actionlist", actions);
  *             in the eventFilter.
  */
-class MapViewModel : public MapModel
+class CALLIGRA_SHEETS_UI_EXPORT MapViewModel : public MapModel
 {
     Q_OBJECT
 public:
@@ -62,12 +62,12 @@ private Q_SLOTS:
     /**
      * Adds \p sheet to the goto sheet actions.
      */
-    void addSheet(Sheet *sheet) override;
+    void addSheet(SheetBase *sheet) override;
 
     /**
      * Removes \p sheet from the goto sheet actions.
      */
-    void removeSheet(Sheet *sheet) override;
+    void removeSheet(SheetBase *sheet) override;
 
     /**
      * Activates the associated sheet of the \p action.

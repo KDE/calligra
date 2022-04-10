@@ -36,6 +36,7 @@ set (calligrasheetscore_LIB_SRCS
     StyleManager.cpp
     CellStorage.cpp
     SheetModel.cpp
+    RegionModel.cpp
     Condition.cpp
     ConditionsStorage.cpp
     RowFormatStorage.cpp

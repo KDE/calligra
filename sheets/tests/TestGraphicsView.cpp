@@ -15,7 +15,7 @@
 #include <part/Part.h>
 #include <part/CanvasItem.h>
 #include <part/HeaderItems.h>
-#include <Sheet.h>
+#include <core/Sheet.h>
 
 int main(int argc, char** argv)
 {

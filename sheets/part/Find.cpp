@@ -7,14 +7,14 @@
 
 #include "Find.h"
 
-#include <QApplication>
-
 #include <KoFindOptionSet.h>
 #include <KoFindOption.h>
 
-#include "Sheet.h"
-#include "Value.h"
-#include "ValueStorage.h"
+#include <KLocalizedString>
+
+#include "engine/ValueStorage.h"
+#include "core/Cell.h"
+#include "core/Sheet.h"
 #include "ui/SheetView.h"
 
 using namespace Calligra::Sheets;

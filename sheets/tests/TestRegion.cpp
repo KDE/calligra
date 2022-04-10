@@ -6,17 +6,17 @@
 
 #include <QTest>
 
-#include "calligra_sheets_limits.h"
-#include "Map.h"
-#include "Region.h"
-#include "Sheet.h"
+#include "engine/calligra_sheets_limits.h"
+#include "engine/MapBase.h"
+#include "engine/Region.h"
+#include "engine/SheetBase.h"
 
 using namespace Calligra::Sheets;
 
 void TestRegion::initTestCase()
 {
-    m_map = new Map(0 /* no Doc*/);
-    Sheet* sheet = m_map->addNewSheet();
+    m_map = new MapBase;
+    SheetBase* sheet = m_map->addNewSheet();
     sheet->setSheetName("Sheet1");
     sheet = m_map->addNewSheet();
     sheet->setSheetName("Sheet2");
@@ -30,41 +30,41 @@ void TestRegion::testComparison()
 {
     Region region1;
     Region region2;
-    region1 = Region("A1");
-    region2 = Region("A1");
+    region1 = m_map->regionFromName("A1");
+    region2 = m_map->regionFromName("A1");
     QVERIFY(region1 == region2);
-    region1 = Region("A1:A5");
-    region2 = Region("A1:A5");
+    region1 = m_map->regionFromName("A1:A5");
+    region2 = m_map->regionFromName("A1:A5");
     QVERIFY(region1 == region2);
-    region1 = Region("A1:A5;B4");
-    region2 = Region("A1:A5;B4");
+    region1 = m_map->regionFromName("A1:A5;B4");
+    region2 = m_map->regionFromName("A1:A5;B4");
     QVERIFY(region1 == region2);
-    region2 = Region("A1");
+    region2 = m_map->regionFromName("A1");
     QVERIFY(region1 != region2);
-    region2 = Region("A1:A5");
+    region2 = m_map->regionFromName("A1:A5");
     QVERIFY(region1 != region2);
 }
 
 void TestRegion::testFixation()
 {
     Region region;
-    region = Region("$A1", m_map, m_map->sheet(0));
+    region = m_map->regionFromName("$A1", m_map->sheet(0));
     QCOMPARE(region.name(), QString("Sheet1!$A1"));
-    region = Region("A$1", m_map, m_map->sheet(0));
+    region = m_map->regionFromName("A$1", m_map->sheet(0));
     QCOMPARE(region.name(), QString("Sheet1!A$1"));
-    region = Region("$A$1", m_map, m_map->sheet(0));
+    region = m_map->regionFromName("$A$1", m_map->sheet(0));
     QCOMPARE(region.name(), QString("Sheet1!$A$1"));
-    region = Region("$A1:B4", m_map, m_map->sheet(0));
+    region = m_map->regionFromName("$A1:B4", m_map->sheet(0));
     QCOMPARE(region.name(), QString("Sheet1!$A1:B4"));
-    region = Region("A$1:B4", m_map, m_map->sheet(0));
+    region = m_map->regionFromName("A$1:B4", m_map->sheet(0));
     QCOMPARE(region.name(), QString("Sheet1!A$1:B4"));
-    region = Region("$A$1:B4", m_map, m_map->sheet(0));
+    region = m_map->regionFromName("$A$1:B4", m_map->sheet(0));
     QCOMPARE(region.name(), QString("Sheet1!$A$1:B4"));
-    region = Region("A1:$B4", m_map, m_map->sheet(0));
+    region = m_map->regionFromName("A1:$B4", m_map->sheet(0));
     QCOMPARE(region.name(), QString("Sheet1!A1:$B4"));
-    region = Region("A1:B$4", m_map, m_map->sheet(0));
+    region = m_map->regionFromName("A1:B$4", m_map->sheet(0));
     QCOMPARE(region.name(), QString("Sheet1!A1:B$4"));
-    region = Region("A1:$B$4", m_map, m_map->sheet(0));
+    region = m_map->regionFromName("A1:$B$4", m_map->sheet(0));
     QCOMPARE(region.name(), QString("Sheet1!A1:$B$4"));
 }
 
@@ -74,35 +74,35 @@ void TestRegion::testSheet()
     region = Region(QPoint(1, 1), m_map->sheet(0));
     QCOMPARE(region.name(), QString("Sheet1!A1"));
     QCOMPARE(region.firstSheet(), m_map->sheet(0));
-    region = Region("A1");
+    region = m_map->regionFromName("A1");
     QCOMPARE(region.name(), QString("A1"));
-    QCOMPARE(region.firstSheet(), (Sheet*)0);
-    region = Region("A1", m_map, m_map->sheet(0));
+    QCOMPARE(region.firstSheet(), nullptr);
+    region = m_map->regionFromName("A1", m_map->sheet(0));
     QCOMPARE(region.name(), QString("Sheet1!A1"));
     QCOMPARE(region.firstSheet(), m_map->sheet(0));
-    region = Region("Sheet1!A1", m_map, m_map->sheet(1));
+    region = m_map->regionFromName("Sheet1!A1", m_map->sheet(1));
     QCOMPARE(region.name(), QString("Sheet1!A1"));
     QCOMPARE(region.firstSheet(), m_map->sheet(0));
-    region = Region("Sheet2!A1", m_map);
+    region = m_map->regionFromName("Sheet2!A1");
     QCOMPARE(region.name(), QString("Sheet2!A1"));
     QCOMPARE(region.firstSheet(), m_map->sheet(1));
-    region = Region("Sheet2!A1", m_map, m_map->sheet(0));
+    region = m_map->regionFromName("Sheet2!A1", m_map->sheet(0));
     QCOMPARE(region.name(), QString("Sheet2!A1"));
     QCOMPARE(region.firstSheet(), m_map->sheet(1));
-    region = Region("Sheet 4!A1", m_map, m_map->sheet(0));
+    region = m_map->regionFromName("Sheet 4!A1", m_map->sheet(0));
     QCOMPARE(region.name(), QString("'Sheet 4'!A1"));
     QCOMPARE(region.firstSheet(), m_map->sheet(3));
-    region = Region("'Sheet 4'!A1", m_map, m_map->sheet(0));
+    region = m_map->regionFromName("'Sheet 4'!A1", m_map->sheet(0));
     QCOMPARE(region.name(), QString("'Sheet 4'!A1"));
     QCOMPARE(region.firstSheet(), m_map->sheet(3));
     // Multiple quotas should be compressed, use-case that
     // was visible in the xls from bug 284325.
-    region = Region("'''Sheet 4'''!A1", m_map, m_map->sheet(0));
+    region = m_map->regionFromName("'''Sheet 4'''!A1", m_map->sheet(0));
     QCOMPARE(region.name(), QString("'Sheet 4'!A1"));
     // invalid calls:
-    region = Region("!A1", m_map, m_map->sheet(0));
+    region = m_map->regionFromName("!A1", m_map->sheet(0));
     QVERIFY(region.isEmpty());
-    region = Region("Sheet99!A1", m_map, m_map->sheet(0));
+    region = m_map->regionFromName("Sheet99!A1", m_map->sheet(0));
     QVERIFY(region.isEmpty());
 }
 
@@ -112,7 +112,7 @@ void TestRegion::testExtrem()
     QVERIFY(region1.isEmpty());
     QVERIFY(!region1.isValid());
 
-    Region region2 = Region("A1:A6553634523563453456356");
+    Region region2 = m_map->regionFromName("A1:A6553634523563453456356");
     QVERIFY(region2.isValid());
 
     Region region3 = Region(QRect(1,1,KS_colMax,KS_rowMax), m_map->sheet(0));

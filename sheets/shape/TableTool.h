@@ -7,7 +7,7 @@
 #ifndef CALLIGRA_SHEETS_TABLE_TOOL
 #define CALLIGRA_SHEETS_TABLE_TOOL
 
-#include "CellToolBase.h"
+#include "ui/CellToolBase.h"
 
 #include <QScrollBar>
 
@@ -63,7 +63,7 @@ protected:
     QPointF canvasOffset() const override;
     int maxCol() const override;
     int maxRow() const override;
-    SheetView* sheetView(const Sheet* sheet) const override;
+    SheetView* sheetView(Sheet* sheet) const override;
 
     double canvasOffsetX() const override;
     double canvasOffsetY() const override;

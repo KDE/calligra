@@ -6,12 +6,12 @@
 
 // Local
 #include "TableToolFactory.h"
+#include "TableTool.h"
+#include "TableShape.h"
 
 #include <KLocalizedString>
 
 #include <KoIcon.h>
-#include "TableShape.h"
-#include "TableTool.h"
 
 using namespace Calligra::Sheets;
 

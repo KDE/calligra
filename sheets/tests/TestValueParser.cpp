@@ -4,16 +4,14 @@
 
 #include "TestValueParser.h"
 
-#include <ValueParser.h>
+#include <engine/ValueParser.h>
 
-#include <CalculationSettings.h>
-#include <Value.h>
+#include <engine/CalculationSettings.h>
+#include <engine/Value.h>
 
-#include <klocale.h>
-
+#include <QStandardPaths>
 #include <QTest>
-
-#include <locale.h>
+#include <KLocalizedString>
 
 using namespace Calligra::Sheets;
 
@@ -49,8 +47,8 @@ void TestValueParser::initTestCase()
     QVERIFY(QFile::copy(QFINDTESTDATA("data/sheets.mo"), m_translationsFile));
 
     // check that translation ok, else lot of tests will fail later
-    *m_calcsettings->locale() = KLocale(locale, locale);
-    QCOMPARE(m_calcsettings->locale()->country(), locale);
+//    *m_calcsettings->locale() = KLocale(locale, locale);
+//    QCOMPARE(m_calcsettings->locale()->country(), locale);
     QString s = ki18n("true").toString(QStringList()<<"nl");
     QVERIFY2(s == QString("xxtruexx"), "Translation failed, check that you have the correct .mo file in the data directory and that it installs correctly");
 }
@@ -96,8 +94,8 @@ void TestValueParser::testTryParseBool()
     QFETCH(bool, expectedOk);
     QFETCH(Value, expected);
 
-    *m_calcsettings->locale() = KLocale(locale, locale);
-    QCOMPARE(m_calcsettings->locale()->country(), locale);
+//    *m_calcsettings->locale() = KLocale(locale, locale);
+//    QCOMPARE(m_calcsettings->locale()->country(), locale);
 
     bool ok;
     Value result = m_parser->tryParseBool(str, &ok);
@@ -144,8 +142,8 @@ void TestValueParser::testTryParseNumber()
     QFETCH(bool, expectedOk);
     QFETCH(Value, expected);
 
-    *m_calcsettings->locale() = KLocale(locale, locale);
-    QCOMPARE(m_calcsettings->locale()->country(), locale);
+//    *m_calcsettings->locale() = KLocale(locale, locale);
+//    QCOMPARE(m_calcsettings->locale()->country(), locale);
 
     bool ok;
     Value result = m_parser->tryParseNumber(str, &ok);
@@ -306,8 +304,8 @@ void TestValueParser::testTryParseDate()
     QFETCH(bool, expectedOk);
     QFETCH(Value, expected);
 
-    *m_calcsettings->locale() = KLocale(locale, locale);
-    QCOMPARE(m_calcsettings->locale()->country(), locale);
+//    *m_calcsettings->locale() = KLocale(locale, locale);
+//    QCOMPARE(m_calcsettings->locale()->country(), locale);
 
     bool ok;
     Value result = m_parser->tryParseDate(str, &ok);
@@ -415,8 +413,8 @@ void TestValueParser::testTryParseTime()
     QFETCH(bool, expectedOk);
     QFETCH(Value, expected);
 
-    *m_calcsettings->locale() = KLocale(locale, locale);
-    QCOMPARE(m_calcsettings->locale()->country(), locale);
+//    *m_calcsettings->locale() = KLocale(locale, locale);
+//    QCOMPARE(m_calcsettings->locale()->country(), locale);
 
     bool ok;
     Value result = m_parser->tryParseTime(str, &ok);
@@ -450,8 +448,8 @@ void TestValueParser::testParse() {
     QFETCH(bool, expectedOk);
     QFETCH(Value, expected);
 
-    *m_calcsettings->locale() = KLocale(locale, locale);
-    QCOMPARE(m_calcsettings->locale()->country(), locale);
+//    *m_calcsettings->locale() = KLocale(locale, locale);
+//    QCOMPARE(m_calcsettings->locale()->country(), locale);
 
     Value result = m_parser->parse(str);
     if (!expectedOk)

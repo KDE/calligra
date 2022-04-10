@@ -12,22 +12,16 @@
 #include "ui_SubtotalWidget.h"
 #include "ui_SubtotalsDetailsWidget.h"
 
-// Qt
-// #include <QCheckBox>
-// #include <QListWidget>
-// #include <QVector>
-
 // KF5
-// #include "SheetsDebug.h"
-// #include <KLocalizedString>
-// #include <kmessagebox.h>
+#include <kmessagebox.h>
 
 // Sheets
-// #include "ui/Selection.h"
-// #include "Sheet.h"
+#include "core/Cell.h"
+#include "core/Sheet.h"
+#include "../Selection.h"
 
 // commands
-// #include "commands/DataManipulators.h"
+#include "../commands/DataManipulators.h"
 
 using namespace Calligra::Sheets;
 
@@ -69,7 +63,7 @@ SubtotalDialog::~SubtotalDialog()
 
 void SubtotalDialog::accept()
 {
-    Sheet *const sheet = d->selection->lastSheet();
+    Sheet *const sheet = dynamic_cast<Sheet *>(d->selection->lastSheet());
     QRect range = d->selection->lastRange();
 
     int numOfCols = range.width();
@@ -184,7 +178,7 @@ void SubtotalDialog::removeSubtotalLines()
 {
     debugSheets << "Removing subtotal lines";
 
-    Sheet *const sheet = d->selection->lastSheet();
+    Sheet *const sheet = dynamic_cast<Sheet *>(d->selection->lastSheet());
     QRect range = d->selection->lastRange();
 
     int r = range.right();
@@ -229,7 +223,7 @@ void SubtotalDialog::removeSubtotalLines()
 
 void SubtotalDialog::fillColumnBoxes()
 {
-    Sheet *const sheet = d->selection->lastSheet();
+    Sheet *const sheet = dynamic_cast<Sheet *>(d->selection->lastSheet());
     const QRect range = d->selection->lastRange();
 
     int r = range.right();
@@ -279,7 +273,7 @@ void SubtotalDialog::fillFunctionBox()
 bool SubtotalDialog::addSubtotal(int mainCol, int column, int row, int topRow,
                                  bool addRow, QString const & text)
 {
-    Sheet *const sheet = d->selection->lastSheet();
+    Sheet *const sheet = dynamic_cast<Sheet *>(d->selection->lastSheet());
     QRect range = d->selection->lastRange();
 
     debugSheets << "Adding subtotal:" << mainCol << "," << column << ", Rows:" << row << "," << topRow

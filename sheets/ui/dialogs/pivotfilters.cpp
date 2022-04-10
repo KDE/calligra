@@ -6,14 +6,12 @@
 
 // Local
 #include "pivotfilters.h"
-// #include "ui_pivotfilters.h"
-// #include "pivotmain.h"
+#include "ui_pivotfilters.h"
+#include "pivotmain.h"
 
-// #include<QtGui>
-// #include<QString>
-
-// #include <sheets/Sheet.h>
-// #include <sheets/ui/Selection.h>
+#include "core/Cell.h"
+#include "core/Sheet.h"
+#include "../Selection.h"
 
 using namespace Calligra::Sheets;
 
@@ -53,7 +51,7 @@ PivotFilters::PivotFilters(QWidget* parent,Selection* selection):
 
 void PivotFilters::selectFields(QComboBox* box)
 {
-      Sheet *const sheet = d->selection->lastSheet();
+      Sheet *const sheet = dynamic_cast<Sheet *>(d->selection->lastSheet());
       const QRect range = d->selection->lastRange();
       
       int r = range.right();

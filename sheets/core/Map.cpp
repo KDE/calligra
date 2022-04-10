@@ -236,7 +236,8 @@ void Map::setDefaultRowHeight(double height)
     d->defaultRowFormat.height = height;
 }
 
-Sheet* Map::createSheet(const QString& name)
+// This fully overrides the base routine.
+SheetBase* Map::createSheet(const QString& name)
 {
     QString sheetName(i18n("Sheet%1", d->tableId++));
     if ( !name.isEmpty() )
@@ -245,13 +246,6 @@ Sheet* Map::createSheet(const QString& name)
     connect(sheet, &Sheet::statusMessage,
             this, &Map::statusMessage);
     return sheet;
-}
-
-Sheet *Map::addNewSheet(const QString& name)
-{
-    Sheet *t = createSheet(name);
-    addSheet(t);
-    return t;
 }
 
 // FIXME cache this for faster operation

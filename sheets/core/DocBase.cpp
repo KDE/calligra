@@ -44,7 +44,6 @@ public:
     static int s_docId;
 
     // document properties
-    bool configLoadFromFile       : 1;
     QStringList spellListIgnoreAll;
     KoDocumentResourceManager *resourceManager;
 };
@@ -75,8 +74,6 @@ DocBase::DocBase(KoPart *part)
 
     // Document Url for FILENAME function and page header/footer.
     d->map->calculationSettings()->setFileName(url().toDisplayString());
-
-    d->configLoadFromFile = false;
 
     documents().append(this);
 }

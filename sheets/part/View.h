@@ -16,17 +16,11 @@
 #ifndef CALLIGRA_SHEETS_VIEW
 #define CALLIGRA_SHEETS_VIEW
 
-#include <QList>
-#include <QPoint>
-#include <QString>
-#include <QStringList>
-#include <QPrinter>
-
-#include <QPointF>
 #include <KoView.h>
 #include <KoZoomMode.h>
-#include <KoPart.h>
-#include "sheets_common_export.h"
+#include "sheets_part_export.h"
+
+#include "engine/ProtectableObject.h"
 
 class QKeyEvent;
 class QScrollBar;
@@ -41,6 +35,7 @@ namespace Sheets
 class Cell;
 class ColumnHeaderWidget;
 class Damage;
+class SheetBase;
 class Sheet;
 class Canvas;
 class Doc;
@@ -71,7 +66,7 @@ class TabBar;
  * KPART_TODO: when we have mdi again, we need to have an equivalent of guiActivateEvent
  *   that sets the initalPosition() and calls calcStatusBarOp().
  */
-class CALLIGRA_SHEETS_COMMON_EXPORT View : public KoView
+class CALLIGRA_SHEETS_PART_EXPORT View : public KoView
 {
     Q_OBJECT
 
@@ -115,7 +110,7 @@ public:
     /**
      * \return the SheetView for \p sheet
      */
-    SheetView* sheetView(const Sheet* sheet) const;
+    SheetView* sheetView(Sheet* sheet) const;
 
     /** Loads the view settings. */
     void initConfig();
@@ -147,12 +142,12 @@ public:
     /**
      * @return marker for @p sheet
      */
-    QPoint markerFromSheet(Sheet* sheet) const;
+    QPoint markerFromSheet(SheetBase* sheet) const;
 
     /**
      * @return scroll offset for @p sheet
      */
-    QPointF offsetFromSheet(Sheet* sheet) const;
+    QPointF offsetFromSheet(SheetBase* sheet) const;
 
     /**
      * Save current sheet selection.
@@ -177,7 +172,7 @@ public:
      * \param title the window title
      * \return \c true on success; \c false on failure
      */
-    bool showPasswordDialog(ProtectableObject *obj, Mode mode, const QString& title);
+    bool showPasswordDialog(ProtectableObject *obj, ProtectableObject::Mode mode, const QString& title);
 
 
 public Q_SLOTS:
@@ -392,10 +387,10 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     /** Adds \p sheet to the displayed sheets. */
-    void addSheet(Sheet *sheet);
+    void addSheet(SheetBase *sheet);
 
     /** Removes \p sheet from the displayed sheets. */
-    void removeSheet(Sheet* sheet);
+    void removeSheet(SheetBase* sheet);
 
     /** Called if a Sheet-instance is deleted to proper clean-up internal pointers. */
     void sheetDestroyed(QObject* obj);

@@ -13,6 +13,8 @@
 #include <ktextedit.h>
 #include <kactioncollection.h>
 
+#include <kundo2command.h>
+
 #include <Formula.h>
 #include <Cell.h>
 #include <part/Doc.h>
@@ -93,6 +95,9 @@ void Solver::optimize()
     if (!formulaCell.isFormula())
         return;
 
+    KUndo2Command *cmd = new KUndo2Command(kundo2_i18n("Optimize"));
+    sheet->fullCellStorage()->startUndoRecording();
+
     debugSheets << formulaCell.userInput();
     s_formula = new Formula(sheet);
     if (d->dialog->minimizeButton->isChecked()) {
@@ -168,6 +173,8 @@ void Solver::optimize()
         printf("f() = %7.3f size = %.3f\n", minimizer->fval, size);
     } while (status == GSL_CONTINUE && iteration < maxIterations);
 
+    sheet->fullCellStorage()->stopUndoRecording (cmd);
+    d->view->selection()->canvas()->addCommand (cmd);
 
     // free allocated memory
     gsl_vector_free(x);

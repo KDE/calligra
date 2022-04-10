@@ -10,18 +10,14 @@
 #include "ui_ChartDatabaseSelector.h"
 
 #include "KoCanvasResourceIdentities.h"
-#include "KoCanvasResourceManager.h"
 #include "KoShape.h"
 
 #include "KoChartInterface.h"
 
-#include "Binding.h"
-#include "CellStorage.h"
-#include "Region.h"
+#include "core/Map.h"
+#include "core/Sheet.h"
+#include "core/SheetAccessModel.h"
 #include "ui/Selection.h"
-#include "Sheet.h"
-#include "DocBase.h"
-#include "SheetAccessModel.h"
 #include "odf/SheetsOdf.h"
 
 using namespace Calligra::Sheets;
@@ -64,11 +60,11 @@ void ChartDatabaseSelector::open(KoShape* shape)
 void ChartDatabaseSelector::save()
 {
     Sheet *sheet = d->selection->activeSheet();
-    const Region selectedRegion(d->widget.m_cellRegion->text(), d->map, sheet);
+    const Region selectedRegion = d->map->regionFromName(d->widget.m_cellRegion->text(), sheet);
     if(!selectedRegion.isValid())
         return;
 
-    d->shape->setSheetAccessModel(sheet->doc()->sheetAccessModel());
+    d->shape->setSheetAccessModel(sheet->fullMap()->sheetAccessModel());
     d->shape->reset(Odf::saveRegion(selectedRegion.name()),
                     d->widget.m_firstRowAsLabel->isChecked(),
                     d->widget.m_firstColumnAsLabel->isChecked(),

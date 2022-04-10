@@ -20,7 +20,7 @@ namespace Sheets
  * \ingroup Commands
  * \brief Manipulates the style of a cell region.
  */
-class StyleCommand : public AbstractRegionCommand
+class CALLIGRA_SHEETS_UI_EXPORT StyleCommand : public AbstractRegionCommand
 {
 public:
     explicit StyleCommand(KUndo2Command *parent = 0);

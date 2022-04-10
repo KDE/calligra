@@ -8,13 +8,11 @@
 
 #include "TableShape.h"
 
-#include <Sheet.h>
+#include <core/Sheet.h>
 
 #include <KoShapeContainer.h>
-#include <KoTextDocumentLayout.h>
-#include <KoTextShapeData.h>
 
-#include <QList>
+#include <QRect>
 
 using namespace Calligra::Sheets;
 

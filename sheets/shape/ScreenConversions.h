@@ -16,6 +16,9 @@ class QSize;
 class QSizeF;
 class QRect;
 class QRectF;
+class QWidget;
+
+#include <Qt>
 
 namespace Calligra
 {

@@ -5,19 +5,15 @@
 #ifndef SCRIPTINGWRITER_H
 #define SCRIPTINGWRITER_H
 
+// These need to be here as the MOC references this file.
+//
 #include "ScriptingModule.h"
 
-#include <QString>
-#include <QObject>
-
-#include <KLocalizedString>
-
+#include <engine/Region.h>
+#include <core/Cell.h>
+#include <core/Sheet.h>
+#include <core/Map.h>
 #include <part/Doc.h>
-#include <Sheet.h>
-#include <Map.h>
-#include <Region.h>
-#include <Cell.h>
-#include <Value.h>
 
 /**
 * The ScriptingWriter class provides abstract high-level functionality to write
@@ -84,7 +80,7 @@ public Q_SLOTS:
     * is returned.
     */
     bool setSheet(const QString& sheetname) {
-        Calligra::Sheets::Sheet* s = m_module->kspreadDoc()->map()->findSheet(sheetname);
+        Calligra::Sheets::Sheet* s = dynamic_cast<Calligra::Sheets::Sheet *>(m_module->kspreadDoc()->map()->findSheet(sheetname));
         if (! s) return false;
         clearAll();
         m_sheet = s;
@@ -108,7 +104,7 @@ public Q_SLOTS:
     */
     bool setCell(const QString& cellname) {
         if (! m_sheet) return false;
-        const Calligra::Sheets::Region region(cellname, m_sheet->doc()->map(), m_sheet);
+        const Calligra::Sheets::Region region = m_sheet->doc()->map()->regionFromName(cellname, m_sheet);
         if (region.firstRange().isNull()) return false;
         QPoint point = region.firstRange().topLeft();
         m_column = point.x();
@@ -194,7 +190,7 @@ public Q_SLOTS:
             case QVariant::Invalid:     v = Calligra::Sheets::Value(); break;
             case QVariant::Bool:        v = Calligra::Sheets::Value(value.toBool()); break;
             case QVariant::Int:         v = Calligra::Sheets::Value(value.toInt()); break;
-            case QVariant::ULongLong:   v = Calligra::Sheets::Value(value.toLongLong()); break;
+            case QVariant::ULongLong:   v = Calligra::Sheets::Value((int64_t)value.toLongLong()); break;
             case QVariant::Double:      v = Calligra::Sheets::Value(value.toDouble()); break;
             case QVariant::String:      v = Calligra::Sheets::Value(value.toString()); break;
             case QVariant::Date:        v = Calligra::Sheets::Value(value.toDate(), settings); break;

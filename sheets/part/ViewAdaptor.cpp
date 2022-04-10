@@ -14,21 +14,15 @@
 
 // Local
 #include "ViewAdaptor.h"
+#include "View.h"
+#include "Doc.h"
 
-#include "part/Doc.h"
-#include "Map.h"
+#include "core/Map.h"
+#include "core/Sheet.h"
 #include "ui/Selection.h"
-#include "Sheet.h"
-#include "part/View.h"
-#include "part/Canvas.h"
-#include "MapAdaptor.h"
 
-// commands
-#include "commands/BorderColorCommand.h"
-#include "commands/CommentCommand.h"
-#include "commands/StyleCommand.h"
-
-#include <KoSelection.h>
+#include "ui/commands/CommentCommand.h"
+#include "ui/commands/StyleCommand.h"
 
 using namespace Calligra::Sheets;
 
@@ -139,11 +133,12 @@ void ViewAdaptor::nextSheet()
 
 bool ViewAdaptor::showSheet(const QString& sheetName)
 {
-    Sheet *const sheet = m_view->doc()->map()->findSheet(sheetName);
-    if (!sheet) {
+    SheetBase *const bsheet = m_view->doc()->map()->findSheet(sheetName);
+    if (!bsheet) {
         debugSheets << "Unknown sheet" << sheetName;
         return false;
     }
+    Sheet *sheet = dynamic_cast<Sheet *>(bsheet);
     m_view->selection()->emitCloseEditor(true); // save changes
     m_view->setActiveSheet(sheet);
     return true;

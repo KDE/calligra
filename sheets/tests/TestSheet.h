@@ -13,7 +13,7 @@ namespace Calligra
 namespace Sheets
 {
 
-class Doc;
+class Map;
 class Sheet;
 
 class SheetTest : public QObject
@@ -34,8 +34,8 @@ private Q_SLOTS:
 //    void testCompareRows();
 
 private:
+    Map *m_map;
     Sheet* m_sheet;
-    Doc* m_doc;
 };
 
 } // namespace Sheets

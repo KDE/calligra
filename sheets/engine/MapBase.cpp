@@ -22,6 +22,7 @@
 #include "ValueParser.h"
 
 #include <QTimer>
+#include <KLocalizedString>
 
 using namespace Calligra::Sheets;
 
@@ -30,6 +31,7 @@ class Q_DECL_HIDDEN MapBase::Private
 public:
 
     bool isLoading;
+    int tableId;
     /**
      * List of all sheets in this map.
      */
@@ -57,6 +59,7 @@ MapBase::MapBase() :
 {
     d->isLoading = false;
 
+    d->tableId = 1;
     d->dependencyManager = new DependencyManager(this);
     d->namedAreaManager = new NamedAreaManager(this);
     d->recalcManager = new RecalcManager(this);
@@ -176,6 +179,24 @@ SheetBase * MapBase::previousSheet(SheetBase *currentSheet) const
         prev = sheet;
     }
     return nullptr;
+}
+
+SheetBase* MapBase::createSheet(const QString& name)
+{
+    QString sheetName(i18n("Sheet%1", d->tableId++));
+    if ( !name.isEmpty() )
+        sheetName = name;
+    SheetBase* sheet = new SheetBase(this, sheetName);
+    return sheet;
+}
+
+
+
+SheetBase *MapBase::addNewSheet(const QString& name)
+{
+    SheetBase *t = createSheet(name);
+    addSheet(t);
+    return t;
 }
 
 void MapBase::addSheet(SheetBase *_sheet)

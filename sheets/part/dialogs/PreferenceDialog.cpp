@@ -14,40 +14,26 @@
 
 // Local
 #include "PreferenceDialog.h"
+#include "../Doc.h"
+#include "../Factory.h"
+#include "../View.h"
 
-#include <KoIcon.h>
-
-#include <QCheckBox>
-#include <QGridLayout>
-#include <QGroupBox>
-#include <QLabel>
-#include <QScrollBar>
 #include <QPushButton>
 
 #include <KConfigGroup>
-#include <kcombobox.h>
-#include <kconfig.h>
-#include <KCompletion>
-
 #include <KPluginMetaData>
 #include <KPluginInfo>
 #include <KPluginSelector>
-#include <ksharedconfig.h>
 #include <sonnet/configwidget.h>
 
 #include <KoConfigAuthorPage.h>
+#include <KoIcon.h>
 #include <KoUnit.h>
 #include <KoComponentData.h>
 
-#include "ApplicationSettings.h"
-#include "CalculationSettings.h"
-#include "part/Doc.h"
-#include "part/Factory.h"
-#include "FunctionModuleRegistry.h"
-#include "Localization.h"
-#include "Map.h"
-#include "Sheet.h"
-#include "part/View.h"
+#include "engine/FunctionModuleRegistry.h"
+#include "core/ApplicationSettings.h"
+#include "core/Map.h"
 
 #include "ui_FileOptionsWidget.h"
 #include "ui_InterfaceOptionsWidget.h"
@@ -103,23 +89,24 @@ void PreferenceDialog::Private::applyInterfaceOptions()
 {
     KSharedConfigPtr config = Factory::global().config();
     KConfigGroup parameterGroup = config->group("Parameters");
+    ApplicationSettings *sett = view->doc()->map()->applicationSettings();
 
-    oldCursorMovement = view->doc()->map()->settings()->moveToValue();
-    oldFunction = view->doc()->map()->settings()->getTypeOfCalc();
+    oldCursorMovement = sett->moveToValue();
+    oldFunction = sett->getTypeOfCalc();
     oldUnit = view->doc()->unit();
 
     const int cursorMovementIndex = interfaceOptions.m_cursorMovement->currentIndex();
     const MoveTo cursorMovement = (MoveTo)interfaceOptions.m_cursorMovement->itemData(cursorMovementIndex).toInt();
-    if (cursorMovement != view->doc()->map()->settings()->moveToValue()) {
-        view->doc()->map()->settings()->setMoveToValue(cursorMovement);
+    if (cursorMovement != sett->moveToValue()) {
+        sett->setMoveToValue(cursorMovement);
         parameterGroup.writeEntry("Move", (int)cursorMovement);
         oldCursorMovement = cursorMovement;
     }
 
     const int functionIndex = interfaceOptions.m_statusBarFunction->currentIndex();
     const MethodOfCalc function = (MethodOfCalc)interfaceOptions.m_statusBarFunction->itemData(functionIndex).toInt();
-    if (function != view->doc()->map()->settings()->getTypeOfCalc()) {
-        view->doc()->map()->settings()->setTypeOfCalc(function);
+    if (function != sett->getTypeOfCalc()) {
+        sett->setTypeOfCalc(function);
         parameterGroup.writeEntry("Method of Calc", (int)function);
         view->calcStatusBarOp();
         view->initCalcMenu();
@@ -136,22 +123,22 @@ void PreferenceDialog::Private::applyInterfaceOptions()
     }
 
     const double value = interfaceOptions.m_indentationStep->value();
-    if (value != view->doc()->map()->settings()->indentValue()) {
-        view->doc()->map()->settings()->setIndentValue(value);
+    if (value != sett->indentValue()) {
+        sett->setIndentValue(value);
         parameterGroup.writeEntry("Indent", unit.fromUserValue(value));
         oldIndentationStep = value;
     }
 
     const QColor gridColor = interfaceOptions.m_gridColor->color();
-    if (gridColor != view->doc()->map()->settings()->gridColor()) {
-        view->doc()->map()->settings()->setGridColor(gridColor);
+    if (gridColor != sett->gridColor()) {
+        sett->setGridColor(gridColor);
         config->group("KSpread Color").writeEntry("GridColor", gridColor);
         oldGridColor = gridColor;
     }
 
     const QColor pageOutlineColor = interfaceOptions.m_pageOutlineColor->color();
-    if (pageOutlineColor != view->doc()->map()->settings()->pageOutlineColor()) {
-        view->doc()->map()->settings()->changePageOutlineColor(pageOutlineColor);
+    if (pageOutlineColor != sett->pageOutlineColor()) {
+        sett->changePageOutlineColor(pageOutlineColor);
         config->group("KSpread Color").writeEntry("PageOutlineColor", pageOutlineColor);
         oldPageOutlineColor = pageOutlineColor;
     }
@@ -176,9 +163,8 @@ void PreferenceDialog::Private::applyInterfaceOptions()
         break;
     }
 
-
     if (comboChanged) {
-        view->doc()->map()->settings()->setCompletionMode(tmpCompletion);
+        sett->setCompletionMode(tmpCompletion);
         parameterGroup.writeEntry("Completion Mode", (int)tmpCompletion);
     }
 #endif
@@ -202,10 +188,11 @@ void PreferenceDialog::Private::resetInterfaceOptions()
     KSharedConfigPtr config = Factory::global().config();
     const KConfigGroup parameterGroup = config->group("Parameters");
 
-    oldCursorMovement = view->doc()->map()->settings()->moveToValue();
-    oldFunction = view->doc()->map()->settings()->getTypeOfCalc();
+    ApplicationSettings *sett = view->doc()->map()->applicationSettings();
+    oldCursorMovement = sett->moveToValue();
+    oldFunction = sett->getTypeOfCalc();
     oldUnit = view->doc()->unit();
-    oldIndentationStep = view->doc()->map()->settings()->indentValue();
+    oldIndentationStep = sett->indentValue();
 
     const KConfigGroup colorGroup = config->group("KSpread Color");
     oldGridColor = colorGroup.readEntry("GridColor", QColor(Qt::lightGray));

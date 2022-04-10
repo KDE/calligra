@@ -6,7 +6,7 @@
 #define SCRIPTINGLISTENER_H
 
 #include <QRect>
-#include <QVariant>
+#include <QVariantList>
 #include <QObject>
 
 namespace Calligra

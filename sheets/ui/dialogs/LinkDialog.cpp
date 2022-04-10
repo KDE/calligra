@@ -11,27 +11,26 @@
 
 #include "LinkDialog.h"
 
-// #include "Cell.h"
-// #include "Map.h"
-// #include "NamedAreaManager.h"
-// #include "ui/Selection.h"
-// #include "Sheet.h"
+#include "engine/CellBase.h"
+#include "engine/MapBase.h"
+#include "engine/NamedAreaManager.h"
+#include "core/Sheet.h"
+#include "../Selection.h"
 
-// #include <KoIcon.h>
+#include <KoIcon.h>
 
-// #include <QLabel>
-// #include <QUrl>
-// #include <QUrlQuery>
-// #include <QVBoxLayout>
+#include <QLabel>
+#include <QUrlQuery>
+#include <QVBoxLayout>
 
-// #include <kcombobox.h>
-// #include <kdesktopfile.h>
-// #include <klineedit.h>
-// #include <kmessagebox.h>
-// #include <KLocalizedString>
-// #include <krecentdocument.h>
-// #include <kurlrequester.h>
-// #include <kurlcompletion.h>
+#include <kcombobox.h>
+#include <kdesktopfile.h>
+#include <klineedit.h>
+#include <kmessagebox.h>
+#include <KLocalizedString>
+#include <krecentdocument.h>
+#include <kurlrequester.h>
+#include <kurlcompletion.h>
 
 using namespace Calligra::Sheets;
 
@@ -148,9 +147,9 @@ LinkDialog::LinkDialog(QWidget* parent, Selection* selection)
     d->cellLink = new KComboBox(d->cellPage);
     d->cellLink->setEditable(true);
 
-    const Sheet *sheet = selection->activeSheet();
+    Sheet *sheet = selection->activeSheet();
     if (sheet && selection) {
-        Cell cell(sheet, selection->cursor());
+        CellBase cell(sheet, selection->cursor());
         d->cellLink->addItem(cell.fullName());
     }
 

@@ -6,13 +6,13 @@
 
 #include "ToolRegistry.h"
 
-#include "CellTool.h"
 #include "CellToolFactory.h"
+
+#include <engine/SheetsDebug.h>
 
 #include <KSharedConfig>
 #include <KConfigGroup>
 #include <KPluginFactory>
-#include <QGlobalStatic>
 
 #include <KoPluginLoader.h>
 #include <KoToolRegistry.h>

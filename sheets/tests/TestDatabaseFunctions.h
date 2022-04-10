@@ -7,13 +7,13 @@
 
 #include <QObject>
 
-#include <Value.h>
+#include <engine/Value.h>
 
 namespace Calligra
 {
 namespace Sheets
 {
-class Map;
+class MapBase;
 
 class TestDatabaseFunctions: public QObject
 {
@@ -38,7 +38,7 @@ private Q_SLOTS:
 private:
     Value evaluate(const QString&, Value& ex);
 
-    Map* m_map;
+    MapBase* m_map;
 };
 
 } // namespace Sheets

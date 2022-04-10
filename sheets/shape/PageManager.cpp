@@ -6,11 +6,13 @@
 
 #include "PageManager.h"
 
-#include "PrintSettings.h"
-#include "Region.h"
-#include "RowColumnFormat.h"
-#include "RowFormatStorage.h"
-#include "Sheet.h"
+#include "engine/Region.h"
+#include "core/ColFormatStorage.h"
+#include "core/PrintSettings.h"
+#include "core/RowFormatStorage.h"
+#include "core/Sheet.h"
+
+#include <QList>
 
 using namespace Calligra::Sheets;
 
@@ -75,10 +77,10 @@ void PageManager::layoutPages()
                 // 2. iterate over the columns and create the pages
                 for (int col = printRange.left(); col < printRange.right(); ++col) {
                     columns++;
-                    width += sheet->columnFormat(col)->visibleWidth();
+                    width += sheet->columnFormats()->visibleWidth(col);
 
                     // Does the next column fit too?
-                    if (width + sheet->columnFormat(col + 1)->visibleWidth() <= size(pageNumber).width())
+                    if (width + sheet->columnFormats()->visibleWidth(col + 1) <= size(pageNumber).width())
                         continue;
 
 //                     debugSheets << "col" << col << "columns" << columns << "width" << width;
@@ -124,12 +126,12 @@ void PageManager::layoutPages()
             double width = 0.0;
             for (int col = printRange.left(); col <= printRange.right(); ++col) {
                 columns++;
-                width += sheet->columnFormat(col)->visibleWidth();
+                width += sheet->columnFormats()->visibleWidth(col);
 
                 // 1. find the number of columns per page
                 if (col == printRange.right()) // always iterate over the last 'page column'
                     ;
-                else if (width + sheet->columnFormat(col + 1)->visibleWidth() <= size(pageNumber).width())
+                else if (width + sheet->columnFormats()->visibleWidth(col + 1) <= size(pageNumber).width())
                     continue;
 
 //                 debugSheets << "1. done: col" << col << "columns" << columns << "width" << width;

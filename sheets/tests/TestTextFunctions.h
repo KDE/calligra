@@ -7,7 +7,7 @@
 
 #include <QObject>
 
-#include <Value.h>
+#include <engine/Value.h>
 
 namespace Calligra
 {

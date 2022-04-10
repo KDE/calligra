@@ -6,9 +6,8 @@
 
 #include "BenchmarkPointStorage.h"
 
-#include "calligra_sheets_limits.h"
-
-#include "PointStorage.h"
+#include "engine/calligra_sheets_limits.h"
+#include "engine/PointStorage.h"
 
 #include <QTest>
 #include <QUuid>

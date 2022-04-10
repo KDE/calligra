@@ -7,9 +7,9 @@
 #ifndef CALLIGRA_SHEETS_CELL_TOOL
 #define CALLIGRA_SHEETS_CELL_TOOL
 
-#include <sheets/ui/CellToolBase.h>
+#include <ui/CellToolBase.h>
 
-#include "sheets_common_export.h"
+#include "sheets_part_export.h"
 
 namespace Calligra
 {
@@ -19,7 +19,7 @@ namespace Sheets
 /**
  * The tool to change cell ranges.
  */
-class CALLIGRA_SHEETS_COMMON_EXPORT CellTool : public CellToolBase
+class CALLIGRA_SHEETS_PART_EXPORT CellTool : public CellToolBase
 {
     Q_OBJECT
 
@@ -39,7 +39,7 @@ protected:
     QPointF canvasOffset() const override;
     int maxCol() const override;
     int maxRow() const override;
-    SheetView* sheetView(const Sheet* sheet) const override;
+    SheetView* sheetView(Sheet* sheet) const override;
 
 protected Q_SLOTS:
     // -- misc actions --

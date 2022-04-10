@@ -23,7 +23,7 @@ namespace Sheets
  * \ingroup Commands
  * \brief Deletes cell contents and column/row styles.
  */
-class DeleteCommand : public AbstractDataManipulator
+class CALLIGRA_SHEETS_UI_EXPORT DeleteCommand : public AbstractDataManipulator
 {
 public:
     /**

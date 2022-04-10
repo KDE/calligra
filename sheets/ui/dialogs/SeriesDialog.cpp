@@ -13,21 +13,19 @@
 
 #include "SeriesDialog.h"
 
-// #include "ui/Selection.h"
-// #include "Sheet.h"
+#include "../ui/Selection.h"
 
-// #include "commands/DataManipulators.h"
+#include "../commands/DataManipulators.h"
 
-// #include <kmessagebox.h>
-// #include <KLocalizedString>
+#include <kmessagebox.h>
+#include <KLocalizedString>
 
-// #include <QGroupBox>
-// #include <QHBoxLayout>
-// #include <QGridLayout>
-// #include <QLabel>
-// #include <QRadioButton>
-// #include <QCheckBox>
-// #include <QDoubleSpinBox>
+#include <QGroupBox>
+#include <QHBoxLayout>
+#include <QGridLayout>
+#include <QLabel>
+#include <QRadioButton>
+#include <QDoubleSpinBox>
 
 using namespace Calligra::Sheets;
 

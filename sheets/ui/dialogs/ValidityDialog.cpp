@@ -12,29 +12,25 @@
 // Local
 #include "ValidityDialog.h"
 
-// #include <QIntValidator>
-// #include <QDoubleValidator>
-// #include <QCheckBox>
-// #include <QPushButton>
-// #include <QLabel>
-// #include <QGridLayout>
-// #include <QFrame>
+#include <QCheckBox>
+#include <QLabel>
+#include <QGridLayout>
+#include <QPushButton>
 
-// #include <kcombobox.h>
-// #include "SheetsDebug.h"
-// #include <klineedit.h>
-// #include <kmessagebox.h>
-// #include <ktextedit.h>
+#include <kcombobox.h>
+#include <klineedit.h>
+#include <kmessagebox.h>
+#include <ktextedit.h>
 
-// #include "CalculationSettings.h"
-// #include "Localization.h"
-// #include "Map.h"
-// #include "ui/Selection.h"
-// #include "Sheet.h"
-// #include "ValueParser.h"
+#include "engine/MapBase.h"
+#include "engine/ValueParser.h"
+#include "engine/CalculationSettings.h"
+#include "engine/Localization.h"
+#include "core/Cell.h"
+#include "core/Sheet.h"
 
-// commands
-// #include "commands/ValidityCommand.h"
+#include "../Selection.h"
+#include "../commands/ValidityCommand.h"
 
 using namespace Calligra::Sheets;
 
@@ -375,9 +371,9 @@ void ValidityDialog::changeIndexCond(int _index)
 
 void ValidityDialog::init()
 {
-    const Map *const map = m_selection->activeSheet()->map();
+    const MapBase *const map = m_selection->activeSheet()->map();
     const CalculationSettings *settings = map->calculationSettings();
-    const KLocale* locale = settings->locale();
+    const Localization* locale = settings->locale();
     Validity validity = Cell(m_selection->activeSheet(), m_selection->marker()).validity();
     if (!validity.isEmpty()) {
         message->setPlainText(validity.message());
@@ -410,9 +406,9 @@ void ValidityDialog::init()
             break;
         case Validity::Date:
             chooseType->setCurrentIndex(4);
-            val_min->setText(locale->formatDate(validity.minimumValue().asDate(settings), KLocale::ShortDate));
+            val_min->setText(locale->formatDate(validity.minimumValue().asDate(settings), false));
             if (validity.condition() >= 5)
-                val_max->setText(locale->formatDate(validity.maximumValue().asDate(settings), KLocale::ShortDate));
+                val_max->setText(locale->formatDate(validity.maximumValue().asDate(settings), false));
             break;
         case Validity::Time:
             chooseType->setCurrentIndex(5);
@@ -467,7 +463,7 @@ void ValidityDialog::clearAllPressed()
 
 void ValidityDialog::OkPressed()
 {
-    const KLocale* locale = m_selection->activeSheet()->map()->calculationSettings()->locale();
+    const Localization* locale = m_selection->activeSheet()->map()->calculationSettings()->locale();
     const ValueParser *const parser = m_selection->activeSheet()->map()->parser();
     Validity validity;
     if (chooseType->currentIndex() == 1) {
@@ -499,23 +495,29 @@ void ValidityDialog::OkPressed()
             return;
         }
     } else  if (chooseType->currentIndex() == 5) {
-        if (!locale->readTime(val_min->text()).isValid()) {
+        bool ok = false;
+        locale->readTime(val_min->text(), &ok);
+        if (!ok) {
             KMessageBox::error(this , i18n("This is not a valid time."), i18n("Error"));
             val_min->setText("");
             return;
         }
-        if (!locale->readTime(val_max->text()).isValid() && choose->currentIndex()  >= 5) {
+        locale->readTime(val_max->text(), &ok);
+        if ((!ok) && choose->currentIndex()  >= 5) {
             KMessageBox::error(this , i18n("This is not a valid time."), i18n("Error"));
             val_max->setText("");
             return;
         }
     } else  if (chooseType->currentIndex() == 4) {
-        if (!locale->readDate(val_min->text()).isValid()) {
+        bool ok = false;
+        locale->readDate(val_min->text(), &ok);
+        if (!ok) {
             KMessageBox::error(this , i18n("This is not a valid date."), i18n("Error"));
             val_min->setText("");
             return;
         }
-        if (!locale->readDate(val_max->text()).isValid() && choose->currentIndex()  >= 5) {
+        locale->readDate(val_max->text(), &ok);
+        if ((!ok) && choose->currentIndex()  >= 5) {
             KMessageBox::error(this , i18n("This is not a valid date."), i18n("Error"));
             val_max->setText("");
             return;

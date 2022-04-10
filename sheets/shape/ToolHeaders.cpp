@@ -34,37 +34,27 @@
 #include <QApplication>
 #include <QLabel>
 #include <QPainter>
-#include <QTextLayout>
 #include <QToolTip>
 #include <QScrollBar>
 #include <QRubberBand>
 #include <QDesktopWidget>
 #include <QStyle>
 
-// KF5
-#include <KLocalizedString>
-#include <kmessagebox.h>
-
 // Calligra
 #include "KoCanvasBase.h"
-#include <KoZoomHandler.h>
 #include <KoPointerEvent.h>
 #include <KoGlobal.h>
+#include <KoUnit.h>
+#include "KoViewConverter.h"
 
 // Sheets
-#include "Cell.h"
-#include "calligra_sheets_limits.h"
-#include "RowColumnFormat.h"
-#include "RowFormatStorage.h"
-#include "Sheet.h"
-#include "ElapsedTime_p.h"
-#include "RowColumnManipulators.h"
-
-// commands
-#include "RowColumnManipulators.h"
-
-// ui
-#include "Selection.h"
+#include "engine/calligra_sheets_limits.h"
+#include "engine/CellBase.h"
+#include "core/ColFormatStorage.h"
+#include "core/RowFormatStorage.h"
+#include "core/Sheet.h"
+#include "ui/commands/RowColumnManipulators.h"
+#include "ui/Selection.h"
 
 using namespace Calligra::Sheets;
 
@@ -529,10 +519,10 @@ void Tool::RowHeader::paint(QPainter* painter, const QRectF& painterRect)
         const qreal height = rawHeight;
         const QRectF rect(0, yPos, width, height);
         if (selected || highlighted) {
-            painter->setPen(QPen(selectionColor.dark(150), 0));
+            painter->setPen(QPen(selectionColor.darker(150), 0));
             painter->setBrush(selectionBrush);
         } else {
-            painter->setPen(QPen(backgroundColor.dark(150), 0));
+            painter->setPen(QPen(backgroundColor.darker(150), 0));
             painter->setBrush(backgroundBrush);
         }
         painter->drawRect(rect);
@@ -670,11 +660,11 @@ int Tool::ColumnHeader::betweenColumns(qreal pos) const
     qreal leftBorderPos;
     int column = m_sheet->leftColumn(pos - resizeWidth, leftBorderPos);
     if (column > 0 && column <= KS_colMax) {
-        const qreal rightBorderPos = leftBorderPos + m_sheet->columnFormat(column)->visibleWidth();
+        const qreal rightBorderPos = leftBorderPos + m_sheet->columnFormats()->visibleWidth(column);
         Q_ASSERT(rightBorderPos > leftBorderPos);
         if ((pos >= rightBorderPos - resizeWidth) &&
             (pos <= rightBorderPos + resizeWidth) &&
-            !(column == 1 && m_sheet->columnFormat(column)->isHiddenOrFiltered())) // if column is hidden and is the first column it shall not be resized
+            !(column == 1 && m_sheet->columnFormats()->isHiddenOrFiltered(column))) // if column is hidden and is the first column it shall not be resized
         {
             return column;
         }
@@ -739,7 +729,7 @@ void Tool::ColumnHeader::mousePress(KoPointerEvent * _ev)
 
         debugSheetsTableShape << "evPos:" << ev_PosX << ", x:" << x << ", COL:" << tmpCol;
         while (ev_PosX > x && (!m_bResize) && tmpCol <= KS_colMax) {
-            double w = sheet->columnFormat(tmpCol)->width();
+            double w = sheet->columnFormats()->colWidth(tmpCol);
 
             debugSheetsTableShape << "evPos:" << ev_PosX << ", x:" << x << ", w:" << w << ", COL:" << tmpCol;
 
@@ -751,7 +741,7 @@ void Tool::ColumnHeader::mousePress(KoPointerEvent * _ev)
             //you mustn't resize it.
             if (ev_PosX >= x + w - resizeWidth &&
                 ev_PosX <= x + w + resizeWidth &&
-                !(sheet->columnFormat(tmpCol)->isHiddenOrFiltered() && tmpCol == 1))
+                !(sheet->columnFormats()->isHiddenOrFiltered(tmpCol) && tmpCol == 1))
             {
                 m_bResize = true;
             }
@@ -762,8 +752,8 @@ void Tool::ColumnHeader::mousePress(KoPointerEvent * _ev)
         //you mustn't resize it.
         qreal tmp2;
         tmpCol = sheet->leftColumn(right - ev_PosX + 1, tmp2);
-        if (sheet->columnFormat(tmpCol)->isHiddenOrFiltered() && tmpCol == 0) {
-            debugSheetsTableShape << "No resize:" << tmpCol << "," << sheet->columnFormat(tmpCol)->isHiddenOrFiltered();
+        if (sheet->columnFormats()->isHiddenOrFiltered(tmpCol) && tmpCol == 0) {
+            debugSheetsTableShape << "No resize:" << tmpCol << "," << sheet->columnFormats()->isHiddenOrFiltered(tmpCol);
             m_bResize = false;
         }
         debugSheetsTableShape << "Resize:" << m_bResize;
@@ -998,9 +988,9 @@ void Tool::ColumnHeader::mouseMove(KoPointerEvent* _ev)
                 m_HScrollBar->setValue(ev_PosX);
             else if (_ev->pos().x() > /*m_pCanvas->*/width()) {
                 if (col < KS_colMax) {
-                    const ColumnFormat *cl = sheet->columnFormat(col + 1);
+                    const ColFormatStorage *cols = sheet->columnFormats();
                     x = sheet->columnPosition(col + 1);
-                    m_HScrollBar->setValue(ev_PosX + cl->width() - right);
+                    m_HScrollBar->setValue(ev_PosX + cols->colWidth(col + 1) - right);
                 }
             }
         }
@@ -1012,14 +1002,14 @@ void Tool::ColumnHeader::mouseMove(KoPointerEvent* _ev)
             int tmpCol = sheet->leftColumn(0.0, x);
 
             while (ev_PosX > x && tmpCol <= KS_colMax) {
-                double w = sheet->columnFormat(tmpCol)->visibleWidth();
+                double w = sheet->columnFormats()->visibleWidth(tmpCol);
                 ++tmpCol;
 
                 //if col is hide and it's the first column
                 //you mustn't resize it.
                 if (ev_PosX >= x + w - resizeWidth &&
                     ev_PosX <= x + w + resizeWidth &&
-                    !(sheet->columnFormat(tmpCol)->isHiddenOrFiltered() && tmpCol == 0))
+                    !(sheet->columnFormats()->isHiddenOrFiltered(tmpCol) && tmpCol == 0))
                 {
                     m_pCanvas->canvasWidget()->setCursor(Qt::SplitHCursor);
                     return;
@@ -1180,27 +1170,27 @@ void Tool::ColumnHeader::paint(QPainter *painter, const QRectF &painterRect)
         if (x > KS_colMax) {
             x = KS_colMax;
         }
-        xPos -= sheet->columnFormat(x)->width();
+        xPos -= sheet->columnFormats()->colWidth(x);
         deltaX = -1;
     }
 
     //Loop through the columns, until we are out of range
     while (xPos <= paintRect.right() && x <= KS_colMax) {
-        const ColumnFormat *columnFormat = sheet->columnFormat(x);
-        if (columnFormat->isHiddenOrFiltered()) {
+        const ColFormatStorage *cols = sheet->columnFormats();
+        if (cols->isHiddenOrFiltered(x)) {
             ++x;
             continue;
         }
         bool selected = (selectedColumns.contains(x));
         bool highlighted = (!selected && affectedColumns.contains(x));
-        const qreal width = columnFormat->width();
+        const qreal width = cols->colWidth(x);
         const QRectF rect(xPos, 0, width, height);
 
         if (selected || highlighted) {
-            painter->setPen(QPen(selectionColor.dark(150), 0));
+            painter->setPen(QPen(selectionColor.darker(150), 0));
             painter->setBrush(selectionBrush);
         } else {
-            painter->setPen(QPen(backgroundColor.dark(150), 0));
+            painter->setPen(QPen(backgroundColor.darker(150), 0));
             painter->setBrush(backgroundBrush);
         }
         painter->drawRect(rect);
@@ -1214,7 +1204,7 @@ void Tool::ColumnHeader::paint(QPainter *painter, const QRectF &painterRect)
         } else if (highlighted) {
             painter->setFont(boldFont);
         }
-        QString colText = sheet->getShowColumnNumber() ? QString::number(x) : Cell::columnName(x);
+        QString colText = sheet->getShowColumnNumber() ? QString::number(x) : CellBase::columnName(x);
         QFontMetricsF fm(painter->font());
         if (width < fm.width(colText)) {
             // try to scale down the font to make it fit
@@ -1251,7 +1241,7 @@ void Tool::ColumnHeader::paint(QPainter *painter, const QRectF &painterRect)
 #endif
             painter->drawText(rect, Qt::AlignCenter, colText);
         }
-        xPos += columnFormat->width();
+        xPos += width;
         x += deltaX;
     }
 }

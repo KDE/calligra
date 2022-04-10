@@ -4,17 +4,18 @@
 
 #include "TestValueConverter.h"
 
-#include <ValueConverter.h>
+#include <engine/ValueConverter.h>
 
-#include <CalculationSettings.h>
-#include <ValueParser.h>
-#include <ValueStorage.h>
+#include <engine/Localization.h>
+#include <engine/CalculationSettings.h>
+#include <engine/ValueParser.h>
+#include <engine/ValueStorage.h>
 
-#include <klocale.h>
+#include <QStandardPaths>
 
 #include <QTest>
 
-#include <locale.h>
+//#include <locale.h>
 
 Q_DECLARE_METATYPE(complex<Number>)
 
@@ -67,8 +68,8 @@ void TestValueConverter::initTestCase()
     QVERIFY(QFile::copy(QFINDTESTDATA("data/sheets.mo"), m_translationsFile));
 
     // check that translation ok, else lot of tests will fail later
-    *m_calcsettings->locale() = KLocale(locale, locale);
-    QCOMPARE(m_calcsettings->locale()->country(), locale);
+//    *m_calcsettings->locale() = KLocale(locale, locale);
+//    QCOMPARE(m_calcsettings->locale()->country(), locale);
     QString s = ki18n("true").toString(QStringList()<<locale);
     QVERIFY2(s == QString("xxtruexx"), "Translation failed, check that you have the correct .mo file in the data directory and that it installs correctly");
 }
@@ -141,8 +142,8 @@ void TestValueConverter::testAsBoolean()
     QFETCH(bool, expectedOk);
     QFETCH(bool, expected);
 
-    *m_calcsettings->locale() = KLocale(locale, locale);
-    QCOMPARE(m_calcsettings->locale()->country(), locale);
+//    *m_calcsettings->locale() = KLocale(locale, locale);
+//    QCOMPARE(m_calcsettings->locale()->country(), locale);
 
     bool ok;
     Value result = m_converter->asBoolean(value, &ok);
@@ -207,8 +208,8 @@ void TestValueConverter::testAsInteger()
     QFETCH(bool, expectedOk);
     QFETCH(int, expected);
 
-    *m_calcsettings->locale() = KLocale(locale, locale);
-    QCOMPARE(m_calcsettings->locale()->country(), locale);
+//    *m_calcsettings->locale() = KLocale(locale, locale);
+//    QCOMPARE(m_calcsettings->locale()->country(), locale);
 
     bool ok;
     Value result = m_converter->asInteger(value, &ok);
@@ -273,8 +274,8 @@ void TestValueConverter::testAsFloat()
     QFETCH(bool, expectedOk);
     QFETCH(double, expected);
 
-    *m_calcsettings->locale() = KLocale(locale, locale);
-    QCOMPARE(m_calcsettings->locale()->country(), locale);
+//    *m_calcsettings->locale() = KLocale(locale, locale);
+//    QCOMPARE(m_calcsettings->locale()->country(), locale);
 
     bool ok;
     Value result = m_converter->asFloat(value, &ok);
@@ -372,8 +373,8 @@ void TestValueConverter::testAsComplex()
     QFETCH(bool, expectedOk);
     QFETCH(complex<Number>, expected);
 
-    *m_calcsettings->locale() = KLocale(locale, locale);
-    QCOMPARE(m_calcsettings->locale()->country(), locale);
+//    *m_calcsettings->locale() = KLocale(locale, locale);
+//    QCOMPARE(m_calcsettings->locale()->country(), locale);
 
     bool ok;
     Value result = m_converter->asComplex(value, &ok);
@@ -444,8 +445,8 @@ void TestValueConverter::testAsNumeric()
     QFETCH(bool, expectedOk);
     QFETCH(Value, expected);
 
-    *m_calcsettings->locale() = KLocale(locale, locale);
-    QCOMPARE(m_calcsettings->locale()->country(), locale);
+//    *m_calcsettings->locale() = KLocale(locale, locale);
+//    QCOMPARE(m_calcsettings->locale()->country(), locale);
 
     bool ok;
     Value result = m_converter->asNumeric(value, &ok);
@@ -631,8 +632,8 @@ void TestValueConverter::testAsString()
     QFETCH(Value, value);
     QFETCH(QString, expected);
 
-    *m_calcsettings->locale() = KLocale(locale, locale);
-    QCOMPARE(m_calcsettings->locale()->country(), locale);
+//    *m_calcsettings->locale() = KLocale(locale, locale);
+//    QCOMPARE(m_calcsettings->locale()->country(), locale);
 
     Value result = m_converter->asString(value);
     QCOMPARE(result, Value(expected));
@@ -690,8 +691,8 @@ void TestValueConverter::testAsDateTime()
     QFETCH(bool, expectedOk);
     QFETCH(Value, expected);
 
-    *m_calcsettings->locale() = KLocale(locale, locale);
-    QCOMPARE(m_calcsettings->locale()->country(), locale);
+//    *m_calcsettings->locale() = KLocale(locale, locale);
+//    QCOMPARE(m_calcsettings->locale()->country(), locale);
 
     bool ok;
     Value result = m_converter->asDateTime(value, &ok);
@@ -760,8 +761,8 @@ void TestValueConverter::testAsDate()
     QFETCH(bool, expectedOk);
     QFETCH(Value, expected);
 
-    *m_calcsettings->locale() = KLocale(locale, locale);
-    QCOMPARE(m_calcsettings->locale()->country(), locale);
+//    *m_calcsettings->locale() = KLocale(locale, locale);
+//    QCOMPARE(m_calcsettings->locale()->country(), locale);
 
     bool ok;
     Value result = m_converter->asDate(value, &ok);
@@ -821,8 +822,8 @@ void TestValueConverter::testAsTime()
     QFETCH(bool, expectedOk);
     QFETCH(Value, expected);
 
-    *m_calcsettings->locale() = KLocale(locale, locale);
-    QCOMPARE(m_calcsettings->locale()->country(), locale);
+//    *m_calcsettings->locale() = KLocale(locale, locale);
+//    QCOMPARE(m_calcsettings->locale()->country(), locale);
 
     bool ok;
     Value result = m_converter->asTime(value, &ok);

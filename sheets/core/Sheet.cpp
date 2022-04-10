@@ -20,6 +20,7 @@
 #include "engine/Damages.h"
 #include "engine/Formula.h"
 #include "engine/NamedAreaManager.h"
+#include "engine/ValueConverter.h"
 #include "engine/ValueStorage.h"
 
 #include "CellStorage.h"

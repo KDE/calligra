@@ -8,7 +8,8 @@
 #define CALLIGRA_SHEETS_TABLE_SHEETSEDITOR
 
 #include <QWidget>
-#include <QListWidgetItem>
+
+class QListWidgetItem;
 
 namespace Calligra
 {
@@ -16,6 +17,7 @@ namespace Sheets
 {
 class TableShape;
 class Sheet;
+class SheetBase;
 
 class SheetsEditor : public QWidget
 {
@@ -25,7 +27,7 @@ public:
     virtual ~SheetsEditor();
 
 private Q_SLOTS:
-    void sheetAdded(Sheet* sheet);
+    void sheetAdded(SheetBase* sheet);
     void sheetNameChanged(Sheet* sheet, const QString& old_name);
 
     void selectionChanged();

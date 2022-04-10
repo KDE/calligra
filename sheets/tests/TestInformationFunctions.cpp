@@ -5,22 +5,20 @@
 
 #include "TestInformationFunctions.h"
 
-#include <CellStorage.h>
-#include <Formula.h>
-#include <Map.h>
-#include <Sheet.h>
-#include <CalculationSettings.h>
+#include <engine/CellBaseStorage.h>
+#include <engine/Formula.h>
+#include <engine/MapBase.h>
+#include <engine/SheetBase.h>
+#include <engine/CalculationSettings.h>
 
 #include "TestKspreadCommon.h"
-
-#include <KLocale>
 
 // because we may need to promote expected value from integer to float
 #define CHECK_EVAL(x,y) { Value z(y); QCOMPARE(evaluate(x,z),(z)); }
 
-Value TestInformationFunctions::evaluate(const QString& formula, Value& ex, const Cell &cell)
+Value TestInformationFunctions::evaluate(const QString& formula, Value& ex, const CellBase &cell)
 {
-    Sheet* sheet = m_map->sheet(0);
+    SheetBase* sheet = m_map->sheet(0);
     Formula f(sheet, cell);
     QString expr = formula;
     if (expr[0] != '=')
@@ -39,14 +37,14 @@ Value TestInformationFunctions::evaluate(const QString& formula, Value& ex, cons
 void TestInformationFunctions::initTestCase()
 {
     FunctionModuleRegistry::instance()->loadFunctionModules();
-    m_map = new Map(0 /* no Doc */);
+    m_map = new MapBase;
     // some tests are sensitive to locale, so use C for all tests
-    *(m_map->calculationSettings()->locale()) = KLocale("C", "C");
+//    *(m_map->calculationSettings()->locale()) = KLocale("C", "C");
 
     m_map->addNewSheet();
-    Sheet* sheet = m_map->sheet(0);
+    SheetBase* sheet = m_map->sheet(0);
     sheet->setSheetName("Sheet1");
-    CellStorage* storage = sheet->cellStorage();
+    CellBaseStorage* storage = sheet->cellStorage();
 
     //
     // Test case data set
@@ -233,11 +231,11 @@ void TestInformationFunctions::testCELL()
     CHECK_EVAL( "CELL(\"ADDRESS\";Sheet2!B7)", Value( "'Sheet2'!$B$7" ) );
 
     Value v1( "$B$7" );
-    Value r1 = evaluate("CELL(\"ADDRESS\")", v1, Cell(m_map->sheet(0), 2, 7));
+    Value r1 = evaluate("CELL(\"ADDRESS\")", v1, CellBase(m_map->sheet(0), 2, 7));
     QCOMPARE(r1, v1);
 
     Value v2( "$B$7" );
-    Value r2 = evaluate("CELL(\"ADDRESS\")", v2, Cell(m_map->sheet(1), 2, 7));
+    Value r2 = evaluate("CELL(\"ADDRESS\")", v2, CellBase(m_map->sheet(1), 2, 7));
     QCOMPARE(r2, v2);
 
     //CHECK_EVAL( "CELL(\"ADDRESS\";'x:\\sample.ods'#Sheet3!B7)", Value( "'file:///x:/sample.ods'#$Sheet3.$B$7" ) );

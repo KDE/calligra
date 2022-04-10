@@ -7,15 +7,14 @@
 
 #include <QObject>
 
-#include <Value.h>
+#include <engine/Value.h>
 
 namespace Calligra
 {
 namespace Sheets
 {
-
-class Doc;
-class Sheet;
+class MapBase;
+class SheetBase;
 
 class TestLogicFunctions: public QObject
 {
@@ -34,8 +33,8 @@ private Q_SLOTS:
     void testTRUE();
     void testXOR();
 private:
-    Doc* m_doc;
-    Sheet* m_sheet;
+    MapBase *m_map;
+    SheetBase* m_sheet;
     Value evaluate(const QString&, Value& ex);
 };
 

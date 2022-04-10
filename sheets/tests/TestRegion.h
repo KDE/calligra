@@ -11,7 +11,7 @@ namespace Calligra
 {
 namespace Sheets
 {
-class Map;
+class MapBase;
 
 class TestRegion : public QObject
 {
@@ -26,7 +26,7 @@ private Q_SLOTS:
     void cleanupTestCase();
 
 private:
-    Map* m_map;
+    MapBase* m_map;
 };
 
 } // namespace Sheets

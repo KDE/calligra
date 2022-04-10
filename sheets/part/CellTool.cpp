@@ -29,6 +29,9 @@
 
 // Local
 #include "CellTool.h"
+#include "CanvasBase.h"
+#include "Doc.h"
+#include "commands/DefinePrintRangeCommand.h"
 
 #include <KLocalizedString>
 
@@ -37,11 +40,8 @@
 #include <KoShapeManager.h>
 #include <KoViewConverter.h>
 
-#include "CanvasBase.h"
-#include "Doc.h"
-#include "calligra_sheets_limits.h"
+#include "engine/calligra_sheets_limits.h"
 
-#include "commands/DefinePrintRangeCommand.h"
 
 using namespace Calligra::Sheets;
 
@@ -121,7 +121,7 @@ int CellTool::maxRow() const
     return KS_rowMax;
 }
 
-SheetView* CellTool::sheetView(const Sheet* sheet) const
+SheetView* CellTool::sheetView(Sheet* sheet) const
 {
     return d->canvas->sheetView(sheet);
 }

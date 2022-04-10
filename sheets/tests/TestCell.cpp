@@ -13,14 +13,12 @@
 #include <KoShapeLoadingContext.h>
 #include <KoDocumentResourceManager.h>
 
-#include <sheets/Cell.h>
-#include <sheets/CellStorage.h>
-#include <sheets/Map.h>
-#include <sheets/Sheet.h>
-#include <sheets/Style.h>
-#include <sheets/odf/OdfLoadingContext.h>
-#include <sheets/Value.h>
-#include <sheets/odf/SheetsOdf.h>
+#include <engine/Value.h>
+#include <core/CellStorage.h>
+#include <core/Map.h>
+#include <core/Sheet.h>
+#include <core/odf/OdfLoadingContext.h>
+#include <core/odf/SheetsOdf.h>
 
 #include <QTest>
 
@@ -53,8 +51,8 @@ void CellTest::testRichText()
     QString cellStyleName;
 
     Map map;
-    Sheet* sheet = map.addNewSheet();
-    CellStorage* storage = sheet->cellStorage();
+    Sheet* sheet = dynamic_cast<Sheet *>(map.addNewSheet());
+    CellStorage* storage = sheet->fullCellStorage();
     storage->setValue(1, 1, Value(1));
 
     Cell cell = storage->firstInRow(1);

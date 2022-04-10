@@ -7,8 +7,6 @@
 
 #include "ChartDialog.h"
 
-#include <KoChartInterface.h>
-
 #include "ChartDatabaseSelectorFactory.h"
 
 using namespace Calligra::Sheets;

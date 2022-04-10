@@ -5,18 +5,15 @@
 #ifndef SCRIPTINGREADER_H
 #define SCRIPTINGREADER_H
 
-#include <QString>
-#include <QStringList>
-#include <QObject>
+// These need to be here as the MOC references this file.
+
+#include <engine/Region.h>
+#include <core/Cell.h>
+#include <core/Sheet.h>
+#include <core/Map.h>
+#include <part/Doc.h>
 
 #include "ScriptingModule.h"
-
-#include <part/Doc.h>
-#include <Sheet.h>
-#include <Map.h>
-#include <Region.h>
-#include <Cell.h>
-#include <Value.h>
 
 /**
 * The ScriptingReader class provides abstract high-level functionality to read
@@ -189,10 +186,10 @@ public Q_SLOTS:
             m_ranges.remove(sheetname);
             return;
         }
-        Calligra::Sheets::Sheet* sheet = m_module->kspreadDoc()->map()->findSheet(sheetname);
+        Calligra::Sheets::SheetBase* sheet = m_module->kspreadDoc()->map()->findSheet(sheetname);
         if (! sheet) return;
         QVariantList ranges;
-        Calligra::Sheets::Region region(range, m_module->kspreadDoc()->map(), sheet);
+        Calligra::Sheets::Region region = m_module->kspreadDoc()->map()->regionFromName(range, sheet);
         if (! region.isValid()) return;
         for (Calligra::Sheets::Region::ConstIterator it = region.constBegin(); it != region.constEnd(); ++it) {
             const QRect rect = (*it)->rect();
@@ -250,7 +247,7 @@ public Q_SLOTS:
                 switch (value.type()) {
                 case Calligra::Sheets::Value::Empty: break;
                 case Calligra::Sheets::Value::Boolean: v = value.asBoolean(); break;
-                case Calligra::Sheets::Value::Integer: v = value.asInteger(); break;
+                case Calligra::Sheets::Value::Integer: v = (qlonglong) value.asInteger(); break;
                 case Calligra::Sheets::Value::Float: v = (double) numToDouble(value.asFloat()); break;
                 case Calligra::Sheets::Value::String: //fall through
                 default: v = value.asString(); break;
@@ -296,7 +293,7 @@ private:
     }
 
     void readSheet(const QString& sheetname) {
-        m_currentSheet = m_module->kspreadDoc()->map()->findSheet(sheetname);
+        m_currentSheet = dynamic_cast<Calligra::Sheets::Sheet *>(m_module->kspreadDoc()->map()->findSheet(sheetname));
         if (! m_currentSheet) return;
         emit changedSheet(sheetname);
         if (m_state != Running) return;

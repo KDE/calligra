@@ -82,7 +82,7 @@ bool Ksp::loadMap(Map *map, const KoXmlElement& mymap)
     while (!n.isNull()) {
         KoXmlElement e = n.toElement();
         if (!e.isNull() && e.tagName() == "table") {
-            Sheet *t = map->addNewSheet();
+            Sheet *t = dynamic_cast<Sheet *>(map->addNewSheet());
             if (!loadSheet (t, e)) {
                 map->setLoading (false);
                 return false;

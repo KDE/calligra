@@ -33,7 +33,7 @@ generate_export_header(krossmodulesheets BASE_NAME sheetsscripting)
 calligrasheets_viewplugin_desktop_to_json(krossmodulesheets sheetsscripting.desktop)
 
 target_link_libraries(krossmodulesheets
-    calligrasheetscommon
+    calligrasheetspartlib
     kokross
 )
 

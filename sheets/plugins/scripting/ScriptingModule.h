@@ -126,16 +126,6 @@ public Q_SLOTS:
     QObject* createListener(const QString& sheetname, const QString& range = QString());
 
     /**
-    * Set the document-content to the as argument passed XML string.
-    */
-    bool fromXML(const QString& xml);
-
-    /**
-    * Return the document-content as XML string.
-    */
-    QString toXML();
-
-    /**
     * Open a document from the defined \p url .
     */
     bool openUrl(const QString& url);

@@ -7,7 +7,7 @@
 
 #include "TestPointStorage.h"
 
-#include "PointStorage.h"
+#include "engine/PointStorage.h"
 
 #include <QTest>
 
@@ -208,10 +208,14 @@ void PointStorageTest::testInsertColumns()
     // (11,  ,  ,  ,12)
 
     QVector< QPair<QPoint, int> > old;
-    old = storage.insertColumns(2, 2);   // in the middle
+    storage.resetUndo(); storage.storeUndo(true);
+    storage.insertColumns(2, 2);   // in the middle
+    old = storage.undoData();
     QVERIFY(old.count() == 0);
 
-    old = storage.insertColumns(9, 1);   // beyond the current end
+    storage.resetUndo(); storage.storeUndo(true);
+    storage.insertColumns(9, 1);   // beyond the current end
+    old = storage.undoData();
     QVERIFY(old.count() == 0);
     // ( 1,  ,  , 2,  ,  , 3)
     // ( 4,  ,  , 5, 6,  ,  )
@@ -226,7 +230,9 @@ void PointStorageTest::testInsertColumns()
     QCOMPARE(storage.m_rows, rows);
     QCOMPARE(storage.m_cols, cols);
 
-    old = storage.insertColumns(6, 4);   // shift the last column out of range
+    storage.resetUndo(); storage.storeUndo(true);
+    storage.insertColumns(6, 4);   // shift the last column out of range
+    old = storage.undoData();
     QVERIFY(old.count() == 3);
     QVERIFY(old.contains(qMakePair(QPoint(7, 1),  3)));
     QVERIFY(old.contains(qMakePair(QPoint(7, 3),  9)));
@@ -250,7 +256,9 @@ void PointStorageTest::testInsertColumns()
     storage.insert(1, 1, 1);
     // ( 1)
 
-    old = storage.insertColumns(1, 1);
+    storage.resetUndo(); storage.storeUndo(true);
+    storage.insertColumns(1, 1);
+    old = storage.undoData();
     QVERIFY(old.count() == 0);
     // (  , 1)
 
@@ -275,7 +283,9 @@ void PointStorageTest::testDeleteColumns()
     // (11,  ,  ,  ,12)
 
     QVector< QPair<QPoint, int> > old;
-    old = storage.removeColumns(2, 2);   // in the middle
+    storage.resetUndo(); storage.storeUndo(true);
+    storage.removeColumns(2, 2);   // in the middle
+    old = storage.undoData();
     QVERIFY(old.count() == 5);
     QVERIFY(old.contains(qMakePair(QPoint(2, 1),  2)));
     QVERIFY(old.contains(qMakePair(QPoint(2, 2),  5)));
@@ -283,7 +293,9 @@ void PointStorageTest::testDeleteColumns()
     QVERIFY(old.contains(qMakePair(QPoint(2, 3),  7)));
     QVERIFY(old.contains(qMakePair(QPoint(3, 3),  8)));
 
-    old = storage.removeColumns(3, 1);   // beyond the current end
+    storage.resetUndo(); storage.storeUndo(true);
+    storage.removeColumns(3, 1);   // beyond the current end
+    old = storage.undoData();
     QVERIFY(old.count() == 3);
     QVERIFY(old.contains(qMakePair(QPoint(3, 1),  3)));
     QVERIFY(old.contains(qMakePair(QPoint(3, 3),  9)));
@@ -316,10 +328,14 @@ void PointStorageTest::testInsertRows()
     // (11,  ,  ,  ,12)
 
     QVector< QPair<QPoint, int> > old;
-    old = storage.insertRows(2, 2);   // in the middle
+    storage.resetUndo(); storage.storeUndo(true);
+    storage.insertRows(2, 2);   // in the middle
+    old = storage.undoData();
     QVERIFY(old.count() == 0);
 
-    old = storage.insertRows(9, 1);   // beyond the current end
+    storage.resetUndo(); storage.storeUndo(true);
+    storage.insertRows(9, 1);   // beyond the current end
+    old = storage.undoData();
     QVERIFY(old.count() == 0);
 
     // ( 1, 2,  ,  , 3)
@@ -338,7 +354,9 @@ void PointStorageTest::testInsertRows()
     QCOMPARE(storage.m_cols, cols);
 
 
-    old = storage.insertRows(6, 4);   // shift the last row out of range
+    storage.resetUndo(); storage.storeUndo(true);
+    storage.insertRows(6, 4);   // shift the last row out of range
+    old = storage.undoData();
     QVERIFY(old.count() == 2);
     QVERIFY(old.contains(qMakePair(QPoint(1, 7), 11)));
     QVERIFY(old.contains(qMakePair(QPoint(5, 7), 12)));
@@ -366,7 +384,9 @@ void PointStorageTest::testInsertRows()
     storage.insert(1, 1, 1);
     // ( 1)
 
-    old = storage.insertRows(1, 1);
+    storage.resetUndo(); storage.storeUndo(true);
+    storage.insertRows(1, 1);
+    old = storage.undoData();
     QVERIFY(old.count() == 0);
     // (  )
     // ( 1)
@@ -392,7 +412,9 @@ void PointStorageTest::testDeleteRows()
     // (11,  ,  ,  ,12)
 
     QVector< QPair<QPoint, int> > old;
-    old = storage.removeRows(2, 2);   // in the middle
+    storage.resetUndo(); storage.storeUndo(true);
+    storage.removeRows(2, 2);   // in the middle
+    old = storage.undoData();
     QVERIFY(old.count() == 6);
     QVERIFY(old.contains(qMakePair(QPoint(1, 2),  4)));
     QVERIFY(old.contains(qMakePair(QPoint(2, 2),  5)));
@@ -401,7 +423,9 @@ void PointStorageTest::testDeleteRows()
     QVERIFY(old.contains(qMakePair(QPoint(3, 3),  8)));
     QVERIFY(old.contains(qMakePair(QPoint(5, 3),  9)));
 
-    old = storage.removeRows(3, 1);   // at the current end
+    storage.resetUndo(); storage.storeUndo(true);
+    storage.removeRows(3, 1);   // at the current end
+    old = storage.undoData();
     QVERIFY(old.count() == 2);
     QVERIFY(old.contains(qMakePair(QPoint(1, 3), 11)));
     QVERIFY(old.contains(qMakePair(QPoint(5, 3), 12)));
@@ -429,14 +453,18 @@ void PointStorageTest::testShiftLeft()
     // (11,  ,  ,  ,12)
 
     QVector< QPair<QPoint, int> > old;
-    old = storage.removeShiftLeft(QRect(2, 2, 2, 2));
+    storage.resetUndo(); storage.storeUndo(true);
+    storage.removeShiftLeft(QRect(2, 2, 2, 2));
+    old = storage.undoData();
     QVERIFY(old.count() == 4);
     QVERIFY(old.contains(qMakePair(QPoint(2, 2),  5)));
     QVERIFY(old.contains(qMakePair(QPoint(3, 2),  6)));
     QVERIFY(old.contains(qMakePair(QPoint(2, 3),  7)));
     QVERIFY(old.contains(qMakePair(QPoint(3, 3),  8)));
 
-    old = storage.removeShiftLeft(QRect(5, 5, 1, 1));
+    storage.resetUndo(); storage.storeUndo(true);
+    storage.removeShiftLeft(QRect(5, 5, 1, 1));
+    old = storage.undoData();
     QVERIFY(old.count() == 1);
     QVERIFY(old.contains(qMakePair(QPoint(5, 5), 12)));
     // ( 1, 2,  ,  , 3)
@@ -466,10 +494,14 @@ void PointStorageTest::testShiftRight()
     // (11,  ,  ,  ,12)
 
     QVector< QPair<QPoint, int> > old;
-    old = storage.insertShiftRight(QRect(2, 2, 2, 2));
+    storage.resetUndo(); storage.storeUndo(true);
+    storage.insertShiftRight(QRect(2, 2, 2, 2));
+    old = storage.undoData();
     QVERIFY(old.count() == 0);
 
-    old = storage.insertShiftRight(QRect(5, 5, 1, 1));
+    storage.resetUndo(); storage.storeUndo(true);
+    storage.insertShiftRight(QRect(5, 5, 1, 1));
+    old = storage.undoData();
     QVERIFY(old.count() == 0);
     // ( 1, 2,  ,  , 3,  ,  )
     // ( 4,  ,  , 5, 6,  ,  )
@@ -485,7 +517,9 @@ void PointStorageTest::testShiftRight()
     QCOMPARE(storage.m_cols, cols);
 
 
-    old = storage.insertShiftRight(QRect(4, 2, 6, 1));     // shift the 6 out of range
+    storage.resetUndo(); storage.storeUndo(true);
+    storage.insertShiftRight(QRect(4, 2, 6, 1));     // shift the 6 out of range
+    old = storage.undoData();
     QVERIFY(old.count() == 1);
     QVERIFY(old.contains(qMakePair(QPoint(5, 2),  6)));
     // ( 1, 2,  ,  , 3,  ,  ,  ,  ,  )
@@ -517,14 +551,18 @@ void PointStorageTest::testShiftUp()
     QRect rect;
     QVector< QPair<QPoint, int> > old;
     rect = QRect(2, 2, 2, 1);
-    old = storage.removeShiftUp(rect);
+    storage.resetUndo(); storage.storeUndo(true);
+    storage.removeShiftUp(rect);
+    old = storage.undoData();
 //     qDebug() << "moved two filled cells up onto filled cells:"<<rect<< endl << qPrintable( storage.dump() );
     QVERIFY(old.count() == 2);
     QVERIFY(old.contains(qMakePair(QPoint(2, 2),  5)));
     QVERIFY(old.contains(qMakePair(QPoint(3, 2),  6)));
 
     rect = QRect(5, 5, 1, 1);
-    old = storage.removeShiftUp(rect); // shift data from 6,5 -> 5,5
+    storage.resetUndo(); storage.storeUndo(true);
+    storage.removeShiftUp(rect); // shift data from 6,5 -> 5,5
+    old = storage.undoData();
 //     qDebug() << "moved 1 cell from non-existent row onto filled cell:"<<rect << endl << qPrintable( storage.dump() );
     QVERIFY(old.count() == 1);
     QVERIFY(old.contains(qMakePair(QPoint(5, 5), 12)));
@@ -542,7 +580,9 @@ void PointStorageTest::testShiftUp()
     QCOMPARE(storage.m_cols, cols);
 
     rect = QRect(1, 4, 1, 1);
-    old = storage.removeShiftUp(rect);
+    storage.resetUndo(); storage.storeUndo(true);
+    storage.removeShiftUp(rect);
+    old = storage.undoData();
 //     qDebug() << "moved 1 filled cell onto unfilled cell:"<<rect << endl << qPrintable( storage.dump() );
     QCOMPARE(old.count(), 0);
 
@@ -557,7 +597,9 @@ void PointStorageTest::testShiftUp()
     // (  , 4)
 //     qDebug() << "start:" << endl << qPrintable( storage.dump() );
 
-    old = storage.removeShiftUp(QRect(1, 1, 2, 2));
+    storage.resetUndo(); storage.storeUndo(true);
+    storage.removeShiftUp(QRect(1, 1, 2, 2));
+    old = storage.undoData();
 //     qDebug() << "moved 1 filled, 1 unfilled two rows up onto 1 row:"<<QRect(1, 1, 2, 2) << endl << qPrintable( storage.dump() );
     qDebug() << old;
     QVERIFY(old.count() == 3);
@@ -589,10 +631,14 @@ void PointStorageTest::testShiftDown()
     // (11,  ,  ,  ,12)
 
     QVector< QPair<QPoint, int> > old;
-    old = storage.insertShiftDown(QRect(2, 2, 2, 2));
+    storage.resetUndo(); storage.storeUndo(true);
+    storage.insertShiftDown(QRect(2, 2, 2, 2));
+    old = storage.undoData();
     QVERIFY(old.count() == 0);
 
-    old = storage.insertShiftDown(QRect(5, 5, 1, 1));
+    storage.resetUndo(); storage.storeUndo(true);
+    storage.insertShiftDown(QRect(5, 5, 1, 1));
+    old = storage.undoData();
     QVERIFY(old.count() == 0);
     // ( 1, 2,  ,  , 3)
     // ( 4,  ,  ,  ,  )
@@ -609,7 +655,9 @@ void PointStorageTest::testShiftDown()
     QCOMPARE(storage.m_cols, cols);
 
 
-    old = storage.insertShiftDown(QRect(2, 4, 1, 6));     // shift the 7 out of range
+    storage.resetUndo(); storage.storeUndo(true);
+    storage.insertShiftDown(QRect(2, 4, 1, 6));     // shift the 7 out of range
+    old = storage.undoData();
     QVERIFY(old.count() == 1);
     QVERIFY(old.contains(qMakePair(QPoint(2, 5),  7)));
     // ( 1, 2,  ,  , 3)
@@ -641,7 +689,9 @@ void PointStorageTest::testShiftDown()
     // ( 2, 3)
     // (  , 4)
 
-    old = storage.insertShiftDown(QRect(1, 1, 2, 2));
+    storage.resetUndo(); storage.storeUndo(true);
+    storage.insertShiftDown(QRect(1, 1, 2, 2));
+    old = storage.undoData();
     QVERIFY(old.count() == 0);
     // (  ,  )
     // (  ,  )
@@ -682,7 +732,9 @@ void PointStorageTest::testShiftDownUp()
     QCOMPARE(storage.m_cols, cols);
 
     QVector< QPair<QPoint, int> > old;
-    old = storage.insertShiftDown(QRect(3, 2, 2, 2));
+    storage.resetUndo(); storage.storeUndo(true);
+    storage.insertShiftDown(QRect(3, 2, 2, 2));
+    old = storage.undoData();
     QVERIFY(old.count() == 0);
 
     // qDebug() << endl << qPrintable(storage.dump());
@@ -701,7 +753,9 @@ void PointStorageTest::testShiftDownUp()
     QCOMPARE(storage.m_rows, rows);
     QCOMPARE(storage.m_cols, cols);
 
-    old = storage.removeShiftUp(QRect(3, 2, 2, 2));
+    storage.resetUndo(); storage.storeUndo(true);
+    storage.removeShiftUp(QRect(3, 2, 2, 2));
+    old = storage.undoData();
     QVERIFY(old.count() == 0);
 
     data = QVector<int>() << 1 << 2 << 3 << 4 << 5 << 2 << 4 << 6 << 8 << 10 << 3 << 6 << 9 << 12 << 15 << 4 << 8 << 12 << 16 << 20 << 5 << 10 << 15 << 20 << 25;

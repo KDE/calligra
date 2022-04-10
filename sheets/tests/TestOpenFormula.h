@@ -22,7 +22,7 @@ class TestOpenFormula: public QObject
 private Q_SLOTS:
     void initTestCase();
     void testEvaluation();
-    void testFormulaConversion();
+//    void testFormulaConversion();
     void testReferenceLoading();
     void testReferenceSaving();
 

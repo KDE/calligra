@@ -5,6 +5,7 @@
 */
 
 #include "CellEditorDocker.h"
+#include "CanvasBase.h"
 
 // Qt
 #include <QGridLayout>
@@ -22,7 +23,6 @@
 #include "ui/ExternalEditor.h"
 #include "ui/LocationComboBox.h"
 
-#include "CanvasBase.h"
 
 using namespace Calligra::Sheets;
 

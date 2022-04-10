@@ -6,23 +6,21 @@
 
 #include "TestKspreadCommon.h"
 
-#include <MockPart.h>
-#include <part/Doc.h>
-#include <Map.h>
-#include <Sheet.h>
+#include <engine/MapBase.h>
+#include <engine/SheetBase.h>
 
 using namespace Calligra::Sheets;
 
 void TestLogicFunctions::init()
 {
-    m_doc = new Doc(new MockPart);
-    m_doc->map()->addNewSheet();
-    m_sheet = m_doc->map()->sheet(0);
+    m_map = new MapBase;
+    m_map->addNewSheet();
+    m_sheet = m_map->sheet(0);
 }
 
 void TestLogicFunctions::cleanup()
 {
-    delete m_doc;
+    delete m_map;
 }
 
 void TestLogicFunctions::initTestCase()

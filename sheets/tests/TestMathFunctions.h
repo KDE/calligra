@@ -8,13 +8,13 @@
 
 #include <QObject>
 
-#include <Value.h>
+#include <engine/Value.h>
 
 namespace Calligra
 {
 namespace Sheets
 {
-class Map;
+class MapBase;
 
 class TestMathFunctions: public QObject
 {
@@ -100,7 +100,7 @@ private:
     Value TestDouble(const QString& formula, const Value& v2, int accuracy);
     Value evaluate(const QString&);
 
-    Map* m_map;
+    MapBase* m_map;
 };
 
 } // namespace Sheets

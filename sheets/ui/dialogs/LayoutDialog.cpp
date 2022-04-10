@@ -19,51 +19,30 @@
 // Local
 #include "LayoutDialog.h"
 
-// #include <stdlib.h>
-// #include <math.h>
+#include <QButtonGroup>
+#include <QFontDatabase>
+#include <QPainter>
+#include <QMouseEvent>
 
-// #include <QIntValidator>
-// #include <QButtonGroup>
-// #include <QCheckBox>
-// #include <QFrame>
-// #include <QLabel>
-// #include <QListWidget>
-// #include <QFontDatabase>
-// #include <QPainter>
-// #include <QRadioButton>
-// #include <QPaintEvent>
-// #include <QMouseEvent>
-// #include <QVBoxLayout>
-// #include <QGridLayout>
-// #include <QPixmap>
-// #include <QSpinBox>
+#include <KoIcon.h>
+#include <KoCanvasBase.h>
+#include <KoUnitDoubleSpinBox.h>
+#include <KoUnit.h>
 
-// #include <kcolorbutton.h>
-// #include <kcombobox.h>
-// #include <klineedit.h>
+#include "engine/CalculationSettings.h"
+#include "engine/Localization.h"
+#include "core/CellStorage.h"
+#include "core/Map.h"
+#include "core/ColFormatStorage.h"
+#include "core/RowFormatStorage.h"
+#include "core/Sheet.h"
+#include "core/StyleManager.h"
+#include "core/ValueFormatter.h"
+#include "../Selection.h"
 
-// #include <KoIcon.h>
-// #include <KoCanvasBase.h>
-// #include <KoUnitDoubleSpinBox.h>
-// #include <KoUnit.h>
-
-// #include "SheetsDebug.h"
-// #include "CalculationSettings.h"
-// #include "Cell.h"
-// #include "CellStorage.h"
-// #include "Localization.h"
-// #include "Map.h"
-// #include "RowFormatStorage.h"
-// #include "ui/Selection.h"
-// #include "Sheet.h"
-// #include "Style.h"
-// #include "StyleManager.h"
-// #include "StyleStorage.h"
-// #include "ValueFormatter.h"
-
-// #include "commands/MergeCommand.h"
-// #include "commands/StyleCommand.h"
-// #include "commands/RowColumnManipulators.h"
+#include "../commands/MergeCommand.h"
+#include "../commands/StyleCommand.h"
+#include "../commands/RowColumnManipulators.h"
 
 using namespace Calligra::Sheets;
 
@@ -411,27 +390,26 @@ CellFormatDialog::CellFormatDialog(QWidget* parent, Selection* selection)
 
     value = cell.value();
 
-    const ColumnFormat *cl;
     widthSize = 0.0;
     heightSize = 0.0;
 
     Selection::ConstIterator end(m_selection->constEnd());
     for (Selection::ConstIterator it(m_selection->constBegin()); it != end; ++it) {
         QRect range = (*it)->rect();
-        Style style = m_sheet->cellStorage()->style(range);   // FIXME merge
+        Style style = m_sheet->fullCellStorage()->style(range);   // FIXME merge
         initParameters(style);
 
         // left border
         range.setWidth(1);
-        checkBorderLeft(m_sheet->cellStorage()->style(range));
+        checkBorderLeft(m_sheet->fullCellStorage()->style(range));
         // right border
         range = (*it)->rect();
         range.setLeft(range.right());
-        checkBorderRight(m_sheet->cellStorage()->style(range));
+        checkBorderRight(m_sheet->fullCellStorage()->style(range));
         // inner borders
         range = (*it)->rect();
         range = range.adjusted(1, 1, -1, -1);
-        style = m_sheet->cellStorage()->style(range);
+        style = m_sheet->fullCellStorage()->style(range);
         checkBorderHorizontal(style);
         checkBorderVertical(style);
         // top border
@@ -441,14 +419,13 @@ CellFormatDialog::CellFormatDialog(QWidget* parent, Selection* selection)
         // bottom border
         range = (*it)->rect();
         range.setBottom(range.top());
-        checkBorderBottom(m_sheet->cellStorage()->style(range));
+        checkBorderBottom(m_sheet->fullCellStorage()->style(range));
     }
 
     // column width
     if (!isRowSelected) {
         for (int x = left; x <= right; x++) {
-            cl = m_sheet->columnFormat(x);
-            widthSize = qMax(cl->width(), widthSize);
+            widthSize = qMax(m_sheet->columnFormats()->colWidth(x), widthSize);
         }
     }
 
@@ -597,8 +574,8 @@ void CellFormatDialog::initMembers()
     m_currency      = Currency(); // locale default
 
     Sheet* sheet = m_sheet;
-    defaultWidthSize  = sheet ? sheet->map()->defaultColumnFormat()->width() : 0;
-    defaultHeightSize = sheet ? sheet->map()->defaultRowFormat()->height() : 0;
+    defaultWidthSize  = sheet ? sheet->fullMap()->defaultColumnFormat().width : 0;
+    defaultHeightSize = sheet ? sheet->fullMap()->defaultRowFormat().height : 0;
 }
 
 bool CellFormatDialog::checkCircle(QString const & name, QString const & parent)
@@ -606,7 +583,7 @@ bool CellFormatDialog::checkCircle(QString const & name, QString const & parent)
     return m_styleManager->checkCircle(name, parent);
 }
 
-KLocale* CellFormatDialog::locale() const
+Localization* CellFormatDialog::locale() const
 {
     return m_sheet->map()->calculationSettings()->locale();
 }
@@ -1185,7 +1162,7 @@ void CellFormatPageFloat::slotChangeState()
         QDateTime tmpTime(QDate(1, 1, 1900), QTime(10, 35, 25), Qt::UTC);
 
 
-        ValueFormatter *fmt = dlg->getSheet()->map()->formatter();
+        ValueFormatter *fmt = dlg->getSheet()->fullMap()->formatter();
         list += fmt->timeFormat(tmpTime, Format::Time1);
         list += fmt->timeFormat(tmpTime, Format::Time2);
         list += fmt->timeFormat(tmpTime, Format::Time3);
@@ -1239,63 +1216,19 @@ void CellFormatPageFloat::init()
 {
     QStringList list;
     QDate tmpDate(2000, 2, 18);
-    list += i18n("System: ") + dlg->locale()->formatDate(QDate::currentDate(), KLocale::ShortDate);
-    list += i18n("System: ") + dlg->locale()->formatDate(QDate::currentDate(), KLocale::LongDate);
+    list += i18n("System: ") + dlg->locale()->formatDate(QDate::currentDate(), false);
+    list += i18n("System: ") + dlg->locale()->formatDate(QDate::currentDate(), true);
 
-    ValueFormatter *fmt = dlg->getSheet()->map()->formatter();
+    ValueFormatter *fmt = dlg->getSheet()->fullMap()->formatter();
 
-    /*18-Feb-00*/
     list += fmt->dateFormat(tmpDate, Format::Date1);
-    /*18-Feb-1999*/
     list += fmt->dateFormat(tmpDate, Format::Date2);
-    /*18-Feb*/
     list += fmt->dateFormat(tmpDate, Format::Date3);
-    /*18-2*/
     list += fmt->dateFormat(tmpDate, Format::Date4);
-    /*18/2/00*/
     list += fmt->dateFormat(tmpDate, Format::Date5);
-    /*18/5/1999*/
     list += fmt->dateFormat(tmpDate, Format::Date6);
-    /*Feb-99*/
     list += fmt->dateFormat(tmpDate, Format::Date7);
-    /*February-99*/
     list += fmt->dateFormat(tmpDate, Format::Date8);
-    /*February-1999*/
-    list += fmt->dateFormat(tmpDate, Format::Date9);
-    /*F-99*/
-    list += fmt->dateFormat(tmpDate, Format::Date10);
-    /*18/Feb*/
-    list += fmt->dateFormat(tmpDate, Format::Date11);
-    /*18/2*/
-    list += fmt->dateFormat(tmpDate, Format::Date12);
-    /*18/Feb/1999*/
-    list += fmt->dateFormat(tmpDate, Format::Date13);
-    /*2000/Feb/18*/
-    list += fmt->dateFormat(tmpDate, Format::Date14);
-    /*2000-Feb-18*/
-    list += fmt->dateFormat(tmpDate, Format::Date15);
-    /*2000-2-18*/
-    list += fmt->dateFormat(tmpDate, Format::Date16);
-    /*2 february 2000*/
-    list += fmt->dateFormat(tmpDate, Format::Date17);
-    list += fmt->dateFormat(tmpDate, Format::Date18);
-    list += fmt->dateFormat(tmpDate, Format::Date19);
-    list += fmt->dateFormat(tmpDate, Format::Date20);
-    list += fmt->dateFormat(tmpDate, Format::Date21);
-    list += fmt->dateFormat(tmpDate, Format::Date22);
-    list += fmt->dateFormat(tmpDate, Format::Date23);
-    list += fmt->dateFormat(tmpDate, Format::Date24);
-    list += fmt->dateFormat(tmpDate, Format::Date25);
-    list += fmt->dateFormat(tmpDate, Format::Date26);
-    list += fmt->dateFormat(tmpDate, Format::Date27);
-    list += fmt->dateFormat(tmpDate, Format::Date28);
-    list += fmt->dateFormat(tmpDate, Format::Date29);
-    list += fmt->dateFormat(tmpDate, Format::Date30);
-    list += fmt->dateFormat(tmpDate, Format::Date31);
-    list += fmt->dateFormat(tmpDate, Format::Date32);
-    list += fmt->dateFormat(tmpDate, Format::Date33);
-    list += fmt->dateFormat(tmpDate, Format::Date34);
-    list += fmt->dateFormat(tmpDate, Format::Date35);
 
     listFormat->addItems(list);
     if (cellFormatType == Format::ShortDate)
@@ -1318,60 +1251,6 @@ void CellFormatPageFloat::init()
         listFormat->setCurrentRow(8);
     else if (cellFormatType == Format::Date8)
         listFormat->setCurrentRow(9);
-    else if (cellFormatType == Format::Date9)
-        listFormat->setCurrentRow(10);
-    else if (cellFormatType == Format::Date10)
-        listFormat->setCurrentRow(11);
-    else if (cellFormatType == Format::Date11)
-        listFormat->setCurrentRow(12);
-    else if (cellFormatType == Format::Date12)
-        listFormat->setCurrentRow(13);
-    else if (cellFormatType == Format::Date13)
-        listFormat->setCurrentRow(14);
-    else if (cellFormatType == Format::Date14)
-        listFormat->setCurrentRow(15);
-    else if (cellFormatType == Format::Date15)
-        listFormat->setCurrentRow(16);
-    else if (cellFormatType == Format::Date16)
-        listFormat->setCurrentRow(17);
-    else if (cellFormatType == Format::Date17)
-        listFormat->setCurrentRow(18);
-    else if (cellFormatType == Format::Date18)
-        listFormat->setCurrentRow(19);
-    else if (cellFormatType == Format::Date19)
-        listFormat->setCurrentRow(20);
-    else if (cellFormatType == Format::Date20)
-        listFormat->setCurrentRow(21);
-    else if (cellFormatType == Format::Date21)
-        listFormat->setCurrentRow(22);
-    else if (cellFormatType == Format::Date22)
-        listFormat->setCurrentRow(23);
-    else if (cellFormatType == Format::Date23)
-        listFormat->setCurrentRow(24);
-    else if (cellFormatType == Format::Date24)
-        listFormat->setCurrentRow(25);
-    else if (cellFormatType == Format::Date25)
-        listFormat->setCurrentRow(26);
-    else if (cellFormatType == Format::Date26)
-        listFormat->setCurrentRow(27);
-    else if (cellFormatType == Format::Date27)
-        listFormat->setCurrentRow(28);
-    else if (cellFormatType == Format::Date28)
-        listFormat->setCurrentRow(29);
-    else if (cellFormatType == Format::Date29)
-        listFormat->setCurrentRow(30);
-    else if (cellFormatType == Format::Date30)
-        listFormat->setCurrentRow(31);
-    else if (cellFormatType == Format::Date31)
-        listFormat->setCurrentRow(32);
-    else if (cellFormatType == Format::Date32)
-        listFormat->setCurrentRow(33);
-    else if (cellFormatType == Format::Date33)
-        listFormat->setCurrentRow(34);
-    else if (cellFormatType == Format::Date34)
-        listFormat->setCurrentRow(35);
-    else if (cellFormatType == Format::Date35)
-        listFormat->setCurrentRow(36);
     else
         listFormat->setCurrentRow(0);
 }
@@ -1379,8 +1258,8 @@ void CellFormatPageFloat::init()
 void CellFormatPageFloat::datetimeInit()
 {
     QStringList list;
-    list += i18n("System: ") + dlg->locale()->formatDateTime(QDateTime::currentDateTime(), KLocale::ShortDate);
-    list += i18n("System: ") + dlg->locale()->formatDateTime(QDateTime::currentDateTime(), KLocale::LongDate);
+    list += i18n("System: ") + dlg->locale()->formatDateTime(QDateTime::currentDateTime(), false);
+    list += i18n("System: ") + dlg->locale()->formatDateTime(QDateTime::currentDateTime(), true);
     listFormat->addItems(list);
 }
 
@@ -1407,41 +1286,14 @@ void CellFormatPageFloat::updateFormatType()
         switch (listFormat->currentRow()) {
         case 0: newFormatType = Format::ShortDate; break;
         case 1: newFormatType = Format::TextDate; break;
-        case 2: newFormatType = Format::Date1; break; /*18-Feb-99*/
-        case 3: newFormatType = Format::Date2; break; /*18-Feb-1999*/
-        case 4: newFormatType = Format::Date3; break; /*18-Feb*/
-        case 5: newFormatType = Format::Date4; break; /*18-05*/
-        case 6: newFormatType = Format::Date5; break; /*18/05/00*/
-        case 7: newFormatType = Format::Date6; break; /*18/05/1999*/
-        case 8: newFormatType = Format::Date7; break;/*Feb-99*/
-        case 9: newFormatType = Format::Date8; break; /*February-99*/
-        case 10: newFormatType = Format::Date9; break; /*February-1999*/
-        case 11: newFormatType = Format::Date10; break; /*F-99*/
-        case 12: newFormatType = Format::Date11; break; /*18/Feb*/
-        case 13: newFormatType = Format::Date12; break; /*18/02*/
-        case 14: newFormatType = Format::Date13; break; /*18/Feb/1999*/
-        case 15: newFormatType = Format::Date14; break; /*2000/Feb/18*/
-        case 16: newFormatType = Format::Date15; break;/*2000-Feb-18*/
-        case 17: newFormatType = Format::Date16; break;/*2000-02-18*/
-        case 18: newFormatType = Format::Date17; break; /*2000-02-18*/
-        case 19: newFormatType = Format::Date18; break;
-        case 20: newFormatType = Format::Date19; break;
-        case 21: newFormatType = Format::Date20; break;
-        case 22: newFormatType = Format::Date21; break;
-        case 23: newFormatType = Format::Date22; break;
-        case 24: newFormatType = Format::Date23; break;
-        case 25: newFormatType = Format::Date24; break;
-        case 26: newFormatType = Format::Date25; break;
-        case 27: newFormatType = Format::Date26; break;
-        case 28: newFormatType = Format::Date27; break;
-        case 29: newFormatType = Format::Date28; break;
-        case 30: newFormatType = Format::Date29; break;
-        case 31: newFormatType = Format::Date30; break;
-        case 32: newFormatType = Format::Date31; break;
-        case 33: newFormatType = Format::Date32; break;
-        case 34: newFormatType = Format::Date33; break;
-        case 35: newFormatType = Format::Date34; break;
-        case 36: newFormatType = Format::Date35; break;
+        case 2: newFormatType = Format::Date1; break;
+        case 3: newFormatType = Format::Date2; break;
+        case 4: newFormatType = Format::Date3; break;
+        case 5: newFormatType = Format::Date4; break;
+        case 6: newFormatType = Format::Date5; break;
+        case 7: newFormatType = Format::Date6; break;
+        case 8: newFormatType = Format::Date7; break;
+        case 9: newFormatType = Format::Date8; break;
         }
     } else if (money->isChecked())
         newFormatType = Format::Money;
@@ -1513,7 +1365,7 @@ void CellFormatPageFloat::makeformat()
     if (!dlg->value.isNumber() || dlg->value.asFloat() >= 0 || !format->isEnabled()) {
         color = Qt::black;
     }
-    ValueFormatter *fmt = dlg->getSheet()->map()->formatter();
+    ValueFormatter *fmt = dlg->getSheet()->fullMap()->formatter();
     tmp = fmt->formatText(dlg->value, newFormatType, precision->value(),
                           floatFormat,
                           prefix->isEnabled() ? prefix->text() : QString(),
@@ -2193,10 +2045,10 @@ void CellFormatPagePosition::apply(CustomStyle * style)
     // setting the default column width and row height
     if (dlg->getStyle()->type() == Style::BUILTIN && dlg->getStyle()->name() == "Default") {
         if ((int) height->value() != (int) dlg->heightSize) {
-            dlg->getSheet()->map()->setDefaultRowHeight(height->value());
+            dlg->getSheet()->fullMap()->setDefaultRowHeight(height->value());
         }
         if ((int) width->value() != (int) dlg->widthSize) {
-            dlg->getSheet()->map()->setDefaultColumnWidth(width->value());
+            dlg->getSheet()->fullMap()->setDefaultColumnWidth(width->value());
         }
     }
 }

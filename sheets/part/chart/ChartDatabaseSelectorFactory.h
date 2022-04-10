@@ -10,7 +10,8 @@
 
 #include <QObject>
 #include <KoShapeConfigFactoryBase.h>
-#include "../Map.h"
+
+#include "core/Map.h"
 
 class KoShape;
 
@@ -18,7 +19,6 @@ namespace Calligra
 {
 namespace Sheets
 {
-class Map;
 
 /// factory to create a ChartDatabaseSelector widget
 class ChartDatabaseSelectorFactory : public QObject, public KoShapeConfigFactoryBase

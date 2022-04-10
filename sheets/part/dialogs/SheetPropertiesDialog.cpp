@@ -7,12 +7,7 @@
 // Local
 #include "SheetPropertiesDialog.h"
 
-#include <kcombobox.h>
-#include <KLocalizedString>
-
 #include <KoVBox.h>
-
-#include "Sheet.h"
 
 using namespace Calligra::Sheets;
 

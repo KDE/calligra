@@ -5,16 +5,17 @@
 #include "TestPasteCommand.h"
 
 #include <QTest>
+#include <QMimeData>
 
 #include "MockPart.h"
 
 #include "part/CanvasItem.h"
 #include "part/Doc.h"
-#include "Map.h"
+#include "core/Map.h"
 #include "ui/Selection.h"
-#include "Sheet.h"
-#include <Value.h>
-#include "commands/PasteCommand.h"
+#include "core/Sheet.h"
+#include <engine/Value.h>
+#include "ui/commands/PasteCommand.h"
 
 using namespace Calligra::Sheets;
 

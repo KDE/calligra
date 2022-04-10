@@ -11,14 +11,13 @@
 // Local
 #include "SpecialPasteDialog.h"
 
+#include "core/Cell.h"
+#include "core/Map.h"
+#include "core/Sheet.h"
+#include "../Selection.h"
+#include "../commands/PasteCommand.h"
 
-// #include <KLocalizedString>
-
-// #include "commands/PasteCommand.h"
-// #include "Global.h"
-// #include "Map.h"
-// #include "ui/Selection.h"
-// #include "Sheet.h"
+#include <QClipboard>
 
 using namespace Calligra::Sheets;
 
@@ -86,7 +85,7 @@ void SpecialPasteDialog::slotOk()
     command->setSameApp(clipboard->ownsClipboard());
     command->setMode(sp);
     command->setOperation(op);
-    m_selection->activeSheet()->map()->addCommand(command);
+    m_selection->activeSheet()->fullMap()->addCommand(command);
     accept();
 }
 

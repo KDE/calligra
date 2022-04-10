@@ -29,43 +29,30 @@
 
 // Local
 #include "HeaderItems.h"
+#include "CanvasBase.h"
+#include "CanvasItem.h"
+#include "Doc.h"
 
 // Qt
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QLabel>
-#include <QPainter>
-#include <QRubberBand>
-#include <QStyle>
-#include <QTextLayout>
 #include <QToolTip>
-#include <QScrollBar>
 #include <QStyleOptionGraphicsItem>
-#include <QGraphicsSceneWheelEvent>
+#include <QGraphicsSceneResizeEvent>
 
 // KF5
 #include <KLocalizedString>
 
 // Calligra
-#include <KoCanvasController.h>
 #include <KoToolProxy.h>
 #include <KoZoomHandler.h>
 #include <KoPointerEvent.h>
 #include <KoUnit.h>
 
 // Sheets
-#include "CanvasItem.h"
-#include "Cell.h"
-#include "Doc.h"
-#include "calligra_sheets_limits.h"
-#include "RowColumnFormat.h"
-#include "Sheet.h"
+#include "core/Sheet.h"
 
-// commands
-#include "commands/RowColumnManipulators.h"
-
-// ui
-#include "ui/Selection.h"
 
 using namespace Calligra::Sheets;
 

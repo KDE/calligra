@@ -15,12 +15,11 @@
 
 #include <KLocalizedString>
 
-#include <part/View.h>
+#include <engine/Region.h>
+#include <core/Map.h>
+#include <core/Sheet.h>
 #include <part/Doc.h>
-#include <Map.h>
-#include <Sheet.h>
-#include <Cell.h>
-#include <Region.h>
+#include <part/View.h>
 
 ScriptingSheetsListView::ScriptingSheetsListView(ScriptingModule* module, QWidget* parent)
         : QWidget(parent), m_module(module), m_initialized(false), m_selectiontype(SingleSelect), m_editortype(Disabled)
@@ -78,7 +77,8 @@ void ScriptingSheetsListView::initialize()
     Calligra::Sheets::View* view = m_module->kspreadView();
     Calligra::Sheets::Sheet* activeSheet = view ? view->activeSheet() : 0;
     if (doc && doc->map()) {
-        foreach(Calligra::Sheets::Sheet* sheet, doc->map()->sheetList()) {
+        for(Calligra::Sheets::SheetBase* bsheet : doc->map()->sheetList()) {
+            Calligra::Sheets::Sheet *sheet = dynamic_cast<Calligra::Sheets::Sheet *>(bsheet);
             if (! sheet || sheet->isHidden())
                 continue;
             QRect area = sheet->usedArea();
@@ -96,7 +96,7 @@ void ScriptingSheetsListView::initialize()
 
             if (m_editortype != Disabled) {
                 QString range;
-                foreach(const QVariant &v, m_prevlist) {
+                for(const QVariant &v : m_prevlist) {
                     QVariantList l = v.toList();
                     if (l.count() < 1 || l[0].toString() != sheet->sheetName())
                         continue;
@@ -193,7 +193,7 @@ QVariantList ScriptingSheetsListView::sheets()
         bool enabled = nameitem->checkState() == Qt::Checked;
 
         const QString sheetname = nameitem->text();
-        Calligra::Sheets::Sheet* sheet = m_module->kspreadDoc()->map()->findSheet(sheetname);
+        Calligra::Sheets::SheetBase* sheet = m_module->kspreadDoc()->map()->findSheet(sheetname);
         if (! sheet)
             continue;
 
@@ -203,7 +203,7 @@ QVariantList ScriptingSheetsListView::sheets()
         QStandardItem* rangeitem = model->item(row, 1);
         if (rangeitem) {
             const QString range = rangeitem->text();
-            Calligra::Sheets::Region region(range, m_module->kspreadDoc()->map(), sheet);
+            Calligra::Sheets::Region region = m_module->kspreadDoc()->map()->regionFromName(range, sheet);
             for (Calligra::Sheets::Region::ConstIterator it = region.constBegin(); it != region.constEnd(); ++it) {
                 const QRect rect = (*it)->rect();
                 if (! rect.isNull())

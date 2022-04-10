@@ -93,6 +93,19 @@ public:
     */
     void addSheet(SheetBase* sheet);
 
+    /**
+     * Creates a new sheet.
+     * The sheet is not added to the map nor added to the GUI.
+     * @return a pointer to a new Sheet
+     */
+    virtual SheetBase* createSheet(const QString& name = QString());
+
+    /**
+     * Creates a new sheet.
+     * Adds a new sheet to this map.
+     * @return a pointer to the new sheet
+     */
+    SheetBase* addNewSheet(const QString& name = QString());
 
     /**
      * \return true if the document is currently loading.

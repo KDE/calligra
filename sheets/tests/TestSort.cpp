@@ -7,14 +7,12 @@
 
 #include <QTest>
 
-#include <KoCanvasBase.h>
-
-#include "CellStorage.h"
-#include "Map.h"
-#include "Region.h"
-#include "Sheet.h"
+#include "engine/CellBaseStorage.h"
+#include "core/Map.h"
+#include "engine/Region.h"
+#include "core/Sheet.h"
 #include "ui/Selection.h"
-#include "../commands/SortManipulator.h"
+#include "ui/commands/SortManipulator.h"
 
 using namespace Calligra::Sheets;
 
@@ -31,7 +29,7 @@ void TestSort::AscendingOrder()
 
     selection->setActiveSheet(sheet);
 
-    CellStorage* storage = sheet->cellStorage();
+    CellBaseStorage* storage = sheet->cellStorage();
     // Data to sort...
     // Ascending
     // A1 3     
@@ -85,7 +83,7 @@ void TestSort::DescendingOrder()
 
     selection->setActiveSheet(sheet);
 
-    CellStorage* storage = sheet->cellStorage();
+    CellBaseStorage* storage = sheet->cellStorage();
     // Data to sort...
     // Descending
     // B1 1 

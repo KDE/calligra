@@ -28,8 +28,6 @@
 
 #include <QDialog>
 
-class KDatePicker;
-
 namespace Calligra
 {
 namespace Sheets
@@ -42,15 +40,6 @@ namespace Sheets
 class CalendarToolWidget : public QDialog, public Ui::CalendarToolWidget
 {
     Q_OBJECT
-
-private:
-
-    /**
-     * Stores a pointer to the currently active date picker frame.
-     * This is useful if we want to delete it manually.
-     * @see datePickerDeleted
-     */
-    KDatePicker* m_datePicker;
 
 public:
 
@@ -66,27 +55,7 @@ public:
      */
     ~CalendarToolWidget() override;
 
-protected:
-
-    /**
-     * Creates a KDatePicker frame that is not connected
-     * to any date widget. Normally showStartDatePicker
-     * of showEndDatePicker use this method to build
-     * a generally usable date picker widget and connect
-     * it to the appropriate KDateWidget of the dialog.
-     *
-     * DatePickerDeleted is already connected!
-     */
-    bool buildDatePickerFrame();
-
 protected Q_SLOTS:
-
-    /**
-     * Sets the currently active KDatePicker frame to 0.
-     * It's expected that the date picker frame is deleted.
-     * @see m_datePicker
-     */
-    void datePickerDeleted();
 
     /**
      * Emits the insertCalendar() signal with the chosen start and end date.
@@ -94,28 +63,13 @@ protected Q_SLOTS:
     void emitInsertCalendar();
 
 public Q_SLOTS:
-
     /**
-     * Shows a KDatePicker widget to select the start date.
-     * This slot is activated by the select date button.
-     */
-    void showStartDatePicker();
-
-    /**
-     * Shows a KDatePicker widget to select the end date.
-     * This slot is activated by the select date button.
-     */
-    void showEndDatePicker();
-
-    /**
-     * Slot for setting the start date in the KDateWidget.
-     * Normally this slot is activated by a KDatePicker widget.
+     * Slot for setting the start date.
      */
     void setStartDate(const QDate&);
 
     /**
-     * Slot for setting the end date in the KDateWidget.
-     * Normally this slot is activated by a KDatePicker widget.
+     * Slot for setting the end date.
      */
     void setEndDate(const QDate&);
 

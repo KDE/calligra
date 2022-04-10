@@ -6,11 +6,11 @@
 
 // Local
 #include "CellToolFactory.h"
+#include "CellTool.h"
 
 #include <KLocalizedString>
 
 #include <KoIcon.h>
-#include "CellTool.h"
 
 using namespace Calligra::Sheets;
 

@@ -6,13 +6,10 @@
 
 // Local
 #include "TableShape.h"
-
 #include "TablePageManager.h"
-#include "DocBase.h"
 
 #include <QPainter>
 
-#include <KGuiItem>
 #include <KMessageBox>
 #include <KAboutData>
 
@@ -23,31 +20,22 @@
 #include <KoOdfLoadingContext.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
+#include <KoXmlReader.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include <calligraversion.h>
 #include <KoComponentData.h>
-#include <KoUnit.h>
-#include <KoDpi.h>
 #include <KoDocumentResourceManager.h>
 #include <KoPart.h>
-#include <KoMainWindow.h>
-#include <KoDocumentBase.h>
 #include <KoDocumentEntry.h>
 
-#include <SheetsDebug.h>
-#include <CellView.h>
-#include <Damages.h>
-#include <Condition.h>
-#include <Map.h>
-#include <PrintSettings.h>
-#include <Region.h>
-#include <RowColumnFormat.h>
-#include <RowFormatStorage.h>
-#include <Sheet.h>
-#include <SheetView.h>
-#include <Value.h>
-#include <odf/SheetsOdf.h>
-#include <FunctionModuleRegistry.h>
+#include <engine/Damages.h>
+#include <engine/FunctionModuleRegistry.h>
+#include <engine/Region.h>
+#include <engine/SheetsDebug.h>
+#include <core/DocBase.h>
+#include <core/Map.h>
+#include <core/Sheet.h>
+#include <ui/SheetView.h>
 
 // Define the protocol used here for embedded documents' URL
 // This used to "store" but KUrl didn't like it,
@@ -367,9 +355,10 @@ void TableShape::saveOdf(KoShapeSavingContext & context) const
 void TableShape::setMap()
 {
     auto map = this->map();
-    Sheet* sheet = map->sheetList().value(0);
+    SheetBase *bsheet = map->sheetList().value(0);
+    Sheet *sheet = dynamic_cast<Sheet *>(bsheet);
     if (!sheet) {
-        sheet = map->addNewSheet();
+        sheet = dynamic_cast<Sheet *>(map->addNewSheet());
     }
     d->currentSheet = sheet;
     d->sheetView = new SheetView(sheet);
@@ -417,7 +406,8 @@ SheetView* TableShape::sheetView() const
 
 void TableShape::setSheet(const QString& sheetName)
 {
-    Sheet* const sheet = map()->findSheet(sheetName);
+    SheetBase* const bsheet = map()->findSheet(sheetName);
+    Sheet *sheet = bsheet ? dynamic_cast<Sheet *>(bsheet) : nullptr;
     if (! sheet) {
         return;
     }

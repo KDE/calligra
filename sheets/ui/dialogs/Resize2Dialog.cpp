@@ -13,27 +13,26 @@
 // Local
 #include "Resize2Dialog.h"
 
-// #include <float.h>
+#include <float.h>
 
 // Qt
-// #include <QGridLayout>
-// #include <QLabel>
+#include <QGridLayout>
+#include <QLabel>
 
 // Calligra
-// #include <KoCanvasBase.h>
-// #include <KoUnit.h>
-// #include <KoUnitDoubleSpinBox.h>
+#include <KoCanvasBase.h>
+#include <KoUnit.h>
+#include <KoUnitDoubleSpinBox.h>
 
 // Sheets
-// #include <Localization.h>
-// #include "Map.h"
-// #include "RowColumnFormat.h"
-// #include "RowFormatStorage.h"
-// #include "ui/Selection.h"
-// #include <Sheet.h>
+#include "core/ColFormatStorage.h"
+#include "core/Map.h"
+#include "core/RowFormatStorage.h"
+#include "core/Sheet.h"
+#include "../Selection.h"
 
 // commands
-// #include "commands/RowColumnManipulators.h"
+#include "../commands/RowColumnManipulators.h"
 
 using namespace Calligra::Sheets;
 
@@ -90,7 +89,7 @@ void ResizeRow::slotDefault()
     Sheet* sheet = m_selection->activeSheet();
     if (!sheet)
         return;
-    double points = sheet->map()->defaultRowFormat()->height();
+    double points = sheet->fullMap()->defaultRowFormat().height;
     m_pHeight->setValue(m_selection->canvas()->unit().toUserValue(points));
 }
 
@@ -102,8 +101,7 @@ ResizeColumn::ResizeColumn(QWidget* parent, Selection* selection)
     setButtons(Ok | Cancel | Default);
     m_selection = selection;
 
-    const ColumnFormat* cl = m_selection->activeSheet()->columnFormat(selection->lastRange().left());
-    columnWidth = cl->width();
+    columnWidth = m_selection->activeSheet()->columnFormats()->colWidth(m_selection->lastRange().left());
 
     QWidget *page = new QWidget();
     setMainWidget(page);
@@ -149,6 +147,6 @@ void ResizeColumn::slotDefault()
     Sheet* sheet = m_selection->activeSheet();
     if (!sheet)
         return;
-    double points = sheet->map()->defaultColumnFormat()->width();
+    double points = sheet->fullMap()->defaultColumnFormat().width;
     m_pWidth->setValue(m_selection->canvas()->unit().toUserValue(points));
 }

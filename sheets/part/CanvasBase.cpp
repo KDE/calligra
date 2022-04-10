@@ -33,36 +33,16 @@
 #include "CanvasBase.h"
 #include "CanvasBase_p.h"
 
-// std
-#include <assert.h>
-#include <float.h>
-#include <stdlib.h>
+#include "Doc.h"
+#include "Headers.h"
 
 // Qt
-#include <QApplication>
-#include <QBuffer>
-#include <QByteArray>
-#include <QClipboard>
-#include <QDragLeaveEvent>
-#include <QDragMoveEvent>
-#include <QDropEvent>
-#include <QEvent>
-#include <QFocusEvent>
-#include <QKeyEvent>
 #include <QLabel>
-#include <QList>
-#include <QMenu>
-#include <QMouseEvent>
+#include <QMimeData>
 #include <QPainter>
-#include <QPaintEvent>
-#include <QPixmap>
-#include <QPoint>
-#include <QScrollBar>
-#include <QTextStream>
 #include <QToolTip>
 
 // Calligra
-#include <KoCanvasController.h>
 #include <KoShapeManager.h>
 #include <KoToolProxy.h>
 #include <KoZoomHandler.h>
@@ -70,29 +50,18 @@
 #include <KoUnit.h>
 
 // Sheets
-#include "SheetsDebug.h"
-#include "CellStorage.h"
-#include "Doc.h"
-#include "HeaderWidgets.h"
-#include "Localization.h"
-#include "Map.h"
-#include "RowColumnFormat.h"
-#include "RowFormatStorage.h"
-#include "Sheet.h"
-#include "Util.h"
-#include "Validity.h"
-#include "ElapsedTime_p.h"
-
-// commands
-#include "commands/CopyCommand.h"
-#include "commands/DeleteCommand.h"
-#include "commands/PasteCommand.h"
-#include "commands/StyleCommand.h"
+#include "core/Cell.h"
+#include "core/ColFormatStorage.h"
+#include "core/Map.h"
+#include "core/RowFormatStorage.h"
+#include "core/Sheet.h"
 
 // ui
 #include "ui/CellView.h"
 #include "ui/Selection.h"
 #include "ui/SheetView.h"
+#include "ui/commands/DeleteCommand.h"
+#include "ui/commands/PasteCommand.h"
 
 #define MIN_SIZE 10
 
@@ -132,8 +101,8 @@ Doc* CanvasBase::doc() const
 
 void CanvasBase::gridSize(qreal* horizontal, qreal* vertical) const
 {
-    *horizontal = doc()->map()->defaultColumnFormat()->width();
-    *vertical = doc()->map()->defaultRowFormat()->height();
+    *horizontal = doc()->map()->defaultColumnFormat().width;
+    *vertical = doc()->map()->defaultRowFormat().height;
 }
 
 bool CanvasBase::snapToGrid() const
@@ -545,7 +514,7 @@ bool CanvasBase::dragMove(const QMimeData* mimeData, const QPointF& eventPos, co
     const QPoint dragAnchor = selection()->boundingRect().topLeft();
     double xpos = sheet->columnPosition(dragAnchor.x());
     double ypos = sheet->rowPosition(dragAnchor.y());
-    double width  = sheet->columnFormat(dragAnchor.x())->width();
+    double width  = sheet->columnFormats()->colWidth(dragAnchor.x());
     double height = sheet->rowFormats()->rowHeight(dragAnchor.y());
 
     // consider also the selection rectangle
@@ -596,7 +565,7 @@ bool CanvasBase::drop(const QMimeData* mimeData, const QPointF& eventPos, const 
     const QPoint topLeft(selection()->boundingRect().topLeft());
     const double xpos = sheet->columnPosition(topLeft.x());
     const double ypos = sheet->rowPosition(topLeft.y());
-    const double width  = sheet->columnFormat(topLeft.x())->width();
+    const double width  = sheet->columnFormats()->colWidth(topLeft.x());
     const double height = sheet->rowFormats()->rowHeight(topLeft.y());
 
     const QRectF noGoArea(xpos - 1, ypos - 1, width + 3, height + 3);

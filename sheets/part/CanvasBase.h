@@ -19,13 +19,12 @@
 #ifndef CALLIGRA_SHEETS_CANVASBASE
 #define CALLIGRA_SHEETS_CANVASBASE
 
-#include <QList>
 #include <QRect>
 #include <QSizeF>
 #include <QVariant>
 #include <KoCanvasBase.h>
 
-#include "sheets_common_export.h"
+#include "sheets_part_export.h"
 
 class QEvent;
 class QFocusEvent;
@@ -52,7 +51,7 @@ class SheetView;
 /**
  * The scrollable area showing the cells.
  */
-class CALLIGRA_SHEETS_COMMON_EXPORT CanvasBase : public KoCanvasBase
+class CALLIGRA_SHEETS_PART_EXPORT CanvasBase : public KoCanvasBase
 {
     friend class ColumnHeader;
     friend class RowHeader;
@@ -158,7 +157,7 @@ public:
     virtual KoZoomHandler* zoomHandler() const = 0;
     KoViewConverter* viewConverter() const override;
     virtual bool isViewLoading() const = 0; // not sure if is needed
-    virtual SheetView* sheetView(const Sheet* sheet) const = 0;
+    virtual SheetView* sheetView(Sheet* sheet) const = 0;
     virtual void enableAutoScroll() = 0;
     virtual void disableAutoScroll() = 0;
 

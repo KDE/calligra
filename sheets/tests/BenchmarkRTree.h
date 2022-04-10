@@ -18,7 +18,7 @@
 #define CALLIGRA_SHEETS_RTREE_BENCHMARK_H
 
 #include <QObject>
-#include "RTree.h"
+#include "engine/RTree.h"
 
 namespace Calligra
 {

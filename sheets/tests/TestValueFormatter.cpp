@@ -4,13 +4,12 @@
 
 #include "TestValueFormatter.h"
 
-#include <ValueFormatter.h>
+#include <core/ValueFormatter.h>
 
-#include <CalculationSettings.h>
-#include <ValueConverter.h>
-#include <ValueParser.h>
-
-#include <KLocale>
+#include <engine/CalculationSettings.h>
+#include <engine/Localization.h>
+#include <engine/ValueConverter.h>
+#include <engine/ValueParser.h>
 
 #include <QTest>
 

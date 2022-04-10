@@ -3,23 +3,16 @@
 // SPDX-License-Identifier: LGPL-2.0-or-later
 
 #include "ScriptingFunction.h"
-
 #include "ScriptingDebug.h"
+#include <FunctionDescription.h>
 
 #include <QDomDocument>
 #include <QPointer>
 
 #include <KLocalizedString>
 
-//#include <Doc.h>
-//#include <View.h>
-#include <Value.h>
-#include <Number.h>
-#include <Function.h>
-#include <FunctionDescription.h>
-#include <FunctionRepository.h>
-
-#include <kross/core/manager.h>
+#include <engine/Function.h>
+#include <engine/FunctionRepository.h>
 
 /***************************************************************************
  * ScriptingFunctionImpl

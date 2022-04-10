@@ -4,14 +4,11 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-// Local
 #include "SheetSelectPage.h"
 
-// Calligra
 #include <KoIcon.h>
 
-// Sheets
-#include "SheetsDebug.h"
+#include "engine/SheetsDebug.h"
 
 using namespace Calligra::Sheets;
 

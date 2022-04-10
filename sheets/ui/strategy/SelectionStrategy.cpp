@@ -6,15 +6,11 @@
 
 #include "SelectionStrategy.h"
 
-// #include "CellEditor.h"
-// #include "CellToolBase.h"
-// #include "calligra_sheets_limits.h"
-// #include "Selection.h"
-// #include "Sheet.h"
-
-// #include <KoCanvasBase.h>
-// #include <KoSelection.h>
-// #include <KoShapeManager.h>
+#include "engine/calligra_sheets_limits.h"
+#include "core/Sheet.h"
+#include "../CellEditorBase.h"
+#include "../CellToolBase.h"
+#include "../Selection.h"
 
 using namespace Calligra::Sheets;
 

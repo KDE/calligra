@@ -8,6 +8,7 @@
 #define CALLIGRA_SHEETS_MAP_MODEL
 
 #include <QAbstractListModel>
+#include "sheets_ui_export.h"
 
 class KUndo2Command;
 
@@ -17,13 +18,14 @@ namespace Sheets
 {
 class Map;
 class Sheet;
+class SheetBase;
 
 /**
  * A model for the 'embedded document'.
  * Actually, a model for a sheet list.
  * \ingroup Model
  */
-class MapModel : public QAbstractListModel
+class CALLIGRA_SHEETS_UI_EXPORT MapModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
@@ -53,8 +55,8 @@ protected:
     Map* map() const;
 
 protected Q_SLOTS:
-    virtual void addSheet(Sheet *sheet);
-    virtual void removeSheet(Sheet *sheet);
+    virtual void addSheet(SheetBase *sheet);
+    virtual void removeSheet(SheetBase *sheet);
 
 private:
     class Private;

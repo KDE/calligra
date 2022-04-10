@@ -9,17 +9,16 @@
 // Local
 #include "ListDialog.h"
 
-// #include <QGridLayout>
-// #include <QLabel>
-// #include <QListWidget>
-// #include <QPushButton>
+#include <QGridLayout>
+#include <QLabel>
+#include <QListWidget>
+#include <QPushButton>
 
-// #include <KSharedConfig>
-// #include <kmessagebox.h>
-// #include <ktextedit.h>
+#include <KSharedConfig>
+#include <kmessagebox.h>
+#include <ktextedit.h>
 
-// #include "commands/AutoFillCommand.h"
-// #include "Localization.h"
+#include "../commands/AutoFillCommand.h"
 
 using namespace Calligra::Sheets;
 

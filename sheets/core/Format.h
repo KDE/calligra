@@ -50,7 +50,7 @@ enum Type {
     Date6 = 205,
     Date7 = 206,
     Date8 = 207,
-    DatesEnd = 234,     ///< \internal
+    DatesEnd = 207,     ///< \internal
 
     DateTime = 40,      ///< e.g. 08-04-2007 11:02 (locale specific)
 

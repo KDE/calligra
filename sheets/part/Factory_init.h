@@ -6,7 +6,6 @@
 #ifndef FACTORYINIT_H
 #define FACTORYINIT_H
 
-#include <kpluginfactory.h>
 #include "Factory.h"
 
 namespace Calligra

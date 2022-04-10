@@ -12,19 +12,19 @@
 // Local
 #include "ShowDialog.h"
 
-// #include <QLabel>
-// #include <QListWidget>
-// #include <QVBoxLayout>
+#include <QLabel>
+#include <QListWidget>
+#include <QVBoxLayout>
 
-// #include <KLocalizedString>
+#include <KLocalizedString>
 
-// #include "Damages.h"
-// #include "Map.h"
-// #include "ui/Selection.h"
-// #include "Sheet.h"
+#include "engine/Damages.h"
+#include "core/Map.h"
+#include "core/Sheet.h"
+#include "../ui/Selection.h"
 
 // commands
-// #include "commands/SheetCommands.h"
+#include "../commands/SheetCommands.h"
 
 using namespace Calligra::Sheets;
 
@@ -49,7 +49,7 @@ ShowDialog::ShowDialog(QWidget* parent, Selection* selection)
     lay1->addWidget(m_listWidget);
 
     m_listWidget->setSelectionMode(QListWidget::MultiSelection);
-    QStringList tabsList = m_selection->activeSheet()->map()->hiddenSheets();
+    QStringList tabsList = m_selection->activeSheet()->fullMap()->hiddenSheets();
     m_listWidget->addItems(tabsList);
     if (!m_listWidget->count())
         enableButtonOk(false);
@@ -67,13 +67,11 @@ void ShowDialog::accept()
         return;
     }
 
-    Map *const map = m_selection->activeSheet()->map();
-    Sheet *sheet;
+    Map *const map = m_selection->activeSheet()->fullMap();
     KUndo2Command* macroCommand = new KUndo2Command(kundo2_i18n("Show Sheet"));
     for (int i = 0; i < items.count(); ++i) {
-        sheet = map->findSheet(items[i]->text());
-        if (!sheet)
-            continue;
+        Sheet *sheet = dynamic_cast<Sheet *>(map->findSheet(items[i]->text()));
+        if (!sheet) continue;
         new ShowSheetCommand(sheet, macroCommand);
     }
     map->addCommand(macroCommand);

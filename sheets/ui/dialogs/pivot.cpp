@@ -11,11 +11,7 @@
 #include "ui_pivotmain.h"
 #include "pivotmain.h"
 
-// #include <QApplication>
-// #include <QMessageBox>
-
-// #include <sheets/Sheet.h>
-// #include <sheets/ui/Selection.h>
+#include <QMessageBox>
 
 
 using namespace Calligra::Sheets;

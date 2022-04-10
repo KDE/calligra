@@ -11,38 +11,32 @@
 
 #ifndef QT_NO_SQL
 
-// #include "Cell.h"
-// #include "ui/Selection.h"
-// #include "Sheet.h"
-// #include "Util.h"
-// #include "SheetsDebug.h"
+#include "engine/CellBase.h"
+#include "engine/MapBase.h"
+#include "core/Sheet.h"
+#include "../Selection.h"
 
-// #include "commands/DataManipulators.h"
+#include "../commands/DataManipulators.h"
 
-// #include <KoCanvasBase.h>
+#include <KoCanvasBase.h>
 
-// #include <kcombobox.h>
-// #include <klineedit.h>
-// #include <KLocalizedString>
-// #include <kmessagebox.h>
-// #include <ktextedit.h>
+#include <kcombobox.h>
+#include <klineedit.h>
+#include <KLocalizedString>
+#include <kmessagebox.h>
+#include <ktextedit.h>
 
-// #include <QIntValidator>
-// #include <QCheckBox>
-// #include <QFrame>
-// #include <QGridLayout>
-// #include <QHBoxLayout>
-// #include <QLabel>
-// #include <QPushButton>
-// #include <QRadioButton>
-// #include <QSqlDatabase>
-// #include <QSqlError>
-// #include <QSqlField>
-// #include <QSqlQuery>
-// #include <QSqlRecord>
-// #include <QVariant>
-// #include <QListWidget>
-// #include <QTreeWidget>
+#include <QCheckBox>
+#include <QGridLayout>
+#include <QLabel>
+#include <QRadioButton>
+#include <QSqlDatabase>
+#include <QSqlError>
+#include <QSqlField>
+#include <QSqlQuery>
+#include <QSqlRecord>
+#include <QListWidget>
+#include <QTreeWidget>
 
 using namespace Calligra::Sheets;
 
@@ -442,7 +436,7 @@ void DatabaseDialog::accept()
     int width  = -1;
     int height = -1;
     if (m_startingRegion->isChecked()) {
-        Region region(m_region->text(), sheet->map());
+        Region region = sheet->map()->regionFromName(m_region->text(), sheet);
         if (region.isValid() && region.firstSheet() != sheet) {
             KMessageBox::error(this, i18n("You cannot specify a table here."));
             m_region->setFocus();
@@ -462,7 +456,7 @@ void DatabaseDialog::accept()
         width  = region.firstRange().width();
         height = region.firstRange().height();
     } else {
-        const Region region(m_cell->text(), sheet->map(), sheet);
+        const Region region = sheet->map()->regionFromName(m_cell->text(), sheet);
         if (region.isValid() && region.firstSheet() != sheet) {
             KMessageBox::error(this, i18n("You cannot specify a table here."));
             m_cell->setFocus();
@@ -490,7 +484,6 @@ void DatabaseDialog::accept()
             queryStr += ' ';
     }
 
-    Cell cell;
     QSqlQuery query(m_dbConnection);
 
     // Check the whole query for SQL that might modify database.
@@ -938,7 +931,7 @@ bool DatabaseDialog::optionsDoNext()
     }
 
     m_sqlQuery->setText(query);
-    m_cell->setText(Cell::name(m_targetRect.left(), m_targetRect.top()));
+    m_cell->setText(CellBase::name(m_targetRect.left(), m_targetRect.top()));
     m_region->setText(Region(m_targetRect).name());
 
     setValid(m_result, true);

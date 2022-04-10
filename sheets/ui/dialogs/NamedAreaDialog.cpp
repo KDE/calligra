@@ -15,31 +15,28 @@
 #include "NamedAreaDialog.h"
 
 // Qt
-// #include <QGridLayout>
-// #include <QLabel>
-// #include <QList>
-// #include <QHBoxLayout>
-// #include <QVBoxLayout>
-// #include <QListWidget>
-// #include <QPushButton>
+#include <QGridLayout>
+#include <QLabel>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QListWidget>
+#include <QPushButton>
 
 // KF5
-// #include <kcombobox.h>
-// #include <klineedit.h>
-// #include <kmessagebox.h>
-// #include <kstandardguiitem.h>
+#include <kcombobox.h>
+#include <klineedit.h>
+#include <kmessagebox.h>
+#include <kstandardguiitem.h>
 
-// #include <KoCanvasBase.h>
+#include <KoCanvasBase.h>
 
 // Sheets
-// #include "Localization.h"
-// #include "Map.h"
-// #include "NamedAreaManager.h"
-// #include "ui/Selection.h"
-// #include "Sheet.h"
-// #include "Util.h"
+#include "engine/MapBase.h"
+#include "engine/NamedAreaManager.h"
+#include "core/Sheet.h"
+#include "../Selection.h"
 
-// #include "commands/NamedAreaCommand.h"
+#include "../commands/NamedAreaCommand.h"
 
 using namespace Calligra::Sheets;
 
@@ -120,14 +117,16 @@ void NamedAreaDialog::slotOk()
 {
     if (m_list->count() > 0) {
         QListWidgetItem* item = m_list->currentItem();
-        Region region = m_selection->activeSheet()->map()->namedAreaManager()->namedArea(item->text());
-        Sheet* sheet = m_selection->activeSheet()->map()->namedAreaManager()->sheet(item->text());
+        NamedAreaManager *manager = m_selection->activeSheet()->map()->namedAreaManager();
+        Region region = manager->namedArea(item->text());
+        SheetBase* sheet = manager->sheet(item->text());
         if (!sheet || !region.isValid()) {
             return;
         }
+        Sheet *fullSheet = dynamic_cast<Sheet *>(sheet);
 
-        if (sheet && sheet != m_selection->activeSheet())
-            m_selection->emitVisibleSheetRequested(sheet);
+        if (fullSheet && fullSheet != m_selection->activeSheet())
+            m_selection->emitVisibleSheetRequested(fullSheet);
         m_selection->initialize(region);
     }
 
@@ -247,9 +246,9 @@ EditNamedAreaDialog::EditNamedAreaDialog(QWidget* parent, Selection* selection)
     m_areaNameEdit = new KLineEdit(page);
     gridLayout->addWidget(m_areaNameEdit, 0, 1);
 
-    const QList<Sheet*> sheetList = m_selection->activeSheet()->map()->sheetList();
+    const QList<SheetBase*> sheetList = m_selection->activeSheet()->map()->sheetList();
     for (int i = 0; i < sheetList.count(); ++i) {
-        Sheet* sheet = sheetList.at(i);
+        SheetBase* sheet = sheetList.at(i);
         if (!sheet)
             continue;
         m_sheets->insertItem(i, sheet->sheetName());
@@ -273,14 +272,15 @@ void EditNamedAreaDialog::setAreaName(const QString& name)
 {
     m_initialAreaName = name;
     m_areaNameEdit->setText(name);
-    Sheet* sheet = m_selection->activeSheet()->map()->namedAreaManager()->sheet(name);
-    const QString tmpName = m_selection->activeSheet()->map()->namedAreaManager()->namedArea(name).name(sheet);
+    NamedAreaManager *manager = m_selection->activeSheet()->map()->namedAreaManager();
+    SheetBase* sheet = manager->sheet(name);
+    const QString tmpName = manager->namedArea(name).name(sheet);
     m_cellRange->setText(tmpName);
 }
 
 void EditNamedAreaDialog::setRegion(const Region& region)
 {
-    Sheet* sheet = region.firstSheet();
+    SheetBase* sheet = region.firstSheet();
     m_sheets->setCurrentIndex(m_sheets->findText(sheet->sheetName()));
     m_cellRange->setText(region.name(sheet));
 }
@@ -289,8 +289,9 @@ void EditNamedAreaDialog::slotOk()
 {
     if (m_areaNameEdit->text().isEmpty())
         return;
-    Sheet* sheet = m_selection->activeSheet()->map()->sheet(m_sheets->currentIndex());
-    Region region(m_cellRange->text(), m_selection->activeSheet()->map(), sheet);
+    SheetBase* baseSheet = m_selection->activeSheet()->map()->sheet(m_sheets->currentIndex());
+    Sheet *sheet = dynamic_cast<Sheet *>(baseSheet);
+    Region region = m_selection->activeSheet()->map()->regionFromName(m_cellRange->text(), sheet);
     if (!region.isValid())
         return;
 

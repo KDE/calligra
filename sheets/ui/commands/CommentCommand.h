@@ -19,7 +19,7 @@ namespace Sheets
  * \ingroup Commands
  * \brief Adds/Removes comments to/of a cell region.
  */
-class CommentCommand : public AbstractRegionCommand
+class CALLIGRA_SHEETS_UI_EXPORT CommentCommand : public AbstractRegionCommand
 {
 public:
     explicit CommentCommand(KUndo2Command *parent = 0);

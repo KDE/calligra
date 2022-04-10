@@ -6,12 +6,11 @@
 
 #include "PasteStrategy.h"
 
-// #include <QApplication>
-// #include <QClipboard>
+#include <QApplication>
+#include <QClipboard>
 
-// #include "commands/PasteCommand.h"
-// #include "Selection.h"
-// #include "Sheet.h"
+#include "../Selection.h"
+#include "../commands/PasteCommand.h"
 
 using namespace Calligra::Sheets;
 

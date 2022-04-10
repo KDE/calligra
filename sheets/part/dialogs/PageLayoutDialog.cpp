@@ -5,23 +5,20 @@
 */
 
 #include "PageLayoutDialog.h"
+#include "ui_PageLayoutSheetPage.h"
 
 // Sheets
-#include "part/Doc.h"
-#include "Map.h"
-#include "PrintSettings.h"
-#include "Sheet.h"
-#include "ui_PageLayoutSheetPage.h"
-#include "Util.h"
+#include "engine/CellBase.h"
+#include "engine/MapBase.h"
+#include "engine/Util.h"
+#include "core/DocBase.h"
+#include "core/Sheet.h"
 
 // commands
-#include "part/commands/PageLayoutCommand.h"
+#include "../commands/PageLayoutCommand.h"
 
 // Calligra
 #include <KoUnit.h>
-
-// KF5
-#include <KLocalizedString>
 
 using namespace Calligra::Sheets;
 
@@ -56,15 +53,15 @@ void PageLayoutDialog::Private::setup()
     sheetPage.columnsCheckBox->setChecked(repeatedColumns.first && repeatedColumns.second);
     const int maxColumn = qMax(usedArea.width(), repeatedColumns.second);
     for (int col = 1; col <= maxColumn; ++col) {
-        const QString number = Cell::columnName(col);
+        const QString number = CellBase::columnName(col);
         sheetPage.startColumnComboBox->addItem(number);
         sheetPage.endColumnComboBox->addItem(number, col);
     }
-    int index = sheetPage.startColumnComboBox->findText(Cell::columnName(repeatedColumns.first));
+    int index = sheetPage.startColumnComboBox->findText(CellBase::columnName(repeatedColumns.first));
     if (index == -1)
         index = 0;
     sheetPage.startColumnComboBox->setCurrentIndex(index);
-    index = sheetPage.endColumnComboBox->findText(Cell::columnName(repeatedColumns.second));
+    index = sheetPage.endColumnComboBox->findText(CellBase::columnName(repeatedColumns.second));
     if (index == -1)
         index = 0;
     sheetPage.endColumnComboBox->setCurrentIndex(index);
@@ -211,9 +208,10 @@ void PageLayoutDialog::accept()
     if (applyToDocument()) {
         // Apply to all sheets.
         KUndo2Command* macroCommand = new KUndo2Command(kundo2_i18n("Set Page Layout"));
-        const QList<Sheet*> sheets = d->sheet->map()->sheetList();
-        for (int i = 0; i < sheets.count(); ++i) {
-            PageLayoutCommand* command = new PageLayoutCommand(sheets[i], settings, macroCommand);
+        const QList<SheetBase*> sheets = d->sheet->map()->sheetList();
+        for (SheetBase *bsheet : sheets) {
+            Sheet *sheet = dynamic_cast<Sheet *>(bsheet);
+            PageLayoutCommand* command = new PageLayoutCommand(sheet, settings, macroCommand);
             Q_UNUSED(command);
         }
         d->sheet->doc()->addCommand(macroCommand);

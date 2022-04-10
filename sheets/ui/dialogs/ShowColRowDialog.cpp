@@ -11,26 +11,23 @@
 #include "ShowColRowDialog.h"
 
 // Qt
-// #include <QLabel>
-// #include <QVBoxLayout>
-// #include <QListWidget>
+#include <QLabel>
+#include <QVBoxLayout>
+#include <QListWidget>
 
 // KF5
-// #include <KLocalizedString>
+#include <KLocalizedString>
 
 // Sheets
-// #include "calligra_sheets_limits.h"
-// #include "Region.h"
-// #include "RowColumnFormat.h"
-// #include "RowFormatStorage.h"
-// #include "ui/Selection.h"
-// #include "Sheet.h"
+#include "engine/calligra_sheets_limits.h"
+#include "engine/CellBase.h"
+#include "core/ColFormatStorage.h"
+#include "core/RowFormatStorage.h"
+#include "core/Sheet.h"
+#include "../ui/Selection.h"
 
 // commands
-// #include "commands/RowColumnManipulators.h"
-
-// Other
-// #include <algorithm>
+#include "../commands/RowColumnManipulators.h"
 
 using namespace Calligra::Sheets;
 
@@ -63,18 +60,20 @@ ShowColRow::ShowColRow(QWidget* parent, Selection* selection, Type _type)
 
     bool showColNumber = m_selection->activeSheet()->getShowColumnNumber();
     if (_type == Column) {
-        ColumnFormat *col = m_selection->activeSheet()->firstCol();
-
         QString text;
         QStringList listCol;
-        for (; col; col = col->next()) {
-            if (col->isHidden())
-                listInt.append(col->column());
+        int lastCol, col = 1;
+        while (col <= KS_colMax) {
+            if (m_selection->activeSheet()->columnFormats()->isHidden(col, &lastCol)) {
+                for (int i = col; i <= lastCol; ++i)
+                    listInt.append(i);
+            }
+            col = lastCol+1;
         }
-        std::sort(listInt.begin(), listInt.end());
+
         for (QList<int>::ConstIterator it = listInt.constBegin(); it != listInt.constEnd(); ++it) {
             if (!showColNumber)
-                listCol += i18n("Column: %1", Cell::columnName(*it));
+                listCol += i18n("Column: %1", CellBase::columnName(*it));
             else
                 listCol += i18n("Column: %1", text.setNum(*it));
         }

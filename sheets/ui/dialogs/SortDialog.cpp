@@ -17,26 +17,23 @@
 #include "SortDialog.h"
 
 // Sheets
-// #include "Map.h"
-// #include "ui/Selection.h"
-// #include "Sheet.h"
-// #include "ValueConverter.h"
+#include "engine/MapBase.h"
+#include "engine/ValueConverter.h"
+#include "core/Sheet.h"
 
-// commands
-// #include "commands/SortManipulator.h"
+#include "../Selection.h"
+#include "../commands/SortManipulator.h"
 
-// #include <KoIcon.h>
+#include <KoIcon.h>
 
 // ui
-// #include "ui_SortWidget.h"
-// #include "ui_SortDetailsWidget.h"
+#include "ui_SortWidget.h"
+#include "ui_SortDetailsWidget.h"
 
-// #include <KSharedConfig>
+#include <KSharedConfig>
 
 // Qt
-// #include <QStyledItemDelegate>
-
-// #include <algorithm>
+#include <QStyledItemDelegate>
 
 using namespace Calligra::Sheets;
 
@@ -77,7 +74,7 @@ public:
         const QAbstractItemModel *const model = index.model();
         const int itemIndex = model->data(index, Qt::UserRole).toInt();
         const bool hasHeader = mainWidget.m_useHeader->isChecked();
-        Sheet *const sheet = selection->lastSheet();
+        SheetBase *const sheet = selection->lastSheet();
         ValueConverter *const converter = sheet->map()->converter();
 
         if (mainWidget.m_sortVertical->isChecked()) /* data grouped in rows; criteria/header per column */ {
@@ -89,7 +86,7 @@ public:
             for (int i = 0; i < indices.count(); ++i) {
                 const int col = indices[i];
                 const QString columnName = i18n("Column %1", Cell::columnName(col));
-                const Value value = Cell(sheet, col, row).value();
+                const Value value = CellBase(sheet, col, row).value();
                 const QString header = converter->asString(value).asString();
                 if (hasHeader) {
                     if (header.isEmpty()) {
@@ -114,7 +111,7 @@ public:
             for (int i = 0; i < indices.count(); ++i) {
                 const int row = indices[i];
                 const QString rowName = i18n("Row %1", row);
-                const Value value = Cell(sheet, col, row).value();
+                const Value value = CellBase(sheet, col, row).value();
                 const QString header = converter->asString(value).asString();
                 if (hasHeader) {
                     if (header.isEmpty()) {
@@ -175,17 +172,17 @@ public:
 
 bool SortDialog::Private::hasHeader(const Region &region, Qt::Orientation orientation) const
 {
-    Sheet *const sheet = region.lastSheet();
+    SheetBase *const sheet = region.lastSheet();
     const QRect range = region.lastRange();
     if (orientation == Qt::Horizontal) /* check for column headers */ {
         for (int col = range.left(); col <= range.right(); ++col) {
-            if (!Cell(sheet, col, range.top()).value().isString())  {
+            if (!CellBase(sheet, col, range.top()).value().isString())  {
                 return false;
             }
         }
     } else /* check for row headers */ {
         for (int row = range.top(); row <= range.bottom(); ++row) {
-            if (!Cell(sheet, range.left(), row).value().isString()) {
+            if (!CellBase(sheet, range.left(), row).value().isString()) {
                 return false;
             }
         }
@@ -228,7 +225,7 @@ void SortDialog::Private::insertIndex(int index, Qt::Orientation orientation) co
 
 QString SortDialog::Private::itemText(int index, bool useHeader) const
 {
-    Sheet *const sheet = selection->lastSheet();
+    SheetBase *const sheet = selection->lastSheet();
     ValueConverter *const converter = sheet->map()->converter();
 
     if (mainWidget.m_sortHorizontal->isChecked()) /* data grouped in columns; criteria/header per row */ {
@@ -236,7 +233,7 @@ QString SortDialog::Private::itemText(int index, bool useHeader) const
         const int row = index;
         const QString rowName = i18n("Row %1", row);
         if (useHeader) {
-            const Value value = Cell(sheet, col, row).value();
+            const Value value = CellBase(sheet, col, row).value();
             const QString header = converter->asString(value).asString();
             if (header.isEmpty()) {
                 return QString('(' + rowName + ')');
@@ -251,7 +248,7 @@ QString SortDialog::Private::itemText(int index, bool useHeader) const
         const int row = selection->lastRange().top();
         const QString columnName = i18n("Column %1", Cell::columnName(col));
         if (useHeader) {
-            const Value value = Cell(sheet, col, row).value();
+            const Value value = CellBase(sheet, col, row).value();
             const QString header = converter->asString(value).asString();
             if (header.isEmpty()) {
                 return QString('(' + columnName + ')');
@@ -384,7 +381,7 @@ void SortDialog::init()
     }
     d->detailsWidget.m_customList->insertItems(0, lst);
 
-    Sheet *const sheet = d->selection->lastSheet();
+    SheetBase *const sheet = d->selection->lastSheet();
     const QRect range = d->selection->lastRange();
     const Region region(range, sheet);
 

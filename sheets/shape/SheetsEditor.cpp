@@ -6,6 +6,7 @@
 
 // Local
 #include "SheetsEditor.h"
+#include "TableShape.h"
 
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -13,9 +14,10 @@
 #include <QPushButton>
 #include <QInputDialog>
 
-#include "TableShape.h"
-#include "Sheet.h"
-#include "Map.h"
+#include <KLocalizedString>
+
+#include "core/Map.h"
+#include "core/Sheet.h"
 
 using namespace Calligra::Sheets;
 
@@ -44,7 +46,7 @@ SheetsEditor::SheetsEditor(TableShape* tableShape, QWidget* parent)
     layout->addWidget(d->list);
 
     Map *map = d->tableShape->map();
-    foreach(Sheet* sheet, map->sheetList()) {
+    for(SheetBase* sheet : map->sheetList()) {
         sheetAdded(sheet);
     }
     connect(map, &Map::sheetAdded, this, &SheetsEditor::sheetAdded);
@@ -73,8 +75,9 @@ SheetsEditor::~SheetsEditor()
     delete d;
 }
 
-void SheetsEditor::sheetAdded(Sheet* sheet)
+void SheetsEditor::sheetAdded(SheetBase* bsheet)
 {
+    Sheet *sheet = dynamic_cast<Sheet *>(bsheet);
     Q_ASSERT(sheet);
     QListWidgetItem* item = new QListWidgetItem(sheet->sheetName());
     item->setCheckState(sheet->isHidden() ? Qt::Unchecked : Qt::Checked);
@@ -100,7 +103,8 @@ void SheetsEditor::itemChanged(QListWidgetItem* item)
 {
     Q_ASSERT(item);
     Map *map = d->tableShape->map();
-    Sheet* sheet = map->findSheet(item->text());
+    SheetBase* bsheet = map->findSheet(item->text());
+    Sheet *sheet = bsheet ? dynamic_cast<Sheet *>(bsheet) : nullptr;
     if (sheet)
         sheet->setHidden(item->checkState() != Qt::Checked);
 }
@@ -111,7 +115,7 @@ void SheetsEditor::renameClicked()
     if (! item)
         return;
     Map *map = d->tableShape->map();
-    Sheet* sheet = map->findSheet(item->text());
+    SheetBase* sheet = map->findSheet(item->text());
     if (! sheet)
         return;
     QString name = QInputDialog::getText(0, i18n("Rename"), i18n("Enter Name:"), QLineEdit::Normal, sheet->sheetName());
@@ -132,7 +136,7 @@ void SheetsEditor::removeClicked()
     if (! item)
         return;
     Map *map = d->tableShape->map();
-    Sheet* sheet = map->findSheet(item->text());
+    SheetBase* sheet = map->findSheet(item->text());
     if (! sheet)
         return;
     map->removeSheet(sheet);

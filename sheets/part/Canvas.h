@@ -19,23 +19,9 @@
 #ifndef CALLIGRA_SHEETS_CANVAS
 #define CALLIGRA_SHEETS_CANVAS
 
-#include <QList>
-#include <QWidget>
-#include <QVariant>
-
-#include <KoCanvasBase.h>
-
-#include "sheets_common_export.h"
 #include "CanvasBase.h"
 
-class QDragLeaveEvent;
-class QDragMoveEvent;
-class QDropEvent;
-class QEvent;
-class QFocusEvent;
-class QKeyEvent;
-class QMouseEvent;
-class QPaintEvent;
+#include <QWidget>
 
 namespace Calligra
 {
@@ -54,7 +40,7 @@ class View;
 /**
  * The scrollable area showing the cells.
  */
-class CALLIGRA_SHEETS_COMMON_EXPORT Canvas : public QWidget, public CanvasBase
+class CALLIGRA_SHEETS_PART_EXPORT Canvas : public QWidget, public CanvasBase
 {
     friend class ColumnHeader;
     friend class RowHeader;
@@ -148,7 +134,7 @@ public:
 
     KoZoomHandler* zoomHandler() const override;
     bool isViewLoading() const override;
-    SheetView* sheetView(const Sheet* sheet) const override;
+    SheetView* sheetView(Sheet* sheet) const override;
     void enableAutoScroll() override;
     void disableAutoScroll() override;
     void showContextMenu(const QPoint& globalPos) override;

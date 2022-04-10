@@ -11,9 +11,9 @@ namespace Calligra
 {
 namespace Sheets
 {
-class CellStorage;
-class Map;
-class Sheet;
+class CellBaseStorage;
+class MapBase;
+class SheetBase;
 
 class TestDependencies : public QObject
 {
@@ -27,9 +27,9 @@ private Q_SLOTS:
     void cleanupTestCase();
 
 private:
-    CellStorage* m_storage;
-    Map* m_map;
-    Sheet* m_sheet;
+    CellBaseStorage* m_storage;
+    MapBase* m_map;
+    SheetBase* m_sheet;
 };
 
 } // namespace Sheets

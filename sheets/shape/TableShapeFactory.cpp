@@ -6,8 +6,8 @@
 
 // Local
 #include "TableShapeFactory.h"
-
-#include <QStringList>
+#include "TableToolFactory.h"
+#include <TableShape.h>
 
 #include <kpluginfactory.h>
 #include <KLocalizedString>
@@ -20,11 +20,6 @@
 #include <KoOdfLoadingContext.h>
 #include <KoXmlNS.h>
 #include <KoStyleStack.h>
-#include <KoDocumentBase.h>
-
-#include <Map.h>
-#include <TableShape.h>
-#include <TableToolFactory.h>
 
 using namespace Calligra::Sheets;
 

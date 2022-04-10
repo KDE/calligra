@@ -8,10 +8,8 @@
 #define CALLIGRA_SHEETS_HYPERLINK_STRATEGY
 
 #include "../AbstractSelectionStrategy.h"
-#include "../sheets_common_export.h"
 
-// #include <Qt>
-// #include <QRectF>
+class QRectF;
 
 namespace Calligra
 {

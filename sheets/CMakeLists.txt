@@ -4,8 +4,7 @@ list(APPEND CMAKE_AUTOMOC_MACRO_NAMES "CALLIGRA_SHEETS_EXPORT_FUNCTION_MODULE")
 
 if (SHOULD_BUILD_PART_SHEETS)
 
-include_directories( ${CMAKE_SOURCE_DIR}/interfaces
-                    ${KOMAIN_INCLUDES}
+include_directories( ${KOMAIN_INCLUDES}
                     ${KOTEXT_INCLUDES}
                     ${TEXTLAYOUT_INCLUDES}
                     ${Boost_INCLUDE_DIR}
@@ -47,72 +46,6 @@ endif ()
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# TODO - all this needs to go somewhere!!!
-
-
-
-
-########### next target ###############
-set (chart_DIR_SRCS
-    chart/ChartDatabaseSelectorFactory.cpp
-    chart/ChartDatabaseSelector.cpp
-    chart/ChartDialog.cpp
-    )
-
-ki18n_wrap_ui(chart_DIR_SRCS
-    chart/ChartDatabaseSelector.ui
-    )
-
-
-if(Qt5DBus_FOUND)
-set (interfaces_DIR_SRCS
-    interfaces/MapAdaptor.cpp
-    interfaces/SheetAdaptor.cpp
-    interfaces/ViewAdaptor.cpp
-    )
-endif()
-
-
-set (calligrasheetscommon_LIB_SRCS
-    MapModel.cpp
-    PageManager.cpp
-    RegionModel.cpp
-    ${chart_DIR_SRCS}
-    ${commands_DIR_SRCS}
-    ${dialogs_DIR_SRCS}
-    ${part_DIR_SRCS}
-    ${ui_DIR_SRCS}
-    )
-
-if(Qt5DBus_FOUND)
-set (calligrasheetscommon_LIB_SRCS
-    ${calligrasheetscommon_LIB_SRCS}
-    ${interfaces_DIR_SRCS}
-    )
-endif()
-
-
-
-########### install files ###############
 
 # TODO: with the new embedded JSON data for plugins there is no schema ATM to define extended
 # propertiessheets_plugin.desktop, sheets_viewplugin.desktop
