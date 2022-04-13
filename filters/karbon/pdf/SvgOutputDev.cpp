@@ -22,6 +22,10 @@
 #include <QPen>
 #include <QImage>
 
+#include <poppler-version.h>
+
+#define POPPLER_VERSION_MACRO ((POPPLER_VERSION_MAJOR << 16) | (POPPLER_VERSION_MINOR << 8) | (POPPLER_VERSION_MICRO))
+
 class SvgOutputDev::Private
 {
 public:
@@ -386,7 +390,12 @@ void SvgOutputDev::drawString(GfxState * state, const GooString * s)
     if (s->getLength() == 0)
         return;
 
+#if POPPLER_VERSION_MACRO < QT_VERSION_CHECK(22, 03, 0)
     GfxFont * font = state->getFont();
+#else
+    std::shared_ptr<GfxFont> font = state->getFont();
+#endif
+
 
     QString str;
 

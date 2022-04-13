@@ -27,6 +27,8 @@
 
 #include <kpluginfactory.h>
 
+#include <poppler-version.h>
+
 // Don't show this warning: it's an issue in poppler
 #ifdef __GNUC__
 #pragma GCC diagnostic ignored "-Wunused-parameter"
@@ -35,6 +37,8 @@
 // poppler includes
 #include <PDFDoc.h>
 #include <GlobalParams.h>
+
+#define POPPLER_VERSION_MACRO ((POPPLER_VERSION_MAJOR << 16) | (POPPLER_VERSION_MINOR << 8) | (POPPLER_VERSION_MICRO))
 
 K_PLUGIN_FACTORY_WITH_JSON(Pdf2OdgImportFactory, "calligra_filter_pdf2odg.json",
                            registerPlugin<Pdf2OdgImport>();)
@@ -69,8 +73,13 @@ KoFilter::ConversionStatus Pdf2OdgImport::convert(const QByteArray& from, const 
     if (! globalParams)
         return KoFilter::NotImplemented;
 
+#if POPPLER_VERSION_MACRO < QT_VERSION_CHECK(22, 03, 0)
     GooString * fname = new GooString(QFile::encodeName(m_chain->inputFile()).data());
     PDFDoc * pdfDoc = new PDFDoc(fname, 0, 0, 0);
+#else
+    std::unique_ptr<GooString> fname = std::make_unique<GooString>(QFile::encodeName(m_chain->inputFile()).data());
+    PDFDoc * pdfDoc = new PDFDoc(std::move(fname));
+#endif
     if (! pdfDoc) {
         globalParams.reset();
         return KoFilter::StupidError;
