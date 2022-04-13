@@ -390,7 +390,7 @@ void SvgOutputDev::drawString(GfxState * state, const GooString * s)
     if (s->getLength() == 0)
         return;
 
-#if POPPLER_VERSION_MACRO < QT_VERSION_CHECK(22, 03, 0)
+#if POPPLER_VERSION_MACRO < QT_VERSION_CHECK(22, 04, 0)
     GfxFont * font = state->getFont();
 #else
     std::shared_ptr<GfxFont> font = state->getFont();
