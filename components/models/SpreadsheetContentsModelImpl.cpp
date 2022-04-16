@@ -13,8 +13,8 @@
 
 #include <KoZoomHandler.h>
 #include <sheets/part/Doc.h>
-#include <sheets/Map.h>
-#include <sheets/Sheet.h>
+#include <sheets/core/Map.h>
+#include <sheets/core/Sheet.h>
 #include <sheets/ui/SheetView.h>
 
 using namespace Calligra::Components;
@@ -53,7 +53,7 @@ int SpreadsheetContentsModelImpl::rowCount() const
 
 QVariant SpreadsheetContentsModelImpl::data(int index, ContentsModel::Role role) const
 {
-    Calligra::Sheets::Sheet* sheet = d->document->map()->sheet(index);
+    Calligra::Sheets::Sheet* sheet = dynamic_cast<Calligra::Sheets::Sheet* >(d->document->map()->sheet(index));
     switch(role) {
         case ContentsModel::TitleRole:
             return sheet->sheetName();
@@ -87,7 +87,8 @@ void SpreadsheetContentsModelImpl::setThumbnailSize(const QSize& size)
 
 QImage SpreadsheetContentsModelImpl::thumbnail(int index, int width) const
 {
-    return d->renderThumbnail(d->document->map()->sheet(index), width, width);
+    Calligra::Sheets::Sheet *sheet = dynamic_cast<Calligra::Sheets::Sheet *>(d->document->map()->sheet(index));
+    return d->renderThumbnail(sheet, width, width);
 }
 
 QImage SpreadsheetContentsModelImpl::Private::renderThumbnail(Calligra::Sheets::Sheet* sheet, int width, int height)

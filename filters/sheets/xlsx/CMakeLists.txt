@@ -34,7 +34,7 @@ target_link_libraries(
     mso
     koodf
     komain
-    calligrasheetscommon
+    calligrasheetsui
 )
 
 install(TARGETS calligra_filter_xlsx2ods DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
@@ -55,5 +55,5 @@ set(TestFormulaParser_SRCS
 ecm_add_test( ${TestFormulaParser_SRCS}
     TEST_NAME "FormulaParser"
     NAME_PREFIX "filter-xlsx2ods-"
-    LINK_LIBRARIES komsooxml calligrasheetscommon Qt5::Test
+    LINK_LIBRARIES komsooxml calligrasheetsui Qt5::Test
 )

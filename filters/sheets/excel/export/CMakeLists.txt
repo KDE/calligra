@@ -47,7 +47,7 @@ calligra_filter_desktop_to_json(calligra_filter_sheets2xls calligra_filter_sheet
 
 
 target_link_libraries(calligra_filter_sheets2xls
-                      calligrasheetscommon
+                      calligrasheetsui
                       komsooxml mso
                       komain koodf
 )

@@ -82,7 +82,7 @@ target_link_libraries(calligraqtquickcomponentsplugin
     komain
     kotextlayout
     wordsprivate
-#    calligrasheetscommon
+#    calligrasheetsui
     kopageapp
     koplugin
     calligrastageprivate)

@@ -13,12 +13,12 @@
 #include <KoShapeBasedDocumentBase.h>
 #include <KoShapeUserData.h>
 
-#include "engine/calligra_sheets_limits.h"
-#include "engine/SheetBase.h"
+#include "../engine/calligra_sheets_limits.h"
+#include "../engine/SheetBase.h"
 
 #include "sheets_core_export.h"
 
-#include "engine/ProtectableObject.h"
+#include "../engine/ProtectableObject.h"
 
 class KoShape;
 

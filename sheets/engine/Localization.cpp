@@ -121,8 +121,8 @@ QString Localization::dateFormat(int type) const
     if (type == 4) return "d" + dateSepShort + "MMM" + dateSepShort + "yyyy";
     if (type == 5) return "d" + dateSepLong + "MMMM" + dateSepLong + "yy";
     if (type == 6) return "d" + dateSepLong + "MMMM" + dateSepLong + "yyyy";
-    if (type == 7) return "d" + dateSepLong + "MMMM" + dateSepLong + "yy";
-    if (type == 8) return "d" + dateSepLong + "MMMM" + dateSepLong + "yyyy";
+    if (type == 7) return "MMMM" + dateSepLong + "d" + dateSepLong + "yy";
+    if (type == 8) return "MMMM" + dateSepLong + "d" + dateSepLong + "yyyy";
 
     return QString();
 }

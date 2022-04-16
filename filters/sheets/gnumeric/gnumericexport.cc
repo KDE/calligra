@@ -9,37 +9,36 @@
    2004 - Some updates by Tim Beaulen (tbscope@gmail.com) */
 
 #include <gnumericexport.h>
+
 #include <KCompressionDevice>
 #include <kpluginfactory.h>
-#include <klocale.h>
-#include <KoFilterChain.h>
-#include <KoZoomHandler.h>
-#include <QDebug>
-#include <QList>
-#include <QFile>
-#include <QTextStream>
-#include <QPen>
-#include <QByteArray>
 
 // Calligra
 #include <KoDocumentInfo.h>
+#include <KoFilterChain.h>
+#include <KoZoomHandler.h>
+#include <KoPart.h>
 #include <KoUnit.h>
 
 // Calligra::Sheets
-#include <sheets/ApplicationSettings.h>
+#include <sheets/engine/CellBaseStorage.h>
+#include <sheets/engine/Localization.h>
+#include <sheets/engine/NamedAreaManager.h>
+#include <sheets/engine/ValueConverter.h>
+#include <sheets/engine/Validity.h>
+
+#include <sheets/core/ApplicationSettings.h>
+#include <sheets/core/Cell.h>
+#include <sheets/core/ColFormatStorage.h>
+#include <sheets/core/DocBase.h>
+#include <sheets/core/HeaderFooter.h>
+#include <sheets/core/Map.h>
+#include <sheets/core/PrintSettings.h>
+#include <sheets/core/RowFormatStorage.h>
+#include <sheets/core/Sheet.h>
+#include <sheets/core/Style.h>
+
 #include <sheets/part/Canvas.h>
-#include <sheets/CellStorage.h>
-#include <sheets/Currency.h>
-#include <sheets/part/Doc.h>
-#include <sheets/HeaderFooter.h>
-#include <sheets/Map.h>
-#include <sheets/NamedAreaManager.h>
-#include <sheets/PrintSettings.h>
-#include <sheets/Sheet.h>
-#include <sheets/RowColumnFormat.h>
-#include <sheets/RowFormatStorage.h>
-#include <sheets/Validity.h>
-#include <sheets/ValueConverter.h>
 #include <sheets/part/View.h>
 
 using namespace Calligra::Sheets;
@@ -705,92 +704,38 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc, const Cell& 
         stringFormat = "0.00E+00";
         break;
     case Format::ShortDate:
-        stringFormat = cell.locale()->dateFormatShort();
+        stringFormat = cell.locale()->dateFormat(false);
         break;
     case Format::TextDate:
-        stringFormat = cell.locale()->dateFormat();
+        stringFormat = cell.locale()->dateFormat(true);
         break;
     case Format::Date1:
-        stringFormat = "dd-mmm-yy";
+        stringFormat = cell.locale()->dateFormat(1);
         break;
     case Format::Date2:
-        stringFormat = "dd-mmm-yyyy";
+        stringFormat = cell.locale()->dateFormat(2);
         break;
     case Format::Date3:
-        stringFormat = "dd-mmm";
+        stringFormat = cell.locale()->dateFormat(3);
         break;
     case Format::Date4:
-        stringFormat = "dd-mm";
+        stringFormat = cell.locale()->dateFormat(4);
         break;
     case Format::Date5:
-        stringFormat = "dd/mm/yy";
+        stringFormat = cell.locale()->dateFormat(5);
         break;
     case Format::Date6:
-        stringFormat = "dd/mm/yyyy";
+        stringFormat = cell.locale()->dateFormat(6);
         break;
     case Format::Date7:
-        stringFormat = "mmm-yy";
+        stringFormat = cell.locale()->dateFormat(7);
         break;
     case Format::Date8:
-        stringFormat = "mmmm-yy";
-        break;
-    case Format::Date9:
-        stringFormat = "mmmm-yyyy";
-        break;
-    case Format::Date10:
-        stringFormat = "m-yy";
-        break;
-    case Format::Date11:
-        stringFormat = "dd/mmm";
-        break;
-    case Format::Date12:
-        stringFormat = "dd/mm";
-        break;
-    case Format::Date13:
-        stringFormat = "dd/mmm/yyyy";
-        break;
-    case Format::Date14:
-        stringFormat = "yyyy/mmm/dd";
-        break;
-    case Format::Date15:
-        stringFormat = "yyyy-mmm-dd";
-        break;
-    case Format::Date16:
-        stringFormat = "yyyy-mm-dd";
-        break;
-    case Format::Date17:
-        stringFormat = "d mmmm yyyy";
-        break;
-    case Format::Date18:
-        stringFormat = "mm/dd/yyyy";
-        break;
-    case Format::Date19:
-        stringFormat = "mm/dd/yy";
-        break;
-    case Format::Date20:
-        stringFormat = "mmm/dd/yy";
-        break;
-    case Format::Date21:
-        stringFormat = "mmm/dd/yyyy";
-        break;
-    case Format::Date22:
-        stringFormat = "mmm-yyyy";
-        break;
-    case Format::Date23:
-        stringFormat = "yyyy";
-        break;
-    case Format::Date24:
-        stringFormat = "yy";
-        break;
-    case Format::Date25:
-        stringFormat = "yyyy/mm/dd";
-        break;
-    case Format::Date26:
-        stringFormat = "yyyy/mmm/dd";
+        stringFormat = cell.locale()->dateFormat(8);
         break;
     case Format::Time:
     case Format::SecondeTime:
-        stringFormat = cell.locale()->timeFormat();
+        stringFormat = cell.locale()->timeFormat(true);
         break;
     case Format::Time1:
         stringFormat = "h:mm AM/PM";
@@ -918,8 +863,8 @@ KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const
     if (!document)
         return KoFilter::StupidError;
 
-    if (!qobject_cast<const Calligra::Sheets::Doc *>(document)) {    // it's safer that way :)
-        qWarning() << "document isn't a Calligra::Sheets::Doc but a " << document->metaObject()->className();
+    if (!qobject_cast<const Calligra::Sheets::DocBase *>(document)) {    // it's safer that way :)
+        qWarning() << "document isn't a Calligra::Sheets::DocBase but a " << document->metaObject()->className();
         return KoFilter::NotImplemented;
     }
     if (to != "application/x-gnumeric" || from != "application/x-kspread") {
@@ -927,7 +872,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const
         return KoFilter::NotImplemented;
     }
 
-    Doc* ksdoc = (Doc*)document;
+    DocBase* ksdoc = dynamic_cast<DocBase*>(document);
 
     if (ksdoc->mimeType() != "application/x-kspread") {
         qWarning() << "Invalid document mimetype " << ksdoc->mimeType();
@@ -956,14 +901,16 @@ KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const
     QDomElement attributes = gnumeric_doc.createElement("gmr:Attributes");
     workbook.appendChild(attributes);
 
-    addAttributeItem(gnumeric_doc, attributes, "4", "WorkbookView::show_horizontal_scrollbar", ksdoc->map()->settings()->showHorizontalScrollBar());
-    addAttributeItem(gnumeric_doc, attributes, "4", "WorkbookView::show_vertical_scrollbar", ksdoc->map()->settings()->showVerticalScrollBar());
-    addAttributeItem(gnumeric_doc, attributes, "4", "WorkbookView::show_notebook_tabs", ksdoc->map()->settings()->showTabBar());
-    if (ksdoc->map()->settings()->completionMode() == KCompletion::CompletionAuto)
+    Map *map = ksdoc->map();
+    ApplicationSettings *appsett = map->applicationSettings();
+    addAttributeItem(gnumeric_doc, attributes, "4", "WorkbookView::show_horizontal_scrollbar", appsett->showHorizontalScrollBar());
+    addAttributeItem(gnumeric_doc, attributes, "4", "WorkbookView::show_vertical_scrollbar", appsett->showVerticalScrollBar());
+    addAttributeItem(gnumeric_doc, attributes, "4", "WorkbookView::show_notebook_tabs", appsett->showTabBar());
+    if (appsett->completionMode() == KCompletion::CompletionAuto)
         addAttributeItem(gnumeric_doc, attributes, "4", "WorkbookView::do_auto_completion", "true");
     else
         addAttributeItem(gnumeric_doc, attributes, "4", "WorkbookView::do_auto_completion", "false");
-    addAttributeItem(gnumeric_doc, attributes, "4", "WorkbookView::is_protected", ksdoc->map()->isProtected());
+    addAttributeItem(gnumeric_doc, attributes, "4", "WorkbookView::is_protected", map->isProtected());
 
     /*
      * Doccument summary
@@ -985,7 +932,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const
     QDomElement sheetNameIndex = gnumeric_doc.createElement("gmr:SheetNameIndex");
     workbook.appendChild(sheetNameIndex);
 
-    foreach(Sheet* table, ksdoc->map()->sheetList()) {
+    for(SheetBase* table : map->sheetList()) {
         QDomElement sheetName = gnumeric_doc.createElement("gmr:SheetName");
         sheetName.appendChild(gnumeric_doc.createTextNode(table->sheetName()));
         sheetNameIndex.appendChild(sheetName);
@@ -1008,16 +955,16 @@ KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const
     </gmr:Name>
     </gmr:Names>
     */
-    const QList<QString> namedAreas = ksdoc->map()->namedAreaManager()->areaNames();
+    const QList<QString> namedAreas = map->namedAreaManager()->areaNames();
     if (namedAreas.count() > 0) {
-        Sheet* sheet = 0;
+        SheetBase* sheet = 0;
         QRect range;
         QDomElement areaNames = gnumeric_doc.createElement("gmr:Names");
         for (int i = 0; i < namedAreas.count(); ++i) {
-            sheet = ksdoc->map()->namedAreaManager()->sheet(namedAreas[i]);
+            sheet = map->namedAreaManager()->sheet(namedAreas[i]);
             if (!sheet)
                 continue;
-            range = ksdoc->map()->namedAreaManager()->namedArea(namedAreas[i]).firstRange();
+            range = map->namedAreaManager()->namedArea(namedAreas[i]).firstRange();
             QDomElement areaName = gnumeric_doc.createElement("gmr:Name");
             QDomElement areaNameElement = gnumeric_doc.createElement("gmr:name");
             areaNameElement.appendChild(gnumeric_doc.createTextNode(namedAreas[i]));
@@ -1049,7 +996,8 @@ KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const
     }
     int i = 0;
     int indexActiveTable = 0;
-    foreach(Sheet* table, ksdoc->map()->sheetList()) {
+    for(SheetBase* btable : map->sheetList()) {
+        Sheet *table = dynamic_cast<Sheet *>(btable);
         if (table->printSettings()->pageLayout().format == KoPageFormat::CustomSize) {
             customSize = gnumeric_doc.createElement("gmr:Geometry");
             customSize.setAttribute("Width", QString::number(POINT_TO_MM(table->printSettings()->pageLayout().width)));
@@ -1064,8 +1012,8 @@ KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const
         sheet.setAttribute("DisplayFormulas", table->getShowFormula() ? "true" : "false");
         sheet.setAttribute("HideZero", table->getHideZero() ? "true" : "false");
         sheet.setAttribute("HideGrid", !table->getShowGrid() ? "true" : "false");
-        sheet.setAttribute("HideColHeader", (!ksdoc->map()->settings()->showColumnHeader() ? "true" : "false"));
-        sheet.setAttribute("HideRowHeader", (!ksdoc->map()->settings()->showRowHeader() ? "true" : "false"));
+        sheet.setAttribute("HideColHeader", (!appsett->showColumnHeader() ? "true" : "false"));
+        sheet.setAttribute("HideRowHeader", (!appsett->showRowHeader() ? "true" : "false"));
         /* Not available in Calligra Sheets ?
          * sheet.setAttribute("DisplayOutlines", "true");
          * sheet.setAttribute("OutlineSymbolsBelow", "true");
@@ -1229,20 +1177,22 @@ KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const
 
 
         /* Start COLS */
-        ColumnFormat *cl = table->firstCol();
-        while (cl) {
+        for (int col = 1; col <= table->columnFormats()->lastNonDefaultCol(); ++col) {
+            int lastCol;
+            if (table->columnFormats()->isDefaultCol(col, &lastCol)) {
+                col = lastCol;
+                continue;
+            }
+
             QDomElement colinfo = gnumeric_doc.createElement("gmr:ColInfo");
             cols.appendChild(colinfo);
-            colinfo.setAttribute("No", QString::number(cl->column() - 1));
-            colinfo.setAttribute("Hidden", QString::number(cl->isHidden()));
-            colinfo.setAttribute("Unit", QString::number(cl->width()));
-
-            cl = cl->next();
+            colinfo.setAttribute("No", QString::number(col - 1));
+            colinfo.setAttribute("Hidden", QString::number(table->columnFormats()->isHidden(col)));
+            colinfo.setAttribute("Unit", QString::number(table->columnFormats()->colWidth(col)));
         }
 
         /* End COLS */
 
-        //  RowFormat *rl=table->m_cells.firstCell;
         //   <gmr:ColInfo No="1" Unit="96.75" MarginA="2" MarginB="2" HardSize="-1" Hidden="0"/>
 
         /* Start ROWS */

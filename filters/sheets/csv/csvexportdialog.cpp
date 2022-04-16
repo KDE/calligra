@@ -8,17 +8,17 @@
 #include "csvexportdialog.h"
 #include "csvexport.h"
 
-#include "sheets/Map.h"
-#include "sheets/Sheet.h"
+#include "sheets/engine/SheetBase.h"
+#include "sheets/core/Map.h"
 
 #include <kcharsets.h>
 #include <kmessagebox.h>
 #include <KSharedConfig>
 
+#include <QButtonGroup>
+#include <QGroupBox>
 #include <QGuiApplication>
 #include <QTextCodec>
-#include <QValidator>
-#include <QDebug>
 
 using namespace Calligra::Sheets;
 
@@ -46,6 +46,13 @@ CSVExportDialog::CSVExportDialog(QWidget * parent)
 
     setMainWidget(m_dialog);
 
+    QButtonGroup *group = new QButtonGroup(m_dialog);
+    group->addButton(m_dialog->m_radioComma, 0);
+    group->addButton(m_dialog->m_radioSemicolon, 1);
+    group->addButton(m_dialog->m_radioTab, 2);
+    group->addButton(m_dialog->m_radioSpace, 3);
+    group->addButton(m_dialog->m_radioOther, 4);
+
     // Invalid 'Other' delimiters
     // - Quotes
     // - CR,LF,Vertical-tab,Formfeed,ASCII bel
@@ -53,7 +60,7 @@ CSVExportDialog::CSVExportDialog(QWidget * parent)
     m_delimiterValidator = new QRegExpValidator(rx, m_dialog->m_delimiterBox);
     m_dialog->m_delimiterEdit->setValidator(m_delimiterValidator);
 
-    connect(m_dialog->m_delimiterBox, QOverload<int>::of(&KButtonGroup::clicked),
+    connect(group, &QButtonGroup::idClicked,
             this, &CSVExportDialog::delimiterClicked);
     connect(m_dialog->m_delimiterEdit, &QLineEdit::returnPressed,
             this, &CSVExportDialog::returnPressed);
@@ -133,8 +140,8 @@ void CSVExportDialog::fillSheet(Map * map)
     m_dialog->m_sheetList->clear();
     QListWidgetItem *item;
 
-    foreach(Sheet* sheet, map->sheetList()) {
-        item = new QListWidgetItem(sheet->sheetName() ,m_dialog->m_sheetList);
+    for(SheetBase* sheet : map->sheetList()) {
+        item = new QListWidgetItem(sheet->sheetName(), m_dialog->m_sheetList);
         item->setCheckState(Qt::Checked);
         m_dialog->m_sheetList->addItem(item);
     }

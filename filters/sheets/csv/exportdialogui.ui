@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>446</width>
+    <width>449</width>
     <height>334</height>
    </rect>
   </property>
@@ -20,7 +20,7 @@
       </sizepolicy>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="encodingPage">
       <attribute name="title">
@@ -211,7 +211,7 @@
       </attribute>
       <layout class="QGridLayout">
        <item row="0" column="0">
-        <widget class="KButtonGroup" name="m_delimiterBox">
+        <widget class="QGroupBox" name="m_delimiterBox">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
            <horstretch>0</horstretch>
@@ -369,12 +369,6 @@
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>KButtonGroup</class>
-   <extends>QGroupBox</extends>
-   <header>kbuttongroup.h</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>KComboBox</class>
    <extends>QComboBox</extends>

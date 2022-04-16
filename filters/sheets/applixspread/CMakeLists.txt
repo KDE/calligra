@@ -6,6 +6,6 @@ set(applixspread2kspread_PART_SRCS applixspreadimport.cc )
 add_library(calligra_filter_applixspread2kspread MODULE ${applixspread2kspread_PART_SRCS})
 calligra_filter_desktop_to_json(calligra_filter_applixspread2kspread calligra_filter_applixspread2kspread.desktop)
 
-target_link_libraries(calligra_filter_applixspread2kspread komain calligrasheetscommon)
+target_link_libraries(calligra_filter_applixspread2kspread komain calligrasheetsengine)
 
 install(TARGETS calligra_filter_applixspread2kspread  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)

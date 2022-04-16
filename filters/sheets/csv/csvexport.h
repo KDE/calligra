@@ -8,11 +8,9 @@
 #ifndef CSVEXPORT_H
 #define CSVEXPORT_H
 
-#include <QString>
 #include <QByteArray>
 #include <KoFilter.h>
 #include <QVariantList>
-#include <QDebug>
 #include <QLoggingCategory>
 
 Q_DECLARE_LOGGING_CATEGORY(lcCsvExport)
@@ -37,7 +35,7 @@ public:
     KoFilter::ConversionStatus convert(const QByteArray & from, const QByteArray & to) override;
 
 private:
-    QString exportCSVCell(const Calligra::Sheets::Doc* doc, Calligra::Sheets::Sheet const * const sheet,
+    QString exportCSVCell(const Calligra::Sheets::Doc* doc, Calligra::Sheets::Sheet *sheet,
                           int col, int row, QChar const & textQuote, QChar csvDelimiter);
 
 private:

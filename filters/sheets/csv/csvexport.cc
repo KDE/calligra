@@ -9,24 +9,20 @@
 
 #include <QFile>
 #include <QTextCodec>
-#include <QTextStream>
-#include <QByteArray>
-#include <QDebug>
 
 #include <kpluginfactory.h>
 #include <KoFilterChain.h>
 #include <KoFilterManager.h>
 #include <KoPart.h>
 
-#include <sheets/CellStorage.h>
-#include <sheets/Map.h>
-#include <sheets/Sheet.h>
-#include <sheets/part/Doc.h>
-#include <sheets/Value.h>
-#include <sheets/part/View.h>
+#include <sheets/core/CellStorage.h>
+#include <sheets/core/Map.h>
+#include <sheets/core/Sheet.h>
 #include <sheets/ui/Selection.h>
+#include <sheets/part/Doc.h>
+#include <sheets/part/View.h>
 
-#include <csvexportdialog.h>
+#include "csvexportdialog.h"
 
 using namespace Calligra::Sheets;
 
@@ -54,7 +50,7 @@ CSVExport::CSVExport(QObject* parent, const QVariantList &)
 {
 }
 
-QString CSVExport::exportCSVCell(const Calligra::Sheets::Doc* doc, Sheet const * const sheet,
+QString CSVExport::exportCSVCell(const Calligra::Sheets::Doc* doc, Sheet *sheet,
                                  int col, int row, QChar const & textQuote, QChar csvDelimiter)
 {
     // This function, given a cell, returns a string corresponding to its export in CSV format
@@ -183,7 +179,7 @@ KoFilter::ConversionStatus CSVExport::convert(const QByteArray & from, const QBy
             return KoFilter::StupidError;
         }
 
-        Sheet const * const sheet = view->activeSheet();
+        Sheet *sheet = view->activeSheet();
 
         QRect selection = view->selection()->lastRange();
         // Compute the highest row and column indexes (within the selection)
@@ -225,7 +221,8 @@ KoFilter::ConversionStatus CSVExport::convert(const QByteArray & from, const QBy
         }
     } else {
         qDebug(lcCsvExport) << "Export as full mode";
-        foreach(Sheet const * const sheet, ksdoc->map()->sheetList()) {
+        for(SheetBase *bsheet : ksdoc->map()->sheetList()) {
+            Sheet *sheet = dynamic_cast<Sheet *>(bsheet);
             if (expDialog && !expDialog->exportSheet(sheet->sheetName())) {
                 continue;
             }

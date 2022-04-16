@@ -18,6 +18,12 @@ endif ()
 
 target_link_libraries(kdeinit_calligrasheets calligrasheetsui komain )
 
+target_include_directories( kdeinit_calligrasheets
+    PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/../
+    ${CMAKE_CURRENT_BINARY_DIR}/../
+)
+
 install(TARGETS kdeinit_calligrasheets  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 target_link_libraries( calligrasheets kdeinit_calligrasheets )

@@ -6,17 +6,13 @@
 
 #include "applixspreadimport.h"
 
+#include <QFile>
 #include <QMessageBox>
-#include <QStringList>
-#include <QRegExp>
-#include <QList>
-#include <QTextStream>
-#include <QByteArray>
 #include <QDebug>
 #include <math.h>
 #include <KoFilterChain.h>
 #include <kpluginfactory.h>
-#include <sheets/Util.h>
+#include <sheets/engine/Util.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(APPLIXSPREADImportFactory, "calligra_filter_applixspread2kspread.json",
                            registerPlugin<APPLIXSPREADImport>();)

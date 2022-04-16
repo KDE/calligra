@@ -18,6 +18,6 @@ add_library(calligra_filter_qpro2sheets MODULE ${qpro2sheets_PART_SRCS})
 
 calligra_filter_desktop_to_json(calligra_filter_qpro2sheets calligra_filter_qpro2sheets.desktop)
 
-target_link_libraries(calligra_filter_qpro2sheets calligrasheetscommon)
+target_link_libraries(calligra_filter_qpro2sheets calligrasheetsui)
 
 install(TARGETS calligra_filter_qpro2sheets  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)

@@ -10,11 +10,6 @@
 /* additions: Norbert Andres nandres@web.de         */
 #include "gnumericimport.h"
 
-#include <QMap>
-#include <QFile>
-#include <QStringList>
-#include <QByteArray>
-#include <QPen>
 #include <QDomDocument>
 #include <QDebug>
 
@@ -22,26 +17,26 @@
 #include <kpluginfactory.h>
 
 #include <KoFilterChain.h>
+#include <KoPageFormat.h>
 #include <KoDocumentInfo.h>
 #include <KoUnit.h>
 
 // Calligra Sheets
-#include <sheets/ApplicationSettings.h>
-#include <sheets/Cell.h>
+#include <sheets/engine/NamedAreaManager.h>
+#include <sheets/engine/Region.h>
+#include <sheets/engine/Util.h>
+#include <sheets/engine/ValueParser.h>
+#include <sheets/core/ApplicationSettings.h>
+#include <sheets/core/Cell.h>
+#include <sheets/core/ColFormatStorage.h>
+#include <sheets/core/HeaderFooter.h>
+#include <sheets/core/LoadingInfo.h>
+#include <sheets/core/Map.h>
+#include <sheets/core/PrintSettings.h>
+#include <sheets/core/RowFormatStorage.h>
+#include <sheets/core/Sheet.h>
+#include <sheets/core/Style.h>
 #include <sheets/part/Doc.h>
-#include <sheets/HeaderFooter.h>
-#include <sheets/LoadingInfo.h>
-#include <sheets/Map.h>
-#include <sheets/NamedAreaManager.h>
-#include <sheets/PrintSettings.h>
-#include <sheets/Region.h>
-#include <sheets/RowColumnFormat.h>
-#include <sheets/Sheet.h>
-#include <sheets/Util.h>
-#include <sheets/Validity.h>
-#include <sheets/ValueParser.h>
-
-#include <math.h>
 
 #define SECS_PER_DAY 86400
 #define HALF_SEC (0.5 / SECS_PER_DAY)
@@ -252,17 +247,18 @@ void set_document_attributes(Doc * ksdoc, QDomElement * docElem)
         return;
 
     QDomNode attributeItem = attributes.namedItem("Attribute");
+    ApplicationSettings *sett = ksdoc->map()->applicationSettings();
     while (!attributeItem.isNull()) {
         QDomNode gmr_name  = attributeItem.namedItem("name");
         QDomNode gmr_value = attributeItem.namedItem("value");
         if (gmr_name.toElement().text() == "WorkbookView::show_horizontal_scrollbar") {
-            ksdoc->map()->settings()->setShowHorizontalScrollBar(gmr_value.toElement().text().toLower() == "true" ? true : false);
+            sett->setShowHorizontalScrollBar(gmr_value.toElement().text().toLower() == "true" ? true : false);
         } else if (gmr_name.toElement().text() == "WorkbookView::show_vertical_scrollbar") {
-            ksdoc->map()->settings()->setShowVerticalScrollBar(gmr_value.toElement().text().toLower() == "true" ? true : false);
+            sett->setShowVerticalScrollBar(gmr_value.toElement().text().toLower() == "true" ? true : false);
         } else if (gmr_name.toElement().text() == "WorkbookView::show_notebook_tabs") {
-            ksdoc->map()->settings()->setShowTabBar(gmr_value.toElement().text().toLower() == "true" ? true : false);
+            sett->setShowTabBar(gmr_value.toElement().text().toLower() == "true" ? true : false);
         } else if (gmr_name.toElement().text() == "WorkbookView::do_auto_completion") {
-            ksdoc->map()->settings()->setCompletionMode(KCompletion::CompletionAuto);
+            sett->setCompletionMode(KCompletion::CompletionAuto);
         } else if (gmr_name.toElement().text() == "WorkbookView::is_protected") {
             //TODO protect document ???
             //ksdoc->map()->isProtected()
@@ -325,17 +321,13 @@ void setColInfo(QDomNode * sheet, Sheet * table)
         defaultWidth = def.attribute("DefaultSizePts").toDouble(&defaultWidthOk);
     }
 
+    ColFormatStorage *cf = table->columnFormats();
     while (!columninfo.isNull()) {
         QDomElement e = columninfo.toElement(); // try to convert the node to an element.
-        int column_number;
-
-        column_number = e.attribute("No").toInt() + 1;
-        ColumnFormat *cl = new ColumnFormat();
-        cl->setSheet(table);
-        cl->setColumn(column_number);
+        int column_number = e.attribute("No").toInt() + 1;
         if (e.hasAttribute("Hidden")) {
             if (e.attribute("Hidden") == "1") {
-                cl->setHidden(true);
+                cf->setHidden(column_number, column_number, true);
             }
         }
         if (e.hasAttribute("Unit")) {
@@ -343,11 +335,10 @@ void setColInfo(QDomNode * sheet, Sheet * table)
             bool ok = false;
             double dbl = e.attribute("Unit").toDouble(&ok);
             if (ok)
-                cl->setWidth(dbl);
+                cf->setColWidth(column_number, column_number, dbl);
             else if (defaultWidthOk)
-                cl->setWidth(defaultWidth);
+                cf->setColWidth(column_number, column_number, defaultWidth);
         }
-        table->insertColumnFormat(cl);
         columninfo = columninfo.nextSibling();
     }
 }
@@ -365,28 +356,24 @@ void setRowInfo(QDomNode *sheet, Sheet *table)
         defaultHeight = def.attribute("DefaultSizePts").toDouble(&defaultHeightOk);
     }
 
+    RowFormatStorage *rf = table->rowFormats();
     while (!rowinfo.isNull()) {
         QDomElement e = rowinfo.toElement(); // try to convert the node to an element.
-        int row_number;
-        row_number = e.attribute("No").toInt() + 1;
-        RowFormat *rl = new RowFormat();
-        rl->setSheet(table);
-        rl->setRow(row_number);
+        int row_number = e.attribute("No").toInt() + 1;
 
         if (e.hasAttribute("Hidden")) {
             if (e.attribute("Hidden") == "1") {
-                rl->setHidden(true);
+                rf->setHidden(row_number, row_number, true);
             }
         }
         if (e.hasAttribute("Unit")) {
             bool ok = false;
             double dbl = e.attribute("Unit").toDouble(&ok);
             if (ok)
-                rl->setHeight(dbl);
+                rf->setRowHeight(row_number, row_number, dbl);
             else if (defaultHeightOk)
-                rl->setHeight(defaultHeight);
+                rf->setRowHeight(row_number, row_number, defaultHeight);
         }
-        table->insertRowFormat(rl);
         rowinfo = rowinfo.nextSibling();
     }
 }
@@ -424,7 +411,7 @@ void setObjectInfo(QDomNode * sheet, Sheet * table)
         QDomElement e = gmr_cellcomment.toElement(); // try to convert the node to an element.
         if (e.hasAttribute("Text")) {
             if (e.hasAttribute("ObjectBound")) {
-                const Calligra::Sheets::Region region(e.attribute("ObjectBound"));
+                const Calligra::Sheets::Region region = table->map()->regionFromName(e.attribute("ObjectBound"), table);
                 Cell cell = Cell(table, region.firstRange().topLeft());
                 cell.setComment(e.attribute("Text"));
             }
@@ -660,32 +647,12 @@ bool GNUMERICFilter::setType(const Cell& kspread_cell,
 
             Format::Type type;
             switch (i) {
-            case 0:  type = Format::Date5;  break;
-            case 1:  type = Format::Date6;  break;
+            case 0:  type = Format::ShortDate;  break;
+            case 1:  type = Format::TextDate;  break;
             case 2:  type = Format::Date1;  break;
             case 3:  type = Format::Date2;  break;
-            case 4:  type = Format::Date3;  break;
-            case 5:  type = Format::Date4;  break;
-            case 6:  type = Format::Date11; break;
-            case 7:  type = Format::Date12; break;
-            case 8:  type = Format::Date19; break;
-            case 9:  type = Format::Date18; break;
-            case 10: type = Format::Date20; break;
-            case 11: type = Format::Date21; break;
-            case 16: type = Format::Date7;  break;
-            case 17: type = Format::Date22; break;
-            case 18: type = Format::Date8;  break;
-            case 19: type = Format::Date9;  break;
-            case 22: type = Format::Date25; break;
-            case 23: type = Format::Date14; break;
-            case 24: type = Format::Date25; break;
-            case 25: type = Format::Date26; break;
-            case 26: type = Format::Date16; break;
-            case 27: type = Format::Date15; break;
-            case 28: type = Format::Date16; break;
-            case 29: type = Format::Date15; break;
-            case 30: type = Format::Date24; break;
-            case 31: type = Format::Date23; break;
+            case 10: type = Format::Date7; break;
+            case 11: type = Format::Date8; break;
             default:
                 type = Format::ShortDate;
                 break;
@@ -854,7 +821,7 @@ void GNUMERICFilter::ParsePrintInfo(QDomNode const & printInfo, Sheet * table)
     if (!repeateColumn.isNull()) {
         QString repeate = repeateColumn.attribute("value");
         if (!repeate.isEmpty()) {
-            const Calligra::Sheets::Region region(repeate);
+            const Calligra::Sheets::Region region = table->map()->regionFromName(repeate, table);
             //kDebug()<<" repeate :"<<repeate<<"range. ::start row :"<<range.startRow ()<<" start col :"<<range.startCol ()<<" end row :"<<range.endRow ()<<" end col :"<<range.endCol ();
             table->printSettings()->setRepeatedRows(qMakePair(region.firstRange().top(), region.firstRange().bottom()));
         }
@@ -866,7 +833,7 @@ void GNUMERICFilter::ParsePrintInfo(QDomNode const & printInfo, Sheet * table)
         if (!repeate.isEmpty()) {
             //fix row too high
             repeate.replace("65536", "32500");
-            const Calligra::Sheets::Region region(repeate);
+            const Calligra::Sheets::Region region = table->map()->regionFromName(repeate, table);
             //kDebug()<<" repeate :"<<repeate<<"range. ::start row :"<<range.startRow ()<<" start col :"<<range.startCol ()<<" end row :"<<range.endRow ()<<" end col :"<<range.endCol ();
             table->printSettings()->setRepeatedColumns(qMakePair(region.firstRange().left(), region.firstRange().right()));
         }
@@ -1283,7 +1250,7 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
                                 int valueOp = validation_element.attribute("Type").toInt();
                                 switch (valueOp) {
                                 case 0:
-                                    kspread_validity.setRestriction(Validity::None);
+                                    kspread_validity.setRestriction(Validity::NoRestriction);
                                     break;
                                 case 1: {
                                     kspread_validity.setRestriction(Validity::Integer);
@@ -1752,6 +1719,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert(const QByteArray & from, cons
     set_document_area_names(ksdoc, &docElem);
 
     Sheet * table;
+    ApplicationSettings *sett = ksdoc->map()->applicationSettings();
 
     // This is a mapping of exprID to expressions.
 
@@ -1760,7 +1728,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert(const QByteArray & from, cons
 
     while (!sheet.isNull()) {
         ++currentTab;
-        table = ksdoc->map()->addNewSheet();
+        table = dynamic_cast<Sheet *>(ksdoc->map()->addNewSheet());
 
         if (currentTab == selectedTab)
             selTable = table;
@@ -1769,9 +1737,9 @@ KoFilter::ConversionStatus GNUMERICFilter::convert(const QByteArray & from, cons
         QDomElement sheetElement = sheet.toElement();
 
         if (!name.isNull())
-            table->setSheetName(name.text(), true);
+            table->setSheetName(name.text());
         else
-            table->setSheetName("Sheet" + QString::number(num), true);
+            table->setSheetName("Sheet" + QString::number(num));
 
         //kDebug()<<" sheetElement.hasAttribute( DisplayFormulas ) :"<<sheetElement.hasAttribute("DisplayFormulas" );
         QString tmp;
@@ -1789,11 +1757,11 @@ KoFilter::ConversionStatus GNUMERICFilter::convert(const QByteArray & from, cons
         }
         if (sheetElement.hasAttribute("HideColHeader")) {
             tmp = sheetElement.attribute("HideColHeader");
-            ksdoc->map()->settings()->setShowColumnHeader((tmp == "false") || (tmp == "0"));
+            sett->setShowColumnHeader((tmp == "false") || (tmp == "0"));
         }
         if (sheetElement.hasAttribute("HideRowHeader")) {
             tmp = sheetElement.attribute("HideRowHeader");
-            ksdoc->map()->settings()->setShowRowHeader((tmp == "false") || (tmp == "0"));
+            sett->setShowRowHeader((tmp == "false") || (tmp == "0"));
         }
 
 
@@ -1960,7 +1928,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert(const QByteArray & from, cons
         while (!mergedRegion.isNull()) {
             QDomElement e = mergedRegion.toElement(); // try to convert the node to an element.
             QString cell_merge_area(e.text());
-            const Calligra::Sheets::Region region(cell_merge_area);
+            const Calligra::Sheets::Region region = ksdoc->map()->regionFromName(cell_merge_area, table);
             //kDebug()<<"text !!! :"<<cell_merge_area<<"range :start row :"<<range.startRow ()<<" start col :"<<range.startCol ()<<" end row :"<<range.endRow ()<<" end col :"<<range.endCol ();
             Cell cell = Cell(table, region.firstRange().left(), region.firstRange().top());
             cell.mergeCells(region.firstRange().left(), region.firstRange().top(),

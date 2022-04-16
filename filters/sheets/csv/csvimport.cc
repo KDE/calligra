@@ -7,36 +7,28 @@
 
 #include "csvimport.h"
 
-#include <QByteArray>
 #include <QFile>
-#include <QRegExp>
-#include <QVector>
 #include <QGuiApplication>
-#include <QDebug>
 
 #include <kmessagebox.h>
 #include <kpluginfactory.h>
-#include <klocale.h>
 
 #include <KoCsvImportDialog.h>
 #include <KoFilterChain.h>
 #include <KoFilterManager.h>
 
-#include <sheets/ElapsedTime_p.h>
-#include <sheets/CalculationSettings.h>
-#include <sheets/Cell.h>
-#include <sheets/part/Doc.h>
-#include <sheets/Global.h>
-#include <sheets/Map.h>
-#include <sheets/RowColumnFormat.h>
-#include <sheets/Sheet.h>
-#include <sheets/Style.h>
-#include <sheets/Value.h>
-#include <sheets/ValueConverter.h>
+#include <sheets/engine/ElapsedTime_p.h>
+#include <sheets/engine/CalculationSettings.h>
+#include <sheets/engine/Localization.h>
+#include <sheets/engine/Value.h>
+#include <sheets/engine/ValueConverter.h>
+#include <sheets/core/Cell.h>
+#include <sheets/core/ColFormatStorage.h>
+#include <sheets/core/DocBase.h>
+#include <sheets/core/Map.h>
+#include <sheets/core/Sheet.h>
 
 using namespace Calligra::Sheets;
-
-// hehe >:->
 
 /*
  To generate a test CSV file:
@@ -61,7 +53,7 @@ KoFilter::ConversionStatus CSVFilter::convert(const QByteArray& from, const QByt
     if (!document)
         return KoFilter::StupidError;
 
-    if (!qobject_cast<const Calligra::Sheets::Doc *>(document)) {
+    if (!qobject_cast<const Calligra::Sheets::DocBase *>(document)) {
         qWarning(lcCsvImport) << "document isn't a Calligra::Sheets::Doc but a " << document->metaObject()->className();
         return KoFilter::NotImplemented;
     }
@@ -70,7 +62,7 @@ KoFilter::ConversionStatus CSVFilter::convert(const QByteArray& from, const QByt
         return KoFilter::NotImplemented;
     }
 
-    Doc *ksdoc = static_cast<Doc *>(document);   // type checked above
+    DocBase *ksdoc = dynamic_cast<DocBase *>(document);   // type checked above
 
 //    if (ksdoc->mimeType() != "application/vnd.oasis.opendocument.spreadsheet") {
 //       qWarning(lcCsvImport) << "Invalid document mimetype " << ksdoc->mimeType();
@@ -92,17 +84,23 @@ KoFilter::ConversionStatus CSVFilter::convert(const QByteArray& from, const QByt
     QByteArray inputFile(in.readAll());
     in.close();
 
+    Localization *locale = ksdoc->map()->calculationSettings()->locale();
+    ValueConverter *conv = ksdoc->map()->converter();
+
+    QString decimal = locale->decimalSymbol();
+    QString thousands = locale->thousandsSeparator();
+
     KoCsvImportDialog* dialog = new KoCsvImportDialog(0);
     dialog->setData(inputFile);
-    dialog->setDecimalSymbol(ksdoc->map()->calculationSettings()->locale()->decimalSymbol());
-    dialog->setThousandsSeparator(ksdoc->map()->calculationSettings()->locale()->thousandsSeparator());
+    dialog->setDecimalSymbol(decimal);
+    dialog->setThousandsSeparator(thousands);
     if (!m_chain->manager()->getBatchMode() && !dialog->exec())
         return KoFilter::UserCancelled;
     inputFile.resize(0);   // Release memory (input file content)
 
     ElapsedTime t("Filling data into document");
 
-    Sheet *sheet = ksdoc->map()->addNewSheet();
+    Sheet *sheet = dynamic_cast<Sheet *>(ksdoc->map()->addNewSheet());
 
     int numRows = dialog->rows();
     int numCols = dialog->cols();
@@ -111,10 +109,8 @@ KoFilter::ConversionStatus CSVFilter::convert(const QByteArray& from, const QByt
         ++numRows;
 
     // Initialize the decimal symbol and thousands separator to use for parsing.
-    const QString documentDecimalSymbol = ksdoc->map()->calculationSettings()->locale()->decimalSymbol();
-    const QString documentThousandsSeparator = ksdoc->map()->calculationSettings()->locale()->thousandsSeparator();
-    ksdoc->map()->calculationSettings()->locale()->setDecimalSymbol(dialog->decimalSymbol());
-    ksdoc->map()->calculationSettings()->locale()->setThousandsSeparator(dialog->thousandsSeparator());
+    decimal = dialog->decimalSymbol();
+    thousands = dialog->thousandsSeparator();
 
     int step = 100 / numRows * numCols;
     int value = 0;
@@ -122,7 +118,7 @@ KoFilter::ConversionStatus CSVFilter::convert(const QByteArray& from, const QByt
     emit sigProgress(value);
     QGuiApplication::setOverrideCursor(Qt::WaitCursor);
 
-    const double defaultWidth = ksdoc->map()->defaultColumnFormat()->width();
+    const double defaultWidth = ksdoc->map()->defaultColumnFormat().width;
     QVector<double> widths(numCols);
     for (int i = 0; i < numCols; ++i)
         widths[i] = defaultWidth;
@@ -143,29 +139,42 @@ KoFilter::ConversionStatus CSVFilter::convert(const QByteArray& from, const QByt
 
             cell = Cell(sheet, col + 1, row + 1);
 
+            // TODO - try to format numbers
+
             switch (dialog->dataType(col)) {
             case KoCsvImportDialog::Generic:
             default: {
-                cell.parseUserInput(text);
+                Value val;
+                // Is this a valid number?
+                QString numtext = text;
+                numtext = numtext.replace(' ', QString());
+                numtext = numtext.replace(thousands, QString());
+                numtext = numtext.replace(decimal, ".");
+                bool ok = false;
+                double num = numtext.toDouble(&ok);
+                if (ok) val = Value(num);
+
+                if (!val.isEmpty())
+                    cell.setCellValue(val);
+                else
+                    cell.parseUserInput(text);
                 break;
             }
             case KoCsvImportDialog::Text: {
                 Value value(text);
-                cell.setValue(value);
-                cell.setUserInput(ksdoc->map()->converter()->asString(value).asString());
+                cell.setCellValue(value);
                 break;
             }
             case KoCsvImportDialog::Date: {
                 Value value(text);
-                cell.setValue(ksdoc->map()->converter()->asDate(value));
-                cell.setUserInput(ksdoc->map()->converter()->asString(value).asString());
+                cell.setCellValue(conv->asDate(value));
                 break;
             }
             case KoCsvImportDialog::Currency: {
                 Value value(text);
+                value = conv->asNumeric(value);
                 value.setFormat(Value::fmt_Money);
-                cell.setValue(value);
-                cell.setUserInput(ksdoc->map()->converter()->asString(value).asString());
+                cell.setCellValue(value);
                 break;
             }
             case KoCsvImportDialog::None: {
@@ -180,12 +189,8 @@ KoFilter::ConversionStatus CSVFilter::convert(const QByteArray& from, const QByt
 
     for (int i = 0; i < numCols; ++i) {
         if (widths[i] > defaultWidth)
-            sheet->nonDefaultColumnFormat(i + 1)->setWidth(widths[i]);
+            sheet->columnFormats()->setColWidth(i + 1, i + 1, widths[i]);
     }
-
-    // Restore the document's decimal symbol and thousands separator.
-    ksdoc->map()->calculationSettings()->locale()->setDecimalSymbol(documentDecimalSymbol);
-    ksdoc->map()->calculationSettings()->locale()->setThousandsSeparator(documentThousandsSeparator);
 
     emit sigProgress(100);
     QGuiApplication::restoreOverrideCursor();

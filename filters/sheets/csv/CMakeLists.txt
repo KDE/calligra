@@ -10,7 +10,7 @@ set(csv2sheets_PART_SRCS csvimport.cc)
 add_library(calligra_filter_csv2sheets MODULE ${csv2sheets_PART_SRCS})
 calligra_filter_desktop_to_json(calligra_filter_csv2sheets calligra_filter_csv2sheets.desktop)
 
-target_link_libraries(calligra_filter_csv2sheets calligrasheetscommon kowidgets)
+target_link_libraries(calligra_filter_csv2sheets calligrasheetsui kowidgets)
 
 install(TARGETS calligra_filter_csv2sheets DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
 
@@ -26,7 +26,7 @@ ki18n_wrap_ui(sheets2csv_PART_SRCS exportdialogui.ui )
 add_library(calligra_filter_sheets2csv MODULE ${sheets2csv_PART_SRCS})
 calligra_filter_desktop_to_json(calligra_filter_sheets2csv calligra_filter_sheets2csv.desktop)
 
-target_link_libraries(calligra_filter_sheets2csv calligrasheetscommon)
+target_link_libraries(calligra_filter_sheets2csv calligrasheetsui calligrasheetspartlib)
 
 install(TARGETS calligra_filter_sheets2csv  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
 

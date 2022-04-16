@@ -4,7 +4,7 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include "AboutData.h"
+#include "part/AboutData.h"
 #include "core/DocBase.h"
 
 #include <KoApplication.h>

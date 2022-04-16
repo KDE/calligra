@@ -17,7 +17,7 @@
 #ifndef CALLIGRA_SHEETS_DOC
 #define CALLIGRA_SHEETS_DOC
 
-#include "core/DocBase.h"
+#include "../core/DocBase.h"
 
 #include "sheets_part_export.h"
 

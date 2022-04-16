@@ -7,15 +7,9 @@
 #ifndef APPLIXSPREADIMPORT_H
 #define APPLIXSPREADIMPORT_H
 
-#include <QString>
-#include <QFile>
-#include <QObject>
 #include <QTextStream>
-#include <QList>
-#include <QByteArray>
 
 #include <KoFilter.h>
-#include <KoStore.h>
 
 struct t_mycolor;
 struct t_rc;

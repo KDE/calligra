@@ -43,7 +43,7 @@ target_link_libraries( CalligraComponentsPlugin
     Qt5::Qml
     Qt5::Quick
     wordsprivate
-    calligrasheetscommon
+    calligrasheetspartlib
     calligrastageprivate
     kotextlayout
     koplugin

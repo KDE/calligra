@@ -24,10 +24,10 @@
 #include <sheets/part/Part.h>
 #include <sheets/part/Doc.h>
 #include <sheets/part/CanvasItem.h>
-#include <sheets/Map.h>
-#include <sheets/Sheet.h>
+#include <sheets/core/Map.h>
+#include <sheets/core/Sheet.h>
 #include <libs/textlayout/KoTextShapeData.h>
-#include <Damages.h>
+#include <sheets/engine/Damages.h>
 
 using namespace Calligra::Components;
 
@@ -165,7 +165,8 @@ bool SpreadsheetImpl::load(const QUrl& url)
     createAndSetZoomController(d->canvas);
     connect(d->canvas, &Calligra::Sheets::CanvasItem::documentSizeChanged, this, &SpreadsheetImpl::updateDocumentSize);
 
-    auto sheet = d->document->map()->sheet(0);
+    Calligra::Sheets::SheetBase *bsheet = d->document->map()->sheet(0);
+    Calligra::Sheets::Sheet *sheet = dynamic_cast<Calligra::Sheets::Sheet *>(bsheet);
     if(sheet) {
         updateDocumentSize(sheet->documentSize().toSize());
     }
@@ -189,7 +190,9 @@ int SpreadsheetImpl::currentIndex()
 void SpreadsheetImpl::setCurrentIndex(int newValue)
 {
     if(newValue != currentIndex()) {
-        d->canvas->setActiveSheet(d->document->map()->sheet(newValue));
+        Calligra::Sheets::SheetBase *bsheet = d->document->map()->sheet(newValue);
+        Calligra::Sheets::Sheet *sheet = dynamic_cast<Calligra::Sheets::Sheet *>(bsheet);
+        d->canvas->setActiveSheet(sheet);
         d->updateLinkTargets();
         emit currentIndexChanged();
     }

@@ -24,7 +24,7 @@ endif()
 
 add_executable(cstester ${cstester_SRCS})
 
-target_link_libraries(cstester komain kopageapp koplugin calligrasheetscommon wordsprivate)
+target_link_libraries(cstester komain kopageapp koplugin calligrasheetspartlib wordsprivate)
 if(SHOULD_BUILD_KARBON)
     target_link_libraries(cstester karbonui)
 endif()

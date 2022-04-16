@@ -12,11 +12,11 @@
 #include "CSThumbProviderTables.h"
 
 #include <sheets/part/Doc.h>
-#include <sheets/Sheet.h>
-#include <sheets/Map.h>
-#include <sheets/PrintSettings.h>
+#include <sheets/core/Sheet.h>
+#include <sheets/core/Map.h>
+#include <sheets/core/PrintSettings.h>
+#include <sheets/core/SheetPrint.h>
 #include <sheets/ui/SheetView.h>
-#include <sheets/SheetPrint.h>
 #include <KoZoomHandler.h>
 #include <KoShapePainter.h>
 #include <KoPAUtil.h>
@@ -35,7 +35,7 @@ QVector<QImage> CSThumbProviderTables::createThumbnails(const QSize &thumbSize)
 {
     QVector<QImage> thumbnails;
     if (0 != m_doc->map()) {
-        foreach(Calligra::Sheets::Sheet* sheet, m_doc->map()->sheetList()) {
+        for (Calligra::Sheets::SheetBase* bsheet : m_doc->map()->sheetList()) {
             QImage thumbnail(thumbSize, QImage::Format_RGB32);
             thumbnail.fill(QColor(Qt::white).rgb());
             QPainter p(&thumbnail);
@@ -46,6 +46,7 @@ QVector<QImage> CSThumbProviderTables::createThumbnails(const QSize &thumbSize)
             pageLayout.rightMargin = 0;
             pageLayout.topMargin = 0;
             pageLayout.bottomMargin = 0;
+            Calligra::Sheets::Sheet *sheet = dynamic_cast<Calligra::Sheets::Sheet *>(bsheet);
             sheet->printSettings()->setPageLayout(pageLayout);
             sheet->print()->setSettings(*sheet->printSettings(), true);
 

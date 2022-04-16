@@ -20,7 +20,7 @@
 
 // For the mimetype names
 #include <KWDocument.h>
-#include <DocBase.h>
+#include <sheets/core/DocBase.h>
 #include <KPrDocument.h>
 
 using namespace Calligra::Components;

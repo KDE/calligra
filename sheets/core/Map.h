@@ -11,10 +11,10 @@
 #include <QString>
 #include <QStringList>
 
-#include "engine/MapBase.h"
+#include "../engine/MapBase.h"
+#include "../engine/ProtectableObject.h"
 
 #include "sheets_core_export.h"
-#include "ProtectableObject.h"
 
 #include <KoDataCenterBase.h>
 
