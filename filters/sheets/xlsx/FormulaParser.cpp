@@ -13,7 +13,7 @@
 #include "FormulaParser.h"
 #include "XlsxXmlWorksheetReader_p.h"
 
-#include <sheets/Util.h>
+#include <sheets/engine/Util.h>
 
 QString MSOOXML::convertFormulaReference(Cell* referencedCell, Cell* thisCell)
 {

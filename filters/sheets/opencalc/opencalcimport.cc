@@ -6,17 +6,7 @@
 */
 
 #include "opencalcimport.h"
-
-#include <float.h>
-#include <math.h>
-
-#include <QColor>
-#include <QFile>
-#include <QFont>
-#include <QPen>
-#include <QList>
-#include <QByteArray>
-#include <QDebug>
+#include "ooutils.h"
 
 #include <KoDocumentInfo.h>
 #include <kpluginfactory.h>
@@ -25,27 +15,24 @@
 #include <KoFilterChain.h>
 #include <KoUnit.h>
 #include <KoStyleStack.h>
-#include <ooutils.h>
 
-#include <sheets/Cell.h>
-#include <sheets/CellStorage.h>
-#include <sheets/Condition.h>
-#include <sheets/Global.h>
-#include <sheets/HeaderFooter.h>
-#include <sheets/Map.h>
-#include <sheets/NamedAreaManager.h>
-#include <sheets/PrintSettings.h>
-#include <sheets/Region.h>
-#include <sheets/RowColumnFormat.h>
-#include <sheets/RowFormatStorage.h>
-#include <sheets/Sheet.h>
-#include <sheets/Style.h>
-#include <sheets/StyleManager.h>
-#include <sheets/Validity.h>
-#include <sheets/Value.h>
-#include <sheets/ValueParser.h>
+#include "sheets/engine/calligra_sheets_limits.h"
+#include <sheets/core/Condition.h>
+#include <sheets/engine/NamedAreaManager.h>
+#include <sheets/engine/Region.h>
+#include <sheets/engine/Value.h>
+#include <sheets/engine/ValueParser.h>
+#include <sheets/core/CellStorage.h>
+#include <sheets/core/ColFormatStorage.h>
+#include <sheets/core/DocBase.h>
+#include <sheets/core/HeaderFooter.h>
+#include <sheets/core/Map.h>
+#include <sheets/core/PrintSettings.h>
+#include <sheets/core/RowFormatStorage.h>
+#include <sheets/core/Sheet.h>
+#include <sheets/core/Style.h>
+#include <sheets/core/StyleManager.h>
 
-#include <sheets/part/Doc.h>
 
 #define SECSPERDAY (24 * 60 * 60)
 
@@ -54,7 +41,7 @@ using namespace Calligra::Sheets;
 K_PLUGIN_FACTORY_WITH_JSON(OpenCalcImportFactory, "calligra_filter_opencalc2sheets.json",
                            registerPlugin<OpenCalcImport>();)
 
-OpenCalcImport::OpenCalcPoint::OpenCalcPoint(QString const & str)
+OpenCalcImport::OpenCalcPoint::OpenCalcPoint(QString const & str, Calligra::Sheets::Map *map)
         : isRange(false)
 {
     bool inQuote = false;
@@ -87,7 +74,7 @@ OpenCalcImport::OpenCalcPoint::OpenCalcPoint(QString const & str)
 
     translation = range;
 
-    const Calligra::Sheets::Region region(range);
+    const Calligra::Sheets::Region region = map->regionFromName(range);
     table = region.firstSheet()->sheetName();
     topLeft = region.firstRange().topLeft();
     botRight = region.firstRange().bottomRight();
@@ -169,7 +156,7 @@ bool OpenCalcImport::readRowFormat(KoXmlElement & rowNode, KoXmlElement * rowSty
     if (height != -1)
         table->rowFormats()->setRowHeight(row, row+number-1, height);
     for (int i = 0; i < number; ++i) {
-        table->cellStorage()->setStyle(Calligra::Sheets::Region(QRect(1, row, KS_colMax, 1)), layout);
+        table->fullCellStorage()->setStyle(Calligra::Sheets::Region(QRect(1, row, KS_colMax, 1)), layout);
 
 
         Q_UNUSED(insertPageBreak); //for now, as long as below code is commented.
@@ -185,7 +172,7 @@ bool OpenCalcImport::readRowFormat(KoXmlElement & rowNode, KoXmlElement * rowSty
 
 QString OpenCalcImport::translatePar(QString & par) const
 {
-    OpenCalcPoint point(par);
+    OpenCalcPoint point(par, m_doc->map());
     qDebug() << "   Parameter:" << par << ", Translation:" << point.translation;
 
     return point.translation;
@@ -445,7 +432,7 @@ bool OpenCalcImport::readCells(KoXmlElement & rowNode, Sheet  * table, int row, 
             Style * layout = m_defaultStyles[psName];
 
             if (layout)
-                table->cellStorage()->setStyle(Calligra::Sheets::Region(QPoint(columns, row)), *layout);
+                table->fullCellStorage()->setStyle(Calligra::Sheets::Region(QPoint(columns, row)), *layout);
         }
         if (e.hasAttributeNS(ooNS::table, "formula")) {
             isFormula = true;
@@ -613,7 +600,7 @@ bool OpenCalcImport::readCells(KoXmlElement & rowNode, Sheet  * table, int row, 
 
                 if (!cell.isNull()) {
                     cellDest = Cell(table, columns, row);
-                    cellDest.copyAll(cell);
+                    cellDest.copyAll(cell, Paste::Normal, Paste::OverWrite);
                 }
             }
         }
@@ -634,7 +621,7 @@ void OpenCalcImport::loadCondition(const Cell& cell, const KoXmlElement &propert
 void OpenCalcImport::loadOasisCondition(const Cell& cell, const KoXmlElement &property)
 {
     KoXmlElement elementItem(property);
-    Map *const map = cell.sheet()->map();
+    MapBase *const map = cell.sheet()->map();
     ValueParser *const parser = map->parser();
 
     QLinkedList<Conditional> cond;
@@ -908,24 +895,20 @@ bool OpenCalcImport::readColLayouts(KoXmlElement & content, Sheet * table)
         if (colLayout.isNull() && (number > 30))
             number = 30;
 
+        ColFormatStorage *cf = table->columnFormats();
         for (int i = 0; i < number; ++i) {
             qDebug() << "Inserting colLayout:" << column;
 
-            ColumnFormat * col = new ColumnFormat();
-            col->setSheet(table);
-            col->setColumn(column);
-            table->cellStorage()->setStyle(Calligra::Sheets::Region(QRect(column, 1, 1, KS_rowMax)), styleLayout);
+            table->fullCellStorage()->setStyle(Calligra::Sheets::Region(QRect(column, 1, 1, KS_rowMax)), styleLayout);
             if (width != -1.0)
-                col->setWidth(width);
+                cf->setColWidth(column, column, width);
 
-            Q_UNUSED(insertPageBreak); //TODO 
-            // if ( insertPageBreak )
-            //   col->setPageBreak( true )
+            if ( insertPageBreak )
+                cf->setPageBreak( column, column, true );
 
             if (collapsed)
-                col->setHidden(true);
+                cf->setHidden(column, column, true);
 
-            table->insertColumnFormat(col);
             ++column;
         }
     }
@@ -1178,7 +1161,6 @@ bool OpenCalcImport::parseBody(int numOfTables)
     loadOasisAreaName(body.toElement());
     loadOasisCellValidation(body.toElement(), m_doc->map()->parser());
 
-    Sheet * table;
     KoXmlNode sheet = KoXml::namedItemNS(body, ooNS::table, "table");
 
     qDebug() << " sheet :" << sheet.isNull();
@@ -1196,10 +1178,9 @@ bool OpenCalcImport::parseBody(int numOfTables)
             continue;
         }
 
-        table = m_doc->map()->addNewSheet();
+        SheetBase *table = m_doc->map()->addNewSheet();
 
-        table->setSheetName(t.attributeNS(ooNS::table, "name", QString()), true);
-        qDebug() << " table->name()" << table->objectName();
+        table->setSheetName(t.attributeNS(ooNS::table, "name", QString()));
         sheet = sheet.nextSibling();
     }
 
@@ -1224,7 +1205,8 @@ bool OpenCalcImport::parseBody(int numOfTables)
             continue;
         }
 
-        table = m_doc->map()->findSheet(t.attributeNS(ooNS::table, "name", QString()));
+        SheetBase *btable = m_doc->map()->findSheet(t.attributeNS(ooNS::table, "name", QString()));
+        Sheet *table = dynamic_cast<Sheet *>(btable);
         if (!table) {
             KMessageBox::sorry(0, i18n("Skipping a table."));
             sheet = sheet.nextSibling();
@@ -1234,7 +1216,7 @@ bool OpenCalcImport::parseBody(int numOfTables)
         Style * defaultStyle = m_defaultStyles[ "Default" ];
         if (defaultStyle) {
             qDebug() << "Copy default style to default cell";
-            table->map()->styleManager()->defaultStyle()->merge(*defaultStyle);
+            table->fullMap()->styleManager()->defaultStyle()->merge(*defaultStyle);
         }
         table->doc()->map()->setDefaultRowHeight(MM_TO_POINT(4.3));
         table->doc()->map()->setDefaultColumnWidth(MM_TO_POINT(22.7));
@@ -1273,10 +1255,10 @@ bool OpenCalcImport::parseBody(int numOfTables)
         if (t.hasAttributeNS(ooNS::table, "print-ranges")) {
             // e.g.: Sheet4.A1:Sheet4.E28
             QString range = t.attributeNS(ooNS::table, "print-ranges", QString());
-            OpenCalcPoint point(range);
+            OpenCalcPoint point(range, m_doc->map());
 
             qDebug() << "Print range:" << point.translation;
-            const Calligra::Sheets::Region region(point.translation);
+            const Calligra::Sheets::Region region = m_doc->map()->regionFromName(point.translation);
 
             qDebug() << "Print table:" << region.firstSheet()->sheetName();
 
@@ -1362,10 +1344,10 @@ void OpenCalcImport::loadOasisAreaName(const KoXmlElement&body)
             m_namedAreas.append(name);
             qDebug() << "Reading in named area, name:" << name << ", area:" << areaPoint;
 
-            OpenCalcPoint point(areaPoint);
+            OpenCalcPoint point(areaPoint, m_doc->map());
             qDebug() << "Area:" << point.translation;
 
-            const Calligra::Sheets::Region region(point.translation);
+            const Calligra::Sheets::Region region = m_doc->map()->regionFromName(point.translation);
 
             m_doc->map()->namedAreaManager()->insert(region, name);
             qDebug() << "Area range:" << region.name();
@@ -2273,8 +2255,8 @@ KoFilter::ConversionStatus OpenCalcImport::convert(QByteArray const & from, QByt
     if (!document)
         return KoFilter::StupidError;
 
-    if (!qobject_cast<const Calligra::Sheets::Doc *>(document)) {     // it's safer that way :)
-        qWarning() << "document isn't a Calligra::Sheets::Doc but a " << document->metaObject()->className();
+    if (!qobject_cast<const Calligra::Sheets::DocBase *>(document)) {     // it's safer that way :)
+        qWarning() << "document isn't a Calligra::Sheets::DocBase but a " << document->metaObject()->className();
         return KoFilter::NotImplemented;
     }
 
@@ -2283,7 +2265,7 @@ KoFilter::ConversionStatus OpenCalcImport::convert(QByteArray const & from, QByt
         return KoFilter::NotImplemented;
     }
 
-    m_doc = (Doc *) document;
+    m_doc = (DocBase *) document;
 
     if (m_doc->mimeType() != "application/x-kspread") {
         qWarning() << "Invalid document mimetype " << m_doc->mimeType();

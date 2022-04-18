@@ -19,7 +19,6 @@
 
 #include <KoFilterChain.h>
 #include <kpluginfactory.h>
-#include <klocale.h>
 
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
@@ -33,27 +32,27 @@
 #include <KoDocumentInfo.h>
 #include <KoTextDocument.h>
 
-#include <DocBase.h>
-#include <sheets/Sheet.h>
-#include <sheets/Condition.h>
-#include <sheets/odf/OdfLoadingContext.h>
-#include <CalculationSettings.h>
-#include <CellStorage.h>
-#include <HeaderFooter.h>
-#include <LoadingInfo.h>
-#include <Map.h>
-#include <NamedAreaManager.h>
-#include <RowColumnFormat.h>
-#include <RowFormatStorage.h>
-#include <Sheet.h>
-#include <SheetPrint.h>
-#include <Style.h>
-#include <StyleManager.h>
-#include <StyleStorage.h>
-#include <ValueConverter.h>
-#include <ShapeApplicationData.h>
-#include <Util.h>
-#include <odf/SheetsOdf.h>
+#include "sheets/engine/calligra_sheets_limits.h"
+#include <sheets/engine/CalculationSettings.h>
+#include <sheets/engine/Localization.h>
+#include <sheets/engine/NamedAreaManager.h>
+#include "sheets/engine/Region.h"
+#include "sheets/engine/Validity.h"
+#include <sheets/engine/ValueConverter.h>
+#include <sheets/core/CellStorage.h>
+#include <sheets/core/ColFormatStorage.h>
+#include <sheets/core/Condition.h>
+#include <sheets/core/Database.h>
+#include <sheets/core/DocBase.h>
+#include <sheets/core/HeaderFooter.h>
+#include <sheets/core/LoadingInfo.h>
+#include <sheets/core/Map.h>
+#include <sheets/core/RowFormatStorage.h>
+#include <sheets/core/Sheet.h>
+#include <sheets/core/Style.h>
+#include <sheets/core/StyleManager.h>
+#include <sheets/core/odf/SheetsOdf.h>
+#include <sheets/core/odf/OdfLoadingContext.h>
 
 #include <Charting.h>
 #include <KoOdfChartWriter.h>
@@ -144,10 +143,10 @@ public:
     int rowsCountTotal, rowsCountDone;
     void addProgress(int addValue);
 
-    QHash<int, QRegion> cellStyles;
-    QHash<int, QRegion> rowStyles;
-    QHash<int, QRegion> columnStyles;
-    QList<QPair<QRegion, Calligra::Sheets::Conditions> > cellConditions;
+    QHash<int, Calligra::Sheets::Region> cellStyles;
+    QHash<int, Calligra::Sheets::Region> rowStyles;
+    QHash<int, Calligra::Sheets::Region> columnStyles;
+    QList<QPair<Calligra::Sheets::Region, Calligra::Sheets::Conditions> > cellConditions;
 
     QList<KoOdfChartWriter*> charts;
     void processCharts(KoXmlWriter* manifestWriter);
@@ -258,7 +257,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
             map->setDefaultColumnWidth(sheet->defaultColWidth());
             map->setDefaultRowHeight(sheet->defaultRowHeight());
         }
-        Calligra::Sheets::Sheet* ksheet = map->addNewSheet(sheet->name());
+        Calligra::Sheets::Sheet* ksheet = dynamic_cast<Calligra::Sheets::Sheet*>(map->addNewSheet(sheet->name()));
         d->processSheet(sheet, ksheet);
         d->shapesXml->endElement();
     }
@@ -270,7 +269,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
         if(range.startsWith(QLatin1Char('[')) && range.endsWith(QLatin1Char(']'))) {
             range.remove(0, 1).chop(1);
         }
-        Calligra::Sheets::Region region(Calligra::Sheets::Odf::loadRegion(range), d->outputDoc->map());
+        Calligra::Sheets::Region region = d->outputDoc->map()->regionFromName(Calligra::Sheets::Odf::loadRegion(range));
         if (!region.isValid() || !region.lastSheet()) {
             qCDebug(lcExcelImport) << "invalid area" << range;
             continue;
@@ -322,7 +321,7 @@ KoFilter::ConversionStatus ExcelImport::convert(const QByteArray& from, const QB
     // sheet background images
     for (unsigned i = 0; i < d->workbook->sheetCount(); ++i) {
         Sheet* sheet = d->workbook->sheet(i);
-        Calligra::Sheets::Sheet* ksheet = map->sheet(i);
+        Calligra::Sheets::Sheet* ksheet = dynamic_cast<Calligra::Sheets::Sheet *>(map->sheet(i));
         qCDebug(lcExcelImport) << i << sheet->backgroundImage();
         if (sheet->backgroundImage().isEmpty()) continue;
 
@@ -463,7 +462,7 @@ void ExcelImport::Private::processEmbeddedObjects(const KoXmlElement& rootElemen
     forEachElement(sheetElement, rootElement) {
         Q_ASSERT(sheetElement.namespaceURI() == KoXmlNS::table && sheetElement.localName() == "table");
         int sheetId = sheetElement.attributeNS(KoXmlNS::table, "id").toInt();
-        Calligra::Sheets::Sheet* sheet = outputDoc->map()->sheet(sheetId);
+        Calligra::Sheets::Sheet* sheet = dynamic_cast<Calligra::Sheets::Sheet *>(outputDoc->map()->sheet(sheetId));
 
         KoXmlElement cellElement;
         int numCellElements = sheetElement.childNodesCount();
@@ -512,7 +511,7 @@ void ExcelImport::Private::processSheet(Sheet* is, Calligra::Sheets::Sheet* os)
     os->setHideZero(!is->showZeroValues());
     os->setShowGrid(is->showGrid());
     os->setFirstLetterUpper(false);
-    os->map()->loadingInfo()->setCursorPosition(os, is->firstVisibleCell() + QPoint(1, 1));
+    os->fullMap()->loadingInfo()->setCursorPosition(os, is->firstVisibleCell() + QPoint(1, 1));
     os->setShowFormulaIndicator(false);
     os->setShowCommentIndicator(true);
     os->setShowPageOutline(is->isPageBreakViewEnabled());
@@ -542,17 +541,17 @@ void ExcelImport::Private::processSheet(Sheet* is, Calligra::Sheets::Sheet* os)
         processRow(is, i, os);
     }
 
-    QList<QPair<QRegion, Calligra::Sheets::Style> > styles;
-    for (QHash<int, QRegion>::const_iterator it = columnStyles.constBegin(); it != columnStyles.constEnd(); ++it) {
+    QList<QPair<Calligra::Sheets::Region, Calligra::Sheets::Style> > styles;
+    for (auto it = columnStyles.constBegin(); it != columnStyles.constEnd(); ++it) {
         styles.append(qMakePair(it.value(), styleList[it.key()]));
     }
-    for (QHash<int, QRegion>::const_iterator it = rowStyles.constBegin(); it != rowStyles.constEnd(); ++it) {
+    for (auto it = rowStyles.constBegin(); it != rowStyles.constEnd(); ++it) {
         styles.append(qMakePair(it.value(), styleList[it.key()]));
     }
-    for (QHash<int, QRegion>::const_iterator it = cellStyles.constBegin(); it != cellStyles.constEnd(); ++it) {
+    for (auto it = cellStyles.constBegin(); it != cellStyles.constEnd(); ++it) {
         styles.append(qMakePair(it.value(), styleList[it.key()]));
     }
-    os->cellStorage()->loadStyles(styles);
+    os->fullCellStorage()->loadStyles(styles);
 
     // sheet shapes
     if (!is->drawObjects().isEmpty() || is->drawObjectsGroupCount()) {
@@ -608,12 +607,12 @@ void ExcelImport::Private::processSheet(Sheet* is, Calligra::Sheets::Sheet* os)
     processSheetForFilters(is, os);
     processSheetForConditionals(is, os);
 
-    os->cellStorage()->loadConditions(cellConditions);
+    os->fullCellStorage()->loadConditions(cellConditions);
 }
 
 void ExcelImport::Private::processSheetForHeaderFooter(Sheet* is, Calligra::Sheets::Sheet* os)
 {
-    os->print()->headerFooter()->setHeadFootLine(
+    os->headerFooter()->setHeadFootLine(
             convertHeaderFooter(is->leftHeader()), convertHeaderFooter(is->centerHeader()),
             convertHeaderFooter(is->rightHeader()), convertHeaderFooter(is->leftFooter()),
             convertHeaderFooter(is->centerFooter()), convertHeaderFooter(is->rightFooter()));
@@ -621,18 +620,18 @@ void ExcelImport::Private::processSheetForHeaderFooter(Sheet* is, Calligra::Shee
 
 void ExcelImport::Private::processSheetForFilters(Sheet* is, Calligra::Sheets::Sheet* os)
 {
-    static int rangeId = 0; // not very nice to do this this way, but I only care about sort of unique names
+//    static int rangeId = 0; // not very nice to do this this way, but I only care about sort of unique names
     QList<QRect> filters = workbook->filterRanges(is);
     foreach (const QRect& filter, filters) {
         Calligra::Sheets::Database db;
-        db.setName(QString("excel-database-%1").arg(++rangeId));
+//        db.setName(QString("excel-database-%1").arg(++rangeId));
         db.setDisplayFilterButtons(true);
         QRect r = filter.adjusted(1, 1, 1, 1);
         r.setBottom(is->maxRow()+1);
         Calligra::Sheets::Region range(r, os);
         db.setRange(range);
         db.setFilter(is->autoFilters());
-        os->cellStorage()->setDatabase(range, db);
+        os->fullCellStorage()->setDatabase(range, db);
 
         // xls files don't seem to make a difference between hidden and filtered rows, so
         // assume all rows in a database range are filtered, not explicitly hidden
@@ -672,41 +671,43 @@ void ExcelImport::Private::processSheetForConditionals(Sheet* is, Calligra::Shee
 {
     static int styleNameId = 0;
     const QList<ConditionalFormat*> conditionals = is->conditionalFormats();
-    Calligra::Sheets::StyleManager* styleManager = os->map()->styleManager();
-    foreach (ConditionalFormat* cf, conditionals) {
-        QRegion r = cf->region().translated(1, 1);
+    Calligra::Sheets::StyleManager* styleManager = os->fullMap()->styleManager();
+    for (ConditionalFormat* cf : conditionals) {
+        Calligra::Sheets::Region r;
+        for (QRect rect : cf->region().translated(1, 1))
+            r.add(rect, os);
         QLinkedList<Calligra::Sheets::Conditional> conds;
         foreach (const Conditional& c, cf->conditionals()) {
             Calligra::Sheets::Conditional kc;
             switch (c.cond) {
-            case Validity::None:
+            case Conditional::None:
                 kc.cond = Calligra::Sheets::Validity::None;
                 break;
-            case Validity::Formula:
+            case Conditional::Formula:
                 kc.cond = Calligra::Sheets::Validity::IsTrueFormula;
                 break;
-            case Validity::Between:
+            case Conditional::Between:
                 kc.cond = Calligra::Sheets::Validity::Between;
                 break;
-            case Validity::Outside:
+            case Conditional::Outside:
                 kc.cond = Calligra::Sheets::Validity::Different;
                 break;
-            case Validity::Equal:
+            case Conditional::Equal:
                 kc.cond = Calligra::Sheets::Validity::Equal;
                 break;
-            case Validity::NotEqual:
+            case Conditional::NotEqual:
                 kc.cond = Calligra::Sheets::Validity::DifferentTo;
                 break;
-            case Validity::Greater:
+            case Conditional::Greater:
                 kc.cond = Calligra::Sheets::Validity::Superior;
                 break;
-            case Validity::Less:
+            case Conditional::Less:
                 kc.cond = Calligra::Sheets::Validity::Inferior;
                 break;
-            case Validity::GreaterOrEqual:
+            case Conditional::GreaterOrEqual:
                 kc.cond = Calligra::Sheets::Validity::SuperiorEqual;
                 break;
-            case Validity::LessOrEqual:
+            case Conditional::LessOrEqual:
                 kc.cond = Calligra::Sheets::Validity::InferiorEqual;
                 break;
             }
@@ -798,15 +799,13 @@ QString ExcelImport::Private::convertHeaderFooter(const QString& text)
 void ExcelImport::Private::processColumn(Sheet* is, unsigned columnIndex, Calligra::Sheets::Sheet* os)
 {
     Column* column = is->column(columnIndex, false);
-
     if (!column) return;
 
-    Calligra::Sheets::ColumnFormat* oc = os->nonDefaultColumnFormat(columnIndex+1);
-    oc->setWidth(column->width());
-    oc->setHidden(!column->visible());
+    os->columnFormats()->setColWidth(columnIndex+1, columnIndex+1, column->width());
+    os->columnFormats()->setHidden(columnIndex+1, columnIndex+1, !column->visible());
 
     int styleId = convertStyle(&column->format());
-    columnStyles[styleId] += QRect(columnIndex+1, 1, 1, KS_rowMax);
+    columnStyles[styleId].add (QRect(columnIndex+1, 1, 1, KS_rowMax), os);
 }
 
 void ExcelImport::Private::processRow(Sheet* is, unsigned rowIndex, Calligra::Sheets::Sheet* os)
@@ -814,7 +813,7 @@ void ExcelImport::Private::processRow(Sheet* is, unsigned rowIndex, Calligra::Sh
     Row *row = is->row(rowIndex, false);
 
     if (!row) {
-        if (is->defaultRowHeight() != os->map()->defaultRowFormat()->height()) {
+        if (is->defaultRowHeight() != os->fullMap()->defaultRowFormat().height) {
             os->rowFormats()->setRowHeight(rowIndex+1, rowIndex+1, is->defaultRowHeight());
         }
         return;
@@ -895,7 +894,7 @@ void ExcelImport::Private::processCell(Cell* ic, Calligra::Sheets::Cell oc)
         } else if (Calligra::Sheets::Format::isDate(styleList[styleId].formatType())) {
             QDateTime date = convertDate(value.asFloat());
             oc.setValue(Calligra::Sheets::Value(date, outputDoc->map()->calculationSettings()));
-            KLocale* locale = outputDoc->map()->calculationSettings()->locale();
+            Calligra::Sheets::Localization* locale = outputDoc->map()->calculationSettings()->locale();
             if (!isFormula) {
                 if (true /* TODO somehow determine if time should be included */) {
                     oc.setRawUserInput(locale->formatDate(date.date()));
@@ -906,7 +905,7 @@ void ExcelImport::Private::processCell(Cell* ic, Calligra::Sheets::Cell oc)
         } else if (Calligra::Sheets::Format::isTime(styleList[styleId].formatType())) {
             QTime time = convertTime(value.asFloat());
             oc.setValue(Calligra::Sheets::Value(time));
-            KLocale* locale = outputDoc->map()->calculationSettings()->locale();
+            Calligra::Sheets::Localization* locale = outputDoc->map()->calculationSettings()->locale();
             if (!isFormula)
                 oc.setRawUserInput(locale->formatTime(time, true));
         } else /* fraction or normal */ {
@@ -946,7 +945,7 @@ void ExcelImport::Private::processCell(Cell* ic, Calligra::Sheets::Cell oc)
             formatRuns[txt.length()] = ic->format().font();
 
             QSharedPointer<QTextDocument> doc(new QTextDocument(txt));
-            KoTextDocument(doc.data()).setStyleManager(oc.sheet()->map()->textStyleManager());
+            KoTextDocument(doc.data()).setStyleManager(oc.fullSheet()->fullMap()->textStyleManager());
             QTextCursor c(doc.data());
             for (std::map<unsigned, FormatFont>::iterator it = formatRuns.begin(); it != formatRuns.end(); ++it) {
                 std::map<unsigned, FormatFont>::iterator it2 = it; ++it2;
@@ -969,10 +968,10 @@ void ExcelImport::Private::processCell(Cell* ic, Calligra::Sheets::Cell oc)
     if (!note.isEmpty())
         oc.setComment(note);
 
-    cellStyles[styleId] += QRect(oc.column(), oc.row(), 1, 1);
+    cellStyles[styleId].add (QRect(oc.column(), oc.row(), 1, 1), oc.sheet());
     QHash<QString, Calligra::Sheets::Conditions>::ConstIterator conds = dataStyleConditions.constFind(ic->format().valueFormat());
     if (conds != dataStyleConditions.constEnd()) {
-        cellConditions.append(qMakePair(QRegion(oc.column(), oc.row(), 1, 1), conds.value()));
+        cellConditions.append(qMakePair(QRect(oc.column(), oc.row(), 1, 1), conds.value()));
     }
 
     processCellObjects(ic, oc);

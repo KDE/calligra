@@ -8,7 +8,7 @@
 #ifndef OpenCalc_IMPORT_H__
 #define OpenCalc_IMPORT_H__
 
-#include "Format.h"
+#include "sheets/core/Format.h"
 
 #include <KoFilter.h>
 
@@ -27,7 +27,8 @@ namespace Sheets
 {
 class Cell;
 class Conditional;
-class Doc;
+class DocBase;
+class Map;
 class Sheet;
 class Style;
 class Validity;
@@ -50,7 +51,7 @@ private:
     class OpenCalcPoint
     {
     public:
-        explicit OpenCalcPoint(const QString &str);
+        explicit OpenCalcPoint(const QString &str, Calligra::Sheets::Map *map);
 
         QString table;
         QString translation;
@@ -61,7 +62,7 @@ private:
 
     enum bPos { Left, Top, Right, Bottom, Fall, GoUp, Border };
 
-    Calligra::Sheets::Doc *    m_doc;
+    Calligra::Sheets::DocBase *m_doc;
     Calligra::Sheets::Style *  m_defaultStyle;
 
     KoXmlDocument   m_content;

@@ -6,28 +6,29 @@
 */
 
 #include <qproimport.h>
-
-#include <sstream>
-
-#include <kdebug.h>
-#include <kmessagebox.h>
-#include <kpluginfactory.h>
-#include <KoFilterChain.h>
-
-#include <sheets/part/Doc.h>
-#include <sheets/Sheet.h>
-#include <sheets/Cell.h>
-#include <sheets/Value.h>
-#include <sheets/Map.h>
-#include <sheets/LoadingInfo.h>
-
 #include <qproformula.h>
 #include <qpro/stream.h>
 #include <qpro/record_factory.h>
+
+#include <KLocalizedString>
+#include <kmessagebox.h>
+#include <kpluginfactory.h>
+
+#include <KoFilterChain.h>
+
+#include <sheets/engine/CellBase.h>
+#include <sheets/engine/SheetBase.h>
+#include <sheets/engine/Value.h>
+#include <sheets/core/DocBase.h>
+#include <sheets/core/LoadingInfo.h>
+#include <sheets/core/Map.h>
+
 #include <QFile>
-#include <QByteArray>
+#include <QDebug>
 
 using namespace Calligra::Sheets;
+
+Q_LOGGING_CATEGORY(lcQPro, "calligra.filter.qpro")
 
 K_PLUGIN_FACTORY_WITH_JSON(QPROImportFactory, "calligra_filter_qpro2sheets.json",
                            registerPlugin<QpImport>();)
@@ -48,14 +49,14 @@ QpTableList::~QpTableList()
 
 
 void
-QpTableList::table(unsigned pIdx, Sheet* pTable)
+QpTableList::table(unsigned pIdx, SheetBase* pTable)
 {
     if (pIdx < cNameCnt) {
         cTable[pIdx] = pTable;
     }
 }
 
-Sheet*
+SheetBase*
 QpTableList::table(unsigned pIdx)
 {
     return (pIdx < cNameCnt ? cTable[pIdx] : 0);
@@ -88,24 +89,22 @@ KoFilter::ConversionStatus QpImport::convert(const QByteArray& from, const QByte
     if (!document)
         return KoFilter::StupidError;
 
-    kDebug(30523) << "here we go..." << document->metaObject()->className();
+    qDebug(lcQPro) << "here we go..." << document->metaObject()->className();
 
-    if (!::qobject_cast<const Calligra::Sheets::Doc *>(document)) {   // it's safer that way :)
-        kWarning(30501) << "document isn't a Calligra::Sheets::Doc but a " << document->metaObject()->className();
+    if (!::qobject_cast<const Calligra::Sheets::DocBase *>(document)) {   // it's safer that way :)
+        qWarning(lcQPro) << "document isn't a Calligra::Sheets::DocBase but a " << document->metaObject()->className();
         return KoFilter::NotImplemented;
     }
     if (from != "application/x-quattropro" || to != "application/x-kspread") {
-        kWarning(30501) << "Invalid mimetypes " << from << " " << to;
+        qWarning(lcQPro) << "Invalid mimetypes " << from << " " << to;
         return KoFilter::NotImplemented;
     }
 
-    kDebug(30523) << "...still here...";
-
-    // No need for a dynamic cast here, since we use Qt's moc magic
-    Doc *ksdoc = (Doc*)document;
+    qDebug(lcQPro) << "...still here...";
+    DocBase *ksdoc = dynamic_cast<DocBase *>(document);
 
     if (ksdoc->mimeType() != "application/x-ole-storage") {
-        kWarning(30501) << "Invalid document mimetype " << ksdoc->mimeType();
+        qWarning(lcQPro) << "Invalid document mimetype " << ksdoc->mimeType();
         return KoFilter::NotImplemented;
     }
 
@@ -116,7 +115,7 @@ KoFilter::ConversionStatus QpImport::convert(const QByteArray& from, const QByte
         return KoFilter::FileNotFound;
     }
 
-    Sheet *table = 0;
+    SheetBase *table = 0;
 
     QString field;
     int value = 0;
@@ -149,9 +148,7 @@ KoFilter::ConversionStatus QpImport::convert(const QByteArray& from, const QByte
             if (table == 0) {
                 table = ksdoc->map()->addNewSheet();
                 // set up a default name for the table
-                table->setSheetName(lTableNames.name(lPageIdx)
-                                    , true
-                                   );
+                table->setSheetName(lTableNames.name(lPageIdx));
                 lTableNames.table(lPageIdx, table);
             }
             break;
@@ -182,12 +179,10 @@ KoFilter::ConversionStatus QpImport::convert(const QByteArray& from, const QByte
                     // we're about to reference a table that hasn't been created yet.
                     // setText gets upset about this, so create a blank table
 
-                    Sheet* lNewTable = ksdoc->map()->addNewSheet();
+                    SheetBase* lNewTable = ksdoc->map()->addNewSheet();
 
                     // set up a default name for the table
-                    lNewTable->setSheetName(lTableNames.name(lIdx)
-                                            , true
-                                           );
+                    lNewTable->setSheetName(lTableNames.name(lIdx));
                     lTableNames.table(lIdx, lNewTable);
                 }
             }
@@ -215,9 +210,7 @@ KoFilter::ConversionStatus QpImport::convert(const QByteArray& from, const QByte
             lRecPageName = (QpRecPageName*)lRec;
 
             if (lTableNames.allocated(lPageIdx) && lTableNames.table(lPageIdx)) {
-                lTableNames.table(lPageIdx)->setSheetName(lRecPageName->pageName()
-//                                                     , true
-                                                         );
+                lTableNames.table(lPageIdx)->setSheetName(lRecPageName->pageName());
                 lTableNames.name(lPageIdx, lRecPageName->pageName());
             }
             break;
@@ -243,9 +236,9 @@ KoFilter::ConversionStatus QpImport::convert(const QByteArray& from, const QByte
         return KoFilter::StupidError;
 }
 
-void QpImport::setText(Sheet* sheet, int _row, int _column, const QString& _text, bool asString)
+void QpImport::setText(SheetBase* sheet, int _row, int _column, const QString& _text, bool asString)
 {
-    Cell cell(sheet, _column, _row);
+    CellBase cell(sheet, _column, _row);
     if (asString) {
         cell.setUserInput(_text);
         cell.setValue(Value(_text));

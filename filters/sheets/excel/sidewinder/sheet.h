@@ -13,7 +13,7 @@
 #include <QImage>
 #include <generated/simpleParser.h>
 
-#include "database/Filter.h"
+#include "sheets/core/DataFilter.h"
 
 class QPoint;
 

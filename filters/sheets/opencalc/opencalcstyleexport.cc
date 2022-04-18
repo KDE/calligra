@@ -6,12 +6,11 @@
 
 #include <opencalcstyleexport.h>
 
-#include <sheets/Cell.h>
-#include <sheets/part/Doc.h>
-#include <sheets/Map.h>
-#include <sheets/Sheet.h>
-#include <sheets/Style.h>
-#include <sheets/StyleManager.h>
+#include <sheets/core/Cell.h>
+#include <sheets/core/Map.h>
+#include <sheets/core/Sheet.h>
+#include <sheets/core/Style.h>
+#include <sheets/core/StyleManager.h>
 
 #include <QDomDocument>
 
@@ -394,7 +393,7 @@ bool CellStyle::isEqual(CellStyle const * const t1, CellStyle const & t2)
 void CellStyle::loadData(CellStyle & cs, const Cell& cell)
 {
     const Calligra::Sheets::Style style = cell.style();
-    const Calligra::Sheets::Style* defaultStyle = cell.sheet()->map()->styleManager()->defaultStyle();
+    const Calligra::Sheets::Style* defaultStyle = cell.fullSheet()->fullMap()->styleManager()->defaultStyle();
 
     QFont font = style.font();
     if (font != defaultStyle->font())

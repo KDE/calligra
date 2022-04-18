@@ -25,7 +25,7 @@ set(sheets2opencalc_PART_SRCS opencalcexport.cc opencalcstyleexport.cc ${liboofi
 add_library(calligra_filter_sheets2opencalc MODULE ${sheets2opencalc_PART_SRCS})
 calligra_filter_desktop_to_json(calligra_filter_sheets2opencalc calligra_filter_sheets2opencalc.desktop)
 
-target_link_libraries(calligra_filter_sheets2opencalc calligrasheetsui)
+target_link_libraries(calligra_filter_sheets2opencalc calligrasheetsui calligrasheetspartlib )
 
 install(TARGETS calligra_filter_sheets2opencalc  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
 

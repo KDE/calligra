@@ -29,8 +29,6 @@
 #include <KoOdfGraphicStyles.h>
 #include <QFontMetricsF>
 
-#include <sheets/Util.h>
-
 #define MSOOXML_CURRENT_NS "xdr"
 #define MSOOXML_CURRENT_CLASS XlsxXmlDrawingReader
 #define BIND_READ_CLASS MSOOXML_CURRENT_CLASS

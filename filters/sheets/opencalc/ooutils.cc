@@ -8,6 +8,7 @@
 
 #include "ooutils.h"
 #include <KoStyleStack.h>
+#include <KoStore.h>
 #include <KoXmlReader.h>
 #include <QDomDocument>
 #include <QColor>

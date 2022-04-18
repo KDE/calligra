@@ -10,14 +10,14 @@
 #define OOUTILS_H
 
 #include <QString>
-#include <KoFilterChain.h>
+#include <KoFilter.h>
 #include <KoXmlReader.h>
 class QColor;
 class QDomElement;
 class KoStyleStack;
 class QDomDocument;
 class KZip;
-
+class KoStore;
 class ooNS
 {
 public:

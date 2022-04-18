@@ -18,7 +18,7 @@
 #include "conditionals.h"
 #include <QPoint>
 
-#include "database/Filter.h"
+#include "sheets/core/DataFilter.h"
 
 //#define SWINDER_XLS2RAW
 
@@ -985,7 +985,7 @@ void WorksheetSubStreamHandler::handleCFRecord(Swinder::CFRecord *record)
 
     Conditional c;
     if (record->conditionType() == record->Formula) {
-        c.cond = Validity::Formula;
+        c.cond = Conditional::Formula;
         FormulaDecoder dec;
         QByteArray rgce = record->rgce1();
         unsigned size = rgce.size();
@@ -996,33 +996,33 @@ void WorksheetSubStreamHandler::handleCFRecord(Swinder::CFRecord *record)
         c.value1 = Value(f);
     } else {
         int valcount = 1;
-        c.cond = Validity::None;
+        c.cond = Conditional::None;
         switch (record->conditionFunction()) {
         case CFRecord::Between:
-            c.cond = Validity::Between;
+            c.cond = Conditional::Between;
             valcount = 2;
             break;
         case CFRecord::Outside:
-            c.cond = Validity::Outside;
+            c.cond = Conditional::Outside;
             valcount = 2;
             break;
         case CFRecord::Equal:
-            c.cond = Validity::Equal;
+            c.cond = Conditional::Equal;
             break;
         case CFRecord::NotEqual:
-            c.cond = Validity::NotEqual;
+            c.cond = Conditional::NotEqual;
             break;
         case CFRecord::Greater:
-            c.cond = Validity::Greater;
+            c.cond = Conditional::Greater;
             break;
         case CFRecord::Less:
-            c.cond = Validity::Less;
+            c.cond = Conditional::Less;
             break;
         case CFRecord::GreaterOrEqual:
-            c.cond = Validity::GreaterOrEqual;
+            c.cond = Conditional::GreaterOrEqual;
             break;
         case CFRecord::LessOrEqual:
-            c.cond = Validity::LessOrEqual;
+            c.cond = Conditional::LessOrEqual;
             break;
         }
         FormulaDecoder dec;

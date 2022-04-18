@@ -6,29 +6,32 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include <htmlexport.h>
-#include <exportdialog.h>
+#include "htmlexport.h"
+#include "exportdialog.h"
 
-#include <QFile>
+// #include <QFile>
 #include <QTextCodec>
-#include <QTextStream>
-#include <QByteArray>
-#include <QUrl>
+// #include <QTextStream>
+// #include <QByteArray>
+// #include <QUrl>
 
-#include <kdebug.h>
 #include <kpluginfactory.h>
 #include <KoFilterChain.h>
 #include <KoFilterManager.h>
 #include <KoDocumentInfo.h>
 #include <CalligraVersionWrapper.h>
 
-#include <sheets/CellStorage.h>
-#include <sheets/Map.h>
-#include <sheets/Sheet.h>
-#include <sheets/part/Doc.h>
-#include <sheets/Util.h>
+#include <sheets/engine/CellBaseStorage.h>
+#include <sheets/engine/Util.h>
+#include <sheets/core/Cell.h>
+#include <sheets/core/DocBase.h>
+#include <sheets/core/Map.h>
+#include <sheets/core/Sheet.h>
+#include <sheets/core/Style.h>
 
 using namespace Calligra::Sheets;
+
+Q_LOGGING_CATEGORY(lcHtml, "calligra.filter.html")
 
 K_PLUGIN_FACTORY_WITH_JSON(HTMLExportFactory, "calligra_filter_sheets2html.json",
                            registerPlugin<HTMLExport>();)
@@ -71,7 +74,7 @@ const QString strGt("&gt;");
 KoFilter::ConversionStatus HTMLExport::convert(const QByteArray& from, const QByteArray& to)
 {
     if (to != "text/html" || from != "application/x-kspread") {
-        kWarning(30501) << "Invalid mimetypes " << to << " " << from;
+        qWarning(lcHtml) << "Invalid mimetypes " << to << " " << from;
         return KoFilter::NotImplemented;
     }
 
@@ -80,15 +83,15 @@ KoFilter::ConversionStatus HTMLExport::convert(const QByteArray& from, const QBy
     if (!document)
         return KoFilter::StupidError;
 
-    if (!::qobject_cast<const Calligra::Sheets::Doc *>(document)) {   // it's safer that way :)
-        kWarning(30501) << "document isn't a Calligra::Sheets::Doc but a " << document->metaObject()->className();
+    if (!::qobject_cast<const Calligra::Sheets::DocBase *>(document)) {   // it's safer that way :)
+        qWarning(lcHtml) << "document isn't a Calligra::Sheets::DocBase but a " << document->metaObject()->className();
         return KoFilter::NotImplemented;
     }
 
-    const Doc * ksdoc = static_cast<const Doc *>(document);
+    const DocBase * ksdoc = dynamic_cast<const DocBase *>(document);
 
     if (ksdoc->mimeType() != "application/x-kspread") {
-        kWarning(30501) << "Invalid document mimetype " << ksdoc->mimeType();
+        qWarning(lcHtml) << "Invalid document mimetype " << ksdoc->mimeType();
         return KoFilter::NotImplemented;
     }
 
@@ -96,7 +99,8 @@ KoFilter::ConversionStatus HTMLExport::convert(const QByteArray& from, const QBy
     filenameBase = filenameBase.left(filenameBase.lastIndexOf('.'));
 
     QStringList sheets;
-    foreach(Sheet* sheet, ksdoc->map()->sheetList()) {
+    for(SheetBase* bsheet : ksdoc->map()->sheetList()) {
+        Sheet *sheet = dynamic_cast<Sheet *>(bsheet);
         int rows = 0;
         int columns = 0;
         detectFilledCells(sheet, rows, columns);
@@ -114,11 +118,11 @@ KoFilter::ConversionStatus HTMLExport::convert(const QByteArray& from, const QBy
         }
     }
 
-    Sheet* sheet = 0;
     sheets = m_dialog->sheets();
     QString str;
     for (int i = 0; i < sheets.count() ; ++i) {
-        sheet = ksdoc->map()->findSheet(sheets[i]);
+        SheetBase *bsheet = ksdoc->map()->findSheet(sheets[i]);
+        Sheet *sheet = dynamic_cast<Sheet *>(bsheet);
         if (!sheet)
             continue;
 
@@ -136,7 +140,7 @@ KoFilter::ConversionStatus HTMLExport::convert(const QByteArray& from, const QBy
             closePage(str);
             QFile out(file);
             if (!out.open(QIODevice::WriteOnly)) {
-                kError(30501) << "Unable to open output file!" << endl;
+                qWarning(lcHtml) << "Unable to open output file!" << endl;
                 out.close();
                 return KoFilter::FileNotFound;
             }

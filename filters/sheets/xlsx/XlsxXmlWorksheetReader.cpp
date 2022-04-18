@@ -36,7 +36,9 @@
 #include <KoGenStyles.h>
 #include <styles/KoCharacterStyle.h>
 
-#include <sheets/Cell.h>
+#include <sheets/engine/CellBase.h>
+#include <sheets/engine/Util.h>
+#include <sheets/core/odf/SheetsOdf.h>
 
 #include <QBrush>
 #include <QRegExp>
@@ -349,7 +351,7 @@ void XlsxXmlWorksheetReader::showWarningAboutWorksheetSize()
 
 inline static QString encodeLabelText(int col, int row)
 {
-    return Calligra::Sheets::Cell::columnName(col) + QString::number(row);
+    return Calligra::Sheets::CellBase::columnName(col) + QString::number(row);
 }
 
 void XlsxXmlWorksheetReader::saveAnnotation(int col, int row)

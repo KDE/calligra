@@ -11,6 +11,7 @@
 
 #include <KoFilter.h>
 #include <QByteArray>
+#include <QLoggingCategory>
 #include <QVariantList>
 
 class ExportDialog;
@@ -23,6 +24,8 @@ namespace Sheets
 class Sheet;
 }
 }
+
+Q_DECLARE_LOGGING_CATEGORY(lcHtml)
 
 class HTMLExport : public KoFilter
 {

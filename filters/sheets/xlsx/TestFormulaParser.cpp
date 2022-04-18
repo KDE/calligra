@@ -16,7 +16,7 @@
 
 #include "FormulaParser.h"
 #include "XlsxXmlWorksheetReader_p.h"
-#include <sheets/Util.h>
+#include <sheets/core/odf/SheetsOdf.h>
 
 void TestFormulaParser::testConvertFormula_data()
 {

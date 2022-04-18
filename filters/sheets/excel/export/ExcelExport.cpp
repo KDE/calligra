@@ -4,29 +4,32 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include <ExcelExport.h>
+#include "ExcelExport.h"
 
 #include <QFont>
 #include <QFontMetricsF>
 #include <QMap>
+#include <QStack>
+#include <QDebug>
 
-#include <kdebug.h>
 #include <kpluginfactory.h>
 
 #include <KoFilterChain.h>
 #include <KoPostscriptPaintDevice.h>
 
-#include <part/Doc.h>
-#include <CellStorage.h>
-#include <Formula.h>
-#include <Map.h>
-#include <sheets/Sheet.h>
-#include <Region.h>
-#include <RowColumnFormat.h>
-#include <RowFormatStorage.h>
-#include <StyleStorage.h>
-#include <ValueStorage.h>
-#include <calligra_sheets_limits.h>
+#include <sheets/engine/Formula.h>
+#include <sheets/engine/Region.h>
+#include <sheets/engine/Value.h>
+#include <sheets/engine/ValueStorage.h>
+#include <sheets/core/Cell.h>
+#include <sheets/core/CellStorage.h>
+#include <sheets/core/ColFormatStorage.h>
+#include <sheets/core/DocBase.h>
+#include <sheets/core/Map.h>
+#include <sheets/core/RowFormatStorage.h>
+#include <sheets/core/Sheet.h>
+#include <sheets/core/Style.h>
+#include <sheets/core/StyleStorage.h>
 
 #include <swinder.h>
 #include <XlsRecordOutputStream.h>
@@ -40,7 +43,7 @@ using namespace Swinder;
 class ExcelExport::Private
 {
 public:
-    const Calligra::Sheets::Doc* inputDoc;
+    const Calligra::Sheets::DocBase* inputDoc;
     QString outputFile;
     XlsRecordOutputStream* out;
     QHash<Calligra::Sheets::Style, unsigned> styles;
@@ -75,9 +78,9 @@ KoFilter::ConversionStatus ExcelExport::convert(const QByteArray& from, const QB
     if (!document)
         return KoFilter::StupidError;
 
-    d->inputDoc = qobject_cast<const Calligra::Sheets::Doc*>(document);
+    d->inputDoc = qobject_cast<const Calligra::Sheets::DocBase*>(document);
     if (!d->inputDoc) {
-        kWarning() << "document isn't a Calligra::Sheets::Doc but a " << document->metaObject()->className();
+        qWarning() << "document isn't a Calligra::Sheets::Doc but a " << document->metaObject()->className();
         return KoFilter::WrongFormat;
     }
 
@@ -147,7 +150,8 @@ KoFilter::ConversionStatus ExcelExport::convert(const QByteArray& from, const QB
     }
     QList<XFRecord> xfs;
     for (int i = 0; i < d->inputDoc->map()->count(); i++) {
-        collectStyles(d->inputDoc->map()->sheet(i), xfs, fonts);
+        Calligra::Sheets::Sheet *sheet = dynamic_cast<Calligra::Sheets::Sheet *>(d->inputDoc->map()->sheet(i));
+        collectStyles(sheet, xfs, fonts);
     }
 
     foreach (const FontRecord& fnt, d->fontRecords) {
@@ -208,7 +212,8 @@ KoFilter::ConversionStatus ExcelExport::convert(const QByteArray& from, const QB
         ExtSSTRecord esst(0);
         sst.setExtSSTRecord(&esst);
         for (int i = 0; i < d->inputDoc->map()->count(); i++) {
-            buildStringTable(d->inputDoc->map()->sheet(i), sst, stringTable);
+            Calligra::Sheets::Sheet *sheet = dynamic_cast<Calligra::Sheets::Sheet *>(d->inputDoc->map()->sheet(i));
+            buildStringTable(sheet, sst, stringTable);
         }
         o.writeRecord(sst);
         o.writeRecord(esst);
@@ -219,7 +224,8 @@ KoFilter::ConversionStatus ExcelExport::convert(const QByteArray& from, const QB
     for (int i = 0; i < d->inputDoc->map()->count(); i++) {
         boundSheets[i].setBofPosition(o.pos());
         o.rewriteRecord(boundSheets[i]);
-        convertSheet(d->inputDoc->map()->sheet(i), stringTable);
+        Calligra::Sheets::Sheet *sheet = dynamic_cast<Calligra::Sheets::Sheet *>(d->inputDoc->map()->sheet(i));
+        convertSheet(sheet, stringTable);
     }
 
     delete a;
@@ -246,10 +252,10 @@ static unsigned convertColumnWidth(qreal width)
 
 void ExcelExport::collectStyles(Calligra::Sheets::Sheet* sheet, QList<XFRecord>& xfRecords, QHash<QPair<QFont, QColor>, unsigned>& fontMap)
 {
-    QRect area = sheet->cellStorage()->styleStorage()->usedArea();
+    QRect area = sheet->fullCellStorage()->styleStorage()->usedArea();
     for (int row = area.top(); row <= area.bottom(); row++) {
         for (int col = area.left(); col <= area.right(); col++){
-            Calligra::Sheets::Style s = sheet->cellStorage()->style(col, row);
+            Calligra::Sheets::Style s = sheet->fullCellStorage()->style(col, row);
             unsigned& idx = d->styles[s];
             if (!idx) {
                 XFRecord xfr(0);
@@ -327,16 +333,16 @@ void ExcelExport::convertSheet(Calligra::Sheets::Sheet* sheet, const QHash<QStri
     {
         ColInfoRecord cir(0);
         for (int i = 1; i <= area.right(); ++i) {
-            const Calligra::Sheets::ColumnFormat* column = sheet->columnFormat(i);
-            unsigned w = convertColumnWidth(column->width());
-            if (w != cir.width() || column->isHidden() != cir.isHidden() || column->isDefault() != !cir.isNonDefaultWidth()) {
+            Calligra::Sheets::ColFormatStorage *cf = sheet->columnFormats();
+            unsigned w = convertColumnWidth(cf->colWidth(i));
+            if (w != cir.width() || cf->isHidden(i) != cir.isHidden() || cf->isDefaultCol(i) != !cir.isNonDefaultWidth()) {
                 if (i > 1) {
                     o.writeRecord(cir);
                 }
                 cir.setFirstColumn(i-1);
                 cir.setWidth(w);
-                cir.setHidden(column->isHidden());
-                cir.setNonDefaultWidth(!column->isDefault());
+                cir.setHidden(cf->isHidden(i));
+                cir.setNonDefaultWidth(!cf->isDefaultCol(i));
             }
             cir.setLastColumn(i-1);
         }
@@ -362,9 +368,9 @@ void ExcelExport::convertSheet(Calligra::Sheets::Sheet* sheet, const QHash<QStri
         for (int row = firstRow; row < lastRowP1; row++) {
             RowRecord rr(0);
 
-            Calligra::Sheets::Cell first = sheet->cellStorage()->firstInRow(row);
+            Calligra::Sheets::Cell first = sheet->fullCellStorage()->firstInRow(row);
             if (first.isNull()) first = Calligra::Sheets::Cell(sheet, 1, row);
-            Calligra::Sheets::Cell last = sheet->cellStorage()->lastInRow(row);
+            Calligra::Sheets::Cell last = sheet->fullCellStorage()->lastInRow(row);
             if (last.isNull()) last = first;
 
             rr.setRow(row-1);
@@ -382,9 +388,9 @@ void ExcelExport::convertSheet(Calligra::Sheets::Sheet* sheet, const QHash<QStri
             db.setCellOffset(row - firstRow, o.pos() - lastStart);
             lastStart = o.pos();
 
-            Calligra::Sheets::Cell first = sheet->cellStorage()->firstInRow(row);
+            Calligra::Sheets::Cell first = sheet->fullCellStorage()->firstInRow(row);
             if (first.isNull()) first = Calligra::Sheets::Cell(sheet, 1, row);
-            Calligra::Sheets::Cell last = sheet->cellStorage()->lastInRow(row);
+            Calligra::Sheets::Cell last = sheet->fullCellStorage()->lastInRow(row);
             if (last.isNull()) last = first;
 
             for (int col = first.column(); col <= last.column(); col++) {
@@ -694,7 +700,7 @@ QList<FormulaToken> ExcelExport::compileFormula(const Calligra::Sheets::Tokens &
             syntaxStack.push(token);
 
             if (tokenType == Calligra::Sheets::Token::Cell) {
-                const Calligra::Sheets::Region region(token.text(), d->inputDoc->map(), sheet);
+                const Calligra::Sheets::Region region = d->inputDoc->map()->regionFromName(token.text(), sheet);
                 if (!region.isValid() || !region.isSingular()) {
                     codes.append(FormulaToken::createRefErr());
                 } else {
@@ -702,7 +708,7 @@ QList<FormulaToken> ExcelExport::compileFormula(const Calligra::Sheets::Tokens &
                     codes.append(FormulaToken::createRef(e->rect().topLeft() - QPoint(1, 1), e->isRowFixed(), e->isColumnFixed()));
                 }
             } else if (tokenType == Calligra::Sheets::Token::Range) {
-                const Calligra::Sheets::Region region(token.text(), d->inputDoc->map(), sheet);
+                const Calligra::Sheets::Region region = d->inputDoc->map()->regionFromName(token.text(), sheet);
                 if (!region.isValid()) {
                     codes.append(FormulaToken::createAreaErr());
                 } else {

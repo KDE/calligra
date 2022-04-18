@@ -4,7 +4,7 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include <qproformula.h>
+#include "qproformula.h"
 
 static QpFormulaConv gOverride[] = {
     {14,  QpFormula::binaryOperand, "=="},      // '=' => '=='

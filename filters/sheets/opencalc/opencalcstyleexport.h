@@ -8,8 +8,7 @@
 #ifndef OPENCALCSTYLEEXPORT_H
 #define OPENCALCSTYLEEXPORT_H
 
-#include "sheets/Global.h"
-#include "sheets/Style.h"
+#include "sheets/core/Style.h"
 
 #include <QColor>
 #include <QFont>

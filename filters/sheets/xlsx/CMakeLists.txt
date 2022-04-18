@@ -4,6 +4,7 @@ include_directories(${KOMAIN_INCLUDES}
                     ${KOODF2_INCLUDES}           # For KoOdfChartWriter
                     ${CMAKE_SOURCE_DIR}/filters/libmso
                     ${CMAKE_SOURCE_DIR}/filters/libmsooxml
+                    ${CMAKE_SOURCE_DIR}/sheets
 )
 
 ########### next target ###############
@@ -34,7 +35,7 @@ target_link_libraries(
     mso
     koodf
     komain
-    calligrasheetsui
+    calligrasheetscore
 )
 
 install(TARGETS calligra_filter_xlsx2ods DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
