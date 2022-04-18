@@ -913,7 +913,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert(const QByteArray& from, const
     addAttributeItem(gnumeric_doc, attributes, "4", "WorkbookView::is_protected", map->isProtected());
 
     /*
-     * Doccument summary
+     * Document summary
      */
     QDomElement summary =  gnumeric_doc.createElement("gmr:Summary");
     workbook.appendChild(summary);

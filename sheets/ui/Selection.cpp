@@ -848,7 +848,7 @@ void Selection::endReferenceSelection(bool saveChanges)
         initialize(d->formerSelection);
     }
     d->formerSelection.clear();
-    // The normal selection does not support the replacments of sub-regions.
+    // The normal selection does not support the replacements of sub-regions.
     // Reset the active sub-region to the whole region.
     // TODO Why not allow that? Would make resizing of all ranges in a
     // non-contiguous selection possible!

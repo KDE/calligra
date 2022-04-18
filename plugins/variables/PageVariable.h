@@ -35,7 +35,7 @@ public:
 
     void propertyChanged(Property property, const QVariant &value) override;
 
-    /// reimplmented
+    /// reimplemented
     void saveOdf(KoShapeSavingContext & context) override;
 
     ///reimplemented

@@ -32,7 +32,7 @@ Fixes:
 
 Changes:
 - Flip now works as in Gimp. Horizontal flip flips on y-axis
-  vertical filp on x-axis
+  vertical flip on x-axis
 - Group objects: The grouped object is now in the z-order of the upperst
   object grouped and no longer on the top.
 - Ungroup object: The objects are now in the z-order where the group object 

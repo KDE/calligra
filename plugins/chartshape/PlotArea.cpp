@@ -641,7 +641,7 @@ bool PlotArea::loadOdf(const KoXmlElement &plotAreaElement,
     KoOdfStylesReader &stylesReader = context.odfLoadingContext().stylesReader();
 
     // The exact position defined in ODF overwrites the default layout position
-    // NOTE: Do not do this as it means functionallity changes just because you save and load.
+    // NOTE: Do not do this as it means functionality changes just because you save and load.
     // I don't think odf has an element/attribute that can hold this type of info.
     // Also afaics libreoffice do not do this.
 //     if (plotAreaElement.hasAttributeNS(KoXmlNS::svg, "x") ||

@@ -42,7 +42,7 @@ Item										Prio	Status
     allow more than three conditions; list all cell ranges holding a condition,
     that intersect the cell selection; display the cell range in an extra column
     in the list; allow to choose between those cell ranges and the current cell
-    selection; if there are no stored condtions yet or the only stored one's
+    selection; if there are no stored conditions yet or the only stored one's
     range matches the cell selection, hide the list's cell range column; extend
     the conditions to allow cell content text length comparisons and formulas;
     'Reset' button to restore conditions; 'Clear'/'Defaults' button to clear all
@@ -307,7 +307,7 @@ Item										Prio	Status
     - Extract an interface for RectStorages (or even better for both, Point-
       and RectStorage) based on QAbstractItemModel.
     - Refactor CellStorage to load storage plugins.
-    - Combine these plugins with the neccessary dialogs/commands acting on the
+    - Combine these plugins with the necessary dialogs/commands acting on the
       cell selection (they could all be placed in one shared object/library, if
       each plugin (storage/dialog/command) gets a corresponding .desktop file).
     - Some extra logic needs to be hard-coded into 'core', e.g. the check
@@ -423,7 +423,7 @@ Things not in bugzilla
   + Indent and multiline doesn't work together			      2 ----
   + RegionSelector						      2 ----
     - add syntax highlighting
-    - intialize choice on focus in events, if necessary
+    - initialize choice on focus in events, if necessary
     - fix the line edit height
     - implement single cell restriction (maybe in Selection)
     - jump back to parent dialog on closing the mini dialog
@@ -477,7 +477,7 @@ Other things: (please add the things you are working on!)
 Not yet sorted (will be entered into categories above)
 
 - Multiple Operations (in Excel: "Data"->"Table")
-- Insert widgets like buttons, drop down lists,... + having the possibily to
+- Insert widgets like buttons, drop down lists,... + having the possibility to
   define action if pressed, or selection changes,...
 - Button + Drop-Down-List support (within cells)
 - interface for mail merge

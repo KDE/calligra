@@ -108,7 +108,7 @@ namespace wvWare
             //documents.
             std::vector<U32> m_endCP;
 
-            //A copy of fib.nFib to identify the document type durig
+            //A copy of fib.nFib to identify the document type during
             //processing of bookmarks.
             U16 m_nFib;
 

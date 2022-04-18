@@ -489,7 +489,7 @@ bool PictureShape::loadOdfFrameElement(const KoXmlElement &element, KoShapeLoadi
             }
         }
         if (!userData()) {
-            // We must crate an image or else things crashes later on
+            // We must create an image or else things crashes later on
             warnPicture<<"Could not find an image, creating an empty one";
             KoImageData *data = m_imageCollection->createImageData(QImage(s_emptyImageXpm));
             setUserData(data);

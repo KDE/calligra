@@ -347,7 +347,7 @@ def main(argv):
 
     def usage():
         print "Syntax:\n  %s [options]" % os.path.split(argv[0])[1]
-        print "\n  ".join([ "Options:", "--help prints usage informations", ])
+        print "\n  ".join([ "Options:", "--help prints usage information", ])
         for s in dir(unoconfig):
             if not s.startswith('_'):
                 v = getattr(unoconfig,s)

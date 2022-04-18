@@ -201,7 +201,7 @@ private:
     QStringList m_authorTags;
     /** The map containing information about the author */
     QMap<QString, QString> m_authorInfo;
-    /** The map containing information about the author set programatically*/
+    /** The map containing information about the author set programmatically*/
     QMap<QString, QString> m_authorInfoOverride;
     /** The map containing information about the document */
     QMap<QString, QString> m_aboutInfo;

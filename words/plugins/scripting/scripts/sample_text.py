@@ -18,7 +18,7 @@ doc.setDefaultStyleSheet(
     )
 )
 
-# Set the html with some general informations.
+# Set the html with some general information.
 doc.setHtml(
     (
         "<h1><font color=\"blue\">Python Sample: Text</font></h1>"

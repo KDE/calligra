@@ -344,7 +344,7 @@ void TestChartLayout::testDefaultDiagram()
     plotAreaRect.setRight(area.right()-1);
     COMPARELAYOUT("Hide secondary y axis");
 
-    // show everyting in one go
+    // show everything in one go
     chartTitle->setVisible(true);
     chartSubTitle->setVisible(true);
     chartFooter->setVisible(true);
@@ -384,7 +384,7 @@ void TestChartLayout::testDefaultDiagram()
     secondaryYAxisTitleRect.moveLeft(plotAreaRect.right() + spaceX);
     secondaryYAxisTitleRect.moveTop(plotAreaRect.center().y() - secondaryYAxisTitleRect.height() / 2);
 
-    COMPARELAYOUT("Show everyting in one go");
+    COMPARELAYOUT("Show everything in one go");
 }
 
 void TestChartLayout::testLegendPositioning()

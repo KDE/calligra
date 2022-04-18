@@ -2,7 +2,7 @@
 Name=Calligra Deferred Loading Plugin
 Name[bs]=Plugin za Odgođeno Calligra Punjenje
 Name[ca]=Connector de càrrega diferida del Calligra
-Name[ca@valencia]=Connector de càrrega diferida del Calligra
+Name[ca@valencia]=Connector de càrrega diferida de Calligra
 Name[da]=Plugin til forsinket indlæsning til Calligra
 Name[de]=Calligramodul für verzögertes Laden
 Name[el]=Πρόσθετο Calligra για αναβολή φόρτωσης
@@ -22,6 +22,7 @@ Name[pt]='Plugin' de Carregamento Posterior do Calligra
 Name[pt_BR]=Plugin de carregamento posterior do Calligra
 Name[ru]=Модуль отложенной загрузки Calligra
 Name[sk]=Odložené načítanie pluginu Calligra
+Name[sl]=Vtičnik za odloženo nalaganje Calligra
 Name[sv]=Calligra insticksprogram för fördröjd inläsning
 Name[tr]=Calligra Gecikmeli Yükleme Eklentisi
 Name[uk]=Додаток завантаження з затримкою Calligra

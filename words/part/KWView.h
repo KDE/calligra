@@ -171,7 +171,7 @@ private Q_SLOTS:
     void showStatusBar(bool);
     /// calls delete on the active tool
     void editDeleteSelection();
-    /** decide if we enable or disable the action "delete_page" uppon m_document->page_count() */
+    /** decide if we enable or disable the action "delete_page" upon m_document->page_count() */
     void updateStatusBarAction();
     /// show guides menu option uses this
     void setGuideVisibility(bool on);

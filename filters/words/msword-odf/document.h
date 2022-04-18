@@ -243,7 +243,7 @@ private:
     QBuffer* m_buffer; //for odd and first page header/footer tags
     QBuffer* m_bufferEven; //for even header/footer tags
 
-    KoGenStyle m_pageLayoutStyle_last; //the lastest page-layout style
+    KoGenStyle m_pageLayoutStyle_last; //the latest page-layout style
     QList<KoGenStyle*> m_masterPageStyle_list; //master-page styles
     QList<KoGenStyle*> m_pageLayoutStyle_list; //page-layout styles
     QStringList m_masterPageName_list; //master-page names

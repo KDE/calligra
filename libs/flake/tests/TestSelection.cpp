@@ -57,7 +57,7 @@ void TestSelection::testSelectedShapes()
     group2->addShape(shape3);
     group2->addShape(group1);
     selection.select(group2);
-    QCOMPARE(selection.count(), 3);  // thats 5 minus 2 grouping shapes.
+    QCOMPARE(selection.count(), 3);  // that's 5 minus 2 grouping shapes.
     // Stripped returns no groups, so simply all 3 shapes
     QCOMPARE(selection.selectedShapes(KoFlake::FullSelection).count(), 3);
     // Stripped returns no groups, so simply all 3 shapes
@@ -72,7 +72,7 @@ void TestSelection::testSelectedShapes()
     container->addShape(shape1);
     container->addShape(shape2);
     selection.select(container);
-    QCOMPARE(selection.count(), 4);  // thats 6 minus 2 grouping shapes.
+    QCOMPARE(selection.count(), 4);  // that's 6 minus 2 grouping shapes.
     // Stripped returns no groups, so simply all 3 shapes + container
     QCOMPARE(selection.selectedShapes(KoFlake::FullSelection).count(), 4);
     // Stripped returns no groups, and no children of a container. So; container + shape3

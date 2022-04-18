@@ -122,7 +122,7 @@ void CommentShape::saveOdf(KoShapeSavingContext& context) const
 {
     KoXmlWriter& writer = context.xmlWriter();
 
-    writer.startElement("officeooo:annotation"); //TODO replace with standarized element name
+    writer.startElement("officeooo:annotation"); //TODO replace with standardized element name
     saveOdfAttributes(context, OdfPosition);
 
     writer.startElement("dc:creator");

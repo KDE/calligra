@@ -215,7 +215,7 @@ void Paragraph::addRunOfText(QString text, wvWare::SharedPtr<const wvWare::Word9
     }
 
     // Apply any extra properties to the auto style.  Those extra properties
-    // are the diff beteween the referenceChp and the summed chp.  ReferenceCHP
+    // are the diff between the referenceChp and the summed chp.  ReferenceCHP
     // can be either from the paragraph style or the character style.
     if (msTextStyle->sti() != stiNormalChar) {
         // this is not the default character style

@@ -113,37 +113,37 @@ private:
     Sheet *m_pSheet;
 
     /**
-     * Header string. The string may contains makros. That means
+     * Header string. The string may contains macros. That means
      * it has to be processed before printing.
      */
     QString m_headLeft;
 
     /**
-     * Header string. The string may contains makros. That means
+     * Header string. The string may contains macros. That means
      * it has to be processed before printing.
      */
     QString m_headRight;
 
     /**
-     * Header string. The string may contains makros. That means
+     * Header string. The string may contains macros. That means
      * it has to be processed before printing.
      */
     QString m_headMid;
 
     /**
-     * Footer string. The string may contains makros. That means
+     * Footer string. The string may contains macros. That means
      * it has to be processed before printing.
      */
     QString m_footLeft;
 
     /**
-     * Footer string. The string may contains makros. That means
+     * Footer string. The string may contains macros. That means
      * it has to be processed before printing.
      */
     QString m_footRight;
 
     /**
-     * Footer string. The string may contains makros. That means
+     * Footer string. The string may contains macros. That means
      * it has to be processed before printing.
      */
     QString m_footMid;

@@ -144,7 +144,7 @@ private:
 
     /**
        Helper routine to convert the EMF angle (centrepoint + radial endpoint) into
-       the Qt format (in degress - may need to multiply by 16 for some purposes)
+       the Qt format (in degrees - may need to multiply by 16 for some purposes)
     */
     qreal angleFromArc( const QPoint &centrePoint, const QPoint &radialPoint );
 

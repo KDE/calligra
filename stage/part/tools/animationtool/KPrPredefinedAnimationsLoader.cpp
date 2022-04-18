@@ -318,7 +318,7 @@ QIcon KPrPredefinedAnimationsLoader::loadMotionPathIcon(const KoXmlElement &elem
         KoPathShapeLoader loader(&pathShape);
         loader.parseSvg(path, true);
         QPixmap thumbnail(QSize(KIconLoader::SizeHuge, KIconLoader::SizeHuge));
-        // fill backgroung
+        // fill background
         thumbnail.fill(QColor(Qt::white).rgb());
         QRect imageRect = thumbnail.rect();
         // adjust to left space for margins

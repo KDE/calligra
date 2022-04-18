@@ -53,7 +53,7 @@ public:
 
     ~Document() override;
 
-    /* Accesors */
+    /* Accessors */
 
     void analyze();
     void generate();

@@ -243,7 +243,7 @@ KoFilter::ConversionStatus EpubFile::writeOpf(KoStore *epubStore,
     bool atLeastOneInfo = false;
 
     foreach (FileInfo *file, files()) {
-        // Here we coul expend the filter with cover | toc | index, etc..
+        // Here we could expand the filter with cover | toc | index, etc..
         // For now, be simple
         if ( file->m_id == "cover") {
             atLeastOneInfo = true;

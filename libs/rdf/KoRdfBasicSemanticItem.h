@@ -67,7 +67,7 @@ public:
 
 protected:
     /**
-     * Return the graph context that contains this SematicItem's Rdf
+     * Return the graph context that contains this SemanticItem's Rdf
      * statements. Used by the updateTriple()s to remove and add
      * updated information. The default is the manifest.rdf file.
      */

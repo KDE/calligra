@@ -241,7 +241,7 @@ void CalloutContainerModel::resizePath(PathShape *path, const QPointF &newPos, c
         // Note: the viewbox coordinates never changes.
         //debugCallout<<'\t'<<"Current modifiers:"<<modifiers;
         if (pointerLeft || pointerRight) {
-            debugCallout<<'\t'<<"modifier X is ouside viewbox";
+            debugCallout<<'\t'<<"modifier X is outside viewbox";
             qreal ax = newSize.width();
             qreal bx = newPathSize.width();
             qreal vbx = viewBox.width();
@@ -271,7 +271,7 @@ void CalloutContainerModel::resizePath(PathShape *path, const QPointF &newPos, c
             debugCallout<<'\t'<<"rx:"<<rx;
         }
         if (pointerTop || pointerBottom) {
-            debugCallout<<'\t'<<"modifier Y is ouside viewbox";
+            debugCallout<<'\t'<<"modifier Y is outside viewbox";
             qreal ay = newSize.height();
             qreal by = newPathSize.height();
             qreal vby = viewBox.height();

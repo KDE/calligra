@@ -86,7 +86,7 @@ public:
     /**
      * Makes sure that the name of the specified table always stays unique.
      *
-     * Use this for programatically added tables (like internal chart table).
+     * Use this for programmatically added tables (like internal chart table).
      * Whenever another table with the same name is added/renamed, the
      * table specified will be renamed (to a sane similar name) to not
      * collide with the new name.

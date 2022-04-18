@@ -65,7 +65,7 @@ public:
     }
 
 private:
-    // Make it private. It is intented to be used only with KoSectionModel that is passed through constructor
+    // Make it private. It is intended to be used only with KoSectionModel that is passed through constructor
     void setSourceModel(QAbstractItemModel *sourceModel) override
     {
         QAbstractProxyModel::setSourceModel(sourceModel);

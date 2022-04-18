@@ -1005,7 +1005,7 @@ QPixmap KPrShapeAnimations::getAnimationIcon(KPrShapeAnimation *animation) const
             const int margin = 8;
             const int width = 4;
             QImage thumb(QSize(KIconLoader::SizeHuge, KIconLoader::SizeHuge), QImage::Format_RGB32);
-            // fill backgroung
+            // fill background
             thumb.fill(QColor(Qt::white).rgb());
             QRect imageRect = thumb.rect();
             // adjust to left space for margins

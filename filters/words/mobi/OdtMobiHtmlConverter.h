@@ -44,7 +44,7 @@ class OdtMobiHtmlConverter
         bool  stylesInCssFile;  // True if the css should go into a separate file
         bool  doBreakIntoChapters; // True if the output should be broken into chapters.
         bool  useMobiConventions;  // True if Mobi is using the convention.
-                                   // to handle img tag and for handle indention
+                                   // to handle img tag and for handle indentation
                                    // and do not write meta and link tag in html head.
     };
 
@@ -115,7 +115,7 @@ class OdtMobiHtmlConverter
     void flattenStyle(const QString &styleName, QHash<QString, StyleInfo*> &styles,
                       QSet<QString> &doneStyles);
 
-    // Write boomarks position in its reference.
+    // Write bookmarks position in its reference.
     void generateMobiInternalLinks();
 
  private:
@@ -199,7 +199,7 @@ class OdtMobiHtmlConverter
 
     // The format is QHash <reference position in file, reference id>
     QMap <qint64, QString> m_refrencesList;
-    // The format is QHash <bookmark poistion in file, bookmark id>
+    // The format is QHash <bookmark position in file, bookmark id>
     QMap <QString, qint64> m_bookMarksList;
 
 };

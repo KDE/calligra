@@ -32,7 +32,7 @@ public:
     /// KoTextLayoutRootArea doesn't use it for anything.
     void setAssociatedShape(KoShape *shape);
 
-    /// Retruns the shape set with setAssociatedShape()
+    /// Returns the shape set with setAssociatedShape()
     KoShape *associatedShape() const;
 
     /**

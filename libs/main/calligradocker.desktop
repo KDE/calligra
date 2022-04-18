@@ -2,7 +2,7 @@
 Name=Calligra Docker Plugin
 Name[bs]=Calligra doker plugin
 Name[ca]=Connector acoblador del Calligra
-Name[ca@valencia]=Connector acoblador del Calligra
+Name[ca@valencia]=Connector acoblador de Calligra
 Name[cs]=Modul doků Calligra
 Name[da]=Dokker-plugin til Calligra
 Name[de]=Calligra Docker-Modul
@@ -66,6 +66,7 @@ Comment[pt]=Um 'plugin' que contém um 'módulo acoplável'
 Comment[pt_BR]=Um plugin que contém um 'módulo acoplável'
 Comment[ru]=Модуль, содержащий элемент панели
 Comment[sk]=Plugin, ktorý obsahuje takzvaný 'dockwidget'
+Comment[sl]=Vtičnik, ki vsebuje t.i. »dockwidget«
 Comment[sv]=Ett insticksprogram som innehåller en så kallad 'grafisk dockningskomponent'
 Comment[ta]=எசாருகள் என்பது'டாக்விட்கெட்' ஐ உள்ளடக்கியது 
 Comment[tr]=Sözde dok parçacığı içeren bir eklenti

@@ -737,7 +737,7 @@ void QWinMetaFile::extTextOut(long num, short* parm)
     QByteArray text(ptStr, parm[ 2 ] + 1);
 
     QFontMetrics fm(mPainter.font());
-    width = fm.width(text) + fm.descent();    // because fm.width(text) isn't rigth with Italic text
+    width = fm.width(text) + fm.descent();    // because fm.width(text) isn't right with Italic text
     height = fm.height();
 
     mPainter.save();

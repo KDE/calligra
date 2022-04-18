@@ -159,7 +159,7 @@ public:
 
     /**
      * Returns all pagestyles.
-     * // TODO only return a qlist of styles, they have a their name in them alraedy
+     * // TODO only return a qlist of styles, they have a their name in them already
      */
     QHash<QString, KWPageStyle> pageStyles() const;
 

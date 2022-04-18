@@ -72,7 +72,7 @@ private Q_SLOTS:
     void slotToggleEncryption();
 
 Q_SIGNALS:
-    void saveRequested();
+    void saveRequested(bool saveas, bool silent, int specialOutputFlag);
 
 private:
     /** Sets up the aboutWidget and fills the widgets with content */

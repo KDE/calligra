@@ -150,7 +150,7 @@ BasicElement* BasicElement::childElementAt( const QPointF& p )
             return ownerElement;
     }
 
-    return this;    // if no child contains the point, it's the FormulaElement itsself
+    return this;    // if no child contains the point, it's the FormulaElement itself
 }
 
 void BasicElement::setAttribute( const QString& name, const QVariant& value )

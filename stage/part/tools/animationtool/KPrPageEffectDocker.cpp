@@ -83,7 +83,7 @@ KPrPageEffectDocker::KPrPageEffectDocker( QWidget* parent, Qt::WindowFlags flags
     m_transitionType = new QComboBox(this);
     m_transitionType->addItem(i18n("Manual"));
     m_transitionType->addItem(i18n("Automatic"));
-    // NOTE: Not used as the definition in odf spec does not make sence to me (danders)
+    // NOTE: Not used as the definition in odf spec does not make sense to me (danders)
     // m_transitionType->addItem(i18n("Semi-Automatic"));
 
     m_transitionTime = new QDoubleSpinBox( this );

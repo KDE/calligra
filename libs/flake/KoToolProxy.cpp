@@ -202,7 +202,7 @@ void KoToolProxy::touchEvent(QTouchEvent *event)
         }
         break;
     default:
-        ; // ingore the rest
+        ; // ignore the rest
     }
     d->mouseLeaveWorkaround = true;
 

@@ -42,7 +42,7 @@ PIGMENTCMS_EXPORT void HSIToRGB(const qreal h, const qreal s, const qreal i, qre
 PIGMENTCMS_EXPORT void RGBToHSI(qreal r, qreal g, qreal b, qreal *h, qreal *s, qreal *i);
 
 //HSY' measures the tone, Luma, by weighting the r, g, and b components before adding them up.
-//The R, G, B reffers to the weights, and defaults to the 601 rec for luma.
+//The R, G, B refers to the weights, and defaults to the 601 rec for luma.
 PIGMENTCMS_EXPORT void RGBToHSY( qreal r, qreal g, qreal b, qreal *h, qreal *s, qreal *y, qreal R=0.299, qreal G=0.587, qreal B=0.114);
 PIGMENTCMS_EXPORT void HSYToRGB(const qreal h, const qreal s, const qreal y, qreal *red, qreal *green, qreal *blue, qreal R=0.299, qreal G=0.587, qreal B=0.114);
 

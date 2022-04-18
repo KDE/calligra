@@ -1482,7 +1482,7 @@ bool KoTextLayoutArea::presentationListTabWorkaround(qreal indent, qreal labelBo
     if (!d->documentLayout->wordprocessingMode() && indent < 0.0) {
         // Impress / Powerpoint expects the label to be before the text
         if (indent + labelBoxWidth >= presentationListTabValue) {
-            // but here is an unforseen overlap with normal text
+            // but here is an unforeseen overlap with normal text
             return true;
         }
     }

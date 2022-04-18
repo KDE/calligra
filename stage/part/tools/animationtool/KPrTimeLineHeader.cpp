@@ -99,7 +99,7 @@ void KPrTimeLineHeader::paintHeaderItem(QPainter *painter, const QRect &rect, co
 
 void KPrTimeLineHeader::paintTimeScale(QPainter *painter, const QRect &rect)
 {
-    // set a marging
+    // set a margin
     const int Padding = 3;
     painter->setPen(QPen(palette().windowText().color(), 0));
     painter->setFont(QFont("", 8));

@@ -20,7 +20,7 @@ import codecs
 import time
 	
 '''
-Write the standart KDE file header with copyright and time signature. Write also the
+Write the standard KDE file header with copyright and time signature. Write also the
 constructor of the Dictionary class.
 '''
 def write_file_header( file ):

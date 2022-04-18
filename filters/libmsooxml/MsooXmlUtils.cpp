@@ -1367,7 +1367,7 @@ bool Utils::ParagraphBulletProperties::startOverride() const
 
 void Utils::ParagraphBulletProperties::addInheritedValues(const ParagraphBulletProperties& properties)
 {
-    // This function is intented for helping to inherit some values from other properties
+    // This function is intended for helping to inherit some values from other properties
     if (m_level == -1) {
         m_level = properties.m_level;
     }

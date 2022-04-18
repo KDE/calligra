@@ -67,7 +67,7 @@ void KoContactSemanticItemFactory::updateSemanticItems(QList<hKoRdfBasicSemantic
         m->executeQuery(sparqlQuery,
                         Soprano::Query::QueryLanguageSparql);
 
-    // lastKnownObjects is used to perform a sematic set diff
+    // lastKnownObjects is used to perform a semantic set diff
     // at return time d->foafObjects will have any new objects and
     // ones that are no longer available will be removed.
     QList<hKoRdfBasicSemanticItem> oldSemanticItems = semanticItems;

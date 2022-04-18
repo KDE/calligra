@@ -934,9 +934,9 @@ void TestTableLayout::testFeatureCombination()
      * 2nd cell requires row to be 12+14.4=26.4
      * 3rd cell requires row to be 4+14.4=16.4
      *
-     * Next row hight depends only on last column 4+14.4
+     * Next row height depends only on last column 4+14.4
      *
-     * Last row hight depends only on last column 4+14.4
+     * Last row height depends only on last column 4+14.4
      *
      * Thus the merged cell (bottom 2 rows) have a combined height of 36.6 at it's disposal
      *

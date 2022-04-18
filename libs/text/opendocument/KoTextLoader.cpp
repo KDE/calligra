@@ -207,7 +207,7 @@ KoList *KoTextLoader::Private::previousList(int level) const
 
 inline static bool isspace(ushort ch)
 {
-    // options are ordered by likelyhood
+    // options are ordered by likelihood
     return ch == ' ' || ch== '\n' || ch == '\r' ||  ch == '\t';
 }
 

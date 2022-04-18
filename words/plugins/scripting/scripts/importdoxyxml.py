@@ -11,7 +11,7 @@ To generate the handbook from within the commandline;
     xsltproc combine.xslt index.xml | ../doxy2doc.py ../kspread.html
 
 To import the handbook in Words, first generate the doxygen xml file like demonstrated
-bellow and then use in Words the "Import Doxygen XML File" python script;
+below and then use in Words the "Import Doxygen XML File" python script;
     cd kspread/plugins/scripting/docs
     doxygen kspreadscripting.doxyfile
     cd xml

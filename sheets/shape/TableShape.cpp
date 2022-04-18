@@ -236,7 +236,7 @@ bool TableShape::loadEmbeddedDocument(KoStore *store, const KoXmlElement &object
     }
     // href can be:
     // 1. relative inside this store, e.g: ./Object1
-    // 2. releative path to the outside filesystem, e.g: ../extern.ods
+    // 2. relative path to the outside filesystem, e.g: ../extern.ods
     //    The first .. is just to get out of this store so in this case
     //    extern.ods is in the same directory as store
     // 3. absolute path to the filesystem
@@ -249,7 +249,7 @@ bool TableShape::loadEmbeddedDocument(KoStore *store, const KoXmlElement &object
             d->url.setScheme(QStringLiteral(INTERNAL_PROTOCOL));
         } else if (href.startsWith("..")) {
             document()->setUrl(d->url);
-            // relative urls are relative this package, so the firts ../ must be removed
+            // relative urls are relative this package, so the first ../ must be removed
             d->url.setPath(d->url.path().remove(0, 3));
             // get the url from the document we are embedded in and prepend out relative  one
             KoDocumentBase *doc = context.documentResourceManager()->odfDocument();

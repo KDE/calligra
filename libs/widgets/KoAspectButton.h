@@ -35,7 +35,7 @@ public Q_SLOTS:
 Q_SIGNALS:
     /**
      * This signal is emitted every time the button changes value, either by user interaction or
-     *  by programatically setting it.
+     *  by programmatically setting it.
      */
     void keepAspectRatioChanged(bool keep);
 

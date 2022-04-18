@@ -3164,7 +3164,7 @@ QColor PptToOdp::toQColor(const ColorIndexStruct &color)
     const MSO::SlideContainer* tmc = nullptr;
     const MSO::SlideContainer* sc = m_currentSlide;
 
-    //TODO: hande the case of a notes master slide/notes slide pair
+    //TODO: handle the case of a notes master slide/notes slide pair
 //     const MSO::NotesContainer* nmc = nullptr;
 //     const MSO::NotesContainer* nc = nullptr;
 

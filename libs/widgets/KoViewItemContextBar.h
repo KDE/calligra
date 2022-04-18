@@ -65,7 +65,7 @@ private Q_SLOTS:
     void setItemSelected();
     /** Hide context bar if the selectem item has been removed */
     void slotRowsRemoved(const QModelIndex &parent, int start, int end);
-    /** Updates contex bar buttons state*/
+    /** Updates context bar buttons state*/
     void updateHoverUi(const QModelIndex& index);
     void showContextBar(const QRect &rect);
     /** Updates Selection Button state*/

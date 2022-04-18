@@ -114,7 +114,7 @@ void PalmDocCompression::startCompressing(QByteArray input, QDataStream &out,
             if ((index != m_maxBlockSize)  || index < input.size()) {
                 // input.at(index) is between [-127..127] so i am sure that
                 // it (^) is less that 0X7f
-                // litterals ascii is between 0X09 - 0X7f
+                // literals ascii is between 0X09 - 0X7f
                 if (QChar(input.at(index)).isLetter() && (input.at(index) >= 0X09)){
 
                     winIndex += 2;
@@ -125,7 +125,7 @@ void PalmDocCompression::startCompressing(QByteArray input, QDataStream &out,
             }
         }
 
-        // litterals ascii is between 0X09 - 0X7f
+        // literals ascii is between 0X09 - 0X7f
         if (input.at(lookahead) < 0X09) {
 
             // Check the length of unknown characters.

@@ -967,7 +967,7 @@ void TestBlockLayout::testParagraphBorders()
 
 void TestBlockLayout::testParagraphMargins()
 {
-    setupTest("Emtpy\nParagraph\nAnother parag\n");
+    setupTest("Empty\nParagraph\nAnother parag\n");
 
     KoParagraphStyle style;
     style.setFontPointSize(12.0);

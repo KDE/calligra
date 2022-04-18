@@ -239,7 +239,7 @@ KOMSOOXML_EXPORT KoFilter::ConversionStatus loadThumbnail(QImage& thumbnail, KZi
 
 //! Handles ST_Lang value @a value (Language Reference) (SharedML, 22.9.2.6)
 /*! The value specifies that its contents contains a language identifier as defined by RFC 4646/BCP 47.
-    Sets up @a language and @a country based on @a value that is of format {langugage}-{country}
+    Sets up @a language and @a country based on @a value that is of format {language}-{country}
     @return true on success. */
 KOMSOOXML_EXPORT bool ST_Lang_to_languageAndCountry(const QString& value, QString& language, QString& country);
 

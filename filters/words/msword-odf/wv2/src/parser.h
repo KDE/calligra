@@ -98,7 +98,7 @@ public:
     ~Parser() override;  // Don't forget to close everything properly here
 
     /**
-     * Is everything allright?
+     * Is everything alright?
      */
     bool isOk() const { return m_okay; }
 
@@ -196,7 +196,7 @@ protected:
     OLEStorage* m_storage;           // The storage representing the file
     OLEStreamReader* m_wordDocument; // document stream ('WordDocument')
 
-    bool m_okay;                     // Still allright?
+    bool m_okay;                     // Still alright?
 
 private:
     Parser( const Parser& rhs );

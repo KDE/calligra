@@ -44,7 +44,11 @@ bool CalligraCreator::create(const QString &path, int width, int height, QImage 
 {
     // try to use any embedded thumbnail
     KoStore *store = KoStore::createStore(path, KoStore::Read);
-
+    if (store && store->isEncrypted()) {
+        // Trying to open an encrypted file will trigger a password dialog
+        delete store;
+        return false;
+    }
     if (store &&
          // ODF thumbnail?
         (store->open(QLatin1String("Thumbnails/thumbnail.png")) ||

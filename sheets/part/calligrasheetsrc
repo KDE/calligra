@@ -6,7 +6,7 @@ FlakePluginsDisabled=
 TextEditingPluginsDisabled=thesaurustool
 TextInlinePluginsDisabled=kprvariables
 
-# Set which toolbars sholuld be hidden/visible per default.
+# Set which toolbars should be hidden/visible per default.
 [DockerManager]
 HiddenToolDockers=
 VisibleToolDockers=KSpreadCellToolId,DefaultToolArrangeWidget,DefaultToolWidget,SnapGuideConfigWidget,TableToolFactoryId

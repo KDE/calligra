@@ -10,7 +10,7 @@
 #include <QFontComboBox>
 
 /**
- * This class is neccessary to work around a suspected bug in QFontComboBox.
+ * This class is necessary to work around a suspected bug in QFontComboBox.
  * 
  * When setCurrentFont() is called, QFontComboBox seems to regenerate
  * the list of fonts and resets its model in the process, while the reset signal is blocked.

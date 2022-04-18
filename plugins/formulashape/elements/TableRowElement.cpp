@@ -70,8 +70,8 @@ void TableRowElement::layout( const AttributeManager* am )
             origin.setY( ( height() - m_data[ i ]->height() ) / 2 );
             // Baseline is treated like Center for the moment until someone also refines
             // TableElement::determineDimensions so that it pays attention to baseline.
-            // Axis as alignment option is ignored as it is tought to be an option for
-            // the table itsself.
+            // Axis as alignment option is ignored as it is thought to be an option for
+            // the table itself.
 //         debugFormula << horizontalAlign[ i ]<<","<<Axis;
         if( horizontalAlign[ i ] == Center ) {
             hOffset = ( parentTable->columnWidth( i ) - m_data[ i ]->width() ) / 2;

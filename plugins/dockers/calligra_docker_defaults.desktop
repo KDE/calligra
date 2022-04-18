@@ -2,7 +2,7 @@
 Name=Calligra Dockers plugin
 Name[bs]=Plugin za Calligra Dockere
 Name[ca]=Connector d'acobladors del Calligra
-Name[ca@valencia]=Connector d'acobladors del Calligra
+Name[ca@valencia]=Connector d'acobladors de Calligra
 Name[cs]=Modul doků Calligra
 Name[da]=Dokker-plugin til Calligra
 Name[de]=Calligra Docker-Modul
@@ -27,6 +27,7 @@ Name[pt]='Plugin' de Áreas Acopláveis do Calligra
 Name[pt_BR]=Plugin de módulos acopláveis do Calligra
 Name[ru]=Модуль панелей Calligra
 Name[sk]=Plugin dockerov Calligra
+Name[sl]=Vtičnik Calligra Dockers
 Name[sv]=Calligra-dockningsinsticksprogram
 Name[tr]=Calligra Dockers eklentisi
 Name[uk]=Додаток панелей для Calligra

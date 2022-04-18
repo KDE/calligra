@@ -275,7 +275,7 @@ public:
     /** writes the child element tree to qDebug()
      *  only for debugging purpose
      *  @param wrong indicates, if the parent is set wrong
-     *  @param indent indention level
+     *  @param indent indentation level
      */
     virtual void writeElementTree(int indent=0, bool wrong=false) const;
 

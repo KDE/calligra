@@ -120,7 +120,7 @@ public:
     KoHistogramProducerFactoryRegistry();
     ~KoHistogramProducerFactoryRegistry() override;
     static KoHistogramProducerFactoryRegistry* instance();
-    /// returns a list, sorted by preferrence: higher preferance comes first
+    /// returns a list, sorted by preference: higher preferance comes first
     QList<QString> keysCompatibleWith(const KoColorSpace* colorSpace) const;
 
 private:

@@ -17,6 +17,10 @@
 
 #include <kpluginfactory.h>
 
+#include <poppler-version.h>
+
+#define POPPLER_VERSION_MACRO ((POPPLER_VERSION_MAJOR << 16) | (POPPLER_VERSION_MINOR << 8) | (POPPLER_VERSION_MICRO))
+
 // Don't show this warning: it's an issue in poppler
 #ifdef __GNUC__
 #pragma GCC diagnostic ignored "-Wunused-parameter"
@@ -26,9 +30,7 @@
 #include <PDFDoc.h>
 #include <GlobalParams.h>
 
-#ifndef HAVE_POPPLER_PRE_0_83
 #include <memory>
-#endif
 
 K_PLUGIN_FACTORY_WITH_JSON(PdfImportFactory, "calligra_filter_pdf2svg.json",
                            registerPlugin<PdfImport>();)
@@ -52,33 +54,24 @@ KoFilter::ConversionStatus PdfImport::convert(const QByteArray& from, const QByt
     }
 
     // read config file
-#ifdef HAVE_POPPLER_PRE_0_83
-    globalParams = new GlobalParams();
-#else
     globalParams = std::unique_ptr<GlobalParams>(new GlobalParams);
-#endif
     if (! globalParams)
         return KoFilter::NotImplemented;
 
+#if POPPLER_VERSION_MACRO < QT_VERSION_CHECK(22, 03, 0)
     GooString * fname = new GooString(QFile::encodeName(m_chain->inputFile()).data());
     PDFDoc * pdfDoc = new PDFDoc(fname, 0, 0, 0);
-    if (! pdfDoc) {
-#ifdef HAVE_POPPLER_PRE_0_83
-        delete globalParams;
-        globalParams = nullptr;
 #else
-        globalParams.reset();
+    std::unique_ptr<GooString> fname = std::make_unique<GooString>(QFile::encodeName(m_chain->inputFile()).data());
+    PDFDoc * pdfDoc = new PDFDoc(std::move(fname));
 #endif
+    if (! pdfDoc) {
+        globalParams.reset();
         return KoFilter::StupidError;
     }
 
     if (! pdfDoc->isOk()) {
-#ifdef HAVE_POPPLER_PRE_0_83
-        delete globalParams;
-        globalParams = nullptr;
-#else
         globalParams.reset();
-#endif
         delete pdfDoc;
         return KoFilter::StupidError;
     }
@@ -105,12 +98,7 @@ KoFilter::ConversionStatus PdfImport::convert(const QByteArray& from, const QByt
 
     delete dev;
     delete pdfDoc;
-#ifdef HAVE_POPPLER_PRE_0_83
-    delete globalParams;
-    globalParams = nullptr;
-#else
     globalParams.reset();
-#endif
 
     return KoFilter::OK;
 }

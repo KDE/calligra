@@ -5,6 +5,6 @@ TODO Items:
 -tablehandler - process borders so there are no double borders where there shouldn't be
         -process cell/column width
 -fields - parse more text fields
--in bulletted lists - check that the bullet character processing is done correctly
+-in bulleted lists - check that the bullet character processing is done correctly
 -fix all bugs & errors people find in documents :)
 -other TODO items scatter through the code

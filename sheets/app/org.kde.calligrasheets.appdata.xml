@@ -5,7 +5,7 @@
   <project_license>GPL-2.0+</project_license>
   <name>Calligra Sheets</name>
   <name xml:lang="ca">Sheets del Calligra</name>
-  <name xml:lang="ca-valencia">Sheets del Calligra</name>
+  <name xml:lang="ca-valencia">Sheets de Calligra</name>
   <name xml:lang="cs">Calligra Sheets</name>
   <name xml:lang="de">Calligra Sheets</name>
   <name xml:lang="el">Calligra Sheets</name>
@@ -66,7 +66,7 @@
     </p>
     <p xml:lang="bs">Calligra ListoviSheets je kompletno opremljen kalkulacijski i tabelarni alat. Koristite ga da brzo kreirate i izračunati različite poslovne vezane tabele, kao što su prihodi i rashodi, radno vrijeme, itd</p>
     <p xml:lang="ca">El Sheets del Calligra és una eina de full de càlcul plenament funcional. S'usa per a crear i calcular ràpidament diversos fulls de càlcul relacionats amb els negocis, com els ingressos i despeses, les hores de treball dels empleats, etc.</p>
-    <p xml:lang="ca-valencia">El Sheets del Calligra és una eina de full de càlcul plenament funcional. S'usa per a crear i calcular ràpidament diversos fulls de càlcul relacionats amb els negocis, com els ingressos i despeses, les hores de treball dels empleats, etc.</p>
+    <p xml:lang="ca-valencia">Sheets de Calligra és una eina de full de càlcul plenament funcional. S'utilitza per a crear i calcular ràpidament diversos fulls de càlcul relacionats amb els negocis, com els ingressos i despeses, les hores de treball dels empleats, etc.</p>
     <p xml:lang="de">Calligra Sheets ist ein voll funktionsfähiges Berechnungs- und Tabellenkalkulationsprogramm. Verwenden Sie es schnell verschiedene geschäftsbezogene Tabellenkalkulationen zu erstellen und zu berechnen, wie wie z. B. Einnahmen und Ausgaben, Arbeitszeiten der Mitarbeiter usw.</p>
     <p xml:lang="el">To Calligra Sheets είναι ένα πλήρες λειτουργιών εργαλείο υπολογισμών και λογιστικών πράξεων. Χρησιμοποιήστε το για να δημιουργήσετε και να υπολογίσετε γρήγορα επιχειρησιακά φύλλα εργασίας, όπως εισόδημα και έξοδα, εργάσιμες ώρες προσωπικού κτλ.</p>
     <p xml:lang="en-GB">Calligra Sheets is a fully-featured calculation and spreadsheet tool. Use it to quickly create and calculate various business-related spreadsheets, such as income and expenditure, employee working hours, etc.</p>
@@ -124,7 +124,7 @@
       <li>Use shapes to take notes or mind maps</li>
       <li xml:lang="bs">Koristite likove za uzimanje zabilješki ili mapa uma</li>
       <li xml:lang="ca">Usa formes per a prendre notes o mapes mentals</li>
-      <li xml:lang="ca-valencia">Usa formes per a prendre notes o mapes mentals</li>
+      <li xml:lang="ca-valencia">Utilitza formes per a prendre notes o mapes mentals</li>
       <li xml:lang="de">Objekte für Notizen oder Mind-Maps</li>
       <li xml:lang="el">Χρησιμοποιήστε σχήματα για να κρατήσετε σημειώσεις ή νοηματικούς χάρτες</li>
       <li xml:lang="en-GB">Use shapes to take notes or mind maps</li>

@@ -12,7 +12,7 @@ PPT files are OLE containers with a number of streams. Five streams are common:
  - "DocumentSummaryInformation"
  - "SummaryInformation"
 
-This discussion focusses on "PowerPoint Document". This stream contains all the slides information except for most of the embedded picture files. These pictures are stored in the Pictures stream.
+This discussion focuses on "PowerPoint Document". This stream contains all the slides information except for most of the embedded picture files. These pictures are stored in the Pictures stream.
 
 A newly generated ODP should contain content.xml and styles.xml as well as all embedded pictures and a list of all embedded files in manifest.xml and a mimetype file.
 The file content.xml contains all the content specific for the file and styles.xml contains all information specific for the style of presentation. That includes definitions of all the masters and the styles used in the master slides.
@@ -75,14 +75,14 @@ Besides style definitions there are other global objects related to style. These
 
 = pictures =
 
-Pictures are easy to convert. Each image has a uid value. This binary array of 16 bytes is converted to a hex array and uses as the base part of the name. The extention reflects the type of image. So all image entries in the Pictures stream are converted to files in the zip container with a name that is derived from the uid key. This same key is used in the PowerPoint Document stream and thus it is easy to create the xlink:href attribute.
+Pictures are easy to convert. Each image has a uid value. This binary array of 16 bytes is converted to a hex array and uses as the base part of the name. The extension reflects the type of image. So all image entries in the Pictures stream are converted to files in the zip container with a name that is derived from the uid key. This same key is used in the PowerPoint Document stream and thus it is easy to create the xlink:href attribute.
 
 = styles =
 
 == global elements ==
 
 The global elements such as line markers, gradients, hatches, background images, stroke dashes and placeholder layouts should be added to the front of the styles.xml. The full list of these items is however only known after going through all master slides, slides, notes and handouts. Since this information in a document tree this is not so hard to do. To simply the programming a functor can be used to reduce the amount of code needed. A distinction should be made between the graphic styles and the placeholders, since the former are defined in FOPTE arrays and the latter are defined in OfficeArtSpContainers.
-The names of the global objects that are later referenced should be easily accessible with an appropriate key, without the need to regenerate said options. This could be achieved by a logical naming scheme and the garantee that the objects are travesed in the same order, were it not that equal objects can be referenced more than once.
+The names of the global objects that are later referenced should be easily accessible with an appropriate key, without the need to regenerate said options. This could be achieved by a logical naming scheme and the guarantee that the objects are traversed in the same order, were it not that equal objects can be referenced more than once.
 
 For fill-image, the rule can be simple; that element has no important additional information, so the number of the image in the blip store can be used.
 
@@ -93,7 +93,7 @@ For things like stroke-dash, a scheme to generate the name from the contents wou
 
 == TextCFException to text-properties ==
 
-Roughly one can say that CFExceptions from the PPT format should be mapped to style:text-properties in ODF. CFException occur in many places in PPT and style:text-properties occur in many places in ODF. Here we list the occurances for both.
+Roughly one can say that CFExceptions from the PPT format should be mapped to style:text-properties in ODF. CFException occur in many places in PPT and style:text-properties occur in many places in ODF. Here we list the occurrences for both.
 
 Where does style:text-properties occur?
 In these style families: text, paragraph, table-cell, graphic, presentation, and chart. In addition, it occurs in text:list-level-style-bullet and text:list-level-style-number, which are part of text:list-style. So where-ever a style:style from one of these families or a text:list-style is referenced, a style:text-properties can occur.

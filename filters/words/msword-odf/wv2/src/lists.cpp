@@ -776,7 +776,7 @@ bool ListInfoProvider::setPAP( Word97::PAP* pap )
     else {
         if ( m_listFormatOverride.size() < static_cast<unsigned int>( pap->ilfo ) ) { // 1-based index!
             // This might be an old-style pap, where a pap->ilfo of 2047 suggests to look at
-            // the ANLD of that paragaph and to convert it
+            // the ANLD of that paragraph and to convert it
             if ( pap->ilfo == oldStyleIlfo )
                 convertCompatANLD();
             else {

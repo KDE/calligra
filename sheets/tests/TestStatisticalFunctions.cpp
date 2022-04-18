@@ -563,7 +563,7 @@ void TestStatisticalFunctions::testGROWTH()
 {
     // constraints
     CHECK_EVAL("GROWTH({}; C19:C23; 1)",          Value::errorNA());  // empty knownY matrix
-    CHECK_EVAL("GROWTH({5.0;\"a\"}; C19:C23; 1)", Value::errorNA());  // knownY matrix constains chars
+    CHECK_EVAL("GROWTH({5.0;\"a\"}; C19:C23; 1)", Value::errorNA());  // knownY matrix constrains chars
 
     // ODF-tests
     CHECK_ARRAY("GROWTH( A19:A23; C19:C23; 1 )",          "{2.5198420998}");  // with offset

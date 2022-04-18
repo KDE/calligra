@@ -31,7 +31,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/colorprofiles
 )
 
-if (HAVE_LCMS24 AND OpenEXR_FOUND)
+if (OpenEXR_FOUND)
 include_directories( 
     ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/gray_f16
     ${CMAKE_CURRENT_SOURCE_DIR}/colorspaces/rgb_f16
@@ -80,7 +80,7 @@ set ( lcmsengine_SRCS
     LcmsEnginePlugin.cpp
 )
 
-if (HAVE_LCMS24 AND OpenEXR_FOUND)
+if (OpenEXR_FOUND)
     set ( lcmsengine_SRCS
         ${lcmsengine_SRCS}
         colorspaces/gray_f16/GrayF16ColorSpace.cpp

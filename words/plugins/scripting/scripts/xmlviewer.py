@@ -121,7 +121,7 @@ class Dialog:
             raise Exception("Failed to open %s" % path)
         # this function will be called for each XML element.
         def onElement():
-            # the level the element is on to handle indention of the displayed lists
+            # the level the element is on to handle indentation of the displayed lists
             level = reader.level()
             if level > self._prevLevel:
                 self._text += "<ul>"

@@ -78,7 +78,7 @@ public:
      * By default the span is 1.
      * Negative spans are not allowed, they are converted back to 1.
      *
-     * \note the span is not checked to ensure not overlaping.
+     * \note the span is not checked to ensure not overlapping.
      * Also the covered cells can also be populated with data.
      */
     void setRowSpan(int span);
@@ -94,7 +94,7 @@ public:
      * By default the span is 1.
      * Negative spans are not allowed, they are converted back to 1.
      *
-     * \note the span is not checked to ensure not overlaping.
+     * \note the span is not checked to ensure not overlapping.
      * Also the covered cells can also be populated with data.
      */
     void setColumnSpan(int span);

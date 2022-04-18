@@ -175,7 +175,7 @@ void KPrViewModeNotes::updateActivePage(KoPAPageBase *page)
     selection->select(notes->textShape());
     selection->setActiveLayer( layer );
     QString tool = KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes());
-    // we need to make sue to switch to the default tool so that the text tool does notice the selection chane
+    // we need to make sue to switch to the default tool so that the text tool does notice the selection change
     KoToolManager::instance()->switchToolRequested(KoInteractionTool_ID);
     // we need to set the focus to the text tool again so that we can start typing
     // otherwise you need to click on the shape again

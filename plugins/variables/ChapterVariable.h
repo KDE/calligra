@@ -22,7 +22,7 @@ class ChapterVariable : public KoVariable
 public:
     ChapterVariable();
 
-    // reimplmented
+    // reimplemented
     QWidget* createOptionsWidget() override;
     void readProperties(const KoProperties *props);
     void saveOdf(KoShapeSavingContext & context) override;

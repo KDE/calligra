@@ -48,7 +48,7 @@ public:
 
     /**
      * Draw the cursor to the given QPainter
-     * @param painter The QPainter the cursor draws itsself to
+     * @param painter The QPainter the cursor draws itself to
      */
     void paint( QPainter &painter ) const;
 

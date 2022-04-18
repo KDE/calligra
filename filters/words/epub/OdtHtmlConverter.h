@@ -44,7 +44,7 @@ class OdtHtmlConverter
         bool  stylesInCssFile;  // True if the css should go into a separate file
         bool  doBreakIntoChapters; // True if the output should be broken into chapters.
         bool  useMobiConventions;  // True if Mobi is using the convention.
-                                   // to handle img tag and for handle indention
+                                   // to handle img tag and for handle indentation
                                    // and do not write meta and link tag in html head.
     };
 

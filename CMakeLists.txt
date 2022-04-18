@@ -148,6 +148,10 @@ calligra_set_productset(${PRODUCTSET})
 set(REQUIRED_KF5_VERSION "5.76.0")
 set(REQUIRED_QT_VERSION "5.12.0")
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 find_package(ECM ${REQUIRED_KF5_VERSION} REQUIRED NO_MODULE)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 
@@ -341,6 +345,7 @@ endif ()
 macro_optional_find_package(Imath 3.0 CONFIG QUIET)
 if(TARGET Imath::Imath)
     set(OPENEXR_LIBRARIES Imath::Imath)
+    set(OpenEXR_FOUND TRUE)
 else()
     macro_optional_find_package(OpenEXR)
 endif()
@@ -473,7 +478,7 @@ endif()
 ##
 ## Test for lcms
 ##
-macro_optional_find_package(LCMS2)
+macro_optional_find_package(LCMS2 2.4)
 set_package_properties(LCMS2 PROPERTIES
     DESCRIPTION "LittleCMS, a color management engine"
     URL "http://www.littlecms.com"
@@ -481,10 +486,6 @@ set_package_properties(LCMS2 PROPERTIES
     TYPE OPTIONAL
     )
 if(LCMS2_FOUND)
-    if(NOT ${LCMS2_VERSION} VERSION_LESS 2040 )
-	set(HAVE_LCMS24 TRUE)
-    endif()
-    set(HAVE_REQUIRED_LCMS_VERSION TRUE)
     set(HAVE_LCMS2 TRUE)
 endif()
 
@@ -521,14 +522,6 @@ if (BUILD_VC)
 	    set(ADDITIONAL_VC_FLAGS "-Wabi -ffp-contract=fast -fPIC")
 	elseif (NOT MSVC)
 	    set(ADDITIONAL_VC_FLAGS "-Wabi -fabi-version=0 -ffp-contract=fast -fPIC")
-	endif()
-
-	#Handle Vc master
-	if(Vc_COMPILER_IS_GCC OR Vc_COMPILER_IS_CLANG)
-	    AddCompilerFlag("-std=c++11" _ok)
-	    if(NOT _ok)
-		AddCompilerFlag("-std=c++0x" _ok)
-	    endif()
 	endif()
 
 	macro(ko_compile_for_all_implementations_no_scalar _objs _src)
@@ -707,7 +700,7 @@ set_package_properties(LibEtonyek PROPERTIES
 ##
 ## Test for qt-poppler
 ##
-macro_optional_find_package(Poppler COMPONENTS Qt5)
+macro_optional_find_package(Poppler 0.83.0 COMPONENTS Qt5)
 set_package_properties(Poppler PROPERTIES
     DESCRIPTION "A PDF rendering library"
     URL "http://poppler.freedesktop.org"
@@ -959,6 +952,7 @@ calligra_drop_product_on_bad_condition( FILTER_WPG_TO_ODG
 calligra_drop_product_on_bad_condition( FILTER_PDF_TO_SVG
     NOT_WIN "not supported on Windows"
     PopplerXPDFHeaders_FOUND "poppler xpdf headers not found"
+    Poppler_FOUND "poppler qt5 headers not found"
     )
 
 calligra_drop_product_on_bad_condition( FILTER_HTML_TO_ODS

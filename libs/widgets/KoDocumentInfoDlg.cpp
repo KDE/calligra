@@ -423,7 +423,7 @@ void KoDocumentInfoDlg::saveEncryption()
         }
     }
     // Why do the dirty work ourselves?
-    emit saveRequested();
+    emit saveRequested(doc->url().isEmpty(), false, doc->specialOutputFlag());
     d->toggleEncryption = false;
     d->applyToggleEncryption = false;
     // Detects when the user cancelled saving

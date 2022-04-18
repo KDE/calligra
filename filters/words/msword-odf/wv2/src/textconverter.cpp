@@ -203,7 +203,7 @@ const char* TextConverter::LID2lang( U16 lid )
         case 0x040d: /* hebrew */
             return "iw-IL";
         case 0x0416: /* brazilian */
-        case 0x0816: /* portugese */
+        case 0x0816: /* portuguese */
             return "pt-PT";
         case 0x0419:
             return "ru-RU";

@@ -22,7 +22,7 @@ class TableDataElement;
  *
  * Each row is responsible for painting the rowline which is placed over its content.
  * For layouting each row in a table will query a list of height and width values
- * from the parental TableElement which can determine these without hussel.
+ * from the parental TableElement which can determine these without hustle.
  */
 class KOFORMULA_EXPORT TableRowElement : public BasicElement {
 public:

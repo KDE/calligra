@@ -864,7 +864,7 @@ void SvgParser::applyClipping(KoShape *shape)
         // check if we have a path shape
         KoPathShape *path = dynamic_cast<KoPathShape*>(clipShape);
         if (!path) {
-            // if shape is a group, ungroup and add children to lits of clip shapes
+            // if shape is a group, ungroup and add children to list of clip shapes
             KoShapeGroup *group = dynamic_cast<KoShapeGroup*>(clipShape);
             if (group) {
                 QList<KoShape*> groupedShapes = group->shapes();

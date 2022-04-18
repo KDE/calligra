@@ -1724,7 +1724,7 @@ void OpenCalcImport::loadStyleProperties(Style * layout, KoXmlElement const & pr
 
     if (property.hasAttributeNS(ooNS::style, "font-name")) {
         KoXmlElement * font = m_styles[ property.attributeNS(ooNS::style, "font-name", QString())];
-        loadFontStyle(layout, font);   // generell font style
+        loadFontStyle(layout, font);   // general font style
     }
 
     loadFontStyle(layout, &property);   // specific font style

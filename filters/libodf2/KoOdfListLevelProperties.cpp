@@ -70,7 +70,7 @@ bool KoOdfListLevelProperties::readOdf(KoXmlStreamReader &reader)
     while (reader.readNextStartElement()) {
         QString child = reader.qualifiedName().toString();
 
-        // style:list-level-label-alignment just is uesd in this place.
+        // style:list-level-label-alignment just is used in this place.
         // Save the list-level-label-alignment and list-level-properties in separate Attributeset for saveOdf.
         if (child == "style:list-level-label-alignment") {
             d->hasLabelAlignment = true;

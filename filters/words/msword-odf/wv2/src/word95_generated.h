@@ -5422,7 +5422,7 @@ struct PAP : public Shared {
 
     /**
      * when not == 0, paragraph is constrained to be dxaWidth wide, independent
-     * of current margin or column setings.
+     * of current margin or column settings.
      */
     U16 dxaWidth;
 
@@ -5952,7 +5952,7 @@ struct PICF : public Shared {
     U16 cbHeader;
 
     /**
-     * If a Windows metafiles is stored immediatelly followingthe PIC structure,
+     * If a Windows metafiles is stored immediately following the PIC structure,
      * the mfp is a Window's METAFILEPICT structure. When the data immediately
      * following the PIC is aTIFF filename, mfp.mm == 98. If a bitmap is stored
      * after the pic,mfp.mm == 99

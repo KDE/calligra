@@ -559,7 +559,7 @@ sub generateHeaderStructs {
         }
 
         # Special toPRM2 method for the PRM struct, implemented in word97_helper.cpp
-        # This method is neccessary as we don't want to rely on a "packed" layout of
+        # This method is necessary as we don't want to rely on a "packed" layout of
         # the structure so we can't just do evil casting ;)
         if($n eq "PRM") {
             $tmp .= $h . "    /**\n";

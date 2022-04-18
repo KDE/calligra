@@ -83,7 +83,7 @@
 #define KOXML_COMPACT
 
 /*
- Use real-time compression. Only works in conjuction with KOXML_COMPACT
+ Use real-time compression. Only works in conjunction with KOXML_COMPACT
  above because otherwise the non-compact layout will slow down everything.
 */
 #define KOXML_COMPRESS

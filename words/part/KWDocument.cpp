@@ -766,7 +766,7 @@ KoDocumentInfoDlg *KWDocument::createDocumentInfoDialog(QWidget *parent, KoDocum
     KoDocumentInfoDlg *dlg = new KoDocumentInfoDlg(parent, docInfo);
     KoMainWindow *mainwin = dynamic_cast<KoMainWindow*>(parent);
     if (mainwin) {
-        connect(dlg, &KoDocumentInfoDlg::saveRequested, mainwin, &KoMainWindow::slotFileSave);
+        connect(dlg, &KoDocumentInfoDlg::saveRequested, mainwin, &KoMainWindow::saveDocument);
     }
 
 #ifdef SHOULD_BUILD_RDF

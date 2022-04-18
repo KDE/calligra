@@ -738,7 +738,7 @@ void TestDocumentLayout::testParagraphBorders()
 
 void TestDocumentLayout::testBorderData()
 {
-    initForNewTest("Emtpy\nParagraph with Borders\nAnother parag\n");
+    initForNewTest("Empty\nParagraph with Borders\nAnother parag\n");
 
     KoParagraphStyle style;
     m_styleManager->add(&style);
@@ -764,7 +764,7 @@ void TestDocumentLayout::testBorderData()
     QVERIFY(border);
     // 1st parag is 12 * 120% = 14.4 tall.
     // 2nd parag starts with 10 pt offset = 24.4
-    // Hight of border is 2 parags, each 14.4 for text. Plus 10 pt above the 3th parag. = 38.8pt
+    // Height of border is 2 parags, each 14.4 for text. Plus 10 pt above the 3th parag. = 38.8pt
 
     // The rules here are
     //  * two paragraphs share a border
