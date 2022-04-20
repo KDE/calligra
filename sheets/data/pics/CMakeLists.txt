@@ -11,7 +11,7 @@ ecm_install_icons( ICONS
     1024-apps-calligrasheets.png
     sc-apps-calligrasheets.svgz
 
-    DESTINATION ${ICON_INSTALL_DIR}
+    DESTINATION ${KDE_INSTALL_ICONDIR}
     THEME hicolor
 )
 

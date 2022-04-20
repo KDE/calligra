@@ -22,7 +22,7 @@ set_target_properties(kookularGenerator_odt PROPERTIES
    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 
-install(TARGETS kookularGenerator_odt  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kookularGenerator_odt  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ## odt generator plugin
@@ -36,5 +36,5 @@ target_link_libraries( okularGenerator_odt_calligra
     kookularGenerator_odt
 )
 
-install( FILES okularOdt_calligra.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-install( PROGRAMS okularApplication_odt_calligra.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
+install( FILES okularOdt_calligra.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR} )
+install( PROGRAMS okularApplication_odt_calligra.desktop DESTINATION ${KDE_INSTALL_APPDIR} )

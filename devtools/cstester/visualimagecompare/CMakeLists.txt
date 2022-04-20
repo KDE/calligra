@@ -12,6 +12,6 @@ add_executable(visualimagecompare ${visualimagecompare_SRCS})
 
 target_link_libraries(visualimagecompare Poppler::Qt5 Qt5::Core Qt5::Widgets)
 
-install(TARGETS visualimagecompare ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS visualimagecompare ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 endif ()

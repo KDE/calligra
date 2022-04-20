@@ -11,5 +11,5 @@ ecm_install_icons(
         1024-apps-braindump.png
         sc-apps-braindump.svgz
 
-    DESTINATION ${ICON_INSTALL_DIR}
+    DESTINATION ${KDE_INSTALL_ICONDIR}
 )

@@ -4,4 +4,4 @@ install(FILES
     scRGB.icm
     cmyk.icm
     krita25_lcms-builtin-sRGB_g100-truegamma.icc
-    DESTINATION ${SHARE_INSTALL_PREFIX}/color/icc/calligra)
+    DESTINATION ${KDE_INSTALL_DATAROOTDIR}/color/icc/calligra)

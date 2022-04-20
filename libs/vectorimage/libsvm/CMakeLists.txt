@@ -20,12 +20,12 @@ set(libsvm_LIB_SRCS
 
 ########### install files ###############
 
-#install(TARGETS libsvm  ${INSTALL_TARGETS_DEFAULT_ARGS})
+#install(TARGETS libsvm  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 #install(
 #    FILES
 #    SvmEnums.h
 #    SvmStructs.h
 #    svm_export.h
-#    DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel
+#    DESTINATION ${KDE_INSTALL_INCLUDEDIR} COMPONENT Devel
 #)

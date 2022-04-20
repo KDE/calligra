@@ -13,4 +13,4 @@ add_library(kspreadexport SHARED ${kspreadexport_LIB_SRCS})
 target_link_libraries(kspreadexport   )
 
 set_target_properties(kspreadexport PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
-install(TARGETS kspreadexport  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kspreadexport  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})

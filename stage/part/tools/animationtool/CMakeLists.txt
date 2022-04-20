@@ -31,14 +31,14 @@ target_link_libraries(
     KF5::IconThemes
 )
 
-install(TARGETS calligrastagetoolanimation  DESTINATION ${PLUGIN_INSTALL_DIR}/calligrastage/tools)
+install(TARGETS calligrastagetoolanimation  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligrastage/tools)
 
 
 ########### install files ###############
 
 ecm_install_icons( ICONS
     16-actions-animation-stage.png
-    DESTINATION ${DATA_INSTALL_DIR}/calligra/icons
+    DESTINATION ${KDE_INSTALL_DATADIR}/calligra/icons
     THEME hicolor
 )
 

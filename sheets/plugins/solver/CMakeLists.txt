@@ -30,11 +30,11 @@ target_link_libraries( sheetssolver
         calligrasheetscommon
 )
 
-install(TARGETS sheetssolver  DESTINATION ${PLUGIN_INSTALL_DIR}/calligrasheets/extensions)
+install(TARGETS sheetssolver  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligrasheets/extensions)
 
 
 ########### install files ###############
 
-install( FILES solver.rc  DESTINATION ${DATA_INSTALL_DIR}/calligrasheets/viewplugins)
+install( FILES solver.rc  DESTINATION ${KDE_INSTALL_DATADIR}/calligrasheets/viewplugins)
 
 endif()

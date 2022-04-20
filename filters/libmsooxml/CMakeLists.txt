@@ -53,7 +53,7 @@ if(Qca-qt5_FOUND)
 endif()
 
 set_target_properties(komsooxml PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
-install(TARGETS komsooxml ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS komsooxml ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 if (FALSE) # these headers are private for now
 install( FILES
@@ -82,6 +82,6 @@ install( FILES
     VmlDrawingReader.h
     ComplexShapeHandler.h
     PredefinedShapeHelper.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/msooxml COMPONENT Devel
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/msooxml COMPONENT Devel
 )
 endif ()

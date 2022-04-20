@@ -49,7 +49,7 @@ calligra_tool_desktop_to_json(karbon_tools karbon_tools.desktop)
 
 target_link_libraries(karbon_tools kowidgets)
 
-install(TARGETS karbon_tools DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/tools)
+install(TARGETS karbon_tools DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/tools)
 
 ecm_install_icons( ICONS
     22-actions-calligraphy.png
@@ -57,6 +57,6 @@ ecm_install_icons( ICONS
     22-actions-pattern.png
     32-actions-tool_imageeffects.png
 
-    DESTINATION ${DATA_INSTALL_DIR}/calligra/icons
+    DESTINATION ${KDE_INSTALL_DATADIR}/calligra/icons
     THEME hicolor
 )

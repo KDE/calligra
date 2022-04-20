@@ -24,5 +24,5 @@ target_link_libraries(calligrageminigitplugin
     KF5::I18n
 )
 
-install(TARGETS calligrageminigitplugin DESTINATION ${QML_INSTALL_DIR}/Calligra/Gemini/Git)
-install(FILES   qmldir                  DESTINATION ${QML_INSTALL_DIR}/Calligra/Gemini/Git)
+install(TARGETS calligrageminigitplugin DESTINATION ${KDE_INSTALL_QMLDIR}/Calligra/Gemini/Git)
+install(FILES   qmldir                  DESTINATION ${KDE_INSTALL_QMLDIR}/Calligra/Gemini/Git)

@@ -1,1 +1,1 @@
-install( FILES Emmentaler-14.ttf  DESTINATION ${DATA_INSTALL_DIR}/calligra_shape_music/fonts)
+install( FILES Emmentaler-14.ttf  DESTINATION ${KDE_INSTALL_DATADIR}/calligra_shape_music/fonts)

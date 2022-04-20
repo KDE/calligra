@@ -8,4 +8,4 @@ add_executable(calligra ${calligra_SRCS})
 
 target_link_libraries(calligra komain KF5::Service KF5::KIOWidgets KF5::WidgetsAddons)
 
-install(TARGETS calligra ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS calligra ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})

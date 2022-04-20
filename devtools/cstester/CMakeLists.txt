@@ -29,5 +29,5 @@ if(SHOULD_BUILD_KARBON)
     target_link_libraries(cstester karbonui)
 endif()
 
-install(TARGETS cstester  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS cstester  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 

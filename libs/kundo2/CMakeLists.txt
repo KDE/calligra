@@ -25,7 +25,7 @@ target_link_libraries(kundo2
 set_target_properties(kundo2 PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
-install(TARGETS kundo2 ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kundo2 ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 if (SHOULD_BUILD_DEVEL_HEADERS)
 
@@ -38,7 +38,7 @@ install(FILES
     kundo2model.h
     kundo2command.h
     kundo2magicstring.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/calligra COMPONENT Devel
 )
 
 endif()

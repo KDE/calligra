@@ -163,7 +163,7 @@ endif()
 set_target_properties(kotext PROPERTIES
    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
-install(TARGETS kotext  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kotext  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
@@ -212,7 +212,7 @@ install(
     KoTextTableTemplate.h
 
     DESTINATION
-    ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel
+    ${KDE_INSTALL_INCLUDEDIR}/calligra COMPONENT Devel
 )
 
 install(
@@ -228,7 +228,7 @@ install(
     styles/KoStyleManager.h
     styles/KoTableStyle.h
     DESTINATION
-    ${INCLUDE_INSTALL_DIR}/calligra/styles COMPONENT Devel
+    ${KDE_INSTALL_INCLUDEDIR}/calligra/styles COMPONENT Devel
 )
 
 install(
@@ -240,7 +240,7 @@ install(
     changetracker/KoDeletedColumnData.cpp
     changetracker/KoDeletedCellData.cpp
     DESTINATION
-    ${INCLUDE_INSTALL_DIR}/calligra/changetracker COMPONENT Devel
+    ${KDE_INSTALL_INCLUDEDIR}/calligra/changetracker COMPONENT Devel
 )
 
 endif()

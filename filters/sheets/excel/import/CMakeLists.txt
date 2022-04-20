@@ -47,7 +47,7 @@ add_library(excelimport MODULE ${excelimport_PART_SRCS})
 
 target_link_libraries(excelimport calligrasheetsodf komsooxml komain mso koodf)
 
-#install(TARGETS excelimport  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
+#install(TARGETS excelimport  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/formatfilters)
 
 set(xls2ods_SRCS ExcelImport.cpp ImportUtils.cpp ODrawClient.cpp ${sidewinder_SRCS})
 add_library(calligra_filter_xls2ods MODULE ${xls2ods_SRCS})
@@ -58,11 +58,11 @@ target_link_libraries(calligra_filter_xls2ods
                       komain koodf
 )
 
-install(TARGETS calligra_filter_xls2ods DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
+install(TARGETS calligra_filter_xls2ods DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/formatfilters)
 
 ########### install files ###############
 
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
-    install( FILES sheets_excel_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+    install( FILES sheets_excel_thumbnail.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR})
 endif()
 

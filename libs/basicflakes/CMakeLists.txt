@@ -24,7 +24,7 @@ set_target_properties(basicflakes PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 
-install(TARGETS basicflakes  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS basicflakes  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 if (SHOULD_BUILD_DEVEL_HEADERS)
 
@@ -34,7 +34,7 @@ install( FILES
     ${CMAKE_CURRENT_BINARY_DIR}/basicflakes_export.h
 
     DESTINATION
-    ${INCLUDE_INSTALL_DIR}/calligra
+    ${KDE_INSTALL_INCLUDEDIR}/calligra
 COMPONENT Devel)
 
 endif()

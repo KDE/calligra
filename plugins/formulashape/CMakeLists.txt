@@ -67,7 +67,7 @@ target_link_libraries(koformula  PUBLIC komain)
 
 set_target_properties(koformula PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
 
-install(TARGETS koformula ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS koformula ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### FormulaShape Plugin ###############
 
@@ -121,7 +121,7 @@ target_link_libraries(calligra_shape_formula koformula ${M2MML_TOOL_LIBRARIES})
 
 
 #set_target_properties(koformula PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
-install(TARGETS calligra_shape_formula  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/shapes)
+install(TARGETS calligra_shape_formula  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/shapes)
 
 add_subdirectory( pics ) 
 # TODO: those font files seem unused currently, investigate if still needed

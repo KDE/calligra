@@ -6,14 +6,14 @@ include_directories(
 set(calligrathumbnail_SRCS calligracreator.cpp)
 add_library(calligrathumbnail MODULE ${calligrathumbnail_SRCS})
 target_link_libraries(calligrathumbnail komain KF5::KIOWidgets)
-install(TARGETS calligrathumbnail  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS calligrathumbnail  DESTINATION ${KDE_INSTALL_PLUGINDIR})
 
 if( SHOULD_BUILD_APP_KARBON )
     set(calligraimagethumbnail_SRCS calligracreator.cpp)
     add_library(calligraimagethumbnail MODULE ${calligraimagethumbnail_SRCS})
     set_target_properties(calligraimagethumbnail PROPERTIES COMPILE_FLAGS "-DNO_ICON_BLENDING")
     target_link_libraries(calligraimagethumbnail komain KF5::KIOWidgets)
-    install(TARGETS calligraimagethumbnail  DESTINATION ${PLUGIN_INSTALL_DIR})
+    install(TARGETS calligraimagethumbnail  DESTINATION ${KDE_INSTALL_PLUGINDIR})
 endif()
 
 # thumbnailing for the native opendocument formats
@@ -37,4 +37,4 @@ if( SHOULD_BUILD_PART_WORDS )
     list( APPEND THUMBNAIL_SERVICES words_odt_thumbnail.desktop )
 endif()
 
-install( FILES ${THUMBNAIL_SERVICES} DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES ${THUMBNAIL_SERVICES} DESTINATION ${KDE_INSTALL_KSERVICES5DIR})

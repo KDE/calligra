@@ -49,4 +49,4 @@ if(PHONON_FOUND_EXPERIMENTAL)
     target_link_libraries(calligra_shape_video Phonon::phonon4qt5experimental)
 endif()
 
-install(TARGETS calligra_shape_video DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/shapes)
+install(TARGETS calligra_shape_video DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/shapes)

@@ -1,3 +1,3 @@
 install( FILES
          defaultstyles.xml
-         DESTINATION ${DATA_INSTALL_DIR}/calligrastage/styles)
+         DESTINATION ${KDE_INSTALL_DATADIR}/calligrastage/styles)

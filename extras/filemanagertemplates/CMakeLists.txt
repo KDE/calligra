@@ -5,12 +5,12 @@ install( FILES
    TextDocument.desktop
    SpreadSheet.desktop
    Illustration.desktop
-DESTINATION ${TEMPLATES_INSTALL_DIR})
+DESTINATION ${KDE_INSTALL_TEMPLATEDIR})
 
 install( FILES
    Presentation.odp
    TextDocument.odt
    SpreadSheet.ods
    Illustration.odg
-DESTINATION ${TEMPLATES_INSTALL_DIR}/.source)
+DESTINATION ${KDE_INSTALL_TEMPLATEDIR}/.source)
 

@@ -2,18 +2,18 @@ add_subdirectory( animations )
 
 install( FILES
          layout-elements.svg
-         DESTINATION ${DATA_INSTALL_DIR}/calligrastage/pics)
+         DESTINATION ${KDE_INSTALL_DATADIR}/calligrastage/pics)
 
 install( FILES
     pen.png
-    DESTINATION ${DATA_INSTALL_DIR}/calligrastage/cursors
+    DESTINATION ${KDE_INSTALL_DATADIR}/calligrastage/cursors
 )
 
 ecm_install_icons( ICONS
     16-actions-pause-to-black-screen.png
     16-actions-highlight-pointer-spot.png
 
-    DESTINATION ${DATA_INSTALL_DIR}/calligrastage/icons
+    DESTINATION ${KDE_INSTALL_DATADIR}/calligrastage/icons
     THEME hicolor
 )
 
@@ -29,6 +29,6 @@ ecm_install_icons( ICONS
     1024-apps-calligrastage.png
     sc-apps-calligrastage.svgz
 
-    DESTINATION ${ICON_INSTALL_DIR}
+    DESTINATION ${KDE_INSTALL_ICONDIR}
     THEME hicolor
 )

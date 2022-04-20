@@ -10,4 +10,4 @@ calligrasheets_plugin_desktop_to_json(kspread_plugin_tool_calendar kspread_plugi
 target_link_libraries(kspread_plugin_tool_calendar calligrasheetscommon)
 
 # TODO: calendar tool does not fit into UI anymore, needs rework. Thus not installing for now
-#install(TARGETS kspread_plugin_tool_calendar DESTINATION ${PLUGIN_INSTALL_DIR}/calligrasheets/tools)
+#install(TARGETS kspread_plugin_tool_calendar DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligrasheets/tools)

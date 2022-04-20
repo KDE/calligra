@@ -16,4 +16,4 @@ calligra_shape_desktop_to_json(calligra_shape_plugin calligra_shape_plugin.deskt
 target_link_libraries(calligra_shape_plugin
     komain
 )
-install(TARGETS calligra_shape_plugin DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/shapes)
+install(TARGETS calligra_shape_plugin DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/shapes)

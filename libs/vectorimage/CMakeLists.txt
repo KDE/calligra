@@ -49,4 +49,4 @@ set_target_properties(kovectorimage PROPERTIES
 if(LIBEMF_DEBUG)
     target_compile_definitions(kovectorimage PUBLIC -DLIBEMF_DEBUG=true)
 endif()
-install(TARGETS kovectorimage ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install(TARGETS kovectorimage ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )

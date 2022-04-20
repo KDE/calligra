@@ -23,4 +23,4 @@ target_link_libraries(kokross
 set_target_properties(kokross PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
-install(TARGETS kokross ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kokross ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})

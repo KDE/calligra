@@ -101,4 +101,4 @@ add_library(calligra_shape_music MODULE ${musicshape_LIB_SRCS})
 calligra_shape_desktop_to_json(calligra_shape_music calligra_shape_music.desktop)
 
 target_link_libraries(calligra_shape_music flake kowidgets KF5::I18n Qt5::Svg)
-install(TARGETS calligra_shape_music DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/shapes)
+install(TARGETS calligra_shape_music DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/shapes)

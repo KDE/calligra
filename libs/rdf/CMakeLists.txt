@@ -49,7 +49,7 @@ target_link_libraries(kordf
 set_target_properties(kordf PROPERTIES
 VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
-install(TARGETS kordf ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install(TARGETS kordf ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
 
 # TODO: with the new embedded JSON data for plugins there is no schema ATM to define extended properties
 # calligra_semanticitem.desktop
@@ -73,6 +73,6 @@ install( FILES
     KoSemanticStylesheetsEditor.h
     RdfSemanticTreeWidgetAction.h
     RdfSemanticTreeWidgetSelectAction.h
-DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)
+DESTINATION ${KDE_INSTALL_INCLUDEDIR}/calligra COMPONENT Devel)
 
 endif()

@@ -37,7 +37,7 @@ calligra_part_desktop_to_json(karbonpart "${CMAKE_CURRENT_SOURCE_DIR}/data/karbo
 
 target_link_libraries(karbonpart karbonui)
 
-install(TARGETS karbonpart  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/parts)
+install(TARGETS karbonpart  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/parts)
 
 ########### next target ###############
 
@@ -48,7 +48,7 @@ endif()
 set(karbon_KDEINIT_SRCS main.cpp )
 
 file(GLOB karbon_icons "${CMAKE_CURRENT_SOURCE_DIR}/pics/action/*-actions-*.png")
-ecm_install_icons(ICONS ${karbon_icons} DESTINATION ${DATA_INSTALL_DIR}/karbon/icons)
+ecm_install_icons(ICONS ${karbon_icons} DESTINATION ${KDE_INSTALL_DATADIR}/karbon/icons)
 
 file(GLOB karbon_app_icons "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/*-apps-calligrakarbon.png")
 ecm_add_app_icon(kdeinit_app_ICONS_SRCS ICONS ${karbon_app_icons})
@@ -58,7 +58,7 @@ endif()
 ecm_install_icons(ICONS
     ${karbon_app_icons}
     "${CMAKE_CURRENT_SOURCE_DIR}/pics/app/sc-apps-calligrakarbon.svgz"
-    DESTINATION ${ICON_INSTALL_DIR}
+    DESTINATION ${KDE_INSTALL_ICONDIR}
 )
 
 kf5_add_kdeinit_executable( karbon ${karbon_KDEINIT_SRCS})
@@ -67,13 +67,13 @@ if (APPLE)
    set_target_properties(karbon PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
    set_target_properties(karbon PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.karbon")
    set_target_properties(karbon PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Karbon")
-   install( FILES ${CMAKE_CURRENT_BINARY_DIR}/karbon_KDEINIT_SRCS.icns DESTINATION ${BUNDLE_INSTALL_DIR}/karbon.app/Contents/Resources)
+   install( FILES ${CMAKE_CURRENT_BINARY_DIR}/karbon_KDEINIT_SRCS.icns DESTINATION ${KDE_INSTALL_BUNDLEDIR}/karbon.app/Contents/Resources)
 endif()
 
 target_link_libraries(kdeinit_karbon karbonui)
 
-install(TARGETS kdeinit_karbon  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kdeinit_karbon  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 target_link_libraries(karbon kdeinit_karbon)
-install(TARGETS karbon  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS karbon  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 

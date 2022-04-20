@@ -32,6 +32,6 @@ ecm_install_icons( ICONS
     64-actions-vertical_animations.png
     64-actions-zoom_animation.png
 
-    DESTINATION ${DATA_INSTALL_DIR}/calligrastage/icons
+    DESTINATION ${KDE_INSTALL_DATADIR}/calligrastage/icons
     THEME hicolor
 )

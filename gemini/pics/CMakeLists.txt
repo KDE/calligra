@@ -10,6 +10,6 @@ ecm_install_icons( ICONS
     64-apps-calligragemini.png
     sc-apps-calligragemini.svg
 
-    DESTINATION ${ICON_INSTALL_DIR}
+    DESTINATION ${KDE_INSTALL_ICONDIR}
     THEME hicolor
 )

@@ -21,17 +21,17 @@ ecm_install_icons( ICONS
     22-actions-pathshape.png
     sc-actions-snap-bounding-box.svg
     sc-actions-snap-extension.svg
-    DESTINATION ${DATA_INSTALL_DIR}/calligra/icons
+    DESTINATION ${KDE_INSTALL_DATADIR}/calligra/icons
     THEME hicolor
 )
 
 install( FILES
     zoom_in_cursor.png
     zoom_out_cursor.png
-    DESTINATION ${DATA_INSTALL_DIR}/calligra/cursors
+    DESTINATION ${KDE_INSTALL_DATADIR}/calligra/cursors
 )
 
 install( FILES
     questionmark.png
-    DESTINATION ${DATA_INSTALL_DIR}/calligra/pics
+    DESTINATION ${KDE_INSTALL_DATADIR}/calligra/pics
 )

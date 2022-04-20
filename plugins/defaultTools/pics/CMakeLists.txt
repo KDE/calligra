@@ -2,7 +2,7 @@ install( FILES
     cursor_shear.png
     cursor_rotate.png
     cursor_connect.png
-    DESTINATION ${DATA_INSTALL_DIR}/calligra/cursors
+    DESTINATION ${KDE_INSTALL_DATADIR}/calligra/cursors
 )
 
 ecm_install_icons( ICONS
@@ -13,6 +13,6 @@ ecm_install_icons( ICONS
     16-actions-escape-direction-right.png
     16-actions-escape-direction-up.png
     16-actions-escape-direction-vertical.png
-    DESTINATION ${DATA_INSTALL_DIR}/calligra/icons
+    DESTINATION ${KDE_INSTALL_DATADIR}/calligra/icons
     THEME hicolor
 )

@@ -1,1 +1,1 @@
-install( FILES  kspread.dtd  DESTINATION ${DATA_INSTALL_DIR}/calligrasheets/dtd)
+install( FILES  kspread.dtd  DESTINATION ${KDE_INSTALL_DATADIR}/calligrasheets/dtd)

@@ -10,13 +10,13 @@ ecm_install_icons( ICONS
     1024-apps-calligrawords.png
     sc-apps-calligrawords.svgz
 
-    DESTINATION ${ICON_INSTALL_DIR}
+    DESTINATION ${KDE_INSTALL_ICONDIR}
     THEME hicolor
 )
 
 ecm_install_icons( ICONS
     22-actions-tool_pagelayout.png
 
-    DESTINATION ${DATA_INSTALL_DIR}/calligrawords/icons
+    DESTINATION ${KDE_INSTALL_DATADIR}/calligrawords/icons
     THEME hicolor
 )

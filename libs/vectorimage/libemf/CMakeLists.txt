@@ -27,7 +27,7 @@ set(libemf_LIB_SRCS
 
 ########### install files ###############
 
-#install(TARGETS libemf  ${INSTALL_TARGETS_DEFAULT_ARGS})
+#install(TARGETS libemf  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 #install(
 #    FILES
@@ -41,5 +41,5 @@ set(libemf_LIB_SRCS
 #    EmfOutputDebugStrategy.h
 #    EmfOutputPainterStrategy.h
 #    emf_export.h
-#    DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel
+#    DESTINATION ${KDE_INSTALL_INCLUDEDIR} COMPONENT Devel
 #)

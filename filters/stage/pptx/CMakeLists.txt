@@ -31,12 +31,12 @@ target_link_libraries(
     komain
 )
 
-install(TARGETS calligra_filter_pptx2odp DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
+install(TARGETS calligra_filter_pptx2odp DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/formatfilters)
 
 ########### install files ###############
 
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
-    install( FILES stage_pptx_thumbnail.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+    install( FILES stage_pptx_thumbnail.desktop  DESTINATION ${KDE_INSTALL_KSERVICES5DIR})
 endif()
 
 if(SHOULD_BUILD_OKULAR_GENERATOR_PPTX)
@@ -49,6 +49,6 @@ if(SHOULD_BUILD_OKULAR_GENERATOR_PPTX)
         kookularGenerator_odp
     )
 
-    install( FILES okularPptx_calligra.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-    install( PROGRAMS okularApplication_pptx_calligra.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
+    install( FILES okularPptx_calligra.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR} )
+    install( PROGRAMS okularApplication_pptx_calligra.desktop DESTINATION ${KDE_INSTALL_APPDIR} )
 endif()

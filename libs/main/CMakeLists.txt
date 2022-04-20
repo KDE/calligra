@@ -119,17 +119,17 @@ endif ()
 set_target_properties(komain PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
-install(TARGETS komain ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install(TARGETS komain ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
 
 ########### install files ###############
 
 # TODO: with the new embedded JSON data for plugins there is no schema ATM to define extended properties
 # calligradocker.desktop
 
-install(FILES calligra_shell.rc DESTINATION ${DATA_INSTALL_DIR}/calligra )
+install(FILES calligra_shell.rc DESTINATION ${KDE_INSTALL_DATADIR}/calligra )
 
 if (APPLE)
-    install(FILES osx.stylesheet DESTINATION ${DATA_INSTALL_DIR}/calligra )
+    install(FILES osx.stylesheet DESTINATION ${KDE_INSTALL_DATADIR}/calligra )
 endif ()
 
 if (SHOULD_BUILD_DEVEL_HEADERS)
@@ -164,13 +164,13 @@ install( FILES
     KoView.h
     KoStandardAction.h
     komain_export.h
-DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)
+DESTINATION ${KDE_INSTALL_INCLUDEDIR}/calligra COMPONENT Devel)
 
 if( Qt5DBus_FOUND )
     install( FILES
         KoApplicationAdaptor.h
         KoViewAdaptor.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/calligra COMPONENT Devel)
 endif()
 endif()
 

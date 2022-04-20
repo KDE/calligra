@@ -15,7 +15,7 @@ target_link_libraries(
     kopageapp
 )
 
-install(TARGETS kopabackgroundtool  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/pageapptools)
+install(TARGETS kopabackgroundtool  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/pageapptools)
 
 
 ########### install files ###############
@@ -24,12 +24,12 @@ if (SHOULD_BUILD_DEVEL_HEADERS)
 install(FILES
     KoPABackgroundTool.h
     DESTINATION
-    ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel
+    ${KDE_INSTALL_INCLUDEDIR}/calligra COMPONENT Devel
 )
 endif()
 
 ecm_install_icons( ICONS
     22-actions-backgroundtool.png
-    DESTINATION ${DATA_INSTALL_DIR}/calligra/icons
+    DESTINATION ${KDE_INSTALL_DATADIR}/calligra/icons
     THEME hicolor
 )

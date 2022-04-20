@@ -11,6 +11,6 @@ ecm_install_icons( ICONS
     22-actions-smiley-shape.png
     22-actions-spiral-shape.png
     22-actions-star-shape.png
-    DESTINATION ${DATA_INSTALL_DIR}/calligra/icons
+    DESTINATION ${KDE_INSTALL_DATADIR}/calligra/icons
     THEME hicolor
 )

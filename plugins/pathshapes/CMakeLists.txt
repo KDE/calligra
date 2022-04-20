@@ -49,4 +49,4 @@ calligra_shape_desktop_to_json(calligra_shape_paths calligra_shape_paths.desktop
 
 target_link_libraries(calligra_shape_paths flake kowidgets)
 
-install(TARGETS calligra_shape_paths  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/shapes)
+install(TARGETS calligra_shape_paths  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/shapes)

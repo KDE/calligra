@@ -12,9 +12,9 @@ karbon_viewplugin_desktop_to_json(karbon_flattenpath karbon_flattenpath.desktop)
 
 target_link_libraries(karbon_flattenpath karboncommon)
 
-install(TARGETS karbon_flattenpath  DESTINATION ${PLUGIN_INSTALL_DIR}/karbon/extensions)
+install(TARGETS karbon_flattenpath  DESTINATION ${KDE_INSTALL_PLUGINDIR}/karbon/extensions)
 
 
 ########### install files ###############
 
-install( FILES  FlattenPathPlugin.rc  DESTINATION ${DATA_INSTALL_DIR}/karbon/plugins)
+install( FILES  FlattenPathPlugin.rc  DESTINATION ${KDE_INSTALL_DATADIR}/karbon/plugins)

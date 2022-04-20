@@ -158,12 +158,12 @@ set_target_properties(pigmentcms PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 
-install(TARGETS pigmentcms  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS pigmentcms  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 # TODO: with the new embedded JSON data for plugins there is no schema ATM to define extended properties
 # pigment.desktop pigmentextension.desktop
 
 if (SHOULD_BUILD_DEVEL_HEADERS)
 install( FILES ${PIGMENT_INSTALL_FILES}
-         DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)
+         DESTINATION ${KDE_INSTALL_INCLUDEDIR}/calligra COMPONENT Devel)
 endif()

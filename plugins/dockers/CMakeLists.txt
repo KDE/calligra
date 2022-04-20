@@ -28,4 +28,4 @@ calligra_docker_desktop_to_json(calligra_docker_defaults calligra_docker_default
 
 target_link_libraries(calligra_docker_defaults kowidgets)
 
-install(TARGETS calligra_docker_defaults DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/dockers)
+install(TARGETS calligra_docker_defaults DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/dockers)

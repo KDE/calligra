@@ -2,8 +2,8 @@
 
 if(SHOULD_BUILD_FILTER_ODT_TO_WIKI)
 if (SharedMimeInfo_FOUND)
-    install(FILES wiki-format.xml DESTINATION ${XDG_MIME_INSTALL_DIR})
-    update_xdg_mimetypes(${XDG_MIME_INSTALL_DIR})
+    install(FILES wiki-format.xml DESTINATION ${KDE_INSTALL_MIMEDIR})
+    update_xdg_mimetypes(${KDE_INSTALL_MIMEDIR})
 endif()
 
 add_subdirectory(export)

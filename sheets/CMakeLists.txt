@@ -339,7 +339,7 @@ target_link_libraries(calligrasheetsodf
 set_target_properties(calligrasheetsodf PROPERTIES
    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
-install(TARGETS calligrasheetsodf ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS calligrasheetsodf ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 add_library(calligrasheetscommon SHARED ${calligrasheetscommon_LIB_SRCS})
@@ -369,7 +369,7 @@ endif()
 set_target_properties(calligrasheetscommon PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
-install(TARGETS calligrasheetscommon  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS calligrasheetscommon  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 ########### next target ###############
 
 set (calligrasheetspart_PART_SRCS part/Factory_init.cpp )
@@ -380,14 +380,14 @@ calligra_part_desktop_to_json(calligrasheetspart sheetspart.desktop)
 
 target_link_libraries(calligrasheetspart calligrasheetscommon )
 
-install(TARGETS calligrasheetspart  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/parts)
+install(TARGETS calligrasheetspart  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/parts)
 
 ########### install files ###############
 
-install( FILES  calligrasheets.rc calligrasheets_readonly.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/calligrasheets)
-install( FILES  ui/CellToolOptionWidgets.xml DESTINATION ${DATA_INSTALL_DIR}/calligrasheets)
-install( FILES  calligrasheets.kcfg DESTINATION ${KCFG_INSTALL_DIR} )
-install( FILES  calligrasheetsrc DESTINATION ${CONFIG_INSTALL_DIR})
+install( FILES  calligrasheets.rc calligrasheets_readonly.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/calligrasheets)
+install( FILES  ui/CellToolOptionWidgets.xml DESTINATION ${KDE_INSTALL_DATADIR}/calligrasheets)
+install( FILES  calligrasheets.kcfg DESTINATION ${KDE_INSTALL_KCFGDIR} )
+install( FILES  calligrasheetsrc DESTINATION ${KDE_INSTALL_CONFDIR})
 
 # TODO: with the new embedded JSON data for plugins there is no schema ATM to define extended
 # propertiessheets_plugin.desktop, sheets_viewplugin.desktop
@@ -426,7 +426,7 @@ install( FILES
     ValueCalc.h
     ValueConverter.h
     ValueStorage.h
-DESTINATION ${INCLUDE_INSTALL_DIR}/sheets COMPONENT Devel)
+DESTINATION ${KDE_INSTALL_INCLUDEDIR}/sheets COMPONENT Devel)
 install( FILES
     part/CanvasBase.h
     part/CanvasItem.h
@@ -438,17 +438,17 @@ install( FILES
     part/Headers.h
     part/ToolRegistry.h
     part/View.h
-DESTINATION ${INCLUDE_INSTALL_DIR}/calligrasheets/part COMPONENT Devel)
+DESTINATION ${KDE_INSTALL_INCLUDEDIR}/calligrasheets/part COMPONENT Devel)
 install( FILES
     ui/CellToolBase.h
     ui/CellEditorBase.h
     ui/Selection.h
     ui/SheetView.h
-DESTINATION ${INCLUDE_INSTALL_DIR}/calligrasheets/ui COMPONENT Devel)
+DESTINATION ${KDE_INSTALL_INCLUDEDIR}/calligrasheets/ui COMPONENT Devel)
 install( FILES
     database/Database.h
     database/Filter.h
-DESTINATION ${INCLUDE_INSTALL_DIR}/calligrasheets/database COMPONENT Devel)
+DESTINATION ${KDE_INSTALL_INCLUDEDIR}/calligrasheets/database COMPONENT Devel)
 install( FILES
     commands/AbstractRegionCommand.h
     commands/DataManipulators.h
@@ -457,7 +457,7 @@ install( FILES
     dialogs/pivotfilters.h
     dialogs/pivotoptions.h
     dialogs/pivotmain.h
-DESTINATION ${INCLUDE_INSTALL_DIR}/calligrasheets/commands COMPONENT Devel)
+DESTINATION ${KDE_INSTALL_INCLUDEDIR}/calligrasheets/commands COMPONENT Devel)
 
 endif()
 
@@ -481,17 +481,17 @@ if (APPLE)
 set_target_properties(calligrasheets PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
 set_target_properties(calligrasheets PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.calligra.sheets")
 set_target_properties(calligrasheets PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Calligra Sheets 2")
-install( FILES ${CMAKE_CURRENT_BINARY_DIR}/calligrasheets_KDEINIT_SRCS.icns DESTINATION ${BUNDLE_INSTALL_DIR}/calligrasheets.app/Contents/Resources)
+install( FILES ${CMAKE_CURRENT_BINARY_DIR}/calligrasheets_KDEINIT_SRCS.icns DESTINATION ${KDE_INSTALL_BUNDLEDIR}/calligrasheets.app/Contents/Resources)
 endif ()
 
 target_link_libraries(kdeinit_calligrasheets komain KF5::KDELibs4Support)
 
-install(TARGETS kdeinit_calligrasheets  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kdeinit_calligrasheets  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 target_link_libraries( calligrasheets kdeinit_calligrasheets )
-install(TARGETS calligrasheets  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS calligrasheets  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
-install( PROGRAMS  org.kde.calligrasheets.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
+install( PROGRAMS  org.kde.calligrasheets.desktop DESTINATION ${KDE_INSTALL_APPDIR})
 install( FILES org.kde.calligrasheets.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
 
 endif ()

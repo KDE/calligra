@@ -13,7 +13,7 @@ calligra_filter_desktop_to_json(calligra_filter_opencalc2sheets calligra_filter_
 
 target_link_libraries(calligra_filter_opencalc2sheets calligrasheetscommon kowidgets KF5::Archive)
 
-install(TARGETS calligra_filter_opencalc2sheets  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
+install(TARGETS calligra_filter_opencalc2sheets  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/formatfilters)
 
 endif()
 
@@ -27,6 +27,6 @@ calligra_filter_desktop_to_json(calligra_filter_sheets2opencalc calligra_filter_
 
 target_link_libraries(calligra_filter_sheets2opencalc calligrasheetscommon)
 
-install(TARGETS calligra_filter_sheets2opencalc  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
+install(TARGETS calligra_filter_sheets2opencalc  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/formatfilters)
 
 endif()

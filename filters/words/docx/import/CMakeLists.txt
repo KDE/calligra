@@ -37,7 +37,7 @@ target_link_libraries(
     komain
 )
 
-install(TARGETS calligra_filter_docx2odt DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
+install(TARGETS calligra_filter_docx2odt DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/formatfilters)
 
 
 ########### next target ###############
@@ -57,7 +57,7 @@ target_link_libraries(
     koodf
 )
 
-install(TARGETS docxexport DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
+install(TARGETS docxexport DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/formatfilters)
 
 endif()
 
@@ -66,7 +66,7 @@ endif()
 ########### install files ###############
 
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
-    install( FILES words_docx_thumbnail.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+    install( FILES words_docx_thumbnail.desktop  DESTINATION ${KDE_INSTALL_KSERVICES5DIR})
 endif()
 
 if(SHOULD_BUILD_OKULAR_GENERATOR_DOCX)
@@ -79,6 +79,6 @@ if(SHOULD_BUILD_OKULAR_GENERATOR_DOCX)
         kookularGenerator_odt
     )
 
-    install( FILES okularDocx_calligra.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-    install( PROGRAMS okularApplication_docx_calligra.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
+    install( FILES okularDocx_calligra.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR} )
+    install( PROGRAMS okularApplication_docx_calligra.desktop DESTINATION ${KDE_INSTALL_APPDIR} )
 endif()

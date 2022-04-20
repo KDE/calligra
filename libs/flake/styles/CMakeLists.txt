@@ -1,3 +1,3 @@
 install(FILES
         markers.xml
-        DESTINATION ${DATA_INSTALL_DIR}/calligra/styles)
+        DESTINATION ${KDE_INSTALL_DATADIR}/calligra/styles)

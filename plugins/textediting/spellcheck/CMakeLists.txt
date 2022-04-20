@@ -27,4 +27,4 @@ target_link_libraries(calligra_textediting_spellcheck
     KF5::SonnetUi
 )
 
-install(TARGETS calligra_textediting_spellcheck DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/textediting)
+install(TARGETS calligra_textediting_spellcheck DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/textediting)
