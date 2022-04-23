@@ -13,8 +13,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/interfaces
                     ${KOMAIN_INCLUDES}
                     ${KOTEXT_INCLUDES}
                     ${TEXTLAYOUT_INCLUDES}
-                    ${Boost_INCLUDE_DIR}
-                    ${EIGEN3_INCLUDE_DIR} )
+                    ${Boost_INCLUDE_DIR} )
 
 # have their own translation domain
 ### TODO: The tableshape needs a rewrite,

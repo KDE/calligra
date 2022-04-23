@@ -1,4 +1,4 @@
-include_directories(${CMAKE_SOURCE_DIR}/sheets ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} ${EIGEN3_INCLUDE_DIR})
+include_directories(${CMAKE_SOURCE_DIR}/sheets ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES})
 
 
 ########### next target ###############
@@ -69,7 +69,7 @@ install(FILES logic.xml DESTINATION ${KDE_INSTALL_DATADIR}/calligrasheets/functi
 
 add_library(kspreadmathmodule MODULE MathModule.h math.cpp)
 calligrasheets_plugin_desktop_to_json(kspreadmathmodule kspreadmathmodule.desktop)
-target_link_libraries(kspreadmathmodule calligrasheetscommon)
+target_link_libraries(kspreadmathmodule calligrasheetscommon Eigen3::Eigen)
 install(TARGETS kspreadmathmodule DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligrasheets/functions)
 install(FILES math.xml DESTINATION ${KDE_INSTALL_DATADIR}/calligrasheets/functions)
 
