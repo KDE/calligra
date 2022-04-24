@@ -241,9 +241,9 @@ void Region::removeIntersects(const Region& region)
         Element *element = *it;
         if (element->type() == Element::Point) {
             Point* point = static_cast<Point*>(element);
-            removeIntersects(Region(point->pos()));
+            removeIntersects(point->pos(), point->sheet());
         } else {
-            removeIntersects(Region(element->rect()));
+            removeIntersects(element->rect(), element->sheet());
         }
     }
 }

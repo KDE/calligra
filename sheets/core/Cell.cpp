@@ -68,7 +68,7 @@ Cell::Cell(Sheet* sheet, const QPoint& pos)
 Cell::Cell(const Cell& other)
         : CellBase(other)
 {
-    cs = fullSheet()->fullCellStorage();
+    cs = other.isNull() ? nullptr : other.fullSheet()->fullCellStorage();
 }
 
 Cell::~Cell()
@@ -78,6 +78,7 @@ Cell::~Cell()
 Cell& Cell::operator=(const Cell& other)
 {
     CellBase::operator=(other);
+    cs = other.isNull() ? nullptr : other.fullSheet()->fullCellStorage();
     return *this;
 }
 

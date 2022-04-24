@@ -160,15 +160,14 @@ QString Localization::formatBool(bool val) const
     return translateString(str).toLower();
 }
 
+// TODO - we should let the caller specify whether to use scientific format or not
 QString Localization::formatNumber(double num, int precision) const
 {
-    if (precision < 0) precision = 2;
     return locale.toString(num, 'g', precision);
 }
 
 QString Localization::formatCurrency(double num, const QString &currencySymbol, int precision) const
 {
-    if (precision < 0) precision = 2;
     return locale.toCurrencyString(num, currencySymbol, precision);
 }
 

@@ -80,6 +80,7 @@ Doc::Doc(KoPart *part)
 {
     Q_ASSERT(part);
     connect(map(), &Map::sheetAdded, this, &Doc::sheetAdded);
+    dd->configLoadFromFile = false;
 
 #ifndef QT_NO_DBUS
     new MapAdaptor(map());

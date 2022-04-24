@@ -30,7 +30,7 @@ public:
 
 protected Q_SLOTS:
     void triggerGarbageCollection() override {
-        QTimer::singleShot(g_garbageCollectionTimeOut, this, SLOT(garbageCollection()));
+        QTimer::singleShot(g_garbageCollectionTimeOut, this, &ValidityStorage::garbageCollection);
     }
     void garbageCollection() override {
         RectStorage<Validity>::garbageCollection();

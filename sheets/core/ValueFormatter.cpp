@@ -229,6 +229,7 @@ QString ValueFormatter::removeTrailingZeros(const QString& str, const QString &c
     return result;
 }
 
+// TODO - this will likely need to be all done better.
 QString ValueFormatter::createNumberFormat(Number value, int precision,
         Format::Type fmt, Style::FloatFormat floatFormat, const QString& currencySymbol,
         const QString& _formatString, bool thousandsSep)
@@ -263,15 +264,19 @@ QString ValueFormatter::createNumberFormat(Number value, int precision,
     }
 
     int p = precision;
+    // Is it an integer within a 64bit range?
+    double dblval = double(numToDouble(value));
+    if (((dblval >= 1) || (dblval <= -1)) && (dblval - ((int64_t)dblval) == 0)) p = 8;
+
     if (p == -1) {
         // If precision (obtained from the cell style) is -1 (arbitrary), use the document default decimal precision
         // and if that value is -1 too then use either automatic decimal place adjustment or a hardcoded default.
         p = settings()->defaultDecimalPrecision();
         if (p == -1) {
             if (fmt == Format::Number) {
-                QString s = QString::number(double(numToDouble(value)));
+                QString s = QString::number(dblval, 'f', 10);
                 int _p = s.indexOf('.');
-                p = _p >= 0 ? qMax(0, 10 - _p) : 0;
+                p = _p >= 0 ? qMax(0, 10 - _p) : 8;
             } else {
                 p = 2; // hardcoded default
             }

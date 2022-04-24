@@ -32,7 +32,7 @@ public:
 
 protected Q_SLOTS:
     void triggerGarbageCollection() override {
-        QTimer::singleShot(g_garbageCollectionTimeOut, this, SLOT(garbageCollection()));
+        QTimer::singleShot(g_garbageCollectionTimeOut, this, &ConditionsStorage::garbageCollection);
     }
     void garbageCollection() override {
         RectStorage<Conditions>::garbageCollection();

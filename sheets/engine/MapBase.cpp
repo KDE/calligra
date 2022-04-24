@@ -69,14 +69,14 @@ MapBase::MapBase() :
     d->converter = new ValueConverter(d->parser);
     d->calc = new ValueCalc(d->converter);
 
-    connect(this, SIGNAL(damagesFlushed()), this, SLOT(handleDamages()));
+    connect(this, &MapBase::damagesFlushed, this, &MapBase::handleDamages);
 
-    connect(this, SIGNAL(sheetAdded(sheet)), d->dependencyManager, SLOT(addSheet(sheet)));
-    connect(this, SIGNAL(sheetAdded(sheet)), d->recalcManager, SLOT(addSheet(sheet)));
-    connect(this, SIGNAL(sheetRemoved(sheet)), d->dependencyManager, SLOT(removeSheet(sheet)));
-    connect(this, SIGNAL(sheetRemoved(sheet)), d->recalcManager, SLOT(removeSheet(sheet)));
-    connect(this, SIGNAL(sheetRevived(sheet)), d->dependencyManager, SLOT(addSheet(sheet)));
-    connect(this, SIGNAL(sheetRevived(sheet)), d->recalcManager, SLOT(addSheet(sheet)));
+    connect(this, &MapBase::sheetAdded, d->dependencyManager, &DependencyManager::addSheet);
+    connect(this, &MapBase::sheetAdded, d->recalcManager, &RecalcManager::addSheet);
+    connect(this, &MapBase::sheetRemoved, d->dependencyManager, &DependencyManager::removeSheet);
+    connect(this, &MapBase::sheetRemoved, d->recalcManager, &RecalcManager::removeSheet);
+    connect(this, &MapBase::sheetRevived, d->dependencyManager, &DependencyManager::addSheet);
+    connect(this, &MapBase::sheetRevived, d->recalcManager, &RecalcManager::addSheet);
 
     connect(d->namedAreaManager, &NamedAreaManager::namedAreaModified,
             d->dependencyManager, &DependencyManager::namedAreaModified);
@@ -283,7 +283,7 @@ void MapBase::addDamage(Damage* damage)
     d->damages.append(damage);
 
     if (d->damages.count() == 1) {
-        QTimer::singleShot(0, this, SLOT(flushDamages()));
+        QTimer::singleShot(0, this, &MapBase::flushDamages);
     }
 }
 

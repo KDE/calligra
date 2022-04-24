@@ -666,7 +666,7 @@ void CellStorage::stopUndoRecording(KUndo2Command *parent)
     for (StorageBase *storage : storages)
         storage->resetUndo();
 
-    undoEnabled = true;
+    undoEnabled = false;
 }
 
 void CellStorage::createCommand(KUndo2Command *parent) const
