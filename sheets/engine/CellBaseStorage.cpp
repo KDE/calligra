@@ -211,8 +211,9 @@ void CellBaseStorage::setFormula(int column, int row, const Formula& formula)
     // formula changed?
     if (formula != old) {
         if (!d->sheet->map()->isLoading()) {
+            CellBase cell(d->sheet, column, row);
             // trigger an update of the dependencies and a recalculation
-            d->sheet->map()->addDamage(new CellDamage(CellBase(d->sheet, column, row), CellDamage::Formula | CellDamage::Value));
+            d->sheet->map()->addDamage(new CellDamage(cell, CellDamage::Formula | CellDamage::Value));
         }
     }
 }

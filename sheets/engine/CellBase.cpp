@@ -186,6 +186,9 @@ Formula CellBase::formula() const
 void CellBase::setFormula(const Formula& formula)
 {
     sheet()->cellStorage()->setFormula(column(), row(), formula);
+    // Also set the existing value - this is needed for undo to receive the correct data
+    // The error will be cleared as soon as dependency updates run
+    setValue(Value::errorDEPEND());
 }
 
 void CellBase::setCellValue(const Value &value)
