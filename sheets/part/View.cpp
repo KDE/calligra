@@ -1820,7 +1820,7 @@ void View::slotChangeSelection(const Calligra::Sheets::Region& changedRegion)
 
     // delayed recalculation of the operation shown in the status bar
     d->statusBarOpTimer.setSingleShot(true);
-    d->statusBarOpTimer.start(250);
+    d->statusBarOpTimer.start(5);
 
     if (!d->loading && !doc()->map()->isLoading()) {
         doc()->map()->addDamage(new SelectionDamage(changedRegion));
