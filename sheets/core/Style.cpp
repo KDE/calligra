@@ -119,7 +119,7 @@ SharedSubStyle SharedSubStyle::s_defaultStyle(new SubStyle());
 class Q_DECL_HIDDEN Style::Private : public QSharedData
 {
 public:
-    QHash<Key, SharedSubStyle> subStyles;
+    QMap<Key, SharedSubStyle> subStyles;
 };
 
 

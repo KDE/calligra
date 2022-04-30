@@ -8,7 +8,6 @@
 #define CALLIGRA_SHEETS_STYLE_MANAGER
 
 #include "sheets_core_export.h"
-#include <QHash>
 #include <QMap>
 #include <QString>
 
@@ -85,7 +84,7 @@ private:
 
     // OpenDocument name to internal name (on loading) or vice versa (on saving)
     // NOTE: Temporary! Only valid while loading or saving OpenDocument files.
-    QHash<QString, QString>  m_oasisStyles;
+    QMap<QString, QString>  m_oasisStyles;
 };
 
 } // namespace Sheets

@@ -61,8 +61,8 @@ bool Filter::And::isEmpty() const {
     return list.isEmpty();
 }
 
-QHash<QString, AbstractCondition::Comparison> Filter::And::conditions(int fieldNumber) const {
-    QHash<QString, AbstractCondition::Comparison> result;
+QMap<QString, AbstractCondition::Comparison> Filter::And::conditions(int fieldNumber) const {
+    QMap<QString, AbstractCondition::Comparison> result;
     for (int i = 0; i < list.count(); ++i)
         result.unite(list[i]->conditions(fieldNumber));
     return result;
@@ -130,8 +130,8 @@ bool Filter::Or::isEmpty() const {
     return list.isEmpty();
 }
 
-QHash<QString, AbstractCondition::Comparison> Filter::Or::conditions(int fieldNumber) const {
-    QHash<QString, AbstractCondition::Comparison> result;
+QMap<QString, AbstractCondition::Comparison> Filter::Or::conditions(int fieldNumber) const {
+    QMap<QString, AbstractCondition::Comparison> result;
     for (int i = 0; i < list.count(); ++i)
         result.unite(list[i]->conditions(fieldNumber));
     return result;
@@ -226,8 +226,8 @@ bool Filter::Condition::isEmpty() const {
     return fieldNumber == -1;
 }
 
-QHash<QString, AbstractCondition::Comparison> Filter::Condition::conditions(int fieldNumber) const {
-    QHash<QString, AbstractCondition::Comparison> result;
+QMap<QString, AbstractCondition::Comparison> Filter::Condition::conditions(int fieldNumber) const {
+    QMap<QString, AbstractCondition::Comparison> result;
     if (this->fieldNumber == fieldNumber)
         result.insert(value, operation);
     return result;
@@ -425,9 +425,9 @@ void Filter::addSubFilter(Composition composition, const Filter& filter)
     }
 }
 
-QHash<QString, AbstractCondition::Comparison> Filter::conditions(int fieldNumber) const
+QMap<QString, AbstractCondition::Comparison> Filter::conditions(int fieldNumber) const
 {
-    return d->condition ? d->condition->conditions(fieldNumber) : QHash<QString, AbstractCondition::Comparison>();
+    return d->condition ? d->condition->conditions(fieldNumber) : QMap<QString, AbstractCondition::Comparison>();
 }
 
 void Filter::removeConditions(int fieldNumber)

@@ -38,7 +38,7 @@ public:
     QMap<int, bool> usedColumns; // FIXME Stefan: Use QList and std::upper_bound() for insertion.
     QMap<int, bool> usedRows;
     Region usedArea;
-    QHash<Style::Key, QList<SharedSubStyle> > subStyles;
+    QMap<Style::Key, QList<SharedSubStyle> > subStyles;
     QMap<int, QPair<QRectF, SharedSubStyle> > possibleGarbage;
     QCache<QPoint, Style> cache;
     Region cachedArea;
@@ -397,6 +397,12 @@ void StyleStorage::insert(const QRect& rect, const SharedSubStyle& subStyle, boo
             d->usedArea.removeIntersects(rect, nullptr);
         else
             d->usedArea.add(rect);
+    }
+
+    if (isDefault) {
+        // If we're resetting the style to default, we need to remove everything.
+        for (SharedSubStyle style : d->tree.intersects(rect))
+            d->tree.remove(rect, style);
     }
 
     // lookup already used substyles

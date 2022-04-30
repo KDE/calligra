@@ -86,7 +86,7 @@ void FilterPopup::Private::initGUI(FilterPopup* parent, const CellBase & cell, c
     scrollLayout->setSpacing(0);
 
     const int fieldNumber = j - (isRowFilter ? range.left() : range.top());
-    const QHash<QString, AbstractCondition::Comparison> conditions = database->filter().conditions(fieldNumber);
+    const QMap<QString, AbstractCondition::Comparison> conditions = database->filter().conditions(fieldNumber);
     const bool defaultCheckState = conditions.isEmpty() ? true
                                    : !(conditions[conditions.keys()[0]] == AbstractCondition::Match ||
                                        conditions[conditions.keys()[0]] == AbstractCondition::Empty);

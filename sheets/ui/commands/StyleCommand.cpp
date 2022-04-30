@@ -171,13 +171,8 @@ bool StyleCommand::mainProcessing()
         if (m_firstrun)
             cs->startUndoRecording();
     } else { // m_reverse
-        Style style;
-        style.setDefault();
-        // special handling for indentation
-        style.setIndentation(0);   // reset to zero
-        // special handling for precision
-        style.setPrecision(0);   // reset to storage default
-        cs->setStyle(*this, style);
+        KUndo2Command::undo(); // undo child commands
+        return true;
     }
     return AbstractRegionCommand::mainProcessing();
 }

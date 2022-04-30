@@ -45,7 +45,7 @@ class SubStyle;
 class ValueParser;
 
 // used for preloading OASIS auto styles
-typedef QHash<QString, Style>       Styles;
+typedef QMap<QString, Style>       Styles;
 
 CALLIGRA_SHEETS_CORE_EXPORT uint qHash(const Style& style);
 

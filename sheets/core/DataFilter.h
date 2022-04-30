@@ -7,7 +7,7 @@
 #ifndef CALLIGRA_SHEETS_FILTER
 #define CALLIGRA_SHEETS_FILTER
 
-#include <QHash>
+#include <QMap>
 #include <QString>
 
 #include "sheets_core_export.h"
@@ -44,7 +44,7 @@ public:
     virtual Type type() const = 0;
     virtual bool evaluate(const Database& database, int index) const = 0;
     virtual bool isEmpty() const = 0;
-    virtual QHash<QString, Comparison> conditions(int fieldNumber) const = 0;
+    virtual QMap<QString, Comparison> conditions(int fieldNumber) const = 0;
     virtual void removeConditions(int fieldNumber) = 0;
     virtual QString dump() const = 0;
     virtual bool allowsChildren() { return false; }
@@ -94,7 +94,7 @@ public:
                       Qt::CaseSensitivity caseSensitivity = Qt::CaseInsensitive, Mode mode = Text);
     void addSubFilter(Composition composition, const Filter& filter);
 
-    QHash<QString, AbstractCondition::Comparison> conditions(int fieldNumber) const;
+    QMap<QString, AbstractCondition::Comparison> conditions(int fieldNumber) const;
     void removeConditions(int fieldNumber = -1);
 
     AbstractCondition *rootCondition() const;
@@ -140,7 +140,7 @@ public:
         Type type() const override;
         bool evaluate(const Database& database, int index) const override;
         bool isEmpty() const override;
-        QHash<QString, AbstractCondition::Comparison> conditions(int fieldNumber) const override;
+        QMap<QString, AbstractCondition::Comparison> conditions(int fieldNumber) const override;
         void removeConditions(int fieldNumber) override;
         bool operator!=(const And& other) const;
         QString dump() const override;
@@ -165,7 +165,7 @@ public:
         Type type() const override;
         bool evaluate(const Database& database, int index) const override;
         bool isEmpty() const override;
-        QHash<QString, AbstractCondition::Comparison> conditions(int fieldNumber) const override;
+        QMap<QString, AbstractCondition::Comparison> conditions(int fieldNumber) const override;
         void removeConditions(int fieldNumber) override;
         bool operator!=(const Or& other) const;
         QString dump() const override;
@@ -191,7 +191,7 @@ public:
         Type type() const override;
         bool evaluate(const Database& database, int index) const override;
         bool isEmpty() const override;
-        QHash<QString, Comparison> conditions(int fieldNumber) const override;
+        QMap<QString, Comparison> conditions(int fieldNumber) const override;
         void removeConditions(int fieldNumber) override;
         bool operator==(const Condition& other) const;
         bool operator!=(const Condition& other) const;
