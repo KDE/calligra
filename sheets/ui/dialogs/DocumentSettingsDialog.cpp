@@ -187,7 +187,7 @@ void parameterLocale::updateDefaultSystemConfig()
 {
     m_bUpdateLocale = true;
     Localization* const locale = m_selection->activeSheet()->map()->calculationSettings()->locale();
-    static_cast<Localization*>(locale)->defaultSystemConfig();
+    static_cast<Localization*>(locale)->setDefaultLocale();
     updateToMatchLocale(locale);
 }
 

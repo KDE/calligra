@@ -28,7 +28,10 @@ class CALLIGRA_SHEETS_ENGINE_EXPORT Localization
 public:
     Localization();
 
-    void defaultSystemConfig();
+    void setDefaultLocale();
+    void setLanguage(const QString &name);
+    void setLanguage(QLocale::Language language, QLocale::Script script = QLocale::AnyScript, QLocale::Country country = QLocale::AnyCountry);
+    QString name() const;
 
     QString decimalSymbol() const;
     QString negativeSign() const;

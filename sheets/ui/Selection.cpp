@@ -161,7 +161,7 @@ void Selection::initialize(const QPoint& point, Sheet* sheet)
 
     fixSubRegionDimension(); // TODO remove this sanity check
     int index = d->activeSubRegionStart + d->activeSubRegionLength;
-    if (insert(index, topLeft, sheet/*, true*/)) {
+    if (insert(index, topLeft, sheet, true, false, false)) {
         // if the point was inserted
         clearSubRegion();
         // Sets:
@@ -236,7 +236,7 @@ void Selection::initialize(const QRect& range, Sheet* sheet)
 
     fixSubRegionDimension(); // TODO remove this sanity check
     int index = d->activeSubRegionStart + d->activeSubRegionLength;
-    if (insert(index, QRect(topLeft, bottomRight), sheet/*, true*/)) {
+    if (insert(index, QRect(topLeft, bottomRight), sheet, true, false, false, false, false)) {
         // if the range was inserted
         clearSubRegion();
         // Sets:
@@ -399,7 +399,7 @@ void Selection::update(const QPoint& point)
     // The update may have shrunk the range, which would be contained in
     // the former range. Remove the latter before inserting the new range.
     delete cells().takeAt(d->activeElement);
-    insert(d->activeElement, newRange, sheet, d->multipleOccurences);
+    insert(d->activeElement, newRange, sheet, d->multipleOccurences, false, false, false, false);
     const int delta = cells().count() - count;
     d->activeSubRegionLength += delta;
     if (atEnd) {
@@ -507,7 +507,7 @@ void Selection::extend(const QPoint& point, Sheet* sheet)
         const bool atEnd = d->activeElement == subRegionEnd;
         // Insert the new location after the active element, if possible.
         const int index = d->activeElement + ((prepend || atEnd) ? 0 : 1);
-        insert(index, topLeft, sheet, true);
+        insert(index, topLeft, sheet, true, false, false);
         ++d->activeSubRegionLength;
         ++d->activeElement;
         d->anchor = topLeft;
@@ -574,7 +574,7 @@ void Selection::extend(const QRect& range, Sheet* sheet)
         const bool atEnd = d->activeElement == subRegionEnd;
         // Insert the new location after the active element, if possible.
         const int index = d->activeElement + ((prepend || atEnd) ? 0 : 1);
-        insert(index, newRange, sheet, true);
+        insert(index, newRange, sheet, true, false, false, false, false);
         ++d->activeSubRegionLength;
         ++d->activeElement;
         d->anchor = newRange.topLeft();
@@ -948,7 +948,7 @@ QRect Selection::extendToMergedAreas(const QRect& _area) const
     return area;
 }
 
-Calligra::Sheets::Region::Point* Selection::createPoint(const QPoint& point) const
+Calligra::Sheets::Region::Point* Selection::createPoint(const QPoint& point, bool /*fixedColumn*/, bool /*fixedRow*/) const
 {
     return new Point(point);
 }
@@ -963,7 +963,7 @@ Calligra::Sheets::Region::Point* Selection::createPoint(const Region::Point& poi
     return new Point(point);
 }
 
-Calligra::Sheets::Region::Range* Selection::createRange(const QRect& rect) const
+Calligra::Sheets::Region::Range* Selection::createRange(const QRect& rect, bool /*fixedTop*/, bool /*fixedLeft*/, bool /*fixedBottom*/, bool /*fixedRight*/) const
 {
     return new Range(rect);
 }

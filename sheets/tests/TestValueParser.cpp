@@ -7,6 +7,7 @@
 #include <engine/ValueParser.h>
 
 #include <engine/CalculationSettings.h>
+#include <engine/Localization.h>
 #include <engine/Value.h>
 
 #include <QStandardPaths>
@@ -14,6 +15,8 @@
 #include <KLocalizedString>
 
 using namespace Calligra::Sheets;
+
+#define USE_LOCALE "cs_CZ"
 
 void TestValueParser::initTestCase()
 {
@@ -35,7 +38,9 @@ void TestValueParser::initTestCase()
     // These are available in .mo file in the data directory.
     // Install these xx translations into test path for some arbitrary language.
     // We use the 'nl'.
-    QString locale = "nl";
+/*
+ * This no longer works with the new QLocale-based translations, so disabling it for now.
+    QString locale = USE_LOCALE;
     QString dataPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
     QString localePath = dataPath + "/locale/" + locale + "/LC_MESSAGES";
     QVERIFY(QDir(localePath).mkpath("."));
@@ -47,10 +52,11 @@ void TestValueParser::initTestCase()
     QVERIFY(QFile::copy(QFINDTESTDATA("data/sheets.mo"), m_translationsFile));
 
     // check that translation ok, else lot of tests will fail later
-//    *m_calcsettings->locale() = KLocale(locale, locale);
-//    QCOMPARE(m_calcsettings->locale()->country(), locale);
-    QString s = ki18n("true").toString(QStringList()<<"nl");
+    m_calcsettings->locale()->setLanguage(locale);
+    QCOMPARE(m_calcsettings->locale()->name(), locale);
+    QString s = ki18n("true").toString(QStringList()<<USE_LOCALE);
     QVERIFY2(s == QString("xxtruexx"), "Translation failed, check that you have the correct .mo file in the data directory and that it installs correctly");
+*/
 }
 
 void TestValueParser::cleanupTestCase()
@@ -71,20 +77,21 @@ void TestValueParser::testTryParseBool_data(bool addCol)
         QTest::addColumn<Value>("expected");
     }
 
+    QString locale_str = USE_LOCALE;
     QTest::newRow("en true") << "C" << "true" << true << Value(true);
     QTest::newRow("en false") << "C" << "false" << true << Value(false);
     QTest::newRow("en foobar") << "C" << "foobar" << false << Value();
     QTest::newRow("en TruE") << "C" << "TruE" << true << Value(true);
     QTest::newRow("en fAlSe") << "C" << "fAlSe" << true << Value(false);
-    QTest::newRow("en xxtruexx") << "C" << "xxtruexx" << false << Value();
-    QTest::newRow("xx true") << "nl" << "true" << true << Value(true);
-    QTest::newRow("xx false") << "nl" << "false" << true << Value(false);
-    QTest::newRow("xx foobar") << "nl" << "foobar" << false << Value();
-    QTest::newRow("xx TruE") << "nl" << "TruE" << true << Value(true);
-    QTest::newRow("xx fAlSe") << "nl" << "fAlSe" << true << Value(false);
-    QTest::newRow("xx xxtruexx") << "nl" << "xxtruexx" << true << Value(true);
-    QTest::newRow("xx xxtRuexx") << "nl" << "xxtRuexx" << true << Value(true);
-    QTest::newRow("xx xxfalSexx") << "nl" << "xxfalSexx" << true << Value(false);
+    QTest::newRow("en xxtruexx") << "C" << "pravda" << false << Value();
+    QTest::newRow("xx true") << locale_str << "true" << true << Value(true);
+    QTest::newRow("xx false") << locale_str << "false" << true << Value(false);
+    QTest::newRow("xx foobar") << locale_str << "foobar" << false << Value();
+    QTest::newRow("xx TruE") << locale_str << "TruE" << true << Value(true);
+    QTest::newRow("xx fAlSe") << locale_str << "fAlSe" << true << Value(false);
+    QTest::newRow("xx pravda") << locale_str << "pravda" << true << Value(true);
+    QTest::newRow("xx pRavda") << locale_str << "pRavda" << true << Value(true);
+    QTest::newRow("xx nepraVda") << locale_str << "nepraVda" << true << Value(false);
 }
 
 void TestValueParser::testTryParseBool()
@@ -94,8 +101,8 @@ void TestValueParser::testTryParseBool()
     QFETCH(bool, expectedOk);
     QFETCH(Value, expected);
 
-//    *m_calcsettings->locale() = KLocale(locale, locale);
-//    QCOMPARE(m_calcsettings->locale()->country(), locale);
+    m_calcsettings->locale()->setLanguage(locale);
+    QCOMPARE(m_calcsettings->locale()->name(), locale);
 
     bool ok;
     Value result = m_parser->tryParseBool(str, &ok);
@@ -131,8 +138,8 @@ void TestValueParser::testTryParseNumber_data(bool addCol)
     //    << true << complex<Number>(12.34e5, 4.2e2);
     //QTest::newRow("string 12.34e+5 + 4.2e+2i") << "C" << "12.34e+5 + 4.2e+2i"
     //    << true << complex<Number>(12.34e5, 4.2e2);
-    QTest::newRow("1,4 nl") << "nl" << "1,4" << true << Value(1.4);
-    QTest::newRow("1,400 nl") << "nl" << "1,400" << true << Value(1.4);
+    QTest::newRow("1,4 nl") << USE_LOCALE << "1,4" << true << Value(1.4);
+    QTest::newRow("1,400 nl") << USE_LOCALE << "1,400" << true << Value(1.4);
 }
 
 void TestValueParser::testTryParseNumber()
@@ -142,8 +149,8 @@ void TestValueParser::testTryParseNumber()
     QFETCH(bool, expectedOk);
     QFETCH(Value, expected);
 
-//    *m_calcsettings->locale() = KLocale(locale, locale);
-//    QCOMPARE(m_calcsettings->locale()->country(), locale);
+    m_calcsettings->locale()->setLanguage(locale);
+    QCOMPARE(m_calcsettings->locale()->name(), locale);
 
     bool ok;
     Value result = m_parser->tryParseNumber(str, &ok);
@@ -173,29 +180,29 @@ void TestValueParser::testTryParseDate_data(bool addCol)
         << Value(QDate(), m_calcsettings);
     QTest::newRow("ShortDate d > 31") << "C" << "2005-02-29" << false
         << Value(QDate(), m_calcsettings);
-    QTest::newRow("ShortDate us") << "us" << "06/11/2005" << true
+    QTest::newRow("ShortDate us") << "en_US" << "06/11/2005" << true
         << Value(QDate(2005, 6, 11), m_calcsettings);
-    QTest::newRow("ShortDate yy us") << "us" << "6/11/05" << true
+    QTest::newRow("ShortDate yy us") << "en_US" << "6/11/05" << true
         << Value(QDate(2005, 6, 11), m_calcsettings);
-    QTest::newRow("ShortDate us m < 1") << "us" << "0/11/05" << false
+    QTest::newRow("ShortDate us m < 1") << "en_US" << "0/11/05" << false
         << Value(QDate(), m_calcsettings);
-    QTest::newRow("ShortDate us m > 12") << "us" << "13/11/05" << false
+    QTest::newRow("ShortDate us m > 12") << "en_US" << "13/11/05" << false
         << Value(QDate(), m_calcsettings);
-    QTest::newRow("ShortDate us d < 1") << "us" << "2/0/05" << false
+    QTest::newRow("ShortDate us d < 1") << "en_US" << "2/0/05" << false
         << Value(QDate(), m_calcsettings);
-    QTest::newRow("ShortDate us d > 31") << "us" << "2/29/05" << false
+    QTest::newRow("ShortDate us d > 31") << "en_US" << "2/29/05" << false
         << Value(QDate(), m_calcsettings);
-    QTest::newRow("ShortDate nl") << "nl" << "11/06/2005" << true
+    QTest::newRow("ShortDate nl") << USE_LOCALE << "11/06/2005" << true
         << Value(QDate(2005, 6, 11), m_calcsettings);
-    QTest::newRow("ShortDate yy nl") << "nl" << "11/06/05" << true
+    QTest::newRow("ShortDate yy nl") << USE_LOCALE << "11/06/05" << true
         << Value(QDate(2005, 6, 11), m_calcsettings);
-    QTest::newRow("ShortDate nl m < 1") << "nl" << "11/0/05" << false
+    QTest::newRow("ShortDate nl m < 1") << USE_LOCALE << "11/0/05" << false
         << Value(QDate(), m_calcsettings);
-    QTest::newRow("ShortDate nl m > 12") << "nl" << "11/13/05" << false
+    QTest::newRow("ShortDate nl m > 12") << USE_LOCALE << "11/13/05" << false
         << Value(QDate(), m_calcsettings);
-    QTest::newRow("ShortDate nl d < 1") << "nl" << "0/2/05" << false
+    QTest::newRow("ShortDate nl d < 1") << USE_LOCALE << "0/2/05" << false
         << Value(QDate(), m_calcsettings);
-    QTest::newRow("ShortDate nl d > 31") << "nl" << "29/2/05" << false
+    QTest::newRow("ShortDate nl d > 31") << USE_LOCALE << "29/2/05" << false
         << Value(QDate(), m_calcsettings);
 
     QTest::newRow("LongDate") << "C" << "Saturday 01 January 2000" << true
@@ -226,13 +233,13 @@ void TestValueParser::testTryParseDate_data(bool addCol)
         << Value(QDate(), m_calcsettings);
     QTest::newRow("IsoDate bad month 2") << "C" << "2005-13-06" << false
         << Value(QDate(), m_calcsettings);
-    QTest::newRow("IsoDate us") << "us" << "2005-06-11" << true
+    QTest::newRow("IsoDate us") << "en_US" << "2005-06-11" << true
         << Value(QDate(2005, 6, 11), m_calcsettings);
-    QTest::newRow("IsoDate yy us") << "us" << "05-06-11" << true
+    QTest::newRow("IsoDate yy us") << "en_US" << "05-06-11" << true
         << Value(QDate(5, 6, 11), m_calcsettings);
-    QTest::newRow("IsoDate nl") << "nl" << "2005-06-11" << true
+    QTest::newRow("IsoDate nl") << USE_LOCALE << "2005-06-11" << true
         << Value(QDate(2005, 6, 11), m_calcsettings);
-    QTest::newRow("IsoDate yy nl") << "nl" << "05-06-11" << true
+    QTest::newRow("IsoDate yy nl") << USE_LOCALE << "05-06-11" << true
         << Value(QDate(5, 6, 11), m_calcsettings);
 
     QTest::newRow("IsoWeekFormat1") << "C" << "2004-W53-7" << true
@@ -269,28 +276,28 @@ void TestValueParser::testTryParseDate_data(bool addCol)
     QTest::newRow("IsoOrdinal error 3") << "C" << "2000-367" << false
         << Value(QDate(), m_calcsettings);
 
-    QTest::newRow("ShortDate-year us") << "us" << "12/30" << true
+    QTest::newRow("ShortDate-year us") << "en_US" << "12/30" << true
         << Value(QDate(QDate::currentDate().year(), 12, 30), m_calcsettings);
-    QTest::newRow("ShortDate-year us bad month 1") << "us" << "0/06" << false
+    QTest::newRow("ShortDate-year us bad month 1") << "en_US" << "0/06" << false
         << Value(QDate(), m_calcsettings);
-    QTest::newRow("ShortDate-year us bad month 2") << "us" << "13/06" << false
+    QTest::newRow("ShortDate-year us bad month 2") << "en_US" << "13/06" << false
         << Value(QDate(), m_calcsettings);
-    QTest::newRow("ShortDate-year us bad day 1") << "us" << "11/0" << false
+    QTest::newRow("ShortDate-year us bad day 1") << "en_US" << "11/0" << false
         << Value(QDate(), m_calcsettings);
-    QTest::newRow("ShortDate-year us bad day 2") << "us" << "11/33" << false
+    QTest::newRow("ShortDate-year us bad day 2") << "en_US" << "11/33" << false
         << Value(QDate(), m_calcsettings);
-    QTest::newRow("ShortDate-year nl") << "nl" << "30/12" << true
+    QTest::newRow("ShortDate-year nl") << USE_LOCALE << "30/12" << true
         << Value(QDate(QDate::currentDate().year(), 12, 30), m_calcsettings);
-    QTest::newRow("ShortDate-year nl bad month 1") << "nl" << "06/0" << false
+    QTest::newRow("ShortDate-year nl bad month 1") << USE_LOCALE << "06/0" << false
         << Value(QDate(), m_calcsettings);
-    QTest::newRow("ShortDate-year nl bad month 2") << "nl" << "06/13" << false
+    QTest::newRow("ShortDate-year nl bad month 2") << USE_LOCALE << "06/13" << false
         << Value(QDate(), m_calcsettings);
-    QTest::newRow("ShortDate-year nl bad day 1") << "nl" << "11/0" << false
+    QTest::newRow("ShortDate-year nl bad day 1") << USE_LOCALE << "11/0" << false
         << Value(QDate(), m_calcsettings);
-    QTest::newRow("ShortDate-year nl bad day 2") << "nl" << "11/33" << false
+    QTest::newRow("ShortDate-year nl bad day 2") << USE_LOCALE << "11/33" << false
         << Value(QDate(), m_calcsettings);
 
-    QTest::newRow("ExcelCompat") << "us" <<"3/4/45" << true
+    QTest::newRow("ExcelCompat") << "en_US" <<"3/4/45" << true
         << Value(QDate(1945, 3, 4), m_calcsettings);
 
     QTest::newRow("string invalid") << "C" << "not a date" << false
@@ -304,8 +311,8 @@ void TestValueParser::testTryParseDate()
     QFETCH(bool, expectedOk);
     QFETCH(Value, expected);
 
-//    *m_calcsettings->locale() = KLocale(locale, locale);
-//    QCOMPARE(m_calcsettings->locale()->country(), locale);
+    m_calcsettings->locale()->setLanguage(locale);
+    QCOMPARE(m_calcsettings->locale()->name(), locale);
 
     bool ok;
     Value result = m_parser->tryParseDate(str, &ok);
@@ -324,69 +331,69 @@ void TestValueParser::testTryParseTime_data(bool addCol)
 
     QTest::newRow("24hr with seconds") << "C" << "13:14:15" << true
         << Value(QTime(13, 14, 15));
-    QTest::newRow("24hr with seconds us") << "us" << "13:14:15" << false << Value();
-    QTest::newRow("24hr with seconds nl") << "nl" << "13:14:15" << true
+    QTest::newRow("24hr with seconds us") << "en_US" << "13:14:15" << false << Value();
+    QTest::newRow("24hr with seconds nl") << USE_LOCALE << "13:14:15" << true
         << Value(QTime(13, 14, 15));
     QTest::newRow("24hr with bad seconds 1") << "C" << "13:14:-1" << false << Value();
     QTest::newRow("24hr with bad seconds 2") << "C" << "13:14:60" << false << Value();
-    QTest::newRow("24hr with bad seconds 1 nl") << "nl" << "13:14:-1" << false << Value();
-    QTest::newRow("24hr with bad seconds 2 nl") << "nl" << "13:14:60" << false << Value();
+    QTest::newRow("24hr with bad seconds 1 nl") << USE_LOCALE << "13:14:-1" << false << Value();
+    QTest::newRow("24hr with bad seconds 2 nl") << USE_LOCALE << "13:14:60" << false << Value();
     QTest::newRow("24hr w/o seconds") << "C" << "13:14" << true
         << Value(QTime(13, 14));
-    QTest::newRow("24hr w/o seconds us") << "us" << "13:14" << false << Value();
-    QTest::newRow("24hr w/o seconds nl") << "nl" << "13:14" << true
+    QTest::newRow("24hr w/o seconds us") << "en_US" << "13:14" << false << Value();
+    QTest::newRow("24hr w/o seconds nl") << USE_LOCALE << "13:14" << true
         << Value(QTime(13, 14));
     QTest::newRow("24hr with bad minutes 1") << "C" << "13:-1:4" << false << Value();
     QTest::newRow("24hr with bad minutes 2") << "C" << "13:60:10" << false << Value();
-    QTest::newRow("24hr with bad minutes 1 nl") << "nl" << "13:-1:4" << false << Value();
-    QTest::newRow("24hr with bad minutes 2 nl") << "nl" << "13:60:10" << false << Value();
+    QTest::newRow("24hr with bad minutes 1 nl") << USE_LOCALE << "13:-1:4" << false << Value();
+    QTest::newRow("24hr with bad minutes 2 nl") << USE_LOCALE << "13:60:10" << false << Value();
     QTest::newRow("25hr") << "C" << "25:1:4" << true
         << Value(QTime(1, 1, 4));
-    QTest::newRow("25hr nl") << "nl" << "25:1:4" << true
+    QTest::newRow("25hr nl") << USE_LOCALE << "25:1:4" << true
         << Value(QTime(1, 1, 4));
     QTest::newRow("0hr") << "C" << "0:14:15" << true
         << Value(QTime(0, 14, 15));
-    QTest::newRow("0hr us") << "us" << "0:14:15" << false << Value();
-    QTest::newRow("0hr nl") << "nl" << "0:14:15" << true
+    QTest::newRow("0hr us") << "en_US" << "0:14:15" << false << Value();
+    QTest::newRow("0hr nl") << USE_LOCALE << "0:14:15" << true
         << Value(QTime(0, 14, 15));
     QTest::newRow("0hr am") << "C" << "0:14:15 AM" << true
         << Value(QTime(0, 14, 15));
-    QTest::newRow("0hr am us") << "us" << "0:14:15 AM" << false << Value();
-    QTest::newRow("0hr am nl") << "nl" << "0:14:15 xxAMxx" << true
+    QTest::newRow("0hr am us") << "en_US" << "0:14:15 AM" << false << Value();
+    QTest::newRow("0hr am nl") << USE_LOCALE << "0:14:15" << true
         << Value(QTime(0, 14, 15));
     QTest::newRow("0hr pm") << "C" << "0:14:15 pM" << true
         << Value(QTime(12, 14, 15));
-    QTest::newRow("0hr pm us") << "us" << "0:14:15 PM" << false << Value();
-    QTest::newRow("0hr pm nl") << "nl" << "0:14:15 xxPmxx" << true
+    QTest::newRow("0hr pm us") << "en_US" << "0:14:15 PM" << false << Value();
+    QTest::newRow("0hr pm nl") << USE_LOCALE << "0:14:15" << true
         << Value(QTime(12, 14, 15));
     QTest::newRow("12hr") << "C" << "10:14:15" << true
         << Value(QTime(10, 14, 15));
-    QTest::newRow("12hr us") << "us" << "10:14:15" << false << Value();
-    QTest::newRow("12hr nl") << "nl" << "10:14:15" << true
+    QTest::newRow("12hr us") << "en_US" << "10:14:15" << false << Value();
+    QTest::newRow("12hr nl") << USE_LOCALE << "10:14:15" << true
         << Value(QTime(10, 14, 15));
     QTest::newRow("am with seconds") << "C" << "10:11:12 am" << true
         << Value(QTime(10, 11, 12));
-    QTest::newRow("am with seconds us") << "us" << "10:11:12 am" << true
+    QTest::newRow("am with seconds us") << "en_US" << "10:11:12 am" << true
         << Value(QTime(10, 11, 12));
-    QTest::newRow("am with seconds nl") << "nl" << "10:11:12 xxamxx" << true
+    QTest::newRow("am with seconds nl") << USE_LOCALE << "10:11:12" << true
         << Value(QTime(10, 11, 12));
     QTest::newRow("am w/o seconds") << "C" << "10:11 am" << true
         << Value(QTime(10, 11));
-    QTest::newRow("am w/o seconds us") << "us" << "10:11 am" << true
+    QTest::newRow("am w/o seconds us") << "en_US" << "10:11 am" << true
         << Value(QTime(10, 11));
-    QTest::newRow("am w/o seconds nl") << "nl" << "10:11 xxamxx" << true
+    QTest::newRow("am w/o seconds nl") << USE_LOCALE << "10:11" << true
         << Value(QTime(10, 11));
     QTest::newRow("pm with seconds") << "C" << "10:11:12 pm" << true
         << Value(QTime(22, 11, 12));
-    QTest::newRow("pm with seconds us") << "us" << "10:11:12 pm" << true
+    QTest::newRow("pm with seconds us") << "en_US" << "10:11:12 pm" << true
         << Value(QTime(22, 11, 12));
-    QTest::newRow("pm with seconds nl") << "nl" << "10:11:12 xxpmxx" << true
+    QTest::newRow("pm with seconds nl") << USE_LOCALE << "10:11:12" << true
         << Value(QTime(22, 11, 12));
     QTest::newRow("pm w/o seconds") << "C" << "10:11 pm" << true
         << Value(QTime(22, 11));
-    QTest::newRow("pm w/o seconds us") << "us" << "10:11 pm" << true
+    QTest::newRow("pm w/o seconds us") << "en_US" << "10:11 pm" << true
         << Value(QTime(22, 11));
-    QTest::newRow("pm w/o seconds nl") << "nl" << "10:11 xxpmxx" << true
+    QTest::newRow("pm w/o seconds nl") << USE_LOCALE << "10:11" << true
         << Value(QTime(22, 11));
     QTest::newRow("negative time") << "C" << "-1:30:10" << true
         << Value(QTime(22, 29, 50));
@@ -394,13 +401,13 @@ void TestValueParser::testTryParseTime_data(bool addCol)
         << Value(QTime(2, 3, 4, 5));
     QTest::newRow("time with ms 2") << "C" << "2:3:4.999" << true
         << Value(QTime(2, 3, 4, 999));
-    QTest::newRow("time with ms us") << "us" << "2:3:4.5 am" << true
+    QTest::newRow("time with ms us") << "en_US" << "2:3:4.5 am" << true
         << Value(QTime(2, 3, 4, 5));
-    QTest::newRow("time with ms nl") << "nl" << "2:3:4,5" << true
+    QTest::newRow("time with ms nl") << USE_LOCALE << "2:3:4,5" << true
         << Value(QTime(2, 3, 4, 5));
-    QTest::newRow("noon us") << "us" << "12:00pm" << true
+    QTest::newRow("noon us") << "en_US" << "12:00pm" << true
         << Value(QTime(12, 0));
-    QTest::newRow("midnight us") << "us" << "12:00am" << true
+    QTest::newRow("midnight us") << "en_US" << "12:00am" << true
         << Value(QTime(0, 0));
     QTest::newRow("too low ms") << "C" << "2:3:4.-1" << false << Value();
     QTest::newRow("too high ms") << "C" << "2:3:4:1000" << false << Value();
@@ -413,8 +420,8 @@ void TestValueParser::testTryParseTime()
     QFETCH(bool, expectedOk);
     QFETCH(Value, expected);
 
-//    *m_calcsettings->locale() = KLocale(locale, locale);
-//    QCOMPARE(m_calcsettings->locale()->country(), locale);
+    m_calcsettings->locale()->setLanguage(locale);
+    QCOMPARE(m_calcsettings->locale()->name(), locale);
 
     bool ok;
     Value result = m_parser->tryParseTime(str, &ok);
@@ -448,8 +455,8 @@ void TestValueParser::testParse() {
     QFETCH(bool, expectedOk);
     QFETCH(Value, expected);
 
-//    *m_calcsettings->locale() = KLocale(locale, locale);
-//    QCOMPARE(m_calcsettings->locale()->country(), locale);
+    m_calcsettings->locale()->setLanguage(locale);
+    QCOMPARE(m_calcsettings->locale()->name(), locale);
 
     Value result = m_parser->parse(str);
     if (!expectedOk)

@@ -15,7 +15,7 @@
 
 #include <QTest>
 
-//#include <locale.h>
+#define USE_LOCALE "cs_CZ"
 
 Q_DECLARE_METATYPE(complex<Number>)
 
@@ -56,7 +56,9 @@ void TestValueConverter::initTestCase()
     // These are available in .mo file in the data directory.
     // Install these xx translations into test path for some arbitrary language.
     // We use the 'nl'.
-    QString locale = "nl";
+    /*
+    * This no longer works with the new QLocale-based translations, so disabling it for now.
+    QString locale = "cs_CZ";
     QString dataPath = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
     QString localePath = dataPath + "/locale/" + locale + "/LC_MESSAGES";
     QVERIFY(QDir(localePath).mkpath("."));
@@ -72,6 +74,7 @@ void TestValueConverter::initTestCase()
 //    QCOMPARE(m_calcsettings->locale()->country(), locale);
     QString s = ki18n("true").toString(QStringList()<<locale);
     QVERIFY2(s == QString("xxtruexx"), "Translation failed, check that you have the correct .mo file in the data directory and that it installs correctly");
+    */
 }
 
 void TestValueConverter::cleanupTestCase()
@@ -116,15 +119,17 @@ void TestValueConverter::testAsBoolean_data()
     QTest::newRow("string en foobar") << "C" << Value("foobar") << false << false;
     QTest::newRow("string en TruE") << "C" << Value("TruE") << true << true;
     QTest::newRow("string en fAlSe") << "C" << Value("fAlSe") << true << false;
-    QTest::newRow("string en xxtruexx") << "C" << Value("xxtruexx") << false << false;
-    QTest::newRow("string xx true") << "nl" << Value("true") << true << true;
-    QTest::newRow("string xx false") << "nl" << Value("false") << true << false;
-    QTest::newRow("string xx foobar") << "nl" << Value("foobar") << false << false;
-    QTest::newRow("string xx TruE") << "nl" << Value("TruE") << true << true;
-    QTest::newRow("string xx fAlSe") << "nl" << Value("fAlSe") << true << false;
-    QTest::newRow("string xx xxtruexx") << "nl" << Value("xxtruexx") << true << true;
-    QTest::newRow("string xx xxtRuexx") << "nl" << Value("xxtRuexx") << true << true;
-    QTest::newRow("string xx xxfalSexx") << "nl" << Value("xxfalSexx") << true << false;
+
+    QTest::newRow("string en pravda") << "C" << Value("pravda") << false << false;
+    QTest::newRow("string xx true") << USE_LOCALE << Value("true") << true << true;
+    QTest::newRow("string xx false") << USE_LOCALE << Value("false") << true << false;
+    QTest::newRow("string xx foobar") << USE_LOCALE << Value("foobar") << false << false;
+    QTest::newRow("string xx TruE") << USE_LOCALE << Value("TruE") << true << true;
+    QTest::newRow("string xx fAlSe") << USE_LOCALE << Value("fAlSe") << true << false;
+    QTest::newRow("string xx pravda") << USE_LOCALE << Value("pravda") << true << true;
+    QTest::newRow("string xx pRavda") << USE_LOCALE << Value("pRavda") << true << true;
+    QTest::newRow("string xx nepraVda") << USE_LOCALE << Value("nepraVda") << true << false;
+
 
     ValueStorage array;
     QTest::newRow("array empty") << "C" << Value(array, QSize(1, 1)) << true << false;
@@ -189,8 +194,8 @@ void TestValueConverter::testAsInteger_data()
     QTest::newRow("string 3 5/2") << "C" << Value("3 5/2") << true << 5;
     QTest::newRow("string 3e2") << "C" << Value("3e2") << true << 300;
     QTest::newRow("string 1234E-2") << "C" << Value("1234E-2") << true << 12;
-    QTest::newRow("string nl 1,4") << "nl" << Value("1,4") << true << 1;
-    QTest::newRow("string nl 1,400") << "nl" << Value("1,400") << true << 1;
+    QTest::newRow("string cz 1,4") << USE_LOCALE << Value("1,4") << true << 1;
+    QTest::newRow("string cz 1,400") << USE_LOCALE << Value("1,400") << true << 1;
 
     ValueStorage array;
     QTest::newRow("array empty") << "C" << Value(array, QSize(1, 1)) << true << 0;
@@ -255,8 +260,8 @@ void TestValueConverter::testAsFloat_data()
     QTest::newRow("string 3 5/2") << "C" << Value("3 5/2") << true << 5.5;
     QTest::newRow("string 3e2") << "C" << Value("3e2") << true << 300.0;
     QTest::newRow("string 1234E-2") << "C" << Value("1234E-2") << true << 12.34;
-    QTest::newRow("string nl 1,4") << "nl" << Value("1,4") << true << 1.4;
-    QTest::newRow("string nl 1,400") << "nl" << Value("1,400") << true << 1.4;
+    QTest::newRow("string cz 1,4") << USE_LOCALE << Value("1,4") << true << 1.4;
+    QTest::newRow("string cz 1,400") << USE_LOCALE << Value("1,400") << true << 1.4;
 
     ValueStorage array;
     QTest::newRow("array empty") << "C" << Value(array, QSize(1, 1)) << true << 0.0;
@@ -348,9 +353,9 @@ void TestValueConverter::testAsComplex_data()
     //    << true << complex<Number>(12.34e5, 4.2e2);
     //QTest::newRow("string 12.34e+5 + 4.2e+2i") << "C" << Value("12.34e+5 + 4.2e+2i")
     //    << true << complex<Number>(12.34e5, 4.2e2);
-    QTest::newRow("string nl 1,4") << "nl" << Value("1,4")
+    QTest::newRow("string cz 1,4") << USE_LOCALE << Value("1,4")
         << true << complex<Number>(1.4, 0);
-    QTest::newRow("string nl 1,400") << "nl" << Value("1,400")
+    QTest::newRow("string cz 1,400") << USE_LOCALE << Value("1,400")
         << true << complex<Number>(1.4, 0);
 
     ValueStorage array;
@@ -426,8 +431,8 @@ void TestValueConverter::testAsNumeric_data()
     QTest::newRow("string 3 5/2") << "C" << Value("3 5/2") << true << Value(5.5);
     QTest::newRow("string 3e2") << "C" << Value("3e2") << true << Value(300.0);
     QTest::newRow("string 1234E-2") << "C" << Value("1234E-2") << true << Value(12.34);
-    QTest::newRow("string nl 1,4") << "nl" << Value("1,4") << true << Value(1.4);
-    QTest::newRow("string nl 1,400") << "nl" << Value("1,400") << true << Value(1.4);
+    QTest::newRow("string cz 1,4") << USE_LOCALE << Value("1,4") << true << Value(1.4);
+    QTest::newRow("string cz 1,400") << USE_LOCALE << Value("1,400") << true << Value(1.4);
 
     ValueStorage array;
     QTest::newRow("array empty") << "C" << Value(array, QSize(1, 1)) << true << Value(0.0);
@@ -464,14 +469,14 @@ void TestValueConverter::testAsString_data()
 
     QTest::newRow("bool True") << "C" << Value(true) << "True";
     QTest::newRow("bool False") << "C" << Value(false) << "False";
-    QTest::newRow("bool True xx") << "nl" << Value(true) << "xxTruexx";
-    QTest::newRow("bool False xx") << "nl" << Value(false) << "xxFalsexx";
+    QTest::newRow("bool True xx") << USE_LOCALE << Value(true) << "Pravda";
+    QTest::newRow("bool False xx") << USE_LOCALE << Value(false) << "Nepravda";
 
     QTest::newRow("integer plain") << "C" << Value(123) << "123";
     QTest::newRow("integer percent") << "C" << ValueWithFormat(3, Value::fmt_Percent)
         << "300 %";
     QTest::newRow("integer time") << "C" << ValueWithFormat(4, Value::fmt_Time) << "00:00";
-    QTest::newRow("integer time us") << "us" << ValueWithFormat(4, Value::fmt_Time)
+    QTest::newRow("integer time us") << "en_US" << ValueWithFormat(4, Value::fmt_Time)
         << "12:00 AM";
     // TODO(mek): These next ones should almost certainly be using short date format.
     QTest::newRow("integer date 1") << "C" << ValueWithFormat(0, Value::fmt_Date)
@@ -480,54 +485,53 @@ void TestValueConverter::testAsString_data()
         << "Thursday 23 June 2005";
     QTest::newRow("integer date 3") << "C" << ValueWithFormat(-10, Value::fmt_Date)
         << "Wednesday 22 December 1999";
-    // TODO(mek): KLocale doesn't take its language into account when formatting dates...
-    //QTest::newRow("integer date 1 nl") << "nl" << ValueWithFormat(0, Value::fmt_Date)
-    //    << "xxSaturdayxx 01 xxJanuaryxx 2000";
-    //QTest::newRow("integer date 2 nl") << "nl" << ValueWithFormat(2000, Value::fmt_Date)
-    //    << "xxThursdayxx 23 xxJunexx 2005";
-    //QTest::newRow("integer date 3 nl") << "nl" << ValueWithFormat(-10, Value::fmt_Date)
-    //    << "xxWednesdayxx 22 xxDecemberxx 1999";
+    QTest::newRow("integer date 1 cz") << USE_LOCALE << ValueWithFormat(0, Value::fmt_Date)
+        << "Sobota 01 leden 2000";
+    QTest::newRow("integer date 2 cz") << USE_LOCALE << ValueWithFormat(2000, Value::fmt_Date)
+        << "Čtvrtek 23 června 2005";
+    QTest::newRow("integer date 3 cz") << USE_LOCALE << ValueWithFormat(-10, Value::fmt_Date)
+        << "Středa 22 prosinec 1999";
     QTest::newRow("integer datetime 1") << "C" << ValueWithFormat(4, Value::fmt_DateTime)
         << "2000-01-05 00:00";
-    QTest::newRow("integer datetime 1 us") << "us" << ValueWithFormat(4, Value::fmt_DateTime)
+    QTest::newRow("integer datetime 1 us") << "en_US" << ValueWithFormat(4, Value::fmt_DateTime)
         << "01/05/00 12:00 AM";
-    QTest::newRow("integer datetime 1 nl") << "nl" << ValueWithFormat(4, Value::fmt_DateTime)
+    QTest::newRow("integer datetime 1 cz") << USE_LOCALE << ValueWithFormat(4, Value::fmt_DateTime)
         << "05/01/00 00:00";
     QTest::newRow("integer datetime 2") << "C" << ValueWithFormat(-10, Value::fmt_DateTime)
         << "1999-12-22 00:00";
-    QTest::newRow("integer datetime 2 us") << "us" << ValueWithFormat(-10, Value::fmt_DateTime)
+    QTest::newRow("integer datetime 2 us") << "en_US" << ValueWithFormat(-10, Value::fmt_DateTime)
         << "12/22/99 12:00 AM";
-    QTest::newRow("integer datetime 2 nl") << "nl" << ValueWithFormat(-10, Value::fmt_DateTime)
+    QTest::newRow("integer datetime 2 cz") << USE_LOCALE << ValueWithFormat(-10, Value::fmt_DateTime)
         << "22/12/99 00:00";
 
     QTest::newRow("float 123") << "C" << Value(123.0) << "123";
     QTest::newRow("float -3.14") << "C" << Value(-3.14) << "-3.14";
     QTest::newRow("float 1.5e99") << "C" << Value(1.5e99) << "1.5e+99";
     QTest::newRow("float 0.43e-12") << "C" << Value(0.43e-12) << "4.3e-13";
-    QTest::newRow("float 123 nl") << "nl" << Value(123.0) << "123";
-    QTest::newRow("float -3.14 nl") << "nl" << Value(-3.14) << "-3,14";
-    QTest::newRow("float 1.5e99 nl") << "nl" << Value(1.5e99) << "1,5e+99";
-    QTest::newRow("float 0.43e-12 nl") << "nl" << Value(0.43e-12) << "4,3e-13";
+    QTest::newRow("float 123 cz") << USE_LOCALE << Value(123.0) << "123";
+    QTest::newRow("float -3.14 cz") << USE_LOCALE << Value(-3.14) << "-3,14";
+    QTest::newRow("float 1.5e99 cz") << USE_LOCALE << Value(1.5e99) << "1,5e+99";
+    QTest::newRow("float 0.43e-12 cz") << USE_LOCALE << Value(0.43e-12) << "4,3e-13";
     // TODO(mek): Currently buggy/inconsistent in implementation.
     //QTest::newRow("float percent") << "C" << ValueWithFormat(3.45, Value::fmt_Percent)
     //    << "345 %";
     QTest::newRow("float time 0") << "C" << ValueWithFormat(4, Value::fmt_Time) << "00:00";
     QTest::newRow("float time 1") << "C" << ValueWithFormat(0.5, Value::fmt_Time) << "12:00";
     QTest::newRow("float time 2") << "C" << ValueWithFormat(3.675, Value::fmt_Time) << "16:12";
-    QTest::newRow("float time 0 us") << "us" << ValueWithFormat(4.0, Value::fmt_Time) << "12:00 AM";
-    QTest::newRow("float time 1 us") << "us" << ValueWithFormat(0.5, Value::fmt_Time) << "12:00 PM";
-    QTest::newRow("float time 2 us") << "us" << ValueWithFormat(3.675, Value::fmt_Time)
+    QTest::newRow("float time 0 us") << "en_US" << ValueWithFormat(4.0, Value::fmt_Time) << "12:00 AM";
+    QTest::newRow("float time 1 us") << "en_US" << ValueWithFormat(0.5, Value::fmt_Time) << "12:00 PM";
+    QTest::newRow("float time 2 us") << "en_US" << ValueWithFormat(3.675, Value::fmt_Time)
         << "04:12 PM";
     QTest::newRow("float date 1") << "C" << ValueWithFormat(0.5, Value::fmt_Date) << "2000-01-01";
     QTest::newRow("float date 2") << "C" << ValueWithFormat(2000.324, Value::fmt_Date)
         << "2005-06-23";
     QTest::newRow("float date 3") << "C" << ValueWithFormat(-9.234, Value::fmt_Date)
         << "1999-12-22";
-    QTest::newRow("float date 1 nl") << "nl" << ValueWithFormat(0.5, Value::fmt_Date)
+    QTest::newRow("float date 1 cz") << USE_LOCALE << ValueWithFormat(0.5, Value::fmt_Date)
         << "01/01/00";
-    QTest::newRow("float date 2 nl") << "nl" << ValueWithFormat(2000.324, Value::fmt_Date)
+    QTest::newRow("float date 2 cz") << USE_LOCALE << ValueWithFormat(2000.324, Value::fmt_Date)
         << "23/06/05";
-    QTest::newRow("float date 3 us") << "us" << ValueWithFormat(-9.234, Value::fmt_Date)
+    QTest::newRow("float date 3 us") << "en_US" << ValueWithFormat(-9.234, Value::fmt_Date)
         << "12/22/99";
     QTest::newRow("float datetime 0") << "C" << ValueWithFormat(4.0, Value::fmt_DateTime)
         << "2000-01-05 00:00";
@@ -535,17 +539,17 @@ void TestValueConverter::testAsString_data()
         << "2005-06-23 12:00";
     QTest::newRow("float datetime 2") << "C" << ValueWithFormat(-9.325, Value::fmt_DateTime)
         << "1999-12-22 16:12";
-    QTest::newRow("float datetime 0 us") << "us" << ValueWithFormat(4.0, Value::fmt_DateTime)
+    QTest::newRow("float datetime 0 us") << "en_US" << ValueWithFormat(4.0, Value::fmt_DateTime)
         << "01/05/00 12:00 AM";
-    QTest::newRow("float datetime 1 us") << "us" << ValueWithFormat(2000.5, Value::fmt_DateTime)
+    QTest::newRow("float datetime 1 us") << "en_US" << ValueWithFormat(2000.5, Value::fmt_DateTime)
         << "06/23/05 12:00 PM";
-    QTest::newRow("float datetime 2 us") << "us" << ValueWithFormat(-9.325, Value::fmt_DateTime)
+    QTest::newRow("float datetime 2 us") << "en_US" << ValueWithFormat(-9.325, Value::fmt_DateTime)
         << "12/22/99 04:12 PM";
-    QTest::newRow("float datetime 0 nl") << "nl" << ValueWithFormat(4.0, Value::fmt_DateTime)
+    QTest::newRow("float datetime 0 cz") << USE_LOCALE << ValueWithFormat(4.0, Value::fmt_DateTime)
         << "05/01/00 00:00";
-    QTest::newRow("float datetime 1 nl") << "nl" << ValueWithFormat(2000.5, Value::fmt_DateTime)
+    QTest::newRow("float datetime 1 cz") << USE_LOCALE << ValueWithFormat(2000.5, Value::fmt_DateTime)
         << "23/06/05 12:00";
-    QTest::newRow("float datetime 2 nl") << "nl" << ValueWithFormat(-9.325, Value::fmt_DateTime)
+    QTest::newRow("float datetime 2 cz") << USE_LOCALE << ValueWithFormat(-9.325, Value::fmt_DateTime)
         << "22/12/99 16:12";
 
     QTest::newRow("complex 0+0i") << "C" << Value(complex<Number>(0, 0)) << "0+0i";
@@ -561,13 +565,13 @@ void TestValueConverter::testAsString_data()
     QTest::newRow("complex time 2") << "C"
         << ValueWithFormat(complex<Number>(3.675, 653), Value::fmt_Time)
         << "16:12";
-    QTest::newRow("complex time 0 us") << "us"
+    QTest::newRow("complex time 0 us") << "en_US"
         << ValueWithFormat(complex<Number>(4, 634), Value::fmt_Time)
         << "12:00 AM";
-    QTest::newRow("complex time 1 us") << "us"
+    QTest::newRow("complex time 1 us") << "en_US"
         << ValueWithFormat(complex<Number>(0.5, 2.3), Value::fmt_Time)
         << "12:00 PM";
-    QTest::newRow("complex time 2 us") << "us"
+    QTest::newRow("complex time 2 us") << "en_US"
         << ValueWithFormat(complex<Number>(3.675, 2), Value::fmt_Time)
         << "04:12 PM";
     QTest::newRow("complex date 1") << "C"
@@ -579,13 +583,13 @@ void TestValueConverter::testAsString_data()
     QTest::newRow("complex date 3") << "C"
         << ValueWithFormat(complex<Number>(-9.234, 0), Value::fmt_Date)
         << "1999-12-22";
-    QTest::newRow("complex date 1 nl") << "nl"
+    QTest::newRow("complex date 1 cz") << USE_LOCALE
         << ValueWithFormat(complex<Number>(0.5, 0), Value::fmt_Date)
         << "01/01/00";
-    QTest::newRow("complex date 2 nl") << "nl"
+    QTest::newRow("complex date 2 cz") << USE_LOCALE
         << ValueWithFormat(complex<Number>(2000.324, 0), Value::fmt_Date)
         << "23/06/05";
-    QTest::newRow("complex date 3 us") << "us"
+    QTest::newRow("complex date 3 us") << "en_US"
         << ValueWithFormat(complex<Number>(-9.234, 0), Value::fmt_Date)
         << "12/22/99";
     QTest::newRow("complex datetime 0") << "C"
@@ -597,13 +601,13 @@ void TestValueConverter::testAsString_data()
     QTest::newRow("complex datetime 2") << "C"
         << ValueWithFormat(complex<Number>(-9.325, 0), Value::fmt_DateTime)
         << "1999-12-22 16:12";
-    QTest::newRow("complex datetime 0 us") << "us"
+    QTest::newRow("complex datetime 0 us") << "en_US"
         << ValueWithFormat(complex<Number>(4.0, 0), Value::fmt_DateTime)
         << "01/05/00 12:00 AM";
-    QTest::newRow("complex datetime 1 us") << "us"
+    QTest::newRow("complex datetime 1 us") << "en_US"
         << ValueWithFormat(complex<Number>(2000.5, 0), Value::fmt_DateTime)
         << "06/23/05 12:00 PM";
-    QTest::newRow("complex datetime 2 us") << "us"
+    QTest::newRow("complex datetime 2 us") << "en_US"
         << ValueWithFormat(complex<Number>(-9.325, 0), Value::fmt_DateTime)
         << "12/22/99 04:12 PM";
 

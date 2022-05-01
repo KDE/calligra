@@ -13,13 +13,31 @@ using namespace Calligra::Sheets;
 
 Localization::Localization()
 {
-    setLocale(QLocale::system());
+    setDefaultLocale();
 }
 
-void Localization::defaultSystemConfig()
+void Localization::setDefaultLocale()
 {
     setLocale(QLocale::system());
 }
+
+void Localization::setLanguage(const QString &name)
+{
+    QLocale locale(name);
+    setLocale(locale);
+}
+
+void Localization::setLanguage(QLocale::Language language, QLocale::Script script, QLocale::Country country)
+{
+    QLocale locale(language, script, country);
+    setLocale(locale);
+}
+
+QString Localization::name() const
+{
+    return locale.name();
+}
+
 
 QString Localization::decimalSymbol() const
 {

@@ -212,14 +212,14 @@ public:
      * @param point the point's location
      * @param sheet the sheet the point belongs to
      */
-    Element* add(const QPoint& point, SheetBase* sheet = 0);
+    Element* add(const QPoint& point, SheetBase* sheet = 0, bool fixedColumn = false, bool fixedRow = false);
 
     /**
      * Adds the range @p range to this region.
      * @param range the range's location
      * @param sheet the sheet the range belongs to
      */
-    Element* add(const QRect& range, SheetBase* sheet = 0);
+    Element* add(const QRect& range, SheetBase* sheet = 0, bool fixedTop = false, bool fixedLeft = false, bool fixedBottom = false, bool fixedRight = false);
 
     /**
      * Adds the region @p region to this region.
@@ -339,7 +339,7 @@ protected:
      * @return the added point, a null pointer, if @p point is not
      * valid or the element containing @p point
      */
-    Element* insert(int index, const QPoint& point, SheetBase* sheet, bool multi = true);
+    Element* insert(int index, const QPoint& point, SheetBase* sheet, bool multi, bool fixedColumn, bool fixedRow);
 
     /**
      * @param index the index of the element in whose front the new range
@@ -350,12 +350,12 @@ protected:
      * @return the added range, a null pointer, if @p range is not
      * valid or the element containing @p range
      */
-    Element* insert(int index, const QRect& range, SheetBase* sheet, bool multi = true);
+    Element* insert(int index, const QRect& range, SheetBase* sheet, bool multi, bool fixedTop, bool fixedLeft, bool fixedBottom, bool fixedRight);
 
     /**
      * @internal used to create derived Points
      */
-    virtual Point* createPoint(const QPoint&) const;
+    virtual Point* createPoint(const QPoint&, bool fixedColumn, bool fixedRow) const;
 
     /**
      * @internal used to create derived Points
@@ -370,7 +370,7 @@ protected:
     /**
      * @internal used to create derived Ranges
      */
-    virtual Range* createRange(const QRect&) const;
+    virtual Range* createRange(const QRect&, bool fixedTop, bool fixedLeft, bool fixedBottom, bool fixedRight) const;
 
     /**
      * @internal used to create derived Ranges
@@ -497,7 +497,7 @@ class CALLIGRA_SHEETS_ENGINE_EXPORT Region::Point : public Region::Element
 public:
     Point() : Element(), m_point() {}
     Point(int col, int row) : Element(), m_point(col, row) {}
-    Point(const QPoint&);
+    Point(const QPoint&, bool fixedColumn = false, bool fixedRow = false);
     Point(const QString&);
     ~Point() override;
 
@@ -578,7 +578,7 @@ private:
 class CALLIGRA_SHEETS_ENGINE_EXPORT Region::Range : public Region::Element
 {
 public:
-    Range(const QRect&);
+    Range(const QRect&, bool fixedTop = false, bool fixedLeft = false, bool fixedBottom = false, bool fixedRight = false);
     Range(const Region::Point&, const Region::Point&);
     Range(const QString&);
     ~Range() override;

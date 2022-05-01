@@ -425,11 +425,11 @@ Region MapBase::regionFromName(const QString& expression, SheetBase* sheet) cons
 
             if (ul.isValid() && lr.isValid()) {
                 QRect range = QRect(ul.pos(), lr.pos());
-                res.add(range, firstSheet);
+                res.add(range, firstSheet, ul.isTopFixed(), ul.isLeftFixed(), lr.isBottomFixed(), lr.isRightFixed());
             } else if (ul.isValid()) {
-                res.add(ul.pos(), firstSheet);
+                res.add(ul.pos(), firstSheet, ul.isTopFixed(), ul.isLeftFixed());
             } else { // lr.isValid()
-                res.add(lr.pos(), firstSheet);
+                res.add(lr.pos(), firstSheet, lr.isTopFixed(), lr.isLeftFixed());
             }
         } else {
             // single cell
@@ -439,7 +439,7 @@ Region MapBase::regionFromName(const QString& expression, SheetBase* sheet) cons
                 return res;
             if (!targetSheet) targetSheet = sheet;
             Region::Point pt(sRegion);
-            res.add(pt.pos(), targetSheet);
+            res.add(pt.pos(), targetSheet, pt.isColumnFixed(), pt.isRowFixed());
         }
     }
 

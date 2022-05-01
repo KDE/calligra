@@ -299,7 +299,7 @@ protected:
     /**
      * @internal used to create derived Points
      */
-    Region::Point* createPoint(const QPoint&) const override;
+    Region::Point* createPoint(const QPoint&, bool fixedColumn, bool fixedRow) const override;
 
     /**
      * @internal used to create derived Points
@@ -314,7 +314,7 @@ protected:
     /**
      * @internal used to create derived Ranges
      */
-    Region::Range* createRange(const QRect&) const override;
+    Region::Range* createRange(const QRect&, bool fixedTop, bool fixedLeft, bool fixedBottom, bool fixedRight) const override;
 
     /**
      * @internal used to create derived Ranges

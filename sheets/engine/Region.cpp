@@ -183,28 +183,28 @@ QString Region::name(SheetBase* originSheet) const
     return names.isEmpty() ? "" : names.join(";");
 }
 
-Region::Element* Region::add(const QPoint& point, SheetBase* sheet)
+Region::Element* Region::add(const QPoint& point, SheetBase* sheet, bool fixedColumn, bool fixedRow)
 {
-    return insert(d->cells.count(), point, sheet, false);
+    return insert(d->cells.count(), point, sheet, false, fixedColumn, fixedRow);
 }
 
-Region::Element* Region::add(const QRect& range, SheetBase* sheet)
+Region::Element* Region::add(const QRect& range, SheetBase* sheet, bool fixedTop, bool fixedLeft, bool fixedBottom, bool fixedRight)
 {
     const QRect normalizedRange = normalized(range);
     if (normalizedRange.width() == 0 || normalizedRange.height() == 0) {
         return 0;
     }
     if (normalizedRange.size() == QSize(1, 1)) {
-        return add(normalizedRange.topLeft(), sheet);
+        return add(normalizedRange.topLeft(), sheet, fixedTop, fixedLeft);
     }
-    return insert(d->cells.count(), normalizedRange, sheet, false);
+    return insert(d->cells.count(), normalizedRange, sheet, false, fixedTop, fixedLeft, fixedBottom, fixedRight);
 }
 
 Region::Element* Region::add(const Region& region, SheetBase* sheet)
 {
     ConstIterator endOfList(region.d->cells.constEnd());
     for (ConstIterator it = region.d->cells.constBegin(); it != endOfList; ++it) {
-        add((*it)->rect(), (*it)->sheet() ? (*it)->sheet() : sheet);
+        add((*it)->rect(), (*it)->sheet() ? (*it)->sheet() : sheet, (*it)->isTopFixed(), (*it)->isLeftFixed(), (*it)->isBottomFixed(), (*it)->isRightFixed());
     }
     return d->cells.isEmpty() ? 0 : d->cells.last();
 }
@@ -356,8 +356,8 @@ Region::Element* Region::eor(const QPoint& point, SheetBase* sheet)
         containsPoint = true;
         int x = point.x();
         int y = point.y();
-        QRect fullRange = d->cells[index]->rect();
-        delete d->cells.takeAt(index);
+        Region::Element *el = d->cells.takeAt(index);
+        QRect fullRange = el->rect();
 
         // top range
         int left = fullRange.left();
@@ -365,7 +365,7 @@ Region::Element* Region::eor(const QPoint& point, SheetBase* sheet)
         int width = fullRange.width();
         int height = y - top;
         if (height > 0) {
-            insert(index, QRect(left, top, width, height), sheet);
+            insert(index, QRect(left, top, width, height), sheet, true, el->isTopFixed(), el->isLeftFixed(), el->isBottomFixed(), el->isRightFixed());
         }
         // left range
         left = fullRange.left();
@@ -373,7 +373,7 @@ Region::Element* Region::eor(const QPoint& point, SheetBase* sheet)
         width = qMax(0, x - left);
         height = 1;
         if (width > 0) {
-            insert(index, QRect(left, top, width, height), sheet);
+            insert(index, QRect(left, top, width, height), sheet, true, el->isTopFixed(), el->isLeftFixed(), el->isBottomFixed(), el->isRightFixed());
         }
         // right range
         left = qMin(x + 1, fullRange.right());
@@ -381,7 +381,7 @@ Region::Element* Region::eor(const QPoint& point, SheetBase* sheet)
         width = qMax(0, fullRange.right() - x);
         height = 1;
         if (width > 0) {
-            insert(index, QRect(left, top, width, height), sheet);
+            insert(index, QRect(left, top, width, height), sheet, true, el->isTopFixed(), el->isLeftFixed(), el->isBottomFixed(), el->isRightFixed());
         }
         // bottom range
         left = fullRange.left();
@@ -389,8 +389,9 @@ Region::Element* Region::eor(const QPoint& point, SheetBase* sheet)
         width = fullRange.width();
         height = qMax(0, fullRange.bottom() - y);
         if (height > 0) {
-            insert(index, QRect(left, top, width, height), sheet);
+            insert(index, QRect(left, top, width, height), sheet, true, el->isTopFixed(), el->isLeftFixed(), el->isBottomFixed(), el->isRightFixed());
         }
+        delete el;
         return d->cells[index];
     }
 
@@ -400,7 +401,7 @@ Region::Element* Region::eor(const QPoint& point, SheetBase* sheet)
     return 0;
 }
 
-Region::Element* Region::insert(int pos, const QPoint& point, SheetBase* sheet, bool multi)
+Region::Element* Region::insert(int pos, const QPoint& point, SheetBase* sheet, bool multi, bool fixedColumn, bool fixedRow)
 {
     if (point.x() < 1 || point.y() < 1) {
         return 0;
@@ -414,7 +415,7 @@ Region::Element* Region::insert(int pos, const QPoint& point, SheetBase* sheet, 
 
     // we don't have to check for occurrences?
     if (multi) {
-        Point* rpoint = createPoint(point);
+        Point* rpoint = createPoint(point, fixedColumn, fixedRow);
         rpoint->setSheet(sheet);
         d->cells.insert(pos, rpoint);
         return d->cells[pos];
@@ -443,7 +444,7 @@ Region::Element* Region::insert(int pos, const QPoint& point, SheetBase* sheet, 
             }*/
     }
     if (!containsPoint) {
-        Point* rpoint = createPoint(point);
+        Point* rpoint = createPoint(point, fixedColumn, fixedRow);
         rpoint->setSheet(sheet);
         d->cells.insert(pos, rpoint);
         return d->cells[pos];
@@ -451,18 +452,18 @@ Region::Element* Region::insert(int pos, const QPoint& point, SheetBase* sheet, 
     return 0;
 }
 
-Region::Element* Region::insert(int pos, const QRect& range, SheetBase* sheet, bool multi)
+Region::Element* Region::insert(int pos, const QRect& range, SheetBase* sheet, bool multi, bool fixedTop, bool fixedLeft, bool fixedBottom, bool fixedRight)
 {
     // Keep boundaries.
     pos = qBound(0, pos, cells().count());
 
     const QRect normalizedRange = normalized(range);
     if (normalizedRange.size() == QSize(1, 1)) {
-        return insert(pos, normalizedRange.topLeft(), sheet);
+        return insert(pos, normalizedRange.topLeft(), sheet, true, fixedTop, fixedLeft);
     }
 
     if (multi) {
-        Range* rrange = createRange(normalizedRange);
+        Range* rrange = createRange(normalizedRange, fixedTop, fixedLeft, fixedBottom, fixedRight);
         rrange->setSheet(sheet);
         d->cells.insert(pos, rrange);
         return d->cells[pos];
@@ -485,7 +486,7 @@ Region::Element* Region::insert(int pos, const QRect& range, SheetBase* sheet, b
         // Keep boundaries.
         pos = qBound(0, pos, cells().count());
 
-        Range* rrange = createRange(normalizedRange);
+        Range* rrange = createRange(normalizedRange, fixedTop, fixedLeft, fixedBottom, fixedRight);
         rrange->setSheet(sheet);
         d->cells.insert(pos, rrange);
         return d->cells[pos];
@@ -772,9 +773,9 @@ void Region::operator=(const Region& other)
     }
 }
 
-Region::Point* Region::createPoint(const QPoint& point) const
+Region::Point* Region::createPoint(const QPoint& point, bool fixedColumn, bool fixedRow) const
 {
-    return new Point(point);
+    return new Point(point, fixedColumn, fixedRow);
 }
 
 Region::Point* Region::createPoint(const QString& string) const
@@ -787,9 +788,9 @@ Region::Point* Region::createPoint(const Point& point) const
     return new Point(point);
 }
 
-Region::Range* Region::createRange(const QRect& rect) const
+Region::Range* Region::createRange(const QRect& rect, bool fixedTop, bool fixedLeft, bool fixedBottom, bool fixedRight) const
 {
-    return new Range(rect);
+    return new Range(rect, fixedTop, fixedLeft, fixedBottom, fixedRight);
 }
 
 Region::Range* Region::createRange(const Point& tl, const Point& br) const
@@ -843,11 +844,11 @@ static int firstNonCharPos(const QString& s, int pos = 0)
     return result;
 }
 
-Region::Point::Point(const QPoint& point)
+Region::Point::Point(const QPoint& point, bool fixedColumn, bool fixedRow)
         : Region::Element()
         , m_point(point)
-        , m_fixedColumn(false)
-        , m_fixedRow(false)
+        , m_fixedColumn(fixedColumn)
+        , m_fixedRow(fixedRow)
 {
     if (m_point.x() > KS_colMax)
         m_point.setX(KS_colMax);
@@ -972,13 +973,13 @@ CellBase Region::Point::cell() const
   class Range
 ****************************************************************************/
 
-Region::Range::Range(const QRect& rect)
+Region::Range::Range(const QRect& rect, bool fixedTop, bool fixedLeft, bool fixedBottom, bool fixedRight)
         : Region::Element()
         , m_range(rect)
-        , m_fixedTop(false)
-        , m_fixedLeft(false)
-        , m_fixedBottom(false)
-        , m_fixedRight(false)
+        , m_fixedTop(fixedTop)
+        , m_fixedLeft(fixedLeft)
+        , m_fixedBottom(fixedBottom)
+        , m_fixedRight(fixedRight)
 {
     if (m_range.right() > KS_colMax)
         m_range.setRight(KS_colMax);
@@ -988,18 +989,14 @@ Region::Range::Range(const QRect& rect)
 
 Region::Range::Range(const Calligra::Sheets::Region::Point& ul, const Calligra::Sheets::Region::Point& lr)
         : Region::Element()
-        , m_fixedTop(false)
-        , m_fixedLeft(false)
-        , m_fixedBottom(false)
-        , m_fixedRight(false)
+        , m_fixedTop(ul.isTopFixed())
+        , m_fixedLeft(ul.isLeftFixed())
+        , m_fixedBottom(lr.isBottomFixed())
+        , m_fixedRight(lr.isRightFixed())
 {
     if (!ul.isValid() || !lr.isValid())
         return;
     m_range = QRect(ul.pos(), lr.pos());
-    m_fixedTop    = ul.isRowFixed();
-    m_fixedLeft   = ul.isColumnFixed();
-    m_fixedBottom = lr.isRowFixed();
-    m_fixedRight  = lr.isColumnFixed();
 }
 
 Region::Range::Range(const QString& sRange)
