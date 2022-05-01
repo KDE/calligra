@@ -319,6 +319,11 @@ public:
     const CellBase& cell() const;
 
     /**
+     * Is the formula empty?
+     */
+    bool isEmpty() const;
+
+    /**
      * Sets the expression for this formula.
      */
     void setExpression(const QString& expr);

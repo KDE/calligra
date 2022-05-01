@@ -409,6 +409,11 @@ SheetBase* Formula::sheet() const
     return d->sheet;
 }
 
+bool Formula::isEmpty() const
+{
+    return d->expression.isEmpty();
+}
+
 // Sets a new expression for this formula.
 // note that both the real lex and parse processes will happen later on
 // when needed (i.e. "lazy parse"), for example during formula evaluation.
