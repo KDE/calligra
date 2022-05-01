@@ -41,7 +41,6 @@ public:
     CellBaseStorage *cellStorage;
 };
 
-
 SheetBase::Private::Private (SheetBase *sheet)
     : m_sheet(sheet)
 {
@@ -65,6 +64,7 @@ SheetBase::SheetBase(const SheetBase &other)
         : d(new Private(this))
 {
     d->workbook = other.d->workbook;
+    d->cellStorage = new CellBaseStorage(*other.d->cellStorage, this);
 
     d->hide = other.d->hide;
     d->autoCalc = other.d->autoCalc;

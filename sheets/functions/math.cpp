@@ -977,14 +977,15 @@ Value func_odd(valVector args, ValueCalc *calc, FuncExtra *)
 
 Value func_trunc(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    Q_UNUSED(calc)
-    Number result = args[0].asFloat();
-    if (args.count() == 2)
-        result = result * calc->pow(Value(10), args[1]).asInteger();
-    result = (args[0].asFloat() < 0) ? -(int64_t)(-result) : (int64_t)result;
-    if (args.count() == 2)
-        result = result * calc->pow(Value(10), calc->mul(-1, args[1])).asInteger();
-    return Value(result);
+    Value val = args[0];
+
+    bool negative = (calc->sign(val) < 0);
+    if (negative) val = calc->abs(val);
+
+    Value digits = (args.count() == 2) ? args[1] : Value(0);
+    Value res = calc->roundDown(val, digits);
+    if (negative) res = calc->mul(res, -1);
+    return res;
 }
 
 // Function: COUNT
