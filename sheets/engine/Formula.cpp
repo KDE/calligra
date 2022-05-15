@@ -752,7 +752,14 @@ Tokens Formula::scan(const QString &expr, const Localization* locale) const
             // we're done with integer number
             else {
                 token.resize(out - outStart);
-                tokens.append(Token(Token::Integer, token, tokenStart - start));
+
+                Token::Type ttype = Token::Integer;
+                // Is the number too big to be represented as an integer? Use a float instead.
+                int64_t token_int = (int64_t) token.toLongLong();
+                double token_dbl = (double) token.toDouble();
+                if ((double) token_int != token_dbl) ttype = Token::Float;
+
+                tokens.append(Token(ttype, token, tokenStart - start));
                 token.resize(length);
                 out = outStart;
                 state = Start;
@@ -1734,7 +1741,8 @@ Value Formula::evalRecursive(CellIndirection cellIndirections, QHash<CellBase, V
     if (stack.count() != 1)
         return Value::errorVALUE();
 
-    return stack.pop().val;
+    Value res = stack.pop().val;
+    return res;
 }
 
 Formula& Formula::operator=(const Formula & other)

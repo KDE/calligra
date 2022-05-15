@@ -123,6 +123,8 @@ void TestValueParser::testTryParseNumber_data(bool addCol)
     QTest::newRow("-456") << "C" << "-456" << true << Value(-456);
     QTest::newRow("+5") << "C" << "+5" << true << Value(5);
     QTest::newRow("1525%") << "C" << "1525%" << true << Value(15.25);
+    QTest::newRow("10000000000000000") << "C" << "10000000000000000" << true << Value(10000000000000000);
+    QTest::newRow("100000000000000000000") << "C" << "100000000000000000000" << true << Value(1e20);   // more than int64 can handle
     QTest::newRow("5+3i") << "C" << "5+3i" << true << Value(complex<Number>(5, 3));
     QTest::newRow("2.4 + 3j") << "C" << "2.4 + 3j"
         << true << Value(complex<Number>(2.4, 3));

@@ -47,6 +47,16 @@ static double GammaHelp(double& x, bool& reflect)
     return res;
 }
 
+static Value toValue(Number value) {
+    // Can the result be represented as an integer?
+    int64_t resint = static_cast<int64_t>(value);
+    if ((Number)resint == value)
+        return Value(resint);
+    else
+        return Value(value);
+}
+
+
 // Array-walk functions registered on ValueCalc object
 
 void awSum(ValueCalc *c, Value &res, Value val, Value)
@@ -212,7 +222,7 @@ Value ValueCalc::add(const Value &a, const Value &b)
     Number aa, bb;
     aa = converter->toFloat(a);
     bb = converter->toFloat(b);
-    Value res = Value(aa + bb);
+    Value res = toValue(aa + bb);
 
     if (a.isNumber() || a.isEmpty())
         res.setFormat(format(a, b));
@@ -230,7 +240,7 @@ Value ValueCalc::sub(const Value &a, const Value &b)
     Number aa, bb;
     aa = converter->toFloat(a);
     bb = converter->toFloat(b);
-    Value res = Value(aa - bb);
+    Value res = toValue(aa - bb);
 
     if (a.isNumber() || a.isEmpty())
         res.setFormat(format(a, b));
@@ -253,7 +263,7 @@ Value ValueCalc::mul(const Value &a, const Value &b)
     Number aa, bb;
     aa = converter->toFloat(a);
     bb = converter->toFloat(b);
-    Value res = Value(aa * bb);
+    Value res = toValue(aa * bb);
 
     if (a.isNumber() || a.isEmpty())
         res.setFormat(format(a, b));
@@ -275,7 +285,7 @@ Value ValueCalc::div(const Value &a, const Value &b)
     if (bb == 0.0)
         return Value::errorDIV0();
     else
-        res = Value(aa / bb);
+        res = toValue(aa / bb);
 
     if (a.isNumber() || a.isEmpty())
         res.setFormat(format(a, b));
@@ -356,7 +366,7 @@ Value ValueCalc::sqrt(const Value &a)
 Value ValueCalc::add(const Value &a, Number b)
 {
     if (a.isError()) return a;
-    Value res = Value(converter->toFloat(a) + b);
+    Value res = toValue(converter->toFloat(a) + b);
 
     if (a.isNumber() || a.isEmpty())
         res.setFormat(a.format());
@@ -367,7 +377,7 @@ Value ValueCalc::add(const Value &a, Number b)
 Value ValueCalc::sub(const Value &a, Number b)
 {
     if (a.isError()) return a;
-    Value res = Value(converter->toFloat(a) - b);
+    Value res = toValue(converter->toFloat(a) - b);
 
     if (a.isNumber() || a.isEmpty())
         res.setFormat(a.format());
@@ -378,7 +388,7 @@ Value ValueCalc::sub(const Value &a, Number b)
 Value ValueCalc::mul(const Value &a, Number b)
 {
     if (a.isError()) return a;
-    Value res = Value(converter->toFloat(a) * b);
+    Value res = toValue(converter->toFloat(a) * b);
 
     if (a.isNumber() || a.isEmpty())
         res.setFormat(a.format());
@@ -393,7 +403,7 @@ Value ValueCalc::div(const Value &a, Number b)
     if (b == 0.0)
         return Value::errorDIV0();
 
-    res = Value(converter->toFloat(a) / b);
+    res = toValue(converter->toFloat(a) / b);
 
     if (a.isNumber() || a.isEmpty())
         res.setFormat(a.format());
@@ -415,7 +425,7 @@ Value ValueCalc::pow(const Value &a, Number b)
 Value ValueCalc::abs(const Value &a)
 {
     if (a.isError()) return a;
-    return Value(fabs(converter->toFloat(a)));
+    return toValue(fabs(converter->toFloat(a)));
 }
 
 bool ValueCalc::isZero(const Value &a)

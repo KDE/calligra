@@ -191,6 +191,8 @@ void TestFormula::testConstant()
     CHECK_EVAL("-1", Value(-1));
     CHECK_EVAL("3.14e7", Value(3.14e7));
     CHECK_EVAL("3.14e-7", Value(3.14e-7));
+    CHECK_EVAL("10000000000000000", Value(1e16));  // number too big to be represented as int32
+    CHECK_EVAL("100000000000000000000", Value(1e20));  // number too big to be represented as int64
 
     // String constants (from Odf 1.2 spec)
     CHECK_EVAL("\"Hi\"", Value("Hi"));
@@ -283,6 +285,10 @@ void TestFormula::testOperators()
     CHECK_EVAL("30-45/3", Value(15));
     CHECK_EVAL("45+45/3", Value(60));
     CHECK_EVAL("4+3*2-1", Value(9));
+    CHECK_EVAL("10000/10000", Value(1));
+    CHECK_EVAL("10000000000000000/10000000000000000", Value(1));
+    CHECK_EVAL("100000000000000000000.0/100000000000000000000.0", Value(1));
+    CHECK_EVAL("100000000000000000000/100000000000000000000", Value(1));  // number too big to be represented as int64
 }
 
 void TestFormula::testComparison()
@@ -332,6 +338,7 @@ void TestFormula::testReferences()
     CHECK_EVAL("A1+A2", Value(7.5));
     CHECK_EVAL("A1*A1", Value(36));
     CHECK_EVAL("A1*A2", Value(9.0));
+    CHECK_EVAL("2*A1+7*A1", Value(54));
     CHECK_EVAL("SUM(A1:A2)", Value(7.5));
     CHECK_EVAL("SUM(A1:A150)", Value(7.5));
     CHECK_EVAL("SUM(A1:F1)", Value(6));
