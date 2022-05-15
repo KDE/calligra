@@ -483,19 +483,21 @@ QString Cell::decodeFormula(const QString &_text) const
         return QString();
 
     while (pos < length) {
-        if (_text[pos] == '"') {
+        QChar ch = _text[pos];
+        if ((ch == '"') || (ch == '\'')) {
+            QChar quote = ch;
             erg += _text[pos++];
-            while (pos < length && _text[pos] != '"') {
+            while (pos < length && _text[pos] != quote) {
                 erg += _text[pos++];
                 // Allow escaped double quotes (\")
-                if (pos < length && _text[pos] == '\\' && _text[pos+1] == '"') {
+                if (pos < length && _text[pos] == '\\' && _text[pos+1] == quote) {
                     erg += _text[pos++];
                     erg += _text[pos++];
                 }
             }
             if (pos < length)
                 erg += _text[pos++];
-        } else if (_text[pos] == '#' || _text[pos] == '$' || _text[pos] == QChar(0xA7)) {
+        } else if (ch == '#' || ch == '$' || ch == QChar(0xA7)) {
             bool abs1 = false;
             bool abs2 = false;
             bool era1 = false; // if 1st is relative but encoded absolutely
@@ -512,7 +514,7 @@ QString Cell::decodeFormula(const QString &_text) const
             while (pos < length && (_text[pos].isDigit() || _text[pos] == '-')) ++pos;
             if (pos != oldPos)
                 col = _text.midRef(oldPos, pos - oldPos).toInt();
-            if (!abs1 && !era1)
+            if (!abs1 && !era1 && (!isNull()))
                 col += column();
             // Skip '#' or '$'
 
@@ -527,7 +529,7 @@ QString Cell::decodeFormula(const QString &_text) const
             while (pos < length && (_text[pos].isDigit() || _text[pos] == '-')) ++pos;
             if (pos != oldPos)
                 _row = _text.midRef(oldPos, pos - oldPos).toInt();
-            if (!abs2 && !era2)
+            if (!abs2 && !era2 && (!isNull()))
                 _row += row();
             // Skip '#' or '$'
             ++pos;

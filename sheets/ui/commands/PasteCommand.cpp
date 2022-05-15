@@ -284,18 +284,6 @@ bool PasteCommand::processSnippetData(Element *element, QRect sourceRect, SheetB
         if (sourceRect.top() > pasteArea.top()) reverseRows = true;
         if (sourceRect.left() > pasteArea.left()) reverseCols = true;
     }
-    int yMin = 0, yMax = pasteHeight - 1, yDiff = 1;
-    int xMin = 0, xMax = pasteWidth - 1, xDiff = 1;
-    if (reverseRows) {
-        yMin = pasteHeight - 1;
-        yMax = 0;
-        yDiff = -1;
-    }
-    if (reverseCols) {
-        xMin = pasteWidth - 1;
-        xMax = 0;
-        xDiff = -1;
-    }
 
     if (fullSourceSheet) {
 
@@ -303,7 +291,8 @@ bool PasteCommand::processSnippetData(Element *element, QRect sourceRect, SheetB
         if (sourceWidth == KS_colMax) {
             RowFormatStorage *rowFormats = fullSourceSheet->rowFormats();
 
-            for (int y = yMin; y < yMax; y += yDiff) {
+            for (int yy = 0; yy < pasteHeight; yy++) {
+                int y = reverseRows ? (pasteHeight - 1 - yy) : yy;
                 int srcRow = sourceRect.top() + y;
                 int tgRow = pasteArea.top() + y;
 
@@ -326,7 +315,8 @@ bool PasteCommand::processSnippetData(Element *element, QRect sourceRect, SheetB
         }
         if (sourceHeight == KS_rowMax) {
             ColFormatStorage *columnFormats = fullSourceSheet->columnFormats();
-            for (int x = xMin; x < xMax; x += xDiff) {
+            for (int xx = 0; xx < pasteWidth; xx++) {
+                int x = reverseCols ? (pasteWidth - 1 - xx) : xx;
                 int srcCol = sourceRect.left() + x;
                 int tgCol = pasteArea.left() + x;
 
@@ -352,8 +342,10 @@ bool PasteCommand::processSnippetData(Element *element, QRect sourceRect, SheetB
     // Now copy the actual cells.
     int sourceMaxX = sourceSheet->cellStorage()->columns();
     int sourceMaxY = sourceSheet->cellStorage()->rows();
-    for (int y = yMin; y < yMax; y += yDiff) {
-        for (int x = xMin; x < xMax; x += xDiff) {
+    for (int yy = 0; yy < pasteHeight; yy++) {
+        int y = reverseRows ? (pasteHeight - 1 - yy) : yy;
+        for (int xx = 0; xx < pasteWidth; xx++) {
+            int x = reverseCols ? (pasteWidth - 1 - xx) : xx;
             int srcX = sourceRect.left() + x;
             int srcY = sourceRect.top() + y;
             int tgX = pasteArea.left() + x;
@@ -367,7 +359,7 @@ bool PasteCommand::processSnippetData(Element *element, QRect sourceRect, SheetB
 
             // The coordinates are good.
             Cell srcCell = Cell(fullSourceSheet, srcX, srcY);
-            Cell tgCell = Cell(sheet, srcX, srcY);
+            Cell tgCell = Cell(sheet, tgX, tgY);
             tgCell.copyAll(srcCell, m_pasteMode, m_operation);
         }
     }

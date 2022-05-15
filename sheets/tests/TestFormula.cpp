@@ -6,6 +6,8 @@
 
 #include "TestKspreadCommon.h"
 
+#include "engine/MapBase.h"
+
 using namespace Calligra::Sheets;
 
 static char encodeTokenType(const Token& token)
@@ -75,7 +77,7 @@ static QString tokenizeFormula(const QString& formula)
 
 Value TestFormula::evaluate(const QString& formula, Value& ex)
 {
-    Formula f;
+    Formula f(m_sheet);
     QString expr = formula;
     if (expr[0] != '=')
         expr.prepend('=');
@@ -93,6 +95,11 @@ Value TestFormula::evaluate(const QString& formula, Value& ex)
 void TestFormula::initTestCase()
 {
     FunctionModuleRegistry::instance()->loadFunctionModules();
+
+    MapBase *map = new MapBase();
+    m_sheet = map->addNewSheet();
+    CellBase(m_sheet, 1, 1).setCellValue(Value(6));
+    CellBase(m_sheet, 1, 2).setCellValue(Value(1.5));
 }
 
 void TestFormula::testTokenizer()
@@ -271,6 +278,7 @@ void TestFormula::testOperators()
     CHECK_EVAL("14+3*77", Value(245));
     CHECK_EVAL("14-3*77", Value(-217));
     CHECK_EVAL("26*4+81", Value(185));
+    CHECK_EVAL("26.0*4+81", Value(185.0));
     CHECK_EVAL("26*4-81", Value(23));
     CHECK_EVAL("30-45/3", Value(15));
     CHECK_EVAL("45+45/3", Value(60));
@@ -316,6 +324,19 @@ void TestFormula::testString()
     CHECK_EVAL("\"2\"+5", Value(7));
     CHECK_EVAL("2+\"5\"", Value(7));
     CHECK_EVAL("\"2\"+\"5\"", Value(7));
+}
+    
+void TestFormula::testReferences()
+{
+    CHECK_EVAL("A1", Value(6));
+    CHECK_EVAL("A1+A2", Value(7.5));
+    CHECK_EVAL("A1*A1", Value(36));
+    CHECK_EVAL("A1*A2", Value(9.0));
+    CHECK_EVAL("SUM(A1:A2)", Value(7.5));
+    CHECK_EVAL("SUM(A1:A150)", Value(7.5));
+    CHECK_EVAL("SUM(A1:F1)", Value(6));
+    CHECK_EVAL("SUM(A1;A150)", Value(6));
+    CHECK_EVAL("SUM(A1:F150)", Value(7.5));
 }
 
 void TestFormula::testFunction()

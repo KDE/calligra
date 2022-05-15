@@ -12,6 +12,7 @@ namespace Calligra
 {
 namespace Sheets
 {
+class SheetBase;
 
 class TestFormula: public QObject
 {
@@ -28,11 +29,13 @@ private Q_SLOTS:
     void testOperators();
     void testComparison();
     void testString();
+    void testReferences();
     void testFunction();
     void testInlineArrays();
 
 private:
     Value evaluate(const QString&, Value&);
+    SheetBase *m_sheet;
 };
 
 } // namespace Sheets

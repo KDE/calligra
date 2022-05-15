@@ -11,7 +11,6 @@ namespace Calligra
 {
 namespace Sheets
 {
-
 class PasteCommandTest : public QObject
 {
     Q_OBJECT
