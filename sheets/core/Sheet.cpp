@@ -517,29 +517,29 @@ double Sheet::rowPosition(int _row) const
 
 void Sheet::insertShiftRight(const QRect& rect)
 {
-    changeNameCellRefs(rect, false, SheetBase::ColumnInsert);
+    changeNameCellRefs(rect, SheetBase::ColumnInsert);
 }
 
 void Sheet::insertShiftDown(const QRect& rect)
 {
-    changeNameCellRefs(rect, false, SheetBase::RowInsert);
+    changeNameCellRefs(rect, SheetBase::RowInsert);
 }
 
 void Sheet::removeShiftUp(const QRect& rect)
 {
-    changeNameCellRefs(rect, false, SheetBase::RowRemove);
+    changeNameCellRefs(rect, SheetBase::RowRemove);
 }
 
 void Sheet::removeShiftLeft(const QRect& rect)
 {
-    changeNameCellRefs(rect, false, SheetBase::ColumnRemove);
+    changeNameCellRefs(rect, SheetBase::ColumnRemove);
 }
 
 void Sheet::insertColumns(int col, int number)
 {
     d->columns.insertCols(col, number);
 
-    changeNameCellRefs(QRect(QPoint(col, 1), QPoint(col + number - 1, KS_colMax)), true, Sheet::ColumnInsert);
+    changeNameCellRefs(QRect(QPoint(col, 1), QPoint(col + number - 1, KS_colMax)), Sheet::ColumnInsert);
 
     emit columnsAdded(col, number);
 }
@@ -548,7 +548,7 @@ void Sheet::insertRows(int row, int number)
 {
     d->rows.insertRows(row, number);
 
-    changeNameCellRefs(QRect(QPoint(1, row), QPoint(KS_rowMax, row + number - 1)), true, Sheet::RowInsert);
+    changeNameCellRefs(QRect(QPoint(1, row), QPoint(KS_rowMax, row + number - 1)), Sheet::RowInsert);
 
     emit rowsAdded(row, number);
 }
@@ -557,7 +557,7 @@ void Sheet::removeColumns(int col, int number)
 {
     d->columns.removeCols(col, number);
 
-    changeNameCellRefs(QRect(QPoint(col, 1), QPoint(col + number - 1, KS_colMax)), true, Sheet::ColumnRemove);
+    changeNameCellRefs(QRect(QPoint(col, 1), QPoint(col + number - 1, KS_colMax)), Sheet::ColumnRemove);
 
     emit columnsRemoved(col, number);
 }
@@ -566,7 +566,7 @@ void Sheet::removeRows(int row, int number)
 {
     d->rows.removeRows(row, number);
 
-    changeNameCellRefs(QRect(QPoint(1, row), QPoint(KS_rowMax, row + number - 1)), true, Sheet::RowRemove);
+    changeNameCellRefs(QRect(QPoint(1, row), QPoint(KS_rowMax, row + number - 1)), Sheet::RowRemove);
 
     emit rowsRemoved(row, number);
 }

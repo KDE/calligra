@@ -110,18 +110,13 @@ public:
      * For example the formula =Sheet1!A1 is changed into =Sheet1!B1 if a Column
      * is inserted before A.
      *
-     * @param pos the point of insertion (only one coordinate may be used, depending
-     * on the other parameters).
-     * @param fullRowOrColumn if true, a whole row or column has been inserted/removed.
-     *                        if false, we inserted or removed a cell
+     * @param rect the added/removed rectabgle
      * @param ref see ChangeRef
-     * @param sheetName completes the pos specification by giving the sheet name
-     * @param number number of columns which were inserted
+     * @param changedSheet the affected sheet
      */
-    void changeNameCellRef(const QPoint& pos, bool fullRowOrColumn, ChangeRef ref,
-                           const QString& sheetName, int number);
+    void changeNameCellRef(const QRect& rect, ChangeRef ref, SheetBase *changedSheet);
 
-    void changeNameCellRefs(const QRect& rect, bool fullRowOrColumn, ChangeRef ref);
+    void changeNameCellRefs(const QRect& rect, ChangeRef ref);
 
 
     virtual void showStatusMessage(const QString &message, int timeout = 3000) const;
@@ -142,13 +137,7 @@ protected:
      * \ingroup Value
      * \see changeNameCellRef()
      */
-    QString changeNameCellRefHelper(const QPoint& pos, bool fullRowOrColumn, ChangeRef ref,
-                                    int NbCol, const QPoint& point, bool isColumnFixed,
-                                    bool isRowFixed);
-    QString changeNameCellRefHelper(const QPoint& pos, const QRect& rect, bool fullRowOrColumn, ChangeRef ref,
-                                    int NbCol, const QPoint& point, bool isColumnFixed,
-                                    bool isRowFixed);
-
+    QPoint changeNameCellRefHelper(const QPoint& pos, const QRect& rect, ChangeRef ref, bool *changed, bool *valid);
 
     /**
      * Used by the child class to override the base storage with the full-featured one.

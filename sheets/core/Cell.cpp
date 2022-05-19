@@ -413,9 +413,10 @@ QString Cell::encodeFormula(bool fixedReferences) const
             for (Region::ConstIterator it = region.constBegin(); it != end; ++it) {
                 if (!(*it)->isValid())
                     continue;
+                SheetBase *tgsheet = (*it)->sheet();
                 if ((*it)->type() == Region::Element::Point) {
-                    if ((*it)->sheet())
-                        result.append((*it)->sheet()->sheetName() + '!');
+                    if (tgsheet && (tgsheet != sheet()))
+                        result.append(tgsheet->sheetName() + '!');
                     const QPoint pos = (*it)->rect().topLeft();
                     if ((*it)->isColumnFixed())
                         result.append(QString("$%1").arg(pos.x()));
@@ -430,8 +431,8 @@ QString Cell::encodeFormula(bool fixedReferences) const
                     else
                         result.append(QString("#%1#").arg(pos.y() - (int)row()));
                 } else { // ((*it)->type() == Region::Range)
-                    if ((*it)->sheet())
-                        result.append((*it)->sheet()->sheetName() + '!');
+                    if (tgsheet && (tgsheet != sheet()))
+                        result.append(tgsheet->sheetName() + '!');
                     QPoint pos = (*it)->rect().topLeft();
                     if ((*it)->isLeftFixed())
                         result.append(QString("$%1").arg(pos.x()));
