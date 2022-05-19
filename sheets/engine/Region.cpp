@@ -758,6 +758,8 @@ bool Region::operator==(const Region& other) const
 
 void Region::operator=(const Region& other)
 {
+    if (this == &other) return;  // assigning the same object would fail
+
     d->map = other.d->map;
     clear();
     ConstIterator end(other.d->cells.constEnd());
