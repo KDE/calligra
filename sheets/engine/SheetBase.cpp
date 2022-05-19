@@ -234,7 +234,7 @@ bool SheetBase::onValidationFailed(Validity::Action action, const CellBase *cell
 
 // Adjusts the coordinate 'pos' if the 'rect' area is being adjusted using operation 'ref'
 // This assumes that the coordinates are all on the same sheet.
-QPoint SheetBase::changeNameCellRefHelper(const QPoint& pos, const QRect& rect, ChangeRef ref, bool *changed, bool *valid)
+QPoint SheetBase::changeNameCellRefHelper(const QPoint& pos, const QRect& rect, ChangeRef ref, bool *changed, bool *valid, bool isStart)
 {
     *changed = false;
     *valid = true;
@@ -258,13 +258,21 @@ QPoint SheetBase::changeNameCellRefHelper(const QPoint& pos, const QRect& rect, 
     }
     if (ref == ColumnRemove) {
         *changed = true;
-        if (col <= rect.right()) *valid = false;   // inside the removed zone
-        col -= rect.width();
+        if (col <= rect.right()) {
+            *valid = false;   // inside the removed zone
+            col = rect.left();
+            if (!isStart) col--;
+        } else
+            col -= rect.width();
     }
     if (ref == RowRemove) {
         *changed = true;
-        if (row <= rect.bottom()) *valid = false;   // inside the removed zone
-        row -= rect.height();
+        if (row <= rect.bottom()) {
+            *valid = false;   // inside the removed zone
+            row = rect.top();
+            if (!isStart) row--;
+        } else
+            row -= rect.height();
     }
 
     return QPoint(col, row);
@@ -306,20 +314,23 @@ void SheetBase::changeNameCellRef(const QRect& rect, ChangeRef ref, SheetBase *c
                 if (tgsheet != changedSheet) continue;   // not the correct sheet
 
                 bool aff = false;
+                bool valid1 = true;
                 QRect r = element->rect();
-                QPoint topleft = SheetBase::changeNameCellRefHelper(r.topLeft(), rect, ref, &aff, &valid);
-                if (!valid) {
-                    affected = true;
-                    break;
-                }
+                QPoint topleft = SheetBase::changeNameCellRefHelper(r.topLeft(), rect, ref, &aff, &valid1, true);
                 if (aff) affected = true;
 
-                QPoint bottomright = SheetBase::changeNameCellRefHelper(r.bottomRight(), rect, ref, &aff, &valid);
+                bool valid2 = true;
+                QPoint bottomright = SheetBase::changeNameCellRefHelper(r.bottomRight(), rect, ref, &aff, &valid2, false);
+                if (aff) affected = true;
+
+                valid = true;
+                if ((!valid1) && (!valid2)) valid = false;
+                // If one point is valid and the other one is not, we just use the calculated coordinates anyway.
+
                 if (!valid) {
                     affected = true;
                     break;
                 }
-                if (aff) affected = true;
 
                 if (topleft == bottomright)
                     newRegion.add(topleft, tgsheet, element->isColumnFixed(), element->isRowFixed());

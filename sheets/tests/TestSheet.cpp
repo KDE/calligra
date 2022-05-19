@@ -45,7 +45,7 @@ void SheetTest::testRemoveRows_data()
     QTest::newRow("range middle row")   << 1 << 1 << "=SUM(C4:C7)" << 5 << 1 << "=SUM(C4:C6)";
     QTest::newRow("range end row")      << 1 << 1 << "=SUM(C4:C7)" << 7 << 1 << "=SUM(C4:C6)";
     QTest::newRow("range after end")    << 1 << 1 << "=SUM(C4:C7)" << 8 << 1 << "=SUM(C4:C7)";
-    QTest::newRow("entire range")       << 1 << 1 << "=SUM(C4:C4)" << 4 << 1 << "=SUM(#Dependency!:#Dependency!)";
+    QTest::newRow("entire range")       << 1 << 1 << "=SUM(C4:C4)" << 4 << 1 << "=SUM(#Dependency!)";
 
     QTest::newRow("2d range before start") << 1 << 1 << "=SUM(C4:E7)" << 3 << 1 << "=SUM(C3:E6)";
     QTest::newRow("2d range start row")    << 1 << 1 << "=SUM(C4:E7)" << 4 << 1 << "=SUM(C4:E6)";
@@ -92,7 +92,7 @@ void SheetTest::testRemoveColumns_data()
     QTest::newRow("range middle row")   << "=SUM(C4:E4)" << 4 << "=SUM(C4:D4)";
     QTest::newRow("range end row")      << "=SUM(C4:E4)" << 5 << "=SUM(C4:D4)";
     QTest::newRow("range after end")    << "=SUM(C4:E4)" << 6 << "=SUM(C4:E4)";
-    QTest::newRow("entire range")       << "=SUM(C4:C4)" << 3 << "=SUM(#Dependency!:#Dependency!)";
+    QTest::newRow("entire range")       << "=SUM(C4:C4)" << 3 << "=SUM(#Dependency!)";
 
     QTest::newRow("2d range before start") << "=SUM(C4:E7)" << 2 << "=SUM(B4:D7)";
     QTest::newRow("2d range start row")    << "=SUM(C4:E7)" << 3 << "=SUM(C4:D7)";

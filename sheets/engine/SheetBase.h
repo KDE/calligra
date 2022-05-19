@@ -137,7 +137,7 @@ protected:
      * \ingroup Value
      * \see changeNameCellRef()
      */
-    QPoint changeNameCellRefHelper(const QPoint& pos, const QRect& rect, ChangeRef ref, bool *changed, bool *valid);
+    QPoint changeNameCellRefHelper(const QPoint& pos, const QRect& rect, ChangeRef ref, bool *changed, bool *valid, bool isStart);
 
     /**
      * Used by the child class to override the base storage with the full-featured one.
