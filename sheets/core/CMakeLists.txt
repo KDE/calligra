@@ -94,7 +94,7 @@ install( FILES
     PrintSettings.h
     odf/OdfLoadingContext.h
 
-DESTINATION ${INCLUDE_INSTALL_DIR}/sheets COMPONENT Devel)
+DESTINATION ${KDE_INSTALL_INCLUDEDIR}/sheets COMPONENT Devel)
 
 endif()
 

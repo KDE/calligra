@@ -71,7 +71,7 @@ install( FILES
     ValueCalc.h
     ValueConverter.h
     ValueStorage.h
-DESTINATION ${INCLUDE_INSTALL_DIR}/sheets COMPONENT Devel)
+DESTINATION ${KDE_INSTALL_INCLUDEDIR}/sheets COMPONENT Devel)
 
 endif()
 

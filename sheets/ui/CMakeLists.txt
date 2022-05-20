@@ -154,7 +154,7 @@ install( FILES
     dialogs/pivotoptions.h
     dialogs/pivotmain.h
 
-DESTINATION ${INCLUDE_INSTALL_DIR}/sheets/ui COMPONENT Devel)
+DESTINATION ${KDE_INSTALL_INCLUDEDIR}/sheets/ui COMPONENT Devel)
 
 endif()
 
@@ -177,5 +177,5 @@ set_target_properties(calligrasheetsui PROPERTIES
 )
 install(TARGETS calligrasheetsui ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-install( FILES  CellToolOptionWidgets.xml DESTINATION ${DATA_INSTALL_DIR}/calligrasheets)
+install( FILES  CellToolOptionWidgets.xml DESTINATION ${KDE_INSTALL_DATADIR}/calligrasheets)
 

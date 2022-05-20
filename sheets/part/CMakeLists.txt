@@ -100,7 +100,7 @@ install( FILES
     ToolRegistry.h
     View.h
 
-DESTINATION ${INCLUDE_INSTALL_DIR}/sheets/part COMPONENT Devel)
+DESTINATION ${KDE_INSTALL_INCLUDEDIR}/sheets/part COMPONENT Devel)
 
 endif()
 
@@ -137,10 +137,10 @@ target_link_libraries(calligrasheetspart
         calligrasheetspartlib
 )
 
-install(TARGETS calligrasheetspart  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/parts)
+install(TARGETS calligrasheetspart  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/parts)
 
-install( FILES  calligrasheets.rc calligrasheets_readonly.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/calligrasheets)
+install( FILES  calligrasheets.rc calligrasheets_readonly.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/calligrasheets)
 install( FILES  calligrasheets.kcfg DESTINATION ${KCFG_INSTALL_DIR} )
-install( FILES  calligrasheetsrc DESTINATION ${CONFIG_INSTALL_DIR})
+install( FILES  calligrasheetsrc DESTINATION ${KDE_INSTALL_CONFDIR})
 
 
