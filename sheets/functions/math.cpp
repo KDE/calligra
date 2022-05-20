@@ -840,19 +840,17 @@ Value func_mod(valVector args, ValueCalc *calc, FuncExtra *)
 // Function: fact
 Value func_fact(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    if (args[0].isInteger() || args[0].asInteger() > 0)
+    if (args[0].isInteger() && args[0].asInteger() >= 0)
         return calc->fact(args[0]);
-    else
-        return Value::errorNUM();
+    return Value::errorNUM();
 }
 
 // Function: FACTDOUBLE
 Value func_factdouble(valVector args, ValueCalc *calc, FuncExtra *)
 {
-    if (args[0].isInteger() || args[0].asInteger() > 0)
+    if (args[0].isInteger() && args[0].asInteger() >= 0)
         return calc->factDouble(args[0]);
-    else
-        return Value::errorNUM();
+    return Value::errorNUM();
 }
 
 // Function: MULTINOMIAL

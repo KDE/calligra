@@ -237,6 +237,11 @@ QString ValueFormatter::createNumberFormat(Number value, int precision,
     QString prefix, postfix;
     QString formatString(_formatString);
 
+    double dblval = double(numToDouble(value));
+    // Is it an integer within a 64bit range?
+    if (fmt != Format::Scientific)
+        if (((dblval >= 1) || (dblval <= -1)) && (dblval - ((int64_t)dblval) == 0)) precision = 8;
+
     int numExpDigits = 0; // QString::number() will be used
     // try to split formatstring into prefix, formatstring and postfix.
     if (!formatString.isEmpty() ) {
@@ -264,9 +269,6 @@ QString ValueFormatter::createNumberFormat(Number value, int precision,
     }
 
     int p = precision;
-    // Is it an integer within a 64bit range?
-    double dblval = double(numToDouble(value));
-    if (((dblval >= 1) || (dblval <= -1)) && (dblval - ((int64_t)dblval) == 0)) p = 8;
 
     if (p == -1) {
         // If precision (obtained from the cell style) is -1 (arbitrary), use the document default decimal precision

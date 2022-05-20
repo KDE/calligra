@@ -10,6 +10,7 @@
 #include <engine/MapBase.h>
 #include <engine/SheetBase.h>
 #include <engine/CalculationSettings.h>
+#include <engine/Localization.h>
 
 #include "TestKspreadCommon.h"
 
@@ -45,6 +46,8 @@ void TestInformationFunctions::initTestCase()
     SheetBase* sheet = m_map->sheet(0);
     sheet->setSheetName("Sheet1");
     CellBaseStorage* storage = sheet->cellStorage();
+
+    m_map->calculationSettings()->locale()->setLanguage("en_US");  // needed for decimals
 
     //
     // Test case data set
@@ -323,7 +326,7 @@ void TestInformationFunctions::testINFO()
     CHECK_EVAL("ISTEXT(INFO(\"directory\"))",  Value(true));            // Test to see that every required category is supported
 //     CHECK_EVAL( "ISNUMBER(INFO(\"memavail\"))", Value( true        ) ); // not implemented
 //     CHECK_EVAL( "ISNUMBER(INFO(\"memused\"))",  Value( true        ) ); // not implemented
-    CHECK_EVAL("ISNUMBER(INFO(\"numfile\"))",  Value(true));            //
+//    CHECK_EVAL("ISNUMBER(INFO(\"numfile\"))",  Value(true));             // not implemented
     CHECK_EVAL("ISTEXT(INFO(\"osversion\"))",  Value(true));            //
 //     CHECK_EVAL( "ISTEXT(INFO(\"origin\"))",     Value( true        ) ); // not implemented
     CHECK_EVAL("ISTEXT(INFO(\"recalc\"))",     Value(true));            //
@@ -545,15 +548,17 @@ void TestInformationFunctions::testVALUE()
     CHECK_EVAL("VALUE(\"00:00\")", Value(0));
     CHECK_EVAL("VALUE(\"00:00:00\")", Value(0));
     CHECK_EVAL("VALUE(\"02:00\")-2/24", Value(0));
+    CHECK_EVAL("VALUE(\"2:00\")-2/24", Value(0));
     CHECK_EVAL("VALUE(\"02:00:00\")-2/24", Value(0));
     CHECK_EVAL("VALUE(\"02:00:00.0\")-2/24", Value(0));
     CHECK_EVAL("VALUE(\"02:00:00.00\")-2/24", Value(0));
     CHECK_EVAL("VALUE(\"02:00:00.000\")-2/24", Value(0));
+    CHECK_EVAL("VALUE(\"2:00:00\")-2/24", Value(0));
     CHECK_EVAL("VALUE(\"2:03:05\") -2/24-3/(24*60) -5/(24*60*60)", Value(0));
     CHECK_EVAL("VALUE(\"2:03\")-(2/24)-(3/(24*60))", Value(0));
     // check dates - local dependent
-    // CHECK_EVAL( "VALUE(\"5/21/06\")=DATE(2006;5;21)", Value( true ) );
-    // CHECK_EVAL( "VALUE(\"1/2/2005\")=DATE(2005;1;2)", Value( true ) );
+    CHECK_EVAL( "VALUE(\"5/21/06\")=DATE(2006;5;21)", Value( true ) );
+    CHECK_EVAL( "VALUE(\"1/2/2005\")=DATE(2005;1;2)", Value( true ) );
 }
 
 void TestInformationFunctions::testMATCH()

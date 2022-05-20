@@ -14,6 +14,8 @@ namespace Calligra
 namespace Sheets
 {
 
+class MapBase;
+
 class TestTextFunctions: public QObject
 {
     Q_OBJECT
@@ -48,8 +50,12 @@ private Q_SLOTS:
     void testROT13();
     void testBAHTTEXT();
     void testTEXT();
+
+    void cleanupTestCase();
 private:
     Value evaluate(const QString&, Value& ex);
+
+    MapBase *m_map;
 };
 
 } // namespace Sheets

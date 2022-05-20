@@ -70,6 +70,36 @@ QDateTime Localization::readDateTime(const QString &str, bool *ok) const
     if (ok) *ok = false;
     QDateTime res = locale.toDateTime(str, QLocale::LongFormat);
     if (!res.isValid()) res = locale.toDateTime(str, QLocale::ShortFormat);
+
+    // let's try without AM/PM or its equivalent
+    if (!res.isValid()) {
+        QString format = dateTimeFormat(true).replace("AP", "").replace("t", "").trimmed();
+        res = locale.toDateTime(str, format);
+    }
+    if (!res.isValid()) {
+        QString format = dateTimeFormat(false).replace("AP", "").replace("t", "").trimmed();
+        res = locale.toDateTime(str, format);
+    }
+
+    // long/short year?
+    if (!res.isValid()) {
+        QString format = dateTimeFormat(true).replace("yy", "yyyy").replace("AP", "").replace("t", "").trimmed();
+        res = locale.toDateTime(str, format);
+    }
+    if (!res.isValid()) {
+        QString format = dateTimeFormat(false).replace("yy", "yyyy").replace("AP", "").replace("t", "").trimmed();
+        res = locale.toDateTime(str, format);
+    }
+    if (!res.isValid()) {
+        QString format = dateTimeFormat(true).replace("yyyy", "yy").replace("AP", "").replace("t", "").trimmed();
+        res = locale.toDateTime(str, format);
+    }
+    if (!res.isValid()) {
+        QString format = dateTimeFormat(false).replace("yyyy", "yy").replace("AP", "").replace("t", "").trimmed();
+        res = locale.toDateTime(str, format);
+    }
+
+
     if (res.isValid()) *ok = true;
     return res;
 }
@@ -87,6 +117,25 @@ QDate Localization::readDate(const QString &str, bool *ok) const
     if (ok) *ok = false;
     QDate res = locale.toDate(str, QLocale::LongFormat);
     if (!res.isValid()) res = locale.toDate(str, QLocale::ShortFormat);
+
+    // long/short year?
+    if (!res.isValid()) {
+        QString format = dateFormat(true).replace("yy", "yyyy").trimmed();
+        res = locale.toDate(str, format);
+    }
+    if (!res.isValid()) {
+        QString format = dateFormat(false).replace("yy", "yyyy").trimmed();
+        res = locale.toDate(str, format);
+    }
+    if (!res.isValid()) {
+        QString format = dateFormat(true).replace("yyyy", "yy").trimmed();
+        res = locale.toDate(str, format);
+    }
+    if (!res.isValid()) {
+        QString format = dateFormat(false).replace("yyyy", "yy").trimmed();
+        res = locale.toDate(str, format);
+    }
+
     if (res.isValid()) *ok = true;
     return res;
 }
@@ -104,6 +153,16 @@ QTime Localization::readTime(const QString &str, bool *ok) const
     if (ok) *ok = false;
     QTime res = locale.toTime(str, QLocale::LongFormat);
     if (!res.isValid()) res = locale.toTime(str, QLocale::ShortFormat);
+    
+    // let's try without AM/PM or its equivalent, also without timezones
+    if (!res.isValid()) {
+        QString format = timeFormat(true).replace("AP", "").replace("t", "").trimmed();
+        res = locale.toTime(str, format);
+    }
+    if (!res.isValid()) {
+        QString format = timeFormat(false).replace("AP", "").replace("t", "").trimmed();
+        res = locale.toTime(str, format);
+    }
     if (res.isValid()) *ok = true;
     return res;
 }
@@ -123,12 +182,12 @@ QString Localization::dateTimeFormat(bool longFormat) const
 
 QString Localization::dateFormat(bool longFormat) const
 {
-    return locale.dateTimeFormat(longFormat ? QLocale::LongFormat : QLocale::ShortFormat);
+    return locale.dateFormat(longFormat ? QLocale::LongFormat : QLocale::ShortFormat);
 }
 
 QString Localization::timeFormat(bool longFormat) const
 {
-    return locale.dateTimeFormat(longFormat ? QLocale::LongFormat : QLocale::ShortFormat);
+    return locale.timeFormat(longFormat ? QLocale::LongFormat : QLocale::ShortFormat);
 }
 
 QString Localization::dateFormat(int type) const

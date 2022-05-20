@@ -258,7 +258,7 @@ static QString removeYearFromFormat(const QString &format)
     if (yearPos == -1) return QString();
 
     QString fmt = format;
-    while ((fmt[yearPos] == 'y') || (fmt[yearPos] == 'Y'))
+    while ((fmt.length() > yearPos) && ((fmt[yearPos] == 'y') || (fmt[yearPos] == 'Y')))
         fmt.remove(yearPos, 1);
     if (yearPos == 0) {
         while (fmt.length() && fmt[0].isLetter()) fmt.remove(0, 1);

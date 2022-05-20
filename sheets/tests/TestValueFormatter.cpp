@@ -203,6 +203,8 @@ void TestValueFormatter::testCreateNumberFormat_data()
             3000.0 << 0 << Format::Number << Style::DefaultFloatFormat << "" << "" << false << "3000";
     QTest::newRow("with thousands separator") <<
             3000.0 << 0 << Format::Number << Style::DefaultFloatFormat << "" << "" << true << "3,000";
+    QTest::newRow("bigger numberr") <<
+            300000.456 << 0 << Format::Number << Style::DefaultFloatFormat << "" << "" << true << "300,000.456";
 
     // scientific
     Format::Type scient = Format::Scientific;
@@ -256,22 +258,23 @@ void TestValueFormatter::testCreateNumberFormat()
     Number num(value);
     PublicValueFormatter fmt(m_converter);
 
-    // FIXME: fix tests when ported to QLocale
     QString res = result;
+
     QString decpoint =  m_calcsettings->locale()->decimalSymbol();
     QString thousep = m_calcsettings->locale()->thousandsSeparator();
     int decimalpos = res.indexOf('.');
     if (thousep != ",") {
         if (res.contains(',')) {
-            res = res.replace(',', thousep.at(0));
+            res = res.replace(',', thousep);
         }
     }
     if (decpoint != ".") {
         if (decimalpos != -1) {
             decimalpos = res.lastIndexOf('.'); // the thousand separator may now be '.'
-            res = res.replace(decimalpos, 1, decpoint.at(0));
+            res = res.replace(decimalpos, 1, decpoint);
         }
     }
+
     QCOMPARE(fmt.createNumberFormat(num, precision, formatType, floatFormat, currencySymbol, formatString, thousandsSep), res);
 }
 

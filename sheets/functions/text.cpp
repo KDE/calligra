@@ -347,10 +347,6 @@ Value func_fixed(valVector args, ValueCalc *calc, FuncExtra *)
     QString result;
     const Localization *locale = calc->settings()->locale();
 
-    // unfortunately, we can't just use KLocale::formatNumber because
-    // * if decimals < 0, number is rounded
-    // * if no_commas is true, thousand separators shouldn't show up
-
     if (decimalsIsNegative) {
         number = floor(number / pow(10.0, decimals) + 0.5) * pow(10.0, decimals);
         decimals = 0;
@@ -360,14 +356,21 @@ Value func_fixed(valVector args, ValueCalc *calc, FuncExtra *)
     result = QString::number(neg ? -number : number, 'f', decimals);
 
     int pos = result.indexOf('.');
+    if ((pos == -1) && decimals) {
+        result += '.';
+        pos = result.length() - 1;
+    }
     if (pos == -1) pos = result.length();
-    else result.replace(pos, 1, locale->decimalSymbol());
+    else {
+        result.replace(pos, 1, locale->decimalSymbol());
+        // add missing decimals
+        while (result.length() - pos < 1 + decimals) result += "0";
+    }
     if (!no_commas)
         while (0 < (pos -= 3))
             result.insert(pos, locale->thousandsSeparator());
 
-    result.prepend(neg ? locale->negativeSign() :
-                   locale->positiveSign());
+    result.prepend(neg ? locale->negativeSign() : QString());
 
     return Value(result);
 }

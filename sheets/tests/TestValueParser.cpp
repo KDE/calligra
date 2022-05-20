@@ -37,7 +37,6 @@ void TestValueParser::initTestCase()
     // Some tests need translations of certain words.
     // These are available in .mo file in the data directory.
     // Install these xx translations into test path for some arbitrary language.
-    // We use the 'nl'.
 /*
  * This no longer works with the new QLocale-based translations, so disabling it for now.
     QString locale = USE_LOCALE;
@@ -389,13 +388,13 @@ void TestValueParser::testTryParseTime_data(bool addCol)
         << Value(QTime(22, 11, 12));
     QTest::newRow("pm with seconds us") << "en_US" << "10:11:12 pm" << true
         << Value(QTime(22, 11, 12));
-    QTest::newRow("pm with seconds nl") << USE_LOCALE << "10:11:12" << true
+    QTest::newRow("pm with seconds nl") << USE_LOCALE << "22:11:12" << true
         << Value(QTime(22, 11, 12));
     QTest::newRow("pm w/o seconds") << "C" << "10:11 pm" << true
         << Value(QTime(22, 11));
     QTest::newRow("pm w/o seconds us") << "en_US" << "10:11 pm" << true
         << Value(QTime(22, 11));
-    QTest::newRow("pm w/o seconds nl") << USE_LOCALE << "10:11" << true
+    QTest::newRow("pm w/o seconds nl") << USE_LOCALE << "22:11" << true
         << Value(QTime(22, 11));
     QTest::newRow("negative time") << "C" << "-1:30:10" << true
         << Value(QTime(22, 29, 50));
