@@ -7,6 +7,6 @@ calligra_filter_desktop_to_json(calligra_filter_dbase2kspread calligra_filter_db
 
 target_link_libraries(calligra_filter_dbase2kspread komain)
 
-install(TARGETS calligra_filter_dbase2kspread  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
+install(TARGETS calligra_filter_dbase2kspread  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/formatfilters)
 
 

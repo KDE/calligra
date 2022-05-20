@@ -47,4 +47,4 @@ target_link_libraries(
     Qt5::Gui
     )
 
-install(TARGETS kpr_pageeffect_matrixwipe  DESTINATION ${PLUGIN_INSTALL_DIR}/calligrastage/pageeffects)
+install(TARGETS kpr_pageeffect_matrixwipe  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligrastage/pageeffects)

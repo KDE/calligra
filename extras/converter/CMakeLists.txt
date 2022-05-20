@@ -7,5 +7,5 @@ ecm_mark_nongui_executable(calligraconverter)
 
 target_link_libraries(calligraconverter komain)
 
-install(TARGETS calligraconverter ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS calligraconverter ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 

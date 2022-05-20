@@ -4,5 +4,5 @@ ecm_install_icons(
         22-actions-statetool.png
         sc-actions-stateshape.svg
 
-    DESTINATION ${DATA_INSTALL_DIR}/calligra/icons
+    DESTINATION ${KDE_INSTALL_DATADIR}/calligra/icons
 )

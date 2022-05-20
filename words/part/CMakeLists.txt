@@ -136,7 +136,7 @@ endif()
 set_target_properties(wordsprivate
     PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
-install(TARGETS wordsprivate  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS wordsprivate  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### WordsPart Library ###############
 
@@ -149,13 +149,13 @@ calligra_part_desktop_to_json(calligrawordspart wordspart.desktop)
 
 target_link_libraries(calligrawordspart   wordsprivate KF5::CoreAddons)
 
-install(TARGETS calligrawordspart  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/parts)
+install(TARGETS calligrawordspart  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/parts)
 
 
 ########### install files ###############
 
-install( FILES calligrawords.rc calligrawords_readonly.rc  DESTINATION ${KXMLGUI_INSTALL_DIR}/calligrawords)
-install( FILES calligrawordsrc DESTINATION ${CONFIG_INSTALL_DIR} )
+install( FILES calligrawords.rc calligrawords_readonly.rc  DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/calligrawords)
+install( FILES calligrawordsrc DESTINATION ${KDE_INSTALL_CONFDIR} )
 
 if (SHOULD_BUILD_DEVEL_HEADERS)
 
@@ -174,14 +174,14 @@ KWApplicationConfig.h
 KWViewMode.h
 KWView.h
 KWViewModeNormal.h
-DESTINATION ${INCLUDE_INSTALL_DIR}/calligrawords/part COMPONENT Devel)
+DESTINATION ${KDE_INSTALL_INCLUDEDIR}/calligrawords/part COMPONENT Devel)
 
 install( FILES
 frames/KWFrame.h
 frames/KWFrameLayout.h
 frames/KWFrameSet.h
 frames/KWTextFrameSet.h
-DESTINATION ${INCLUDE_INSTALL_DIR}/calligrawords/part/frames COMPONENT Devel)
+DESTINATION ${KDE_INSTALL_INCLUDEDIR}/calligrawords/part/frames COMPONENT Devel)
 
 endif()
 

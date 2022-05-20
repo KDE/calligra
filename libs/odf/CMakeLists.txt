@@ -64,7 +64,7 @@ target_link_libraries(koodf
 set_target_properties(koodf PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
-install(TARGETS koodf ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install(TARGETS koodf ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
 
 
 if (SHOULD_BUILD_DEVEL_HEADERS)
@@ -103,6 +103,6 @@ install( FILES
     KoUnit.h
     KoElementReference.h
     KoTableTemplate.h
-DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)
+DESTINATION ${KDE_INSTALL_INCLUDEDIR}/calligra COMPONENT Devel)
 
 endif()

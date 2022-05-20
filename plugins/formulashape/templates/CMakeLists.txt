@@ -1,1 +1,1 @@
-install( FILES  DESTINATION ${DATA_INSTALL_DIR}/calligra_shape_formula/templates )
+install( FILES  DESTINATION ${KDE_INSTALL_DATADIR}/calligra_shape_formula/templates )

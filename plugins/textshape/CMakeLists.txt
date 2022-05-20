@@ -197,4 +197,4 @@ if( SHOULD_BUILD_FEATURE_RDF )
     target_link_libraries(calligra_shape_text ${SOPRANO_LIBRARIES})
 endif()
 
-install(TARGETS calligra_shape_text DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/shapes)
+install(TARGETS calligra_shape_text DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/shapes)

@@ -8,11 +8,11 @@ add_library(braindumpquickstates MODULE ${braindumpquickstates_PART_SRCS})
 
 target_link_libraries(braindumpquickstates ${FLAKE_LIBRARY} ${KOTEXT_LIBRARY} ${KOBASE_LIBRARY}  braindumpcore)
 
-install(TARGETS braindumpquickstates  DESTINATION ${PLUGIN_INSTALL_DIR}/braindump/extensions)
+install(TARGETS braindumpquickstates  DESTINATION ${KDE_INSTALL_PLUGINDIR}/braindump/extensions)
 
 braindump_extensions_desktop_to_json(braindumpquickstates braindumpquickstates.desktop)
 
 ########### install files ###############
 
-install( FILES  quickstates.rc  DESTINATION ${DATA_INSTALL_DIR}/braindump/plugins)
-install( FILES  braindumpquickstates.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/calligra)
+install( FILES  quickstates.rc  DESTINATION ${KDE_INSTALL_DATADIR}/braindump/plugins)
+install( FILES  braindumpquickstates.desktop  DESTINATION ${KDE_INSTALL_KSERVICES5DIR}/calligra)

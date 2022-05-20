@@ -9,4 +9,4 @@ calligra_filter_desktop_to_json(calligra_filter_applixword2odt calligra_filter_a
 
 target_link_libraries(calligra_filter_applixword2odt komain)
 
-install(TARGETS calligra_filter_applixword2odt  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
+install(TARGETS calligra_filter_applixword2odt  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/formatfilters)

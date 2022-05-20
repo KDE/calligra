@@ -69,7 +69,7 @@ target_link_libraries(kopageapp
 set_target_properties(kopageapp PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
-install(TARGETS kopageapp  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kopageapp  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 if (SHOULD_BUILD_DEVEL_HEADERS)
 
@@ -93,7 +93,7 @@ install(FILES
     KoPAViewModeNormal.h
     tools/backgroundTool/KoPABackgroundTool.h
     DESTINATION
-    ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel
+    ${KDE_INSTALL_INCLUDEDIR}/calligra COMPONENT Devel
 )
 
 endif()

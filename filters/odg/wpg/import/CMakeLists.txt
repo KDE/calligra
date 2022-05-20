@@ -18,8 +18,8 @@ calligra_filter_desktop_to_json(calligra_filter_wpg2odg calligra_filter_wpg2odg.
 
 target_link_libraries(calligra_filter_wpg2odg komain ${LIBODFGEN_LIBRARIES} ${LIBREVENGE_LIBRARIES} ${LIBWPG_LIBRARIES})
 
-install(TARGETS calligra_filter_wpg2odg DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
+install(TARGETS calligra_filter_wpg2odg DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/formatfilters)
 
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
-    install(FILES flow_wpg_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+    install(FILES flow_wpg_thumbnail.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR})
 endif()

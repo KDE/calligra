@@ -14,10 +14,10 @@ calligra_filter_desktop_to_json(calligra_filter_karbon1x2karbon calligra_filter_
 
 target_link_libraries(calligra_filter_karbon1x2karbon karboncommon)
 
-install(TARGETS calligra_filter_karbon1x2karbon DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
+install(TARGETS calligra_filter_karbon1x2karbon DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/formatfilters)
 
 ########### install files ###############
 
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
-    install( FILES karbon_karbon1x_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+    install( FILES karbon_karbon1x_thumbnail.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR})
 endif()

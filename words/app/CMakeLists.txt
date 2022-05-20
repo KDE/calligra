@@ -19,15 +19,15 @@ if (APPLE)
    set_target_properties(calligrawords PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.template)
    set_target_properties(calligrawords PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.kde.calligrawords")
    set_target_properties(calligrawords PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "Words")
-   install( FILES ${CMAKE_CURRENT_BINARY_DIR}/words_KDEINIT_SRCS.icns DESTINATION ${BUNDLE_INSTALL_DIR}/calligrawords.app/Contents/Resources)
+   install( FILES ${CMAKE_CURRENT_BINARY_DIR}/words_KDEINIT_SRCS.icns DESTINATION ${KDE_INSTALL_BUNDLEDIR}/calligrawords.app/Contents/Resources)
 endif ()
 
 target_link_libraries(kdeinit_calligrawords   komain )
 
-install(TARGETS kdeinit_calligrawords  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kdeinit_calligrawords  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 target_link_libraries( calligrawords kdeinit_calligrawords )
-install(TARGETS calligrawords  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS calligrawords  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
-install( PROGRAMS org.kde.calligrawords.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
+install( PROGRAMS org.kde.calligrawords.desktop  DESTINATION ${KDE_INSTALL_APPDIR})
 install( FILES org.kde.calligrawords.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})

@@ -37,5 +37,5 @@ target_link_libraries(krossmodulesheets
     kokross
 )
 
-install(TARGETS krossmodulesheets DESTINATION ${PLUGIN_INSTALL_DIR}/calligrasheets/extensions)
-install( FILES scripting.rc  DESTINATION ${DATA_INSTALL_DIR}/calligrasheets/viewplugins)
+install(TARGETS krossmodulesheets DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligrasheets/extensions)
+install( FILES scripting.rc  DESTINATION ${KDE_INSTALL_DATADIR}/calligrasheets/viewplugins)

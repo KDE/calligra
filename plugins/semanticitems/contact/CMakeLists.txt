@@ -27,4 +27,4 @@ endif ()
 target_link_libraries(calligra_semanticitem_contact   ${KORDF_LIBS} KF5::I18n KF5::KDELibs4Support)
 calligra_semanticitem_desktop_to_json(calligra_semanticitem_contact calligra_semanticitem_contact.desktop)
 
-install(TARGETS calligra_semanticitem_contact  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/semanticitems)
+install(TARGETS calligra_semanticitem_contact  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/semanticitems)

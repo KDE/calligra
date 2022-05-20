@@ -1,1 +1,1 @@
-install(FILES stage.zip DESTINATION ${DATA_INSTALL_DIR}/calligrastage/templates/exportHTML/templates)
+install(FILES stage.zip DESTINATION ${KDE_INSTALL_DATADIR}/calligrastage/templates/exportHTML/templates)

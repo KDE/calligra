@@ -28,6 +28,6 @@ ecm_install_icons(
         sc-actions-text-remove-from-path.svg
         sc-actions-artistictext-tool.svg
         sc-actions-table.svgz
-    DESTINATION ${DATA_INSTALL_DIR}/calligra/icons
+    DESTINATION ${KDE_INSTALL_DATADIR}/calligra/icons
     THEME hicolor
 )

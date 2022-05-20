@@ -7,8 +7,7 @@ if (SHOULD_BUILD_PART_SHEETS)
 include_directories( ${KOMAIN_INCLUDES}
                     ${KOTEXT_INCLUDES}
                     ${TEXTLAYOUT_INCLUDES}
-                    ${Boost_INCLUDE_DIR}
-                    ${EIGEN3_INCLUDE_DIR} )
+                    ${Boost_INCLUDE_DIR} )
 
 #add_definitions(-DCALLIGRA_SHEETS_MT)
 
@@ -38,9 +37,7 @@ endif (SHOULD_BUILD_PART_SHEETS)
 ########### APP ###############
 
 if (SHOULD_BUILD_APP_SHEETS)
-
 add_subdirectory( app )
-
 endif ()
 
 

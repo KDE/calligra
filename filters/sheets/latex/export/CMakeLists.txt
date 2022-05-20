@@ -27,4 +27,4 @@ calligra_filter_desktop_to_json(calligra_filter_kspread2tex calligra_filter_kspr
 
 target_link_libraries(calligra_filter_kspread2tex komain)
 
-install(TARGETS calligra_filter_kspread2tex  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
+install(TARGETS calligra_filter_kspread2tex  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/formatfilters)

@@ -21,7 +21,7 @@ set_target_properties(kookularGenerator_odp PROPERTIES
    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 
-install(TARGETS kookularGenerator_odp  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kookularGenerator_odp  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ## odp generator plugin
@@ -35,5 +35,5 @@ target_link_libraries( okularGenerator_odp_calligra
     kookularGenerator_odp
 )
 
-install( FILES okularOdp_calligra.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-install( PROGRAMS okularApplication_odp_calligra.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
+install( FILES okularOdp_calligra.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR} )
+install( PROGRAMS okularApplication_odp_calligra.desktop DESTINATION ${KDE_INSTALL_APPDIR} )

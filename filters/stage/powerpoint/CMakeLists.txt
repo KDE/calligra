@@ -21,10 +21,10 @@ calligra_filter_desktop_to_json(calligra_filter_ppt2odp calligra_filter_ppt2odp.
 
 target_link_libraries(calligra_filter_ppt2odp ppttoodplib komain)
 
-install(TARGETS calligra_filter_ppt2odp  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
+install(TARGETS calligra_filter_ppt2odp  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/formatfilters)
 
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
-    install( FILES  stage_powerpoint_thumbnail.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+    install( FILES  stage_powerpoint_thumbnail.desktop  DESTINATION ${KDE_INSTALL_KSERVICES5DIR})
 endif()
 
 if(SHOULD_BUILD_OKULAR_GENERATOR_PPT)
@@ -37,6 +37,6 @@ if(SHOULD_BUILD_OKULAR_GENERATOR_PPT)
         kookularGenerator_odp
     )
 
-    install( FILES okularPowerpoint_calligra.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-    install( PROGRAMS okularApplication_powerpoint_calligra.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
+    install( FILES okularPowerpoint_calligra.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR} )
+    install( PROGRAMS okularApplication_powerpoint_calligra.desktop DESTINATION ${KDE_INSTALL_APPDIR} )
 endif()

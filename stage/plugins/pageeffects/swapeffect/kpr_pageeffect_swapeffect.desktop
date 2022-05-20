@@ -2,7 +2,7 @@
 Name=Swap Effect
 Name[bs]=Efekt izmjene
 Name[ca]=Efecte d'escombrat
-Name[ca@valencia]=Efecte d'escombrat
+Name[ca@valencia]=Efecte d'agranat
 Name[da]=Ombytningseffekt
 Name[de]=Wechseleffekt
 Name[el]=Εφέ ανταλλαγής
@@ -35,7 +35,7 @@ Name[zh_TW]=變換效果
 Comment=Swap Page Effect
 Comment[bs]=Efekat izmjene strane
 Comment[ca]=Efecte d'escombrat de pàgina
-Comment[ca@valencia]=Efecte d'escombrat de pàgina
+Comment[ca@valencia]=Efecte d'agranat de pàgina
 Comment[da]=Sideombytningseffekt
 Comment[de]=Seitenwechseleffekt
 Comment[el]=Εφέ ανταλλαγής σελίδας

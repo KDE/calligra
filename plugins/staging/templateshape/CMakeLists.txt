@@ -38,8 +38,8 @@ target_link_libraries(calligra_shape_template flake)
 #Template: Possibly you need to link with komain too.
 #target_link_libraries(templateshape komain flake)
 
-install(TARGETS calligra_shape_template DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/shapes)
+install(TARGETS calligra_shape_template DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/shapes)
 
 ########### install files ###############
 
-ecm_install_icons( ${DATA_INSTALL_DIR}/calligra/icons )
+ecm_install_icons( ${KDE_INSTALL_DATADIR}/calligra/icons )

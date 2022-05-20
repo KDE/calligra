@@ -20,4 +20,4 @@ calligra_shape_desktop_to_json(calligra_shape_comment calligra_shape_comment.des
 
 target_link_libraries(calligra_shape_comment kotextlayout)
 
-install(TARGETS calligra_shape_comment DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/shapes)
+install(TARGETS calligra_shape_comment DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/shapes)

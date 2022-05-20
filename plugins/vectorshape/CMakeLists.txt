@@ -31,13 +31,13 @@ target_link_libraries(calligra_shape_vector
     Qt5::Svg
 )
 
-install(TARGETS calligra_shape_vector DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/shapes)
+install(TARGETS calligra_shape_vector DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/shapes)
 
 ########### install files ###############
 
 if (SharedMimeInfo_FOUND)
-    install(FILES calligra_svm.xml DESTINATION ${XDG_MIME_INSTALL_DIR})
-    update_xdg_mimetypes(${XDG_MIME_INSTALL_DIR})
+    install(FILES calligra_svm.xml DESTINATION ${KDE_INSTALL_MIMEDIR})
+    update_xdg_mimetypes(${KDE_INSTALL_MIMEDIR})
 endif ()
 
 ########### subdirectories ###############

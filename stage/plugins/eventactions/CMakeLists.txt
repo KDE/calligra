@@ -20,4 +20,4 @@ target_link_libraries(
     Qt5::Gui
 )
 
-install(TARGETS calligrastageeventactions  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/presentationeventactions)
+install(TARGETS calligrastageeventactions  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/presentationeventactions)

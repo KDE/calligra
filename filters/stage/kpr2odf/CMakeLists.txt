@@ -11,8 +11,8 @@ calligra_filter_desktop_to_json(calligra_filter_kpr2odp calligra_filter_kpr2odp.
 
 target_link_libraries(calligra_filter_kpr2odp komain)
 
-install(TARGETS calligra_filter_kpr2odp DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
+install(TARGETS calligra_filter_kpr2odp DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/formatfilters)
 
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
-    install( FILES  stage_kpr_thumbnail.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+    install( FILES  stage_kpr_thumbnail.desktop  DESTINATION ${KDE_INSTALL_KSERVICES5DIR})
 endif()

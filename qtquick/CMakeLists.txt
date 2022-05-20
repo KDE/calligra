@@ -88,5 +88,5 @@ target_link_libraries(calligraqtquickcomponentsplugin
     calligrastageprivate)
 
 install(TARGETS calligraqtquickcomponentsplugin
-    DESTINATION ${QML_INSTALL_DIR}/org/calligra/CalligraComponents)
-install(FILES qmldir DESTINATION ${QML_INSTALL_DIR}/org/calligra/CalligraComponents)
+    DESTINATION ${KDE_INSTALL_QMLDIR}/org/calligra/CalligraComponents)
+install(FILES qmldir DESTINATION ${KDE_INSTALL_QMLDIR}/org/calligra/CalligraComponents)

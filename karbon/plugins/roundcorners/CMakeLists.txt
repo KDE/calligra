@@ -14,9 +14,9 @@ karbon_viewplugin_desktop_to_json(karbon_roundcorners karbon_roundcorners.deskto
 
 target_link_libraries(karbon_roundcorners karboncommon)
 
-install(TARGETS karbon_roundcorners  DESTINATION ${PLUGIN_INSTALL_DIR}/karbon/extensions)
+install(TARGETS karbon_roundcorners  DESTINATION ${KDE_INSTALL_PLUGINDIR}/karbon/extensions)
 
 
 ########### install files ###############
 
-install( FILES  RoundCornersPlugin.rc  DESTINATION ${DATA_INSTALL_DIR}/karbon/plugins)
+install( FILES  RoundCornersPlugin.rc  DESTINATION ${KDE_INSTALL_DATADIR}/karbon/plugins)

@@ -38,12 +38,12 @@ target_link_libraries(
     calligrasheetscore
 )
 
-install(TARGETS calligra_filter_xlsx2ods DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
+install(TARGETS calligra_filter_xlsx2ods DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/formatfilters)
 
 ########### install files ###############
 
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
-    install( FILES sheets_xlsx_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+    install( FILES sheets_xlsx_thumbnail.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR})
 endif()
 
 ########## unit tests ###################

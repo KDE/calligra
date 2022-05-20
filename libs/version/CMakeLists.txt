@@ -17,7 +17,7 @@ generate_export_header(koversion BASE_NAME koversion)
 set_target_properties(koversion PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
-install(TARGETS koversion ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install(TARGETS koversion ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
 
 if (SHOULD_BUILD_DEVEL_HEADERS)
 
@@ -25,6 +25,6 @@ install( FILES
     ${CMAKE_CURRENT_BINARY_DIR}/calligraversion.h
     ${CMAKE_CURRENT_BINARY_DIR}/calligragitversion.h
     ${CMAKE_CURRENT_BINARY_DIR}/koversion_export.h
-DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)
+DESTINATION ${KDE_INSTALL_INCLUDEDIR}/calligra COMPONENT Devel)
 
 endif()

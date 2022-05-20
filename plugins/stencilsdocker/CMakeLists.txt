@@ -16,6 +16,6 @@ calligra_docker_desktop_to_json(calligra_docker_stencils calligra_docker_stencil
 
 target_link_libraries(calligra_docker_stencils komain kowidgets flake KF5::Archive KF5::IconThemes)
 
-install(TARGETS calligra_docker_stencils DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/dockers)
+install(TARGETS calligra_docker_stencils DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/dockers)
 
 add_subdirectory(stencils)

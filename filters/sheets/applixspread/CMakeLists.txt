@@ -8,4 +8,4 @@ calligra_filter_desktop_to_json(calligra_filter_applixspread2kspread calligra_fi
 
 target_link_libraries(calligra_filter_applixspread2kspread komain calligrasheetsengine)
 
-install(TARGETS calligra_filter_applixspread2kspread  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
+install(TARGETS calligra_filter_applixspread2kspread  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/formatfilters)

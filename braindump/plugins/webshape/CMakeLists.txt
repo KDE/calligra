@@ -24,6 +24,6 @@ target_link_libraries(
     Qt5::WebKitWidgets
     Qt5::Svg
     )
-install(TARGETS braindump_shape_web DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/shapes)
+install(TARGETS braindump_shape_web DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/shapes)
 
 calligra_shape_desktop_to_json(braindump_shape_web braindump_shape_web.desktop)

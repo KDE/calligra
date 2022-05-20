@@ -242,7 +242,7 @@ set_target_properties(flake PROPERTIES
 
 ########### install files ###############
 
-install(TARGETS flake  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS flake  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 # TODO: with the new embedded JSON data for plugins there is no schema ATM to define extended properties
 #     flake.desktop
 #     flaketool.desktop
@@ -355,7 +355,7 @@ install(
     tools/KoPanTool.h
     KoViewConverter.h
     DESTINATION
-    ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel
+    ${KDE_INSTALL_INCLUDEDIR}/calligra COMPONENT Devel
 )
 
 endif()

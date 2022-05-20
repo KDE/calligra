@@ -13,7 +13,7 @@ include_directories( ${KOMAIN_INCLUDES} )
 #target_link_libraries(kwmf   Qt5::Gui)
 #
 #set_target_properties(kwmf PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
-#install(TARGETS kwmf  ${INSTALL_TARGETS_DEFAULT_ARGS})
+#install(TARGETS kwmf  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ########### next target ###############
@@ -33,5 +33,5 @@ add_library(libwmf SHARED ${libwmf_LIB_SRCS})
 target_link_libraries(libwmf   Qt5::Gui)
 
 set_target_properties(libwmf PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
-install(TARGETS libwmf  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS libwmf  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 

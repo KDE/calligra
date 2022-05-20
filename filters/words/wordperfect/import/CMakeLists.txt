@@ -20,10 +20,10 @@ calligra_filter_desktop_to_json(calligra_filter_wpd2odt calligra_filter_wpd2odt.
 target_link_libraries(calligra_filter_wpd2odt
     komain ${LIBODFGEN_LIBRARIES} ${LIBREVENGE_LIBRARIES} ${LIBWPD_LIBRARIES} ${LIBWPG_LIBRARIES})
 
-install(TARGETS calligra_filter_wpd2odt DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
+install(TARGETS calligra_filter_wpd2odt DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/formatfilters)
 
 if(SHOULD_BUILD_FILEMANAGER_THUMBNAIL)
-    install( FILES words_wpd_thumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+    install( FILES words_wpd_thumbnail.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR})
 endif()
 
 if(SHOULD_BUILD_OKULAR_GENERATOR_WORDPERFECT)
@@ -36,6 +36,6 @@ if(SHOULD_BUILD_OKULAR_GENERATOR_WORDPERFECT)
         kookularGenerator_odt
     )
 
-    install( FILES okularWpd_calligra.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-    install( PROGRAMS okularApplication_wpd_calligra.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
+    install( FILES okularWpd_calligra.desktop DESTINATION ${KDE_INSTALL_KSERVICES5DIR} )
+    install( PROGRAMS okularApplication_wpd_calligra.desktop DESTINATION ${KDE_INSTALL_APPDIR} )
 endif()

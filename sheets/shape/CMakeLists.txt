@@ -36,8 +36,8 @@ target_link_libraries(calligra_shape_spreadsheet
 )
 # target_link_libraries(calligra_shape_spreadsheet flake)
 
-# install(TARGETS calligra_shape_spreadsheet-deferred DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/deferred)
-install(TARGETS calligra_shape_spreadsheet DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/shapes)
+# install(TARGETS calligra_shape_spreadsheet-deferred DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/deferred)
+install(TARGETS calligra_shape_spreadsheet DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/shapes)
 
 ########### install files ###############
 
@@ -46,6 +46,6 @@ ecm_install_icons( ICONS
     22-actions-tool_cellformatting.png
     32-actions-spreadsheetshape.png
 
-    DESTINATION ${DATA_INSTALL_DIR}/calligra/icons
+    DESTINATION ${KDE_INSTALL_DATADIR}/calligra/icons
     THEME hicolor
 )

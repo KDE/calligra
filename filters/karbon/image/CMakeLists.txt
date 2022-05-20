@@ -11,4 +11,4 @@ calligra_filter_desktop_to_json(calligra_filter_karbon2image calligra_filter_kar
 
 target_link_libraries(calligra_filter_karbon2image karbonui komain kopageapp)
 
-install(TARGETS calligra_filter_karbon2image  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
+install(TARGETS calligra_filter_karbon2image  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/formatfilters)

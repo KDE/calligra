@@ -20,4 +20,4 @@ calligra_filter_desktop_to_json(calligra_filter_qpro2sheets calligra_filter_qpro
 
 target_link_libraries(calligra_filter_qpro2sheets calligrasheetsui)
 
-install(TARGETS calligra_filter_qpro2sheets  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
+install(TARGETS calligra_filter_qpro2sheets  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/formatfilters)

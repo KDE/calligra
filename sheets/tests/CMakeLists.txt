@@ -2,7 +2,6 @@ set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories(
     ${CMAKE_SOURCE_DIR}/sheets
     ${CMAKE_BINARY_DIR}/sheets
-    ${EIGEN3_INCLUDE_DIR}
     ${KOMAIN_INCLUDES}
 )
 

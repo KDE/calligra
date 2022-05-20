@@ -32,7 +32,7 @@ set_target_properties(kowidgetutils
     PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
 
-install(TARGETS kowidgetutils ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kowidgetutils ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 if (SHOULD_BUILD_DEVEL_HEADERS)
 
@@ -46,7 +46,7 @@ install(FILES
     KoFileDialog.h
     KoKineticScroller.h
     ${CMAKE_CURRENT_BINARY_DIR}/kowidgetutils_export.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/calligra
+    DESTINATION ${KDE_INSTALL_INCLUDEDIR}/calligra
     COMPONENT Devel
 )
 

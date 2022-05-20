@@ -96,6 +96,6 @@ set_target_properties( kowv2 PROPERTIES
                   LT_DEPENDENCY_LIBS ${WV2_LDFLAGS}
             )
 
-install( TARGETS kowv2 ${INSTALL_TARGETS_DEFAULT_ARGS}
+install( TARGETS kowv2 ${KDE_INSTALL_TARGETS_DEFAULT_ARGS}
 )
 

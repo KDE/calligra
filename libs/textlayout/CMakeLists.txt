@@ -45,7 +45,7 @@ target_link_libraries(kotextlayout
 set_target_properties(kotextlayout PROPERTIES
    VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
-install(TARGETS kotextlayout  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kotextlayout  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 if (SHOULD_BUILD_DEVEL_HEADERS)
 
@@ -58,7 +58,7 @@ install(
     KoPointedAt.h
     KoStyleThumbnailer.h
     DESTINATION
-    ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel
+    ${KDE_INSTALL_INCLUDEDIR}/calligra COMPONENT Devel
 )
 
 endif()

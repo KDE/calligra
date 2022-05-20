@@ -12,7 +12,7 @@ calligra_filter_desktop_to_json(calligra_filter_csv2sheets calligra_filter_csv2s
 
 target_link_libraries(calligra_filter_csv2sheets calligrasheetsui kowidgets)
 
-install(TARGETS calligra_filter_csv2sheets DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
+install(TARGETS calligra_filter_csv2sheets DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/formatfilters)
 
 endif()
 
@@ -28,6 +28,6 @@ calligra_filter_desktop_to_json(calligra_filter_sheets2csv calligra_filter_sheet
 
 target_link_libraries(calligra_filter_sheets2csv calligrasheetsui calligrasheetspartlib)
 
-install(TARGETS calligra_filter_sheets2csv  DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/formatfilters)
+install(TARGETS calligra_filter_sheets2csv  DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/formatfilters)
 
 endif()

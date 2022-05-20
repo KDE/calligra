@@ -73,6 +73,6 @@ ecm_install_icons( ICONS
     32-actions-under.png
     32-actions-vector.png
 
-    DESTINATION ${DATA_INSTALL_DIR}/calligra/icons
+    DESTINATION ${KDE_INSTALL_DATADIR}/calligra/icons
     THEME hicolor
 )

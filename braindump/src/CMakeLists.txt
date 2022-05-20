@@ -49,4 +49,4 @@ add_executable(braindump ${braindump_SRCS})
 
 target_link_libraries(braindump braindumpcore komain kowidgets kotext flake koplugin KF5::IconThemes)
 
-install(TARGETS braindump ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS braindump ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})

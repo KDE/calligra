@@ -65,7 +65,7 @@ target_link_libraries(koodf2
 set_target_properties(koodf2 PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
-install(TARGETS koodf2 ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install(TARGETS koodf2 ${KDE_INSTALL_TARGETS_DEFAULT_ARGS} )
 
 
 if (SHOULD_BUILD_DEVEL_HEADERS)
@@ -97,6 +97,6 @@ install( FILES
     chart/Charting.h
     chart/KoOdfChartWriter.h
 
-DESTINATION ${INCLUDE_INSTALL_DIR}/calligra COMPONENT Devel)
+DESTINATION ${KDE_INSTALL_INCLUDEDIR}/calligra COMPONENT Devel)
 
 endif()

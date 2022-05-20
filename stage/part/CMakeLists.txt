@@ -173,7 +173,7 @@ if(HAVE_OPENGL)
 endif()
 
 set_target_properties(calligrastageprivate PROPERTIES VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION} )
-install(TARGETS calligrastageprivate  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS calligrastageprivate  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 ### calligrastagepart ###
 set(calligrastagepart_PART_SRCS KPrFactoryInit.cpp )
@@ -184,17 +184,17 @@ calligra_part_desktop_to_json(calligrastagepart stagepart.desktop)
 
 target_link_libraries(calligrastagepart calligrastageprivate )
 
-install(TARGETS calligrastagepart DESTINATION ${PLUGIN_INSTALL_DIR}/calligra/parts)
+install(TARGETS calligrastagepart DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligra/parts)
 
 ### GUI files ###
-install( FILES calligrastage.rc calligrastage_readonly.rc DESTINATION ${KXMLGUI_INSTALL_DIR}/calligrastage)
+install( FILES calligrastage.rc calligrastage_readonly.rc DESTINATION ${KDE_INSTALL_KXMLGUI5DIR}/calligrastage)
 
-install( FILES calligrastagerc DESTINATION ${CONFIG_INSTALL_DIR} )
+install( FILES calligrastagerc DESTINATION ${KDE_INSTALL_CONFDIR} )
 
 ### Predefined Animations ###
 install(FILES
         animations/animations.xml
-        DESTINATION ${DATA_INSTALL_DIR}/calligrastage/animations)
+        DESTINATION ${KDE_INSTALL_DATADIR}/calligrastage/animations)
 
 ### Include files ###
 if (SHOULD_BUILD_DEVEL_HEADERS)
@@ -212,18 +212,18 @@ install( FILES
         KPrShapeAnimations.h
         KPrView.h
         KPrViewModePresentation.h
-        DESTINATION ${INCLUDE_INSTALL_DIR}/calligrastage/part
+        DESTINATION ${KDE_INSTALL_INCLUDEDIR}/calligrastage/part
         COMPONENT Devel)
 
 install( FILES 
          animations/KPrAnimationData.h
          animations/KPrAnimationStep.h
          animations/KPrShapeAnimation.h
-         DESTINATION ${INCLUDE_INSTALL_DIR}/calligrastage/part/animations
+         DESTINATION ${KDE_INSTALL_INCLUDEDIR}/calligrastage/part/animations
          COMPONENT Devel)
 
 install( FILES
          pagelayout/KPrPlaceholders.h
-         DESTINATION ${INCLUDE_INSTALL_DIR}/calligrastage/part/pagelayout
+         DESTINATION ${KDE_INSTALL_INCLUDEDIR}/calligrastage/part/pagelayout
          COMPONENT Devel)
 endif()
