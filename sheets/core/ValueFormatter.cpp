@@ -625,7 +625,7 @@ QString ValueFormatter::dateFormat(const QDate &date, Format::Type fmtType, cons
     if (fmtType == Format::Date8) ftype = 8;
     if (ftype) {
         QString format = locale->dateFormat(ftype);
-        return locale->formatDate(date, ftype);
+        return locale->formatDate(date, format);
     }
 
     // fallback

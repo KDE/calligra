@@ -13,15 +13,20 @@
 #include <ktextedit.h>
 #include <kactioncollection.h>
 
+#include "KoCanvasBase.h"
+
 #include <kundo2command.h>
 
-#include <Formula.h>
-#include <Cell.h>
+#include <engine/Formula.h>
+#include <core/Cell.h>
+#include <core/CellStorage.h>
 #include <part/Doc.h>
-#include <Sheet.h>
-#include <Value.h>
+#include <core/Map.h>
+#include <core/Sheet.h>
+#include <ui/Selection.h>
+#include <engine/Value.h>
+#include <engine/Region.h>
 #include <part/View.h>
-#include <Region.h>
 
 #include "SolverDialog.h"
 
@@ -86,7 +91,7 @@ void Solver::optimize()
     if (d->dialog->parameters->textEdit()->toPlainText().isEmpty())
         return;
 
-    Region region(d->dialog->function->textEdit()->toPlainText(), d->view->doc()->map(), d->view->activeSheet());
+    Region region = d->view->doc()->map()->regionFromName(d->dialog->function->textEdit()->toPlainText(), d->view->activeSheet());
     if (!region.isValid())
         return;
 
@@ -114,7 +119,7 @@ void Solver::optimize()
     // Determine the parameters
     int dimension = 0;
     Parameters* parameters = new Parameters;
-    region = Region(d->dialog->parameters->textEdit()->toPlainText(), d->view->doc()->map(), d->view->activeSheet());
+    region = d->view->doc()->map()->regionFromName(d->dialog->parameters->textEdit()->toPlainText(), d->view->activeSheet());
     Region::ConstIterator end(region.constEnd());
     for (Region::ConstIterator it(region.constBegin()); it != end; ++it) {
         QRect range = (*it)->rect();
