@@ -75,7 +75,7 @@ install(FILES logic.xml DESTINATION ${KDE_INSTALL_DATADIR}/calligrasheets/functi
 add_library(kspreadmathmodule MODULE MathModule.h math.cpp)
 target_include_directories( kspreadmathmodule PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../ )
 calligrasheets_plugin_desktop_to_json(kspreadmathmodule kspreadmathmodule.desktop)
-target_link_libraries(kspreadmathmodule calligrasheetsengine)
+target_link_libraries(kspreadmathmodule calligrasheetsengine Eigen3::Eigen)
 install(TARGETS kspreadmathmodule DESTINATION ${KDE_INSTALL_PLUGINDIR}/calligrasheets/functions)
 install(FILES math.xml DESTINATION ${KDE_INSTALL_DATADIR}/calligrasheets/functions)
 
