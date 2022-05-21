@@ -628,8 +628,9 @@ QString ValueFormatter::dateFormat(const QDate &date, Format::Type fmtType, cons
         return locale->formatDate(date, format);
     }
 
-    // fallback
-    return locale->formatDate(date, false);
+    // default format
+    QString res = locale->formatDate(date, false);
+    return res;
 }
 
 QString ValueFormatter::complexFormat(const Value& value, int precision,

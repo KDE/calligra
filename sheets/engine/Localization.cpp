@@ -11,9 +11,24 @@
 
 using namespace Calligra::Sheets;
 
+class Q_DECL_HIDDEN Localization::Private : public QSharedData
+{
+public:
+    QLocale locale;
+    QString timeSep, dateSepShort, dateSepLong;
+    QStringList dateTimeFormats, dateFormats, timeFormats;
+    bool includesAMPM;
+};
+
 Localization::Localization()
+    : d(new Private)
 {
     setDefaultLocale();
+}
+
+// This must be defined or we get errors.
+Localization::~Localization()
+{
 }
 
 void Localization::setDefaultLocale()
@@ -35,199 +50,185 @@ void Localization::setLanguage(QLocale::Language language, QLocale::Script scrip
 
 QString Localization::name() const
 {
-    return locale.name();
+    return d->locale.name();
 }
 
 
 QString Localization::decimalSymbol() const
 {
-    return locale.decimalPoint();
+    return d->locale.decimalPoint();
 }
 
 QString Localization::negativeSign() const
 {
-    return locale.negativeSign();
+    return d->locale.negativeSign();
 }
 
 QString Localization::positiveSign() const
 {
-    return locale.positiveSign();
+    return d->locale.positiveSign();
 }
 
 QString Localization::thousandsSeparator() const
 {
-    return locale.groupSeparator();
+    return d->locale.groupSeparator();
+}
+
+QString Localization::timeSeparator() const
+{
+    return d->timeSep;
+}
+
+bool Localization::timeWithAMPM() const
+{
+    return d->includesAMPM;
+}
+
+QString Localization::dateSeparator(bool longDate) const
+{
+    return longDate ? d->dateSepLong : d->dateSepShort;
 }
 
 
 double Localization::readNumber(const QString &str, bool *ok) const
 {
-    return locale.toDouble(str, ok);
+    return d->locale.toDouble(str, ok);
 }
 
 QDateTime Localization::readDateTime(const QString &str, bool *ok) const
 {
     if (ok) *ok = false;
-    QDateTime res = locale.toDateTime(str, QLocale::LongFormat);
-    if (!res.isValid()) res = locale.toDateTime(str, QLocale::ShortFormat);
+    QDateTime res;
 
-    // let's try without AM/PM or its equivalent
-    if (!res.isValid()) {
-        QString format = dateTimeFormat(true).replace("AP", "").replace("t", "").trimmed();
-        res = locale.toDateTime(str, format);
-    }
-    if (!res.isValid()) {
-        QString format = dateTimeFormat(false).replace("AP", "").replace("t", "").trimmed();
-        res = locale.toDateTime(str, format);
+    // Try all the formats.
+    for (QString format : d->dateTimeFormats) {
+        res = readDateTime(str, format, ok);
+        if (*ok) return res;
     }
 
-    // long/short year?
-    if (!res.isValid()) {
-        QString format = dateTimeFormat(true).replace("yy", "yyyy").replace("AP", "").replace("t", "").trimmed();
-        res = locale.toDateTime(str, format);
-    }
-    if (!res.isValid()) {
-        QString format = dateTimeFormat(false).replace("yy", "yyyy").replace("AP", "").replace("t", "").trimmed();
-        res = locale.toDateTime(str, format);
-    }
-    if (!res.isValid()) {
-        QString format = dateTimeFormat(true).replace("yyyy", "yy").replace("AP", "").replace("t", "").trimmed();
-        res = locale.toDateTime(str, format);
-    }
-    if (!res.isValid()) {
-        QString format = dateTimeFormat(false).replace("yyyy", "yy").replace("AP", "").replace("t", "").trimmed();
-        res = locale.toDateTime(str, format);
-    }
-
-
-    if (res.isValid()) *ok = true;
+    *ok = false;
     return res;
 }
 
 QDateTime Localization::readDateTime(const QString &str, const QString &format, bool *ok) const
 {
     if (ok) *ok = false;
-    QDateTime res = locale.toDateTime(str, format);
+    QDateTime res = d->locale.toDateTime(str, format);
     if (res.isValid()) *ok = true;
     return res;
 }
 
 QDate Localization::readDate(const QString &str, bool *ok) const
 {
+    QDate res;
     if (ok) *ok = false;
-    QDate res = locale.toDate(str, QLocale::LongFormat);
-    if (!res.isValid()) res = locale.toDate(str, QLocale::ShortFormat);
 
-    // long/short year?
-    if (!res.isValid()) {
-        QString format = dateFormat(true).replace("yy", "yyyy").trimmed();
-        res = locale.toDate(str, format);
-    }
-    if (!res.isValid()) {
-        QString format = dateFormat(false).replace("yy", "yyyy").trimmed();
-        res = locale.toDate(str, format);
-    }
-    if (!res.isValid()) {
-        QString format = dateFormat(true).replace("yyyy", "yy").trimmed();
-        res = locale.toDate(str, format);
-    }
-    if (!res.isValid()) {
-        QString format = dateFormat(false).replace("yyyy", "yy").trimmed();
-        res = locale.toDate(str, format);
+    // Try all the formats.
+    for (QString format : d->dateFormats) {
+        res = readDate(str, format, ok);
+        if (*ok) return res;
     }
 
-    if (res.isValid()) *ok = true;
+    *ok = false;
     return res;
 }
 
 QDate Localization::readDate(const QString &str, const QString &format, bool *ok) const
 {
     if (ok) *ok = false;
-    QDate res = locale.toDate(str, format);
+    QDate res = d->locale.toDate(str, format);
     if (res.isValid()) *ok = true;
     return res;
 }
 
 QTime Localization::readTime(const QString &str, bool *ok) const
 {
+    QTime res;
     if (ok) *ok = false;
-    QTime res = locale.toTime(str, QLocale::LongFormat);
-    if (!res.isValid()) res = locale.toTime(str, QLocale::ShortFormat);
-    
-    // let's try without AM/PM or its equivalent, also without timezones
-    if (!res.isValid()) {
-        QString format = timeFormat(true).replace("AP", "").replace("t", "").trimmed();
-        res = locale.toTime(str, format);
+
+    // Try all the formats.
+    for (QString format : d->timeFormats) {
+        res = readTime(str, format, ok);
+        if (*ok) return res;
     }
-    if (!res.isValid()) {
-        QString format = timeFormat(false).replace("AP", "").replace("t", "").trimmed();
-        res = locale.toTime(str, format);
-    }
-    if (res.isValid()) *ok = true;
+
+    *ok = false;
     return res;
 }
 
 QTime Localization::readTime(const QString &str, const QString &format, bool *ok) const
 {
     if (ok) *ok = false;
-    QTime res = locale.toTime(str, format);
+    QTime res = d->locale.toTime(str, format);
     if (res.isValid()) *ok = true;
     return res;
 }
 
 QString Localization::dateTimeFormat(bool longFormat) const
 {
-    return locale.dateTimeFormat(longFormat ? QLocale::LongFormat : QLocale::ShortFormat);
+    QString res = d->locale.dateTimeFormat(longFormat ? QLocale::LongFormat : QLocale::ShortFormat);
+
+    // But let's use long years even if the locale has short ones.
+    if (res.contains("yy") && (!res.contains("yyyy")))
+        res = res.replace("yy", "yyyy");
+
+    return res;
 }
 
 QString Localization::dateFormat(bool longFormat) const
 {
-    return locale.dateFormat(longFormat ? QLocale::LongFormat : QLocale::ShortFormat);
+    QString res = d->locale.dateFormat(longFormat ? QLocale::LongFormat : QLocale::ShortFormat);
+
+    // But let's use long years even if the locale has short ones.
+    if (res.contains("yy") && (!res.contains("yyyy")))
+        res = res.replace("yy", "yyyy");
+
+    return res;
 }
 
 QString Localization::timeFormat(bool longFormat) const
 {
-    return locale.timeFormat(longFormat ? QLocale::LongFormat : QLocale::ShortFormat);
+    return d->locale.timeFormat(longFormat ? QLocale::LongFormat : QLocale::ShortFormat);
 }
 
 QString Localization::dateFormat(int type) const
 {
-    if (type == 1) return "d" + dateSepShort + "M" + dateSepShort + "yyyy";
-    if (type == 2) return "d" + dateSepShort + "M" + dateSepShort + "yy";
-    if (type == 3) return "d" + dateSepShort + "MMM" + dateSepShort + "yy";
-    if (type == 4) return "d" + dateSepShort + "MMM" + dateSepShort + "yyyy";
-    if (type == 5) return "d" + dateSepLong + "MMMM" + dateSepLong + "yy";
-    if (type == 6) return "d" + dateSepLong + "MMMM" + dateSepLong + "yyyy";
-    if (type == 7) return "MMMM" + dateSepLong + "d" + dateSepLong + "yy";
-    if (type == 8) return "MMMM" + dateSepLong + "d" + dateSepLong + "yyyy";
+    if (type == 1) return "d" + d->dateSepShort + "M" + d->dateSepShort + "yyyy";
+    if (type == 2) return "d" + d->dateSepShort + "M" + d->dateSepShort + "yy";
+    if (type == 3) return "d" + d->dateSepShort + "MMM" + d->dateSepShort + "yy";
+    if (type == 4) return "d" + d->dateSepShort + "MMM" + d->dateSepShort + "yyyy";
+    if (type == 5) return "d" + d->dateSepLong + "MMMM" + d->dateSepLong + "yy";
+    if (type == 6) return "d" + d->dateSepLong + "MMMM" + d->dateSepLong + "yyyy";
+    if (type == 7) return "MMMM" + d->dateSepLong + "d" + d->dateSepLong + "yy";
+    if (type == 8) return "MMMM" + d->dateSepLong + "d" + d->dateSepLong + "yyyy";
 
     return QString();
 }
 
 QString Localization::currencySymbol() const
 {
-    return locale.currencySymbol();
+    return d->locale.currencySymbol();
 }
 
 int Localization::firstDayOfWeek() const
 {
-    return (int) locale.firstDayOfWeek();
+    return (int) d->locale.firstDayOfWeek();
 }
 
 QString Localization::dayName(int day) const
 {
-    return locale.dayName(day);
+    return d->locale.dayName(day);
 }
 
 QString Localization::monthName(int month) const
 {
-    return locale.monthName(month);
+    return d->locale.monthName(month);
 }
 
 
 QString Localization::translateString(KLocalizedString str) const
 {
-    QStringList langs = locale.uiLanguages();
+    QStringList langs = d->locale.uiLanguages();
     return str.toString(langs);
 }
 
@@ -240,19 +241,19 @@ QString Localization::formatBool(bool val) const
 // TODO - we should let the caller specify whether to use scientific format or not
 QString Localization::formatNumber(double num, int precision) const
 {
-    return locale.toString(num, 'g', precision);
+    return d->locale.toString(num, 'g', precision);
 }
 
 QString Localization::formatCurrency(double num, const QString &currencySymbol, int precision) const
 {
-    return locale.toCurrencyString(num, currencySymbol, precision);
+    return d->locale.toCurrencyString(num, currencySymbol, precision);
 }
 
 QString Localization::formatDoubleNoSep(double val) const
 {
     QString res = QString::number(val, 'g', 10);
     int pos = res.indexOf('.');
-    const QString decimalSymbol = locale.decimalPoint();
+    const QString decimalSymbol = d->locale.decimalPoint();
     if (!decimalSymbol.isNull() && (pos != -1))
         res.replace(pos, 1, decimalSymbol);
     return res;
@@ -261,49 +262,52 @@ QString Localization::formatDoubleNoSep(double val) const
 
 QString Localization::formatDateTime(const QDateTime &datetime, bool longFormat) const
 {
-    return locale.toString(datetime, longFormat ? QLocale::LongFormat : QLocale::ShortFormat);
+    QString fmt = dateTimeFormat(longFormat);
+    return d->locale.toString(datetime, fmt);
 }
 
 QString Localization::formatDateTime(const QDateTime &datetime, const QString &format) const
 {
-    return locale.toString(datetime, format);
+    return d->locale.toString(datetime, format);
 }
 
 QString Localization::formatDate(const QDate &date, bool longFormat) const
 {
-    return locale.toString(date, longFormat ? QLocale::LongFormat : QLocale::ShortFormat);
+    QString fmt = dateFormat(longFormat);
+    return d->locale.toString(date, fmt);
 }
 
 QString Localization::formatDate(const QDate &date, const QString &format) const
 {
-    return locale.toString(date, format);
+    return d->locale.toString(date, format);
 }
 
 QString Localization::formatTime(const QTime &time, bool longFormat) const
 {
-    return locale.toString(time, longFormat ? QLocale::LongFormat : QLocale::ShortFormat);
+    QString fmt = timeFormat(longFormat);
+    return d->locale.toString(time, fmt);
 }
 
 QString Localization::formatTime(const QTime &time, const QString &format) const
 {
-    return locale.toString(time, format);
+    return d->locale.toString(time, format);
 }
 
 QString Localization::languageName(bool full) const
 {
-    if (full) return locale.nativeLanguageName();
-    return locale.name();
+    if (full) return d->locale.nativeLanguageName();
+    return d->locale.name();
 }
 
 
 QString Localization::toUpper(const QString &str) const
 {
-    return locale.toUpper(str);
+    return d->locale.toUpper(str);
 }
 
 QString Localization::toLower(const QString &str) const
 {
-    return locale.toLower(str);
+    return d->locale.toLower(str);
 }
 
 static QString getSeparator(const QString &str) {
@@ -330,19 +334,79 @@ static QString getSeparator(const QString &str) {
 }
 
 void Localization::setLocale(const QLocale &l) {
-    locale = l;
+    d->locale = l;
 
     // Determine the date/time separator
-    QString format = timeFormat(false);
-    timeSep = getSeparator(format);
-    format = timeFormat(true);
-    if (format.indexOf("A") >= 0) includesAMPM = true;
-    else includesAMPM = false;
+    QString longFormat = dateFormat(true);
+    d->dateSepLong = getSeparator(longFormat);
+    QString shortFormat = dateFormat(false);
+    d->dateSepShort = getSeparator(shortFormat);
 
-    format = dateFormat(true);
-    dateSepLong = getSeparator(format);
-    format = dateFormat(false);
-    dateSepShort = getSeparator(format);
+    // date formats
+    d->dateFormats.clear();
+    d->dateFormats.append (longFormat);
+    d->dateFormats.append (shortFormat);
+    d->dateFormats.append (longFormat.replace("yy", "yyyy"));
+    d->dateFormats.append (longFormat.replace("yyyy", "yy"));
+    //long-year
+    if (shortFormat.contains("yyyy")) {
+        d->dateFormats.append (shortFormat.replace("MM", "M"));
+        d->dateFormats.append (shortFormat.replace("MM", "M").replace("dd", "d"));
+        d->dateFormats.append (shortFormat.replace("dd", "d"));
+        shortFormat = shortFormat.replace("yyyy", "yy");
+        d->dateFormats.append (shortFormat);
+    } else {
+        d->dateFormats.append (shortFormat.replace("yy", "yyyy"));
+    }
+    // short-year
+    d->dateFormats.append (shortFormat.replace("MM", "M"));
+    d->dateFormats.append (shortFormat.replace("MM", "M").replace("dd", "d"));
+    d->dateFormats.append (shortFormat.replace("dd", "d"));
+
+    // date/time formats
+    longFormat = dateTimeFormat(true);
+    shortFormat = dateTimeFormat(false);
+    d->dateTimeFormats.clear();
+    d->dateTimeFormats.append (longFormat);
+
+    d->dateTimeFormats.append (shortFormat);
+    longFormat = longFormat.replace("AP", "").replace("t", "").trimmed();
+    shortFormat = shortFormat.replace("AP", "").replace("t", "").trimmed();
+    d->dateTimeFormats.append (longFormat);
+    d->dateTimeFormats.append (shortFormat);
+    d->dateTimeFormats.append (longFormat.replace("yy", "yyyy"));
+    d->dateTimeFormats.append (longFormat.replace("yyyy", "yy"));
+    //long-year
+    if (shortFormat.contains("yyyy")) {
+        d->dateTimeFormats.append (shortFormat.replace("MM", "M"));
+        d->dateTimeFormats.append (shortFormat.replace("MM", "M").replace("dd", "d"));
+        d->dateTimeFormats.append (shortFormat.replace("dd", "d"));
+        shortFormat = shortFormat.replace("yyyy", "yy");
+        d->dateTimeFormats.append (shortFormat);
+    } else {
+        d->dateTimeFormats.append (shortFormat.replace("yy", "yyyy"));
+    }
+    // short-year
+    d->dateTimeFormats.append (shortFormat.replace("MM", "M"));
+    d->dateTimeFormats.append (shortFormat.replace("MM", "M").replace("dd", "d"));
+    d->dateTimeFormats.append (shortFormat.replace("dd", "d"));
+
+
+    // time separator
+    shortFormat = timeFormat(false);
+    d->timeSep = getSeparator(shortFormat);
+    longFormat = timeFormat(true);
+    if (longFormat.indexOf("A") >= 0) d->includesAMPM = true;
+    else d->includesAMPM = false;
+
+    // time formats
+    d->timeFormats.clear();
+    d->timeFormats.append (longFormat);
+    d->timeFormats.append (shortFormat);
+    longFormat = longFormat.replace("AP", "").replace("t", "").trimmed();
+    shortFormat = shortFormat.replace("AP", "").replace("t", "").trimmed();
+    d->timeFormats.append (longFormat);
+    d->timeFormats.append (shortFormat);
 }
 
 

@@ -11,6 +11,7 @@
 #include <QLocale>
 
 #include <KLocalizedString>
+#include <QSharedDataPointer>
 
 #include "sheets_engine_export.h"
 
@@ -27,6 +28,7 @@ class CALLIGRA_SHEETS_ENGINE_EXPORT Localization
 {
 public:
     Localization();
+    ~Localization();
 
     void setDefaultLocale();
     void setLanguage(const QString &name);
@@ -78,9 +80,9 @@ public:
 
     QString currencySymbol() const;
 
-    QString timeSeparator() const { return timeSep; }
-    bool timeWithAMPM() const { return includesAMPM; }
-    QString dateSeparator(bool longDate) const { return longDate ? dateSepLong : dateSepShort; }
+    QString timeSeparator() const;
+    bool timeWithAMPM() const;
+    QString dateSeparator(bool longDate) const;
     int firstDayOfWeek() const;
     QString dayName(int day) const;
     /** Name of month, 1-12 */
@@ -107,11 +109,10 @@ public:
 
     QString languageName(bool full) const;
 private:
-    void setLocale(const QLocale &l);
+    class Private;
+    QSharedDataPointer<Private> d;
 
-    QLocale locale;
-    QString timeSep, dateSepShort, dateSepLong;
-    bool includesAMPM;
+    void setLocale(const QLocale &l);
 };
 
 } // namespace Sheets

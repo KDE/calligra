@@ -295,8 +295,27 @@ int ValueParser::repairYear(int year, const QString &str) const {
     return year;
 }
 
+bool ValueParser::containsDateTimeSeparator(const QString &str) const
+{
+    // Speedup: if the string doesn't contain any separator, it's not a date/time.
+    // The separator cannot be on the first position.
+    Localization *locale = m_settings->locale();
+    QString sep = locale->dateSeparator(true);
+    if (sep.length() && (str.indexOf (sep, 1) > 0)) return true;
+    sep = locale->dateSeparator(false);
+    if (sep.length() && (str.indexOf (sep, 1) > 0)) return true;
+    sep = locale->timeSeparator();
+    if (sep.length() && (str.indexOf (sep, 1) > 0)) return true;
+    if (str.indexOf ('-', 1) > 0) return true;
+    if (str.indexOf (':', 1) > 0) return true;
+    return false;
+}
+
 Value ValueParser::tryParseDateTime(const QString& str, bool *ok) const
 {
+    *ok = false;
+    if (!containsDateTimeSeparator(str)) return Value();
+
     Localization *locale = m_settings->locale();
     QDateTime datetime = locale->readDateTime(str, ok);
 
@@ -340,6 +359,9 @@ Value ValueParser::tryParseDateTime(const QString& str, bool *ok) const
 
 Value ValueParser::tryParseDate(const QString& str, bool *ok) const
 {
+    *ok = false;
+    if (!containsDateTimeSeparator(str)) return Value();
+
     Localization *locale = m_settings->locale();
     QDate date = locale->readDate(str, ok);
 
@@ -381,6 +403,9 @@ Value ValueParser::tryParseDate(const QString& str, bool *ok) const
 
 Value ValueParser::tryParseTime(const QString& str, bool *ok) const
 {
+    *ok = false;
+    if (!containsDateTimeSeparator(str)) return Value();
+
     Localization *locale = m_settings->locale();
     QTime time = locale->readTime(str, ok);
 

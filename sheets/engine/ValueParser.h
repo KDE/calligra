@@ -95,6 +95,11 @@ protected:
      * A helper function to handle two-digit years.
      */
     int repairYear(int year, const QString &str) const;
+
+    /**
+     * A helper function to speed up date/time parsing.
+     */
+    bool containsDateTimeSeparator(const QString &str) const;
 private:
     const CalculationSettings* m_settings;
 };

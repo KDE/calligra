@@ -65,10 +65,7 @@ Item										Prio	Status
   - "Insert Link...": same as for "Insert Comment...", if applicable
 
 * Source code organization                                                      3       ----
-  - Move the .cpp/.h files in sheets/ to sheets/core/.
-  - Move sheets/functions/ to sheets/plugins/functions/.
-  - Move sheets/dialogs/ to sheets/ui/dialogs/.
-  - Move sheets/commands/ to sheets/core/commands/.
+  - Move various features to standalone modules (could be statically linked)
 
 * User Interface                                                                1       ----
   - Add a 'Go' ('Navigation') menu to select the active sheet. Reuse the actions
