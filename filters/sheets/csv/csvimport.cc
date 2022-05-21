@@ -112,7 +112,6 @@ KoFilter::ConversionStatus CSVFilter::convert(const QByteArray& from, const QByt
     decimal = dialog->decimalSymbol();
     thousands = dialog->thousandsSeparator();
 
-    int step = 100 / numRows * numCols;
     int value = 0;
 
     emit sigProgress(value);
@@ -126,10 +125,16 @@ KoFilter::ConversionStatus CSVFilter::convert(const QByteArray& from, const QByt
     Cell cell(sheet, 1, 1);
     QFontMetrics fm(cell.style().font());
 
+    int processed = 0;
     for (int row = 0; row < numRows; ++row) {
         for (int col = 0; col < numCols; ++col) {
-            value += step;
-            emit sigProgress(value);
+            processed++;
+            int progress = (int) (100.0 * processed / (numRows * numCols));
+            if (progress != value) {
+                value = progress;
+                emit sigProgress(value);
+            }
+
             const QString text(dialog->text(row, col));
 
             // ### FIXME: how to calculate the width of numbers (as they might not be in the right format)
@@ -184,8 +189,6 @@ KoFilter::ConversionStatus CSVFilter::convert(const QByteArray& from, const QByt
             }
         }
     }
-
-    emit sigProgress(98);
 
     for (int i = 0; i < numCols; ++i) {
         if (widths[i] > defaultWidth)

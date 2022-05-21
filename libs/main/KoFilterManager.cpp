@@ -530,6 +530,11 @@ bool KoFilterManager::getBatchMode(void) const
     return d->batch;
 }
 
+void KoFilterManager::setProgressUpdater(KoProgressUpdater *updater)
+{
+    d->progressUpdater = updater;
+}
+
 KoProgressUpdater* KoFilterManager::progressUpdater() const
 {
     if (d->progressUpdater.isNull()) {

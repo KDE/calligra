@@ -1454,6 +1454,7 @@ bool KoDocument::openFile()
     d->progressUpdater = new KoProgressUpdater(progressProxy,
             KoProgressUpdater::Unthreaded,
             d->profileStream);
+    d->filterManager->setProgressUpdater(d->progressUpdater);
 
     d->progressUpdater->setReferenceTime(d->profileReferenceTime);
     d->progressUpdater->start(100, i18n("Opening Document"));
@@ -1537,7 +1538,8 @@ bool KoDocument::openFile()
 
             d->isLoading = false;
             delete d->progressUpdater;
-            d->progressUpdater = 0;
+            d->progressUpdater = nullptr;
+            d->filterManager->setProgressUpdater(nullptr);
             return false;
         }
         d->isEmpty = false;
@@ -1602,7 +1604,8 @@ bool KoDocument::openFile()
         updater->setProgress(100);
     }
     delete d->progressUpdater;
-    d->progressUpdater = 0;
+    d->filterManager->setProgressUpdater(nullptr);
+    d->progressUpdater = nullptr;
 
     d->isLoading = false;
 

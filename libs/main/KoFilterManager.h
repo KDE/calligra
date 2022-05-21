@@ -140,6 +140,11 @@ public:
      **/
     KoProgressUpdater *progressUpdater() const;
 
+    /**
+     * Set up a progress updater.
+     */
+    void setProgressUpdater(KoProgressUpdater *updater);
+
 private:
     // === API for KoFilterChains === (internal)
     // The friend methods are private in KoFilterChain and
