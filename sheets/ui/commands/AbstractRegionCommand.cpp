@@ -44,7 +44,6 @@ AbstractRegionCommand::AbstractRegionCommand(KUndo2Command* parent)
         : Region(),
         KUndo2Command(parent),
         m_sheet(0),
-        m_reverse(false),
         m_firstrun(true),
         m_register(true),
         m_success(true),
@@ -88,7 +87,7 @@ void AbstractRegionCommand::redo()
 
     m_success = true;
     bool successfully = true;
-    successfully = preProcessing();
+    successfully = preProcess();
     if (!successfully) {
         m_success = false;
         return;   // do nothing if pre-processing fails
@@ -98,14 +97,24 @@ void AbstractRegionCommand::redo()
     // FIXME Stefan: Does every derived command damage the visual cache? No!
     m_sheet->map()->addDamage(new CellDamage(m_sheet, *this, CellDamage::Appearance));
 
-    successfully = mainProcessing();
+    if (m_firstrun) m_sheet->fullCellStorage()->startUndoRecording();
+    successfully = performCommands();
     if (!successfully) {
         m_success = false;
-        warnSheets << "AbstractRegionCommand::redo(): processing was not successful!";
+        warnSheets << "AbstractRegionCommand::redo(): command recording was not successful!";
+    }
+    if (m_firstrun) m_sheet->fullCellStorage()->stopUndoRecording(this);
+
+    if (!m_firstrun) KUndo2Command::redo();
+
+    // Now perform extras that do not rely on recording
+    successfully = performNonCommandActions();
+    if (!successfully) {
+        m_success = false;
+        warnSheets << "AbstractRegionCommand::redo(): non-command actions were not successful!";
     }
 
-    successfully = true;
-    successfully = postProcessing();
+    successfully = postProcess();
     if (!successfully) {
         m_success = false;
         warnSheets << "AbstractRegionCommand::redo(): postprocessing was not successful!";
@@ -118,9 +127,42 @@ void AbstractRegionCommand::redo()
 
 void AbstractRegionCommand::undo()
 {
-    m_reverse = !m_reverse;
-    redo();
-    m_reverse = !m_reverse;
+    KUndo2Command::undo();   // undo child commands as well
+
+    Q_ASSERT(m_sheet);
+    if (!m_sheet) { m_success = false; return; }
+
+    m_success = true;
+    bool successfully = true;
+    successfully = preProcessUndo();
+    if (!successfully) {
+        m_success = false;
+        return;   // do nothing if pre-processing fails
+    }
+
+    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+    // FIXME Stefan: Does every derived command damage the visual cache? No!
+    m_sheet->map()->addDamage(new CellDamage(m_sheet, *this, CellDamage::Appearance));
+
+    // undo actions that do not rely on recording
+    successfully = undoNonCommandActions();
+    if (!successfully) {
+        m_success = false;
+        warnSheets << "AbstractRegionCommand::undo(): non-command actions were not successful!";
+    }
+
+    // and undo child commands, too
+    KUndo2Command::undo();
+
+    successfully = postProcessUndo();
+    if (!successfully) {
+        m_success = false;
+        warnSheets << "AbstractRegionCommand::undo(): postprocessing was not successful!";
+    }
+
+    QApplication::restoreOverrideCursor();
+
+    m_firstrun = false;
 }
 
 bool AbstractRegionCommand::isApproved() const
@@ -130,8 +172,6 @@ bool AbstractRegionCommand::isApproved() const
     if (!m_sheet) return false;
 
     const QList<Element *> elements = cells();
-    const int begin = m_reverse ? elements.count() - 1 : 0;
-    const int end = m_reverse ? -1 : elements.count();
     if (m_checkLock && m_sheet->fullCellStorage()->hasLockedCells(*this)) {
         KPassivePopup::message(i18n("Processing is not possible, because some "
                                     "cells are locked as elements of a matrix."),
@@ -139,7 +179,7 @@ bool AbstractRegionCommand::isApproved() const
         return false;
     }
     if (m_sheet->isProtected()) {
-        for (int i = begin; i != end; m_reverse ? --i : ++i) {
+        for (int i = 0; i < elements.count(); ++i) {
             const QRect range = elements[i]->rect();
 
             for (int col = range.left(); col <= range.right(); ++col) {
@@ -158,18 +198,16 @@ bool AbstractRegionCommand::isApproved() const
     return true;
 }
 
-bool AbstractRegionCommand::mainProcessing()
+bool AbstractRegionCommand::performCommands()
 {
-    //sebsauer; same as in AbstractRegionCommand::redo
     Q_ASSERT(m_sheet);
     if (!m_sheet) return false;
 
     bool successfully = true;
     const QList<Element *> elements = cells();
-    const int begin = m_reverse ? elements.count() - 1 : 0;
-    const int end = m_reverse ? -1 : elements.count();
-    for (int i = begin; i != end; m_reverse ? --i : ++i) {
+    for (int i = 0; i < elements.count(); ++i) {
         successfully = successfully && process(elements[i]);
     }
     return successfully;
 }
+

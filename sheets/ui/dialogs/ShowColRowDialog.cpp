@@ -133,7 +133,7 @@ void ShowColRow::slotOk()
     if (typeShow == Row) {
         manipulator->setManipulateRows(true);
     }
-    manipulator->setReverse(true);
+    manipulator->setHide(true);
     manipulator->add(region);
     manipulator->execute(m_selection->canvas());
 

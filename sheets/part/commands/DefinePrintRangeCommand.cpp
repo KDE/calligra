@@ -22,15 +22,17 @@ DefinePrintRangeCommand::DefinePrintRangeCommand()
     setText(kundo2_i18n("Define Print Range"));
 }
 
-void DefinePrintRangeCommand::redo()
+bool DefinePrintRangeCommand::performNonCommandActions()
 {
     if (m_firstrun) {
         m_oldPrintRegion = m_sheet->printSettings()->printRegion();
     }
     m_sheet->printSettings()->setPrintRegion(*this);
+    return true;
 }
 
-void DefinePrintRangeCommand::undo()
+bool DefinePrintRangeCommand::undoNonCommandActions()
 {
     m_sheet->printSettings()->setPrintRegion(m_oldPrintRegion);
+    return true;
 }

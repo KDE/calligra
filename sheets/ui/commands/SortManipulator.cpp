@@ -43,13 +43,8 @@ bool SortManipulator::process(Element* element)
     return AbstractDFManipulator::process(element);
 }
 
-bool SortManipulator::preProcessing()
+bool SortManipulator::preProcess()
 {
-    // Only on sorting we need to temporarily store the old data.
-    // On restoring (undo) we return immediately.
-    if (m_reverse)
-        return AbstractDFManipulator::preProcessing();
-
     m_cellStorage = new CellStorage(m_sheet->fullCellStorage()->subStorage(*this));
 
     Region::ConstIterator endOfList(cells().constEnd());
@@ -65,10 +60,10 @@ bool SortManipulator::preProcessing()
     }
 
     // to start undo recording
-    return AbstractDFManipulator::preProcessing();
+    return AbstractDFManipulator::preProcess();
 }
 
-bool SortManipulator::postProcessing()
+bool SortManipulator::postProcess()
 {
     delete m_cellStorage;
     m_cellStorage = 0;
@@ -76,7 +71,7 @@ bool SortManipulator::postProcessing()
     m_formulas.clear();
 
     // to stop undo recording
-    return AbstractDFManipulator::postProcessing();
+    return AbstractDFManipulator::postProcess();
 }
 
 void SortManipulator::addCriterion(int index, Qt::SortOrder order, Qt::CaseSensitivity caseSensitivity)

@@ -281,7 +281,7 @@ private:
 #ifdef CALLIGRA_SHEETS_MT
     QReadWriteLock bigUglyLock;
 #endif
-    bool undoEnabled;
+    int undoCounter;
 
     class Private;
     Private * const d;

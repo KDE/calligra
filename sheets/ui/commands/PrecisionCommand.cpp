@@ -16,33 +16,23 @@ using namespace Calligra::Sheets;
 PrecisionCommand::PrecisionCommand()
         : AbstractRegionCommand()
 {
-    setText(kundo2_i18n("Increase Precision"));
+    setDecrease(false);
 }
 
-bool PrecisionCommand::mainProcessing()
+bool PrecisionCommand::performCommands()
 {
     Style style;
-    if (!m_reverse) {
-        // increase the precision
-        style.setPrecision(1);
-    } else { // m_reverse
-        // decrease the precision
-        style.setPrecision(-1);
-    }
+    style.setPrecision(m_decrease ? -1 : 1);
     m_sheet->fullCellStorage()->setStyle(*this, style);
     return true;
 }
 
-bool PrecisionCommand::postProcessing()
+void PrecisionCommand::setDecrease(bool decrease)
 {
-    return true;
-}
-
-void PrecisionCommand::setReverse(bool reverse)
-{
-    AbstractRegionCommand::setReverse(reverse);
-    if (!m_reverse)
+    m_decrease = decrease;
+    if (!m_decrease)
         setText(kundo2_i18n("Increase Precision"));
     else
         setText(kundo2_i18n("Decrease Precision"));
 }
+

@@ -14,7 +14,7 @@
 #ifndef CALLIGRA_SHEETS_AUTOFILL_COMMAND
 #define CALLIGRA_SHEETS_AUTOFILL_COMMAND
 
-#include "DataManipulators.h"
+#include "AbstractRegionCommand.h"
 
 namespace Calligra
 {
@@ -27,7 +27,7 @@ class Cell;
  * \ingroup Commands
  * \brief Auto-filling of a cell range.
  */
-class AutoFillCommand : public AbstractDataManipulator
+class AutoFillCommand : public AbstractRegionCommand
 {
 public:
     /**
@@ -46,7 +46,7 @@ public:
     /**
      * Executes the actual operation.
      */
-    bool mainProcessing() override;
+    bool performCommands() override;
 
 public:
     static QStringList *other;
@@ -60,10 +60,6 @@ private:
                       const QList<Cell>& _destList,
                       const AutoFillSequence& _seqList,
                       bool down = true);
-    // dummy
-    Value newValue(Element*, int, int, bool*, Format::Type*) override {
-        return Value();
-    }
 
 private:
     QRect m_sourceRange;

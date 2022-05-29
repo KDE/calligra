@@ -26,35 +26,17 @@ void AutoFormatCommand::setStyles(const QList<Style>& styles)
     m_styles = styles;
 }
 
-bool AutoFormatCommand::preProcessing()
+bool AutoFormatCommand::process(Element* element)
 {
+    const QRect rect = element->rect();
     CellStorage *cs = m_sheet->fullCellStorage();
-    if (m_firstrun)
-        cs->startUndoRecording();
+
     // always reset the style of the processed region
     Style defaultStyle;
     defaultStyle.setDefault();
     Region::ConstIterator end(constEnd());
     for (Region::ConstIterator it = constBegin(); it != end; ++it)
         cs->setStyle(Region((*it)->rect()), defaultStyle);
-    if (m_firstrun)
-        cs->stopUndoRecording(this);
-    return true;
-}
-
-bool AutoFormatCommand::mainProcessing()
-{
-    if (m_reverse) {
-        KUndo2Command::undo(); // undo child commands
-        return true;
-    }
-    return AbstractRegionCommand::mainProcessing();
-}
-
-bool AutoFormatCommand::process(Element* element)
-{
-    const QRect rect = element->rect();
-    CellStorage *cs = m_sheet->fullCellStorage();
 
     // Top left corner
     if (!m_styles[0].isDefault())

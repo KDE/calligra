@@ -23,11 +23,11 @@ class PrecisionCommand : public AbstractRegionCommand
 public:
     PrecisionCommand();
 
-    void setReverse(bool reverse) override;
+    void setDecrease(bool decrease);
 
 protected:
-    bool mainProcessing() override;
-    bool postProcessing() override;
+    bool performCommands() override;
+    bool m_decrease  : 1;
 };
 
 } // namespace Sheets

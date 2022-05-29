@@ -693,16 +693,10 @@ void AutoFillCommand::setTargetRange(const QRect& range)
     m_targetRange = range;
 }
 
-bool AutoFillCommand::mainProcessing()
+bool AutoFillCommand::performCommands()
 {
     if (m_sourceRange.contains(m_targetRange))
         return false;
-
-    if (m_reverse) {
-        // reverse - use the stored value
-        AbstractDataManipulator::mainProcessing();
-        return true;
-    }
 
     // Fill from left to right
     if (m_sourceRange.left() == m_targetRange.left() && m_sourceRange.right() < m_targetRange.right()) {

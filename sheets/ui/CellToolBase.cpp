@@ -2027,7 +2027,6 @@ void CellToolBase::decreaseIndentation()
     command->setSheet(selection()->activeSheet());
     double val = selection()->activeSheet()->fullMap()->applicationSettings()->indentValue();
     command->setIndent(-1 * val);
-    command->setReverse(true);
     command->add(*selection());
     if (!command->execute())
         delete command;
@@ -2074,7 +2073,7 @@ void CellToolBase::decreasePrecision()
 {
     PrecisionCommand* command = new PrecisionCommand();
     command->setSheet(selection()->activeSheet());
-    command->setReverse(true);
+    command->setDecrease(true);
     command->add(*selection());
     if (!command->execute())
         delete command;
@@ -2185,7 +2184,7 @@ void CellToolBase::dissociateCells()
     }
     MergeCommand* const command = new MergeCommand();
     command->setSheet(selection()->activeSheet());
-    command->setReverse(true);
+    command->setMerge(false);
     command->setSelection(selection());
     command->add(*selection());
     command->execute(canvas());
@@ -2214,7 +2213,7 @@ void CellToolBase::deleteColumn()
 {
     InsertDeleteColumnManipulator* command = new InsertDeleteColumnManipulator();
     command->setSheet(selection()->activeSheet());
-    command->setReverse(true);
+    command->setDelete(true);
     command->add(*selection());
     command->execute(canvas());
 }
@@ -2229,6 +2228,7 @@ void CellToolBase::hideColumn()
     HideShowManipulator* command = new HideShowManipulator();
     command->setSheet(selection()->activeSheet());
     command->setManipulateColumns(true);
+    command->setHide(true);
     command->add(*selection());
     command->execute(canvas());
 }
@@ -2243,7 +2243,6 @@ void CellToolBase::showColumn()
     HideShowManipulator* command = new HideShowManipulator();
     command->setSheet(selection()->activeSheet());
     command->setManipulateColumns(true);
-    command->setReverse(true);
     command->add(*selection());
     command->execute(canvas());
 }
@@ -2278,6 +2277,7 @@ void CellToolBase::equalizeColumn()
             HideShowManipulator* command = new HideShowManipulator();
             command->setSheet(selection()->activeSheet());
             command->setManipulateColumns(true);
+            command->setHide(true);
             command->add(*selection());
             if (!command->execute())
                 delete command;
@@ -2317,7 +2317,7 @@ void CellToolBase::deleteRow()
 {
     InsertDeleteRowManipulator* command = new InsertDeleteRowManipulator();
     command->setSheet(selection()->activeSheet());
-    command->setReverse(true);
+    command->setDelete(true);
     command->add(*selection());
     command->execute(canvas());
 }
@@ -2332,6 +2332,7 @@ void CellToolBase::hideRow()
     HideShowManipulator* command = new HideShowManipulator();
     command->setSheet(selection()->activeSheet());
     command->setManipulateRows(true);
+    command->setHide(true);
     command->add(*selection());
     command->execute(canvas());
 }
@@ -2346,7 +2347,6 @@ void CellToolBase::showRow()
     HideShowManipulator* command = new HideShowManipulator();
     command->setSheet(selection()->activeSheet());
     command->setManipulateRows(true);
-    command->setReverse(true);
     command->add(*selection());
     command->execute(canvas());
 }
@@ -2384,6 +2384,7 @@ void CellToolBase::equalizeRow()
             HideShowManipulator* command = new HideShowManipulator();
             command->setSheet(selection()->activeSheet());
             command->setManipulateRows(true);
+            command->setHide(true);
             command->add(*selection());
             if (!command->execute())
                 delete command;
@@ -3510,7 +3511,7 @@ void CellToolBase::breakBeforeColumn(bool enable)
     PageBreakCommand *command = new PageBreakCommand();
     command->setSheet(selection()->activeSheet());
     command->setMode(PageBreakCommand::BreakBeforeColumn);
-    command->setReverse(!enable);
+    command->setBreak(enable);
     command->add(*selection());
     command->execute(canvas());
 }
@@ -3520,7 +3521,7 @@ void CellToolBase::breakBeforeRow(bool enable)
     PageBreakCommand *command = new PageBreakCommand();
     command->setSheet(selection()->activeSheet());
     command->setMode(PageBreakCommand::BreakBeforeRow);
-    command->setReverse(!enable);
+    command->setBreak(enable);
     command->add(*selection());
     command->execute(canvas());
 }

@@ -18,26 +18,9 @@ CommentCommand::CommentCommand(KUndo2Command* parent)
 {
 }
 
-bool CommentCommand::preProcessing()
-{
-    if (!m_firstrun)
-        return true;
-    m_sheet->fullCellStorage()->startUndoRecording();
-    return AbstractRegionCommand::preProcessing();
-}
-
 bool CommentCommand::process(Element* element)
 {
-    if (!m_reverse) {
-        m_sheet->cellStorage()->setComment(Region(element->rect()), m_comment);
-    }
-    return true;
-}
-
-bool CommentCommand::postProcessing()
-{
-    if (m_firstrun)
-        m_sheet->fullCellStorage()->stopUndoRecording(this);
+    m_sheet->cellStorage()->setComment(Region(element->rect()), m_comment);
     return true;
 }
 

@@ -65,34 +65,6 @@ bool AbstractDataManipulator::process(Element* element)
     return true;
 }
 
-bool AbstractDataManipulator::preProcessing()
-{
-    // not the first run - data already stored ...
-    if (!m_firstrun)
-        return true;
-    m_sheet->fullCellStorage()->startUndoRecording();
-    return AbstractRegionCommand::preProcessing();
-}
-
-bool AbstractDataManipulator::mainProcessing()
-{
-    if (m_reverse) {
-        // reverse - use the stored value
-        KUndo2Command::undo(); // undo child commands
-        return true;
-    }
-    return AbstractRegionCommand::mainProcessing();
-}
-
-bool AbstractDataManipulator::postProcessing()
-{
-    // not the first run - data already stored ...
-    if (!m_firstrun)
-        return true;
-    m_sheet->fullCellStorage()->stopUndoRecording(this);
-    return true;
-}
-
 AbstractDFManipulator::AbstractDFManipulator(KUndo2Command *parent)
         : AbstractDataManipulator(parent)
 {
@@ -110,7 +82,6 @@ bool AbstractDFManipulator::process(Element* element)
 
     // don't continue if we don't have to change formatting
     if (!m_changeformat) return true;
-    if (m_reverse) return true; // undo done by AbstractDataManipulator
 
     QRect range = element->rect();
     for (int col = range.left(); col <= range.right(); ++col) {
@@ -140,7 +111,7 @@ DataManipulator::~DataManipulator()
 {
 }
 
-bool DataManipulator::preProcessing()
+bool DataManipulator::preProcess()
 {
     // extend a singular region to the matrix size, if applicable
     if (m_firstrun && m_parsing && m_expandMatrix && Region::isSingular()) {
@@ -160,7 +131,7 @@ bool DataManipulator::preProcessing()
             m_expandMatrix = false;
         }
     }
-    return AbstractDataManipulator::preProcessing();
+    return AbstractDataManipulator::preProcess();
 }
 
 bool DataManipulator::process(Element* element)
@@ -168,11 +139,9 @@ bool DataManipulator::process(Element* element)
     bool success = AbstractDataManipulator::process(element);
     if (!success)
         return false;
-    if (!m_reverse) {
-        // Only lock cells, if expansion is desired and the value is a formula.
-        if (m_expandMatrix && (m_data.asString().isEmpty() || m_data.asString().at(0) == '='))
-            m_sheet->cellStorage()->lockCells(element->rect());
-    }
+    // Only lock cells, if expansion is desired and the value is a formula.
+    if (m_expandMatrix && (m_data.asString().isEmpty() || m_data.asString().at(0) == '='))
+        m_sheet->cellStorage()->lockCells(element->rect());
     return true;
 }
 
@@ -378,11 +347,10 @@ ShiftManipulator::~ShiftManipulator()
 {
 }
 
-void ShiftManipulator::setReverse(bool reverse)
+void ShiftManipulator::setRemove(bool remove)
 {
-    m_reverse = reverse;
-    m_mode = reverse ? Delete : Insert;
-    if (!m_reverse)
+    m_mode = remove ? Delete : Insert;
+    if (!remove)
         setText(kundo2_i18n("Insert Cells"));
     else
         setText(kundo2_i18n("Remove Cells"));
@@ -391,18 +359,13 @@ void ShiftManipulator::setReverse(bool reverse)
 bool ShiftManipulator::process(Element* element)
 {
     const QRect range = element->rect();
-    if (!m_reverse) { // insertion
+    if (m_mode == Insert) { // insertion
         if (m_direction == ShiftBottom) {
-            m_sheet->insertShiftDown(range);
+            m_sheet->insertShiftDown(range);   // this updates the cell refs
             m_sheet->cellStorage()->insertShiftDown(range);
         } else if (m_direction == ShiftRight) {
             m_sheet->insertShiftRight(range);
             m_sheet->cellStorage()->insertShiftRight(range);
-        }
-
-        // undo deletion
-        if (m_mode == Delete) {
-            KUndo2Command::undo(); // undo child commands
         }
     } else { // deletion
         if (m_direction == ShiftBottom) {
@@ -412,91 +375,8 @@ bool ShiftManipulator::process(Element* element)
             m_sheet->removeShiftLeft(range);
             m_sheet->cellStorage()->removeShiftLeft(range);
         }
-
-        // undo insertion
-        if (m_mode == Insert) {
-            KUndo2Command::undo(); // undo child commands
-        }
     }
     return true;
 }
 
-namespace Calligra
-{
-namespace Sheets
-{
-bool topRowLessThan(const Region::Element *e1, const Region::Element *e2)
-{
-    return e1->rect().top() < e2->rect().top();
-}
 
-bool leftColumnLessThan(const Region::Element *e1, const Region::Element *e2)
-{
-    return e1->rect().top() < e2->rect().top();
-}
-} // namespace Sheets
-} // namespace Calligra
-
-bool ShiftManipulator::preProcessing()
-{
-    if (m_firstrun) {
-        // If we have an NCS, create a child command for each element.
-        if (cells().count() > 1) { // non-contiguous selection
-            // Sort the elements by their top row.
-            if (m_direction == ShiftBottom) {
-                std::stable_sort(cells().begin(), cells().end(), topRowLessThan);
-            } else { // ShiftRight
-                std::stable_sort(cells().begin(), cells().end(), leftColumnLessThan);
-            }
-            // Create sub-commands.
-            const Region::ConstIterator end(constEnd());
-            for (Region::ConstIterator it = constBegin(); it != end; ++it) {
-                ShiftManipulator *const command = new ShiftManipulator(this);
-                command->setSheet(m_sheet);
-                command->add(Region((*it)->rect(), (*it)->sheet()));
-                if (m_mode == Delete) {
-                    command->setReverse(true);
-                }
-                command->setDirection(m_direction);
-            }
-        } else { // contiguous selection
-            m_sheet->fullCellStorage()->startUndoRecording();
-        }
-    }
-    return AbstractRegionCommand::preProcessing();
-}
-
-bool ShiftManipulator::mainProcessing()
-{
-    if (cells().count() > 1) { // non-contiguous selection
-        if ((m_reverse && m_mode == Insert) || (!m_reverse && m_mode == Delete)) {
-            KUndo2Command::undo(); // process all sub-commands
-        } else {
-            KUndo2Command::redo(); // process all sub-commands
-        }
-        return true;
-    }
-    return AbstractRegionCommand::mainProcessing(); // calls process(Element*)
-}
-
-bool ShiftManipulator::postProcessing()
-{
-    if (cells().count() > 1) { // non-contiguous selection
-        return true;
-    }
-    if (m_firstrun) {
-        m_sheet->fullCellStorage()->stopUndoRecording(this);
-    }
-    CellDamage *damage = 0;
-    if (m_direction == ShiftBottom) {
-        const QPoint bottomRight(lastRange().right(), KS_rowMax);
-        const Region region(QRect(lastRange().topLeft(), bottomRight), m_sheet);
-        damage = new CellDamage(m_sheet, region, CellDamage::Appearance);
-    } else { // ShiftRight
-        const QPoint bottomRight(KS_colMax, lastRange().bottom());
-        const Region region(QRect(lastRange().topLeft(), bottomRight), m_sheet);
-        damage = new CellDamage(m_sheet, region, CellDamage::Appearance);
-    }
-    m_sheet->map()->addDamage(damage);
-    return true;
-}

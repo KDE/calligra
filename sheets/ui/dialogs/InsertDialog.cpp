@@ -78,7 +78,7 @@ void InsertDialog::slotOk()
             ShiftManipulator* manipulator = new ShiftManipulator();
             manipulator->setSheet(m_selection->activeSheet());
             manipulator->setDirection(ShiftManipulator::ShiftRight);
-            manipulator->setReverse(true);
+            manipulator->setRemove(true);
             manipulator->add(*m_selection);
             manipulator->execute(m_selection->canvas());
         }
@@ -93,7 +93,7 @@ void InsertDialog::slotOk()
             ShiftManipulator* manipulator = new ShiftManipulator();
             manipulator->setSheet(m_selection->activeSheet());
             manipulator->setDirection(ShiftManipulator::ShiftBottom);
-            manipulator->setReverse(true);
+            manipulator->setRemove(true);
             manipulator->add(*m_selection);
             manipulator->execute(m_selection->canvas());
         }
@@ -106,7 +106,7 @@ void InsertDialog::slotOk()
         } else if (insRem == Remove) {
             InsertDeleteRowManipulator* manipulator = new InsertDeleteRowManipulator();
             manipulator->setSheet(m_selection->activeSheet());
-            manipulator->setReverse(true);
+            manipulator->setDelete(true);
             manipulator->add(*m_selection);
             manipulator->execute(m_selection->canvas());
         }
@@ -119,7 +119,7 @@ void InsertDialog::slotOk()
         } else if (insRem == Remove) {
             InsertDeleteColumnManipulator* manipulator = new InsertDeleteColumnManipulator();
             manipulator->setSheet(m_selection->activeSheet());
-            manipulator->setReverse(true);
+            manipulator->setDelete(true);
             manipulator->add(*m_selection);
             manipulator->execute(m_selection->canvas());
         }

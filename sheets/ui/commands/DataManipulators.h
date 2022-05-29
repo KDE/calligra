@@ -43,21 +43,6 @@ protected:
         Q_UNUSED(row)
         return true;
     }
-
-    /**
-     * Starts the undo recording.
-     */
-    bool preProcessing() override;
-
-    /**
-     * Processes the region. Calls process(Element*).
-     */
-    bool mainProcessing() override;
-
-    /**
-     * Stops the undo recording and stores the old data.
-     */
-    bool postProcessing() override;
 };
 
 /**
@@ -113,7 +98,7 @@ public:
         m_format = fmtType;
     }
 protected:
-    bool preProcessing() override;
+    bool preProcess() override;
     bool process(Element* element) override;
     Value newValue(Element *element, int col, int row, bool *, Format::Type *) override;
     bool wantChange(Element *element, int col, int row) override;
@@ -218,13 +203,10 @@ public:
     void setDirection(Direction direction) {
         m_direction = direction;
     }
-    void setReverse(bool reverse) override;
+    void setRemove(bool remove);
 
 protected:
     bool process(Element*) override;
-    bool preProcessing() override;
-    bool mainProcessing() override;
-    bool postProcessing() override;
 
 private:
     Direction m_direction;

@@ -17,26 +17,9 @@ ValidityCommand::ValidityCommand()
 {
 }
 
-bool ValidityCommand::preProcessing()
-{
-    if (!m_firstrun)
-        return true;
-    m_sheet->fullCellStorage()->startUndoRecording();
-    return AbstractRegionCommand::preProcessing();
-}
-
 bool ValidityCommand::process(Element* element)
 {
-    if (!m_reverse) {
-        m_sheet->cellStorage()->setValidity(Region(element->rect()), m_validity);
-    }
-    return true;
-}
-
-bool ValidityCommand::postProcessing()
-{
-    if (m_firstrun)
-        m_sheet->fullCellStorage()->stopUndoRecording(this);
+    m_sheet->cellStorage()->setValidity(Region(element->rect()), m_validity);
     return true;
 }
 

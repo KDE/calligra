@@ -17,27 +17,9 @@ ConditionCommand::ConditionCommand()
 {
 }
 
-bool ConditionCommand::preProcessing()
-{
-    if (!m_firstrun)
-        return true;
-    m_sheet->fullCellStorage()->startUndoRecording();
-    return AbstractRegionCommand::preProcessing();
-}
-
-
 bool ConditionCommand::process(Element* element)
 {
-    if (!m_reverse) {
-        m_sheet->fullCellStorage()->setConditions(Region(element->rect()), m_conditions);
-    }
-    return true;
-}
-
-bool ConditionCommand::postProcessing()
-{
-    if (m_firstrun)
-        m_sheet->fullCellStorage()->stopUndoRecording(this);
+    m_sheet->fullCellStorage()->setConditions(Region(element->rect()), m_conditions);
     return true;
 }
 

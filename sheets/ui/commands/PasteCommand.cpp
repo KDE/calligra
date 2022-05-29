@@ -130,36 +130,16 @@ bool PasteCommand::unknownShiftDirection(const QMimeData *mimeData)
     return true;
 }
 
-bool PasteCommand::preProcessing()
+bool PasteCommand::performCommands()
 {
-    if (m_firstrun) {
-        m_sheet->fullCellStorage()->startUndoRecording();
-    }
-    return AbstractRegionCommand::preProcessing();
-}
-
-bool PasteCommand::mainProcessing()
-{
-    if (m_reverse) { // apply/redo
-        KUndo2Command::undo(); // undo the child commands
-        return true;
-    }
-
-    if (!m_firstrun) { // apply
-        KUndo2Command::redo(); // redo the child commands
-        return true;
-    }
-
     const QList<Element *> elements = cells();
-    const int begin = m_reverse ? elements.count() - 1 : 0;
-    const int end = m_reverse ? -1 : elements.count();
 
     bool isSnippet = m_mimeData->hasFormat("application/x-calligra-sheets-snippet");
     if (!m_sameApp) isSnippet = false;     // cannot use the snippet if it is not ours (it only contains coordinates)
     QString data;
     if (!isSnippet) {
         QString data = m_mimeData->text();
-        for (int i = begin; i != end; m_reverse ? --i : ++i)    
+        for (int i = 0; i < elements.count(); ++i)
             processTextPlain(elements[i], data);
         return true;
     }
@@ -205,19 +185,11 @@ bool PasteCommand::mainProcessing()
 
     // Iterate over all region elements and build the sub-commands.
     int datapos = 0;
-    for (int i = begin; i != end; m_reverse ? --i : ++i) {
+    for (int i = 0; i < elements.count(); ++i) {
         processSnippetData(elements[i], rects[datapos], sheets[datapos], isCut);
         datapos = (datapos + 1) % areas;
     }
     return true;
-}
-
-bool PasteCommand::postProcessing()
-{
-    if (m_firstrun) {
-        m_sheet->fullCellStorage()->stopUndoRecording(this);
-    }
-    return AbstractRegionCommand::postProcessing();
 }
 
 bool PasteCommand::processSnippetData(Element *element, QRect sourceRect, SheetBase *sourceSheet, bool isCut)
@@ -305,12 +277,12 @@ bool PasteCommand::processSnippetData(Element *element, QRect sourceRect, SheetB
                 hideShow->setManipulateColumns(false);
                 hideShow->setSheet(sheet);
                 hideShow->add(region);
-                hideShow->setReverse(!rowFormats->isHidden(srcRow));
+                hideShow->setHide(!rowFormats->isHidden(srcRow));
                 PageBreakCommand *const pageBreak = new PageBreakCommand(this);
                 pageBreak->setMode(PageBreakCommand::BreakBeforeRow);
                 pageBreak->setSheet(sheet);
                 pageBreak->add(region);
-                pageBreak->setReverse(!rowFormats->hasPageBreak(srcRow));
+                pageBreak->setBreak(rowFormats->hasPageBreak(srcRow));
             }
         }
         if (sourceHeight == KS_rowMax) {
@@ -329,12 +301,12 @@ bool PasteCommand::processSnippetData(Element *element, QRect sourceRect, SheetB
                 hideShow->setManipulateColumns(true);
                 hideShow->setSheet(sheet);
                 hideShow->add(region);
-                hideShow->setReverse(!columnFormats->isHidden(srcCol));
+                hideShow->setHide(!columnFormats->isHidden(srcCol));
                 PageBreakCommand *const pageBreak = new PageBreakCommand(this);
                 pageBreak->setMode(PageBreakCommand::BreakBeforeColumn);
                 pageBreak->setSheet(sheet);
                 pageBreak->add(region);
-                pageBreak->setReverse(!columnFormats->hasPageBreak(srcCol));
+                pageBreak->setBreak(columnFormats->hasPageBreak(srcCol));
             }
         }
     }

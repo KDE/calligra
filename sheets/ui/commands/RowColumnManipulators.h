@@ -36,7 +36,8 @@ public:
     }
 
 protected:
-    bool process(Element*) override;
+    bool performNonCommandActions() override;
+    bool undoNonCommandActions() override;
 
 private:
     double m_newSize;
@@ -60,7 +61,8 @@ public:
     }
 
 protected:
-    bool process(Element*) override;
+    bool performNonCommandActions() override;
+    bool undoNonCommandActions() override;
 
 private:
     double m_newSize;
@@ -79,10 +81,6 @@ public:
     explicit AdjustColumnRowManipulator(KUndo2Command *parent = 0);
     ~AdjustColumnRowManipulator() override;
 
-    bool process(Element*) override;
-    bool preProcessing() override;
-    bool postProcessing() override;
-
     void setAdjustColumn(bool state) {
         m_adjustColumn = state;
     }
@@ -91,9 +89,17 @@ public:
     }
 
 protected:
+    bool performNonCommandActions() override;
+    bool undoNonCommandActions() override;
+
+    void setHeights(int from, int to, QMap<int, double> &heights);
+    void setWidths(int from, int to, QMap<int, double> &widths);
+
     KUndo2MagicString name() const;
 
     QSizeF textSize(const QString& text, const Style& style) const;
+    double idealColumnWidth(int col);
+    double idealRowHeight(int row);
     double adjustColumnHelper(const Cell& cell);
     double adjustRowHelper(const Cell& cell);
 
@@ -119,9 +125,9 @@ public:
     explicit HideShowManipulator(KUndo2Command *parent = 0);
     ~HideShowManipulator() override;
 
-    bool process(Element*) override;
-    bool preProcessing() override;
-    bool postProcessing() override;
+    void setHide(bool hide);
+
+    bool preProcess() override;
 
     void setManipulateColumns(bool state) {
         m_manipulateColumns = state;
@@ -131,11 +137,17 @@ public:
     }
 
 protected:
-    KUndo2MagicString name() const;
+    void performActions(bool hide);
+
+    bool performNonCommandActions() override;
+    bool undoNonCommandActions() override;
+
+    KUndo2MagicString name(bool hide) const;
 
 private:
     bool m_manipulateColumns : 1;
     bool m_manipulateRows    : 1;
+    bool m_hide              : 1;
 };
 
 
@@ -152,13 +164,11 @@ public:
     ~InsertDeleteColumnManipulator() override;
 
     void setTemplate(const ColFormat &columnFormat);
-    void setReverse(bool reverse) override;
+    void setDelete(bool deletion);
 
 protected:
     bool process(Element*) override;
-    bool preProcessing() override;
-    bool mainProcessing() override;
-    bool postProcessing() override;
+    bool preProcess() override;
 
 private:
     enum Mode { Insert, Delete };
@@ -180,13 +190,11 @@ public:
     ~InsertDeleteRowManipulator() override;
 
     void setTemplate(const RowFormat &rowFormat);
-    void setReverse(bool reverse) override;
+    void setDelete(bool deletion);
 
 protected:
     bool process(Element*) override;
-    bool preProcessing() override;
-    bool mainProcessing() override;
-    bool postProcessing() override;
+    bool preProcess() override;
 
 private:
     enum Mode { Insert, Delete };

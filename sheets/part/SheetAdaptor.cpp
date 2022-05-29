@@ -275,7 +275,7 @@ void SheetAdaptor::removeColumn(int col, int nbCol)
 {
     InsertDeleteColumnManipulator* manipulator = new InsertDeleteColumnManipulator();
     manipulator->setSheet(m_sheet);
-    manipulator->setReverse(true);
+    manipulator->setDelete(true);
     manipulator->add(Region(QRect(col, 1, nbCol, 1)));
     manipulator->execute();
 }
@@ -284,7 +284,7 @@ void SheetAdaptor::removeRow(int row, int nbRow)
 {
     InsertDeleteRowManipulator* manipulator = new InsertDeleteRowManipulator();
     manipulator->setSheet(m_sheet);
-    manipulator->setReverse(true);
+    manipulator->setDelete(true);
     manipulator->add(Region(QRect(1, row, 1, nbRow)));
     manipulator->execute();
 }

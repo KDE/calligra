@@ -24,17 +24,12 @@ AutoFilterCommand::~AutoFilterCommand()
 {
 }
 
-void AutoFilterCommand::redo()
+bool AutoFilterCommand::performCommands()
 {
     Database database;
     database.setDisplayFilterButtons(true);
     database.setRange(*this);
     m_sheet->fullCellStorage()->setDatabase(*this, database);
-    m_sheet->map()->addDamage(new CellDamage(m_sheet, *this, CellDamage::Appearance));
+    return true;
 }
 
-void AutoFilterCommand::undo()
-{
-    m_sheet->fullCellStorage()->setDatabase(*this, Database());
-    m_sheet->map()->addDamage(new CellDamage(m_sheet, *this, CellDamage::Appearance));
-}

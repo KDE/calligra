@@ -192,7 +192,7 @@ void NamedAreaDialog::slotRemove()
 
     NamedAreaCommand* command = new NamedAreaCommand();
     command->setAreaName(item->text());
-    command->setReverse(true);
+    command->setRemove(true);
     command->setSheet(m_selection->activeSheet());
     if (!command->execute(m_selection->canvas())) {
         delete command;
@@ -301,7 +301,7 @@ void EditNamedAreaDialog::slotOk()
         // remove the old named area
         NamedAreaCommand* command = new NamedAreaCommand(macroCommand);
         command->setAreaName(m_initialAreaName);
-        command->setReverse(true);
+        command->setRemove(true);
         command->setSheet(sheet);
         command->add(region);
     }

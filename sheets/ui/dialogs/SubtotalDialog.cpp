@@ -210,7 +210,7 @@ void SubtotalDialog::removeSubtotalLines()
             ShiftManipulator* manipulator = new ShiftManipulator();
             manipulator->setSheet(sheet);
             manipulator->setDirection(ShiftManipulator::ShiftBottom);
-            manipulator->setReverse(true);
+            manipulator->setRemove(true);
             manipulator->add(Region(rect));
             manipulator->execute(d->selection->canvas());
             range.setHeight(range.height() - 1);

@@ -803,7 +803,7 @@ void CellFormatDialog::slotApply()
         command->setSelection(m_selection);
         if (!positionPage->getMergedCellState())
             //dissociate cells
-            command->setReverse(true);
+            command->setMerge(false);
         command->add(*m_selection);
     }
 

@@ -25,11 +25,9 @@ public:
     IndentationCommand();
 
     void setIndent(double val);
-    void setReverse(bool reverse) override;
 
 protected:
-    bool mainProcessing() override;
-    bool postProcessing() override;
+    bool performCommands() override;
 private:
     double m_indent;
 };

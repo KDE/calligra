@@ -29,21 +29,18 @@ void NamedAreaCommand::setAreaName(const QString& name)
     m_areaName = name;
 }
 
-void NamedAreaCommand::setReverse(bool reverse)
+void NamedAreaCommand::setRemove(bool remove)
 {
-    AbstractRegionCommand::setReverse(reverse);
-    if (!m_reverse)
+    m_remove = remove;
+    if (!m_remove)
         setText(kundo2_i18n("Add Named Area"));
     else
         setText(kundo2_i18n("Remove Named Area"));
 }
 
-bool NamedAreaCommand::preProcessing()
+bool NamedAreaCommand::preProcess()
 {
-    if (!m_firstrun)
-        return true;
-    if (m_reverse)
-        return true;
+    if (!m_firstrun) return true;
 
     const Region namedArea = m_sheet->map()->namedAreaManager()->namedArea(m_areaName);
     if (!namedArea.isEmpty()) {
@@ -55,38 +52,28 @@ bool NamedAreaCommand::preProcessing()
     return isContiguous();
 }
 
-bool NamedAreaCommand::mainProcessing()
+bool NamedAreaCommand::performNonCommandActions()
 {
-    debugSheets ;
-    if (!m_reverse) {
+    NamedAreaManager *manager = m_sheet->map()->namedAreaManager();
+
+    if (!m_remove) {
         if (!m_oldArea.isEmpty())
-            m_sheet->map()->namedAreaManager()->remove(m_areaName);
-        m_sheet->map()->namedAreaManager()->insert(*this, m_areaName);
+            manager->remove(m_areaName);
+        manager->insert(*this, m_areaName);
     } else {
-        m_sheet->map()->namedAreaManager()->remove(m_areaName);
+        manager->remove(m_areaName);
         if (!m_oldArea.isEmpty())
-            m_sheet->map()->namedAreaManager()->insert(m_oldArea, m_areaName);
+            manager->insert(m_oldArea, m_areaName);
     }
     return true;
 }
 
-bool NamedAreaCommand::postProcessing()
+bool NamedAreaCommand::undoNonCommandActions()
 {
-    // update formulas containing either the new or the old name
-    MapBase* const map = m_sheet->map();
-    foreach(SheetBase* sheet, map->sheetList()) {
-        const QString tmp = '\'' + m_areaName + '\'';
-        const FormulaStorage* const storage = sheet->formulaStorage();
-        for (int c = 0; c < storage->count(); ++c) {
-            if (storage->data(c).expression().contains(tmp)) {
-                CellBase cell(sheet, storage->col(c), storage->row(c));
-                if (cell.isFormula()) {
-                    // recalculate cells
-                    map->addDamage(new CellDamage(cell, CellDamage::Appearance | CellDamage::Binding |
-                                                  CellDamage::Value));
-                }
-            }
-        }
-    }
-    return AbstractRegionCommand::postProcessing();
+    m_remove = !m_remove;
+    performNonCommandActions();
+    m_remove = !m_remove;
+    return true;
 }
+
+

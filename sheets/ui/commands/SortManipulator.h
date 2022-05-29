@@ -58,8 +58,8 @@ public:
     void clearCriteria();
 
 protected:
-    bool preProcessing() override;
-    bool postProcessing() override;
+    bool preProcess() override;
+    bool postProcess() override;
     Value newValue(Element *element, int col, int row,
                            bool *parse, Format::Type *fmtType) override;
     Style newFormat(Element *element, int col, int row) override;

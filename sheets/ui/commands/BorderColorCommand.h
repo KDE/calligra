@@ -29,14 +29,10 @@ public:
     }
 
 protected:
-    bool preProcessing() override;
-    bool mainProcessing() override;
-    bool postProcessing() override;
+    bool performCommands() override;
 
 private:
     QColor m_color;
-
-    QVector< QPair<QRectF, SharedSubStyle> > m_undoData;
 };
 
 } // namespace Sheets

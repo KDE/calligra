@@ -86,7 +86,7 @@ public:
 CellStorage::CellStorage(Sheet* sheet)
         : QObject(sheet)
         , CellBaseStorage(sheet)
-        , undoEnabled(false)
+        , undoCounter(0)
         , d(new Private(sheet))
 #ifdef CALLIGRA_SHEETS_MT
         , bigUglyLock(QReadWriteLock::Recursive)
@@ -98,7 +98,7 @@ CellStorage::CellStorage(Sheet* sheet)
 CellStorage::CellStorage(const CellStorage& other)
         : QObject(other.d->sheet)
         , CellBaseStorage(other)
-        , undoEnabled(false)
+        , undoCounter(0)
         , d(new Private(*other.d, other.d->sheet))
 #ifdef CALLIGRA_SHEETS_MT
         , bigUglyLock(QReadWriteLock::Recursive)
@@ -110,7 +110,7 @@ CellStorage::CellStorage(const CellStorage& other)
 CellStorage::CellStorage(const CellStorage& other, Sheet* sheet)
         : QObject(sheet)
         , CellBaseStorage(other, sheet)
-        , undoEnabled(false)
+        , undoCounter(0)
         , d(new Private(*other.d, sheet))
 #ifdef CALLIGRA_SHEETS_MT
         , bigUglyLock(QReadWriteLock::Recursive)
@@ -644,14 +644,14 @@ void CellStorage::startUndoRecording()
 #ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&bigUglyLock);
 #endif
-    // If undo is set, the recording wasn't stopped.
-    // Should not happen, hence this assertion.
-    Q_ASSERT(undoEnabled == false);
 
-    for (StorageBase *storage : storages)
-        storage->storeUndo(true);
+    // This can be called resursively from commands, hence the counter and not a simple flag.
+    if (!undoCounter) {
+        for (StorageBase *storage : storages)
+            storage->storeUndo(true);
+    }
 
-    undoEnabled = true;
+    undoCounter++;
 }
 
 void CellStorage::stopUndoRecording(KUndo2Command *parent)
@@ -659,14 +659,17 @@ void CellStorage::stopUndoRecording(KUndo2Command *parent)
 #ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&bigUglyLock);
 #endif
-    Q_ASSERT(undoEnabled);
+    Q_ASSERT(undoCounter > 0);
+
+    undoCounter--;
+    // Are we in a resursive call?
+    if (undoCounter) return;
+
     // append sub-commands to the parent command
     createCommand(parent);
 
     for (StorageBase *storage : storages)
         storage->resetUndo();
-
-    undoEnabled = false;
 }
 
 void CellStorage::createCommand(KUndo2Command *parent) const

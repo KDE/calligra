@@ -71,9 +71,7 @@ public:
     static bool unknownShiftDirection(const QMimeData *mimeData);
 
 protected:
-    bool preProcessing() override;
-    bool mainProcessing() override;
-    bool postProcessing() override;
+    bool performCommands() override;
 
     /**
      * Creates sub-commands for the region \p element. \p data.

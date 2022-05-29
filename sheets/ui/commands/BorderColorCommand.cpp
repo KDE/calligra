@@ -19,84 +19,63 @@ BorderColorCommand::BorderColorCommand()
     setText(kundo2_i18n("Change Border Color"));
 }
 
-bool BorderColorCommand::preProcessing()
+bool BorderColorCommand::performCommands()
 {
-    if (!m_firstrun)
-        return true;
-    m_sheet->fullCellStorage()->startUndoRecording();
-    return AbstractRegionCommand::preProcessing();
-}
-
-bool BorderColorCommand::mainProcessing()
-{
-    if (!m_reverse) {
-        if (m_firstrun) {
-            // Grab the current data.
-            QVector< QPair<QRectF, SharedSubStyle> > undoData = m_sheet->styleStorage()->currentData(*this);
-            ConstIterator endOfList = constEnd();
-            for (ConstIterator it = constBegin(); it != endOfList; ++it) {
-                for (int i = 0; i < undoData.count(); ++i) {
-                    if (undoData[i].second->type() != Style::LeftPen &&
-                            undoData[i].second->type() != Style::RightPen &&
-                            undoData[i].second->type() != Style::TopPen &&
-                            undoData[i].second->type() != Style::BottomPen &&
-                            undoData[i].second->type() != Style::FallDiagonalPen &&
-                            undoData[i].second->type() != Style::GoUpDiagonalPen) {
-                        undoData.removeAt(i--);
-                    }
-                }
-                m_undoData += undoData;
+    // Grab the current borders.
+    QVector< QPair<QRectF, SharedSubStyle> > undoData = m_sheet->styleStorage()->currentData(*this);
+    ConstIterator endOfList = constEnd();
+    for (ConstIterator it = constBegin(); it != endOfList; ++it) {
+        for (int i = 0; i < undoData.count(); ++i) {
+            if (undoData[i].second->type() != Style::LeftPen &&
+                    undoData[i].second->type() != Style::RightPen &&
+                    undoData[i].second->type() != Style::TopPen &&
+                    undoData[i].second->type() != Style::BottomPen &&
+                    undoData[i].second->type() != Style::FallDiagonalPen &&
+                    undoData[i].second->type() != Style::GoUpDiagonalPen) {
+                undoData.removeAt(i--);
             }
         }
+    }
 
-        // change colors
-        Style style;
-        for (int i = 0; i < m_undoData.count(); ++i) {
-            style.clear();
-            style.insertSubStyle(m_undoData[i].second);
-            QPen pen;
-            if (m_undoData[i].second->type() == Style::LeftPen) {
-                pen = style.leftBorderPen();
-                pen.setColor(m_color);
-                style.setLeftBorderPen(pen);
-            }
-            if (m_undoData[i].second->type() == Style::RightPen) {
-                pen = style.rightBorderPen();
-                pen.setColor(m_color);
-                style.setRightBorderPen(pen);
-            }
-            if (m_undoData[i].second->type() == Style::TopPen) {
-                pen = style.topBorderPen();
-                pen.setColor(m_color);
-                style.setTopBorderPen(pen);
-            }
-            if (m_undoData[i].second->type() == Style::BottomPen) {
-                pen = style.bottomBorderPen();
-                pen.setColor(m_color);
-                style.setBottomBorderPen(pen);
-            }
-            if (m_undoData[i].second->type() == Style::FallDiagonalPen) {
-                pen = style.fallDiagonalPen();
-                pen.setColor(m_color);
-                style.setFallDiagonalPen(pen);
-            }
-            if (m_undoData[i].second->type() == Style::GoUpDiagonalPen) {
-                pen = style.goUpDiagonalPen();
-                pen.setColor(m_color);
-                style.setGoUpDiagonalPen(pen);
-            }
-            m_sheet->fullCellStorage()->setStyle(Region(m_undoData[i].first.toRect()), style);
+    // And change their colors.
+    Style style;
+    for (int i = 0; i < undoData.count(); ++i) {
+        style.clear();
+        style.insertSubStyle(undoData[i].second);
+        QPen pen;
+        if (undoData[i].second->type() == Style::LeftPen) {
+            pen = style.leftBorderPen();
+            pen.setColor(m_color);
+            style.setLeftBorderPen(pen);
         }
-    } else { // m_reverse
-        KUndo2Command::undo(); // undo child commands
+        if (undoData[i].second->type() == Style::RightPen) {
+            pen = style.rightBorderPen();
+            pen.setColor(m_color);
+            style.setRightBorderPen(pen);
+        }
+        if (undoData[i].second->type() == Style::TopPen) {
+            pen = style.topBorderPen();
+            pen.setColor(m_color);
+            style.setTopBorderPen(pen);
+        }
+        if (undoData[i].second->type() == Style::BottomPen) {
+            pen = style.bottomBorderPen();
+            pen.setColor(m_color);
+            style.setBottomBorderPen(pen);
+        }
+        if (undoData[i].second->type() == Style::FallDiagonalPen) {
+            pen = style.fallDiagonalPen();
+            pen.setColor(m_color);
+            style.setFallDiagonalPen(pen);
+        }
+        if (undoData[i].second->type() == Style::GoUpDiagonalPen) {
+            pen = style.goUpDiagonalPen();
+            pen.setColor(m_color);
+            style.setGoUpDiagonalPen(pen);
+        }
+        m_sheet->fullCellStorage()->setStyle(Region(undoData[i].first.toRect()), style);
     }
     return true;
 }
 
-bool BorderColorCommand::postProcessing()
-{
-    if (m_firstrun)
-        m_sheet->fullCellStorage()->stopUndoRecording(this);
-    return true;
-}
 

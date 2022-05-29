@@ -38,8 +38,6 @@ public:
 
 protected:
     bool process(Element* element) override;
-    bool preProcessing() override;
-    bool mainProcessing() override;
 
 private:
     QList<Style> m_styles;

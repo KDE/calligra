@@ -27,8 +27,6 @@ public:
 
 protected:
     bool process(Element* element) override;
-    bool preProcessing() override;
-    bool postProcessing() override;
 
 private:
     QString m_comment;

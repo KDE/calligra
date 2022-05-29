@@ -27,12 +27,18 @@ public:
     enum Mode { BreakBeforeColumn, BreakBeforeRow };
     void setMode(Mode mode);
 
+    void setBreak(bool breaking) {
+        m_breaking = breaking;
+    }
+
 protected:
-    bool process(Element *) override;
-    bool postProcessing() override;
+    bool performNonCommandActions() override;
+    bool undoNonCommandActions() override;
+    bool setRangeBreak(Sheet *sheet, const QRect range, bool enable);
 
 private:
     Mode m_mode;
+    bool m_breaking      : 1;
 };
 
 } // namespace Sheets

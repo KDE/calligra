@@ -28,8 +28,6 @@ public:
 
 protected:
     bool process(Element* element) override;
-    bool preProcessing() override;
-    bool postProcessing() override;
 
 private:
     Validity m_validity;

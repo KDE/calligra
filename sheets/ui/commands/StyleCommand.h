@@ -153,10 +153,6 @@ public:
 protected:
     bool process(Element*) override;
 
-    bool preProcessing() override;
-    bool mainProcessing() override;
-    bool postProcessing() override;
-
 private:
     QPen m_horizontalPen;
     QPen m_verticalPen;

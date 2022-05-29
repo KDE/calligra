@@ -34,32 +34,45 @@ ResizeColumnManipulator::~ResizeColumnManipulator()
 {
 }
 
-bool ResizeColumnManipulator::process(Element* element)
-{
-    QRect range = element->rect();
-    // TODO: more efficiently store old sizes
-    if (m_firstrun) {
-        for (int col = range.right(); col >= range.left(); --col) {
-            m_oldSizes[col] = m_sheet->columnFormats()->colWidth(col);
+bool ResizeColumnManipulator::performNonCommandActions() {
+    const QList<Element *> elements = cells();
+    for (int i = 0; i < elements.count(); ++i) {
+        Element *element = elements[i];
+        QRect range = element->rect();
+        if (m_firstrun) {
+            for (int col = range.right(); col >= range.left(); --col) {
+                m_oldSizes[col] = m_sheet->columnFormats()->colWidth(col);
+            }
+        }
+        m_sheet->columnFormats()->setColWidth(range.left(), range.right(), qMax(2.0, m_newSize));
+
+        // TODO: more efficiently update positions of cell-anchored shapes
+        for (int col = range.left(); col <= range.right(); ++col) {
+            qreal delta = m_newSize - m_oldSizes[col];
+            m_sheet->adjustCellAnchoredShapesX(delta, col+1);
         }
     }
-    if (m_reverse) {
+
+    m_sheet->map()->addDamage(new SheetDamage(m_sheet, SheetDamage::ContentChanged));
+    return true;
+}
+
+bool ResizeColumnManipulator::undoNonCommandActions() {
+    const QList<Element *> elements = cells();
+    for (int i = 0; i < elements.count(); ++i) {
+        Element *element = elements[i];
+        QRect range = element->rect();
         for (int col = range.right(); col >= range.left(); --col) {
             m_sheet->columnFormats()->setColWidth(col, col, m_oldSizes[col]);
         }
-    } else {
-        m_sheet->columnFormats()->setColWidth(range.left(), range.right(), qMax(2.0, m_newSize));
+        // TODO: more efficiently update positions of cell-anchored shapes
+        for (int col = range.left(); col <= range.right(); ++col) {
+            qreal delta = -1 * (m_newSize - m_oldSizes[col]);
+            m_sheet->adjustCellAnchoredShapesX(delta, col+1);
+        }
     }
-    // TODO: more efficiently update positions of cell-anchored shapes
-    for (int col = range.left(); col <= range.right(); ++col) {
-        qreal delta = m_newSize - m_oldSizes[col];
-        if (m_reverse) delta = -delta;
-        m_sheet->adjustCellAnchoredShapesX(delta, col+1);
-    }
-    // Just repaint everything visible; no need to invalidate the visual cache.
-    m_sheet->map()->addDamage(new SheetDamage(m_sheet, SheetDamage::ContentChanged));
-    // TODO: only invalidate the cells that are actually effected by this resize (so everything in this column, and everything that covers something in this column)
-    m_sheet->map()->addDamage(new CellDamage(m_sheet, Region(1, 1, KS_colMax, KS_rowMax, m_sheet), CellDamage::Appearance));
+
+    m_sheet->map()->addDamage(new SheetDamage(m_sheet, SheetDamage::ContentChanged | SheetDamage::ColumnsChanged));
     return true;
 }
 
@@ -79,32 +92,50 @@ ResizeRowManipulator::~ResizeRowManipulator()
 {
 }
 
-bool ResizeRowManipulator::process(Element* element)
-{
-    QRect range = element->rect();
-    // TODO: more efficiently store old sizes
-    if (m_firstrun) {
-        for (int row = range.bottom(); row >= range.top(); --row) {
-            m_oldSizes[row] = m_sheet->rowFormats()->rowHeight(row);
+bool ResizeRowManipulator::performNonCommandActions() {
+    const QList<Element *> elements = cells();
+    for (int i = 0; i < elements.count(); ++i) {
+        Element *element = elements[i];
+        QRect range = element->rect();
+        if (m_firstrun) {
+            for (int row = range.bottom(); row >= range.top(); --row) {
+                m_oldSizes[row] = m_sheet->rowFormats()->rowHeight(row);
+            }
+        }
+        m_sheet->rowFormats()->setRowHeight(range.top(), range.bottom(), m_newSize);
+        // TODO: more efficiently update positions of cell-anchored shapes
+        for (int row = range.top(); row <= range.bottom(); ++row) {
+            qreal delta = m_newSize - m_oldSizes[row];
+            m_sheet->adjustCellAnchoredShapesY(delta, row+1);
         }
     }
-    if (m_reverse) {
+
+    m_sheet->map()->addDamage(new SheetDamage(m_sheet, SheetDamage::ContentChanged));
+    return true;
+}
+
+bool ResizeRowManipulator::undoNonCommandActions() {
+    const QList<Element *> elements = cells();
+    for (int i = 0; i < elements.count(); ++i) {
+        Element *element = elements[i];
+        QRect range = element->rect();
+        // TODO: more efficiently store old sizes
+        if (m_firstrun) {
+            for (int row = range.bottom(); row >= range.top(); --row) {
+                m_oldSizes[row] = m_sheet->rowFormats()->rowHeight(row);
+            }
+        }
         for (int row = range.bottom(); row >= range.top(); --row) {
             m_sheet->rowFormats()->setRowHeight(row, row, m_oldSizes[row]);
         }
-    } else {
-        m_sheet->rowFormats()->setRowHeight(range.top(), range.bottom(), m_newSize);
+        // TODO: more efficiently update positions of cell-anchored shapes
+        for (int row = range.top(); row <= range.bottom(); ++row) {
+            qreal delta = -1 * (m_newSize - m_oldSizes[row]);
+            m_sheet->adjustCellAnchoredShapesY(delta, row+1);
+        }
     }
-    // TODO: more efficiently update positions of cell-anchored shapes
-    for (int row = range.top(); row <= range.bottom(); ++row) {
-        qreal delta = m_newSize - m_oldSizes[row];
-        if (m_reverse) delta = -delta;
-        m_sheet->adjustCellAnchoredShapesY(delta, row+1);
-    }
-    // Just repaint everything visible; no need to invalidate the visual cache.
-    m_sheet->map()->addDamage(new SheetDamage(m_sheet, SheetDamage::ContentChanged));
-    // TODO: only invalidate the cells that are actually effected by this resize (so everything in this row, and everything that covers something in this row)
-    m_sheet->map()->addDamage(new CellDamage(m_sheet, Region(1, 1, KS_colMax, KS_rowMax, m_sheet), CellDamage::Appearance));
+
+    m_sheet->map()->addDamage(new SheetDamage(m_sheet, SheetDamage::ContentChanged | SheetDamage::RowsChanged));
     return true;
 }
 
@@ -116,7 +147,8 @@ bool ResizeRowManipulator::process(Element* element)
 HideShowManipulator::HideShowManipulator(KUndo2Command* parent)
         : AbstractRegionCommand(parent),
         m_manipulateColumns(false),
-        m_manipulateRows(false)
+        m_manipulateRows(false),
+        m_hide(false)
 {
 }
 
@@ -124,106 +156,88 @@ HideShowManipulator::~HideShowManipulator()
 {
 }
 
-bool HideShowManipulator::process(Element* element)
+void HideShowManipulator::setHide(bool hide)
 {
-    QRect range = element->rect();
-    if (m_manipulateColumns) {
-        m_sheet->columnFormats()->setHidden(range.left(), range.right(), !m_reverse);
-        qreal delta = m_sheet->columnFormats()->totalColWidth(range.left(), range.right());
-        if (!m_reverse) delta = -delta;
-        m_sheet->adjustCellAnchoredShapesX(delta, range.left());
+    m_hide = hide;
+    setText(name(hide));
+}
+
+void HideShowManipulator::performActions(bool hide)
+{
+    const QList<Element *> elements = cells();
+    for (int i = 0; i < elements.count(); ++i) {
+        QRect range = elements[i]->rect();
+
+        if (m_manipulateColumns) {
+            m_sheet->columnFormats()->setHidden(range.left(), range.right(), hide);
+            qreal delta = m_sheet->columnFormats()->totalColWidth(range.left(), range.right());
+            if (hide) delta = -delta;
+            m_sheet->adjustCellAnchoredShapesX(delta, range.left());
+        }
+        if (m_manipulateRows) {
+            m_sheet->rowFormats()->setHidden(range.top(), range.bottom(), hide);
+            qreal delta = m_sheet->rowFormats()->totalRowHeight(range.top(), range.bottom());
+            if (hide) delta = -delta;
+            m_sheet->adjustCellAnchoredShapesY(delta, range.top());
+        }
+
     }
-    if (m_manipulateRows) {
-        m_sheet->rowFormats()->setHidden(range.top(), range.bottom(), !m_reverse);
-        qreal delta = m_sheet->rowFormats()->totalRowHeight(range.top(), range.bottom());
-        if (!m_reverse) delta = -delta;
-        m_sheet->adjustCellAnchoredShapesY(delta, range.top());
-    }
+
+    // Just repaint everything visible; no need to invalidate the visual cache.
+    SheetDamage::Changes changes = SheetDamage::ContentChanged;
+    if (m_manipulateColumns)
+        changes |= SheetDamage::ColumnsChanged;
+    if (m_manipulateRows)
+        changes |= SheetDamage::RowsChanged;
+    m_sheet->map()->addDamage(new SheetDamage(m_sheet, changes));
+
+
+    setText(name(!hide));
+}
+
+bool HideShowManipulator::performNonCommandActions() {
+    performActions(m_hide);
     return true;
 }
 
-bool HideShowManipulator::preProcessing()
+bool HideShowManipulator::undoNonCommandActions() {
+    performActions(!m_hide);
+    return true;
+}
+
+bool HideShowManipulator::preProcess()
 {
-    if (m_firstrun)
-        setText(name());
     Region region;
     ConstIterator endOfList = cells().constEnd();
     for (ConstIterator it = cells().constBegin(); it != endOfList; ++it) {
-        if (m_reverse) {
-            QRect range = (*it)->rect();
-            if (m_manipulateColumns) {
-                if (range.left() > 1) {
-                    int col;
-                    for (col = 1; col < range.left(); ++col) {
-                        if (!m_sheet->columnFormats()->isHidden(col))
-                            break;
-                    }
-                    if (col == range.left()) {
-                        region.add(QRect(1, 1, range.left() - 1, KS_rowMax));
-                    }
-                }
-                for (int col = range.left(); col <= range.right(); ++col) {
-                    if (m_sheet->columnFormats()->isHidden(col)) {
-                        region.add(QRect(col, 1, 1, KS_rowMax));
-                    }
-                }
-            }
-            if (m_manipulateRows) {
-                if (range.top() > 1) {
-                    int row;
-                    for (row = 1; row < range.top(); ++row) {
-                        if (!m_sheet->rowFormats()->isHidden(row)) {
-                            break;
-                        }
-                    }
-                    if (row == range.top()) {
-                        region.add(QRect(1, 1, KS_colMax, range.top() - 1));
-                    }
-                }
-                for (int row = range.top(); row <= range.bottom(); ++row) {
-                    if (m_sheet->rowFormats()->isHidden(row)) {
-                        region.add(QRect(1, row, KS_colMax, 1));
-                    }
-                }
-            }
-        }
-
-        if (((*it)->isRow() && m_manipulateColumns) ||
-                ((*it)->isColumn() && m_manipulateRows)) {
-            /*      KMessageBox::error( this, i18n( "Area is too large." ) );*/
-            return false;
+        QRect range = (*it)->rect();
+        // too big if we want to hide everything
+        if (m_manipulateColumns) {
+            if (range.right() >= KS_colMax) return false;
+        } else {
+            if (range.bottom() >= KS_rowMax) return false;
         }
     }
 
-    if (m_reverse) {
-        clear();
-        add(region);
-    }
-
-    return AbstractRegionCommand::preProcessing();
-}
-
-bool HideShowManipulator::postProcessing()
-{
-    // Just repaint everything visible; no need to invalidate the visual cache.
-    m_sheet->map()->addDamage(new SheetDamage(m_sheet, SheetDamage::ContentChanged));
     return true;
 }
 
-KUndo2MagicString HideShowManipulator::name() const
+KUndo2MagicString HideShowManipulator::name(bool hide) const
 {
-    if (m_reverse && m_manipulateColumns && m_manipulateRows) {
-        return kundo2_i18n("Show Rows/Columns");
-    } else if (m_reverse && m_manipulateColumns) {
-        return kundo2_i18n("Show Columns");
-    } else if (m_reverse && m_manipulateRows) {
-        return kundo2_i18n("Show Rows");
-    } else if (!m_reverse && m_manipulateColumns && m_manipulateRows) {
-        return kundo2_i18n("Hide Rows/Columns");
-    } else if (!m_reverse && m_manipulateColumns) {
-        return kundo2_i18n("Hide Columns");
-    } else if (!m_reverse && m_manipulateRows) {
-        return kundo2_i18n("Hide Rows");
+    if (hide) {
+        if (m_manipulateColumns && m_manipulateRows)
+            return kundo2_i18n("Hide Rows/Columns");
+        else if (m_manipulateColumns)
+            return kundo2_i18n("Hide Columns");
+        else if (m_manipulateRows)
+            return kundo2_i18n("Hide Rows");
+    } else {
+        if (m_manipulateColumns && m_manipulateRows)
+            return kundo2_i18n("Show Rows/Columns");
+        else if (m_manipulateColumns)
+            return kundo2_i18n("Show Columns");
+        else if (m_manipulateRows)
+            return kundo2_i18n("Show Rows");
     }
 
     return kundo2_noi18n("XXX: bug!");
@@ -244,205 +258,91 @@ AdjustColumnRowManipulator::~AdjustColumnRowManipulator()
 {
 }
 
-bool AdjustColumnRowManipulator::process(Element* element)
-{
-    Sheet* sheet = m_sheet; // TODO Stefan: element->sheet();
-    if (m_sheet && sheet != m_sheet) {
-        return true;
-    }
+bool AdjustColumnRowManipulator::performNonCommandActions() {
+    QRect used = m_sheet->usedArea();
+    const QList<Element *> elements = cells();
+    for (int i = 0; i < elements.count(); ++i) {
+        QRect range = elements[i]->rect();
+        if (elements[i]->sheet() != m_sheet) continue;
 
-    QMap<int, double> heights;
-    QMap<int, double> widths;
-    if (m_reverse) {
-        heights = m_oldHeights;
-        widths = m_oldWidths;
-    } else {
-        heights = m_newHeights;
-        widths = m_newWidths;
-    }
-
-    CellStorage *cs = sheet->fullCellStorage();
-    QRect range = element->rect();
-    if (m_adjustColumn) {
-        if (element->isRow()) {
-            for (int row = range.top(); row <= range.bottom(); ++row) {
-                Cell cell = cs->firstInRow(row);
-                while (!cell.isNull()) {
-                    int col = cell.column();
-                    if (!cell.isEmpty() && !cell.isPartOfMerged()) {
-                        if (widths.contains(col) && widths[col] != -1.0) {
-                            double w = sheet->columnFormats()->colWidth(col);
-                            if (qAbs(w - widths[col]) > DBL_EPSILON) {
-                                sheet->columnFormats()->setColWidth(col, col, qMax(2.0, widths[col]));
-                            }
-                        }
-                    }
-                    cell = cs->nextInRow(col, row);
+        if (m_adjustColumn) {
+            int min = qMin(range.left(), used.right());
+            int max = qMin(range.right(), used.right());
+            if (m_firstrun) {
+                for (int col = min; col <= max; ++col) {
+                    m_oldWidths[col] = m_sheet->columnFormats()->colWidth(col);
+                    m_newWidths[col] = idealColumnWidth(col);
                 }
             }
-        } else {
-            for (int col = range.left(); col <= range.right(); ++col) {
-                if (widths.contains(col) && widths[col] != -1.0) {
-                    double w = sheet->columnFormats()->colWidth(col);
-                    if (qAbs(w - widths[col]) > DBL_EPSILON) {
-                        sheet->columnFormats()->setColWidth(col, col, qMax(2.0, widths[col]));
-                    }
+            setWidths(min, max, m_newWidths);
+        }
+
+        if (m_adjustRow) {
+            int min = qMin(range.top(), used.bottom());
+            int max = qMin(range.bottom(), used.bottom());
+            if (m_firstrun) {
+                for (int row = min; row <= max; ++row) {
+                    m_oldHeights[row] = m_sheet->rowFormats()->rowHeight(row);
+                    m_newHeights[row] = idealRowHeight(row);
                 }
             }
+            setHeights(min, max, m_newHeights);
         }
     }
-    if (m_adjustRow) {
-        if (element->isColumn()) {
-            for (int col = range.left(); col <= range.right(); ++col) {
-                Cell cell = cs->firstInColumn(col);
-                while (!cell.isNull()) {
-                    int row = cell.row();
-                    if (!cell.isEmpty() && !cell.isPartOfMerged()) {
-                        if (heights.contains(row) && heights[row] != -1.0) {
-                            sheet->rowFormats()->setRowHeight(row, row, heights[row]);
-                        }
-                    }
-                    cell = cs->nextInColumn(col, row);
-                }
-            }
-        } else {
-            for (int row = range.top(); row <= range.bottom(); ++row) {
-                if (heights.contains(row) && heights[row] != -1.0) {
-                    sheet->rowFormats()->setRowHeight(row, row, heights[row]);
-                }
-            }
-        }
-    }
-    // The cell width(s) or height(s) changed, which are cached: rebuild them.
-    const Region region(m_adjustRow ? 1 : range.left(),
-                        m_adjustColumn ? 1 : range.top(),
-                        m_adjustRow ? KS_colMax : range.width(),
-                        m_adjustColumn ? KS_rowMax : range.height());
-    m_sheet->map()->addDamage(new CellDamage(m_sheet, region, CellDamage::Appearance));
+
     return true;
 }
 
-bool AdjustColumnRowManipulator::preProcessing()
-{
-    if (m_firstrun)
-        setText(name());
-    if (m_reverse) {
-    } else {
-        if (!m_newHeights.isEmpty() || !m_newWidths.isEmpty()) {
-            return AbstractRegionCommand::preProcessing();
-        }
-//     createUndo();
+bool AdjustColumnRowManipulator::undoNonCommandActions() {
+    QRect used = m_sheet->usedArea();
+    const QList<Element *> elements = cells();
+    for (int i = 0; i < elements.count(); ++i) {
+        QRect range = elements[i]->rect();
+        if (elements[i]->sheet() != m_sheet) continue;
 
-        CellStorage *cs = m_sheet->fullCellStorage();
-        ConstIterator endOfList(cells().constEnd());
-        for (ConstIterator it = cells().constBegin(); it != endOfList; ++it) {
-            Element* element = *it;
-            QRect range = element->rect();
-            if (element->isColumn()) {
-                for (int col = range.left(); col <= range.right(); ++col) {
-                    Cell cell = cs->firstInColumn(col);
-                    while (!cell.isNull()) {
-                        int row = cell.row();
-                        if (m_adjustColumn) {
-                            if (!m_newWidths.contains(col)) {
-                                m_newWidths[col] = -1.0;
-                                m_oldWidths[col] = m_sheet->columnFormats()->colWidth(col);
-                            }
-                            if (!cell.isEmpty() && !cell.isPartOfMerged()) {
-                                m_newWidths[col] = qMax(adjustColumnHelper(cell),
-                                                        m_newWidths[col]);
-                            }
-                        }
-                        if (m_adjustRow) {
-                            if (!m_newHeights.contains(row)) {
-                                m_newHeights[row] = -1.0;
-                                m_oldHeights[row] = m_sheet->rowFormats()->rowHeight(row);
-                            }
-                            if (!cell.isEmpty() && !cell.isPartOfMerged()) {
-                                m_newHeights[row] = qMax(adjustRowHelper(cell),
-                                                         m_newHeights[row]);
-                            }
-                        }
-                        cell = cs->nextInColumn(col, row);
-                    }
-                }
-            } else if (element->isRow()) {
-                for (int row = range.top(); row <= range.bottom(); ++row) {
-                    Cell cell = cs->firstInRow(row);
-                    while (!cell.isNull()) {
-                        int col = cell.column();
-                        if (m_adjustColumn) {
-                            if (!m_newWidths.contains(col)) {
-                                m_newWidths[col] = -1.0;
-                                m_oldWidths[col] = m_sheet->columnFormats()->colWidth(col);
-                            }
-                            if (!cell.isEmpty() && !cell.isPartOfMerged()) {
-                                m_newWidths[col] = qMax(adjustColumnHelper(cell),
-                                                        m_newWidths[col]);
-                            }
-                        }
-                        if (m_adjustRow) {
-                            if (!m_newHeights.contains(row)) {
-                                m_newHeights[row] = -1.0;
-                                m_oldHeights[row] = m_sheet->rowFormats()->rowHeight(row);
-                            }
-                            if (!cell.isEmpty() && !cell.isPartOfMerged()) {
-                                m_newHeights[row] = qMax(adjustRowHelper(cell),
-                                                         m_newHeights[row]);
-                            }
-                        }
-                        cell = cs->nextInRow(col, row);
-                    }
-                }
-            } else {
-                Cell cell;
-                for (int col = range.left(); col <= range.right(); ++col) {
-                    for (int row = range.top(); row <= range.bottom(); ++row) {
-                        cell = Cell(m_sheet,  col, row);
-                        if (m_adjustColumn) {
-                            if (!m_newWidths.contains(col)) {
-                                m_newWidths[col] = -1.0;
-                                m_oldWidths[col] = m_sheet->columnFormats()->colWidth(col);
-                            }
-                            if (!cell.isEmpty() && !cell.isPartOfMerged()) {
-                                m_newWidths[col] = qMax(adjustColumnHelper(cell),
-                                                        m_newWidths[col]);
-                            }
-                        }
-                        if (m_adjustRow) {
-                            if (!m_newHeights.contains(row)) {
-                                m_newHeights[row] = -1.0;
-                                m_oldHeights[row] = m_sheet->rowFormats()->rowHeight(row);
-                            }
-                            if (!cell.isEmpty() && !cell.isPartOfMerged()) {
-                                m_newHeights[row] = qMax(adjustRowHelper(cell),
-                                                         m_newHeights[row]);
-                            }
-                        }
-                    }
-                }
+        if (m_adjustColumn) {
+            int min = qMin(range.left(), used.right());
+            int max = qMin(range.right(), used.right());
+            setWidths(min, max, m_oldWidths);
+        }
+        if (m_adjustRow) {
+            int min = qMin(range.top(), used.bottom());
+            int max = qMin(range.bottom(), used.bottom());
+            setHeights(min, max, m_oldHeights);
+        }
+    }
+
+    return true;
+}
+
+void AdjustColumnRowManipulator::setHeights(int from, int to, QMap<int, double> &heights)
+{
+    for (int row = from; row <= to; ++row) {
+        if (heights.contains(row) && heights[row] > -1.0) {
+            m_sheet->rowFormats()->setRowHeight(row, row, heights[row]);
+        }
+    }
+
+    // Update the column/row header, if necessary.
+    m_sheet->map()->addDamage(new SheetDamage(m_sheet, SheetDamage::ContentChanged | SheetDamage::RowsChanged));
+}
+
+void AdjustColumnRowManipulator::setWidths(int from, int to, QMap<int, double> &widths)
+{
+    for (int col = from; col <= to; ++col) {
+        if (widths.contains(col) && widths[col] > -1.0) {
+            double w = m_sheet->columnFormats()->colWidth(col);
+            if (qAbs(w - widths[col]) > DBL_EPSILON) {
+                m_sheet->columnFormats()->setColWidth(col, col, qMax(2.0, widths[col]));
             }
         }
     }
-    return AbstractRegionCommand::preProcessing();
+
+    // Update the column/row header, if necessary.
+    m_sheet->map()->addDamage(new SheetDamage(m_sheet, SheetDamage::ContentChanged | SheetDamage::ColumnsChanged));
 }
 
-bool AdjustColumnRowManipulator::postProcessing()
-{
-    if (!m_adjustColumn && !m_adjustRow) {
-        return false;
-    }
-    // Update the column/row header, if necessary.
-    SheetDamage::Changes changes = SheetDamage::None;
-    if (m_adjustColumn) {
-        changes |= SheetDamage::ColumnsChanged;
-    }
-    if (m_adjustRow) {
-        changes |= SheetDamage::RowsChanged;
-    }
-    m_sheet->map()->addDamage(new SheetDamage(m_sheet, changes));
-    return AbstractRegionCommand::postProcessing();
-}
+
 
 class DummyWidget : public QWidget
 {
@@ -500,6 +400,40 @@ QSizeF AdjustColumnRowManipulator::textSize(const QString& text, const Style& st
     }
     return size;
 }
+
+double AdjustColumnRowManipulator::idealColumnWidth(int col)
+{
+    CellStorage *cs = m_sheet->fullCellStorage();
+    double width = -1.0;
+
+    Cell cell = cs->firstInColumn(col);
+    while (!cell.isNull()) {
+        int row = cell.row();
+        if (!cell.isEmpty() && !cell.isPartOfMerged()) {
+            width = qMax(width, adjustColumnHelper(cell));
+        }
+        cell = cs->nextInColumn(col, row);
+    }
+
+    return width;
+}
+
+double AdjustColumnRowManipulator::idealRowHeight(int row)
+{
+    CellStorage *cs = m_sheet->fullCellStorage();
+    double height = -1.0;
+
+    Cell cell = cs->firstInRow(row);
+    while (!cell.isNull()) {
+        if (!cell.isEmpty() && !cell.isPartOfMerged()) {
+            height = qMax(height, adjustRowHelper(cell));
+        }
+        cell = cs->nextInRow(cell.column(), row);
+    }
+
+    return height;
+}
+
 
 double AdjustColumnRowManipulator::adjustColumnHelper(const Cell& cell)
 {
@@ -584,11 +518,10 @@ void InsertDeleteColumnManipulator::setTemplate(const ColFormat &columnFormat)
     m_template = new ColFormat(columnFormat);
 }
 
-void InsertDeleteColumnManipulator::setReverse(bool reverse)
+void InsertDeleteColumnManipulator::setDelete(bool deletion)
 {
-    m_reverse = reverse;
-    m_mode = reverse ? Delete : Insert;
-    if (!m_reverse)
+    m_mode = deletion ? Delete : Insert;
+    if (!deletion)
         setText(kundo2_i18n("Insert Columns"));
     else
         setText(kundo2_i18n("Remove Columns"));
@@ -599,28 +532,16 @@ bool InsertDeleteColumnManipulator::process(Element* element)
     const QRect range = element->rect();
     const int pos = range.left();
     const int num = range.width();
-    if (!m_reverse) { // insertion
-        // insert rows
+    if (m_mode == Insert) {
         m_sheet->insertColumns(pos, num);
         if (m_template) {
             const int end = pos + num - 1;
             m_sheet->columnFormats()->setColFormat (pos, end, *m_template);
         }
         m_sheet->cellStorage()->insertColumns(pos, num);
-
-        // undo deletion
-        if (m_mode == Delete) {
-            KUndo2Command::undo(); // process child commands (from CellStorage)
-        }
     } else {
-        // delete rows
         m_sheet->removeColumns(pos, num);
         m_sheet->cellStorage()->removeColumns(pos, num);
-
-        // undo insertion
-        if (m_mode == Insert) {
-            KUndo2Command::undo(); // process child commands (from CellStorage)
-        }
     }
     return true;
 }
@@ -630,55 +551,14 @@ bool elementLeftColumnLessThan(const Calligra::Sheets::Region::Element *e1, cons
     return e1->rect().left() < e2->rect().left();
 }
 
-bool InsertDeleteColumnManipulator::preProcessing()
+bool InsertDeleteColumnManipulator::preProcess()
 {
-    if (m_firstrun) {
-        // If we have an NCS, create a child command for each element.
-        if (cells().count() > 1) { // non-contiguous selection
-            // Sort the elements by their top row.
-            std::stable_sort(cells().begin(), cells().end(), elementLeftColumnLessThan);
-            // Create sub-commands.
-            const Region::ConstIterator end(constEnd());
-            for (Region::ConstIterator it = constBegin(); it != end; ++it) {
-                InsertDeleteColumnManipulator *const command = new InsertDeleteColumnManipulator(this);
-                command->setSheet(m_sheet);
-                command->add(Region((*it)->rect(), (*it)->sheet()));
-                if (m_mode == Delete) {
-                    command->setReverse(true);
-                }
-            }
-        } else { // contiguous selection
-            m_sheet->fullCellStorage()->startUndoRecording();
-        }
-    }
-    return AbstractRegionCommand::preProcessing();
-}
-
-bool InsertDeleteColumnManipulator::mainProcessing()
-{
-    if (cells().count() > 1) { // non-contiguous selection
-        if ((m_reverse && m_mode == Insert) || (!m_reverse && m_mode == Delete)) {
-            KUndo2Command::undo(); // process all sub-commands
-        } else {
-            KUndo2Command::redo(); // process all sub-commands
-        }
-        return true;
-    }
-    return AbstractRegionCommand::mainProcessing(); // calls process(Element*)
-}
-
-bool InsertDeleteColumnManipulator::postProcessing()
-{
-    if (cells().count() > 1) { // non-contiguous selection
-        return true;
-    }
-    if (m_firstrun) {
-        m_sheet->fullCellStorage()->stopUndoRecording(this);
-    }
-    const QRect rect(QPoint(boundingRect().left(), 1), QPoint(KS_colMax, KS_rowMax));
-    m_sheet->map()->addDamage(new CellDamage(m_sheet, Region(rect, m_sheet), CellDamage::Appearance));
+    // Need these ordered.
+    if (m_firstrun)
+        std::stable_sort(cells().begin(), cells().end(), elementLeftColumnLessThan);
     return true;
 }
+
 
 /***************************************************************************
   class InsertDeleteRowManipulator
@@ -703,11 +583,10 @@ void InsertDeleteRowManipulator::setTemplate(const RowFormat &rowFormat)
     m_template = new RowFormat(rowFormat);
 }
 
-void InsertDeleteRowManipulator::setReverse(bool reverse)
+void InsertDeleteRowManipulator::setDelete(bool deletion)
 {
-    m_reverse = reverse;
-    m_mode = reverse ? Delete : Insert;
-    if (!m_reverse)
+    m_mode = deletion ? Delete : Insert;
+    if (!deletion)
         setText(kundo2_i18n("Insert Rows"));
     else
         setText(kundo2_i18n("Remove Rows"));
@@ -718,28 +597,17 @@ bool InsertDeleteRowManipulator::process(Element* element)
     const QRect range = element->rect();
     const int pos = range.top();
     const int num = range.height();
-    if (!m_reverse) { // insertion
-        // insert rows
+    if (m_mode == Insert) {
         m_sheet->insertRows(pos, num);
         if (m_template) {
             const int end = pos + num - 1;
             m_sheet->rowFormats()->setRowFormat (pos, end, *m_template);
         }
         m_sheet->cellStorage()->insertRows(pos, num);
-
-        // undo deletion
-        if (m_mode == Delete) {
-            KUndo2Command::undo(); // process child commands (from CellStorage)
-        }
     } else {
         // delete rows
         m_sheet->removeRows(pos, num);
         m_sheet->cellStorage()->removeRows(pos, num);
-
-        // undo insertion
-        if (m_mode == Insert) {
-            KUndo2Command::undo(); // process child commands (from CellStorage)
-        }
     }
     return true;
 }
@@ -749,52 +617,12 @@ bool elementTopRowLessThan(const Calligra::Sheets::Region::Element *e1, const Ca
     return e1->rect().top() < e2->rect().top();
 }
 
-bool InsertDeleteRowManipulator::preProcessing()
+bool InsertDeleteRowManipulator::preProcess()
 {
-    if (m_firstrun) {
-        // If we have an NCS, create a child command for each element.
-        if (cells().count() > 1) { // non-contiguous selection
-            // Sort the elements by their top row.
-            std::stable_sort(cells().begin(), cells().end(), elementTopRowLessThan);
-            // Create sub-commands.
-            const Region::ConstIterator end(constEnd());
-            for (Region::ConstIterator it = constBegin(); it != end; ++it) {
-                InsertDeleteRowManipulator *const command = new InsertDeleteRowManipulator(this);
-                command->setSheet(m_sheet);
-                command->add(Region((*it)->rect(), (*it)->sheet()));
-                if (m_mode == Delete) {
-                    command->setReverse(true);
-                }
-            }
-        } else { // contiguous selection
-            m_sheet->fullCellStorage()->startUndoRecording();
-        }
-    }
-    return AbstractRegionCommand::preProcessing();
-}
-
-bool InsertDeleteRowManipulator::mainProcessing()
-{
-    if (cells().count() > 1) { // non-contiguous selection
-        if ((m_reverse && m_mode == Insert) || (!m_reverse && m_mode == Delete)) {
-            KUndo2Command::undo(); // process all sub-commands
-        } else {
-            KUndo2Command::redo(); // process all sub-commands
-        }
-        return true;
-    }
-    return AbstractRegionCommand::mainProcessing(); // calls process(Element*)
-}
-
-bool InsertDeleteRowManipulator::postProcessing()
-{
-    if (cells().count() > 1) { // non-contiguous selection
-        return true;
-    }
-    if (m_firstrun) {
-        m_sheet->fullCellStorage()->stopUndoRecording(this);
-    }
-    const QRect rect(QPoint(1, boundingRect().top()), QPoint(KS_colMax, KS_rowMax));
-    m_sheet->map()->addDamage(new CellDamage(m_sheet, Region(rect, m_sheet), CellDamage::Appearance));
+    // Need these ordered.
+    if (m_firstrun)
+        std::stable_sort(cells().begin(), cells().end(), elementTopRowLessThan);
     return true;
 }
+
+

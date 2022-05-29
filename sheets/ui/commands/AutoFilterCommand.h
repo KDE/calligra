@@ -31,8 +31,7 @@ public:
      */
     ~AutoFilterCommand() override;
 
-    void redo() override;
-    void undo() override;
+    bool performCommands() override;
 };
 
 } // namespace Sheets

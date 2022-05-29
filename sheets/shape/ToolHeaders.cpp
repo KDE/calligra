@@ -290,7 +290,7 @@ void Tool::RowHeader::mouseRelease(KoPointerEvent * _ev)
                 HideShowManipulator* command = new HideShowManipulator();
                 command->setSheet(sheet);
                 command->setManipulateRows(true);
-                command->setReverse(true);
+                command->setHide(true);
                 command->add(*m_selection);
                 command->execute();
             }
@@ -888,7 +888,7 @@ void Tool::ColumnHeader::mouseRelease(KoPointerEvent * _ev)
                 HideShowManipulator* command = new HideShowManipulator();
                 command->setSheet(sheet);
                 command->setManipulateColumns(true);
-                command->setReverse(true);
+                command->setHide(true);
                 command->add(*m_selection);
                 command->execute();
             }

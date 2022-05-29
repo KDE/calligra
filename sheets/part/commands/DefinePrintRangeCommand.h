@@ -25,8 +25,8 @@ class DefinePrintRangeCommand : public AbstractRegionCommand
 public:
     explicit DefinePrintRangeCommand();
 
-    void redo() override;
-    void undo() override;
+    bool performNonCommandActions() override;
+    bool undoNonCommandActions() override;
 
 private:
     Region m_oldPrintRegion;

@@ -32,15 +32,11 @@ void DeleteCommand::setMode(Mode mode)
 
 bool DeleteCommand::process(Element* element)
 {
-    Q_ASSERT(!m_reverse);
-
     // The RecalcManager needs a valid sheet.
     if (!element->sheet())
         element->setSheet(m_sheet);
 
     CellStorage *cs = m_sheet->fullCellStorage();
-    ColFormatStorage *cols = m_sheet->columnFormats();
-    RowFormatStorage *rows = m_sheet->rowFormats();
     const QRect range = element->rect();
 
     if (element->isColumn()) {
@@ -51,31 +47,6 @@ bool DeleteCommand::process(Element* element)
                 cs->take(col, cell.row());
                 cell = cs->nextInColumn(col, cell.row());
             }
-            if (m_mode == OnlyCells)
-                continue;
-
-            if (m_firstrun && (!cols->isDefaultCol(col))) {
-                ColFormat cf = cols->getColFormat(col);
-                m_columnFormats[col] = cf;
-            }
-            m_sheet->clearColumnFormat(col);
-        }
-    } else if (element->isRow()) {
-        // row-wise processing
-        for (int row = range.top(); row <= range.bottom(); ++row) {
-            Cell cell = cs->firstInRow(row);
-            while (!cell.isNull()) {
-                cs->take(cell.column(), row);
-                cell = cs->nextInRow(cell.column(), row);
-            }
-            if (m_mode == OnlyCells) {
-                continue;
-            }
-            if (m_firstrun && (!rows->isDefaultRow(row))) {
-                RowFormat rf = rows->getRowFormat(row);
-                m_rowFormats[row] = rf;
-            }
-            m_sheet->clearRowFormat(row);
         }
     } else {
         // row-wise processing
@@ -103,16 +74,49 @@ bool DeleteCommand::process(Element* element)
     return true;
 }
 
-bool DeleteCommand::mainProcessing()
+bool DeleteCommand::performNonCommandActions()
 {
-    if (m_reverse) {
-        for (int col : m_columnFormats.keys()) {
-            m_sheet->columnFormats()->setColFormat(col, col, m_columnFormats.value(col));
-        }
-        for (int row : m_rowFormats.keys()) {
-            m_sheet->rowFormats()->setRowFormat(row, row, m_rowFormats.value(row));
+    if (m_mode == OnlyCells) return true;
+
+    ColFormatStorage *cols = m_sheet->columnFormats();
+    RowFormatStorage *rows = m_sheet->rowFormats();
+
+    const QList<Element *> elements = cells();
+    for (int i = 0; i < elements.count(); ++i) {
+        Element *element = elements[i];
+        const QRect range = element->rect();
+
+        if (element->isColumn()) {
+            // column-wise processing
+            for (int col = range.left(); col <= range.right(); ++col) {
+                if (m_firstrun && (!cols->isDefaultCol(col))) {
+                    ColFormat cf = cols->getColFormat(col);
+                    m_columnFormats[col] = cf;
+                }
+                m_sheet->clearColumnFormat(col);
+            }
+        } else if (element->isRow()) {
+            // row-wise processing
+            for (int row = range.top(); row <= range.bottom(); ++row) {
+                if (m_firstrun && (!rows->isDefaultRow(row))) {
+                    RowFormat rf = rows->getRowFormat(row);
+                    m_rowFormats[row] = rf;
+                }
+                m_sheet->clearRowFormat(row);
+            }
         }
     }
-    return AbstractDataManipulator::mainProcessing();
+    return true;
+}
+
+bool DeleteCommand::undoNonCommandActions()
+{
+    for (int col : m_columnFormats.keys()) {
+        m_sheet->columnFormats()->setColFormat(col, col, m_columnFormats.value(col));
+    }
+    for (int row : m_rowFormats.keys()) {
+        m_sheet->rowFormats()->setRowFormat(row, row, m_rowFormats.value(row));
+    }
+    return true;
 }
 

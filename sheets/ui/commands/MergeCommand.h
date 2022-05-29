@@ -27,10 +27,8 @@ public:
     explicit MergeCommand(KUndo2Command *parent = 0);
     ~MergeCommand() override;
 
-    bool preProcessing() override;
-
-    void setReverse(bool reverse) override {
-        m_merge = !reverse;
+    void setMerge(bool merge) {
+        m_merge = merge;
     }
     void setHorizontalMerge(bool state) {
         m_mergeHorizontal = state;
@@ -43,9 +41,8 @@ public:
         m_selection = selection;
     }
 protected:
+    bool preProcess() override;
     bool process(Element*) override;
-
-    bool postProcessing() override;
 
     KUndo2MagicString name() const;
 
@@ -53,7 +50,6 @@ protected:
 private:
     bool m_mergeHorizontal : 1;
     bool m_mergeVertical   : 1;
-    AbstractRegionCommand* m_unmerger; // to restore old merging
     Selection *m_selection;
 };
 

@@ -45,16 +45,17 @@ public:
 protected:
     /**
      * Processes \p element , a Region::Point or a Region::Range .
-     * Invoked by mainProcessing() .
+     * Invoked by performCommands() .
      */
     bool process(Element* element) override;
-
-    bool mainProcessing() override;
 
     // dummy
     Value newValue(Element*, int, int, bool*, Format::Type*) override {
         return Value();
     }
+
+    bool performNonCommandActions() override;
+    bool undoNonCommandActions() override;
 
 protected:
     QMap<int, ColFormat> m_columnFormats;

@@ -30,30 +30,47 @@ void PageBreakCommand::setMode(Mode mode)
     m_mode = mode;
 }
 
-bool PageBreakCommand::process(Element *element)
-{
-    // No reverse means setting; reverse means unsetting.
-    const bool enable = !m_reverse;
-    Sheet *sheet = dynamic_cast<Sheet *>(element->sheet());
-    const QRect range = element->rect();
-    if (m_mode == BreakBeforeColumn && range.left() > 1) {
+bool PageBreakCommand::setRangeBreak(Sheet *sheet, const QRect range, bool enable) {
+    if (m_mode == BreakBeforeColumn && range.left() > 1)
+    {
         sheet->columnFormats()->setPageBreak(range.left(), range.left(), enable);
-    } else if (m_mode == BreakBeforeRow && range.top() > 1) {
-        sheet->rowFormats()->setPageBreak(range.top(), range.top(), enable);
+        sheet->print()->updateHorizontalPageParameters(range.left() - 1);
     }
+    else if (m_mode == BreakBeforeRow && range.top() > 1)
+    {
+        sheet->rowFormats()->setPageBreak(range.top(), range.top(), enable);
+        sheet->print()->updateVerticalPageParameters(range.top() - 1);
+    }
+
+    if (sheet->isShowPageOutline())
+        sheet->map()->addDamage(new SheetDamage(sheet, SheetDamage::ContentChanged));
+
     return true;
 }
 
-bool PageBreakCommand::postProcessing()
+bool PageBreakCommand::performNonCommandActions()
 {
-    const QRect range = boundingRect();
-    if (m_mode == BreakBeforeColumn && range.left() > 1) {
-        m_sheet->print()->updateHorizontalPageParameters(range.left() - 1);
-    } else if (m_mode == BreakBeforeRow && range.top() > 1) {
-        m_sheet->print()->updateVerticalPageParameters(range.top() - 1);
+    const bool enable = m_breaking;
+    const QList<Element *> elements = cells();
+    for (int i = 0; i < elements.count(); ++i) {
+        Element *element = elements[i];
+        Sheet *sheet = dynamic_cast<Sheet *>(element->sheet());
+        setRangeBreak(sheet, element->rect(), enable);
     }
-    if (m_sheet->isShowPageOutline()) {
-        m_sheet->map()->addDamage(new SheetDamage(m_sheet, SheetDamage::ContentChanged));
-    }
-    return AbstractRegionCommand::postProcessing();
+
+    return true;
 }
+
+bool PageBreakCommand::undoNonCommandActions()
+{
+    const bool enable = !m_breaking;
+    const QList<Element *> elements = cells();
+    for (int i = 0; i < elements.count(); ++i) {
+        Element *element = elements[i];
+        Sheet *sheet = dynamic_cast<Sheet *>(element->sheet());
+        setRangeBreak(sheet, element->rect(), enable);
+    }
+
+    return true;
+}
+
