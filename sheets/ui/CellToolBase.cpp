@@ -1112,6 +1112,9 @@ void CellToolBase::activate(ToolActivation toolActivation, const QSet<KoShape*> 
             this, &CellToolBase::documentReadWriteToggled);
     connect(selection(), &Selection::sheetProtectionToggled,
             this, &CellToolBase::sheetProtectionToggled);
+
+    Map *map = selection()->activeSheet()->fullMap();
+    connect(map, &MapBase::damagesFlushed, this, &CellToolBase::handleDamages);
 }
 
 void CellToolBase::deactivate()
@@ -1262,6 +1265,15 @@ KoInteractionStrategy* CellToolBase::createStrategy(KoPointerEvent* event)
         return new DragAndDropStrategy(this, position, event->modifiers());
 
     return new SelectionStrategy(this, position, event->modifiers());
+}
+
+// This makes sure that the action buttons stay updated whenever we change anything.
+void CellToolBase::handleDamages()
+{
+    const Cell cell = Cell(selection()->activeSheet(), selection()->cursor());
+    if (!cell)
+        return;
+    d->updateActions(cell);
 }
 
 void CellToolBase::selectionChanged(const Region& region)

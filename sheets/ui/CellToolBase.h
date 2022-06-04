@@ -135,6 +135,7 @@ protected Q_SLOTS:
     void focusEditorRequested();
     void documentReadWriteToggled(bool enable);
     void sheetProtectionToggled(bool enable);
+    void handleDamages();
 
     // -- cell style actions --
     void cellStyle();
