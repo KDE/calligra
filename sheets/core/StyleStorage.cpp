@@ -271,6 +271,7 @@ QVector< QPair<QRectF, SharedSubStyle> > StyleStorage::currentData(const Region&
             pairs[i].first = pairs[i].first.intersected(rect);
         }
         // Always a default subStyle first, even if there are no pairs.
+        // This is necessary for undo to properly clear new substyles.
         result.push_back (qMakePair(QRectF(rect), SharedSubStyle()));
         result.append (QVector< QPair<QRectF, SharedSubStyle> >::fromList (pairs));
     }
@@ -369,7 +370,16 @@ void StyleStorage::insert(const QRect& rect, const SharedSubStyle& subStyle, boo
 {
     d->ensureLoaded();
 
-    if (m_storingUndo) d->m_undoData << currentData(Region(rect));
+    if (m_storingUndo) {
+        auto data = currentData(Region(rect));
+        // We need to store this data at the BEGINNING of the undo data. This is so that multiple operations do not conceal the correct values.
+        // Otherwise if we e.g. set bold and italics consequently, the first call would set the correct undo data, then the second one
+        // would overwrite it with a bolded version.
+        // When the data is in reverse, this is not an issue - we do have a lot of extra values, but garbage collection will take care of that.
+        // We cannot simply ignore subsequent data, as the rects may be different.
+        for (int i = data.size() - 1; i >= 0; --i)
+            d->m_undoData.prepend(data[i]);
+    }
 
 //     debugSheetsStyle <<"StyleStorage: inserting" << SubStyle::name(subStyle->type()) <<" into" << rect;
     // keep track of the used area
