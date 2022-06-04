@@ -20,7 +20,8 @@ add_subdirectory( part )
 # have their own translation domain
 ### TODO: The tableshape needs a rewrite,
 ### it has been obsoleted by the implementation of texttables
-add_subdirectory( shape )
+# The tableshape also registers the same actions as the main app, which causes issues.
+# add_subdirectory( shape )
 
 add_subdirectory( plugins )
 
