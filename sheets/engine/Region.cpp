@@ -667,6 +667,7 @@ QRect Region::boundingRect() const
     int right  = 1;
     int top    = KS_rowMax;
     int bottom = 1;
+    if (isEmpty()) return QRect();
     Region::ConstIterator endOfList = cells().constEnd();
     for (Region::ConstIterator it = cells().constBegin(); it != endOfList; ++it) {
         QRect range = (*it)->rect();

@@ -131,6 +131,30 @@ void TestRegion::testExtrem()
     QCOMPARE(region6.name(), region7.name());
 }
 
+void TestRegion::testOps()
+{
+    Region empty = Region();
+    int rownum = 4;
+    Region row = Region(QRect(QPoint(1, rownum), QPoint(KS_colMax, rownum)));
+    Region a1 = row.intersected(empty);
+    QVERIFY(a1.isEmpty());
+    Region rect = Region(QRect(QPoint(3,3), QPoint(5,5)));
+    Region a2 = row.intersected(rect);
+    Region a3 = rect.intersected(row);
+    QVERIFY(a2 == a3);
+    Region smallrect = Region(QRect(QPoint(3,4), QPoint(5,4)));
+    QVERIFY(a2 == smallrect);
+
+    QVERIFY(row.isRowSelected(rownum));
+    QVERIFY(row.isColumnOrRowSelected());
+    QVERIFY(row.contains(QPoint(789,rownum)));
+    QVERIFY(!row.contains(QPoint(789,rownum+1)));
+
+    QRect bound = empty.boundingRect();
+    QVERIFY(bound == QRect());
+
+}
+
 void TestRegion::cleanupTestCase()
 {
     delete m_map;

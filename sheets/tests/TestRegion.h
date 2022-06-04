@@ -23,6 +23,7 @@ private Q_SLOTS:
     void testFixation();
     void testSheet();
     void testExtrem();
+    void testOps();
     void cleanupTestCase();
 
 private:

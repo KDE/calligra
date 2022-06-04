@@ -1124,7 +1124,10 @@ void Odf::saveColRowCell(Sheet *sheet, int maxCols, int maxRows, OdfSavingContex
         while (j <= maxCols) {
             j++;
             if (!cf->colsAreEqual(i, j)) break;
-            if (j > cf->lastNonDefaultCol()) break;
+            if (j > cf->lastNonDefaultCol()) {
+                count = maxCols - i + 1;  // grab everything that is left
+                break;
+            }
             if (style != tableContext.columnDefaultStyles.value(j)) break;
             ++count;
         }
@@ -1316,7 +1319,6 @@ void Odf::saveCells(Sheet *sheet, int row, int maxCols, OdfSavingContext& tableC
 //         debugSheetsODF <<"Odf::saveCells:"
 //                       << " i: " << i
 //                       << " column: " << cell.column() << endl;
-
         int repeated = 1;
         int column = i;
         saveCell(&cell, repeated, tableContext);
