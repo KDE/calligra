@@ -61,12 +61,12 @@ bool MergeCommand::process(Element* element)
         if (m_mergeHorizontal) {
             for (int row = top; row <= bottom; ++row) {
                 Cell cell = Cell(m_sheet,  left, row);
-                cell.mergeCells(left, row, width - 1, 1);
+                cell.mergeCells(left, row, width - 1, 0);
             }
         } else if (m_mergeVertical) {
             for (int col = left; col <= right; ++col) {
                 Cell cell = Cell(m_sheet, col, top);
-                cell.mergeCells(col, top, 1, height - 1);
+                cell.mergeCells(col, top, 0, height - 1);
             }
         } else {
             Cell cell = Cell(m_sheet,  left, top);
