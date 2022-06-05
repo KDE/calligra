@@ -18,6 +18,7 @@
 
 #include <KoView.h>
 #include <KoZoomMode.h>
+#include <KoCanvasControllerWidget.h>
 #include "sheets_part_export.h"
 
 #include "engine/ProtectableObject.h"
@@ -412,6 +413,25 @@ private:
     /** Sets the column/row headers minima according to the zoom level. */
     void setHeaderMinima();
 };
+
+
+/**
+ * Overriding this to provide scrolling beyond the scrollbar's edge
+ */
+class SheetsCanvasControllerWidget : public KoCanvasControllerWidget {
+    Q_OBJECT
+public:
+    explicit SheetsCanvasControllerWidget(KActionCollection * actionCollection, View *parent = 0);
+    ~SheetsCanvasControllerWidget() override;
+
+protected:
+    void wheelEvent(QWheelEvent *ev) override; 
+    void recenterPreferred() override;
+private:
+    View *view;
+};
+
+
 
 } // namespace Sheets
 } // namespace Calligra

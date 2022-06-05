@@ -18,8 +18,6 @@
 #include <QWriteLocker>
 #endif
 
-// #include <KoViewConverter.h>
-
 #include "engine/PointStorage.h"
 #include "engine/RectStorage.h"
 #include "core/Cell.h"
@@ -27,8 +25,6 @@
 #include "core/RowFormatStorage.h"
 #include "core/Sheet.h"
 #include "CellView.h"
-// #include "calligra_sheets_limits.h"
-// #include "Region.h"
 
 using namespace Calligra::Sheets;
 
@@ -176,7 +172,7 @@ SheetView::SheetView(Sheet* sheet)
     d->visibleRect = QRect(1, 1, 0, 0);
     d->cache.setMaxCost(10000);
     d->defaultCellView = createDefaultCellView();
-    d->accessedCellRange =  sheet->usedArea().size().expandedTo(QSize(256, 256));
+    d->accessedCellRange = QSize(1,1);
     d->obscuredInfo = new FusionStorage(sheet->map());
     d->obscuredRange = QSize(0, 0);
     d->highlightMaskColor = QColor(0, 0, 0, 128);
@@ -647,17 +643,30 @@ const CellView& SheetView::defaultCellView() const
     return *d->defaultCellView;
 }
 
-void SheetView::updateAccessedCellRange(const QPoint& location)
+void SheetView::updateAccessedCellRange(const QPoint& location, bool noOverflow)
 {
-    const QSize cellRange = d->accessedCellRange.expandedTo(QSize(location.x(), location.y()));
-    if (d->accessedCellRange != cellRange || location.isNull()) {
-        d->accessedCellRange = cellRange;
-        const int col = qMin(KS_colMax, cellRange.width() + 10);
-        const int row = qMin(KS_rowMax, cellRange.height() + 10);
-        const double width = sheet()->columnPosition(col) + sheet()->columnFormats()->colWidth(col);
-        const double height = sheet()->rowPosition(row) + sheet()->rowFormats()->rowHeight(row);
-        emit visibleSizeChanged(QSizeF(width, height));
+    QPoint loc = location.isNull() ? QPoint(1, 1) : location;
+
+    int col = loc.x();
+    int row = loc.y();
+    if (!noOverflow) {
+        QRect area = sheet()->usedArea();
+        col = area.width() + 20;
+        row = area.height() + 60;
+        col = qMax(loc.x() + 10, col);
+        row = qMax(loc.y() + 40, row);
+        // make sure that we have at least 128x26
+        col = qMax(26, col);
+        row = qMax(128, row);
     }
+
+    QSize cellRange = QSize(col, row);
+    if (d->accessedCellRange == cellRange) return;
+
+    d->accessedCellRange = cellRange;
+    const double width = sheet()->columnPosition(col) + sheet()->columnFormats()->visibleWidth(col);
+    const double height = sheet()->rowPosition(row) + sheet()->rowFormats()->visibleHeight(row);
+    emit visibleSizeChanged(QSizeF(width, height));
 }
 
 CellView* SheetView::createDefaultCellView()

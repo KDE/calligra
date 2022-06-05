@@ -759,3 +759,4 @@ KoViewConverter* CanvasBase::viewConverter() const
 {
     return zoomHandler();
 }
+

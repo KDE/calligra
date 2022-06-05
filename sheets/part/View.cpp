@@ -58,7 +58,6 @@
 #include <KoPluginLoader.h>
 #include <KoGlobal.h>
 #include <KoColor.h>
-#include <KoCanvasControllerWidget.h>
 #include <KoMainWindow.h>
 #include <KoPart.h>
 #include <KoShapeController.h>
@@ -89,6 +88,7 @@
 #include "core/CellStorage.h"
 #include "core/LoadingInfo.h"
 #include "core/Map.h"
+#include "core/RowFormatStorage.h"
 #include "core/ShapeApplicationData.h"
 #include "core/Sheet.h"
 
@@ -494,6 +494,66 @@ void View::Private::adjustActions(bool mode)
 }
 
 
+
+/*****************************************************************************
+ *
+ * SheetsCanvasControllerWidget
+ *
+ *****************************************************************************/
+
+SheetsCanvasControllerWidget::SheetsCanvasControllerWidget(KActionCollection * actionCollection, View *parent)
+    : KoCanvasControllerWidget(actionCollection, parent)
+    , view(parent)
+{
+}
+
+SheetsCanvasControllerWidget::~SheetsCanvasControllerWidget() {
+}
+
+
+void SheetsCanvasControllerWidget::recenterPreferred() {
+    // We don't want this in sheets
+}
+
+void SheetsCanvasControllerWidget::wheelEvent(QWheelEvent *ev)
+{
+    // If we're at the bottom of the vertical scrollbar, extend it
+    // This ensures that wheel-scrolling continues instead of stopping at the bottom of the document
+    QScrollBar *bar = verticalScrollBar();
+    int val = bar->value();
+
+    // Coordinates for the cell on the bottom right
+    CanvasBase *canvas = dynamic_cast<CanvasBase *>(this->canvas());
+    if (!canvas) {
+        // shouldn't happen ...
+        KoCanvasControllerWidget::wheelEvent(ev);
+        return;
+    }
+
+    int scrollStep = abs(ev->pixelDelta().y());
+    QRect visible = canvas->visibleCells();
+    int col = visible.right();
+    int row = visible.bottom();
+
+    // How many rows are worth 240px of scrolling?
+    Sheet *sheet = view->activeSheet();
+    SheetView *sheetView = view->sheetView(sheet);
+    int total = 0;
+    int newrow = row;
+    while ((total < scrollStep) && (newrow - row < 10000)) {  // also a sanity check - in case something goes awry, we stop at 10k
+        newrow++;
+        total += sheet->rowFormats()->visibleHeight(newrow);
+    }
+    sheetView->updateAccessedCellRange(QPoint(col, newrow));
+
+    // the sheetview may have moved the scrollbar, so let's move it back
+    bar->setValue(val);
+
+    KoCanvasControllerWidget::wheelEvent(ev);
+}
+
+
+
 /*****************************************************************************
  *
  * View
@@ -642,7 +702,7 @@ void View::initView()
 
     // Setup the Canvas and its controller.
     d->canvas = new Canvas(this);
-    KoCanvasControllerWidget *canvasController = new KoCanvasControllerWidget(actionCollection(), this);
+    SheetsCanvasControllerWidget *canvasController = new SheetsCanvasControllerWidget(actionCollection(), this);
     d->canvasController = canvasController;
     d->canvasController->setCanvas(d->canvas);
     d->canvasController->setCanvasMode(KoCanvasController::Spreadsheet);
