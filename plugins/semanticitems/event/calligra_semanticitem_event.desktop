@@ -2,7 +2,7 @@
 Name=RDF Calendar Event Plugin
 Name[bs]=RDF dodatak za kalendarske događaje
 Name[ca]=Connector d'esdeveniments de calendari RDF
-Name[ca@valencia]=Connector d'esdeveniments de calendari RDF
+Name[ca@valencia]=Conector de successos de calendari RDF
 Name[da]=Plugin til RDF-kalenderbegivenheder
 Name[de]=RDF-Kalender-Ereignismodul
 Name[el]=Πρόσθετο συμβάντων ημερολογίου RDF
@@ -33,7 +33,7 @@ Name[zh_CN]=RDF 日历事件插件
 Comment=A plugin to map calendar event items between document and RDF database
 Comment[bs]=Dodatak koji mapira kalendarske događaje između dokumenta i RDF baze podataka
 Comment[ca]=Un connector per a relacionar elements de calendari entre documents i una base de dades RDF
-Comment[ca@valencia]=Un connector per a relacionar elements de calendari entre documents i una base de dades RDF
+Comment[ca@valencia]=Un conector per a relacionar elements de calendari entre documents i una base de dades RDF
 Comment[da]=Et plugin til at koble kalenderbegivenheder mellem dokument og RDF-database
 Comment[de]=Ein Modul, um Kalenderereignisse zwischen Dokument und RDF-Datenbank zuzuordnen
 Comment[el]=Ένα πρόσθετο για την αντιστοίχηση αντικειμένων συμβάντων ημερολογίου μεταξύ εγγράφου και βάσης δεδομένων RDF

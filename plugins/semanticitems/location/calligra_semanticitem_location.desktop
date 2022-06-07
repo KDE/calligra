@@ -2,7 +2,7 @@
 Name=RDF Location Plugin
 Name[bs]=Dodatak za RDF lokacije
 Name[ca]=Connector d'ubicació RDF
-Name[ca@valencia]=Connector d'ubicació RDF
+Name[ca@valencia]=Conector d'ubicació RDF
 Name[da]=Pluigin til RDF-lokation
 Name[de]=RDF-Ortsmodul
 Name[el]=Πρόσθετο τοποθεσίας RDF
@@ -34,7 +34,7 @@ Name[zh_CN]=RDF 位置插件
 Comment=A plugin to map location items between document and RDF database
 Comment[bs]=Dodatak koji mapira lokacijeks objekte između dokumenta i RDF baze podataka
 Comment[ca]=Un connector per a relacionar elements d'ubicació entre documents i una base de dades RDF
-Comment[ca@valencia]=Un connector per a relacionar elements d'ubicació entre documents i una base de dades RDF
+Comment[ca@valencia]=Un conector per a relacionar elements d'ubicació entre documents i una base de dades RDF
 Comment[da]=Et plugin til at koble lokationselementer mellem dokument og RDF-database
 Comment[de]=Ein Modul, um Ortseinträge zwischen Dokument und RDF-Datenbank zuzuordnen
 Comment[el]=Ένα πρόσθετο για την αντιστοίχηση αντικειμένων τοποθεσίας μεταξύ εγγράφου και βάσης δεδομένων RDF
