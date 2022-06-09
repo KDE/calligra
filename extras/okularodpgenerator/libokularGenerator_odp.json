@@ -93,7 +93,7 @@
         "Copyright[x-test]": "xxCopyright 2010-2016 Sven Langkamp, Friedrich W. H. Kossebauxx",
         "Copyright[zh_CN]": "Copyright 2010-2016 Sven Langkamp, Friedrich W. H. Kossebau",
         "Description": "OpenDocument Presentation file renderer",
-        "Description[ca@valencia]": "Representació de fichers de presentacions en OpenDocument",
+        "Description[ca@valencia]": "Representació de fitxers de presentacions en OpenDocument",
         "Description[ca]": "Representació de fitxers de presentacions en OpenDocument",
         "Description[cs]": "Vykreslovač souborů prezentací OpenDocument",
         "Description[de]": "Renderer für OpenDocument-Präsentations-Dokumente",
