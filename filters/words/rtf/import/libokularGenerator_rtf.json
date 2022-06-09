@@ -93,7 +93,7 @@
         "Copyright[x-test]": "xxCopyright 2012-2016 Sven Langkamp, Friedrich W. H. Kossebauxx",
         "Copyright[zh_CN]": "Copyright 2012-2016 Sven Langkamp, Friedrich W. H. Kossebau",
         "Description": "RTF file renderer",
-        "Description[ca@valencia]": "Representació de fichers RTF",
+        "Description[ca@valencia]": "Representació de fitxers RTF",
         "Description[ca]": "Representació de fitxers RTF",
         "Description[cs]": "Vykreslovač souborů RTF",
         "Description[de]": "Renderer für RTF-Dateien",
