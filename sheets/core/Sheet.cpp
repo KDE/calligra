@@ -191,8 +191,8 @@ Sheet::Sheet(const Sheet &other)
     }
 #endif // CALLIGRA_SHEETS_WIP_COPY_SHEET_(SHAPES)
 
-    d->printSettings = other.d->printSettings;
-    d->sheetPrint = other.d->sheetPrint;
+    d->printSettings = new PrintSettings (*(other.d->printSettings));
+    d->sheetPrint = new SheetPrint(this);
 
     d->showPageOutline = other.d->showPageOutline;
     d->documentSize = other.d->documentSize;
