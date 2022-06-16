@@ -153,6 +153,8 @@ void Value::Private::setFormatByType()
 Value::Private* Value::Private::s_null = 0;
 
 // static things
+namespace
+{
 Value ks_value_empty;
 Value ks_value_null;
 Value ks_error_circle;
@@ -165,6 +167,7 @@ Value ks_error_num;
 Value ks_error_parse;
 Value ks_error_ref;
 Value ks_error_value;
+}
 
 // create an empty value
 Value::Value()

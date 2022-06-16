@@ -89,10 +89,6 @@ private:
 
 };
 
-}
-
-using namespace Swinder;
-
 // to be shared between all empty value
 ValueData* ValueData::s_null = 0;
 
@@ -484,6 +480,8 @@ void Value::detach()
         d->unref();
         d = n;
     }
+}
+
 }
 
 std::ostream& Swinder::operator<<(std::ostream& s, Swinder::Value value)
