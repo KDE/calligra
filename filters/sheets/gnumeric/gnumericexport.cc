@@ -268,7 +268,7 @@ QDomElement GNUMERICExport::GetValidity(QDomDocument gnumeric_doc, const Cell& c
         break;
     }
     switch (kspread_validity.restriction()) {
-    case Validity::None:
+    case Validity::NoRestriction:
         val.setAttribute("Type", "0");
         break;
     case Validity::Number: {

@@ -134,10 +134,10 @@ QString PrintSettings::paperFormatString() const
 QString PrintSettings::orientationString() const
 {
     switch (d->pageLayout.orientation) {
-    case QPrinter::Portrait:
+    case KoPageFormat::Portrait:
     default:
         return "Portrait";
-    case QPrinter::Landscape:
+    case KoPageFormat::Landscape:
         return "Landscape";
     }
 }
