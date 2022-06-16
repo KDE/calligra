@@ -1100,7 +1100,6 @@ void Odf::saveColRowCell(Sheet *sheet, int maxCols, int maxRows, OdfSavingContex
     // OpenDocument needs at least one cell per sheet.
     maxCols = qMin(KS_colMax, qMax(1, maxCols));
     maxRows = qMin(KS_rowMax, qMax(1, maxRows));
-    maxMaxRows = maxMaxRows;
     debugSheetsODF << "\t Sheet dimension:" << maxCols << " x" << maxRows;
     Localization *locale = sheet->map()->calculationSettings()->locale();
 
