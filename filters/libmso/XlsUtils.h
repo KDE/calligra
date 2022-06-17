@@ -11,13 +11,13 @@
 #include <math.h>
 
 // translate the range-character to a number
-int rangeCharToInt(char c)
+inline int rangeCharToInt(char c)
 {
     return (c >= 'A' && c <= 'Z') ? (c - 'A' + 1) : -1;
 }
 
 // translates the range-string into a number
-int rangeStringToInt(const QString &string)
+inline int rangeStringToInt(const QString &string)
 {
     int result = 0;
     const int size = string.size();
@@ -27,7 +27,7 @@ int rangeStringToInt(const QString &string)
 }
 
 // splits a given cellrange like Sheet1.D2:Sheet1.F2, Sheet1.D2:F2, D2:F2 or D2 into its parts
-QPair<QString,QRect> splitCellRange(QString range)
+inline QPair<QString,QRect> splitCellRange(QString range)
 {
     range.remove( '$' ); // remove "fixed" character
     // remove []
