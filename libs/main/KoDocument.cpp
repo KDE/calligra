@@ -88,7 +88,7 @@ namespace {
 
 class DocumentProgressProxy : public KoProgressProxy {
 public:
-    KoMainWindow *m_mainWindow;
+    QPointer<KoMainWindow> m_mainWindow;
     DocumentProgressProxy(KoMainWindow *mainWindow)
         : m_mainWindow(mainWindow)
     {
@@ -96,7 +96,9 @@ public:
 
     ~DocumentProgressProxy() override {
         // signal that the job is done
-        setValue(-1);
+        if (m_mainWindow) {
+            m_mainWindow->slotProgress(-1);
+        }
     }
 
     int maximum() const override {
@@ -462,6 +464,7 @@ KoDocument::~KoDocument()
     d->parentPart->deleteLater();
 
     delete d->filterManager;
+    delete d->progressProxy;
     delete d;
 }
 
