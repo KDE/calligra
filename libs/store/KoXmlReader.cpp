@@ -737,7 +737,9 @@ class KoXmlNodeData
 public:
 
     explicit KoXmlNodeData(unsigned long initialRefCount = 1);
-    ~KoXmlNodeData();
+    // KoXmlDocumentData derives from us and adds more members that need
+    // destroying, so our destructor must be virtual
+    virtual ~KoXmlNodeData();
 
     // generic properties
     KoXmlNode::NodeType nodeType;

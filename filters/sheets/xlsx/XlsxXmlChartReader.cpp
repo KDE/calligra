@@ -227,6 +227,10 @@ QString BubbleSize::writeLitToInternalTable(XlsxXmlChartReader *chartReader)
 
 class Ser
 {
+public:
+    // XlsxXmlChartReader::Private deletes the derived classes below through us,
+    // so we need to be virtual in order to support that correctly.
+    virtual ~Ser() = default;
 };
 
 class ValSeries : public Ser
