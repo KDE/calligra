@@ -680,6 +680,7 @@ class Chart : public Obj
     }
     ~Chart() override
     {
+	qDeleteAll(m_axes);
 	qDeleteAll(m_series);
 	qDeleteAll(m_texts);
 	delete m_impl;
