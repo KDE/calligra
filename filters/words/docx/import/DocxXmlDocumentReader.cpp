@@ -5532,6 +5532,7 @@ KoFilter::ConversionStatus DocxXmlDocumentReader::read_tbl()
     }
 
     delete m_currentLocalTableStyles;
+    delete m_currentDefaultCellStyle;
 
     //Floating Table
     if (!m_currentDrawStyleName.isEmpty()) {
