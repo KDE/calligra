@@ -64,12 +64,12 @@ int TableStyleConverterProperties::rowBandSize() const
     return m_rowBandSize;
 }
 
-void TableStyleConverterProperties::setLocalStyles(const MSOOXML::LocalTableStyles& localStyles)
+void TableStyleConverterProperties::setLocalStyles(MSOOXML::LocalTableStyles localStyles)
 {
-    m_localStyles = localStyles;
+    m_localStyles = std::move(localStyles);
 }
 
-LocalTableStyles TableStyleConverterProperties::localStyles() const
+const LocalTableStyles &TableStyleConverterProperties::localStyles() const
 {
     return m_localStyles;
 }
@@ -620,9 +620,10 @@ LocalTableStyles::LocalTableStyles()
 
 LocalTableStyles::~LocalTableStyles()
 {
+    qDeleteAll(m_properties.values());
 }
 
-TableStyleProperties* LocalTableStyles::localStyle(int row, int column)
+TableStyleProperties* LocalTableStyles::localStyle(int row, int column) const
 {
     const QPair<int,int> key(row,column);
     return m_properties.value(key);

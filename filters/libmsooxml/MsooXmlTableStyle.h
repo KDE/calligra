@@ -103,11 +103,17 @@ class KOMSOOXML_EXPORT LocalTableStyles
 public:
     LocalTableStyles();
     ~LocalTableStyles();
+    LocalTableStyles(LocalTableStyles&&) = default;
+    LocalTableStyles&operator=(LocalTableStyles&&) = default;
 
-    TableStyleProperties* localStyle(int row, int column);
+    TableStyleProperties* localStyle(int row, int column) const;
     void setLocalStyle(MSOOXML::TableStyleProperties* properties, int row, int column);
 
 private:
+    // Non-copyable since we own the TableStyleProperties objects
+    LocalTableStyles(const LocalTableStyles&) = delete;
+    LocalTableStyles&operator=(const LocalTableStyles&) = delete;
+
     QMap<QPair<int,int>, TableStyleProperties*> m_properties;
 };
 
@@ -130,8 +136,8 @@ public:
     int columnBandSize() const;
 
     ///LocalStyles is a collection of cell<->style relationships
-    void setLocalStyles(const LocalTableStyles& localStyles);
-    LocalTableStyles localStyles() const;
+    void setLocalStyles(LocalTableStyles localStyles);
+    const LocalTableStyles &localStyles() const;
 
     ///LocalTableStyle is a style defined to be the default style of a table. Defined locally.
     void setLocalDefaulCelltStyle(MSOOXML::TableStyleProperties* properties);

@@ -5557,7 +5557,7 @@ void DocxXmlDocumentReader::defineTableStyles()
     converterProperties.setRowCount(rowCount);
     converterProperties.setColumnCount(columnCount);
     converterProperties.setRoles(m_activeRoles);
-    converterProperties.setLocalStyles(*m_currentLocalTableStyles);
+    converterProperties.setLocalStyles(std::move(*m_currentLocalTableStyles));
     converterProperties.setLocalDefaulCelltStyle(m_currentDefaultCellStyle);
     MSOOXML::DrawingTableStyle* tableStyle = m_context->m_tableStyles.value(m_currentTableStyleName);
     MSOOXML::DrawingTableStyleConverter styleConverter(converterProperties, tableStyle);
