@@ -29,6 +29,9 @@ KoTable::KoTable()
 
 KoTable::~KoTable()
 {
+    qDeleteAll(m_rows);
+    qDeleteAll(m_columns);
+    qDeleteAll(m_cells);
 }
 
 KoCell* KoTable::cellAt(int row, int column)

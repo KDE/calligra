@@ -78,6 +78,9 @@ public:
     QString protectionalgorithm() const;
 
 private:
+    KoTable(const KoTable&) = delete;
+    KoTable &operator=(const KoTable&) = delete;
+
     QVector<KoColumn*> m_columns;
     QVector<KoRow*> m_rows;
 
