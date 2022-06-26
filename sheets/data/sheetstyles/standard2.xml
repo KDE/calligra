@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE spreadsheet-snippet>
 <spreadsheet-snippet>
 <cell row="1" column="1" >
-<format bgcolor="#0000c0">
+<format brushcolor="#0000c0">
 <font size="12" family="Times" weight="50" />
 <pen width="0" style="1" color="#ffffff" />
 <left-border>
@@ -13,7 +13,7 @@
 </format>
 </cell>
 <cell row="2" column="1" >
-<format bgcolor="#ffffff">
+<format brushcolor="#ffffff">
 <font size="12" family="Times" bold="yes" weight="75" italic="yes" />
 <left-border>
 <pen width="2" style="1" color="#000000" />
@@ -26,7 +26,7 @@
 a</text>
 </cell>
 <cell row="1" column="2" >
-<format bgcolor="#0000c0">
+<format brushcolor="#0000c0">
 <font size="12" family="Times" bold="yes" weight="75" italic="yes" />
 <pen width="0" style="1" color="#ffffff" />
 <left-border>
@@ -40,7 +40,7 @@ a</text>
 x</text>
 </cell>
 <cell row="2" column="2" >
-<format bgcolor="#ffffff">
+<format brushcolor="#ffffff">
 <font size="12" family="Times" weight="50" />
 <left-border>
 <pen width="2" style="1" color="#000000" />
@@ -53,7 +53,7 @@ x</text>
 1</text>
 </cell>
 <cell row="3" column="1" >
-<format bgcolor="#ffff00">
+<format brushcolor="#ffff00">
 <font size="12" family="Times" bold="yes" weight="75" italic="yes" />
 <left-border>
 <pen width="2" style="1" color="#000000" />
@@ -66,7 +66,7 @@ x</text>
 b</text>
 </cell>
 <cell row="1" column="3" >
-<format bgcolor="#0000c0">
+<format brushcolor="#0000c0">
 <font size="12" family="Times" bold="yes" weight="75" italic="yes" />
 <pen width="0" style="1" color="#ffffff" />
 <left-border>
@@ -90,7 +90,7 @@ y</text>
 </format>
 </cell>
 <cell row="2" column="3" >
-<format bgcolor="#ffffff">
+<format brushcolor="#ffffff">
 <font size="12" family="Times" weight="50" />
 <left-border>
 <pen width="1" style="1" color="#000000" />
@@ -103,7 +103,7 @@ y</text>
 2</text>
 </cell>
 <cell row="3" column="2" >
-<format bgcolor="#ffff00">
+<format brushcolor="#ffff00">
 <font size="12" family="Times" weight="50" />
 <left-border>
 <pen width="2" style="1" color="#000000" />
@@ -146,7 +146,7 @@ y</text>
 </format>
 </cell>
 <cell row="3" column="3" >
-<format bgcolor="#ffff00">
+<format brushcolor="#ffff00">
 <font size="12" family="Times" weight="50" />
 <left-border>
 <pen width="1" style="1" color="#000000" />

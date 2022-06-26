@@ -163,8 +163,8 @@ bool AutoFormatDialog::Private::parseXML(const KoXmlDocument& doc)
     for (int i = 0; i < 16; ++i)
         styles.append(Style());
 
-    KoXmlElement e = doc.documentElement().firstChild().toElement();
-    for (; !e.isNull(); e = e.nextSibling().toElement()) {
+    for (KoXmlNode node = doc.documentElement().firstChild(); !node.isNull(); node = node.nextSibling()) {
+        KoXmlElement e = node.toElement();
         if (e.tagName() == "cell") {
             Style style;
             KoXmlElement tmpElement(e.namedItem("format").toElement());
