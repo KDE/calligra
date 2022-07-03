@@ -418,10 +418,12 @@ bool CellBaseStorage::hasLockedCells(const Region& region) const
 
 void CellBaseStorage::lockCells(const QRect& rect)
 {
+    // Start by unlocking the cells that we lock right now
+    unlockCells(rect);
+
 #ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&bigUglyLock);
 #endif
-    // Start by unlocking the cells that we lock right now
     const QPair<QRectF, bool> pair = d->matrixStorage->containedPair(rect.topLeft());  // FIXME
     if (!pair.first.isNull())
         d->matrixStorage->insert(Region(pair.first.toRect()), false);
@@ -440,17 +442,16 @@ void CellBaseStorage::unlockCells(int column, int row)
         return;
     if (pair.second == false)
         return;
-    if (pair.first.toRect().topLeft() != QPoint(column, row))
-        return;
     const QRect rect = pair.first.toRect();
     d->matrixStorage->insert(Region(rect), false);
-    // clear the values
-    for (int r = rect.top(); r <= rect.bottom(); ++r) {
-        for (int c = rect.left(); c <= rect.right(); ++c) {
-            if (r != rect.top() || c != rect.left())
-                setValue(c, r, Value());
-        }
-    }
+}
+
+void CellBaseStorage::unlockCells(const QRect& rect)
+{
+    // clear all the existing locks, if any
+    for (int r = rect.top(); r <= rect.bottom(); ++r)
+        for (int c = rect.left(); c <= rect.right(); ++c)
+            unlockCells(c, r);
 }
 
 QRect CellBaseStorage::lockedCells(int column, int row) const

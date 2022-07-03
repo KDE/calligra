@@ -34,7 +34,7 @@ MergeCommand::~MergeCommand()
 
 bool MergeCommand::process(Element* element)
 {
-    if (element->type() != Element::Range || element->isRow() || element->isColumn()) {
+    if (element->isRow() || element->isColumn()) {
         // TODO Stefan: remove these elements?!
         return true;
     }
@@ -47,16 +47,6 @@ bool MergeCommand::process(Element* element)
     int height = range.height();
     int width  = range.width();
 
-    // Clear existing merged cells - this happens for both merge and dissociate.
-    for (int row = top; row <= bottom; ++row) {
-        for (int col = left; col <= right; ++col) {
-            Cell cell = Cell(m_sheet, col, row);
-            if (cell.doesMergeCells())
-                cell.mergeCells(col, row, 0, 0);
-        }
-    }
-
-    // If we were dissociating, we're now done. Otherwise we merge.
     if (m_merge) {
         if (m_mergeHorizontal) {
             for (int row = top; row <= bottom; ++row) {
@@ -72,6 +62,9 @@ bool MergeCommand::process(Element* element)
             Cell cell = Cell(m_sheet,  left, top);
             cell.mergeCells(left, top, width - 1, height - 1);
         }
+    } else {
+        Cell cell = Cell(m_sheet,  left, top);
+        cell.mergeCells(left, top, width - 1, height - 1, true);  // dissociate
     }
 
     // adjust selection

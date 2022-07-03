@@ -156,9 +156,9 @@ public:
      * \param row the master cell's row
      * \param numXCells number of horizontal cells to be merged in
      * \param numYCells number of vertical cells to be merged in
-     *
+     * \param dissociate dissociate all cells in range instead of merging
      */
-    void mergeCells(int column, int row, int numXCells, int numYCells);
+    void mergeCells(int column, int row, int numXCells, int numYCells, bool dissociate = false);
     Cell masterCell(int column, int row) const;
     int mergedXCells(int column, int row) const;
     int mergedYCells(int column, int row) const;

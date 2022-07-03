@@ -345,17 +345,23 @@ bool CellStorage::isPartOfMerged(int column, int row) const
     return true;
 }
 
-void CellStorage::mergeCells(int column, int row, int numXCells, int numYCells)
+void CellStorage::mergeCells(int column, int row, int numXCells, int numYCells, bool dissociate)
 {
 #ifdef CALLIGRA_SHEETS_MT
     QWriteLocker(&bigUglyLock);
 #endif
+
     // Start by unmerging the cells that we merge right now
-    const QPair<QRectF, bool> pair = d->fusionStorage->containedPair(QPoint(column, row));
-    if (!pair.first.isNull())
-        d->fusionStorage->insert(Region(pair.first.toRect()), false);
-    // Merge the cells
-    if (numXCells != 0 || numYCells != 0)
+    for (int y = 0; y <= numYCells; ++y) {
+        for (int x = 0; x <= numXCells; ++x) {
+            const QPair<QRectF, bool> pair = d->fusionStorage->containedPair(QPoint(column + x, row + y));
+            if ((!pair.first.isNull()) && pair.second)
+                d->fusionStorage->insert(Region(pair.first.toRect()), false);
+        }
+    }
+
+    // Merge the cells if needed
+    if ((!dissociate) && (numXCells != 0 || numYCells != 0))
         d->fusionStorage->insert(Region(column, row, numXCells + 1, numYCells + 1), true);
 }
 

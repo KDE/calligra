@@ -286,7 +286,7 @@ public:
      * @param _y tells to occupy _y additional cells in the vertical
      *
      */
-    void mergeCells(int _col, int _row, int _x, int _y);
+    void mergeCells(int _col, int _row, int _x, int _y, bool dissociate = false);
 
     /**
      * @return true if the cell is forced to obscure other cells.

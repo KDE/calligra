@@ -228,7 +228,8 @@ bool SheetModel::setData(const QModelIndex& index, const QVariant& value, int ro
 
 bool SheetModel::setData(const QItemSelectionRange &range, const QVariant &value, int role)
 {
-    const Region region(toRange(range), d->sheet);
+    const QRect _range = toRange(range);
+    const Region region(_range, d->sheet);
     CellStorage *const storage = d->sheet->fullCellStorage();
     switch (role) {
     case CommentRole:
@@ -238,12 +239,13 @@ bool SheetModel::setData(const QItemSelectionRange &range, const QVariant &value
         storage->setConditions(region, value.value<Conditions>());
         break;
     case FusionedRangeRole:
-        // TODO
-//         storage->setFusion(region, value.value<bool>());
+        storage->mergeCells(_range.left(), _range.top(), _range.width() - 1, _range.height() - 1, !value.value<bool>());
         break;
     case LockedRangeRole:
-        // TODO
-//         storage->setMatrix(region, value.value<bool>());
+        if (value.value<bool>())
+            storage->lockCells(_range);
+        else
+            storage->unlockCells(_range);
         break;
     case NamedAreaRole: {
         QString namedAreaName = value.toString();

@@ -635,10 +635,11 @@ Cell Cell::masterCell() const
 }
 
 // Merge a number of cells, i.e. make this cell obscure a number of
-// other cells.  If _x and _y == 0, then the merging is removed.
-void Cell::mergeCells(int _col, int _row, int _x, int _y)
+// other cells.  If _x and _y == 0, or dissociate is set, then the merging is removed.
+// Setting dissociate removes merged cells in the entire range.
+void Cell::mergeCells(int _col, int _row, int _x, int _y, bool dissociate)
 {
-    cs->mergeCells(_col, _row, _x, _y);
+    cs->mergeCells(_col, _row, _x, _y, dissociate);
 }
 
 bool Cell::doesMergeCells() const

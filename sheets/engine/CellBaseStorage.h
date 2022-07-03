@@ -136,6 +136,7 @@ public:
     bool hasLockedCells(const Region& region) const;
     void lockCells(const QRect& rect);
     void unlockCells(int column, int row);
+    void unlockCells(const QRect& rect);
     QRect lockedCells(int column, int row) const;
 
     /**
