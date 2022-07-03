@@ -9,7 +9,6 @@
 
 #include <QRect>
 
-
 namespace Calligra
 {
 namespace Sheets

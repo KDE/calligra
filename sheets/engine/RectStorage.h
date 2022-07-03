@@ -179,7 +179,6 @@ private:
 #endif
     mutable Region m_cachedArea;
 
-    bool m_storingUndo;
     QVector< QPair<QRectF, T> > m_undoData;
 
     RectStorageLoader<T>* m_loader;
@@ -202,7 +201,7 @@ private:
 
 template<typename T>
 RectStorage<T>::RectStorage(MapBase* map)
-        : m_map(map), m_storingUndo(false), m_loader(0)
+        : m_map(map), m_loader(0)
 {
 }
 
@@ -211,7 +210,6 @@ RectStorage<T>::RectStorage(const RectStorage& other)
         : m_map(other.m_map)
         , m_usedArea(other.m_usedArea)
         , m_storedData(other.m_storedData)
-        , m_storingUndo(false)
         , m_loader(0)
 {
     m_tree = other.m_tree;
