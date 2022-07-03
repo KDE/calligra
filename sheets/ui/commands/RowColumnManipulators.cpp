@@ -164,19 +164,29 @@ void HideShowManipulator::setHide(bool hide)
 
 void HideShowManipulator::performActions(bool hide)
 {
+    if (m_firstrun) oldHidden.clear();
+
     const QList<Element *> elements = cells();
     for (int i = 0; i < elements.count(); ++i) {
         QRect range = elements[i]->rect();
 
         if (m_manipulateColumns) {
-            m_sheet->columnFormats()->setHidden(range.left(), range.right(), hide);
-            qreal delta = m_sheet->columnFormats()->totalColWidth(range.left(), range.right());
+            ColFormatStorage *cf = m_sheet->columnFormats();
+            if (m_firstrun)
+                for (int i = range.left(); i <= range.right(); ++i)
+                    oldHidden[i] = cf->isHidden(i);
+            cf->setHidden(range.left(), range.right(), hide);
+            qreal delta = cf->totalColWidth(range.left(), range.right());
             if (hide) delta = -delta;
             m_sheet->adjustCellAnchoredShapesX(delta, range.left());
         }
         if (m_manipulateRows) {
-            m_sheet->rowFormats()->setHidden(range.top(), range.bottom(), hide);
-            qreal delta = m_sheet->rowFormats()->totalRowHeight(range.top(), range.bottom());
+            RowFormatStorage *rf = m_sheet->rowFormats();
+            if (m_firstrun)
+                for (int i = range.top(); i <= range.bottom(); ++i)
+                    oldHidden[i] = rf->isHidden(i);
+            rf->setHidden(range.top(), range.bottom(), hide);
+            qreal delta = rf->totalRowHeight(range.top(), range.bottom());
             if (hide) delta = -delta;
             m_sheet->adjustCellAnchoredShapesY(delta, range.top());
         }
@@ -191,9 +201,42 @@ void HideShowManipulator::performActions(bool hide)
         changes |= SheetDamage::RowsChanged;
     m_sheet->map()->addDamage(new SheetDamage(m_sheet, changes));
 
-
-    setText(name(!hide));
+    setText(name(hide));
 }
+
+void HideShowManipulator::undoActions()
+{
+    const QList<Element *> elements = cells();
+    for (int i = 0; i < elements.count(); ++i) {
+        QRect range = elements[i]->rect();
+
+        if (m_manipulateColumns) {
+            ColFormatStorage *cf = m_sheet->columnFormats();
+            qreal orig = cf->totalColWidth(range.left(), range.right());
+            for (int i = range.left(); i <= range.right(); ++i)
+                cf->setHidden(i, i, oldHidden[i]);
+            qreal neww = cf->totalColWidth(range.left(), range.right());
+            m_sheet->adjustCellAnchoredShapesX(neww - orig, range.left());
+        }
+        if (m_manipulateRows) {
+            RowFormatStorage *rf = m_sheet->rowFormats();
+            qreal orig = rf->totalRowHeight(range.top(), range.bottom());
+            for (int i = range.top(); i <= range.bottom(); ++i)
+                rf->setHidden(i, i, oldHidden[i]);
+            qreal newh = rf->totalRowHeight(range.top(), range.bottom());
+            m_sheet->adjustCellAnchoredShapesY(newh - orig, range.top());
+        }
+    }
+
+    // Just repaint everything visible; no need to invalidate the visual cache.
+    SheetDamage::Changes changes = SheetDamage::ContentChanged;
+    if (m_manipulateColumns)
+        changes |= SheetDamage::ColumnsChanged;
+    if (m_manipulateRows)
+        changes |= SheetDamage::RowsChanged;
+    m_sheet->map()->addDamage(new SheetDamage(m_sheet, changes));
+}
+
 
 bool HideShowManipulator::performNonCommandActions() {
     performActions(m_hide);
@@ -201,7 +244,7 @@ bool HideShowManipulator::performNonCommandActions() {
 }
 
 bool HideShowManipulator::undoNonCommandActions() {
-    performActions(!m_hide);
+    undoActions();
     return true;
 }
 

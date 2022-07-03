@@ -138,6 +138,7 @@ public:
 
 protected:
     void performActions(bool hide);
+    void undoActions();
 
     bool performNonCommandActions() override;
     bool undoNonCommandActions() override;
@@ -148,6 +149,7 @@ private:
     bool m_manipulateColumns : 1;
     bool m_manipulateRows    : 1;
     bool m_hide              : 1;
+    QMap<int, bool>          oldHidden;
 };
 
 
