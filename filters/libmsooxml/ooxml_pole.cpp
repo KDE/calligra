@@ -159,11 +159,11 @@ public:
     void load();
     void create();
 
-    unsigned long loadBigBlocks(std::vector<unsigned long> blocks, unsigned char* buffer, unsigned long maxlen);
+    unsigned long loadBigBlocks(const std::vector<unsigned long>& blocks, unsigned char* buffer, unsigned long maxlen);
 
     unsigned long loadBigBlock(unsigned long block, unsigned char* buffer, unsigned long maxlen);
 
-    unsigned long loadSmallBlocks(std::vector<unsigned long> blocks, unsigned char* buffer, unsigned long maxlen);
+    unsigned long loadSmallBlocks(const std::vector<unsigned long>& blocks, unsigned char* buffer, unsigned long maxlen);
 
     unsigned long loadSmallBlock(unsigned long block, unsigned char* buffer, unsigned long maxlen);
 
@@ -1009,7 +1009,7 @@ StreamIO* StorageIO::streamIO(const std::string& name)
     return result;
 }
 
-unsigned long StorageIO::loadBigBlocks(std::vector<unsigned long> blocks,
+unsigned long StorageIO::loadBigBlocks(const std::vector<unsigned long>& blocks,
                                        unsigned char* data, unsigned long maxlen)
 {
     // sentinel
@@ -1050,7 +1050,7 @@ unsigned long StorageIO::loadBigBlock(unsigned long block,
 }
 
 // return number of bytes which has been read
-unsigned long StorageIO::loadSmallBlocks(std::vector<unsigned long> blocks,
+unsigned long StorageIO::loadSmallBlocks(const std::vector<unsigned long>& blocks,
         unsigned char* data, unsigned long maxlen)
 {
     // sentinel
