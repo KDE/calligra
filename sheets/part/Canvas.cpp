@@ -39,6 +39,7 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QScrollBar>
+#include <QToolTip>
 
 // KF5
 #include <kxmlguifactory.h>
@@ -51,6 +52,9 @@
 
 // Sheets
 #include "engine/SheetsDebug.h"
+#include "core/Cell.h"
+#include "core/Sheet.h"
+#include "ui/Selection.h"
 
 #define MIN_SIZE 10
 
@@ -99,6 +103,46 @@ View* Canvas::view() const
 {
     return cd->view;
 }
+
+void Canvas::validateSelection()
+{
+     Sheet * const sheet = activeSheet();
+    if (!sheet)
+        return;
+//#if 0
+//XXX TODO
+    if (selection()->isSingular()) {
+        const Cell cell = Cell(sheet, selection()->marker()).masterCell();
+        Validity validity = cell.validity();
+        if (validity.displayValidationInformation()) {
+            const QString title = validity.titleInfo();
+            QString message = validity.messageInfo();
+            if (title.isEmpty() && message.isEmpty())
+                return;
+
+            QString resultText("<html><body>");
+            if (!title.isEmpty()) {
+                resultText += "<h2>" + title + "</h2>";
+            }
+            if (!message.isEmpty()) {
+                message.replace(QChar('\n'), QString("<br>"));
+                resultText += "<p>" + message + "</p>";
+            }
+            resultText += "</body></html>";
+
+            const double xpos = sheet->columnPosition(cell.column()) + cell.width();
+            const double ypos = sheet->rowPosition(cell.row()) + cell.height();
+            const QPointF position = QPointF(xpos, ypos) - offset();
+            QToolTip::showText( view()->mapToGlobal( QPoint( position.x(), position.y() ) ), resultText );
+        } else {
+            QToolTip::hideText();
+        }
+    } else {
+        QToolTip::hideText();
+    }
+//#endif
+}
+
 
 void Canvas::mousePressEvent(QMouseEvent* event)
 {

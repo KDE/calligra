@@ -11,8 +11,6 @@
 #include <QPointer>
 #include "CanvasBase.h"
 
-class QLabel;
-
 class KoShapeManager;
 class KoToolProxy;
 
@@ -31,8 +29,6 @@ public:
     // Example: If the first visible row is '5', then offset stores
     // the height of the invisible rows '1' to '4'.
     QPointF offset;
-
-    QLabel *validationInfo;
 
     // flake
     KoShapeManager* shapeManager;

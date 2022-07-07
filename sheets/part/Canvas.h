@@ -132,6 +132,11 @@ public:
         QWidget::updateMicroFocus();
     }
 
+    /**
+     * Validates the selected cell.
+     */
+    void validateSelection();
+
     KoZoomHandler* zoomHandler() const override;
     bool isViewLoading() const override;
     SheetView* sheetView(Sheet* sheet) const override;

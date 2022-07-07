@@ -37,7 +37,6 @@
 #include "Headers.h"
 
 // Qt
-#include <QLabel>
 #include <QMimeData>
 #include <QPainter>
 #include <QToolTip>
@@ -77,7 +76,6 @@ CanvasBase::CanvasBase(Doc* doc)
         : KoCanvasBase(0)
         , d(new Private)
 {
-    d->validationInfo = 0;
     d->offset = QPointF(0.0, 0.0);
     d->doc = doc;
     
@@ -90,7 +88,6 @@ CanvasBase::~CanvasBase()
 {
     delete d->shapeManager;
     delete d->toolProxy;
-    delete d->validationInfo;
     delete d;
 }
 
@@ -181,62 +178,6 @@ bool CanvasBase::eventFilter(QObject *o, QEvent *e)
         break;
     }
     return false;
-}
-
-void CanvasBase::validateSelection()
-{
-     Sheet * const sheet = activeSheet();
-    if (!sheet)
-        return;
-#if 0
-XXX TODO
-    if (selection()->isSingular()) {
-        const Cell cell = Cell(sheet, selection()->marker()).masterCell();
-        Validity validity = cell.validity();
-        if (validity.displayValidationInformation()) {
-            const QString title = validity.titleInfo();
-            QString message = validity.messageInfo();
-            if (title.isEmpty() && message.isEmpty())
-                return;
-
-            if (!d->validationInfo) {
-                d->validationInfo = new QLabel(this);
-                QPalette palette = d->validationInfo->palette();
-                palette.setBrush(QPalette::Window, palette.toolTipBase());
-                palette.setBrush(QPalette::WindowText, palette.toolTipText());
-                d->validationInfo->setPalette(palette);
-//                 d->validationInfo->setWindowFlags(Qt::ToolTip);
-                d->validationInfo->setFrameShape(QFrame::Box);
-                d->validationInfo->setAlignment(Qt::AlignVCenter);
-                d->validationInfo->setTextFormat(Qt::RichText);
-            }
-
-            QString resultText("<html><body>");
-            if (!title.isEmpty()) {
-                resultText += "<h2>" + title + "</h2>";
-            }
-            if (!message.isEmpty()) {
-                message.replace(QChar('\n'), QString("<br>"));
-                resultText += "<p>" + message + "</p>";
-            }
-            resultText += "</body></html>";
-            d->validationInfo->setText(resultText);
-
-            const double xpos = sheet->columnPosition(cell.column()) + cell.width();
-            const double ypos = sheet->rowPosition(cell.row()) + cell.height();
-            const QPointF position = QPointF(xpos, ypos) - offset();
-            const QPoint viewPosition = viewConverter()->documentToView(position).toPoint();
-            d->validationInfo->move(/*mapToGlobal*/(viewPosition)); // Qt::ToolTip!
-            d->validationInfo->show();
-        } else {
-            delete d->validationInfo;
-            d->validationInfo = 0;
-        }
-    } else {
-        delete d->validationInfo;
-        d->validationInfo = 0;
-    }
-#endif
 }
 
 void CanvasBase::setDocumentOffset(const QPoint& offset)

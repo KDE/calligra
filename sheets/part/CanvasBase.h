@@ -110,11 +110,6 @@ public:
      */
     virtual Sheet* activeSheet() const = 0;
 
-    /**
-     * Validates the selected cell.
-     */
-    void validateSelection();
-
     void paint(QPainter* painter, const QRectF& painterRect); // maybe add a QRegion overload
 
 public:
