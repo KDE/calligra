@@ -268,6 +268,7 @@ QString ValueFormatter::createNumberFormat(Number value, int precision,
         }
     }
 
+    // TODO - precision should only affect numbers after the decimal point, not everything ...
     int p = precision;
 
     if (p == -1) {

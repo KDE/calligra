@@ -21,9 +21,17 @@ IndentationCommand::IndentationCommand()
 
 bool IndentationCommand::performCommands()
 {
-    Style style;
-    style.setIndentation(m_indent);
-    m_sheet->fullCellStorage()->setStyle(*this, style);
+    Style curStyle = m_sheet->fullCellStorage()->style(boundingRect().left(), boundingRect().top());
+    double cur = curStyle.indentation();
+    double indent = cur + m_indent;
+    if (indent < 0) indent = 0;
+
+    if (cur != indent) {
+        Style style;
+        style.setIndentation(indent);
+        m_sheet->fullCellStorage()->setStyle(*this, style);
+    }
+
     return true;
 }
 

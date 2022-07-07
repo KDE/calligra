@@ -39,14 +39,6 @@ bool StyleCommand::process(Element* element)
     else
         setText(kundo2_i18n("Change Style"));
 
-    // special handling for precision
-    if (m_style->hasAttribute(Style::Precision)) {
-        if (m_style->precision() == -1)   // Style default
-            m_style->setPrecision(0);   // storage default
-        else if (m_style->precision() == 0)
-            m_style->setPrecision(-1);   // anything resulting in zero, but not storage default
-    }
-
     // special handling for the border
     bool hasLeftPen = m_style->hasAttribute(Style::LeftPen);
     bool hasRightPen = m_style->hasAttribute(Style::RightPen);
@@ -77,13 +69,6 @@ bool StyleCommand::process(Element* element)
     if (m_style->hasAttribute(Style::Indentation)) {
         Style style;
         style.setIndentation(0);
-        cs->setStyle(Region(range), style);
-    }
-
-    // special handling for precision: reset the precision first
-    if (m_style->hasAttribute(Style::Precision)) {
-        Style style;
-        style.setPrecision(0);   // insert storage default
         cs->setStyle(Region(range), style);
     }
 

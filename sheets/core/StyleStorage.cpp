@@ -14,10 +14,12 @@
 #include <QMutexLocker>
 #endif
 
-#include "Map.h"
-#include "RTree.h"
-#include "StyleManager.h"
-#include "RectStorage.h"
+#include "engine/CalculationSettings.h"
+#include "engine/RTree.h"
+
+#include "core/Map.h"
+#include "engine/RectStorage.h"
+#include "core/StyleManager.h"
 
 static const int g_maximumCachedStyles = 10000;
 
@@ -738,34 +740,6 @@ void StyleStorage::garbageCollection()
         return; // already done
     }
 
-    // special handling for indentation:
-    // check whether the default indentation is placed first
-    if (zIndex == currentZIndex &&
-            currentPair.second->type() == Style::Indentation &&
-            static_cast<const SubStyleOne<Style::Indentation, int>*>(currentPair.second.data())->value1 == 0 &&
-            pair.first == currentPair.first) {
-        debugSheetsStyle << "removing default indentation"
-        << "at" << Region(currentPair.first.toRect()).name()
-        << "used" << currentPair.second->ref << "times" << endl;
-        d->tree.remove(currentPair.first.toRect(), currentPair.second);
-        QTimer::singleShot(g_garbageCollectionTimeOut, this, &StyleStorage::garbageCollection);
-        return; // already done
-    }
-
-    // special handling for precision:
-    // check whether the storage default precision is placed first
-    if (zIndex == currentZIndex &&
-            currentPair.second->type() == Style::Precision &&
-            static_cast<const SubStyleOne<Style::Precision, int>*>(currentPair.second.data())->value1 == 0 &&
-            pair.first == currentPair.first) {
-        debugSheetsStyle << "removing default precision"
-        << "at" << Region(currentPair.first.toRect()).name()
-        << "used" << currentPair.second->ref << "times" << endl;
-        d->tree.remove(currentPair.first.toRect(), currentPair.second);
-        QTimer::singleShot(g_garbageCollectionTimeOut, this, &StyleStorage::garbageCollection);
-        return; // already done
-    }
-
     // check, if the current substyle is covered by others added after it
     bool found = false;
     QMap<int, SharedSubStylePair>::ConstIterator end = pairs.constEnd();
@@ -791,19 +765,6 @@ void StyleStorage::garbageCollection()
                  pair.second->type() == Style::DefaultStyleKey ||
                  pair.second->type() == Style::NamedStyleKey) &&
                 pair.first.toRect().contains(currentPair.first.toRect())) {
-            // special handling for indentation
-            // only remove, if covered by default
-            if (pair.second->type() == Style::Indentation &&
-                    static_cast<const SubStyleOne<Style::Indentation, int>*>(pair.second.data())->value1 != 0) {
-                continue;
-            }
-
-            // special handling for precision
-            // only remove, if covered by default
-            if (pair.second->type() == Style::Precision &&
-                    static_cast<const SubStyleOne<Style::Precision, int>*>(pair.second.data())->value1 != 0) {
-                continue;
-            }
 
             debugSheetsStyle << "removing" << currentPair.second->debugData()
             << "at" << Region(currentPair.first.toRect()).name()
@@ -955,29 +916,6 @@ Style StyleStorage::composeStyle(const QList<SharedSubStyle>& subStyles) const
             // skip
         } else if (subStyles[i]->type() == Style::NamedStyleKey) {
             // treated above
-        } else if (subStyles[i]->type() == Style::Indentation) {
-            // special handling for indentation
-            const int indentation = static_cast<const SubStyleOne<Style::Indentation, int>*>(subStyles[i].data())->value1;
-            if (indentation == 0 || (style.indentation() + indentation <= 0))
-                style.clearAttribute(Style::Indentation);   // reset
-            else
-                style.setIndentation(style.indentation() + indentation);   // increase/decrease
-        } else if (subStyles[i]->type() == Style::Precision) {
-            // special handling for precision
-            // The Style default (-1) and the storage default (0) differ.
-            const int precision = static_cast<const SubStyleOne<Style::Precision, int>*>(subStyles[i].data())->value1;
-            if (precision == 0)   // storage default
-                style.clearAttribute(Style::Precision);   // reset
-            else {
-                if (style.precision() == -1)   // Style default
-                    style.setPrecision(qMax(0, precision));     // positive initial value
-                else if (style.precision() + precision <= 0)
-                    style.setPrecision(0);
-                else if (style.precision() + precision >= 10)
-                    style.setPrecision(10);
-                else
-                    style.setPrecision(style.precision() + precision);   // increase/decrease
-            }
         } else {
             // insert the substyle
 //             debugSheetsStyle <<"StyleStorage: inserting" << subStyles[i]->debugData();
