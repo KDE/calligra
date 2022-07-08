@@ -315,6 +315,10 @@ void ConditionalDialog::init()
 
         ++numCondition;
     }
+    // Enable the next condition too
+    if (numCondition == 0) m_dlg->m_condition_1->setEnabled(true);
+    if (numCondition == 1) m_dlg->m_condition_2->setEnabled(true);
+    if (numCondition == 2) m_dlg->m_condition_3->setEnabled(true);
 }
 
 void ConditionalDialog::init(Conditional const & tmp, int numCondition)
@@ -352,6 +356,7 @@ void ConditionalDialog::init(Conditional const & tmp, int numCondition)
 
     if (!tmp.styleName.isEmpty()) {
         sb->setCurrentIndex(sb->findText(tmp.styleName));
+        cb->setEnabled(true);
         sb->setEnabled(true);
     }
 
@@ -478,9 +483,6 @@ bool ConditionalDialog::getCondition(Conditional & newCondition, const KComboBox
                                      const KLineEdit * edit1, const KLineEdit * edit2,
                                      const KComboBox * sb)
 {
-    if (!cb->isEnabled())
-        return false;
-
     newCondition.cond = typeOfCondition(cb);
     if (newCondition.cond == Validity::None)
         return false;
