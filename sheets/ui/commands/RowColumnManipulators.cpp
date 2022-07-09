@@ -583,8 +583,8 @@ bool InsertDeleteColumnManipulator::process(Element* element)
         }
         m_sheet->cellStorage()->insertColumns(pos, num);
     } else {
-        m_sheet->removeColumns(pos, num);
         m_sheet->cellStorage()->removeColumns(pos, num);
+        m_sheet->removeColumns(pos, num);
     }
     return true;
 }

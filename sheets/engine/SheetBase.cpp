@@ -356,6 +356,9 @@ void SheetBase::changeNameCellRef(const QRect& rect, ChangeRef ref, SheetBase *c
         formula.setExpression(newText);
         cell.setFormula(formula);
     }
+
+    const Region region(1, 1, KS_colMax, KS_rowMax, this);
+    map()->addDamage(new CellDamage(this, region, CellDamage::Appearance));
 }
 
 // 'rect' is the area being added/removed
