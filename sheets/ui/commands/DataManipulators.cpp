@@ -376,6 +376,19 @@ bool ShiftManipulator::process(Element* element)
             m_sheet->cellStorage()->removeShiftLeft(range);
         }
     }
+    const Region region(1, 1, KS_colMax, KS_rowMax, m_sheet);
+    m_sheet->map()->addDamage(new CellDamage(m_sheet, region, CellDamage::Appearance));
+    return true;
+}
+
+bool ShiftManipulator::undoNonCommandActions()
+{
+    Mode orig_mode = m_mode;
+    // Revert the mode and run the commands. This will get the columns to where they need to be.
+    // Then, the parent class will call undo actions to restore the contents.
+    m_mode = (m_mode == Insert) ? Delete : Insert;
+    performCommands();
+    m_mode = orig_mode;
     return true;
 }
 

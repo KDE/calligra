@@ -171,6 +171,7 @@ public:
 protected:
     bool process(Element*) override;
     bool preProcess() override;
+    bool undoNonCommandActions() override;
 
 private:
     enum Mode { Insert, Delete };
@@ -197,6 +198,7 @@ public:
 protected:
     bool process(Element*) override;
     bool preProcess() override;
+    bool undoNonCommandActions() override;
 
 private:
     enum Mode { Insert, Delete };

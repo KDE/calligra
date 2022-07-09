@@ -207,6 +207,7 @@ public:
 
 protected:
     bool process(Element*) override;
+    bool undoNonCommandActions() override;
 
 private:
     Direction m_direction;

@@ -589,6 +589,18 @@ bool InsertDeleteColumnManipulator::process(Element* element)
     return true;
 }
 
+bool InsertDeleteColumnManipulator::undoNonCommandActions()
+{
+    Mode orig_mode = m_mode;
+    // Revert the mode and run the commands. This will get the columns to where they need to be.
+    // Then, the parent class will call undo actions to restore the contents.
+    m_mode = (m_mode == Insert) ? Delete : Insert;
+    performCommands();
+    m_mode = orig_mode;
+    return true;
+}
+
+
 bool elementLeftColumnLessThan(const Calligra::Sheets::Region::Element *e1, const Calligra::Sheets::Region::Element *e2)
 {
     return e1->rect().left() < e2->rect().left();
@@ -654,6 +666,18 @@ bool InsertDeleteRowManipulator::process(Element* element)
     }
     return true;
 }
+
+bool InsertDeleteRowManipulator::undoNonCommandActions()
+{
+    Mode orig_mode = m_mode;
+    // Revert the mode and run the commands. This will get the columns to where they need to be.
+    // Then, the parent class will call undo actions to restore the contents.
+    m_mode = (m_mode == Insert) ? Delete : Insert;
+    performCommands();
+    m_mode = orig_mode;
+    return true;
+}
+
 
 bool elementTopRowLessThan(const Calligra::Sheets::Region::Element *e1, const Calligra::Sheets::Region::Element *e2)
 {
