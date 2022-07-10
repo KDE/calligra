@@ -53,6 +53,7 @@ KoAnnotationLayoutManager::KoAnnotationLayoutManager(QObject *parent)
 
 KoAnnotationLayoutManager::~KoAnnotationLayoutManager()
 {
+    delete d;
 }
 
 void KoAnnotationLayoutManager::setShapeManager(KoShapeManager *shapeManager)

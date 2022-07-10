@@ -30,7 +30,6 @@ protected:
     MSOOXML::DrawingTableStyle* m_tableStyle;
     MSOOXML::DrawingTableStyleConverterProperties::Roles m_activeRoles;
 
-    MSOOXML::TableStyleProperties* m_currentLocalStyleProperties;
     MSOOXML::LocalTableStyles m_localTableStyles;
 
     #include "PresetDrawingMLTables.h"

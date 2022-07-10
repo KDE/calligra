@@ -83,7 +83,7 @@ void MSOOXML_CURRENT_CLASS::defineStyles()
     converterProperties.setRowCount(rowCount);
     converterProperties.setColumnCount(columnCount);
     converterProperties.setRoles(m_activeRoles);
-    converterProperties.setLocalStyles(m_localTableStyles);
+    converterProperties.setLocalStyles(std::move(m_localTableStyles));
     // TODO: converterProperties.setLocalDefaulCelltStyle()
     MSOOXML::DrawingTableStyleConverter styleConverter(converterProperties, m_tableStyle);
     for(int row = 0; row < rowCount; ++row ) {
@@ -331,7 +331,7 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tcPr()
 {
     READ_PROLOGUE
 
-    m_currentLocalStyleProperties = new MSOOXML::TableStyleProperties();
+    auto *localStyleProperties = new MSOOXML::TableStyleProperties();
 
     while (!atEnd()) {
         readNext();
@@ -347,38 +347,38 @@ KoFilter::ConversionStatus MSOOXML_CURRENT_CLASS::read_tcPr()
 //             ELSE_TRY_READ_IF(pattFill)
             if (QUALIFIED_NAME_IS(lnL)) {
                 TRY_READ(Table_lnL)
-                m_currentLocalStyleProperties->left = m_currentBorder;
-                m_currentLocalStyleProperties->setProperties |= TableStyleProperties::LeftBorder;
+                localStyleProperties->left = m_currentBorder;
+                localStyleProperties->setProperties |= TableStyleProperties::LeftBorder;
             }
             else if (QUALIFIED_NAME_IS(lnR)) {
                 TRY_READ(Table_lnR)
-                m_currentLocalStyleProperties->right = m_currentBorder;
-                m_currentLocalStyleProperties->setProperties |= TableStyleProperties::RightBorder;
+                localStyleProperties->right = m_currentBorder;
+                localStyleProperties->setProperties |= TableStyleProperties::RightBorder;
             }
             else if (QUALIFIED_NAME_IS(lnT)) {
                 TRY_READ(Table_lnT)
-                m_currentLocalStyleProperties->top = m_currentBorder;
-                m_currentLocalStyleProperties->setProperties |= TableStyleProperties::TopBorder;
+                localStyleProperties->top = m_currentBorder;
+                localStyleProperties->setProperties |= TableStyleProperties::TopBorder;
             }
             else if (QUALIFIED_NAME_IS(lnB)) {
                 TRY_READ(Table_lnB)
-                m_currentLocalStyleProperties->bottom = m_currentBorder;
-                m_currentLocalStyleProperties->setProperties |= TableStyleProperties::BottomBorder;
+                localStyleProperties->bottom = m_currentBorder;
+                localStyleProperties->setProperties |= TableStyleProperties::BottomBorder;
             }
             else if (QUALIFIED_NAME_IS(solidFill)) {
                 TRY_READ(solidFill)
-                m_currentLocalStyleProperties->backgroundColor = m_currentColor;
-                m_currentLocalStyleProperties->setProperties |= MSOOXML::TableStyleProperties::BackgroundColor;
+                localStyleProperties->backgroundColor = m_currentColor;
+                localStyleProperties->setProperties |= MSOOXML::TableStyleProperties::BackgroundColor;
                 if (m_currentAlpha > 0) {
-                    m_currentLocalStyleProperties->backgroundOpacity = m_currentAlpha;
-                    m_currentLocalStyleProperties->setProperties |= MSOOXML::TableStyleProperties::BackgroundOpacity;
+                    localStyleProperties->backgroundOpacity = m_currentAlpha;
+                    localStyleProperties->setProperties |= MSOOXML::TableStyleProperties::BackgroundOpacity;
                 }
             }
             SKIP_UNKNOWN // Added to make sure that solidfill eg inside 'lnT' does not mess with the color
         }
     }
 
-    m_localTableStyles.setLocalStyle(m_currentLocalStyleProperties, m_currentTableRowNumber, m_currentTableColumnNumber);
+    m_localTableStyles.setLocalStyle(localStyleProperties, m_currentTableRowNumber, m_currentTableColumnNumber);
 
     READ_EPILOGUE
 }

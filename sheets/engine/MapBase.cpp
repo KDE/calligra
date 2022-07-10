@@ -100,6 +100,8 @@ MapBase::~MapBase()
     delete d->converter;
     delete d->calc;
     delete d->calculationSettings;
+
+    delete d;
 }
 
 
