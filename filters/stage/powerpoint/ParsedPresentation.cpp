@@ -11,6 +11,8 @@
 
 using namespace MSO;
 
+namespace {
+
 bool
 readStream(POLE::Storage& storage, const char* streampath, QBuffer& buffer)
 {
@@ -176,6 +178,8 @@ parsePersistDirectory(const PowerPointStructs& pps, const UserEditAtom* userEdit
     userEditAtom = get<UserEditAtom>(pps, offset);
     parsePersistDirectory(pps, userEditAtom, persistDirectory);
 }
+
+} // anonymous namespace
 
 bool
 ParsedPresentation::parse(POLE::Storage& storage)

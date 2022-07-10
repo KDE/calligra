@@ -81,7 +81,7 @@ void KOODF_EXPORT addTextSpan(group_paragraph_content& content,
  * @param e the content of the paragraph group
  * @param text the text to write
  */
-void addTextSpan(group_paragraph_content& e, const QString& text)
+inline void addTextSpan(group_paragraph_content& e, const QString& text)
 {
     QMap<int, int> tabCache;
     addTextSpan(e, text, tabCache);
