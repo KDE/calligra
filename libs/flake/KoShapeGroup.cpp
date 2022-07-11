@@ -72,6 +72,7 @@ class KoShapeGroupPrivate : public KoShapeContainerPrivate
 public:
     KoShapeGroupPrivate(KoShapeGroup *q)
     : KoShapeContainerPrivate(q)
+    , sizeCached(false)
     {
         model = new ShapeGroupContainerModel(q);
     }
