@@ -41,7 +41,6 @@ struct Q_DECL_HIDDEN KoColorSpaceRegistry::Private {
     QHash<QString, const KoColorSpace * > csMap;
     KoColorConversionSystem *colorConversionSystem;
     KoColorConversionCache* colorConversionCache;
-    KoColorSpaceFactory* alphaCSF;
     const KoColorSpace *rgbU8sRGB;
     const KoColorSpace *lab16sLAB;
     const KoColorSpace *alphaCs;
@@ -127,7 +126,9 @@ KoColorSpaceRegistry::~KoColorSpaceRegistry()
 //    // Delete the colorspace factories
 //    qDeleteAll(d->localFactories);
 
-//    delete d->alphaCSF;
+//    delete d->rgbU8sRGB;
+//    delete d->lab16sLAB;
+//    delete d->alphaCs;
 
     delete d;
 }
