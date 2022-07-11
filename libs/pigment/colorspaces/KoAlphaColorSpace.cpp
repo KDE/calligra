@@ -249,23 +249,19 @@ KoAlphaColorSpace::KoAlphaColorSpace() :
 {
     addChannel(new KoChannelInfo(i18n("Alpha"), 0, 0, KoChannelInfo::ALPHA, KoChannelInfo::UINT8));
 
-    m_compositeOps << new KoCompositeOpOver<AlphaU8Traits>(this)
-            << new CompositeClear(this)
-            << new KoCompositeOpErase<AlphaU8Traits>(this)
-            << new KoCompositeOpCopy2<AlphaU8Traits>(this)
-            << new CompositeSubtract(this)
-            << new CompositeMultiply(this)
-            << new KoCompositeOpAlphaDarken<AlphaU8Traits>(this);
+    addCompositeOp(new KoCompositeOpOver<AlphaU8Traits>(this));
+    addCompositeOp(new CompositeClear(this));
+    addCompositeOp(new KoCompositeOpErase<AlphaU8Traits>(this));
+    addCompositeOp(new KoCompositeOpCopy2<AlphaU8Traits>(this));
+    addCompositeOp(new CompositeSubtract(this));
+    addCompositeOp(new CompositeMultiply(this));
+    addCompositeOp(new KoCompositeOpAlphaDarken<AlphaU8Traits>(this));
 
-    foreach(KoCompositeOp *op, m_compositeOps) {
-        addCompositeOp(op);
-    }
     m_profile = new KoDummyColorProfile;
 }
 
 KoAlphaColorSpace::~KoAlphaColorSpace()
 {
-    qDeleteAll(m_compositeOps);
     delete m_profile;
     m_profile = 0;
 }
