@@ -439,9 +439,6 @@ const KoColorSpace * KoColorSpaceRegistry::colorSpace(const QString &csID, const
 
 const KoColorSpace * KoColorSpaceRegistry::alpha8()
 {
-    if (!d->alphaCs) {
-        d->alphaCs = colorSpace(KoAlphaColorSpace::colorSpaceId());
-    }
     Q_ASSERT(d->alphaCs);
     return d->alphaCs;
 }
