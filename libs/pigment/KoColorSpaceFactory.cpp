@@ -16,12 +16,8 @@
 
 struct Q_DECL_HIDDEN KoColorSpaceFactory::Private {
     QList<KoColorProfile*> colorprofiles;
-    QList<KoColorSpace*> colorspaces;
     QHash<QString, KoColorSpace* > availableColorspaces;
     QMutex mutex;
-#ifndef NDEBUG
-    QHash<KoColorSpace*, QString> stackInformation;
-#endif
 };
 
 KoColorSpaceFactory::KoColorSpaceFactory() : d(new Private)
@@ -30,27 +26,6 @@ KoColorSpaceFactory::KoColorSpaceFactory() : d(new Private)
 
 KoColorSpaceFactory::~KoColorSpaceFactory()
 {
-#ifndef NDEBUG
-    // Check that all color spaces have been released
-    int count = 0;
-    count += d->availableColorspaces.size();
-
-    for(QHash<KoColorSpace*, QString>::const_iterator it = d->stackInformation.constBegin();
-        it != d->stackInformation.constEnd(); ++it)
-    {
-        errorPigment << "*******************************************";
-        errorPigment << it.key()->id() << " still in used, and grabbed in: ";
-        errorPigment << it.value();
-    }
-    if( count != d->colorspaces.size())
-    {
-        errorPigment << (d->colorspaces.size() - count) << " colorspaces are still used";
-    }
-    Q_ASSERT(count == d->colorspaces.size());
-#endif
-    foreach(KoColorSpace* cs, d->colorspaces) {
-        delete cs;
-    }
     foreach(KoColorProfile* profile, d->colorprofiles) {
         KoColorSpaceRegistry::instance()->removeProfile(profile);
         delete profile;
