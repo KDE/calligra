@@ -640,6 +640,10 @@ QList<KoShape *> KoTextSharedLoadingData::insertedShapes() const
 
 void KoTextSharedLoadingData::addNotesConfiguration(KoShapeLoadingContext &context, KoStyleManager *styleManager)
 {
+    if (!styleManager) {
+        return;
+    }
+
     KoOdfNotesConfiguration *footnotesConfiguration = new KoOdfNotesConfiguration(
          context.odfLoadingContext().stylesReader().globalNotesConfiguration(KoOdfNotesConfiguration::Footnote));
     KoOdfNotesConfiguration *endnotesConfiguration = new KoOdfNotesConfiguration(
@@ -657,10 +661,8 @@ void KoTextSharedLoadingData::addNotesConfiguration(KoShapeLoadingContext &conte
 
     endnotesConfiguration->setDefaultNoteParagraphStyle(d->paragraphStylesDotXmlStyles.value(endnotesConfiguration->defaultNoteParagraphStyleName()));
 
-    if (styleManager) {
-        styleManager->setNotesConfiguration(footnotesConfiguration);
-        styleManager->setNotesConfiguration(endnotesConfiguration);
-    }
+    styleManager->setNotesConfiguration(footnotesConfiguration);
+    styleManager->setNotesConfiguration(endnotesConfiguration);
 }
 
 void KoTextSharedLoadingData::addBibliographyConfiguration(KoShapeLoadingContext &context)
