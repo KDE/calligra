@@ -43,13 +43,19 @@
 #include <QTemporaryFile>
 #include <krecentdocument.h>
 #include <klocalizedstring.h>
-#include <ktoolinvocation.h>
 #include <kxmlguifactory.h>
 #include <kfileitem.h>
 #include <ktoolbar.h>
 #include <kactionmenu.h>
 #include <kactioncollection.h>
 #include <KWindowConfig>
+
+#include <kio_version.h>
+#if KIO_VERSION >= QT_VERSION_CHECK(5, 87, 0)
+#include <KEMailClientLauncherJob>
+#else
+#include <KToolInvocation>
+#endif
 
 #ifdef HAVE_KACTIVITIES
 #include <KActivities/ResourceInstance>
@@ -1667,8 +1673,8 @@ void KoMainWindow::slotEmailFile()
     // Attachment = The current file
     // Message Body = The current document in HTML export? <-- This may be an option.
     QString theSubject;
-    QStringList urls;
-    QString fileURL;
+    QList<QUrl> urls;
+    QUrl fileURL;
     if (rootDocument()->url().isEmpty() ||
             rootDocument()->isModified()) {
         //Save the file as a temporary file
@@ -1691,7 +1697,7 @@ void KoMainWindow::slotEmailFile()
 
         saveDocument(false, true);
 
-        fileURL = fileName;
+        fileURL = QUrl::fromLocalFile(fileName);
         theSubject = i18n("Document");
         urls.append(fileURL);
 
@@ -1699,7 +1705,7 @@ void KoMainWindow::slotEmailFile()
         rootDocument()->setModified(tmp_modified);
         rootDocument()->setOutputMimeType(tmp_mimetype);
     } else {
-        fileURL = rootDocument()->url().url();
+        fileURL = rootDocument()->url();
         theSubject = i18n("Document - %1", rootDocument()->url().fileName());
         urls.append(fileURL);
     }
@@ -1707,10 +1713,17 @@ void KoMainWindow::slotEmailFile()
     debugMain << "(" << fileURL << ")";
 
     if (!fileURL.isEmpty()) {
+#if KIO_VERSION >= QT_VERSION_CHECK(5, 87, 0)
+        auto *job = new KEMailClientLauncherJob;
+        job->setSubject(theSubject);
+        job->setAttachments(urls);
+        job->start();
+#else
         KToolInvocation::invokeMailer(QString(), QString(), QString(), theSubject,
                                       QString(), //body
                                       QString(),
-                                      urls); // attachments
+                                      QUrl::toStringList(urls)); // attachments
+#endif
     }
 }
 
