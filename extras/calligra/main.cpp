@@ -16,9 +16,9 @@
 #include <kmimetypetrader.h>
 #include <KServiceTypeTrader>
 #include <krun.h>
-#include <ktoolinvocation.h>
 #include <kmessagebox.h>
 #include <kguiitem.h>
+#include <KIO/ApplicationLauncherJob>
 
 #include <calligraversion.h>
 
@@ -40,19 +40,11 @@ static void showWelcomeWindow()
 {
 }
 
-static bool startService(KService::Ptr service, const QUrl& url)
+static void startService(KService::Ptr service, const QUrl& url)
 {
-    qDebug() << "service->entryPath():" << service->entryPath();
-    QString error;
-    QString serviceName;
-    int pid = 0;
-    int res = KToolInvocation::startServiceByDesktopPath(
-        service->entryPath(), url.url(), &error, &serviceName, &pid
-    );
-    // could not check result - does not work for custom KDEDIRS: ok = res == 0;
-    //ok = true;
-    qDebug() << "KToolInvocation::startServiceByDesktopPath:" << res << pid << error << serviceName;
-    return res == 0;
+    auto *job = new KIO::ApplicationLauncherJob(service);
+    job->setUrls({url});
+    job->start();
 }
 
 static int handleUrls(const QStringList& files)
