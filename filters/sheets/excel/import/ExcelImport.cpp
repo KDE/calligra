@@ -760,7 +760,7 @@ QString ExcelImport::Private::convertHeaderFooter(const QString& text)
     else if (pos > 0) // Some text and '&'
         result += text.midRef(0,  pos - 1);
 
-    while (pos >= 0) {
+    while (pos >= 0 && pos + 1 < len) {
         switch (text[pos + 1].unicode()) {
         case 'D':
             result += "<date>";
