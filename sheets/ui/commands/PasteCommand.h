@@ -13,6 +13,8 @@
 
 #include "core/Cell.h"
 
+#include <QVector>
+
 class QMimeData;
 class KoXmlDocument;
 
@@ -33,23 +35,18 @@ public:
     PasteCommand(KUndo2Command *parent = 0);
     ~PasteCommand() override;
 
-    /**
-     * Modes used for paste with insertion.
-     */
-    enum InsertionMode {
-        NoInsertion,     ///< No cell insertion.
-        ShiftCells,      ///< Shift cells; determine the direction from the data.
-        ShiftCellsRight, ///< Shift cells to the right.
-        ShiftCellsDown   ///< Shift cells to the bottom.
-    };
-
     const QMimeData* mimeData() const;
     bool setMimeData(const QMimeData *mimeData);
-    void setInsertionMode(InsertionMode mode);
     void setMode(Paste::Mode mode);
     void setOperation(Paste::Operation operation);
     void setPasteFC(bool force);
     void setSameApp(bool same);
+    void setSourceRegion(const Region &region);
+    void setCutMode(bool cut);
+
+    Region sourceRegion() const;
+    
+    static QRect adjustPasteArea(QRect sourceRect, QRect pasteArea);
 
     virtual bool isApproved() const;
 
@@ -64,13 +61,13 @@ public:
      * Used to decide whether the paste with insertion dialog, where
      * you can choose between shifting cells down or to the right,
      * has to be shown.
-     * \param mimeData the MIME data to check
      * \return \c true if the shifting direction is not defined
      * \return \c false if the clipboard data contains a column or a row
      */
-    static bool unknownShiftDirection(const QMimeData *mimeData);
+    bool unknownShiftDirection();
 
 protected:
+    bool postProcess() override;
     bool performCommands() override;
 
     /**
@@ -83,13 +80,18 @@ protected:
      */
     bool processTextPlain(Element *element, const QString &data);
 
+    void adjustTargetRegion();
+    Region parseSnippet(bool *isCut);
+
 private:
     const QMimeData *   m_mimeData;
-    InsertionMode       m_insertMode;
+    Region              m_sourceRegion;
     Paste::Mode         m_pasteMode;
     Paste::Operation    m_operation;
     bool                m_pasteFC;
     bool                m_sameApp;
+    bool                m_isCut;
+    QVector<AbstractRegionCommand *> m_nestedCommands;
 };
 
 } // namespace Sheets

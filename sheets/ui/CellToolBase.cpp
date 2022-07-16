@@ -3051,19 +3051,80 @@ void CellToolBase::pasteWithInsertion()
 {
     QClipboard *clipboard = QApplication::clipboard();
     const QMimeData *const mimeData = clipboard->mimeData();
-    if (!PasteCommand::unknownShiftDirection(mimeData)) {
-        PasteCommand *const command = new PasteCommand();
-        command->setSheet(selection()->activeSheet());
-        command->add(*selection());
-        command->setMimeData(mimeData);
-        command->setSameApp(clipboard->ownsClipboard());
-        command->setInsertionMode(PasteCommand::ShiftCells);
-        command->execute(canvas());
-    } else {
+
+    PasteCommand *const command = new PasteCommand();
+    command->setSheet(selection()->activeSheet());
+    command->add(*selection());
+    command->setMimeData(mimeData);   // this sets the source, if applicable
+    command->setSameApp(clipboard->ownsClipboard());
+
+
+    // First the insertion, then the actual pasting
+    int shiftMode = -1;   // 0 = right, 1 = down
+
+    if (command->unknownShiftDirection()) {
         QPointer<PasteInsertDialog> dialog= new PasteInsertDialog(canvas()->canvasWidget(), selection());
-        dialog->exec();
+        int res = dialog->exec();
+        if (dialog->checkedRight())
+            shiftMode = 0;   // right
+        else
+            shiftMode = 1;   // down
         delete dialog;
+        if (res != QDialog::Accepted) {
+            delete command;
+            return;
+        }
+    } else {
+        // Determine the shift direction, if needed.
+        if (command->isColumnSelected())
+            shiftMode = 0;   // right
+        else
+            shiftMode = 1;   // down
     }
+
+    // The paste command has now generated the correct areas for us, so let's perform the insertion.
+    for (Region::ConstIterator it = command->constBegin(); it != command->constEnd(); ++it) {
+        QRect moverect = (*it)->rect();
+        SheetBase *movesheet = (*it)->sheet();
+        AbstractRegionCommand *shiftCommand = nullptr;
+
+        // Shift cells down.
+        if (shiftMode == 1) {
+            if (moverect.width() >= KS_colMax) {
+                // Rows present.
+                shiftCommand = new InsertDeleteRowManipulator();
+            } else {
+                ShiftManipulator *const command = new ShiftManipulator();
+                command->setDirection(ShiftManipulator::ShiftBottom);
+                shiftCommand = command;
+            }
+        }
+        // Shift cells right.
+        if (shiftMode == 0) {
+            if (moverect.height() >= KS_rowMax) {
+                // Columns present.
+                shiftCommand = new InsertDeleteColumnManipulator();
+            } else {
+                // Neither columns, nor rows present.
+                ShiftManipulator *const command = new ShiftManipulator();
+                command->setDirection(ShiftManipulator::ShiftRight);
+                shiftCommand = command;
+            }
+        }
+
+        // shift the data
+        if (shiftCommand) {
+            shiftCommand->setSheet(dynamic_cast<Sheet *>(movesheet));
+            shiftCommand->add(Region(moverect, movesheet));
+
+            shiftCommand->execute(canvas());
+        }
+    }
+
+    // And now we can actually execute the paste command.
+    // TODO - this works, but undo is separate for cell shift and actual paste ... maybe group these?
+    command->execute(canvas());
+
     d->updateEditor(Cell(selection()->activeSheet(), selection()->cursor()));
 }
 

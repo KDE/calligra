@@ -105,8 +105,6 @@ void AbstractRegionCommand::redo()
     }
     if (m_firstrun) m_sheet->fullCellStorage()->stopUndoRecording(this);
 
-    if (!m_firstrun) KUndo2Command::redo();
-
     // Now perform extras that do not rely on recording
     successfully = performNonCommandActions();
     if (!successfully) {

@@ -29,11 +29,11 @@ using namespace Calligra::Sheets;
 PasteCommand::PasteCommand(KUndo2Command *parent)
         : AbstractRegionCommand(parent)
         , m_mimeData(0)
-        , m_insertMode(NoInsertion)
         , m_pasteMode(Paste::Normal)
         , m_operation(Paste::OverWrite)
         , m_pasteFC(false)
         , m_sameApp(true)
+        , m_isCut(false)
 {
 }
 
@@ -52,12 +52,11 @@ bool PasteCommand::setMimeData(const QMimeData *mimeData)
         return false;
     }
     m_mimeData = mimeData;
-    return true;
-}
 
-void PasteCommand::setInsertionMode(InsertionMode mode)
-{
-    m_insertMode = mode;
+    if (m_mimeData->hasFormat("application/x-calligra-sheets-snippet"))
+        setSourceRegion (parseSnippet(&m_isCut));
+
+    return true;
 }
 
 void PasteCommand::setMode(Paste::Mode mode)
@@ -78,6 +77,22 @@ void PasteCommand::setPasteFC(bool force)
 void PasteCommand::setSameApp(bool same)
 {
     m_sameApp = same;
+}
+
+void PasteCommand::setSourceRegion(const Region &region)
+{
+    m_sourceRegion = region;
+    adjustTargetRegion();
+}
+
+Region PasteCommand::sourceRegion() const
+{
+    return m_sourceRegion;
+}
+
+void PasteCommand::setCutMode(bool cut)
+{
+    m_isCut = cut;
 }
 
 bool PasteCommand::isApproved() const
@@ -106,57 +121,33 @@ bool PasteCommand::supports(const QMimeData *mimeData)
     return false;
 }
 
-// static
-bool PasteCommand::unknownShiftDirection(const QMimeData *mimeData)
+bool PasteCommand::unknownShiftDirection()
 {
-    if (!mimeData) return false;
+    if (!m_mimeData) return false;
 
-    QByteArray byteArray;
-
-    if (mimeData->hasFormat("application/x-calligra-sheets-snippet")) {
-        byteArray = mimeData->data("application/x-calligra-sheets-snippet");
-    } else {
-        return false;
-    }
-
-    QString data = QString::fromUtf8(byteArray);
-    // find a column or row entry
-    QStringList lines = data.split("\n");
-    if (lines.isEmpty()) return false;
-    for (QString line : lines) {
-        if (line.startsWith("row ")) return false;
-        if (line.startsWith("column ")) return false;
-    }
+    if (m_sourceRegion.isEmpty()) return false;
+    if (m_sourceRegion.isColumnOrRowSelected()) return false;
     return true;
 }
 
-bool PasteCommand::performCommands()
+Region PasteCommand::parseSnippet(bool *isCut)
 {
-    const QList<Element *> elements = cells();
+    Region res;
+    *isCut = false;
 
     bool isSnippet = m_mimeData->hasFormat("application/x-calligra-sheets-snippet");
-    if (!m_sameApp) isSnippet = false;     // cannot use the snippet if it is not ours (it only contains coordinates)
-    QString data;
-    if (!isSnippet) {
-        QString data = m_mimeData->text();
-        for (int i = 0; i < elements.count(); ++i)
-            processTextPlain(elements[i], data);
-        return true;
-    }
+    if (!isSnippet) return res;
 
     QByteArray byteArray = m_mimeData->data("application/x-calligra-sheets-snippet");
-    data = QString::fromUtf8(byteArray);
+    QString data = QString::fromUtf8(byteArray);
     QStringList list = data.split('\n');
-    if (!list.size()) return true;  // nothing to do?
+    if (!list.size()) return res;  // nothing to do?
     // cut or copy?
-    bool isCut = false;
     if (list.size() && (list[0] == "CUT")) {
-        isCut = true;
+        *isCut = true;
         list.removeFirst();
     }
-    int areas = 0;
-    QList<QRect> rects;
-    QList<SheetBase *> sheets;
+
     for (QString e : list) {
         QStringList parts = e.split(' ');
         if (parts.size() < 6) continue;
@@ -177,27 +168,48 @@ bool PasteCommand::performCommands()
         QRect rect = QRect(QPoint(x1, y1), QPoint(x2, y2));
         SheetBase *sheet = m_sheet->map()->findSheet (sheetName);
         if (!sheet) sheet = m_sheet;
-        rects.append(rect);
-        sheets.append(sheet);
+
+        res.add(rect, sheet);
+    }
+
+    return res;
+}
+
+bool PasteCommand::performCommands()
+{
+    const QList<Element *> elements = cells();
+
+    bool isSnippet = m_mimeData->hasFormat("application/x-calligra-sheets-snippet");
+    if (!m_sameApp) isSnippet = false;     // cannot use the snippet if it is not ours (it only contains coordinates)
+    QString data;
+    if (!isSnippet) {
+        QString data = m_mimeData->text();
+        for (int i = 0; i < elements.count(); ++i)
+            processTextPlain(elements[i], data);
+        return true;
+    }
+
+    int areas = 0;
+    QVector<QRect> rects;
+    QVector<SheetBase *> sheets;
+    for (Region::ConstIterator it = m_sourceRegion.constBegin(); it != m_sourceRegion.constEnd(); ++it) {
+        rects.append((*it)->rect());
+        sheets.append((*it)->sheet());
         areas++;
     }
-    if (!areas) return true;
 
     // Iterate over all region elements and build the sub-commands.
     int datapos = 0;
     for (int i = 0; i < elements.count(); ++i) {
-        processSnippetData(elements[i], rects[datapos], sheets[datapos], isCut);
+        processSnippetData(elements[i], rects[datapos], sheets[datapos], m_isCut);
         datapos = (datapos + 1) % areas;
     }
     return true;
 }
 
-bool PasteCommand::processSnippetData(Element *element, QRect sourceRect, SheetBase *sourceSheet, bool isCut)
+// static
+QRect PasteCommand::adjustPasteArea(QRect sourceRect, QRect pasteArea)
 {
-    const QRect pasteArea = element->rect();
-    Sheet *sheet = dynamic_cast<Sheet *>(element->sheet());
-    Q_ASSERT(sheet == m_sheet);
-
     const int sourceWidth = sourceRect.width();
     const int sourceHeight = sourceRect.height();
 
@@ -211,41 +223,51 @@ bool PasteCommand::processSnippetData(Element *element, QRect sourceRect, SheetB
     if ((pasteArea.height() >= sourceHeight) && (pasteArea.height() < KS_rowMax))
         pasteHeight = pasteArea.height();
 
-    // Determine the shift direction, if needed.
-    if (m_insertMode == ShiftCells) {
-        m_insertMode = ShiftCellsRight;
-        if (sourceWidth == KS_colMax) m_insertMode = ShiftCellsDown;
+    pasteArea.setWidth(pasteWidth);
+    pasteArea.setHeight(pasteHeight);
+
+    return pasteArea;
+}
+
+void PasteCommand::adjustTargetRegion()
+{
+    int areas = 0;
+    QVector<QRect> rects;
+    QVector<SheetBase *> sheets;
+    for (Region::ConstIterator it = m_sourceRegion.constBegin(); it != m_sourceRegion.constEnd(); ++it) {
+        rects.append((*it)->rect());
+        sheets.append((*it)->sheet());
+        areas++;
     }
 
-    // Shift cells down.
-    if (m_insertMode == ShiftCellsDown) {
-        if (pasteWidth == KS_colMax) {
-            // Rows present.
-            InsertDeleteRowManipulator *const command = new InsertDeleteRowManipulator(this);
-            command->setSheet(sheet);
-            command->add(Region(pasteArea.x(), pasteArea.y(), pasteWidth, pasteHeight, sheet));
-        } else {
-            ShiftManipulator *const command = new ShiftManipulator(this);
-            command->setSheet(sheet);
-            command->add(Region(pasteArea.x(), pasteArea.y(), pasteWidth, pasteHeight, sheet));
-            command->setDirection(ShiftManipulator::ShiftBottom);
-        }
+    Region newTarget;
+    const QList<Element *> elements = cells();
+    int datapos = 0;
+    for (int i = 0; i < elements.count(); ++i) {
+        Element *e = elements[i];
+
+        QRect tg = adjustPasteArea(rects[datapos], e->rect());
+        newTarget.add(tg, e->sheet());
+        datapos = (datapos + 1) % areas;
     }
-    // Shift cells right.
-    if (m_insertMode == ShiftCellsRight) {
-        if (pasteHeight == KS_rowMax) {
-            // Columns present.
-            InsertDeleteColumnManipulator *const command = new InsertDeleteColumnManipulator(this);
-            command->setSheet(sheet);
-            command->add(Region(pasteArea.x(), pasteArea.y(), pasteWidth, pasteHeight, sheet));
-        } else {
-            // Neither columns, nor rows present.
-            ShiftManipulator *const command = new ShiftManipulator(this);
-            command->setSheet(sheet);
-            command->add(Region(pasteArea.x(), pasteArea.y(), pasteWidth, pasteHeight, sheet));
-            command->setDirection(ShiftManipulator::ShiftRight);
-        }
+
+    clear();
+    for (Region::ConstIterator it = newTarget.constBegin(); it != newTarget.constEnd(); ++it) {
+        add((*it)->rect(), (*it)->sheet());
     }
+}
+
+bool PasteCommand::processSnippetData(Element *element, QRect sourceRect, SheetBase *sourceSheet, bool isCut)
+{
+    const QRect pasteArea = element->rect();
+    Sheet *sheet = dynamic_cast<Sheet *>(element->sheet());
+    Q_ASSERT(sheet == m_sheet);
+
+    const int pasteWidth = pasteArea.width();
+    const int pasteHeight = pasteArea.height();
+
+    const int sourceWidth = sourceRect.width();
+    const int sourceHeight = sourceRect.height();
 
     Sheet *fullSourceSheet = dynamic_cast<Sheet *>(sourceSheet);
 
@@ -269,20 +291,31 @@ bool PasteCommand::processSnippetData(Element *element, QRect sourceRect, SheetB
                 int tgRow = pasteArea.top() + y;
 
                 Region region = Region(1, tgRow, 1, 1, sheet);
-                ResizeRowManipulator *const resize = new ResizeRowManipulator(this);
+                ResizeRowManipulator *const resize = new ResizeRowManipulator(nullptr);
                 resize->setSheet(sheet);
                 resize->add(region);
                 resize->setSize(rowFormats->rowHeight(srcRow));
-                HideShowManipulator *const hideShow = new HideShowManipulator(this);
+                resize->redo();
+                if (m_firstrun) m_nestedCommands.append (resize);
+                else delete resize;
+
+                HideShowManipulator *const hideShow = new HideShowManipulator(nullptr);
                 hideShow->setManipulateColumns(false);
                 hideShow->setSheet(sheet);
                 hideShow->add(region);
                 hideShow->setHide(!rowFormats->isHidden(srcRow));
-                PageBreakCommand *const pageBreak = new PageBreakCommand(this);
+                hideShow->redo();
+                if (m_firstrun) m_nestedCommands.append (hideShow);
+                else delete hideShow;
+
+                PageBreakCommand *const pageBreak = new PageBreakCommand(nullptr);
                 pageBreak->setMode(PageBreakCommand::BreakBeforeRow);
                 pageBreak->setSheet(sheet);
                 pageBreak->add(region);
                 pageBreak->setBreak(rowFormats->hasPageBreak(srcRow));
+                pageBreak->redo();
+                if (m_firstrun) m_nestedCommands.append (pageBreak);
+                else delete pageBreak;
             }
         }
         if (sourceHeight == KS_rowMax) {
@@ -293,20 +326,32 @@ bool PasteCommand::processSnippetData(Element *element, QRect sourceRect, SheetB
                 int tgCol = pasteArea.left() + x;
 
                 Region region = Region(tgCol, 1, 1, 1, sheet);
-                ResizeColumnManipulator *const resize = new ResizeColumnManipulator(this);
+                ResizeColumnManipulator *const resize = new ResizeColumnManipulator(nullptr);
                 resize->setSheet(sheet);
                 resize->add(region);
                 resize->setSize(columnFormats->colWidth(srcCol));
-                HideShowManipulator *const hideShow = new HideShowManipulator(this);
+                m_nestedCommands.append (resize);
+                resize->redo();
+                if (m_firstrun) m_nestedCommands.append (resize);
+                else delete resize;
+
+                HideShowManipulator *const hideShow = new HideShowManipulator(nullptr);
                 hideShow->setManipulateColumns(true);
                 hideShow->setSheet(sheet);
                 hideShow->add(region);
                 hideShow->setHide(!columnFormats->isHidden(srcCol));
-                PageBreakCommand *const pageBreak = new PageBreakCommand(this);
+                hideShow->redo();
+                if (m_firstrun) m_nestedCommands.append (hideShow);
+                else delete hideShow;
+
+                PageBreakCommand *const pageBreak = new PageBreakCommand(nullptr);
                 pageBreak->setMode(PageBreakCommand::BreakBeforeColumn);
                 pageBreak->setSheet(sheet);
                 pageBreak->add(region);
                 pageBreak->setBreak(columnFormats->hasPageBreak(srcCol));
+                pageBreak->redo();
+                if (m_firstrun) m_nestedCommands.append (pageBreak);
+                else delete pageBreak;
             }
         }
     }
@@ -337,9 +382,13 @@ bool PasteCommand::processSnippetData(Element *element, QRect sourceRect, SheetB
     }
 
     if (isCut) {
-        DeleteCommand* command = new DeleteCommand(this);
+        DeleteCommand* command = new DeleteCommand(nullptr);
         command->setSheet(fullSourceSheet);
         command->add(sourceRect);
+        // The delete command is mostly recorded, but has non-command actions too. We just call everything in undo to simplify things, it's good enough.
+        command->redo();
+        if (m_firstrun) m_nestedCommands.append (command);
+        else delete command;
     }
 
     return true;
@@ -367,10 +416,24 @@ bool PasteCommand::processTextPlain(Element *element, const QString &text)
 //     Region range(mx, my, 1, list.size());
 
     // create a command, configure it and execute it
-    DataManipulator *command = new DataManipulator(this);
+    DataManipulator *command = new DataManipulator(nullptr);
     command->setSheet(m_sheet);
     command->setParsing(false);
     command->setValue(value);
     command->add(element->rect(), m_sheet);
+    command->redo();
+    delete command;
+
     return true;
 }
+
+bool PasteCommand::postProcess() {
+    if (!m_firstrun) return true;
+    // Nested commands should appear on the undo stack after the recorded ones, so we add them here.
+    for (AbstractRegionCommand *command : m_nestedCommands)
+        addCommand(command);
+    return true;
+}
+
+
+

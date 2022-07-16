@@ -30,6 +30,8 @@ class PasteInsertDialog : public KoDialog
 public:
     PasteInsertDialog(QWidget* parent, Selection* selection);
 
+    bool checkedRight() const;
+    bool checkedBottom() const;
 public Q_SLOTS:
     void slotOk();
 private:

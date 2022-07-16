@@ -10,15 +10,12 @@
 // Local
 #include "PasteInsertDialog.h"
 
-#include <QApplication>
-#include <QClipboard>
 #include <QGroupBox>
 #include <QVBoxLayout>
 #include <QRadioButton>
 
-#include "core/Map.h"
-#include "core/Sheet.h"
-#include "../commands/PasteCommand.h"
+#include <KLocalizedString>
+
 #include "../Selection.h"
 
 using namespace Calligra::Sheets;
@@ -48,19 +45,19 @@ PasteInsertDialog::PasteInsertDialog(QWidget* parent, Selection* selection)
     connect(this, &KoDialog::okClicked, this, &PasteInsertDialog::slotOk);
 }
 
+bool PasteInsertDialog::checkedRight() const
+{
+    return rb1->isChecked();
+}
+
+bool PasteInsertDialog::checkedBottom() const
+{
+    return rb2->isChecked();
+}
+
 void PasteInsertDialog::slotOk()
 {
-    QClipboard *clipboard = QApplication::clipboard();
-    PasteCommand *const command = new PasteCommand();
-    command->setSheet(m_selection->activeSheet());
-    command->add(*m_selection);
-    command->setMimeData(clipboard->mimeData());
-    command->setSameApp (clipboard->ownsClipboard());
-    if (rb1->isChecked()) {
-        command->setInsertionMode(PasteCommand::ShiftCellsRight);
-    } else if (rb2->isChecked()) {
-        command->setInsertionMode(PasteCommand::ShiftCellsDown);
-    }
-    m_selection->activeSheet()->fullMap()->addCommand(command);
     accept();
 }
+
+
