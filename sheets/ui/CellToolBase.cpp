@@ -3025,8 +3025,7 @@ bool CellToolBase::paste()
             PasteCommand *const command = new PasteCommand();
             command->setSheet(selection()->activeSheet());
             command->add(*selection());
-            command->setMimeData(mimedata);
-            command->setSameApp(clipboard->ownsClipboard());
+            command->setMimeData(mimedata, clipboard->ownsClipboard());
             command->setPasteFC(true);
             command->execute(canvas());
         }
@@ -3055,8 +3054,7 @@ void CellToolBase::pasteWithInsertion()
     PasteCommand *const command = new PasteCommand();
     command->setSheet(selection()->activeSheet());
     command->add(*selection());
-    command->setMimeData(mimeData);   // this sets the source, if applicable
-    command->setSameApp(clipboard->ownsClipboard());
+    command->setMimeData(mimeData, clipboard->ownsClipboard());   // this sets the source, if applicable
 
 
     // First the insertion, then the actual pasting

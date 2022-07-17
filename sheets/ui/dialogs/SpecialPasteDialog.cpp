@@ -81,8 +81,7 @@ void SpecialPasteDialog::slotOk()
     PasteCommand *const command = new PasteCommand();
     command->setSheet(m_selection->activeSheet());
     command->add(*m_selection);
-    command->setMimeData(clipboard->mimeData());
-    command->setSameApp(clipboard->ownsClipboard());
+    command->setMimeData(clipboard->mimeData(), clipboard->ownsClipboard());
     command->setMode(sp);
     command->setOperation(op);
     m_selection->activeSheet()->fullMap()->addCommand(command);

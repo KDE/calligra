@@ -531,14 +531,9 @@ bool CanvasBase::drop(const QMimeData* mimeData, const QPointF& eventPos, const 
     PasteCommand *const command = new PasteCommand();
     command->setSheet(sheet);
     command->add(Region(col, row, 1, 1, sheet));
-    command->setMimeData(mimeData);
+    command->setMimeData(mimeData, (source == canvasWidget()));
 
-    if (source == canvasWidget()) {
-        DeleteCommand *const deleteCommand = new DeleteCommand(command);
-        deleteCommand->setSheet(sheet);
-        deleteCommand->add(*selection()); // selection is still, where the drag started
-        deleteCommand->setRegisterUndo(false);
-    }
+    if (source == canvasWidget()) command->setCutMode(true);
 
     command->execute();
 

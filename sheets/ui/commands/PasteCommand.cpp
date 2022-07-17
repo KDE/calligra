@@ -46,15 +46,22 @@ const QMimeData* PasteCommand::mimeData() const
     return m_mimeData;
 }
 
-bool PasteCommand::setMimeData(const QMimeData *mimeData)
+bool PasteCommand::setMimeData(const QMimeData *mimeData, bool sameApp)
 {
     if (!mimeData) {
         return false;
     }
     m_mimeData = mimeData;
+    m_sameApp = sameApp;
 
-    if (m_mimeData->hasFormat("application/x-calligra-sheets-snippet"))
+    if (m_mimeData->hasFormat("application/x-calligra-sheets-snippet") && m_sameApp)
         setSourceRegion (parseSnippet(&m_isCut));
+    else {
+        QString data = m_mimeData->text();
+        const QStringList list = data.split('\n');
+        const int lines = list.count();
+        setSourceRegion(Region(QRect(1, 1, 1, lines)));
+    }
 
     return true;
 }
@@ -72,11 +79,6 @@ void PasteCommand::setOperation(Paste::Operation operation)
 void PasteCommand::setPasteFC(bool force)
 {
     m_pasteFC = force;
-}
-
-void PasteCommand::setSameApp(bool same)
-{
-    m_sameApp = same;
 }
 
 void PasteCommand::setSourceRegion(const Region &region)

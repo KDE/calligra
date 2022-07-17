@@ -36,11 +36,10 @@ public:
     ~PasteCommand() override;
 
     const QMimeData* mimeData() const;
-    bool setMimeData(const QMimeData *mimeData);
+    bool setMimeData(const QMimeData *mimeData, bool sameApp);
     void setMode(Paste::Mode mode);
     void setOperation(Paste::Operation operation);
     void setPasteFC(bool force);
-    void setSameApp(bool same);
     void setSourceRegion(const Region &region);
     void setCutMode(bool cut);
 

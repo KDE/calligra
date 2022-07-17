@@ -42,8 +42,7 @@ void PasteCommandTest::testKSpreadSnippet()
     PasteCommand *command = new PasteCommand();
     command->setSheet(selection.activeSheet());
     command->add(selection);
-    command->setSameApp(true);
-    command->setMimeData(mimedata);
+    command->setMimeData(mimedata, true);
     command->setPasteFC(true);
     qDebug()<<(*command);
     command->execute(&canvas);
