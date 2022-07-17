@@ -28,7 +28,8 @@ using namespace Calligra::Sheets;
 
 PasteCommand::PasteCommand(KUndo2Command *parent)
         : AbstractRegionCommand(parent)
-        , m_mimeData(0)
+        , m_haveSource(false)
+        , m_haveText(false)
         , m_pasteMode(Paste::Normal)
         , m_operation(Paste::OverWrite)
         , m_pasteFC(false)
@@ -41,26 +42,20 @@ PasteCommand::~PasteCommand()
 {
 }
 
-const QMimeData* PasteCommand::mimeData() const
-{
-    return m_mimeData;
-}
-
 bool PasteCommand::setMimeData(const QMimeData *mimeData, bool sameApp)
 {
-    if (!mimeData) {
+    if (!mimeData)
         return false;
-    }
-    m_mimeData = mimeData;
     m_sameApp = sameApp;
 
-    if (m_mimeData->hasFormat("application/x-calligra-sheets-snippet") && m_sameApp)
-        setSourceRegion (parseSnippet(&m_isCut));
+    if (mimeData->hasFormat("application/x-calligra-sheets-snippet") && m_sameApp)
+        setSourceRegion (parseSnippet(mimeData, &m_isCut));
     else {
-        QString data = m_mimeData->text();
-        const QStringList list = data.split('\n');
-        const int lines = list.count();
+        QString data = mimeData->text();
+        m_text = data.split('\n');
+        const int lines = m_text.count();
         setSourceRegion(Region(QRect(1, 1, 1, lines)));
+        m_haveText = true;
     }
 
     return true;
@@ -99,10 +94,8 @@ void PasteCommand::setCutMode(bool cut)
 
 bool PasteCommand::isApproved() const
 {
-    if (supports(m_mimeData)) {
+    if (m_haveSource || m_haveText)
         return AbstractRegionCommand::isApproved();
-    }
-    warnSheets << "Unrecognized MIME type(s):" << m_mimeData->formats().join(", ");
     return false;
 }
 
@@ -125,22 +118,21 @@ bool PasteCommand::supports(const QMimeData *mimeData)
 
 bool PasteCommand::unknownShiftDirection()
 {
-    if (!m_mimeData) return false;
-
     if (m_sourceRegion.isEmpty()) return false;
     if (m_sourceRegion.isColumnOrRowSelected()) return false;
     return true;
 }
 
-Region PasteCommand::parseSnippet(bool *isCut)
+Region PasteCommand::parseSnippet(const QMimeData *mimeData, bool *isCut)
 {
     Region res;
     *isCut = false;
 
-    bool isSnippet = m_mimeData->hasFormat("application/x-calligra-sheets-snippet");
+    bool isSnippet = mimeData->hasFormat("application/x-calligra-sheets-snippet");
     if (!isSnippet) return res;
 
-    QByteArray byteArray = m_mimeData->data("application/x-calligra-sheets-snippet");
+    m_haveSource = true;
+    QByteArray byteArray = mimeData->data("application/x-calligra-sheets-snippet");
     QString data = QString::fromUtf8(byteArray);
     QStringList list = data.split('\n');
     if (!list.size()) return res;  // nothing to do?
@@ -181,13 +173,9 @@ bool PasteCommand::performCommands()
 {
     const QList<Element *> elements = cells();
 
-    bool isSnippet = m_mimeData->hasFormat("application/x-calligra-sheets-snippet");
-    if (!m_sameApp) isSnippet = false;     // cannot use the snippet if it is not ours (it only contains coordinates)
-    QString data;
-    if (!isSnippet) {
-        QString data = m_mimeData->text();
+    if (!m_haveSource) {
         for (int i = 0; i < elements.count(); ++i)
-            processTextPlain(elements[i], data);
+            processTextPlain(elements[i], m_text);
         return true;
     }
 
@@ -396,17 +384,11 @@ bool PasteCommand::processSnippetData(Element *element, QRect sourceRect, SheetB
     return true;
 }
 
-bool PasteCommand::processTextPlain(Element *element, const QString &text)
+bool PasteCommand::processTextPlain(Element *element, const QStringList &list)
 {
-    if (text.isEmpty()) {
-        return false;
-    }
-
-    // Split the text into lines.
-    const QStringList list = text.split('\n');
-
 //    const int mx = 1; // always one column
     const int my = list.count();
+    if (!my) return false;
 
     // Put the lines into an array value.
     Value value(Value::Array);

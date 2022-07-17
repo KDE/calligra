@@ -35,7 +35,6 @@ public:
     PasteCommand(KUndo2Command *parent = 0);
     ~PasteCommand() override;
 
-    const QMimeData* mimeData() const;
     bool setMimeData(const QMimeData *mimeData, bool sameApp);
     void setMode(Paste::Mode mode);
     void setOperation(Paste::Operation operation);
@@ -77,14 +76,16 @@ protected:
     /**
      * Creates sub-commands for the region \p element by parsing plain text.
      */
-    bool processTextPlain(Element *element, const QString &data);
+    bool processTextPlain(Element *element, const QStringList &data);
 
     void adjustTargetRegion();
-    Region parseSnippet(bool *isCut);
+    Region parseSnippet(const QMimeData *mimeData, bool *isCut);
 
 private:
-    const QMimeData *   m_mimeData;
+    bool                m_haveSource;
+    bool                m_haveText;
     Region              m_sourceRegion;
+    QStringList         m_text;
     Paste::Mode         m_pasteMode;
     Paste::Operation    m_operation;
     bool                m_pasteFC;
