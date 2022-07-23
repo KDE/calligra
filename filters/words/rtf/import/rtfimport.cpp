@@ -53,7 +53,7 @@ KoFilter::ConversionStatus RTFImport::convert(const QByteArray& from, const QByt
         if (!batch) {
             KMessageBox::error(0,
                                i18n("The file cannot be loaded, as it seems not to be an RTF document."),
-                               i18n("Words's RTF Import Filter"), {});
+                               i18n("Words's RTF Import Filter"), KMessageBox::Option());
         }
         return KoFilter::WrongFormat;
     }
@@ -67,7 +67,7 @@ KoFilter::ConversionStatus RTFImport::convert(const QByteArray& from, const QByt
         if (!batch) {
             KMessageBox::error(0,
                                i18n("The file cannot be loaded."),
-                               i18n("Words's RTF Import Filter"), {});
+                               i18n("Words's RTF Import Filter"), KMessageBox::Option());
         }
         return KoFilter::CreationError;
     }
@@ -77,7 +77,7 @@ KoFilter::ConversionStatus RTFImport::convert(const QByteArray& from, const QByt
         if (!batch) {
             KMessageBox::error(0,
                                i18n("The file cannot be loaded."),
-                               i18n("Words's RTF Import Filter"), {});
+                               i18n("Words's RTF Import Filter"), KMessageBox::Option());
 
         }
         return KoFilter::CreationError;
