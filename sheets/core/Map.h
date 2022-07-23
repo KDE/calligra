@@ -130,9 +130,6 @@ public:
      */
     virtual SheetBase* createSheet(const QString& name = QString()) override;
 
-    QStringList visibleSheets() const;
-    QStringList hiddenSheets() const;
-
     void setOverallRowsCounter(int number);
     int increaseLoadedRowsCounter(int i = 1);
 

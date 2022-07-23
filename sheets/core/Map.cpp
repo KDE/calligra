@@ -248,32 +248,6 @@ SheetBase* Map::createSheet(const QString& name)
     return sheet;
 }
 
-// FIXME cache this for faster operation
-QStringList Map::visibleSheets() const
-{
-    QStringList result;
-    for (SheetBase *sheet : sheetList()) {
-        Sheet *fullSheet = dynamic_cast<Sheet *>(sheet);
-        if (!fullSheet) continue;
-        if (!fullSheet->isHidden())
-            result.append(sheet->sheetName());
-    }
-    return result;
-}
-
-// FIXME cache this for faster operation
-QStringList Map::hiddenSheets() const
-{
-    QStringList result;
-    for (SheetBase *sheet : sheetList()) {
-        Sheet *fullSheet = dynamic_cast<Sheet *>(sheet);
-        if (!fullSheet) continue;
-        if (fullSheet->isHidden())
-            result.append(sheet->sheetName());
-    }
-    return result;
-}
-
 void Map::setOverallRowsCounter(int number)
 {
     d->overallRowCount = number;

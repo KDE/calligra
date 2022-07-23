@@ -151,15 +151,12 @@ bool SheetBase::isHidden() const
 void SheetBase::setHidden(bool hidden)
 {
     d->hide = hidden;
+    map()->onSheetHidden(this, hidden);
 }
 
 void SheetBase::hideSheet(bool _hide)
 {
     setHidden(_hide);
-    if (_hide)
-        map()->addDamage(new SheetDamage(this, SheetDamage::Hidden));
-    else
-        map()->addDamage(new SheetDamage(this, SheetDamage::Shown));
 }
 
 void SheetBase::changeCellTabName(QString const & old_name, QString const & new_name)

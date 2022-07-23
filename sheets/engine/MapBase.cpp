@@ -220,6 +220,39 @@ void MapBase::reviveSheet(SheetBase* sheet)
     emit sheetRevived(sheet);
 }
 
+void MapBase::onSheetHidden(SheetBase *sheet, bool hidden)
+{
+    if (hidden) {
+        addDamage(new SheetDamage(sheet, SheetDamage::Hidden));
+        emit sheetHidden(sheet);
+    } else {
+        addDamage(new SheetDamage(sheet, SheetDamage::Shown));
+        emit sheetShown(sheet);
+    }
+}
+
+// FIXME cache this for faster operation
+QStringList MapBase::visibleSheets() const
+{
+    QStringList result;
+    for (SheetBase *sheet : sheetList()) {
+        if (!sheet->isHidden())
+            result.append(sheet->sheetName());
+    }
+    return result;
+}
+
+// FIXME cache this for faster operation
+QStringList MapBase::hiddenSheets() const
+{
+    QStringList result;
+    for (SheetBase *sheet : sheetList()) {
+        if (sheet->isHidden())
+            result.append(sheet->sheetName());
+    }
+    return result;
+}
+
 
 
 ValueParser* MapBase::parser() const

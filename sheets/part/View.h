@@ -396,6 +396,9 @@ private Q_SLOTS:
     /** Called if a Sheet-instance is deleted to proper clean-up internal pointers. */
     void sheetDestroyed(QObject* obj);
 
+    void sheetHidden(SheetBase *sheet);
+    void sheetShown(SheetBase *sheet);
+
     void slotAutoScroll();
 
 private:

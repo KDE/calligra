@@ -609,6 +609,10 @@ View::View(KoPart *part, QWidget *_parent, Doc *_doc)
             this, &View::removeSheet);
     connect(doc()->map(), &Map::sheetRevived,
             this, &View::addSheet);
+    connect(doc()->map(), &Map::sheetHidden,
+            this, &View::sheetHidden);
+    connect(doc()->map(), &Map::sheetShown,
+            this, &View::sheetShown);
     connect(doc()->map(), &Map::damagesFlushed,
             this, &View::handleDamages);
     if (statusBar()) {
@@ -1469,16 +1473,8 @@ void View::hideSheet()
         return;
     }
 
-    QStringList vs = doc()->map()->visibleSheets();
-    int i = vs.indexOf(d->activeSheet->sheetName()) - 1;
-    if (i < 0) i = 1;
-    QString sn = vs[i];
-
     KUndo2Command* command = new HideSheetCommand(activeSheet());
     doc()->addCommand(command);
-
-    d->tabBar->removeTab(d->activeSheet->sheetName());
-    d->tabBar->setActiveTab(sn);
 }
 
 void View::showSheet()
@@ -1488,6 +1484,42 @@ void View::showSheet()
 
     ShowDialog dialog(this, d->selection);
     dialog.exec();
+}
+
+void View::sheetHidden(SheetBase *sheet)
+{
+    QList<SheetBase *> lst = doc()->map()->sheetList();
+    int cur = lst.indexOf(sheet);
+    SheetBase *next = nullptr;
+    // find the closest unhidden one
+    for (int i = cur + 1; i < lst.count(); ++i) {
+        if (lst[i]->isHidden()) continue;
+         next = lst[i];
+         break;
+    }
+    if (!next) {
+        for (int i = cur - 1; i >= 0; --i) {
+            if (lst[i]->isHidden()) continue;
+             next = lst[i];
+             break;
+        }
+    }
+
+    d->tabBar->removeTab(sheet->sheetName());
+    if (next) d->tabBar->setActiveTab(next->sheetName());
+
+    bool gotTwo = (doc()->map()->visibleSheets().count() > 1);
+    d->actions->deleteSheet->setEnabled(gotTwo);
+    d->actions->hideSheet->setEnabled(gotTwo);
+}
+
+void View::sheetShown(SheetBase * /*sheet*/)
+{
+    // damages handle the tabbar update
+
+    bool gotTwo = (doc()->map()->visibleSheets().count() > 1);
+    d->actions->deleteSheet->setEnabled(gotTwo);
+    d->actions->hideSheet->setEnabled(gotTwo);
 }
 
 void View::copyAsText()
@@ -2144,7 +2176,7 @@ void View::handleDamages(const QList<Damage*>& damages)
             SheetDamage* sheetDamage = static_cast<SheetDamage*>(damage);
             debugSheetsDamage << *sheetDamage;
             const SheetDamage::Changes changes = sheetDamage->changes();
-            if (changes & (SheetDamage::Name | SheetDamage::Shown)) {
+            if (changes & (SheetDamage::Name | SheetDamage::Shown | SheetDamage::Hidden)) {
                 d->tabBar->setTabs(doc()->map()->visibleSheets());
                 paintMode = Everything;
             }

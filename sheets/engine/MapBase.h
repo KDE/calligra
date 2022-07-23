@@ -108,6 +108,11 @@ public:
     SheetBase* addNewSheet(const QString& name = QString());
 
     /**
+     * Actions when a sheet is hidden, or shown.
+     */
+    void onSheetHidden(SheetBase *sheet, bool hidden);
+
+    /**
      * \return true if the document is currently loading.
      */
     virtual bool isLoading() const;
@@ -164,6 +169,8 @@ public:
      */
     void addDamage(Damage* damage);
 
+    QStringList visibleSheets() const;
+    QStringList hiddenSheets() const;
 
     /**
      * Creates a region consisting of the region defined in @p expression .
@@ -203,6 +210,15 @@ Q_SIGNALS:
      */
     void sheetRevived(SheetBase* sheet);
 
+    /**
+     * Emitted if a sheet has been hidden.
+     */
+    void sheetHidden(SheetBase *sheet);
+
+    /**
+     * Emitted if a sheet has been shown.
+     */
+    void sheetShown(SheetBase *sheet);
 
 public Q_SLOTS:
     /**
