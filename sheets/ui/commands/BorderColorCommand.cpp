@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    SPDX-FileCopyrightText: 2005-2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+   SPDX-FileCopyrightText: 2022 Tomas Mecir <mecirt@gmail.com>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -21,59 +22,56 @@ BorderColorCommand::BorderColorCommand()
 
 bool BorderColorCommand::performCommands()
 {
-    // Grab the current borders.
-    QVector< QPair<QRectF, SharedSubStyle> > undoData = m_sheet->styleStorage()->currentData(*this);
-    ConstIterator endOfList = constEnd();
-    for (ConstIterator it = constBegin(); it != endOfList; ++it) {
-        for (int i = 0; i < undoData.count(); ++i) {
-            if (undoData[i].second->type() != Style::LeftPen &&
-                    undoData[i].second->type() != Style::RightPen &&
-                    undoData[i].second->type() != Style::TopPen &&
-                    undoData[i].second->type() != Style::BottomPen &&
-                    undoData[i].second->type() != Style::FallDiagonalPen &&
-                    undoData[i].second->type() != Style::GoUpDiagonalPen) {
-                undoData.removeAt(i--);
-            }
-        }
-    }
+    QRect cur = firstRange();
+    for (int y = cur.top(); y < cur.top() + cur.height(); ++y) {
+        if (y > m_sheet->fullCellStorage()->rows()) break;
+        for (int x = cur.left(); x < cur.left() + cur.width(); ++x) {
+            if (y > m_sheet->fullCellStorage()->rows()) break;
 
-    // And change their colors.
-    Style style;
-    for (int i = 0; i < undoData.count(); ++i) {
-        style.clear();
-        style.insertSubStyle(undoData[i].second);
-        QPen pen;
-        if (undoData[i].second->type() == Style::LeftPen) {
+            Style style = m_sheet->fullCellStorage()->style(x, y);
+            Style newStyle;
+            bool adjusted = false;
+            QPen pen;
             pen = style.leftBorderPen();
-            pen.setColor(m_color);
-            style.setLeftBorderPen(pen);
-        }
-        if (undoData[i].second->type() == Style::RightPen) {
+            if (pen.style() != Qt::NoPen) {
+                pen.setColor(m_color);
+                newStyle.setLeftBorderPen(pen);
+                adjusted = true;
+            }
             pen = style.rightBorderPen();
-            pen.setColor(m_color);
-            style.setRightBorderPen(pen);
-        }
-        if (undoData[i].second->type() == Style::TopPen) {
+            if (pen.style() != Qt::NoPen) {
+                pen.setColor(m_color);
+                newStyle.setRightBorderPen(pen);
+                adjusted = true;
+            }
             pen = style.topBorderPen();
-            pen.setColor(m_color);
-            style.setTopBorderPen(pen);
-        }
-        if (undoData[i].second->type() == Style::BottomPen) {
+            if (pen.style() != Qt::NoPen) {
+                pen.setColor(m_color);
+                newStyle.setTopBorderPen(pen);
+                adjusted = true;
+            }
             pen = style.bottomBorderPen();
-            pen.setColor(m_color);
-            style.setBottomBorderPen(pen);
-        }
-        if (undoData[i].second->type() == Style::FallDiagonalPen) {
+            if (pen.style() != Qt::NoPen) {
+                pen.setColor(m_color);
+                newStyle.setBottomBorderPen(pen);
+                adjusted = true;
+            }
             pen = style.fallDiagonalPen();
-            pen.setColor(m_color);
-            style.setFallDiagonalPen(pen);
-        }
-        if (undoData[i].second->type() == Style::GoUpDiagonalPen) {
+            if (pen.style() != Qt::NoPen) {
+                pen.setColor(m_color);
+                newStyle.setFallDiagonalPen(pen);
+                adjusted = true;
+            }
             pen = style.goUpDiagonalPen();
-            pen.setColor(m_color);
-            style.setGoUpDiagonalPen(pen);
+            if (pen.style() != Qt::NoPen) {
+                pen.setColor(m_color);
+                newStyle.setGoUpDiagonalPen(pen);
+                adjusted = true;
+            }
+
+            if (adjusted)
+                m_sheet->fullCellStorage()->setStyle(Region(QPoint(x, y)), newStyle);
         }
-        m_sheet->fullCellStorage()->setStyle(Region(undoData[i].first.toRect()), style);
     }
     return true;
 }
