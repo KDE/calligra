@@ -36,6 +36,7 @@ public:
      * List of all sheets in this map.
      */
     QList<SheetBase *> lstSheets, lstDeletedSheets;
+    QMap<SheetBase *, int> lstDeletedPos;   // original positions of deleted sheets - this only works correctly if we restore in reverse order
 
     CalculationSettings* calculationSettings;
     ValueCalc* calc;
@@ -207,6 +208,8 @@ void MapBase::addSheet(SheetBase *_sheet)
 
 void MapBase::removeSheet(SheetBase* sheet)
 {
+    int pos = d->lstSheets.indexOf(sheet);
+    if (pos >= 0) d->lstDeletedPos[sheet] = pos;
     d->lstSheets.removeAll(sheet);
     d->lstDeletedSheets.append(sheet);
     namedAreaManager()->remove(sheet);
@@ -216,7 +219,14 @@ void MapBase::removeSheet(SheetBase* sheet)
 void MapBase::reviveSheet(SheetBase* sheet)
 {
     d->lstDeletedSheets.removeAll(sheet);
-    d->lstSheets.append(sheet);
+    if (d->lstDeletedPos.contains(sheet)) {
+        int pos = d->lstDeletedPos.take(sheet);
+        if ((pos >= 0) && (pos < d->lstSheets.size()))
+            d->lstSheets.insert(pos, sheet);
+        else
+            d->lstSheets.append(sheet);
+    } else
+        d->lstSheets.append(sheet);
     emit sheetRevived(sheet);
 }
 

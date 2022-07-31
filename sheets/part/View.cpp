@@ -2075,9 +2075,9 @@ void View::updateBorderButton()
 void View::addSheet(SheetBase *bsheet)
 {
     Sheet *sheet = dynamic_cast<Sheet *>(bsheet);
-    if (!sheet->isHidden()) {
-        d->tabBar->addTab(sheet->sheetName());
-    }
+    // need to use setTabs instead of addTab, as the added sheet may be at a different position
+    d->tabBar->setTabs(doc()->map()->visibleSheets());
+
     const bool state = (doc()->map()->visibleSheets().count() > 1);
     d->actions->deleteSheet->setEnabled(state);
     d->actions->hideSheet->setEnabled(state);
