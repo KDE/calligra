@@ -117,13 +117,7 @@ KoFilter::ConversionStatus CSVFilter::convert(const QByteArray& from, const QByt
     emit sigProgress(value);
     QGuiApplication::setOverrideCursor(Qt::WaitCursor);
 
-    const double defaultWidth = ksdoc->map()->defaultColumnFormat().width;
-    QVector<double> widths(numCols);
-    for (int i = 0; i < numCols; ++i)
-        widths[i] = defaultWidth;
-
     Cell cell(sheet, 1, 1);
-    QFontMetrics fm(cell.style().font());
 
     int processed = 0;
     for (int row = 0; row < numRows; ++row) {
@@ -136,11 +130,6 @@ KoFilter::ConversionStatus CSVFilter::convert(const QByteArray& from, const QByt
             }
 
             const QString text(dialog->text(row, col));
-
-            // ### FIXME: how to calculate the width of numbers (as they might not be in the right format)
-            const double len = fm.width(text);
-            if (len > widths[col])
-                widths[col] = len;
 
             cell = Cell(sheet, col + 1, row + 1);
 
@@ -188,11 +177,6 @@ KoFilter::ConversionStatus CSVFilter::convert(const QByteArray& from, const QByt
             }
             }
         }
-    }
-
-    for (int i = 0; i < numCols; ++i) {
-        if (widths[i] > defaultWidth)
-            sheet->columnFormats()->setColWidth(i + 1, i + 1, widths[i]);
     }
 
     emit sigProgress(100);

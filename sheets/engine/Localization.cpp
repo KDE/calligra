@@ -18,6 +18,7 @@ public:
     QString timeSep, dateSepShort, dateSepLong;
     QStringList dateTimeFormats, dateFormats, timeFormats;
     bool includesAMPM;
+    QString trueString, falseString;
 };
 
 Localization::Localization()
@@ -234,8 +235,7 @@ QString Localization::translateString(KLocalizedString str) const
 
 QString Localization::formatBool(bool val) const
 {
-    KLocalizedString str = val ? ki18n("true") : ki18n("false");
-    return translateString(str).toLower();
+    return val ? d->trueString : d->falseString;
 }
 
 // TODO - we should let the caller specify whether to use scientific format or not
@@ -407,6 +407,11 @@ void Localization::setLocale(const QLocale &l) {
     shortFormat = shortFormat.replace("AP", "").replace("t", "").trimmed();
     d->timeFormats.append (longFormat);
     d->timeFormats.append (shortFormat);
+
+
+    // cache true/false
+    d->trueString = translateString(ki18n("true")).toLower();
+    d->falseString = translateString(ki18n("false")).toLower();
 }
 
 
