@@ -2521,10 +2521,13 @@ void CellToolBase::insertHyperlink()
     }
 
     if (dialog->exec() == KoDialog::Accepted) {
-        cell = Cell(selection()->activeSheet(), marker);
-
-        LinkCommand* command = new LinkCommand(cell, dialog->text(), dialog->link());
-        canvas()->addCommand(command);
+        QString text = dialog->text();
+        QString link = dialog->link();
+        if (text.isEmpty()) text = link;
+        LinkCommand* command = new LinkCommand(dialog->text(), dialog->link());
+        command->setSheet(selection()->activeSheet());
+        command->add(*selection());
+        command->execute(canvas());
 
         //refresh editWidget
         selection()->emitModified();
@@ -2534,14 +2537,10 @@ void CellToolBase::insertHyperlink()
 
 void CellToolBase::clearHyperlink()
 {
-    QPoint marker(selection()->marker());
-    Cell cell(selection()->activeSheet(), marker);
-    if (!cell)
-        return;
-    if (cell.link().isEmpty())
-        return;
-
-    LinkCommand* command = new LinkCommand(cell, QString(), QString());
+    LinkCommand* command = new LinkCommand(QString(), QString());
+    command->setSheet(selection()->activeSheet());
+    command->add(*selection());
+    command->execute(canvas());
     canvas()->addCommand(command);
 
     selection()->emitModified();

@@ -11,37 +11,30 @@
 #include "engine/Damages.h"
 #include "engine/MapBase.h"
 #include "engine/SheetBase.h"
+#include "core/Cell.h"
 
 using namespace Calligra::Sheets;
 
-LinkCommand::LinkCommand(const Cell& c, const QString& text, const QString& link)
+LinkCommand::LinkCommand(const QString& text, const QString& link)
 {
-    cell = c;
-    oldText = cell.userInput();
-    oldLink = cell.link();
     newText = text;
     newLink = link;
 
     setText(newLink.isEmpty() ? kundo2_i18n("Remove Link") : kundo2_i18n("Set Link"));
 }
 
-void LinkCommand::redo()
+bool LinkCommand::process(Element* element)
 {
-    if (!cell) return;
+    QRect range = element->rect();
+    for (int col = range.left(); col <= range.right(); ++col)
+        for (int row = range.top(); row <= range.bottom(); ++row) {
+            Cell cell = Cell(m_sheet, col, row);
+            if (cell.isPartOfMerged()) cell = cell.masterCell();
 
-    if (!newText.isEmpty())
-        cell.parseUserInput(newText);
-    cell.setLink(newLink);
-
-    cell.sheet()->map()->addDamage(new CellDamage(cell, CellDamage::Appearance));
+            cell.parseUserInput(newText);
+            cell.setLink(newLink);
+        }
+    return true;
 }
 
-void LinkCommand::undo()
-{
-    if (!cell) return;
 
-    cell.parseUserInput(oldText);
-    cell.setLink(oldLink);
-
-    cell.sheet()->map()->addDamage(new CellDamage(cell, CellDamage::Appearance));
-}

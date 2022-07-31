@@ -9,33 +9,24 @@
 #define CALLIGRA_SHEETS_LINK_COMMAND
 
 #include <QString>
-#include <kundo2command.h>
-
-#include "core/Cell.h"
+#include "AbstractRegionCommand.h"
 
 namespace Calligra
 {
 namespace Sheets
 {
 
-class Cell;
-
 /**
  * \ingroup Commands
  * \brief Adds/Removes a hyperlink.
  */
-class LinkCommand : public KUndo2Command
+class LinkCommand : public AbstractRegionCommand
 {
 public:
-    LinkCommand(const Cell& cell, const QString& text, const QString& link);
-
-    void redo() override;
-    void undo() override;
-
+    LinkCommand(const QString& text, const QString& link);
 protected:
-    Cell cell;
-    QString oldText;
-    QString oldLink;
+    bool process(Element* element) override;
+
     QString newText;
     QString newLink;
 };

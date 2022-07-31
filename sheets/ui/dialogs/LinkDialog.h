@@ -37,9 +37,6 @@ public Q_SLOTS:
     void setText(const QString& text);
     void setLink(const QString& link);
 
-protected Q_SLOTS:
-    void slotOk();
-
 private:
     Q_DISABLE_COPY(LinkDialog)
 

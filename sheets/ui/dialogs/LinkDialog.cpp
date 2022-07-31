@@ -280,26 +280,4 @@ void LinkDialog::setLink(const QString& link)
     setCurrentPage(d->p4);
 }
 
-void LinkDialog::slotOk()
-{
-    QString str;
 
-    if (currentPage() == d->p1)
-        str = i18n("Internet address is empty");
-    else if (currentPage() == d->p2)
-        str = i18n("Mail address is empty");
-    else if (currentPage() == d->p3)
-        str = i18n("File name is empty");
-    else if (currentPage() == d->p4)
-        i18n("Destination cell is empty");
-
-    if (link().isEmpty()) {
-        KMessageBox::error(this, str);
-        return;
-    }
-
-    if (d->text.isEmpty())
-        d->text = link();
-
-    accept();
-}
