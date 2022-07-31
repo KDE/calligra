@@ -16,6 +16,7 @@
 #include "PageBreakCommand.h"
 #include "RowColumnManipulators.h"
 
+#include "engine/Damages.h"
 #include "engine/DependencyManager.h"
 #include "engine/MapBase.h"
 #include "core/CellStorage.h"
@@ -265,8 +266,8 @@ bool PasteCommand::processSnippetData(Element *element, QRect sourceRect, SheetB
     // This will set reverse mode even if it isn't needed due to no overlap, but that's fine.
     bool reverseRows = false, reverseCols = false;
     if (sheet == fullSourceSheet) {
-        if (sourceRect.top() > pasteArea.top()) reverseRows = true;
-        if (sourceRect.left() > pasteArea.left()) reverseCols = true;
+        if (sourceRect.top() <= pasteArea.top()) reverseRows = true;
+        if (sourceRect.left() <= pasteArea.left()) reverseCols = true;
     }
 
     if (fullSourceSheet) {
@@ -347,8 +348,9 @@ bool PasteCommand::processSnippetData(Element *element, QRect sourceRect, SheetB
     }
 
     // Now copy the actual cells.
-    int sourceMaxX = sourceSheet->cellStorage()->columns();
-    int sourceMaxY = sourceSheet->cellStorage()->rows();
+    CellStorage *cs = fullSourceSheet->fullCellStorage();
+    int sourceMaxX = cs->columns();
+    int sourceMaxY = cs->rows();
     for (int yy = 0; yy < pasteHeight; yy++) {
         int y = reverseRows ? (pasteHeight - 1 - yy) : yy;
         for (int xx = 0; xx < pasteWidth; xx++) {
@@ -359,27 +361,23 @@ bool PasteCommand::processSnippetData(Element *element, QRect sourceRect, SheetB
             int tgY = pasteArea.top() + y;
 
             // do not copy empty cells
-            if (srcX > sourceMaxX) break;
-            if (srcY > sourceMaxY) break;
-            if (tgX > KS_colMax) break;
-            if (tgY > KS_rowMax) break;
+            if (srcX > sourceMaxX) continue;
+            if (srcY > sourceMaxY) continue;
+            if (tgX > KS_colMax) continue;
+            if (tgY > KS_rowMax) continue;
 
             // The coordinates are good.
             Cell srcCell = Cell(fullSourceSheet, srcX, srcY);
             Cell tgCell = Cell(sheet, tgX, tgY);
             tgCell.copyAll(srcCell, m_pasteMode, m_operation);
+
+            // Clear the original? But only if it's not a part of the target.
+            if (isCut && (!pasteArea.contains (srcX, srcY)))
+                cs->take(srcX, srcY);
         }
     }
-
-    if (isCut) {
-        DeleteCommand* command = new DeleteCommand(nullptr);
-        command->setSheet(fullSourceSheet);
-        command->add(sourceRect);
-        // The delete command is mostly recorded, but has non-command actions too. We just call everything in undo to simplify things, it's good enough.
-        command->redo();
-        if (m_firstrun) m_nestedCommands.append (command);
-        else delete command;
-    }
+    if (isCut)
+        m_sheet->map()->addDamage(new CellDamage(sourceSheet, Region(sourceRect), CellDamage::Appearance));
 
     return true;
 }
