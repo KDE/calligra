@@ -543,7 +543,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
 
     // -- cell content actions --
 
-    action = new QAction(koIcon("deletecell"), i18n("All"), this);
+    action = new QAction(koIcon("deletecell"), i18n("Clear All"), this);
     action->setIconText(i18n("Clear All"));
     action->setToolTip(i18n("Clear all contents and formatting of the current cell"));
     addAction("clearAll", action);

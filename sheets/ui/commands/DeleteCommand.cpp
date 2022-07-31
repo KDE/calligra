@@ -6,6 +6,8 @@
 
 #include "DeleteCommand.h"
 
+#include "engine/Damages.h"
+#include "engine/MapBase.h"
 #include "engine/Validity.h"
 #include "core/CellStorage.h"
 #include "core/Condition.h"
@@ -80,6 +82,7 @@ bool DeleteCommand::performNonCommandActions()
 
     ColFormatStorage *cols = m_sheet->columnFormats();
     RowFormatStorage *rows = m_sheet->rowFormats();
+    bool hasCol = false, hasRow = false;
 
     const QList<Element *> elements = cells();
     for (int i = 0; i < elements.count(); ++i) {
@@ -94,6 +97,7 @@ bool DeleteCommand::performNonCommandActions()
                     m_columnFormats[col] = cf;
                 }
                 m_sheet->clearColumnFormat(col);
+                hasCol = true;
             }
         } else if (element->isRow()) {
             // row-wise processing
@@ -103,20 +107,29 @@ bool DeleteCommand::performNonCommandActions()
                     m_rowFormats[row] = rf;
                 }
                 m_sheet->clearRowFormat(row);
+                hasRow = true;
             }
         }
     }
+    if (hasCol || hasRow)
+        m_sheet->map()->addDamage(new SheetDamage(m_sheet, SheetDamage::ContentChanged | SheetDamage::ColumnsChanged | SheetDamage::RowsChanged));
+
     return true;
 }
 
 bool DeleteCommand::undoNonCommandActions()
 {
+    bool changed = false;
     for (int col : m_columnFormats.keys()) {
         m_sheet->columnFormats()->setColFormat(col, col, m_columnFormats.value(col));
+        changed = true;
     }
     for (int row : m_rowFormats.keys()) {
         m_sheet->rowFormats()->setRowFormat(row, row, m_rowFormats.value(row));
+        changed = true;
     }
+    if (changed)
+        m_sheet->map()->addDamage(new SheetDamage(m_sheet, SheetDamage::ContentChanged | SheetDamage::ColumnsChanged | SheetDamage::RowsChanged));
     return true;
 }
 
