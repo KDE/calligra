@@ -164,7 +164,6 @@ LinkDialog::LinkDialog(QWidget* parent, Selection* selection)
 
     d->internetText->setFocus();
     resize(400, 300);
-    connect(this, &QDialog::accepted, this, &LinkDialog::slotOk);
 }
 
 LinkDialog::~LinkDialog()
