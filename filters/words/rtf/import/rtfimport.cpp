@@ -59,8 +59,8 @@ KoFilter::ConversionStatus RTFImport::convert(const QByteArray& from, const QByt
     }
 
     QTextDocument doc;
-    RtfReader::TextDocumentRtfOutput *output = new RtfReader::TextDocumentRtfOutput( &doc );
-    reader.parseTo(output);
+    RtfReader::TextDocumentRtfOutput output( &doc );
+    reader.parseTo(&output);
 
     QFile saveFile(m_chain->outputFile());
     if (!saveFile.open(QIODevice::WriteOnly)) {
