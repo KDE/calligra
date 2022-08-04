@@ -279,15 +279,6 @@ void KoFilterChain::manageIO()
     m_inputFile.clear();
 
     if (!m_outputFile.isEmpty()) {
-        if (m_outputTempFile == 0) {
-            m_inputTempFile = new QTemporaryFile;
-            m_inputTempFile->setAutoRemove(true);
-            m_inputTempFile->setFileName(m_outputFile);
-        }
-        else {
-            m_inputTempFile = m_outputTempFile;
-            m_outputTempFile = 0;
-        }
         m_inputFile = m_outputFile;
         m_outputFile.clear();
         m_inputTempFile = m_outputTempFile;
