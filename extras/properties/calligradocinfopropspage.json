@@ -23,7 +23,10 @@
         "Name": "Calligra Document Info Properties Page",
         "Name[ca]": "Pàgina d'informació de propietats de documents Calligra",
         "Name[es]": "Página de propiedades informativas del documento de Calligra",
+        "Name[fr]": "Page d'informations sur les propriétés d'un document « Calligra »",
         "Name[nl]": "Document-info-eigenschappen-pagina van Calligra",
+        "Name[pt]": "Página de Propriedades do Documento do Calligra",
+        "Name[sl]": "Stran informacij o lastnostih Calligra dokumenta",
         "Name[uk]": "Сторінка даних щодо властивостей документа Calligra",
         "Name[x-test]": "xxCalligra Document Info Properties Pagexx"
     },
