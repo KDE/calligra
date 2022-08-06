@@ -511,7 +511,7 @@ namespace wvWare
         reader->pop();
 
         m_rgfc = new U32[ m_crun + 1 ];
-        for ( U8 i = 0; i <= m_crun; ++i )  // <= crun, because of crun+1 FCs!
+        for ( U16 i = 0; i <= m_crun; ++i )  // <= crun, because of crun+1 FCs!
             m_rgfc[ i ] = reader->readU32();
 
         m_rgb = new Offset[ m_crun ];
@@ -536,7 +536,7 @@ namespace wvWare
         m_crun = ptr[ 511 ];
 
         m_rgfc = new U32[ m_crun + 1 ];
-        for ( U8 i = 0; i <= m_crun; ++i, ptr += 4 )  // <= crun, because of crun+1 FCs!
+        for ( U16 i = 0; i <= m_crun; ++i, ptr += 4 )  // <= crun, because of crun+1 FCs!
             m_rgfc[ i ] = readU32( ptr );
 
         m_rgb = new Offset[ m_crun ];
