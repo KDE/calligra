@@ -1,0 +1,6 @@
+This contains all the sheets actions. These get attached to the CellTool.
+
+The actions are linked with the lib, not as plug-ins - at least for now, it may change later.
+
+All actions inherit CellAction.
+

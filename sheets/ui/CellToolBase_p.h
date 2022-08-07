@@ -35,7 +35,7 @@ namespace Calligra
 {
 namespace Sheets
 {
-class CharacterSelectDialog;
+class Actions;
 class CellEditor;
 class Sheet;
 
@@ -49,7 +49,6 @@ public:
     // External editor
     Calligra::Sheets::ExternalEditor* externalEditor;
     // Insert special character dialog
-    CharacterSelectDialog* specialCharDialog;
     QPointer<FormulaDialog> formulaDialog;
     // Actions with extended names for the popup menu
     QHash<QString, QAction*> popupMenuActions;
@@ -78,6 +77,7 @@ public:
     QPoint findPos;
     QPoint findEnd;
     QHash<int, QString> wordCollection;
+    Actions *actions;
 
     struct {
         Sheet * currentSheet;

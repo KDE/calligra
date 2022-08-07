@@ -35,6 +35,7 @@ class ExternalEditor;
 class Selection;
 class SheetView;
 class CellEditorBase;
+class CellAction;
 
 /**
  * Abstract tool providing actions acting on cell ranges.
@@ -89,6 +90,10 @@ public:
      * Sets an external editor to be associated with the internal editor of this tool.
      */
     void setExternalEditor(Calligra::Sheets::ExternalEditor* editor);
+
+    /** Wrapper around addAction, which is protected (in parent). */
+
+    void addCellAction(CellAction *a);
 
     /**
      * The shape offset in document coordinates.
@@ -237,9 +242,6 @@ protected Q_SLOTS:
     // -- data insert actions --
     void insertSeries();
     void insertFormula();
-    void insertSpecialChar();
-    void specialChar(QChar character, const QString& fontName);
-    void specialCharDialogClosed();
     void insertFromDatabase();
     void insertFromTextfile();
     void insertFromClipboard();

@@ -37,6 +37,10 @@
 #include "inspector.h"
 #include "SheetView.h"
 
+// actions
+#include "actions/Actions.h"
+#include "actions/CellAction.h"
+
 // commands
 #include "commands/AutoFilterCommand.h"
 #include "commands/BorderColorCommand.h"
@@ -61,7 +65,6 @@
 #include "dialogs/AddNamedAreaDialog.h"
 #include "dialogs/AngleDialog.h"
 #include "dialogs/AutoFormatDialog.h"
-#include "dialogs/CharacterSelectDialog.h"
 #include "dialogs/CommentDialog.h"
 #include "dialogs/ConditionalDialog.h"
 #include "dialogs/ConsolidateDialog.h"
@@ -140,7 +143,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     d->cellEditor = 0;
     d->externalEditor = 0;
     d->formulaDialog = 0;
-    d->specialCharDialog = 0;
     d->initialized = false;
     d->popupListChoose = 0;
     d->lastEditorWithFocus = EmbeddedEditor;
@@ -166,6 +168,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     QAction* action = nullptr;
 
     // -- cell style actions --
+    d->actions = new Actions(this);
 
     action = new QAction(koIcon("cell_layout"), i18n("Cell Format..."), this);
     action->setIconText(i18n("Format"));
@@ -656,11 +659,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     connect(action, &QAction::triggered, this, &CellToolBase::insertFormula);
     action->setToolTip(i18n("Insert math expression"));
 
-    action = new QAction(koIcon("character-set"), i18n("S&pecial Character..."), this);
-    addAction("insertSpecialChar", action);
-    action->setToolTip(i18n("Insert one or more symbols or letters not found on the keyboard"));
-    connect(action, &QAction::triggered, this, &CellToolBase::insertSpecialChar);
-
 #ifndef QT_NO_SQL
     action = new QAction(koIcon("network-server-database"), i18n("From &Database..."), this);
     action->setIconText(i18n("Database"));
@@ -844,6 +842,7 @@ CellToolBase::~CellToolBase()
     delete d->formulaDialog;
     delete d->popupListChoose;
     delete d->cellEditor;
+    delete d->actions;
     qDeleteAll(d->popupMenuActions);
     qDeleteAll(actions());
     delete d;
@@ -1126,6 +1125,11 @@ void CellToolBase::deactivate()
     deleteEditor(true); // save changes
     // clear the selection rectangle
     if (sel) sel->update();
+}
+
+void CellToolBase::addCellAction(CellAction *a)
+{
+    addAction(a->name(), a->action());
 }
 
 void CellToolBase::init()
@@ -2747,48 +2751,6 @@ void CellToolBase::insertSeries()
     QPointer<SeriesDialog> dialog = new SeriesDialog(canvas()->canvasWidget(), selection());
     dialog->exec();
     delete dialog;
-}
-
-void CellToolBase::insertSpecialChar()
-{
-    QString fontFamily = Cell(selection()->activeSheet(), selection()->marker()).style().fontFamily();
-    QChar c = ' ';
-
-    if (d->specialCharDialog == 0) {
-        d->specialCharDialog = new CharacterSelectDialog(canvas()->canvasWidget(), "SpecialCharDialog", fontFamily, c, false);
-        connect(d->specialCharDialog, &CharacterSelectDialog::insertChar,
-                this, &CellToolBase::specialChar);
-        connect(d->specialCharDialog, &CharacterSelectDialog::finished,
-                   this, &CellToolBase::specialCharDialogClosed);
-    }
-    d->specialCharDialog->show();
-}
-
-void CellToolBase::specialCharDialogClosed()
-{
-    if (d->specialCharDialog) {
-        disconnect(d->specialCharDialog, &CharacterSelectDialog::insertChar,
-                   this, &CellToolBase::specialChar);
-        disconnect(d->specialCharDialog, &CharacterSelectDialog::finished,
-                   this, &CellToolBase::specialCharDialogClosed);
-        d->specialCharDialog->deleteLater();
-        d->specialCharDialog = 0;
-    }
-}
-
-void CellToolBase::specialChar(QChar character, const QString& fontName)
-{
-    const Style style = Cell(selection()->activeSheet(), selection()->marker()).style();
-    if (style.fontFamily() != fontName) {
-        Style newStyle;
-        newStyle.setFontFamily(fontName);
-        selection()->activeSheet()->fullCellStorage()->setStyle(Region(selection()->marker()), newStyle);
-    }
-    QKeyEvent keyEvent(QEvent::KeyPress, 0, Qt::NoModifier, QString(character));
-    if (!editor()) {
-        createEditor();
-    }
-    QApplication::sendEvent(editor()->widget(), &keyEvent);
 }
 
 void CellToolBase::insertFormula()

@@ -1,4 +1,10 @@
 
+set (actions_DIR_SRCS
+    actions/CellAction.cpp
+    actions/Actions.cpp
+    actions/InsertSpecialChar.cpp
+    )
+
 set (commands_DIR_SRCS
     commands/AbstractRegionCommand.cpp
     commands/DataManipulators.cpp
@@ -113,6 +119,7 @@ set (calligrasheetsui_LIB_SRCS
     Selection.cpp
     SheetView.cpp
 
+    ${actions_DIR_SRCS}
     ${commands_DIR_SRCS}
     ${dialogs_DIR_SRCS}
     ${strategy_DIR_SRCS}
