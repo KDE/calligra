@@ -128,12 +128,3 @@ void CalligraCreator::onLoadingCompleted()
     m_loadingCompleted = true;
     m_eventLoop.quit();
 }
-
-ThumbCreator::Flags CalligraCreator::flags() const
-{
-#ifdef NO_ICON_BLENDING
-    return None;
-#else
-    return BlendIcon;
-#endif
-}
