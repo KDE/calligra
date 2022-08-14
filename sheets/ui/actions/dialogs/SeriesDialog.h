@@ -14,8 +14,8 @@
 #define CALLIGRA_SHEETS_SERIES_DIALOG
 
 #include <KoDialog.h>
+#include <QRadioButton>
 
-class QRadioButton;
 class QDoubleSpinBox;
 
 namespace Calligra
@@ -38,6 +38,13 @@ public:
 
     Sheet* sheet;
 
+    double dstep() const { return m_dstep; }
+    double dstart() const { return m_dstart; }
+    double dend() const { return m_dend; }
+
+    bool isColumn() const { return column->isChecked(); }
+    bool isLinear() const { return linear->isChecked(); }
+
 public Q_SLOTS:
     void slotButtonClicked(int button) override;
 
@@ -52,6 +59,8 @@ protected:
     QRadioButton* linear;
     QRadioButton* geometric;
     QPoint  marker;
+    
+    double m_dstep, m_dend, m_dstart;
 };
 
 } // namespace Sheets

@@ -80,7 +80,6 @@
 #include "dialogs/NamedAreaDialog.h"
 #include "dialogs/PasteInsertDialog.h"
 #include "dialogs/Resize2Dialog.h"
-#include "dialogs/SeriesDialog.h"
 #include "dialogs/ShowColRowDialog.h"
 #include "dialogs/SortDialog.h"
 #include "dialogs/SpecialPasteDialog.h"
@@ -648,11 +647,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     action->setToolTip(i18n("Insert the 'sum' function"));
 
     // -- data insert actions --
-
-    action = new QAction(koIcon("series"), i18n("&Series..."), this);
-    addAction("insertSeries", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::insertSeries);
-    action ->setToolTip(i18n("Insert a series"));
 
     action = new QAction(koIcon("insert-math-expression"), i18n("&Function..."), this);
     addAction("insertFormula", action);
@@ -2509,7 +2503,7 @@ void CellToolBase::clearConditionalStyles()
 
 void CellToolBase::insertHyperlink()
 {
-    selection()->emitAboutToModify();
+    selection()->emitCloseEditor(true);
 
     QPoint marker(selection()->marker());
     Cell cell(selection()->activeSheet(), marker);
@@ -2672,7 +2666,7 @@ void CellToolBase::fillDown()
 
 void CellToolBase::autoSum()
 {
-    selection()->emitAboutToModify();
+    selection()->emitCloseEditor(true);
 
     //Get the selected range and remove the current cell from it(as that is
     //where the result of the autosum will be stored - perhaps change
@@ -2745,14 +2739,6 @@ void CellToolBase::autoSum()
     }
 }
 
-void CellToolBase::insertSeries()
-{
-    selection()->emitAboutToModify();
-    QPointer<SeriesDialog> dialog = new SeriesDialog(canvas()->canvasWidget(), selection());
-    dialog->exec();
-    delete dialog;
-}
-
 void CellToolBase::insertFormula()
 {
     if (! d->formulaDialog) {
@@ -2766,7 +2752,7 @@ void CellToolBase::insertFormula()
 void CellToolBase::insertFromDatabase()
 {
 #ifndef QT_NO_SQL
-    selection()->emitAboutToModify();
+    selection()->emitCloseEditor(true);
 
     QStringList str = QSqlDatabase::drivers();
     if (str.isEmpty()) {
@@ -2783,7 +2769,7 @@ void CellToolBase::insertFromDatabase()
 
 void CellToolBase::insertFromTextfile()
 {
-    selection()->emitAboutToModify();
+    selection()->emitCloseEditor(true);
 
     QPointer<CSVDialog> dialog = new CSVDialog(canvas()->canvasWidget(), selection(), CSVDialog::File);
     dialog->setDecimalSymbol(selection()->activeSheet()->map()->calculationSettings()->locale()->decimalSymbol());
@@ -2795,7 +2781,7 @@ void CellToolBase::insertFromTextfile()
 
 void CellToolBase::insertFromClipboard()
 {
-    selection()->emitAboutToModify();
+    selection()->emitCloseEditor(true);
 
     QPointer<CSVDialog> dialog = new CSVDialog(canvas()->canvasWidget(), selection(), CSVDialog::Clipboard);
     dialog->setDecimalSymbol(selection()->activeSheet()->map()->calculationSettings()->locale()->decimalSymbol());
@@ -2810,7 +2796,7 @@ void CellToolBase::insertFromClipboard()
 
 void CellToolBase::textToColumns()
 {
-    selection()->emitAboutToModify();
+    selection()->emitCloseEditor(true);
 
     QRect area = selection()->lastRange();
     area.setRight(area.left()); // only use the first column
@@ -2836,14 +2822,14 @@ void CellToolBase::sortList()
 
 void CellToolBase::consolidate()
 {
-    selection()->emitAboutToModify();
+    selection()->emitCloseEditor(true);
     ConsolidateDialog * dialog = new ConsolidateDialog(canvas()->canvasWidget(), selection());
     dialog->show(); // dialog deletes itself later
 }
 
 void CellToolBase::goalSeek()
 {
-    selection()->emitAboutToModify();
+    selection()->emitCloseEditor(true);
 
     GoalSeekDialog* dialog = new GoalSeekDialog(canvas()->canvasWidget(), selection());
     dialog->show(); // dialog deletes itself later

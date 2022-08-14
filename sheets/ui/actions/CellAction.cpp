@@ -17,6 +17,7 @@ using namespace Calligra::Sheets;
 CellAction::CellAction(Actions *actions, const QString &actionName, const QString &caption, const QIcon &icon, const QString &tooltip)
     : m_actions(actions)
     , m_name(actionName)
+    , m_closeEditor(false)
 {
     m_tool = actions->tool();
     if (!icon.isNull())
@@ -37,6 +38,7 @@ CellAction::~CellAction()
 
 void CellAction::triggered()
 {
+    if (m_closeEditor) m_tool->selection()->emitCloseEditor(true);
     execute(m_tool->selection(), m_tool->selection()->activeSheet());
 }
 

@@ -2,7 +2,16 @@
 set (actions_DIR_SRCS
     actions/CellAction.cpp
     actions/Actions.cpp
+    actions/InsertSeries.cpp
     actions/InsertSpecialChar.cpp
+    )
+
+set (action_dialogs_DIR_SRCS
+    actions/dialogs/CharacterSelectDialog.cpp
+    actions/dialogs/SeriesDialog.cpp
+    )
+
+ki18n_wrap_ui(action_dialogs_DIR_SRCS
     )
 
 set (commands_DIR_SRCS
@@ -38,7 +47,6 @@ set (dialogs_DIR_SRCS
     dialogs/AddNamedAreaDialog.cpp
     dialogs/AngleDialog.cpp
     dialogs/AutoFormatDialog.cpp
-    dialogs/CharacterSelectDialog.cpp
     dialogs/CommentDialog.cpp
     dialogs/ConditionalDialog.cpp
     dialogs/ConsolidateDialog.cpp
@@ -56,7 +64,6 @@ set (dialogs_DIR_SRCS
     dialogs/NamedAreaDialog.cpp
     dialogs/PasteInsertDialog.cpp
     dialogs/Resize2Dialog.cpp
-    dialogs/SeriesDialog.cpp
     dialogs/ShowDialog.cpp
     dialogs/ShowColRowDialog.cpp
     dialogs/SortDialog.cpp
@@ -120,6 +127,7 @@ set (calligrasheetsui_LIB_SRCS
     SheetView.cpp
 
     ${actions_DIR_SRCS}
+    ${action_dialogs_DIR_SRCS}
     ${commands_DIR_SRCS}
     ${dialogs_DIR_SRCS}
     ${strategy_DIR_SRCS}

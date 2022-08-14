@@ -6,13 +6,14 @@
 
 #include "InsertSpecialChar.h"
 #include "Actions.h"
+#include "./dialogs/CharacterSelectDialog.h"
 
 #include "core/CellStorage.h"
 #include "core/Sheet.h"
 #include "ui/CellEditorBase.h"
 #include "ui/CellToolBase.h"
 #include "ui/Selection.h"
-#include "ui/dialogs/CharacterSelectDialog.h"
+
 
 #include <QApplication>
 #include <QKeyEvent>

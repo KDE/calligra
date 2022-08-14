@@ -240,7 +240,6 @@ protected Q_SLOTS:
     void fillDown();
     void autoSum();
     // -- data insert actions --
-    void insertSeries();
     void insertFormula();
     void insertFromDatabase();
     void insertFromTextfile();

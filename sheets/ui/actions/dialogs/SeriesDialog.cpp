@@ -13,9 +13,7 @@
 
 #include "SeriesDialog.h"
 
-#include "../ui/Selection.h"
-
-#include "../commands/DataManipulators.h"
+#include "ui/Selection.h"
 
 #include <kmessagebox.h>
 #include <KLocalizedString>
@@ -24,7 +22,6 @@
 #include <QHBoxLayout>
 #include <QGridLayout>
 #include <QLabel>
-#include <QRadioButton>
 #include <QDoubleSpinBox>
 
 using namespace Calligra::Sheets;
@@ -34,7 +31,7 @@ SeriesDialog::SeriesDialog(QWidget* parent, Selection* selection)
 {
     setCaption(i18n("Series"));
     setButtons(Ok | Cancel);
-    setModal(true);
+    setModal(false);
 
     m_selection = selection;
 
@@ -115,65 +112,53 @@ void SeriesDialog::slotButtonClicked(int button)
         return;
     }
 
-    bool isColumn = column->isChecked();
     bool isLinear = linear->isChecked();
 
-    double dstep, dend, dstart;
-
-    dstart = start->value();
-    dend = end->value();
-    dstep = step->value();
+    m_dstart = start->value();
+    m_dend = end->value();
+    m_dstep = step->value();
     if (!isLinear) { // = Geometric
-        if (dstart < 0.0 || dend < 0.0) {
+        if (m_dstart < 0.0 || m_dend < 0.0) {
             KMessageBox::error(this, i18n("End and start value must be positive."));
             return;
         }
-        if (dstart > dend && dstep >= 1.0) {
+        if (m_dstart > m_dend && m_dstep >= 1.0) {
             KMessageBox::error(this, i18n("End value must be greater than the start "
                                           "value or the step must be less than '1'."));
             return;
         }
-        if (dstart == 0.0 || dend == 0.0 || dstep == 0.0) {
+        if (m_dstart == 0.0 || m_dend == 0.0 || m_dstep == 0.0) {
             KMessageBox::error(this, i18n("None of the Start, Stop or Step values "
                                           "may be equal to zero."));
             return;
         }
-        if (dstep == 1.0) {
+        if (m_dstep == 1.0) {
             KMessageBox::error(this, i18n("Step value must be different from 1"));
             return;
         }
-        if (dstep < 0.0) {
+        if (m_dstep < 0.0) {
             KMessageBox::error(this, i18n("Step is negative."));
             return;
         }
     }
 
     if (isLinear) { // Linear
-        if (dstep == 0.0) {
+        if (m_dstep == 0.0) {
             KMessageBox::error(this, i18n("The step value must be greater than zero; "
                                           "otherwise, the linear series is infinite."));
             return;
         }
-        if ((dstep > 0.0) && (dend < dstart)) {
+        if ((m_dstep > 0.0) && (m_dend < m_dstart)) {
             KMessageBox::error(this, i18n("If the start value is greater than the "
                                           "end value the step must be less than zero."));
             return;
         }
-        if ((dstep < 0.0) && (dstart <= dend)) {
+        if ((m_dstep < 0.0) && (m_dstart <= m_dend)) {
             KMessageBox::error(this, i18n("If the step is negative, the start value "
                                           "must be greater then the end value."));
             return;
         }
     }
-
-    SeriesManipulator *manipulator = new SeriesManipulator;
-    manipulator->setSheet(m_selection->activeSheet());
-    manipulator->setupSeries(m_selection->marker(), dstart, dend, dstep,
-                             isColumn ? SeriesManipulator::Column : SeriesManipulator::Row,
-                             isLinear ? SeriesManipulator::Linear : SeriesManipulator::Geometric);
-
-    // setupSeries also called add(), so we can call execute directly
-    manipulator->execute(m_selection->canvas());
 
     accept();
 }

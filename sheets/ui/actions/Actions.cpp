@@ -6,6 +6,7 @@
 
 #include "Actions.h"
 
+#include "InsertSeries.h"
 #include "InsertSpecialChar.h"
 
 #include "engine/SheetsDebug.h"
@@ -26,6 +27,7 @@ Actions::~Actions()
 void Actions::createActions()
 {
     addAction(new InsertSpecialChar(this));
+    addAction(new InsertSeries(this));
 
     // TODO!
 
