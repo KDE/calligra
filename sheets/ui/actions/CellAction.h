@@ -9,12 +9,17 @@
 
 #include "sheets_ui_export.h"
 
+// we don't need these here, but all the children will be using them, so easier to define them here
+#include "core/Cell.h"
+#include "ui/Selection.h"
+
 #include <KoIcon.h>
 
 #include <QObject>
 #include <QString>
 
 class QAction;
+class QWidget;
 
 namespace Calligra
 {
@@ -39,10 +44,15 @@ public:
 
     QAction *action() { return m_action; }
     QString name() { return m_name; }
+    bool shouldBeEnabled(bool readWrite, Selection *selection, const Cell &activeCell);
 protected Q_SLOTS:
     void triggered();
 protected:
-    virtual void execute(Selection *selection, Sheet *sheet) = 0;
+    virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) = 0;
+
+    virtual bool enabledIfReadOnly() const { return false; }
+    virtual bool enabledIfProtected() const { return false; }
+    virtual bool enabledForSelection(Selection *selection, const Cell &activeCell);
 
     Actions *m_actions;
     CellToolBase *m_tool;

@@ -13,6 +13,8 @@
 
 #include <kpagedialog.h>
 
+#include "engine/Validity.h"
+
 class QLabel;
 class KLineEdit;
 class KTextEdit;
@@ -23,7 +25,7 @@ namespace Calligra
 {
 namespace Sheets
 {
-class Selection;
+class CalculationSettings;
 
 /**
  * \ingroup UI
@@ -34,11 +36,12 @@ class ValidityDialog : public KPageDialog
     Q_OBJECT
 
 public:
-    ValidityDialog(QWidget* parent, Selection* selection);
-    void init();
+    ValidityDialog(QWidget* parent, CalculationSettings *settings, ValueParser *parser);
+    Validity getValidity();
+    void setValidity(Validity validity);
 
 public Q_SLOTS:
-    void OkPressed();
+    virtual void done(int r) override;
     void clearAllPressed();
     void changeIndexCond(int);
     void changeIndexType(int);
@@ -46,7 +49,8 @@ public Q_SLOTS:
 protected:
     void displayOrNotListOfValidity(bool _displayList);
 
-    Selection* m_selection;
+    CalculationSettings *m_settings;
+    ValueParser *m_parser;
 
     KLineEdit *val_max;
     KLineEdit *val_min;
@@ -65,6 +69,10 @@ protected:
     KLineEdit *titleHelp;
     KTextEdit *validityList;
     QLabel *validityLabelList;
+
+    double minval, maxval;
+    QTime mintime, maxtime;
+    QDate mindate, maxdate;
 };
 
 } // namespace Sheets

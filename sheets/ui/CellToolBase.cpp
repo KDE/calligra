@@ -23,6 +23,7 @@
 #include "core/CellStorage.h"
 #include "core/ColFormatStorage.h"
 #include "core/Database.h"
+#include "core/DocBase.h"
 #include "core/Map.h"
 #include "core/RowFormatStorage.h"
 #include "core/Sheet.h"
@@ -59,7 +60,6 @@
 #include "commands/SortManipulator.h"
 #include "commands/SpellCheckCommand.h"
 #include "commands/StyleCommand.h"
-#include "commands/ValidityCommand.h"
 
 // dialogs
 #include "dialogs/AddNamedAreaDialog.h"
@@ -85,7 +85,6 @@
 #include "dialogs/SpecialPasteDialog.h"
 #include "dialogs/StyleManagerDialog.h"
 #include "dialogs/SubtotalDialog.h"
-#include "dialogs/ValidityDialog.h"
 #include "dialogs/pivot.h"
 
 // strategies
@@ -589,17 +588,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     action->setToolTip(i18n("Remove a link"));
     addAction("clearHyperlink", action);
     connect(action, &QAction::triggered, this, &CellToolBase::clearHyperlink);
-
-    action = new QAction(i18n("Validity..."), this);
-    action->setToolTip(i18n("Set tests to confirm cell data is valid"));
-    addAction("validity", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::validity);
-
-    action = new QAction(i18n("Validity"), this);
-    action->setIconText(i18n("Remove Validity"));
-    action->setToolTip(i18n("Remove the validity tests on this cell"));
-    addAction("clearValidity", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::clearValidity);
 
     // -- sorting/filtering action --
 
@@ -1268,10 +1256,7 @@ KoInteractionStrategy* CellToolBase::createStrategy(KoPointerEvent* event)
 // This makes sure that the action buttons stay updated whenever we change anything.
 void CellToolBase::handleDamages()
 {
-    const Cell cell = Cell(selection()->activeSheet(), selection()->cursor());
-    if (!cell)
-        return;
-    d->updateActions(cell);
+    updateActions();
 }
 
 void CellToolBase::selectionChanged(const Region& region)
@@ -1319,7 +1304,6 @@ void CellToolBase::selectionChanged(const Region& region)
         return;
     }
     d->updateEditor(cell);
-    d->updateActions(cell);
 
     if (selection()->activeSheet()->isProtected()) {
         const Style style = cell.style();
@@ -1339,6 +1323,8 @@ void CellToolBase::selectionChanged(const Region& region)
             }
         }
     }
+
+    updateActions();
 }
 
 void CellToolBase::scrollToCell(const QPoint &location)
@@ -1613,11 +1599,24 @@ void CellToolBase::applyUserInput(const QString &userInput, bool expandMatrix)
 void CellToolBase::documentReadWriteToggled(bool readWrite)
 {
     d->setProtectedActionsEnabled(readWrite);
+
+    updateActions();
 }
 
 void CellToolBase::sheetProtectionToggled(bool protect)
 {
     d->setProtectedActionsEnabled(!protect);
+
+    updateActions();
+}
+
+void CellToolBase::updateActions()
+{
+    Sheet *sheet = selection()->activeSheet();
+    bool readWrite = sheet->fullMap()->doc()->isReadWrite();
+    const Cell cell = Cell(sheet, selection()->cursor());
+    d->updateActions(cell);  // TODO - eventuaully get rid of this one
+    d->actions->updateOnChange(readWrite, selection(), cell);
 }
 
 void CellToolBase::cellStyle()
@@ -2542,26 +2541,6 @@ void CellToolBase::clearHyperlink()
     canvas()->addCommand(command);
 
     selection()->emitModified();
-}
-
-void CellToolBase::validity()
-{
-    QPointer<ValidityDialog> dialog = new ValidityDialog(canvas()->canvasWidget(), selection());
-    dialog->exec();
-    delete dialog;
-}
-
-void CellToolBase::clearValidity()
-{
-    // TODO Stefan: Actually this check belongs into the command!
-    if (selection()->activeSheet()->areaIsEmpty(*selection(), Sheet::Validity))
-        return;
-
-    ValidityCommand* command = new ValidityCommand();
-    command->setSheet(selection()->activeSheet());
-    command->setValidity(Validity()); // empty object removes validity
-    command->add(*selection());
-    command->execute(canvas());
 }
 
 void CellToolBase::sort()

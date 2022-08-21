@@ -7,8 +7,11 @@
 #include "CellAction.h"
 #include "Actions.h"
 
+#include "core/Sheet.h"
 #include "ui/CellToolBase.h"
 #include "ui/Selection.h"
+
+#include <KoCanvasBase.h>
 
 #include <QAction>
 
@@ -39,6 +42,32 @@ CellAction::~CellAction()
 void CellAction::triggered()
 {
     if (m_closeEditor) m_tool->selection()->emitCloseEditor(true);
-    execute(m_tool->selection(), m_tool->selection()->activeSheet());
+    execute(m_tool->selection(), m_tool->selection()->activeSheet(), m_tool->canvas()->canvasWidget());
 }
+
+bool CellAction::shouldBeEnabled(bool readWrite, Selection *selection, const Cell &activeCell)
+{
+    if ((!readWrite) && (!enabledIfReadOnly())) return false;
+
+    bool prot = false;
+    if (selection->activeSheet()->isProtected()) {
+        prot = true;
+        // Unprotected singular cell in a protected sheet?
+        // TODO - also allow multi-cell selections consisting solely of protected cells ...
+        if (selection->isSingular() && (!activeCell.isNull())) {
+            const Style style = activeCell.style();
+            // TODO if more cells enabled, 
+            if (style.notProtected()) prot = false;
+        }
+    }
+    if (prot && (!enabledIfProtected())) return false;
+
+    return enabledForSelection(selection, activeCell);
+}
+
+bool CellAction::enabledForSelection(Selection *selection, const Cell &activeCell)
+{
+    return true;
+}
+
 

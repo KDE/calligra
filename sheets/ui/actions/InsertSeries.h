@@ -17,7 +17,6 @@ namespace Calligra
 namespace Sheets
 {
 class SeriesDialog;
-class Selection;
 
 class InsertSeries : public CellAction {
 Q_OBJECT
@@ -29,7 +28,7 @@ protected Q_SLOTS:
     void dialogFinished(int result);
 
 protected:
-    virtual void execute(Selection *selection, Sheet *sheet) override;
+    virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
     
     SeriesDialog *m_dlg;
     Selection *m_selection;

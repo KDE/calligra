@@ -15,7 +15,6 @@ namespace Calligra
 namespace Sheets
 {
 class CharacterSelectDialog;
-class Selection;
 
 class InsertSpecialChar : public CellAction {
 Q_OBJECT
@@ -28,7 +27,7 @@ protected Q_SLOTS:
     void specialChar(QChar character, const QString& fontName);
 
 protected:
-    virtual void execute(Selection *selection, Sheet *sheet) override;
+    virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
 
     CharacterSelectDialog *m_dlg;
     Selection *m_selection;
@@ -38,4 +37,4 @@ protected:
 } // namespace Sheets
 } // namespace Calligra
 
-#endif   // CALLIGRA_SHEETS_CELL_ACTION
+#endif   // CALLIGRA_SHEETS_ACTION_INSERT_SPECIAL_CHAR

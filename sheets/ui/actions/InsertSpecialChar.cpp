@@ -37,7 +37,7 @@ InsertSpecialChar::~InsertSpecialChar()
 }
 
 
-void InsertSpecialChar::execute(Selection *selection, Sheet *sheet)
+void InsertSpecialChar::execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget)
 {
     m_selection = selection;
 
@@ -45,8 +45,7 @@ void InsertSpecialChar::execute(Selection *selection, Sheet *sheet)
     QChar c = ' ';
 
     if (!m_dlg) {
-        CellToolBase *tool = m_actions->tool();
-        m_dlg = new CharacterSelectDialog(tool->canvas()->canvasWidget(), "SpecialCharDialog", fontFamily, c, false);
+        m_dlg = new CharacterSelectDialog(canvasWidget, "SpecialCharDialog", fontFamily, c, false);
         connect(m_dlg, &CharacterSelectDialog::insertChar,
                 this, &InsertSpecialChar::specialChar);
         connect(m_dlg, &CharacterSelectDialog::finished,

@@ -22,15 +22,9 @@
 #include <kmessagebox.h>
 #include <ktextedit.h>
 
-#include "engine/MapBase.h"
-#include "engine/ValueParser.h"
 #include "engine/CalculationSettings.h"
 #include "engine/Localization.h"
-#include "core/Cell.h"
-#include "core/Sheet.h"
-
-#include "../Selection.h"
-#include "../commands/ValidityCommand.h"
+#include "engine/ValueParser.h"
 
 using namespace Calligra::Sheets;
 
@@ -38,17 +32,18 @@ Q_DECLARE_METATYPE(Validity::Type)
 Q_DECLARE_METATYPE(Validity::Action)
 Q_DECLARE_METATYPE(Validity::Restriction)
 
-ValidityDialog::ValidityDialog(QWidget* parent, Selection* selection)
+ValidityDialog::ValidityDialog(QWidget* parent, CalculationSettings *settings, ValueParser *parser)
         : KPageDialog(parent)
 
 {
+    m_settings = settings;
+    m_parser = parser;
+
     setFaceType(Tabbed);
     setWindowTitle(i18n("Validity"));
     setModal(true);
 
     QPushButton *clearAllButton = buttonBox()->addButton(i18n("Clear &All"), QDialogButtonBox::ActionRole);
-
-    m_selection = selection;
 
     QFrame *page1 = new QFrame();
     addPage(page1, i18n("&Criteria"));
@@ -196,10 +191,10 @@ ValidityDialog::ValidityDialog(QWidget* parent, Selection* selection)
 
     connect(choose, QOverload<int>::of(&KComboBox::activated), this, &ValidityDialog::changeIndexCond);
     connect(chooseType, QOverload<int>::of(&KComboBox::activated), this, &ValidityDialog::changeIndexType);
-    connect(this, &QDialog::accepted, this, &ValidityDialog::OkPressed);
     connect(clearAllButton, &QAbstractButton::clicked, this, &ValidityDialog::clearAllPressed);
 
-    init();
+    changeIndexType(chooseType->currentIndex()) ;
+    changeIndexCond(choose->currentIndex()) ;
 }
 
 void ValidityDialog::displayOrNotListOfValidity(bool _displayList)
@@ -369,12 +364,10 @@ void ValidityDialog::changeIndexCond(int _index)
     }
 }
 
-void ValidityDialog::init()
+void ValidityDialog::setValidity(Validity validity)
 {
-    const MapBase *const map = m_selection->activeSheet()->map();
-    const CalculationSettings *settings = map->calculationSettings();
-    const Localization* locale = settings->locale();
-    Validity validity = Cell(m_selection->activeSheet(), m_selection->marker()).validity();
+    const Localization* locale = m_settings->locale();
+
     if (!validity.isEmpty()) {
         message->setPlainText(validity.message());
         title->setText(validity.title());
@@ -406,9 +399,9 @@ void ValidityDialog::init()
             break;
         case Validity::Date:
             chooseType->setCurrentIndex(4);
-            val_min->setText(locale->formatDate(validity.minimumValue().asDate(settings), false));
+            val_min->setText(locale->formatDate(validity.minimumValue().asDate(m_settings), false));
             if (validity.condition() >= 5)
-                val_max->setText(locale->formatDate(validity.maximumValue().asDate(settings), false));
+                val_max->setText(locale->formatDate(validity.maximumValue().asDate(m_settings), false));
             break;
         case Validity::Time:
             chooseType->setCurrentIndex(5);
@@ -461,72 +454,73 @@ void ValidityDialog::clearAllPressed()
     displayHelp->setChecked(false);
 }
 
-void ValidityDialog::OkPressed()
-{
-    const Localization* locale = m_selection->activeSheet()->map()->calculationSettings()->locale();
-    const ValueParser *const parser = m_selection->activeSheet()->map()->parser();
-    Validity validity;
-    if (chooseType->currentIndex() == 1) {
-        bool ok;
-        val_min->text().toDouble(&ok);
+
+void ValidityDialog::done(int r) {
+    if (r != QDialog::Accepted) {
+        KPageDialog::done(r);
+        return;
+    }
+
+    // Validate the data.
+    int idx = chooseType->currentIndex();
+    bool ok = false;
+    if (idx == 1) {
+        minval = val_min->text().toDouble(&ok);
         if (! ok) {
             KMessageBox::error(this , i18n("This is not a valid value."), i18n("Error"));
-            val_min->setText("");
             return;
         }
-        val_max->text().toDouble(&ok);
+        maxval = val_max->text().toDouble(&ok);
         if (! ok && choose->currentIndex() >= 5 && choose->currentIndex() < 7) {
             KMessageBox::error(this , i18n("This is not a valid value."), i18n("Error"));
-            val_max->setText("");
             return;
         }
-    } else if (chooseType->currentIndex() == 2 || chooseType->currentIndex() == 6) {
-        bool ok;
-        val_min->text().toInt(&ok);
+    } else if (idx == 2 || idx == 6) {
+        minval = val_min->text().toInt(&ok);
         if (! ok) {
             KMessageBox::error(this , i18n("This is not a valid value."), i18n("Error"));
-            val_min->setText("");
             return;
         }
-        val_max->text().toInt(&ok);
+        maxval = val_max->text().toInt(&ok);
         if (! ok && choose->currentIndex() >= 5 && choose->currentIndex() < 7) {
             KMessageBox::error(this , i18n("This is not a valid value."), i18n("Error"));
-            val_max->setText("");
             return;
         }
-    } else  if (chooseType->currentIndex() == 5) {
-        bool ok = false;
-        locale->readTime(val_min->text(), &ok);
+    } else if (idx == 5) {
+        mintime = m_parser->tryParseTime(val_min->text(), &ok).asTime();
         if (!ok) {
             KMessageBox::error(this , i18n("This is not a valid time."), i18n("Error"));
-            val_min->setText("");
             return;
         }
-        locale->readTime(val_max->text(), &ok);
+        maxtime = m_parser->tryParseTime(val_max->text(), &ok).asTime();
         if ((!ok) && choose->currentIndex()  >= 5) {
             KMessageBox::error(this , i18n("This is not a valid time."), i18n("Error"));
-            val_max->setText("");
             return;
         }
-    } else  if (chooseType->currentIndex() == 4) {
-        bool ok = false;
-        locale->readDate(val_min->text(), &ok);
+    } else  if (idx == 4) {
+        mindate = m_parser->tryParseDate(val_min->text(), &ok).asDate(m_settings);
         if (!ok) {
             KMessageBox::error(this , i18n("This is not a valid date."), i18n("Error"));
-            val_min->setText("");
             return;
         }
-        locale->readDate(val_max->text(), &ok);
+        maxdate = m_parser->tryParseDate(val_max->text(), &ok).asDate(m_settings);
         if ((!ok) && choose->currentIndex()  >= 5) {
             KMessageBox::error(this , i18n("This is not a valid date."), i18n("Error"));
-            val_max->setText("");
             return;
         }
-    } else if (chooseType->currentIndex() == 7) {
+    } else if (idx == 7) {
         //Nothing
     }
 
-    if (chooseType->currentIndex() == 0) {//no validity
+    KPageDialog::done(r);
+}
+
+Validity ValidityDialog::getValidity() {
+    const Localization* locale = m_settings->locale();
+    Validity validity;
+
+    int idx = chooseType->currentIndex();
+    if (idx == 0) {//no validity
         validity.setRestriction(Validity::NoRestriction);
         validity.setAction(Validity::Stop);
         validity.setCondition(Validity::Equal);
@@ -543,49 +537,49 @@ void ValidityDialog::OkPressed()
         validity.setMinimumValue(Value());
         validity.setMaximumValue(Value());
 
-        if (chooseType->currentIndex() == 1) {
+        if (idx == 1) {
             if (choose->currentIndex()  < 5) {
-                validity.setMinimumValue(Value(val_min->text().toDouble()));
+                validity.setMinimumValue(Value(minval));
             } else {
-                validity.setMinimumValue(Value(qMin(val_min->text().toDouble(), val_max->text().toDouble())));
-                validity.setMaximumValue(Value(qMax(val_max->text().toDouble(), val_min->text().toDouble())));
+                validity.setMinimumValue(Value(qMin(minval, maxval)));
+                validity.setMaximumValue(Value(qMax(minval, maxval)));
             }
-        } else if (chooseType->currentIndex() == 2 || chooseType->currentIndex() == 6) {
+        } else if (idx == 2 || idx == 6) {
             if (choose->currentIndex()  < 5) {
-                validity.setMinimumValue(Value(val_min->text().toInt()));
+                validity.setMinimumValue(Value((int) minval));
             } else {
-                validity.setMinimumValue(Value(qMin(val_min->text().toInt(), val_max->text().toInt())));
-                validity.setMaximumValue(Value(qMax(val_max->text().toInt(), val_min->text().toInt())));
+                validity.setMinimumValue(Value(qMin((int)minval, (int)maxval)));
+                validity.setMaximumValue(Value(qMax((int)minval, (int)maxval)));
             }
-        } else  if (chooseType->currentIndex() == 4) {
-            const Value minValue = parser->tryParseDate(val_min->text());
-            const Value maxValue = parser->tryParseDate(val_max->text());
+        } else  if (idx == 4) {
+            Value minDate = Value(mindate, m_settings);
+            Value maxDate = Value(maxdate, m_settings);
             if (choose->currentIndex()  < 5) {
-                validity.setMinimumValue(minValue);
+                validity.setMinimumValue(minDate);
             } else {
-                if (minValue.less(maxValue)) {
-                    validity.setMinimumValue(minValue);
-                    validity.setMaximumValue(maxValue);
+                if (minDate.less(maxDate)) {
+                    validity.setMinimumValue(minDate);
+                    validity.setMaximumValue(maxDate);
                 } else {
-                    validity.setMinimumValue(maxValue);
-                    validity.setMaximumValue(minValue);
+                    validity.setMinimumValue(maxDate);
+                    validity.setMaximumValue(minDate);
                 }
             }
-        } else  if (chooseType->currentIndex() == 5) {
-            const Value minValue = parser->tryParseTime(val_min->text());
-            const Value maxValue = parser->tryParseTime(val_max->text());
+        } else  if (idx == 5) {
+            Value minTime = Value(mintime);
+            Value maxTime = Value(maxtime);
             if (choose->currentIndex()  < 5) {
-                validity.setMinimumValue(minValue);
+                validity.setMinimumValue(minTime);
             } else {
-                if (minValue.less(maxValue)) {
-                    validity.setMaximumValue(maxValue);
-                    validity.setMinimumValue(minValue);
+                if (minTime.less(maxTime)) {
+                    validity.setMaximumValue(maxTime);
+                    validity.setMinimumValue(minTime);
                 } else {
-                    validity.setMaximumValue(minValue);
-                    validity.setMinimumValue(maxValue);
+                    validity.setMaximumValue(minTime);
+                    validity.setMinimumValue(maxTime);
                 }
             }
-        } else if (chooseType->currentIndex() == 7) {
+        } else if (idx == 7) {
             validity.setValidityList(validityList->toPlainText().split('\n', QString::SkipEmptyParts));
         }
     }
@@ -595,9 +589,7 @@ void ValidityDialog::OkPressed()
     validity.setMessageInfo(messageHelp->toPlainText());
     validity.setTitleInfo(titleHelp->text());
 
-    ValidityCommand* manipulator = new ValidityCommand();
-    manipulator->setSheet(m_selection->activeSheet());
-    manipulator->setValidity(validity);
-    manipulator->add(*m_selection);
-    manipulator->execute(m_selection->canvas());
+    return validity;
+
 }
+

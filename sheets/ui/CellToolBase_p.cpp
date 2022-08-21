@@ -82,6 +82,8 @@ void CellToolBase::Private::updateEditor(const Cell& cell)
 
 void CellToolBase::Private::updateActions(const Cell& cell)
 {
+    // TODO - this should eventually be removed, all the checks are done in the CellAction classes instead
+
     const Style style = cell.style();
 
     // -- font actions --
@@ -157,6 +159,7 @@ void CellToolBase::Private::updateActions(const Cell& cell)
 
 void CellToolBase::Private::setProtectedActionsEnabled(bool enable)
 {
+    // TODO - this should eventually be removed, all the checks are done in the CellAction classes instead
     // Enable/disable actions.
     const QList<QAction*> actions = q->actions().values();
     for (int i = 0; i < actions.count(); ++i)

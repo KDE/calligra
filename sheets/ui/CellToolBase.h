@@ -95,6 +95,9 @@ public:
 
     void addCellAction(CellAction *a);
 
+    /** Update all the actions' enabled/disabled status. */
+    void updateActions();
+
     /**
      * The shape offset in document coordinates.
      */
@@ -226,8 +229,6 @@ protected Q_SLOTS:
     void clearConditionalStyles();
     void insertHyperlink();
     void clearHyperlink();
-    void validity();
-    void clearValidity();
     // -- sorting/filtering action --
     void sort();
     void sortInc();

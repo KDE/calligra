@@ -4,11 +4,13 @@ set (actions_DIR_SRCS
     actions/Actions.cpp
     actions/InsertSeries.cpp
     actions/InsertSpecialChar.cpp
+    actions/Validity.cpp
     )
 
 set (action_dialogs_DIR_SRCS
     actions/dialogs/CharacterSelectDialog.cpp
     actions/dialogs/SeriesDialog.cpp
+    actions/dialogs/ValidityDialog.cpp
     )
 
 ki18n_wrap_ui(action_dialogs_DIR_SRCS
@@ -37,7 +39,6 @@ set (commands_DIR_SRCS
     commands/SortManipulator.cpp
     commands/SpellCheckCommand.cpp
     commands/StyleCommand.cpp
-    commands/ValidityCommand.cpp
     commands/CopyCommand.cpp
     commands/PasteCommand.cpp
     )
@@ -70,7 +71,6 @@ set (dialogs_DIR_SRCS
     dialogs/SpecialPasteDialog.cpp
     dialogs/StyleManagerDialog.cpp
     dialogs/SubtotalDialog.cpp
-    dialogs/ValidityDialog.cpp
     dialogs/pivot.cpp
     dialogs/pivotfilters.cpp
     dialogs/pivotoptions.cpp

@@ -11,7 +11,6 @@
 #include "engine/ValueCalc.h"
 #include "core/CellStorage.h"
 #include "core/Sheet.h"
-#include "ui/CellToolBase.h"
 #include "ui/Selection.h"
 
 #include <float.h>   // for DBL_EPSILON
@@ -20,8 +19,6 @@
 #include <QKeyEvent>
 
 #include <KLocalizedString>
-
-#include <KoCanvasBase.h>
 
 using namespace Calligra::Sheets;
 
@@ -38,7 +35,7 @@ InsertSeries::~InsertSeries()
 }
 
 
-void InsertSeries::execute(Selection *selection, Sheet *)
+void InsertSeries::execute(Selection *selection, Sheet *, QWidget *canvasWidget)
 {
     m_selection = selection;
     if (m_dlg) {
@@ -46,8 +43,7 @@ void InsertSeries::execute(Selection *selection, Sheet *)
         return;
     }
 
-    CellToolBase *tool = m_actions->tool();
-    m_dlg = new SeriesDialog(tool->canvas()->canvasWidget(), selection);
+    m_dlg = new SeriesDialog(canvasWidget, selection);
     connect(m_dlg, &QDialog::finished, this, &InsertSeries::dialogFinished);
     m_dlg->show();
 }

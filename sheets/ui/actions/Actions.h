@@ -19,6 +19,7 @@ namespace Calligra
 {
 namespace Sheets
 {
+class Cell;
 class Sheet;
 class CellToolBase;
 class CellAction;
@@ -35,6 +36,7 @@ public:
     ~Actions();
 
     CellToolBase *tool() { return m_tool; }
+    void updateOnChange(bool readWrite, Selection *selection, const Cell &activeCell);
 
 protected:
     void createActions();
