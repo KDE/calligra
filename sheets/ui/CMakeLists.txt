@@ -4,16 +4,20 @@ set (actions_DIR_SRCS
     actions/Actions.cpp
     actions/InsertSeries.cpp
     actions/InsertSpecialChar.cpp
+    actions/Sort.cpp
     actions/Validity.cpp
     )
 
 set (action_dialogs_DIR_SRCS
     actions/dialogs/CharacterSelectDialog.cpp
     actions/dialogs/SeriesDialog.cpp
+    actions/dialogs/SortDialog.cpp
     actions/dialogs/ValidityDialog.cpp
     )
 
 ki18n_wrap_ui(action_dialogs_DIR_SRCS
+    actions/dialogs/SortWidget.ui
+    actions/dialogs/SortDetailsWidget.ui
     )
 
 set (commands_DIR_SRCS
@@ -36,7 +40,6 @@ set (commands_DIR_SRCS
     commands/PrecisionCommand.cpp
     commands/RowColumnManipulators.cpp
     commands/SheetCommands.cpp
-    commands/SortManipulator.cpp
     commands/SpellCheckCommand.cpp
     commands/StyleCommand.cpp
     commands/CopyCommand.cpp
@@ -67,7 +70,6 @@ set (dialogs_DIR_SRCS
     dialogs/Resize2Dialog.cpp
     dialogs/ShowDialog.cpp
     dialogs/ShowColRowDialog.cpp
-    dialogs/SortDialog.cpp
     dialogs/SpecialPasteDialog.cpp
     dialogs/StyleManagerDialog.cpp
     dialogs/SubtotalDialog.cpp
@@ -86,8 +88,6 @@ ki18n_wrap_ui(dialogs_DIR_SRCS
     dialogs/PositionWidget.ui
     dialogs/ProtectionWidget.ui
     dialogs/SpecialPasteWidget.ui
-    dialogs/SortWidget.ui
-    dialogs/SortDetailsWidget.ui
     dialogs/SubtotalWidget.ui
     dialogs/SubtotalsDetailsWidget.ui
     dialogs/pivot.ui
@@ -162,7 +162,6 @@ install( FILES
 
     commands/AbstractRegionCommand.h
     commands/DataManipulators.h
-    commands/SortManipulator.h
 
     dialogs/pivot.h
     dialogs/pivotfilters.h

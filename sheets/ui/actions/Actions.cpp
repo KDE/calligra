@@ -8,7 +8,9 @@
 
 #include "InsertSeries.h"
 #include "InsertSpecialChar.h"
+#include "Sort.h"
 #include "Validity.h"
+
 
 #include "engine/SheetsDebug.h"
 
@@ -29,6 +31,9 @@ void Actions::createActions()
 {
     addAction(new InsertSpecialChar(this));
     addAction(new InsertSeries(this));
+    addAction(new Sort(this));
+    addAction(new SortInc(this));
+    addAction(new SortDesc(this));
     addAction(new SetValidity(this));
     addAction(new ClearValidity(this));
 

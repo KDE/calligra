@@ -26,8 +26,6 @@ public:
     SetValidity(Actions *actions);
     virtual ~SetValidity();
 
-protected Q_SLOTS:
-
 protected:
     virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;
 
@@ -40,8 +38,6 @@ Q_OBJECT
 public:
     ClearValidity(Actions *actions);
     virtual ~ClearValidity();
-
-protected Q_SLOTS:
 
 protected:
     virtual void execute(Selection *selection, Sheet *sheet, QWidget *canvasWidget) override;

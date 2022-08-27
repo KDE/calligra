@@ -65,7 +65,7 @@ bool CellAction::shouldBeEnabled(bool readWrite, Selection *selection, const Cel
     return enabledForSelection(selection, activeCell);
 }
 
-bool CellAction::enabledForSelection(Selection *selection, const Cell &activeCell)
+bool CellAction::enabledForSelection(Selection *, const Cell &)
 {
     return true;
 }

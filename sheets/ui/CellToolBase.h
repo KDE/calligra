@@ -230,9 +230,6 @@ protected Q_SLOTS:
     void insertHyperlink();
     void clearHyperlink();
     // -- sorting/filtering action --
-    void sort();
-    void sortInc();
-    void sortDec();
     void autoFilter();
     // -- fill actions --
     void fillLeft();

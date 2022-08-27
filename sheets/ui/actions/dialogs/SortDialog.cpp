@@ -16,19 +16,13 @@
 // Local
 #include "SortDialog.h"
 
-// Sheets
-#include "engine/MapBase.h"
-#include "engine/ValueConverter.h"
-#include "core/Sheet.h"
-
-#include "../Selection.h"
-#include "../commands/SortManipulator.h"
-
-#include <KoIcon.h>
+#include "engine/CellBase.h"
 
 // ui
 #include "ui_SortWidget.h"
 #include "ui_SortDetailsWidget.h"
+
+#include <KoIcon.h>
 
 #include <KSharedConfig>
 
@@ -74,21 +68,17 @@ public:
         const QAbstractItemModel *const model = index.model();
         const int itemIndex = model->data(index, Qt::UserRole).toInt();
         const bool hasHeader = mainWidget.m_useHeader->isChecked();
-        SheetBase *const sheet = selection->lastSheet();
-        ValueConverter *const converter = sheet->map()->converter();
 
         if (mainWidget.m_sortVertical->isChecked()) /* data grouped in rows; criteria/header per column */ {
             // Put the old item back into the map of available items.
             insertIndex(itemIndex, Qt::Horizontal);
 
-            const int row = selection->lastRange().top();
             const QList<int> indices = columns;
             for (int i = 0; i < indices.count(); ++i) {
                 const int col = indices[i];
-                const QString columnName = i18n("Column %1", Cell::columnName(col));
-                const Value value = CellBase(sheet, col, row).value();
-                const QString header = converter->asString(value).asString();
+                const QString columnName = i18n("Column %1", CellBase::columnName(col));
                 if (hasHeader) {
+                    const QString header = firstRow.at(i).asString();
                     if (header.isEmpty()) {
                         combo->addItem('(' + columnName + ')', col);
                     } else {
@@ -106,14 +96,12 @@ public:
             // Put the old item back into the map of available items.
             insertIndex(itemIndex, Qt::Vertical);
 
-            const int col = selection->lastRange().left();
             const QList<int> indices = rows;
             for (int i = 0; i < indices.count(); ++i) {
                 const int row = indices[i];
                 const QString rowName = i18n("Row %1", row);
-                const Value value = CellBase(sheet, col, row).value();
-                const QString header = converter->asString(value).asString();
                 if (hasHeader) {
+                    const QString header = firstCol.at(i).asString();
                     if (header.isEmpty()) {
                         combo->addItem('(' + rowName + ')', row);
                     } else {
@@ -155,50 +143,48 @@ public:
     }
 
 public: // data
-    Selection *selection;
+    QRect rect;
     Ui::SortWidget mainWidget;
     Ui::SortDetailsWidget detailsWidget;
     mutable QList<int> columns;
     mutable QList<int> rows;
+    QVector<Value> firstRow, firstCol;
 
 public:
     /// \return \c true if all columns/rows have text values
-    bool hasHeader(const Region &region, Qt::Orientation orientation) const;
-    void createAvailableIndices(const Region &region, Qt::Orientation orientation);
+    bool hasHeader(Qt::Orientation orientation) const;
+    void createAvailableIndices(Qt::Orientation orientation);
     void insertIndex(int index, Qt::Orientation orientation) const;
     QString itemText(int index, bool useHeader) const;
     void initCriteria(Qt::Orientation orientation, SortDialog *parent);
 };
 
-bool SortDialog::Private::hasHeader(const Region &region, Qt::Orientation orientation) const
+bool SortDialog::Private::hasHeader(Qt::Orientation orientation) const
 {
-    SheetBase *const sheet = region.lastSheet();
-    const QRect range = region.lastRange();
-    if (orientation == Qt::Horizontal) /* check for column headers */ {
-        for (int col = range.left(); col <= range.right(); ++col) {
-            if (!CellBase(sheet, col, range.top()).value().isString())  {
+    if (orientation == Qt::Horizontal) /* check for column headers */
+    {
+        if (!firstRow.size()) return false;
+        for (Value v : firstRow)
+            if (!v.isString())
                 return false;
-            }
-        }
-    } else /* check for row headers */ {
-        for (int row = range.top(); row <= range.bottom(); ++row) {
-            if (!CellBase(sheet, range.left(), row).value().isString()) {
+    } else /* check for row headers */
+    {
+        if (!firstCol.size()) return false;
+        for (Value v : firstCol)
+            if (!v.isString())
                 return false;
-            }
-        }
     }
     return true;
 }
 
-void SortDialog::Private::createAvailableIndices(const Region &region, Qt::Orientation orientation)
+void SortDialog::Private::createAvailableIndices(Qt::Orientation orientation)
 {
-    const QRect range = region.lastRange();
     if (orientation == Qt::Horizontal) /* available columns */ {
-        for (int col = range.left(); col <= range.right(); ++col) {
+        for (int col = rect.left(); col <= rect.right(); ++col) {
             columns.append(col);
         }
     } else /* available rows */ {
-        for (int row = range.top(); row <= range.bottom(); ++row) {
+        for (int row = rect.top(); row <= rect.bottom(); ++row) {
             rows.append(row);
         }
     }
@@ -207,14 +193,12 @@ void SortDialog::Private::createAvailableIndices(const Region &region, Qt::Orien
 void SortDialog::Private::insertIndex(int index, Qt::Orientation orientation) const
 {
     if (orientation == Qt::Vertical) /* data grouped in columns; criteria/header per row */ {
-        Q_ASSERT(1 <= index && index <= KS_colMax);
         QList<int>::Iterator it = std::lower_bound(rows.begin(), rows.end(), index);
         if (*it == index) {
             return;
         }
         rows.insert(it, index);
     } else /* data grouped in rows; criteria/header per column */ {
-        Q_ASSERT(1 <= index && index <= KS_rowMax);
         QList<int>::Iterator it = std::lower_bound(columns.begin(), columns.end(), index);
         if (*it == index) {
             return;
@@ -225,40 +209,26 @@ void SortDialog::Private::insertIndex(int index, Qt::Orientation orientation) co
 
 QString SortDialog::Private::itemText(int index, bool useHeader) const
 {
-    SheetBase *const sheet = selection->lastSheet();
-    ValueConverter *const converter = sheet->map()->converter();
-
-    if (mainWidget.m_sortHorizontal->isChecked()) /* data grouped in columns; criteria/header per row */ {
-        const int col = selection->lastRange().left();
-        const int row = index;
-        const QString rowName = i18n("Row %1", row);
+    if (mainWidget.m_sortHorizontal->isChecked()) /* data grouped in columns; criteria/header per row */
+    {
+        const QString rowName = i18n("Row %1", index);
         if (useHeader) {
-            const Value value = CellBase(sheet, col, row).value();
-            const QString header = converter->asString(value).asString();
-            if (header.isEmpty()) {
+            const QString header = firstCol.at(index - rect.top()).asString();
+            if (header.isEmpty())
                 return QString('(' + rowName + ')');
-            } else {
-                return header;
-            }
-        } else {
-            return rowName;
+            return header;
         }
-    } else /* data grouped in rows; criteria/header per column */ {
-        const int col = index;
-        const int row = selection->lastRange().top();
-        const QString columnName = i18n("Column %1", Cell::columnName(col));
-        if (useHeader) {
-            const Value value = CellBase(sheet, col, row).value();
-            const QString header = converter->asString(value).asString();
-            if (header.isEmpty()) {
-                return QString('(' + columnName + ')');
-            } else {
-                return header;
-            }
-        } else {
-            return columnName;
-        }
+        return rowName;
     }
+    /* data grouped in rows; criteria/header per column */
+    const QString columnName = i18n("Column %1", CellBase::columnName(index));
+    if (useHeader) {
+        const QString header = firstRow.at(index - rect.left()).asString();
+        if (header.isEmpty())
+            return QString('(' + columnName + ')');
+        return header;
+    }
+    return columnName;
 }
 
 void SortDialog::Private::initCriteria(Qt::Orientation orientation, SortDialog *parent)
@@ -299,11 +269,13 @@ void SortDialog::Private::initCriteria(Qt::Orientation orientation, SortDialog *
 }
 
 
-SortDialog::SortDialog(QWidget* parent, Selection* selection)
+SortDialog::SortDialog(QWidget* parent, QRect rect, const QVector<Value> &firstRow, const QVector<Value> &firstCol)
         : KoDialog(parent)
         , d(new Private(this))
 {
-    d->selection = selection;
+    d->rect = rect;
+    d->firstRow = firstRow;
+    d->firstCol = firstCol;
 
     setCaption(i18n("Sort"));
     setButtons(Ok | Cancel | Details | Reset);
@@ -381,122 +353,109 @@ void SortDialog::init()
     }
     d->detailsWidget.m_customList->insertItems(0, lst);
 
-    SheetBase *const sheet = d->selection->lastSheet();
-    const QRect range = d->selection->lastRange();
-    const Region region(range, sheet);
+    d->mainWidget.m_sortHorizontal->setEnabled(true);
+    d->mainWidget.m_sortVertical->setEnabled(true);
 
-    if (region.isColumnSelected()) /* entire columns */ {
+    if (!d->firstRow.size()) {
         d->mainWidget.m_sortHorizontal->setEnabled(false);
         d->mainWidget.m_sortVertical->setChecked(true);
 
-        const bool hasHeader = d->hasHeader(region, Qt::Horizontal);
+        const bool hasHeader = d->hasHeader(Qt::Horizontal);
         d->mainWidget.m_useHeader->setChecked(hasHeader);
-        d->createAvailableIndices(region, Qt::Horizontal);
     }
-    else if (region.isRowSelected()) /* entire rows */ {
+    else if (!d->firstCol.size()) {
         d->mainWidget.m_sortVertical->setEnabled(false);
         d->mainWidget.m_sortHorizontal->setChecked(true);
 
-        const bool hasHeader = d->hasHeader(region, Qt::Vertical);
+        const bool hasHeader = d->hasHeader(Qt::Vertical);
         d->mainWidget.m_useHeader->setChecked(hasHeader);
-        d->createAvailableIndices(region, Qt::Vertical);
-    } else /* ordinary cell range */ {
-        if (range.top() == range.bottom()) /* only one row */{
-            d->mainWidget.m_sortVertical->setEnabled(false);
+    } else /* both directions are possible */ {
+        const bool hasColumnHeader = d->hasHeader(Qt::Horizontal);
+        const bool hasRowHeader = d->hasHeader(Qt::Vertical);
+
+        if (d->rect.width() >= d->rect.height()) {
             d->mainWidget.m_sortHorizontal->setChecked(true);
-        } else if (range.left() == range.right()) /* only one column */ {
-            d->mainWidget.m_sortHorizontal->setEnabled(false);
-            d->mainWidget.m_sortVertical->setChecked(true);
+            d->mainWidget.m_useHeader->setChecked(hasRowHeader);
         } else {
-            const bool hasColumnHeader = d->hasHeader(region, Qt::Horizontal);
-            const bool hasRowHeader = d->hasHeader(region, Qt::Vertical);
-
-#if 0 // TODO
-            if (hasColumnHeader && range.top() + 1 == range.bottom()) /* only one data row */ {
-                d->mainWidget.m_sortVertical->setEnabled(false);
-            }
-            if (hasRowHeader && range.left() + 1 == range.right()) /* only one data column */ {
-                d->mainWidget.m_sortHorizontal->setEnabled(false);
-            }
-#endif
-
-            if (range.width() >= range.height()) {
-                d->mainWidget.m_sortHorizontal->setChecked(true);
-                d->mainWidget.m_useHeader->setChecked(hasRowHeader);
-            } else {
-                d->mainWidget.m_sortVertical->setChecked(true);
-                d->mainWidget.m_useHeader->setChecked(hasColumnHeader);
-            }
-        }
-
-        // create column indices, if data can be sorted vertically
-        if (d->mainWidget.m_sortVertical->isEnabled()) {
-            d->createAvailableIndices(region, Qt::Horizontal);
-        }
-        // create row indices, if data can be sorted horizontally
-        if (d->mainWidget.m_sortHorizontal->isEnabled()) {
-            d->createAvailableIndices(region, Qt::Vertical);
+            d->mainWidget.m_sortVertical->setChecked(true);
+            d->mainWidget.m_useHeader->setChecked(hasColumnHeader);
         }
     }
+    // create column indices, if data can be sorted vertically
+    if (d->mainWidget.m_sortVertical->isEnabled())
+        d->createAvailableIndices(Qt::Horizontal);
+    // create row indices, if data can be sorted horizontally
+    if (d->mainWidget.m_sortHorizontal->isEnabled())
+        d->createAvailableIndices(Qt::Vertical);
 
     // Initialize the criteria.
     slotButtonClicked(Reset);
 }
+
+bool SortDialog::sortRows() const {
+    return d->mainWidget.m_sortVertical->isChecked();
+}
+
+bool SortDialog::skipFirst() const {
+    return d->mainWidget.m_useHeader->isChecked();
+}
+
+bool SortDialog::copyFormat() const {
+    return d->detailsWidget.m_copyLayout->isChecked();
+}
+
+bool SortDialog::isHorizontal() const {
+    return d->mainWidget.m_sortHorizontal->isChecked();
+}
+
+bool SortDialog::useCustomList() const
+{
+    return d->detailsWidget.m_useCustomLists->isChecked();
+}
+
+QStringList SortDialog::customList() const
+{
+    QString txt = d->detailsWidget.m_customList->currentText();
+    QStringList clist = txt.split(",");
+    QStringList res;
+    for (QString chunk : clist)
+        res.append(chunk.trimmed());
+    return res;
+}
+
+int SortDialog::criterionCount() const {
+    QTableWidget *const table = d->mainWidget.m_tableWidget;
+    return table->rowCount();
+}
+
+int SortDialog::criterionIndex(int row) const {
+    QTableWidget *const table = d->mainWidget.m_tableWidget;
+    Q_ASSERT ((row >= 0) && (row < table->rowCount()));
+
+    return table->item(row, 0)->data(Qt::UserRole).toInt();
+}
+
+Qt::SortOrder SortDialog::criterionSortOrder(int row) const {
+    QTableWidget *const table = d->mainWidget.m_tableWidget;
+    Q_ASSERT ((row >= 0) && (row < table->rowCount()));
+
+    return table->item(row, 1)->data(Qt::UserRole).value<Qt::SortOrder>();
+}
+
+Qt::CaseSensitivity SortDialog::criterionCaseSensitivity(int row) const {
+    QTableWidget *const table = d->mainWidget.m_tableWidget;
+    Q_ASSERT ((row >= 0) && (row < table->rowCount()));
+
+    return table->item(row, 2)->data(Qt::UserRole).value<Qt::CaseSensitivity>();
+}
+
+
 
 void SortDialog::orientationChanged(bool horizontal)
 {
     // Take the old, i.e. the reverse orientation.
     const Qt::Orientation orientation = horizontal ? Qt::Horizontal : Qt::Vertical;
     d->initCriteria(orientation, this);
-}
-
-void SortDialog::accept()
-{
-    Sheet *const sheet = d->selection->activeSheet();
-
-    SortManipulator *const command = new SortManipulator();
-    command->setSheet(sheet);
-
-    // set parameters
-    command->setSortRows(d->mainWidget.m_sortVertical->isChecked());
-    command->setSkipFirst(d->mainWidget.m_useHeader->isChecked());
-    command->setCopyFormat(d->detailsWidget.m_copyLayout->isChecked());
-
-    const bool horizontal = d->mainWidget.m_sortHorizontal->isChecked();
-    const QRect range = d->selection->lastRange();
-    const int offset = horizontal ? range.top() : range.left();
-
-    // retrieve sorting order
-    QTableWidget *const table = d->mainWidget.m_tableWidget;
-    for (int i = 0; i < table->rowCount(); ++i) {
-        const int index = table->item(i, 0)->data(Qt::UserRole).toInt();
-        const Qt::SortOrder order = table->item(i, 1)->data(Qt::UserRole).value<Qt::SortOrder>();
-        const Qt::CaseSensitivity caseSensitivity = table->item(i, 2)->data(Qt::UserRole).value<Qt::CaseSensitivity>();
-        command->addCriterion(index - offset, order, caseSensitivity);
-    }
-
-    if (d->detailsWidget.m_useCustomLists->isChecked()) {
-        // add custom list if any
-        QStringList clist;
-        QString list = d->detailsWidget.m_customList->currentText();
-        QString tmp;
-        int l = list.length();
-        for (int i = 0; i < l; ++i) {
-            if (list[i] == ',') {
-                clist.append(tmp.trimmed());
-                tmp.clear();
-            } else
-                tmp += list[i];
-        }
-
-        command->setUseCustomList(true);
-        command->setCustomList(clist);
-    }
-    command->add(d->selection->lastRange());
-    command->execute(d->selection->canvas());
-
-    d->selection->emitModified();
-    KoDialog::accept();
 }
 
 void SortDialog::slotButtonClicked(int button)

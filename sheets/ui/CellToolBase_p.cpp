@@ -140,9 +140,6 @@ void CellToolBase::Private::updateActions(const Cell& cell)
 
         const bool simpleSelection = q->selection()->isSingular() || colSelected || rowSelected;
         q->action("sheetFormat")->setEnabled(!simpleSelection);
-        q->action("sort")->setEnabled(!simpleSelection);
-        q->action("sortDec")->setEnabled(!simpleSelection);
-        q->action("sortInc")->setEnabled(!simpleSelection);
         q->action("mergeCells")->setEnabled(!simpleSelection);
         q->action("mergeCellsHorizontal")->setEnabled(!simpleSelection);
         q->action("mergeCellsVertical")->setEnabled(!simpleSelection);

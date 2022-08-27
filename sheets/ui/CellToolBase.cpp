@@ -57,7 +57,6 @@
 #include "commands/PasteCommand.h"
 #include "commands/PrecisionCommand.h"
 #include "commands/RowColumnManipulators.h"
-#include "commands/SortManipulator.h"
 #include "commands/SpellCheckCommand.h"
 #include "commands/StyleCommand.h"
 
@@ -81,7 +80,6 @@
 #include "dialogs/PasteInsertDialog.h"
 #include "dialogs/Resize2Dialog.h"
 #include "dialogs/ShowColRowDialog.h"
-#include "dialogs/SortDialog.h"
 #include "dialogs/SpecialPasteDialog.h"
 #include "dialogs/StyleManagerDialog.h"
 #include "dialogs/SubtotalDialog.h"
@@ -590,21 +588,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     connect(action, &QAction::triggered, this, &CellToolBase::clearHyperlink);
 
     // -- sorting/filtering action --
-
-    action = new QAction(i18n("&Sort..."), this);
-    addAction("sort", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::sort);
-    action->setToolTip(i18n("Sort a group of cells"));
-
-    action = new QAction(koIcon("view-sort-descending"), i18n("Sort &Decreasing"), this);
-    addAction("sortDec", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::sortDec);
-    action->setToolTip(i18n("Sort a group of cells in decreasing(last to first) order"));
-
-    action = new QAction(koIcon("view-sort-ascending"), i18n("Sort &Increasing"), this);
-    addAction("sortInc", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::sortInc);
-    action->setToolTip(i18n("Sort a group of cells in ascending(first to last) order"));
 
     action = new QAction(koIcon("view-filter"), i18n("&Auto-Filter"), this);
     addAction("autoFilter", action);
@@ -2539,62 +2522,6 @@ void CellToolBase::clearHyperlink()
     command->add(*selection());
     command->execute(canvas());
     canvas()->addCommand(command);
-
-    selection()->emitModified();
-}
-
-void CellToolBase::sort()
-{
-    if (selection()->isSingular()) {
-        KMessageBox::error(canvas()->canvasWidget(), i18n("You must select multiple cells."));
-        return;
-    }
-
-    QPointer<SortDialog> dialog = new SortDialog(canvas()->canvasWidget(), selection());
-    dialog->exec();
-    delete dialog;
-}
-
-void CellToolBase::sortInc()
-{
-    if (selection()->isSingular()) {
-        KMessageBox::error(canvas()->canvasWidget(), i18n("You must select multiple cells."));
-        return;
-    }
-
-    SortManipulator* command = new SortManipulator();
-    command->setSheet(selection()->activeSheet());
-
-    // Entire row(s) selected ? Or just one row ? Sort by columns if yes.
-    QRect range = selection()->lastRange();
-    bool sortCols = selection()->isRowSelected();
-    sortCols = sortCols || (range.top() == range.bottom());
-    command->setSortRows(!sortCols);
-    command->addCriterion(0, Qt::AscendingOrder, Qt::CaseInsensitive);
-    command->add(*selection());
-    command->execute(canvas());
-
-    selection()->emitModified();
-}
-
-void CellToolBase::sortDec()
-{
-    if (selection()->isSingular()) {
-        KMessageBox::error(canvas()->canvasWidget(), i18n("You must select multiple cells."));
-        return;
-    }
-
-    SortManipulator* command = new SortManipulator();
-    command->setSheet(selection()->activeSheet());
-
-    // Entire row(s) selected ? Or just one row ? Sort by rows if yes.
-    QRect range = selection()->lastRange();
-    bool sortCols = selection()->isRowSelected();
-    sortCols = sortCols || (range.top() == range.bottom());
-    command->setSortRows(!sortCols);
-    command->addCriterion(0, Qt::DescendingOrder, Qt::CaseInsensitive);
-    command->add(*selection());
-    command->execute(canvas());
 
     selection()->emitModified();
 }

@@ -12,7 +12,7 @@
 #include "engine/Region.h"
 #include "core/Sheet.h"
 #include "ui/Selection.h"
-#include "ui/commands/SortManipulator.h"
+#include "ui/actions/Sort.h"
 
 using namespace Calligra::Sheets;
 
