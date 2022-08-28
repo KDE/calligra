@@ -291,6 +291,7 @@ void SortManipulator::sort(Element *element)
 {
     // we'll use insert-sort to sort
     QRect range = element->rect();
+    range = element->sheet()->cellStorage()->trimToUsedArea(range);
     int max = m_rows ? range.bottom() : range.right();
     int min = m_rows ? range.top() : range.left();
     int count = max - min + 1;

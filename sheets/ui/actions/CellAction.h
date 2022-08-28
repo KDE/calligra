@@ -58,7 +58,7 @@ protected:
     CellToolBase *m_tool;
     QString m_name;
     QAction *m_action;
-    /** Shouuld we close the editor when triggering this action? */
+    /** Should we close the editor when triggering this action? */
     bool m_closeEditor;
 };
 

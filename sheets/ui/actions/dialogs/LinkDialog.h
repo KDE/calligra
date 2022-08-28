@@ -18,7 +18,6 @@ namespace Calligra
 {
 namespace Sheets
 {
-class Selection;
 
 /**
  * \ingroup UI
@@ -28,7 +27,7 @@ class LinkDialog : public KPageDialog
 {
     Q_OBJECT
 public:
-    explicit LinkDialog(QWidget* parent, Selection* selection);
+    explicit LinkDialog(QWidget* parent, const QList<QString> &links);
     ~LinkDialog() override;
     QString text() const;
     QString link() const;

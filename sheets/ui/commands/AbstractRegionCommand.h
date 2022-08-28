@@ -81,10 +81,10 @@ public:
 
 protected:
     /**
-     * Processes \p element , a Region::Point or a Region::Range .
+     * Processes \p element .
      * Invoked by performCommands() .
      */
-    virtual bool process(Element*) {
+    virtual bool process(Element *) {
         return true;
     }
 
@@ -103,7 +103,7 @@ protected:
     }
 
     /**
-     * Processes the region. Calls process(Element*).
+     * Processes the region. Calls process(rect, sheet).
      */
     virtual bool performCommands();
 

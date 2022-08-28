@@ -8,6 +8,7 @@
 
 #include "InsertSeries.h"
 #include "InsertSpecialChar.h"
+#include "Link.h"
 #include "Sort.h"
 #include "Validity.h"
 
@@ -31,6 +32,8 @@ void Actions::createActions()
 {
     addAction(new InsertSpecialChar(this));
     addAction(new InsertSeries(this));
+    addAction(new Link(this));
+    addAction(new ClearLink(this));
     addAction(new Sort(this));
     addAction(new SortInc(this));
     addAction(new SortDesc(this));

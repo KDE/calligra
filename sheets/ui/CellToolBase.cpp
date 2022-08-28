@@ -51,7 +51,6 @@
 #include "commands/DataManipulators.h"
 #include "commands/DeleteCommand.h"
 #include "commands/IndentationCommand.h"
-#include "commands/LinkCommand.h"
 #include "commands/MergeCommand.h"
 #include "commands/PageBreakCommand.h"
 #include "commands/PasteCommand.h"
@@ -74,7 +73,6 @@
 #include "dialogs/GotoDialog.h"
 #include "dialogs/InsertDialog.h"
 #include "dialogs/LayoutDialog.h"
-#include "dialogs/LinkDialog.h"
 #include "dialogs/ListDialog.h"
 #include "dialogs/NamedAreaDialog.h"
 #include "dialogs/PasteInsertDialog.h"
@@ -575,17 +573,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     action->setToolTip(i18n("Remove the conditional cell styles"));
     addAction("clearConditional", action);
     connect(action, &QAction::triggered, this, &CellToolBase::clearConditionalStyles);
-
-    action = new QAction(koIcon("insert-link"), i18n("&Link..."), this);
-    addAction("insertHyperlink", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::insertHyperlink);
-    action->setToolTip(i18n("Insert an Internet hyperlink"));
-
-    action = new QAction(i18n("Link"), this);
-    action->setIconText(i18n("Remove Link"));
-    action->setToolTip(i18n("Remove a link"));
-    addAction("clearHyperlink", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::clearHyperlink);
 
     // -- sorting/filtering action --
 
@@ -2481,49 +2468,6 @@ void CellToolBase::clearConditionalStyles()
     command->setConditionList(QLinkedList<Conditional>());
     command->add(*selection());
     command->execute(canvas());
-}
-
-void CellToolBase::insertHyperlink()
-{
-    selection()->emitCloseEditor(true);
-
-    QPoint marker(selection()->marker());
-    Cell cell(selection()->activeSheet(), marker);
-
-    QPointer<LinkDialog> dialog = new LinkDialog(canvas()->canvasWidget(), selection());
-    dialog->setWindowTitle(i18n("Insert Link"));
-    if (!cell.isNull()) {
-        dialog->setText(cell.userInput());
-        if (!cell.link().isEmpty()) {
-            dialog->setWindowTitle(i18n("Edit Link"));
-            dialog->setLink(cell.link());
-        }
-    }
-
-    if (dialog->exec() == KoDialog::Accepted) {
-        QString text = dialog->text();
-        QString link = dialog->link();
-        if (text.isEmpty()) text = link;
-        LinkCommand* command = new LinkCommand(dialog->text(), dialog->link());
-        command->setSheet(selection()->activeSheet());
-        command->add(*selection());
-        command->execute(canvas());
-
-        //refresh editWidget
-        selection()->emitModified();
-    }
-    delete dialog;
-}
-
-void CellToolBase::clearHyperlink()
-{
-    LinkCommand* command = new LinkCommand(QString(), QString());
-    command->setSheet(selection()->activeSheet());
-    command->add(*selection());
-    command->execute(canvas());
-    canvas()->addCommand(command);
-
-    selection()->emitModified();
 }
 
 void CellToolBase::autoFilter()

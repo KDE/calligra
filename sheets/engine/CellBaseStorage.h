@@ -151,6 +151,11 @@ public:
      */
     virtual int rows(bool includeStyles = true) const;
 
+    /**
+     * Check if the provided rectangle spans an unused area. If so, cut off those parts.
+     */
+    QRect trimToUsedArea(const QRect &r) const;
+
 
     /**
      * Insert \p number columns at \p position .

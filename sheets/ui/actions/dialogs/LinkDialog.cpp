@@ -11,17 +11,11 @@
 
 #include "LinkDialog.h"
 
-#include "engine/CellBase.h"
-#include "engine/MapBase.h"
-#include "engine/NamedAreaManager.h"
-#include "core/Sheet.h"
-#include "../Selection.h"
-
-#include <KoIcon.h>
-
 #include <QLabel>
 #include <QUrlQuery>
 #include <QVBoxLayout>
+
+#include <KoIcon.h>
 
 #include <kcombobox.h>
 #include <kdesktopfile.h>
@@ -54,7 +48,7 @@ public:
     KPageWidgetItem* p1, *p2, *p3, *p4;
 };
 
-LinkDialog::LinkDialog(QWidget* parent, Selection* selection)
+LinkDialog::LinkDialog(QWidget* parent, const QList<QString> &links)
         : KPageDialog(parent)
         , d(new Private)
 {
@@ -146,17 +140,8 @@ LinkDialog::LinkDialog(QWidget* parent, Selection* selection)
     cLayout->addWidget(new QLabel(i18n("Cell or Named Area:"), d->cellPage));
     d->cellLink = new KComboBox(d->cellPage);
     d->cellLink->setEditable(true);
+    d->cellLink->addItems(links);
 
-    Sheet *sheet = selection->activeSheet();
-    if (sheet && selection) {
-        CellBase cell(sheet, selection->cursor());
-        d->cellLink->addItem(cell.fullName());
-    }
-
-    const NamedAreaManager *manager = selection->activeSheet()->map()->namedAreaManager();
-    d->cellLink->addItems(manager->areaNames());
-
-    d->cellLink->setItemText(d->cellLink->currentIndex(), "");
     cLayout->addWidget(d->cellLink);
     cLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
     connect(d->cellText, &QLineEdit::textChanged, this,

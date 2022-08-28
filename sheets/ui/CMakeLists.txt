@@ -4,12 +4,14 @@ set (actions_DIR_SRCS
     actions/Actions.cpp
     actions/InsertSeries.cpp
     actions/InsertSpecialChar.cpp
+    actions/Link.cpp
     actions/Sort.cpp
     actions/Validity.cpp
     )
 
 set (action_dialogs_DIR_SRCS
     actions/dialogs/CharacterSelectDialog.cpp
+    actions/dialogs/LinkDialog.cpp
     actions/dialogs/SeriesDialog.cpp
     actions/dialogs/SortDialog.cpp
     actions/dialogs/ValidityDialog.cpp
@@ -33,7 +35,6 @@ set (commands_DIR_SRCS
     commands/CSVDataCommand.cpp
     commands/DeleteCommand.cpp
     commands/IndentationCommand.cpp
-    commands/LinkCommand.cpp
     commands/MergeCommand.cpp
     commands/NamedAreaCommand.cpp
     commands/PageBreakCommand.cpp
@@ -63,7 +64,6 @@ set (dialogs_DIR_SRCS
     dialogs/GotoDialog.cpp
     dialogs/InsertDialog.cpp
     dialogs/LayoutDialog.cpp
-    dialogs/LinkDialog.cpp
     dialogs/ListDialog.cpp
     dialogs/NamedAreaDialog.cpp
     dialogs/PasteInsertDialog.cpp

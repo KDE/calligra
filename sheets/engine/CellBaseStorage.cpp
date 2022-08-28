@@ -633,5 +633,13 @@ int CellBaseStorage::rows(bool /*includeStyles*/) const
     return max;
 }
 
+QRect CellBaseStorage::trimToUsedArea(const QRect &rect) const
+{
+    int c = columns();
+    int r = rows();
+    if ((rect.right() <= c) && (rect.bottom() <= r)) return rect;   // all good
+    return rect.intersected(QRect(1, 1, c, r));
+    
+}
 
 

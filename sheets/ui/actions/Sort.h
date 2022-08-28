@@ -11,8 +11,6 @@
 #include "CellAction.h"
 
 #include "ui/commands/DataManipulators.h"
-#include "engine/Validity.h"
-#include "core/Cell.h"
 
 
 namespace Calligra

@@ -227,8 +227,6 @@ protected Q_SLOTS:
     void clearComment();
     void conditional();
     void clearConditionalStyles();
-    void insertHyperlink();
-    void clearHyperlink();
     // -- sorting/filtering action --
     void autoFilter();
     // -- fill actions --
