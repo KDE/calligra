@@ -75,7 +75,7 @@ public:
     void paste() override { KTextEdit::paste(); }
     QString toPlainText() const override { return KTextEdit::toPlainText(); }
 Q_SIGNALS:
-    void textChanged(const QString &text);
+    void textModified(const QString &text);
 
 public Q_SLOTS:
     void setText(const QString& text, int cursorPos = -1) override;

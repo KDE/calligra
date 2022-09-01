@@ -1167,9 +1167,9 @@ bool CellToolBase::createEditor(bool clear, bool focus, bool captureArrows)
                 d->cellEditor, &CellEditor::permuteFixation);
 
         if(d->externalEditor) {
-            connect(d->cellEditor, QOverload<const QString &>::of(&CellEditor::textChanged),
+            connect(d->cellEditor, &CellEditor::textModified,
                     d->externalEditor, &ExternalEditor::setText);
-            connect(d->externalEditor, QOverload<const QString &>::of(&ExternalEditor::textChanged),
+            connect(d->externalEditor, &ExternalEditor::textModified,
                     d->cellEditor, [this] (const QString &text) {
                         d->cellEditor->setText(text);
                     });

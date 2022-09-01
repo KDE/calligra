@@ -49,7 +49,7 @@ ExternalEditor::ExternalEditor(QWidget *parent)
     document()->setDocumentMargin(1);
     setMinimumHeight(fontMetrics().height() + 2 * frameWidth() + 1);
 
-    connect(this, &ExternalEditor::textChanged, this, &ExternalEditor::slotTextChanged);
+    connect(this, &QTextEdit::textChanged, this, &ExternalEditor::slotTextChanged);
     connect(this, &QTextEdit::cursorPositionChanged,
             this, &ExternalEditor::slotCursorPositionChanged);
 
@@ -173,7 +173,7 @@ void ExternalEditor::focusOutEvent(QFocusEvent* event)
 void ExternalEditor::slotTextChanged()
 {
     if (!hasFocus()) return;  // only report change if we have focus
-    emit textChanged(toPlainText());
+    emit textModified(toPlainText());
     // Update the cursor position again, because this slot is invoked after
     // slotCursorPositionChanged().
     if (d->cellTool->editor()) {

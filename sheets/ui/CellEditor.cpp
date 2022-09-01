@@ -474,7 +474,7 @@ void CellEditor::slotTextChanged()
 
     // update the external editor, but only if we have focus
     if (hasFocus()) {
-        emit textChanged(text);
+        emit textModified(text);
     }
 
     // Enable/disable the reference selection.
@@ -574,7 +574,7 @@ void CellEditor::selectionChanged()
 
     // Always emit, because this editor may be hidden or does not have focus,
     // but the external one needs an update.
-    emit textChanged(toPlainText());
+    emit textModified(toPlainText());
 }
 
 void CellEditor::keyPressEvent(QKeyEvent *event)

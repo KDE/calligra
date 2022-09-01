@@ -39,7 +39,7 @@ public:
     QAction* applyAction() const;
     QAction* cancelAction() const;
 Q_SIGNALS:
-    void textChanged(const QString &text);
+    void textModified(const QString &text);
 
 public Q_SLOTS:
     void applyChanges();
