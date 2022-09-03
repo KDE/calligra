@@ -176,26 +176,14 @@ public:
     bool isAllSelected() const;
 
     /**
-     * @return a set of column numbers, for those columns, that are selected
+     * @return whether at least one cell from this row is included.
      */
-    QSet<int> columnsSelected() const;
+    bool isRowAffected(int row) const;
 
     /**
-     * @return a set of row numbers, for those rows, that are selected
+     * @return whether at least one cell from this column is included.
      */
-    QSet<int> rowsSelected() const;
-
-    /**
-     * @return a set of column numbers, for those columns, that have at least
-     * one cell selected
-     */
-    QSet<int> columnsAffected() const;
-
-    /**
-     * @return a set of row numbers, for those rows, that have at least
-     * one cell selected
-     */
-    QSet<int> rowsAffected() const;
+    bool isColumnAffected(int col) const;
 
     /**
      * @param point the point's location

@@ -2,6 +2,7 @@
 set (actions_DIR_SRCS
     actions/CellAction.cpp
     actions/Actions.cpp
+    actions/AdjustRowCol.cpp
     actions/InsertSeries.cpp
     actions/InsertSpecialChar.cpp
     actions/Link.cpp
@@ -12,7 +13,9 @@ set (actions_DIR_SRCS
 set (action_dialogs_DIR_SRCS
     actions/dialogs/CharacterSelectDialog.cpp
     actions/dialogs/LinkDialog.cpp
+    actions/dialogs/Resize2Dialog.cpp
     actions/dialogs/SeriesDialog.cpp
+    actions/dialogs/ShowColRowDialog.cpp
     actions/dialogs/SortDialog.cpp
     actions/dialogs/ValidityDialog.cpp
     )
@@ -67,9 +70,7 @@ set (dialogs_DIR_SRCS
     dialogs/ListDialog.cpp
     dialogs/NamedAreaDialog.cpp
     dialogs/PasteInsertDialog.cpp
-    dialogs/Resize2Dialog.cpp
     dialogs/ShowDialog.cpp
-    dialogs/ShowColRowDialog.cpp
     dialogs/SpecialPasteDialog.cpp
     dialogs/StyleManagerDialog.cpp
     dialogs/SubtotalDialog.cpp

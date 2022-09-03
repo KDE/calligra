@@ -40,6 +40,7 @@
 // ui
 #include "CellEditor.h"
 #include "ExternalEditor.h"
+#include "actions/Actions.h"
 #include "commands/StyleCommand.h"
 
 // Calligra
@@ -124,17 +125,6 @@ void CellToolBase::Private::updateActions(const Cell& cell)
     if (!q->selection()->activeSheet()->isProtected()) {
         const bool colSelected = q->selection()->isColumnSelected();
         const bool rowSelected = q->selection()->isRowSelected();
-        // -- column & row actions --
-        q->action("resizeCol")->setEnabled(!rowSelected);
-        q->action("insertColumn")->setEnabled(!rowSelected);
-        q->action("deleteColumn")->setEnabled(!rowSelected);
-        q->action("hideColumn")->setEnabled(!rowSelected);
-        q->action("equalizeCol")->setEnabled(!rowSelected);
-        q->action("resizeRow")->setEnabled(!colSelected);
-        q->action("deleteRow")->setEnabled(!colSelected);
-        q->action("insertRow")->setEnabled(!colSelected);
-        q->action("hideRow")->setEnabled(!colSelected);
-        q->action("equalizeRow")->setEnabled(!colSelected);
         // -- data insert actions --
         q->action("textToColumns")->setEnabled(!rowSelected);
 
@@ -1111,113 +1101,60 @@ void CellToolBase::Private::retrieveMarkerInfo(const QRect &cellRange, const QRe
 
 QList<QAction*> CellToolBase::Private::popupActionList() const
 {
-    QList<QAction*> actions;
+    QList<QAction*> popupActions;
     const Cell cell = Cell(q->selection()->activeSheet(), q->selection()->marker());
     const bool isProtected = !q->selection()->activeSheet()->fullMap()->isReadWrite() ||
                              (q->selection()->activeSheet()->isProtected() &&
                               !(cell.style().notProtected() && q->selection()->isSingular()));
     if (!isProtected) {
-        actions.append(q->action("cellStyle"));
-        actions.append(popupMenuActions["separator1"]);
-        actions.append(q->action("cut"));
+        popupActions.append(q->action("cellStyle"));
+        popupActions.append(popupMenuActions["separator1"]);
+        popupActions.append(q->action("cut"));
     }
-    actions.append(q->action("copy"));
+    popupActions.append(q->action("copy"));
     if (!isProtected) {
-        actions.append(q->action("paste"));
-        actions.append(q->action("specialPaste"));
-        actions.append(q->action("pasteWithInsertion"));
-        actions.append(popupMenuActions["separator2"]);
-        actions.append(q->action("clearAll"));
-        actions.append(q->action("adjust"));
-        actions.append(q->action("setDefaultStyle"));
-        actions.append(q->action("setAreaName"));
+        popupActions.append(q->action("paste"));
+        popupActions.append(q->action("specialPaste"));
+        popupActions.append(q->action("pasteWithInsertion"));
+        popupActions.append(popupMenuActions["separator2"]);
+        popupActions.append(q->action("clearAll"));
+        popupActions.append(q->action("adjust"));
+        popupActions.append(q->action("setDefaultStyle"));
+        popupActions.append(q->action("setAreaName"));
 
         if (!q->selection()->isColumnOrRowSelected()) {
-            actions.append(popupMenuActions["separator3"]);
-            actions.append(popupMenuActions["insertCell"]);
-            actions.append(popupMenuActions["deleteCell"]);
+            popupActions.append(popupMenuActions["separator3"]);
+            popupActions.append(popupMenuActions["insertCell"]);
+            popupActions.append(popupMenuActions["deleteCell"]);
         } else if (q->selection()->isColumnSelected()) {
-            actions.append(q->action("resizeCol"));
-            actions.append(popupMenuActions["adjustColumn"]);
-            actions.append(popupMenuActions["separator4"]);
-            actions.append(popupMenuActions["insertColumn"]);
-            actions.append(popupMenuActions["deleteColumn"]);
-            actions.append(q->action("hideColumn"));
-
-            q->action("showSelColumns")->setEnabled(false);
-            const ColFormatStorage *columnFormats = q->selection()->activeSheet()->columnFormats();
-            Region::ConstIterator endOfList = q->selection()->constEnd();
-            for (Region::ConstIterator it = q->selection()->constBegin(); it != endOfList; ++it) {
-                QRect range = (*it)->rect();
-                int col;
-                for (col = range.left(); col < range.right(); ++col) {
-                    if (columnFormats->isHidden(col)) {
-                        q->action("showSelColumns")->setEnabled(true);
-                        actions.append(q->action("showSelColumns"));
-                        break;
-                    }
-                }
-                if (range.left() > 1 && col == range.right()) {
-                    bool allHidden = true;
-                    for (col = 1; col < range.left(); ++col) {
-                        allHidden &= columnFormats->isHidden(col);
-                    }
-                    if (allHidden) {
-                        q->action("showSelColumns")->setEnabled(true);
-                        actions.append(q->action("showSelColumns"));
-                        break;
-                    }
-                } else {
-                    break;
-                }
-            }
+            popupActions.append(actions->action("resizeCol"));
+            popupActions.append(actions->action("adjustColumn"));
+            popupActions.append(popupMenuActions["separator4"]);
+            popupActions.append(actions->action("insertColumn"));
+            popupActions.append(actions->action("deleteColumn"));
+            popupActions.append(actions->action("hideColumn"));
+            popupActions.append(actions->action("showSelColumns"));
         } else if (q->selection()->isRowSelected()) {
-            actions.append(q->action("resizeRow"));
-            actions.append(popupMenuActions["adjustRow"]);
-            actions.append(popupMenuActions["separator5"]);
-            actions.append(popupMenuActions["insertRow"]);
-            actions.append(popupMenuActions["deleteRow"]);
-            actions.append(q->action("hideRow"));
-
-            q->action("showSelRows")->setEnabled(false);
-            Region::ConstIterator endOfList = q->selection()->constEnd();
-            for (Region::ConstIterator it = q->selection()->constBegin(); it != endOfList; ++it) {
-                QRect range = (*it)->rect();
-                int row;
-                for (row = range.top(); row < range.bottom(); ++row) {
-                    if (q->selection()->activeSheet()->rowFormats()->isHidden(row)) {
-                        q->action("showSelRows")->setEnabled(true);
-                        actions.append(q->action("showSelRows"));
-                        break;
-                    }
-                }
-                if (range.top() > 1 && row == range.bottom()) {
-                    bool allHidden = true;
-                    for (row = 1; row < range.top(); ++row) {
-                        allHidden &= q->selection()->activeSheet()->rowFormats()->isHidden(row);
-                    }
-                    if (allHidden) {
-                        q->action("showSelRows")->setEnabled(true);
-                        actions.append(q->action("showSelRows"));
-                        break;
-                    }
-                } else {
-                    break;
-                }
-            }
+            popupActions.append(actions->action("resizeRow"));
+            popupActions.append(actions->action("adjustRow"));
+            popupActions.append(popupMenuActions["separator5"]);
+            popupActions.append(actions->action("insertRow"));
+            popupActions.append(actions->action("deleteRow"));
+            popupActions.append(actions->action("hideRow"));
+            popupActions.append(actions->action("showSelRows"));
         }
-        actions.append(popupMenuActions["separator6"]);
-        actions.append(popupMenuActions["comment"]);
+        popupActions.append(popupMenuActions["separator6"]);
+        popupActions.append(popupMenuActions["comment"]);
         if (!cell.comment().isEmpty()) {
-            actions.append(popupMenuActions["clearComment"]);
+            popupActions.append(popupMenuActions["clearComment"]);
         }
 
         if (testListChoose(q->selection())) {
-            actions.append(popupMenuActions["separator7"]);
-            actions.append(popupMenuActions["listChoose"]);
+            popupActions.append(popupMenuActions["separator7"]);
+            popupActions.append(popupMenuActions["listChoose"]);
         }
     }
-    return actions;
+    return popupActions;
 }
 
 void CellToolBase::Private::createPopupMenuActions()
@@ -1237,30 +1174,6 @@ void CellToolBase::Private::createPopupMenuActions()
     action = new QAction(koIcon("removecell"), i18n("Delete Cells..."), q);
     connect(action, &QAction::triggered, q, &CellToolBase::deleteCells);
     popupMenuActions.insert("deleteCell", action);
-
-    action = new QAction(koIcon("adjustcol"), i18n("Adjust Column"), q);
-    connect(action, &QAction::triggered, q, &CellToolBase::adjustColumn);
-    popupMenuActions.insert("adjustColumn", action);
-
-    action = new QAction(koIcon("edit-table-insert-column-left"), i18n("Insert Columns"), q);
-    connect(action, &QAction::triggered, q, &CellToolBase::insertColumn);
-    popupMenuActions.insert("insertColumn", action);
-
-    action = new QAction(koIcon("edit-table-delete-column"), i18n("Delete Columns"), q);
-    connect(action, &QAction::triggered, q, &CellToolBase::deleteColumn);
-    popupMenuActions.insert("deleteColumn", action);
-
-    action = new QAction(koIcon("adjustrow"), i18n("Adjust Row"), q);
-    connect(action, &QAction::triggered, q, &CellToolBase::adjustRow);
-    popupMenuActions.insert("adjustRow", action);
-
-    action = new QAction(koIcon("edit-table-insert-row-above"), i18n("Insert Rows"), q);
-    connect(action, &QAction::triggered, q, &CellToolBase::insertRow);
-    popupMenuActions.insert("insertRow", action);
-
-    action = new QAction(koIcon("edit-table-delete-row"), i18n("Delete Rows"), q);
-    connect(action, &QAction::triggered, q, &CellToolBase::deleteRow);
-    popupMenuActions.insert("deleteRow", action);
 
     action = new QAction(i18n("Selection List..."), q);
     connect(action, &QAction::triggered, q, &CellToolBase::listChoosePopupMenu);

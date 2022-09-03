@@ -37,6 +37,8 @@ public:
 
     CellToolBase *tool() { return m_tool; }
     void updateOnChange(bool readWrite, Selection *selection, const Cell &activeCell);
+    CellAction *cellAction(const QString &name);
+    QAction *action(const QString &name);
 
 protected:
     void createActions();

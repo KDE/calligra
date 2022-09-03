@@ -392,21 +392,22 @@ void RowHeader::paint(QPainter* painter, const QRectF& painterRect)
     const KoViewConverter *converter = m_pCanvas->zoomHandler();
     const qreal width = this->width() - 1;
 
-    QSet<int> selectedRows;
-    QSet<int> affectedRows;
-    if (!m_pCanvas->selection()->referenceSelectionMode() && m_cellToolIsActive) {
-        selectedRows = m_pCanvas->selection()->rowsSelected();
-        affectedRows = m_pCanvas->selection()->rowsAffected();
-    }
+    bool useHighlight = (!m_pCanvas->selection()->referenceSelectionMode() && m_cellToolIsActive);
     // Loop through the rows, until we are out of range
     while (yPos <= paintRect.bottom() && y <= KS_rowMax) {
-        const bool selected = (selectedRows.contains(y));
-        const bool highlighted = (!selected && affectedRows.contains(y));
 
         if (sheet->rowFormats()->isHiddenOrFiltered(y)) {
             ++y;
             continue;
         }
+
+        bool selected = false;
+        bool highlighted = false;
+        if (useHighlight) {
+            selected = m_pCanvas->selection()->isRowSelected(y);
+            highlighted = m_pCanvas->selection()->isRowAffected(y);
+        }
+
         const qreal rawHeight = sheet->rowFormats()->rowHeight(y);
         const qreal height = converter->documentToViewY(rawHeight);
         const QRectF rect(0, converter->documentToViewY(yPos), width, height);
@@ -951,12 +952,7 @@ void ColumnHeader::paint(QPainter* painter, const QRectF& painterRect)
     const KoViewConverter *converter = m_pCanvas->zoomHandler();
     const qreal height = this->height() - 1;
 
-    QSet<int> selectedColumns;
-    QSet<int> affectedColumns;
-    if (!m_pCanvas->selection()->referenceSelectionMode() && m_cellToolIsActive) {
-        selectedColumns = m_pCanvas->selection()->columnsSelected();
-        affectedColumns = m_pCanvas->selection()->columnsAffected();
-    }
+    bool useHighlight = (!m_pCanvas->selection()->referenceSelectionMode() && m_cellToolIsActive);
 
     int deltaX = 1;
     if (sheet->layoutDirection() == Qt::RightToLeft) {
@@ -969,13 +965,19 @@ void ColumnHeader::paint(QPainter* painter, const QRectF& painterRect)
 
     //Loop through the columns, until we are out of range
     while (xPos <= paintRect.right() && x <= KS_colMax) {
-        bool selected = (selectedColumns.contains(x));
-        bool highlighted = (!selected && affectedColumns.contains(x));
 
         if (sheet->columnFormats()->isHiddenOrFiltered(x)) {
             ++x;
             continue;
         }
+
+        bool selected = false;
+        bool highlighted = false;
+        if (useHighlight) {
+            selected = m_pCanvas->selection()->isColumnSelected(x);
+            highlighted = m_pCanvas->selection()->isColumnAffected(x);
+        }
+
         const qreal width = converter->documentToViewX(sheet->columnFormats()->colWidth(x));
         const QRectF rect(converter->documentToViewX(xPos), 0, width, height);
 

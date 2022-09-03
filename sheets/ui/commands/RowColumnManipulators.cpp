@@ -4,6 +4,11 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
+// These are used by the row/col actions in ui/actions, by ui/dialogs/LayoutDialog and ui/commands/PasteCommand, as well as by the interface routines in part/ and shape/. Hence keeping them here, not in ui/actions
+
+
+
+
 // Local
 #include "RowColumnManipulators.h"
 

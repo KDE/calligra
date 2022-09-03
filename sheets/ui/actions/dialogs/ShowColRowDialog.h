@@ -21,28 +21,26 @@ namespace Calligra
 {
 namespace Sheets
 {
-class Selection;
 
 /**
  * \ingroup UI
  * Dialog to show hidden columns/rows.
  */
-class ShowColRow: public KoDialog
+class ShowColRowDialog: public KoDialog
 {
     Q_OBJECT
 public:
-    enum Type { Column, Row };
-    ShowColRow(QWidget* parent, Selection* selection, Type _type);
+    ShowColRowDialog(QWidget* parent, bool rows);
+
+    void setList(const QVector<QString> &captions);
+    QVector<int> selectedIndexes() const;
 
 public Q_SLOTS:
     void slotOk();
     void slotDoubleClicked(QListWidgetItem *);
 
 protected:
-    Selection* m_selection;
     QListWidget * list;
-    Type typeShow;
-    QList<int> listInt;
 };
 
 } // namespace Sheets

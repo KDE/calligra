@@ -500,21 +500,21 @@ void Tool::RowHeader::paint(QPainter* painter, const QRectF& painterRect)
     int y = sheet->topRow(qMax<qreal>(0, paintRect.y()), yPos);
     const qreal width = this->width() - 1;
 
-    QSet<int> selectedRows;
-    QSet<int> affectedRows;
-
-    if (m_selection && !m_selection->referenceSelectionMode()) {
-        selectedRows = m_selection->rowsSelected();
-        affectedRows = m_selection->rowsAffected();
-    }
+    bool useHighlight = (m_selection && !m_selection->referenceSelectionMode());
     // Loop through the rows, until we are out of range
     while (yPos <= paintRect.bottom() && y <= KS_rowMax) {
         if (sheet->rowFormats()->isHiddenOrFiltered(y)) {
             ++y;
             continue;
         }
-        const bool selected = (selectedRows.contains(y));
-        const bool highlighted = (!selected && affectedRows.contains(y));
+
+        bool selected = false;
+        bool highlighted = false;
+        if (useHighlight) {
+            selected = m_selection->isColumnSelected(y);
+            highlighted = m_selection->isColumnAffected(y);
+        }
+
         const qreal rawHeight = sheet->rowFormats()->rowHeight(y);
         const qreal height = rawHeight;
         const QRectF rect(0, yPos, width, height);
@@ -1157,13 +1157,7 @@ void Tool::ColumnHeader::paint(QPainter *painter, const QRectF &painterRect)
 
     const qreal height = this->height() - 1;
 
-    QSet<int> selectedColumns;
-    QSet<int> affectedColumns;
-
-    if (m_selection && !m_selection->referenceSelectionMode()) {
-        selectedColumns = m_selection->columnsSelected();
-        affectedColumns = m_selection->columnsAffected();
-    }
+    bool useHighlight = (m_selection && !m_selection->referenceSelectionMode());
 
     int deltaX = 1;
     if (sheet->layoutDirection() == Qt::RightToLeft) {
@@ -1181,8 +1175,14 @@ void Tool::ColumnHeader::paint(QPainter *painter, const QRectF &painterRect)
             ++x;
             continue;
         }
-        bool selected = (selectedColumns.contains(x));
-        bool highlighted = (!selected && affectedColumns.contains(x));
+
+        bool selected = false;
+        bool highlighted = false;
+        if (useHighlight) {
+            selected = m_selection->isColumnSelected(x);
+            highlighted = m_selection->isColumnAffected(x);
+        }
+
         const qreal width = cols->colWidth(x);
         const QRectF rect(xPos, 0, width, height);
 

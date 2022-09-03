@@ -199,24 +199,6 @@ protected Q_SLOTS:
     void mergeCellsHorizontal();
     void mergeCellsVertical();
     void dissociateCells();
-    // -- column & row actions --
-    void resizeColumn();
-    void insertColumn();
-    void deleteColumn();
-    void hideColumn();
-    void showColumn();
-    void slotShowColumnDialog();
-    void equalizeColumn();
-    void adjustColumn();
-    void resizeRow();
-    void insertRow();
-    void deleteRow();
-    void hideRow();
-    void showRow();
-    void slotShowRowDialog();
-    void equalizeRow();
-    void adjustRow();
-    void adjust();
     // -- cell insert/remove actions --
     void insertCells();
     void deleteCells();

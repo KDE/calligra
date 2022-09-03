@@ -14,6 +14,7 @@
 #define CALLIGRA_SHEETS_RESIZE2_DIALOG
 
 #include <KoDialog.h>
+#include <KoUnit.h>
 
 class KoUnitDoubleSpinBox;
 
@@ -21,48 +22,51 @@ namespace Calligra
 {
 namespace Sheets
 {
-class Selection;
 
 /**
  * \ingroup UI
  * Dialog to resize rows.
  */
-class ResizeRow: public KoDialog
+class ResizeRowDialog: public KoDialog
 {
     Q_OBJECT
 
 public:
-    explicit ResizeRow(QWidget* parent, Selection* selection);
-    double rowHeight;
+    explicit ResizeRowDialog(QWidget* parent, KoUnit unit);
+    void setRowHeight(double height);
+    double rowHeight();
+    void setDefault(double d) { defaultHeight = d; }
 
 protected Q_SLOTS:
     virtual void slotOk();
     virtual void slotDefault();
 
 protected:
-    Selection* m_selection;
     KoUnitDoubleSpinBox *m_pHeight;
+    double defaultHeight;
 };
 
 /**
  * \ingroup UI
  * Dialog to resize columns.
  */
-class ResizeColumn: public KoDialog
+class ResizeColumnDialog: public KoDialog
 {
     Q_OBJECT
 
 public:
-    explicit ResizeColumn(QWidget* parent, Selection* selection);
-    double columnWidth;
+    explicit ResizeColumnDialog(QWidget* parent, KoUnit unit);
+    void setColWidth(double width);
+    double colWidth();
+    void setDefault(double d) { defaultWidth = d; }
 
 protected Q_SLOTS:
     virtual void slotOk();
     virtual void slotDefault();
 
 protected:
-    Selection* m_selection;
     KoUnitDoubleSpinBox *m_pWidth;
+    double defaultWidth;
 };
 
 } // namespace Sheets

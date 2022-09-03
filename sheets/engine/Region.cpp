@@ -494,65 +494,28 @@ Region::Element* Region::insert(int pos, const QRect& range, SheetBase* sheet, b
     return 0;
 }
 
-QSet<int> Region::columnsSelected() const
+bool Region::isRowAffected(int row) const
 {
-    QSet<int> result;
-    ConstIterator endOfList(d->cells.constEnd());
-    for (ConstIterator it = d->cells.constBegin(); it != endOfList; ++it) {
-        if ((*it)->isColumn()) {
-            const QRect range = (*it)->rect();
-            const int right = range.right();
-            for (int col = range.left(); col <= right; ++col) {
-                result << col;
-            }
-        }
-    }
-    return result;
-}
-
-QSet<int> Region::rowsSelected() const
-{
-    QSet<int> result;
-    ConstIterator endOfList(d->cells.constEnd());
-    for (ConstIterator it = d->cells.constBegin(); it != endOfList; ++it) {
-        if ((*it)->isRow()) {
-            const QRect range = (*it)->rect();
-            const int bottom = range.bottom();
-            for (int row = range.top(); row <= bottom; ++row) {
-                result << row;
-            }
-        }
-    }
-    return result;
-}
-
-QSet<int> Region::columnsAffected() const
-{
-    QSet<int> result;
     ConstIterator endOfList(d->cells.constEnd());
     for (ConstIterator it = d->cells.constBegin(); it != endOfList; ++it) {
         const QRect range = (*it)->rect();
-        const int right = range.right();
-        for (int col = range.left(); col <= right; ++col) {
-            result << col;
-        }
+        if ((row >= range.top()) && (row <= range.bottom()))
+            return true;
     }
-    return result;
+    return false;
 }
 
-QSet<int> Region::rowsAffected() const
+bool Region::isColumnAffected(int col) const
 {
-    QSet<int> result;
     ConstIterator endOfList(d->cells.constEnd());
     for (ConstIterator it = d->cells.constBegin(); it != endOfList; ++it) {
         const QRect range = (*it)->rect();
-        const int bottom = range.bottom();
-        for (int row = range.top(); row <= bottom; ++row) {
-            result << row;
-        }
+        if ((col >= range.left()) && (col <= range.right()))
+            return true;
     }
-    return result;
+    return false;
 }
+
 
 bool Region::isColumnSelected(uint col) const
 {
