@@ -79,48 +79,6 @@ void ViewAdaptor::show()
     m_view->show();
 }
 
-#if 0 // -> cell tool
-void ViewAdaptor::find()
-{
-    m_view->find();
-}
-
-void ViewAdaptor::replace()
-{
-    m_view->replace();
-}
-
-void ViewAdaptor::conditional()
-{
-    m_view->conditional();
-}
-
-void ViewAdaptor::validity()
-{
-    m_view->validity();
-}
-
-void ViewAdaptor::insertSeries()
-{
-    m_view->insertSeries();
-}
-
-void ViewAdaptor::insertHyperlink()
-{
-    m_view->insertHyperlink();
-}
-
-void ViewAdaptor::gotoCell()
-{
-    m_view->gotoCell();
-}
-
-void ViewAdaptor::changeAngle()
-{
-    m_view->changeAngle();
-}
-#endif
-
 void ViewAdaptor::preference()
 {
     m_view->preference();
@@ -149,143 +107,6 @@ void ViewAdaptor::previousSheet()
     m_view->previousSheet();
 }
 
-#if 0 // -> cell tool
-void ViewAdaptor::sortList()
-{
-    m_view->sortList();
-}
-
-void ViewAdaptor::setAreaName()
-{
-    m_view->setAreaName();
-}
-
-void ViewAdaptor::showAreaName()
-{
-    m_view->namedAreaDialog();
-}
-
-void ViewAdaptor::mergeCell()
-{
-    m_view->mergeCell();
-}
-
-void ViewAdaptor::dissociateCell()
-{
-    m_view->dissociateCell();
-}
-
-void ViewAdaptor::consolidate()
-{
-    m_view->consolidate();
-}
-
-void ViewAdaptor::deleteColumn()
-{
-    m_view->deleteColumn();
-}
-
-void ViewAdaptor::insertColumn()
-{
-    m_view->insertColumn();
-}
-
-void ViewAdaptor::deleteRow()
-{
-    m_view->deleteRow();
-}
-
-void ViewAdaptor::insertRow()
-{
-    m_view->insertRow();
-}
-
-void ViewAdaptor::hideRow()
-{
-    m_view->hideRow();
-}
-
-void ViewAdaptor::showRow()
-{
-    m_view->showRow();
-}
-
-void ViewAdaptor::hideColumn()
-{
-    m_view->hideColumn();
-}
-
-void ViewAdaptor::showColumn()
-{
-    m_view->showColumn();
-}
-
-void ViewAdaptor::upper()
-{
-    m_view->upper();
-}
-
-void ViewAdaptor::lower()
-{
-    m_view->lower();
-}
-
-void ViewAdaptor::equalizeColumn()
-{
-    m_view->equalizeColumn();
-}
-
-void ViewAdaptor::equalizeRow()
-{
-    m_view->equalizeRow();
-}
-
-void ViewAdaptor::clearTextSelection()
-{
-    m_view->clearContents();
-}
-
-void ViewAdaptor::clearCommentSelection()
-{
-    m_view->clearComment();
-}
-
-void ViewAdaptor::clearValiditySelection()
-{
-    m_view->clearValidity();
-}
-
-void ViewAdaptor::clearConditionalSelection()
-{
-    m_view->clearConditionalStyles();
-}
-
-void ViewAdaptor::goalSeek()
-{
-    m_view->goalSeek();
-}
-
-void ViewAdaptor::insertFromDatabase()
-{
-    m_view->insertFromDatabase();
-}
-
-void ViewAdaptor::insertFromTextfile()
-{
-    m_view->insertFromTextfile();
-}
-
-void ViewAdaptor::insertFromClipboard()
-{
-    m_view->insertFromClipboard();
-}
-
-void ViewAdaptor::textToColumns()
-{
-    m_view->textToColumns();
-}
-#endif
-
 void ViewAdaptor::copyAsText()
 {
     m_view->copyAsText();
@@ -301,48 +122,6 @@ QRect ViewAdaptor::selection()
     return m_view->selection()->lastRange();
 }
 
-#if 0 // -> cell tool
-void ViewAdaptor::setSelectionMoneyFormat(bool b)
-{
-    m_view->moneyFormat(b);
-}
-
-void ViewAdaptor::setSelectionPercent(bool b)
-{
-    m_view->percent(b);
-}
-
-void ViewAdaptor::setSelectionMultiRow(bool enable)
-{
-    m_view->wrapText(enable);
-}
-
-void ViewAdaptor::setSelectionSize(int size)
-{
-    m_view->setSelectionFontSize(size);
-}
-
-void ViewAdaptor::setSelectionUpper()
-{
-    m_view->upper();
-}
-
-void ViewAdaptor::setSelectionLower()
-{
-    m_view->lower();
-}
-
-void ViewAdaptor::setSelectionFirstLetterUpper()
-{
-    m_view->firstLetterUpper();
-}
-
-void ViewAdaptor::setSelectionVerticalText(bool enable)
-{
-    m_view->verticalText(enable);
-}
-#endif
-
 void ViewAdaptor::setSelectionComment(const QString& comment)
 {
     CommentCommand* command = new CommentCommand();
@@ -352,13 +131,6 @@ void ViewAdaptor::setSelectionComment(const QString& comment)
     command->add(*m_view->selection());
     command->execute();
 }
-
-#if 0 // -> cell tool
-void ViewAdaptor::setSelectionAngle(int value)
-{
-    m_view->setSelectionAngle(value);
-}
-#endif
 
 void ViewAdaptor::setSelectionTextColor(const QColor& txtColor)
 {
@@ -389,23 +161,6 @@ void ViewAdaptor::setSelectionBorderColor(const QColor& bgColor)
     command->add(*m_view->selection());
     command->execute();
 }
-
-#if 0 // -> cell tool
-void ViewAdaptor::deleteSelection()
-{
-    m_view->clearAll();
-}
-
-void ViewAdaptor::copySelection()
-{
-    m_view->copySelection();
-}
-
-void ViewAdaptor::cutSelection()
-{
-    m_view->cutSelection();
-}
-#endif
 
 void ViewAdaptor::setLeftBorderColor(const QColor& color)
 {
@@ -481,60 +236,3 @@ void ViewAdaptor::setOutlineBorderColor(const QColor& color)
     command->execute();
 }
 
-#if 0 // -> cell tool
-void ViewAdaptor::removeBorder()
-{
-    m_view->borderRemove();
-}
-
-void ViewAdaptor::increaseIndent()
-{
-    m_view->increaseIndent();
-}
-
-void ViewAdaptor::decreaseIndent()
-{
-    m_view->increaseIndent();
-}
-
-void ViewAdaptor::increasePrecision()
-{
-    m_view->increasePrecision();
-}
-
-void ViewAdaptor::decreasePrecision()
-{
-    m_view->decreasePrecision();
-}
-
-void ViewAdaptor::subtotals()
-{
-    m_view->subtotals();
-}
-
-void ViewAdaptor::sortInc()
-{
-    m_view->sortInc();
-}
-
-void ViewAdaptor::sortDec()
-{
-    m_view->sortDec();
-}
-
-void ViewAdaptor::layoutDlg()
-{
-    m_view->layoutDlg();
-}
-
-
-void ViewAdaptor::increaseFontSize()
-{
-    m_view->increaseFontSize();
-}
-
-void ViewAdaptor::decreaseFontSize()
-{
-    m_view->decreaseFontSize();
-}
-#endif
