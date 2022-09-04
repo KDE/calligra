@@ -1,4 +1,5 @@
 /* This file is part of the KDE project
+   SPDX-FileCopyrightText: 1998-2022 The Calligra Team <calligra-devel@kde.org>
    SPDX-FileCopyrightText: 2022 Tomas Mecir <mecirt@gmail.com>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
