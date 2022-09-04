@@ -10,6 +10,7 @@
 #include "InsertSeries.h"
 #include "InsertSpecialChar.h"
 #include "Link.h"
+#include "Merge.h"
 #include "Sort.h"
 #include "Validity.h"
 
@@ -56,6 +57,11 @@ void Actions::createActions()
     // Link
     addAction(new Link(this));
     addAction(new ClearLink(this));
+    // Merge
+    addAction(new Merge(this, false, false));
+    addAction(new Merge(this, true, false));
+    addAction(new Merge(this, false, true));
+    addAction(new RemoveMerge(this));
     // Sort
     addAction(new Sort(this));
     addAction(new SortInc(this));

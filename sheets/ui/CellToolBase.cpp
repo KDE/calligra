@@ -417,28 +417,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     addAction("backgroundColor", colorAction);
     connect(colorAction, &KoColorPopupAction::colorChanged, this, &CellToolBase::changeBackgroundColor);
 
-    // -- cell merging actions --
-
-    action = new QAction(koIcon("mergecell"), i18n("Merge Cells"), this);
-    addAction("mergeCells", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::mergeCells);
-    action->setToolTip(i18n("Merge the selected region"));
-
-    action = new QAction(koIcon("mergecell-horizontal"), i18n("Merge Cells Horizontally"), this);
-    action->setToolTip(i18n("Merge the selected region horizontally"));
-    addAction("mergeCellsHorizontal", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::mergeCellsHorizontal);
-
-    action = new QAction(koIcon("mergecell-vertical"), i18n("Merge Cells Vertically"), this);
-    action->setToolTip(i18n("Merge the selected region vertically"));
-    addAction("mergeCellsVertical", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::mergeCellsVertical);
-
-    action = new QAction(koIcon("dissociatecell"), i18n("Dissociate Cells"), this);
-    action->setToolTip(i18n("Unmerge the selected region"));
-    addAction("dissociateCells", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::dissociateCells);
-
     // -- cell insert/remove actions --
 
     action = new QAction(koIcon("insertcell"), i18n("Cells..."), this);
@@ -2009,77 +1987,6 @@ void CellToolBase::changeBackgroundColor(const KoColor &color)
     command->setSheet(selection()->activeSheet());
     command->setText(kundo2_i18n("Change Background Color"));
     command->setBackgroundColor(color.toQColor());
-    command->add(*selection());
-    command->execute(canvas());
-}
-
-void CellToolBase::mergeCells()
-{
-    // sanity check
-    if (selection()->activeSheet()->isProtected()) {
-        return;
-    }
-    if (selection()->activeSheet()->fullMap()->isProtected()) {
-        return;
-    }
-    MergeCommand* const command = new MergeCommand();
-    command->setSheet(selection()->activeSheet());
-    command->setSelection(selection());
-    command->setHorizontalMerge(false);
-    command->setVerticalMerge(false);
-    command->add(*selection());
-    command->execute(canvas());
-}
-
-void CellToolBase::mergeCellsHorizontal()
-{
-    // sanity check
-    if (selection()->activeSheet()->isProtected()) {
-        return;
-    }
-    if (selection()->activeSheet()->fullMap()->isProtected()) {
-        return;
-    }
-    MergeCommand* const command = new MergeCommand();
-    command->setSheet(selection()->activeSheet());
-    command->setHorizontalMerge(true);
-    command->setVerticalMerge(false);
-    command->setSelection(selection());
-    command->add(*selection());
-    command->execute(canvas());
-}
-
-void CellToolBase::mergeCellsVertical()
-{
-    // sanity check
-    if (selection()->activeSheet()->isProtected()) {
-        return;
-    }
-    if (selection()->activeSheet()->fullMap()->isProtected()) {
-        return;
-    }
-    MergeCommand* const command = new MergeCommand();
-    command->setSheet(selection()->activeSheet());
-    command->setHorizontalMerge(false);
-    command->setVerticalMerge(true);
-    command->setSelection(selection());
-    command->add(*selection());
-    command->execute(canvas());
-}
-
-void CellToolBase::dissociateCells()
-{
-    // sanity check
-    if (selection()->activeSheet()->isProtected()) {
-        return;
-    }
-    if (selection()->activeSheet()->fullMap()->isProtected()) {
-        return;
-    }
-    MergeCommand* const command = new MergeCommand();
-    command->setSheet(selection()->activeSheet());
-    command->setMerge(false);
-    command->setSelection(selection());
     command->add(*selection());
     command->execute(canvas());
 }

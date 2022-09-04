@@ -6,6 +6,7 @@ set (actions_DIR_SRCS
     actions/InsertSeries.cpp
     actions/InsertSpecialChar.cpp
     actions/Link.cpp
+    actions/Merge.cpp
     actions/Sort.cpp
     actions/Validity.cpp
     )

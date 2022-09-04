@@ -194,11 +194,6 @@ protected Q_SLOTS:
     void toLowerCase();
     void firstLetterToUpperCase();
     void changeBackgroundColor(const KoColor &);
-    // -- cell merging actions --
-    void mergeCells();
-    void mergeCellsHorizontal();
-    void mergeCellsVertical();
-    void dissociateCells();
     // -- cell insert/remove actions --
     void insertCells();
     void deleteCells();

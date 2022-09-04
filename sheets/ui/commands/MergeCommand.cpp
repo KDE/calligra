@@ -4,6 +4,10 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
+
+// This is used by actions, as well as by ui/dialogs/LayoutDialog and ui/strategy/MergeStrategy
+
+
 // Local
 #include "MergeCommand.h"
 
