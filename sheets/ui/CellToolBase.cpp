@@ -66,7 +66,6 @@
 #include "dialogs/CommentDialog.h"
 #include "dialogs/ConditionalDialog.h"
 #include "dialogs/ConsolidateDialog.h"
-#include "dialogs/CSVDialog.h"
 #include "dialogs/DatabaseDialog.h"
 #include "dialogs/DocumentSettingsDialog.h"
 #include "dialogs/GoalSeekDialog.h"
@@ -511,23 +510,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     connect(action, &QAction::triggered, this, &CellToolBase::insertFromDatabase);
     action->setToolTip(i18n("Insert data from a SQL database"));
 #endif
-
-    action = new QAction(koIcon("text-plain"), i18n("From &Text File..."), this);
-    action->setIconText(i18n("Text File"));
-    addAction("insertFromTextfile", action);
-    connect(action, &QAction::triggered, this,  &CellToolBase::insertFromTextfile);
-    action->setToolTip(i18n("Insert data from a text file to the current cursor position/selection"));
-
-    action = new QAction(koIcon("edit-paste"), i18n("From &Clipboard..."), this);
-    action->setIconText(i18n("Clipboard"));
-    addAction("insertFromClipboard", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::insertFromClipboard);
-    action->setToolTip(i18n("Insert CSV data from the clipboard to the current cursor position/selection"));
-
-    action = new QAction(i18n("&Text to Columns..."), this);
-    addAction("textToColumns", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::textToColumns);
-    action->setToolTip(i18n("Expand the content of cells to multiple columns"));
 
     action = new QAction(i18n("Custom Lists..."), this);
     addAction("sortList", action);
@@ -1482,6 +1464,15 @@ void CellToolBase::updateActions()
     d->actions->updateOnChange(readWrite, selection(), cell);
 }
 
+void CellToolBase::triggerAction(const QString &name)
+{
+    CellAction *a = d->actions->cellAction(name);
+    if (a)
+        a->trigger();
+    else
+        KMessageBox::sorry(canvas()->canvasWidget(), i18n("Unable to location action ") + name);
+}
+
 void CellToolBase::cellStyle()
 {
     QPointer<CellFormatDialog> dialog = new CellFormatDialog(canvas()->canvasWidget(), selection());
@@ -2218,52 +2209,6 @@ void CellToolBase::insertFromDatabase()
 #endif
 }
 
-void CellToolBase::insertFromTextfile()
-{
-    selection()->emitCloseEditor(true);
-
-    QPointer<CSVDialog> dialog = new CSVDialog(canvas()->canvasWidget(), selection(), CSVDialog::File);
-    dialog->setDecimalSymbol(selection()->activeSheet()->map()->calculationSettings()->locale()->decimalSymbol());
-    dialog->setThousandsSeparator(selection()->activeSheet()->map()->calculationSettings()->locale()->thousandsSeparator());
-    if (!dialog->canceled())
-        dialog->exec();
-    delete dialog;
-}
-
-void CellToolBase::insertFromClipboard()
-{
-    selection()->emitCloseEditor(true);
-
-    QPointer<CSVDialog> dialog = new CSVDialog(canvas()->canvasWidget(), selection(), CSVDialog::Clipboard);
-    dialog->setDecimalSymbol(selection()->activeSheet()->map()->calculationSettings()->locale()->decimalSymbol());
-    dialog->setThousandsSeparator(selection()->activeSheet()->map()->calculationSettings()->locale()->thousandsSeparator());
-    QString oldDelimiter = dialog->delimiter();
-    dialog->setDelimiter(QString());
-    if (!dialog->canceled())
-        dialog->exec();
-    dialog->setDelimiter(oldDelimiter);
-    delete dialog;
-}
-
-void CellToolBase::textToColumns()
-{
-    selection()->emitCloseEditor(true);
-
-    QRect area = selection()->lastRange();
-    area.setRight(area.left()); // only use the first column
-    Region oldSelection = *selection(); // store
-    selection()->initialize(area);
-
-    QPointer<CSVDialog> dialog = new CSVDialog(canvas()->canvasWidget(), selection(), CSVDialog::Column);
-    dialog->setDecimalSymbol(selection()->activeSheet()->map()->calculationSettings()->locale()->decimalSymbol());
-    dialog->setThousandsSeparator(selection()->activeSheet()->map()->calculationSettings()->locale()->thousandsSeparator());
-    if (!dialog->canceled())
-        dialog->exec();
-    else
-        selection()->initialize(oldSelection);
-    delete dialog;
-}
-
 void CellToolBase::sortList()
 {
     QPointer<ListDialog> dialog = new ListDialog(canvas()->canvasWidget());
@@ -2417,7 +2362,7 @@ bool CellToolBase::paste()
             !mimedata->hasHtml() && mimedata->hasText() &&
             mimeData->text().split('\n').count() >= 2 )
         {
-            insertFromClipboard();
+            triggerAction("insertFromClipboard");
         } else {
             //debugSheetsUI <<"Pasting. Rect=" << selection()->lastRange() <<" bytes";
             PasteCommand *const command = new PasteCommand();

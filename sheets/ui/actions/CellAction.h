@@ -45,6 +45,7 @@ public:
     QAction *action() { return m_action; }
     QString name() { return m_name; }
     bool shouldBeEnabled(bool readWrite, Selection *selection, const Cell &activeCell);
+    void trigger();
 protected Q_SLOTS:
     void triggered();
 protected:

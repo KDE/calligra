@@ -39,6 +39,12 @@ CellAction::~CellAction()
     // delete m_action;
 }
 
+// Triggerts the action manually. Keeping as a separate call in case we need to do things differently.
+void CellAction::trigger()
+{
+    triggered();
+}
+
 void CellAction::triggered()
 {
     if (m_closeEditor) m_tool->selection()->emitCloseEditor(true);

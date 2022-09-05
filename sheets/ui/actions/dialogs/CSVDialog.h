@@ -18,42 +18,24 @@ namespace Calligra
 namespace Sheets
 {
 class Selection;
+class Value;
 
 /**
  * \ingroup UI
  * Provides dialog for managing CSV (comma separated value) data.
  *
- * Currently CSVDialog is used for converting text into columns,
- * inserting text file and pasting text from clipboard, where conversion
- * from CSV (comma separated value) data is is all required.
- * The different purposed mentioned above is determined
- * using mode, which can be Column, File, or Clipboard respectively.
- *
+ * This class currently only provides some convenience routines on top of KoCsvImportDialog.
 */
 class CSVDialog : public KoCsvImportDialog
 {
     Q_OBJECT
 
 public:
-    enum Mode { Clipboard, File, Column };
-
-    CSVDialog(QWidget* parent, Selection* selection, Mode mode);
+    CSVDialog(QWidget* parent);
     ~CSVDialog() override;
 
-    bool canceled();
-
-protected Q_SLOTS:
-    void init();
-
-protected:
-    void accept() override;
-
-private:
-    Selection* m_selection;
-    bool    m_canceled;
-    QRect   m_targetRect;
-    Mode    m_mode;
-    QString m_filename;
+    QList<KoCsvImportDialog::DataType> dataTypes();
+    Value value();
 };
 
 } // namespace Sheets

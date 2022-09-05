@@ -3,6 +3,7 @@ set (actions_DIR_SRCS
     actions/CellAction.cpp
     actions/Actions.cpp
     actions/AdjustRowCol.cpp
+    actions/CSVActions.cpp
     actions/InsertSeries.cpp
     actions/InsertSpecialChar.cpp
     actions/Link.cpp
@@ -13,6 +14,7 @@ set (actions_DIR_SRCS
 
 set (action_dialogs_DIR_SRCS
     actions/dialogs/CharacterSelectDialog.cpp
+    actions/dialogs/CSVDialog.cpp
     actions/dialogs/LinkDialog.cpp
     actions/dialogs/Resize2Dialog.cpp
     actions/dialogs/SeriesDialog.cpp
@@ -59,7 +61,6 @@ set (dialogs_DIR_SRCS
     dialogs/CommentDialog.cpp
     dialogs/ConditionalDialog.cpp
     dialogs/ConsolidateDialog.cpp
-    dialogs/CSVDialog.cpp
     dialogs/DatabaseDialog.cpp
     dialogs/DocumentSettingsDialog.cpp
     dialogs/FindDialog.cpp

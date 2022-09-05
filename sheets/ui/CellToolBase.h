@@ -98,6 +98,9 @@ public:
     /** Update all the actions' enabled/disabled status. */
     void updateActions();
 
+    /** Trigger an action. */
+    void triggerAction(const QString &name);
+
     /**
      * The shape offset in document coordinates.
      */
@@ -215,9 +218,6 @@ protected Q_SLOTS:
     // -- data insert actions --
     void insertFormula();
     void insertFromDatabase();
-    void insertFromTextfile();
-    void insertFromClipboard();
-    void textToColumns();
     void sortList();
     void consolidate();
     void goalSeek();
