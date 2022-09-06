@@ -1470,7 +1470,7 @@ void CellToolBase::triggerAction(const QString &name)
     if (a)
         a->trigger();
     else
-        KMessageBox::sorry(canvas()->canvasWidget(), i18n("Unable to location action ") + name);
+        KMessageBox::sorry(canvas()->canvasWidget(), i18n("Unable to locate action %1", name));
 }
 
 void CellToolBase::cellStyle()
