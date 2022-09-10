@@ -125,15 +125,8 @@ void CellToolBase::Private::updateActions(const Cell& cell)
     if (!q->selection()->activeSheet()->isProtected()) {
         const bool colSelected = q->selection()->isColumnSelected();
         const bool rowSelected = q->selection()->isRowSelected();
-        // -- data insert actions --
-        q->action("textToColumns")->setEnabled(!rowSelected);
-
         const bool simpleSelection = q->selection()->isSingular() || colSelected || rowSelected;
         q->action("sheetFormat")->setEnabled(!simpleSelection);
-        q->action("fillRight")->setEnabled(!simpleSelection);
-        q->action("fillUp")->setEnabled(!simpleSelection);
-        q->action("fillDown")->setEnabled(!simpleSelection);
-        q->action("fillLeft")->setEnabled(!simpleSelection);
         q->action("createStyleFromCell")->setEnabled(simpleSelection); // just from one cell
 
         const bool contiguousSelection = q->selection()->isContiguous();

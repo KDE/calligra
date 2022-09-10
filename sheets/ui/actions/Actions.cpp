@@ -7,7 +7,9 @@
 #include "Actions.h"
 
 #include "AdjustRowCol.h"
+#include "AutoSum.h"
 #include "CSVActions.h"
+#include "Fill.h"
 #include "InsertSeries.h"
 #include "InsertSpecialChar.h"
 #include "Link.h"
@@ -51,10 +53,17 @@ void Actions::createActions()
     addAction(new AdjustRowCol(this, false, true));
     addAction(new ResizeRowCol(this, false));
     addAction(new ResizeRowCol(this, true));
+    // AutoSum
+    addAction(new AutoSum(this));
     // CSVActions
     addAction(new InsertFromFile(this));
     addAction(new InsertFromClipboard(this));
     addAction(new TextToColumns(this));
+    // Fill
+    addAction(new Fill(this, FillManipulator::Up));
+    addAction(new Fill(this, FillManipulator::Down));
+    addAction(new Fill(this, FillManipulator::Left));
+    addAction(new Fill(this, FillManipulator::Right));
     // InsertSpecialChar
     addAction(new InsertSpecialChar(this));
     // InsertSeries

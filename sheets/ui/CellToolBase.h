@@ -209,12 +209,6 @@ protected Q_SLOTS:
     void clearConditionalStyles();
     // -- sorting/filtering action --
     void autoFilter();
-    // -- fill actions --
-    void fillLeft();
-    void fillRight();
-    void fillUp();
-    void fillDown();
-    void autoSum();
     // -- data insert actions --
     void insertFormula();
     void insertFromDatabase();

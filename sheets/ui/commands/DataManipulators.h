@@ -112,29 +112,6 @@ protected:
 
 /**
  * \ingroup Commands
- * \brief Fills values into a cell range.
- */
-class CALLIGRA_SHEETS_UI_EXPORT FillManipulator : public AbstractDFManipulator
-{
-public:
-    FillManipulator();
-    ~FillManipulator() override;
-
-    enum Direction { Up = 0, Down, Left, Right };
-
-    void setDirection(Direction d) {
-        m_dir = d;
-    }
-protected:
-    Value newValue(Element *element, int col, int row,
-                           bool *parse, Format::Type *fmtType) override;
-    Style newFormat(Element *element, int col, int row) override;
-    Direction m_dir;
-};
-
-
-/**
- * \ingroup Commands
  * \brief Converts string values to upper-/lowercase.
  */
 class CALLIGRA_SHEETS_UI_EXPORT CaseManipulator: public AbstractDataManipulator

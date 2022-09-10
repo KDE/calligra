@@ -3,7 +3,9 @@ set (actions_DIR_SRCS
     actions/CellAction.cpp
     actions/Actions.cpp
     actions/AdjustRowCol.cpp
+    actions/AutoSum.cpp
     actions/CSVActions.cpp
+    actions/Fill.cpp
     actions/InsertSeries.cpp
     actions/InsertSpecialChar.cpp
     actions/Link.cpp

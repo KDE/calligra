@@ -170,48 +170,6 @@ Value DataManipulator::newValue(Element *element, int col, int row,
 }
 
 
-FillManipulator::FillManipulator()
-{
-    m_dir = Down;
-    m_changeformat = true;
-    setText(kundo2_i18n("Fill Selection"));
-}
-
-FillManipulator::~FillManipulator()
-{
-}
-
-Value FillManipulator::newValue(Element *element, int col, int row,
-                                bool *parse, Format::Type *fmtType)
-{
-    Q_UNUSED(fmtType);
-    const int targetRow = row;
-    const int targetCol = col;
-    switch (m_dir) {
-    case Up:    row = element->rect().bottom(); break;
-    case Down:  row = element->rect().top();    break;
-    case Left:  col = element->rect().right();  break;
-    case Right: col = element->rect().left();   break;
-    };
-    Cell cell(m_sheet, col, row); // the reference cell
-    if (cell.isFormula()) {
-        *parse = true;
-        return Value(Cell(m_sheet, targetCol, targetRow).decodeFormula(cell.encodeFormula()));
-    }
-    return cell.value();
-}
-
-Style FillManipulator::newFormat(Element *element, int col, int row)
-{
-    switch (m_dir) {
-    case Up:    row = element->rect().bottom(); break;
-    case Down:  row = element->rect().top();    break;
-    case Left:  col = element->rect().right();  break;
-    case Right: col = element->rect().left();   break;
-    };
-    return Cell(m_sheet, col, row).style();
-}
-
 CaseManipulator::CaseManipulator()
 {
     m_mode = Upper;

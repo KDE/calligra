@@ -271,6 +271,12 @@ void TextToColumns::execute(Selection *selection, Sheet *sheet, QWidget *canvasW
     m_dlg = nullptr;
 }
 
+bool TextToColumns::enabledForSelection(Selection *selection, const Cell &)
+{
+    if (selection->isRowSelected()) return false;
+    return true;
+}
+
 
 
 
