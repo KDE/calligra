@@ -19,7 +19,6 @@ namespace Calligra
 {
 namespace Sheets
 {
-class Selection;
 
 /**
  * \ingroup UI
@@ -29,14 +28,15 @@ class CommentDialog : public KoDialog
 {
     Q_OBJECT
 public:
-    CommentDialog(QWidget* parent, Selection* selection);
+    CommentDialog(QWidget* parent);
 
+    void setComment(const QString &comment);
+    QString comment() const;
 public Q_SLOTS:
     void slotOk();
     void slotTextChanged();
 protected:
 
-    Selection* m_selection;
     KTextEdit *multiLine;
 };
 

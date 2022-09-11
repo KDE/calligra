@@ -70,8 +70,6 @@ public Q_SLOTS: // METHODS
     /** Copy the content of the range of cells that is selected. */
     virtual void copyAsText();
 
-    /** Set the comment of all selected cells to the defined comment string. */
-    virtual void setSelectionComment(const QString& comment);
     /** Set the text color of all selected cells to the defined color value. */
     virtual void setSelectionTextColor(const QColor& txtColor);
     /** Set the background color of all selected cells to the defined color value. */

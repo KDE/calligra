@@ -200,8 +200,6 @@ protected Q_SLOTS:
     // -- cell content actions --
     void clearAll();
     void clearContents();
-    void comment();
-    void clearComment();
     void conditional();
     void clearConditionalStyles();
     // -- sorting/filtering action --

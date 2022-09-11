@@ -41,11 +41,11 @@
 // actions
 #include "actions/Actions.h"
 #include "actions/CellAction.h"
+#include "actions/Comment.h"   // for CommentCommand, which is used by the Find action
 
 // commands
 #include "commands/AutoFilterCommand.h"
 #include "commands/BorderColorCommand.h"
-#include "commands/CommentCommand.h"
 #include "commands/ConditionCommand.h"
 #include "commands/CopyCommand.h"
 #include "commands/DataManipulators.h"
@@ -63,7 +63,6 @@
 #include "dialogs/AddNamedAreaDialog.h"
 #include "dialogs/AngleDialog.h"
 #include "dialogs/AutoFormatDialog.h"
-#include "dialogs/CommentDialog.h"
 #include "dialogs/ConditionalDialog.h"
 #include "dialogs/ConsolidateDialog.h"
 #include "dialogs/DatabaseDialog.h"
@@ -425,17 +424,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     action->setToolTip(i18n("Remove the contents of the current cell"));
     addAction("clearContents", action);
     connect(action, &QAction::triggered, this, &CellToolBase::clearContents);
-
-    action = new QAction(koIcon("edit-comment"), i18n("Comment..."), this);
-    action->setToolTip(i18n("Edit a comment for this cell"));
-    addAction("comment", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::comment);
-
-    action = new QAction(koIcon("delete-comment"), i18n("Comment"), this);
-    action->setIconText(i18n("Remove Comment"));
-    action->setToolTip(i18n("Remove this cell's comment"));
-    addAction("clearComment", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::clearComment);
 
     action = new QAction(i18n("Conditional Styles..."), this);
     action->setToolTip(i18n("Set cell style based on certain conditions"));
@@ -1946,27 +1934,6 @@ void CellToolBase::clearContents()
     // no actual parsing shall be done
     command->setParsing(true);
     command->setValue(Value(""));
-    command->add(*selection());
-    command->execute(canvas());
-}
-
-void CellToolBase::comment()
-{
-    QPointer<CommentDialog> dialog = new CommentDialog(canvas()->canvasWidget(), selection());
-    dialog->exec();
-    delete dialog;
-}
-
-void CellToolBase::clearComment()
-{
-    // TODO Stefan: Actually this check belongs into the command!
-    if (selection()->activeSheet()->areaIsEmpty(*selection(), Sheet::Comment))
-        return;
-
-    CommentCommand* command = new CommentCommand();
-    command->setSheet(selection()->activeSheet());
-    command->setText(kundo2_i18n("Remove Comment"));
-    command->setComment(QString());
     command->add(*selection());
     command->execute(canvas());
 }

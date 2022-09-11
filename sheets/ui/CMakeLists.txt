@@ -4,6 +4,7 @@ set (actions_DIR_SRCS
     actions/Actions.cpp
     actions/AdjustRowCol.cpp
     actions/AutoSum.cpp
+    actions/Comment.cpp
     actions/CSVActions.cpp
     actions/Fill.cpp
     actions/InsertSeries.cpp
@@ -17,6 +18,7 @@ set (actions_DIR_SRCS
 
 set (action_dialogs_DIR_SRCS
     actions/dialogs/CharacterSelectDialog.cpp
+    actions/dialogs/CommentDialog.cpp
     actions/dialogs/CSVDialog.cpp
     actions/dialogs/LinkDialog.cpp
     actions/dialogs/Resize2Dialog.cpp
@@ -39,7 +41,6 @@ set (commands_DIR_SRCS
     commands/AutoFilterCommand.cpp
     commands/AutoFormatCommand.cpp
     commands/BorderColorCommand.cpp
-    commands/CommentCommand.cpp
     commands/ConditionCommand.cpp
     commands/CSVDataCommand.cpp
     commands/DeleteCommand.cpp
@@ -61,7 +62,6 @@ set (dialogs_DIR_SRCS
     dialogs/AddNamedAreaDialog.cpp
     dialogs/AngleDialog.cpp
     dialogs/AutoFormatDialog.cpp
-    dialogs/CommentDialog.cpp
     dialogs/ConditionalDialog.cpp
     dialogs/ConsolidateDialog.cpp
     dialogs/DatabaseDialog.cpp

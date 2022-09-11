@@ -13,23 +13,17 @@
 
 #include <QVBoxLayout>
 #include <ktextedit.h>
+#include <KLocalizedString>
 
-// Sheets
-#include "core/Cell.h"
-#include "../Selection.h"
-
-#include "../commands/CommentCommand.h"
 
 using namespace Calligra::Sheets;
 
-CommentDialog::CommentDialog(QWidget* parent, Selection* selection)
+CommentDialog::CommentDialog(QWidget* parent)
         : KoDialog(parent)
 {
     setCaption(i18n("Cell Comment"));
     setModal(true);
     setButtons(Ok | Cancel);
-
-    m_selection = selection;
 
     QWidget *page = new QWidget();
     setMainWidget(page);
@@ -40,15 +34,21 @@ CommentDialog::CommentDialog(QWidget* parent, Selection* selection)
 
     multiLine->setFocus();
 
-    const QString comment = Cell(m_selection->activeSheet(), m_selection->marker()).comment();
-    if (!comment.isEmpty())
-        multiLine->setText(comment);
-
     connect(this, &KoDialog::okClicked, this, &CommentDialog::slotOk);
     connect(multiLine, &QTextEdit::textChanged, this, &CommentDialog::slotTextChanged);
 
     slotTextChanged();
     resize(400, height());
+}
+
+void CommentDialog::setComment(const QString &comment)
+{
+    multiLine->setText(comment);
+}
+
+QString CommentDialog::comment() const
+{
+    return multiLine->toPlainText().trimmed();
 }
 
 void CommentDialog::slotTextChanged()
@@ -58,11 +58,6 @@ void CommentDialog::slotTextChanged()
 
 void CommentDialog::slotOk()
 {
-    CommentCommand* command = new CommentCommand();
-    command->setSheet(m_selection->activeSheet());
-    command->setText(kundo2_i18n("Add Comment"));
-    command->setComment(multiLine->toPlainText().trimmed());
-    command->add(*m_selection);
-    command->execute(m_selection->canvas());
     accept();
 }
+

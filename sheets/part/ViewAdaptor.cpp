@@ -21,7 +21,6 @@
 #include "core/Sheet.h"
 #include "ui/Selection.h"
 
-#include "ui/commands/CommentCommand.h"
 #include "ui/commands/StyleCommand.h"
 
 using namespace Calligra::Sheets;
@@ -114,22 +113,12 @@ void ViewAdaptor::copyAsText()
 
 void ViewAdaptor::setSelection(const QRect& selection)
 {
-    m_view->selection()->initialize(selection);//,m_view->activeSheet());
+    m_view->selection()->initialize(selection);
 }
 
 QRect ViewAdaptor::selection()
 {
     return m_view->selection()->lastRange();
-}
-
-void ViewAdaptor::setSelectionComment(const QString& comment)
-{
-    CommentCommand* command = new CommentCommand();
-    command->setSheet(m_view->activeSheet());
-    command->setText(kundo2_i18n("Add Comment"));
-    command->setComment(comment.trimmed());
-    command->add(*m_view->selection());
-    command->execute();
 }
 
 void ViewAdaptor::setSelectionTextColor(const QColor& txtColor)

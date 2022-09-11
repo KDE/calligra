@@ -117,7 +117,6 @@ void CellToolBase::Private::updateActions(const Cell& cell)
     q->action("alignRight")->setEnabled(!showFormulas);
 
     if (!q->selection()->activeSheet()->isProtected() || style.notProtected()) {
-        q->action("clearComment")->setEnabled(!cell.comment().isEmpty());
         q->action("decreaseIndentation")->setEnabled(style.indentation() > 0.0);
     }
 
@@ -1134,9 +1133,9 @@ QList<QAction*> CellToolBase::Private::popupActionList() const
             popupActions.append(actions->action("showSelRows"));
         }
         popupActions.append(popupMenuActions["separator6"]);
-        popupActions.append(popupMenuActions["comment"]);
+        popupActions.append(actions->action("comment"));
         if (!cell.comment().isEmpty()) {
-            popupActions.append(popupMenuActions["clearComment"]);
+            popupActions.append(actions->action("clearComment"));
         }
 
         if (testListChoose(q->selection())) {
@@ -1168,15 +1167,6 @@ void CellToolBase::Private::createPopupMenuActions()
     action = new QAction(i18n("Selection List..."), q);
     connect(action, &QAction::triggered, q, &CellToolBase::listChoosePopupMenu);
     popupMenuActions.insert("listChoose", action);
-
-    action = new QAction(koIcon("edit-comment"), i18n("Comment"), q);
-    connect(action, &QAction::triggered, q, &CellToolBase::comment);
-    popupMenuActions.insert("comment", action);
-
-    action = new QAction(koIcon("delete-comment"),i18n("Clear Comment"), q);
-    connect(action, &QAction::triggered, q, &CellToolBase::clearComment);
-    popupMenuActions.insert("clearComment", action);
-
 }
 
 bool CellToolBase::Private::testListChoose(Selection *selection) const

@@ -8,6 +8,7 @@
 
 #include "AdjustRowCol.h"
 #include "AutoSum.h"
+#include "Comment.h"
 #include "CSVActions.h"
 #include "Fill.h"
 #include "InsertSeries.h"
@@ -56,6 +57,9 @@ void Actions::createActions()
     addAction(new ResizeRowCol(this, true));
     // AutoSum
     addAction(new AutoSum(this));
+    // Comment
+    addAction(new Comment(this));
+    addAction(new ClearComment(this));
     // CSVActions
     addAction(new InsertFromFile(this));
     addAction(new InsertFromClipboard(this));
