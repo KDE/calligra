@@ -7,6 +7,7 @@ set (actions_DIR_SRCS
     actions/Comment.cpp
     actions/CSVActions.cpp
     actions/Fill.cpp
+    actions/Indent.cpp
     actions/InsertSeries.cpp
     actions/InsertSpecialChar.cpp
     actions/Link.cpp
@@ -44,7 +45,6 @@ set (commands_DIR_SRCS
     commands/ConditionCommand.cpp
     commands/CSVDataCommand.cpp
     commands/DeleteCommand.cpp
-    commands/IndentationCommand.cpp
     commands/MergeCommand.cpp
     commands/NamedAreaCommand.cpp
     commands/PageBreakCommand.cpp

@@ -184,8 +184,6 @@ protected Q_SLOTS:
     // -- text layout actions --
     void wrapText(bool enable);
     void verticalText(bool enable);
-    void increaseIndentation();
-    void decreaseIndentation();
     void changeAngle();
     // -- value format actions --
     void percent(bool enable);

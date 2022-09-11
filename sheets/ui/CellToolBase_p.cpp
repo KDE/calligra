@@ -116,10 +116,6 @@ void CellToolBase::Private::updateActions(const Cell& cell)
     q->action("alignCenter")->setEnabled(!showFormulas);
     q->action("alignRight")->setEnabled(!showFormulas);
 
-    if (!q->selection()->activeSheet()->isProtected() || style.notProtected()) {
-        q->action("decreaseIndentation")->setEnabled(style.indentation() > 0.0);
-    }
-
     // Now, activate/deactivate some actions depending on what is selected.
     if (!q->selection()->activeSheet()->isProtected()) {
         const bool colSelected = q->selection()->isColumnSelected();

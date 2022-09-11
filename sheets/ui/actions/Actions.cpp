@@ -11,6 +11,7 @@
 #include "Comment.h"
 #include "CSVActions.h"
 #include "Fill.h"
+#include "Indent.h"
 #include "InsertSeries.h"
 #include "InsertSpecialChar.h"
 #include "Link.h"
@@ -69,6 +70,9 @@ void Actions::createActions()
     addAction(new Fill(this, FillManipulator::Down));
     addAction(new Fill(this, FillManipulator::Left));
     addAction(new Fill(this, FillManipulator::Right));
+    // Indent
+    addAction(new Indent(this, false));
+    addAction(new Indent(this, true));
     // InsertSpecialChar
     addAction(new InsertSpecialChar(this));
     // InsertSeries

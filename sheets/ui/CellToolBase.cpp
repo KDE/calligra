@@ -50,7 +50,6 @@
 #include "commands/CopyCommand.h"
 #include "commands/DataManipulators.h"
 #include "commands/DeleteCommand.h"
-#include "commands/IndentationCommand.h"
 #include "commands/MergeCommand.h"
 #include "commands/PageBreakCommand.h"
 #include "commands/PasteCommand.h"
@@ -347,16 +346,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     addAction("verticalText", action);
     connect(action, &QAction::triggered, this, &CellToolBase::verticalText);
     action->setToolTip(i18n("Print cell contents vertically"));
-
-    action = new QAction(QIcon::fromTheme(QApplication::isRightToLeft() ? koIconName("format-indent-less") : koIconName("format-indent-more")), i18n("Increase Indent"), this);
-    addAction("increaseIndentation", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::increaseIndentation);
-    action->setToolTip(i18n("Increase the indentation"));
-
-    action = new QAction(QIcon::fromTheme(QApplication::isRightToLeft() ? koIconName("format-indent-more") : koIconName("format-indent-less")), i18n("Decrease Indent"), this);
-    addAction("decreaseIndentation", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::decreaseIndentation);
-    action->setToolTip(i18n("Decrease the indentation"));
 
     action = new QAction(i18n("Change Angle..."), this);
     action->setIconText(i18n("Angle"));
@@ -1818,28 +1807,6 @@ void CellToolBase::verticalText(bool enable)
     command->setAngle(0);
     command->add(*selection());
     command->execute(canvas());
-}
-
-void CellToolBase::increaseIndentation()
-{
-    IndentationCommand* command = new IndentationCommand();
-    command->setSheet(selection()->activeSheet());
-    double val = selection()->activeSheet()->fullMap()->applicationSettings()->indentValue();
-    command->setIndent(val);
-    command->add(*selection());
-    if (!command->execute())
-        delete command;
-}
-
-void CellToolBase::decreaseIndentation()
-{
-    IndentationCommand* command = new IndentationCommand();
-    command->setSheet(selection()->activeSheet());
-    double val = selection()->activeSheet()->fullMap()->applicationSettings()->indentValue();
-    command->setIndent(-1 * val);
-    command->add(*selection());
-    if (!command->execute())
-        delete command;
 }
 
 void CellToolBase::changeAngle()
