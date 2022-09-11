@@ -391,24 +391,6 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
 
     // -- misc style attribute actions --
 
-    action = new QAction(koIconWanted("no icon in Kate, but LO has one", "format-text-uppercase"), i18n("Upper Case"), this);
-    action->setIconText(i18n("Upper"));
-    addAction("toUpperCase", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::toUpperCase);
-    action->setToolTip(i18n("Convert all letters to upper case"));
-
-    action = new QAction(koIconWanted("no icon in Kate, but LO has one", "format-text-lowercase"), i18n("Lower Case"), this);
-    action->setIconText(i18n("Lower"));
-    addAction("toLowerCase", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::toLowerCase);
-    action->setToolTip(i18n("Convert all letters to lower case"));
-
-    action = new QAction(koIcon("format-text-capitalize"), i18n("Convert First Letter to Upper Case"), this);
-    action->setIconText(i18n("First Letter Upper"));
-    addAction("firstLetterToUpperCase", action);
-    connect(action, &QAction::triggered, this, &CellToolBase::firstLetterToUpperCase);
-    action->setToolTip(i18n("Capitalize the first letter"));
-
     colorAction = new KoColorPopupAction(this);
     colorAction->setIcon(koIcon("format-fill-color"));
     colorAction->setToolTip(i18n("Set the background color"));
@@ -1917,36 +1899,6 @@ void CellToolBase::decreasePrecision()
     command->add(*selection());
     if (!command->execute())
         delete command;
-}
-
-void CellToolBase::toUpperCase()
-{
-    CaseManipulator* command = new CaseManipulator;
-    command->setSheet(selection()->activeSheet());
-    command->setText(kundo2_i18n("Switch to uppercase"));
-    command->changeMode(CaseManipulator::Upper);
-    command->add(*selection());
-    command->execute(canvas());
-}
-
-void CellToolBase::toLowerCase()
-{
-    CaseManipulator* command = new CaseManipulator;
-    command->setSheet(selection()->activeSheet());
-    command->setText(kundo2_i18n("Switch to lowercase"));
-    command->changeMode(CaseManipulator::Lower);
-    command->add(*selection());
-    command->execute(canvas());
-}
-
-void CellToolBase::firstLetterToUpperCase()
-{
-    CaseManipulator* command = new CaseManipulator;
-    command->setSheet(selection()->activeSheet());
-    command->setText(kundo2_i18n("First letter uppercase"));
-    command->changeMode(CaseManipulator::FirstUpper);
-    command->add(*selection());
-    command->execute(canvas());
 }
 
 void CellToolBase::changeBackgroundColor(const KoColor &color)

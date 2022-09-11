@@ -112,37 +112,6 @@ protected:
 
 /**
  * \ingroup Commands
- * \brief Converts string values to upper-/lowercase.
- */
-class CALLIGRA_SHEETS_UI_EXPORT CaseManipulator: public AbstractDataManipulator
-{
-public:
-    CaseManipulator();
-    ~CaseManipulator() override;
-
-    enum CaseMode {
-        Upper = 0,
-        Lower,
-        FirstUpper
-    };
-    void changeMode(CaseMode mode) {
-        m_mode = mode;
-    }
-    void changeLowerCase();
-    void changeFirstUpper();
-protected:
-    Value newValue(Element *element, int col, int row,
-                           bool *parse, Format::Type *fmtType) override;
-
-    /** do we want to change this cell ? */
-    bool wantChange(Element *element, int col, int row) override;
-
-    CaseMode m_mode;
-};
-
-
-/**
- * \ingroup Commands
  * \brief Inserts/Removes cells by shifting other cells.
  */
 class CALLIGRA_SHEETS_UI_EXPORT ShiftManipulator : public AbstractRegionCommand

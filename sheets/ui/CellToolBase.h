@@ -193,9 +193,6 @@ protected Q_SLOTS:
     void increasePrecision();
     void decreasePrecision();
     // -- misc style attribute actions --
-    void toUpperCase();
-    void toLowerCase();
-    void firstLetterToUpperCase();
     void changeBackgroundColor(const KoColor &);
     // -- cell insert/remove actions --
     void insertCells();

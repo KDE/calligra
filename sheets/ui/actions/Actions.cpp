@@ -15,6 +15,7 @@
 #include "Link.h"
 #include "Merge.h"
 #include "Sort.h"
+#include "TextCase.h"
 #include "Validity.h"
 
 
@@ -80,6 +81,10 @@ void Actions::createActions()
     addAction(new Sort(this));
     addAction(new SortInc(this));
     addAction(new SortDesc(this));
+    // TextCase
+    addAction(new TextCase(this, CaseManipulator::Upper));
+    addAction(new TextCase(this, CaseManipulator::Lower));
+    addAction(new TextCase(this, CaseManipulator::FirstUpper));
     // Validity
     addAction(new SetValidity(this));
     addAction(new ClearValidity(this));

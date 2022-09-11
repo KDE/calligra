@@ -170,51 +170,6 @@ Value DataManipulator::newValue(Element *element, int col, int row,
 }
 
 
-CaseManipulator::CaseManipulator()
-{
-    m_mode = Upper;
-    setText(kundo2_i18n("Change Case"));
-}
-
-CaseManipulator::~CaseManipulator()
-{
-}
-
-Value CaseManipulator::newValue(Element *element, int col, int row,
-                                bool *parse, Format::Type *)
-{
-    Q_UNUSED(element)
-    // if we are here, we know that we want the change
-    *parse = false;
-    QString str = Cell(m_sheet, col, row).value().asString();
-    switch (m_mode) {
-    case Upper: str = str.toUpper();
-        break;
-    case Lower: str = str.toLower();
-        break;
-    case FirstUpper:
-        if (str.length() > 0)
-            str = str.at(0).toUpper() + str.right(str.length() - 1);
-        break;
-    };
-    return Value(str);
-}
-
-bool CaseManipulator::wantChange(Element *element, int col, int row)
-{
-    Q_UNUSED(element)
-    Cell cell(m_sheet, col, row);
-    // don't change cells with a formula
-    if (cell.isFormula())
-        return false;
-    // don't change cells containing other things than strings
-    if (!cell.value().isString())
-        return false;
-    // original version was dismissing text starting with '!' and '*', is this
-    // necessary ?
-    return true;
-}
-
 
 
 ShiftManipulator::ShiftManipulator(KUndo2Command *parent)
