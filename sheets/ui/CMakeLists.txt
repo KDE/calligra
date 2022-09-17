@@ -195,7 +195,7 @@ endif()
 set_target_properties(calligrasheetsui PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
-install(TARGETS calligrasheetsui ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS calligrasheetsui ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 install( FILES  CellToolOptionWidgets.xml DESTINATION ${KDE_INSTALL_DATADIR}/calligrasheets)
 

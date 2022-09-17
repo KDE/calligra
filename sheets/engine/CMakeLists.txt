@@ -89,5 +89,5 @@ target_link_libraries(calligrasheetsengine
 set_target_properties(calligrasheetsengine PROPERTIES
     VERSION ${GENERIC_CALLIGRA_LIB_VERSION} SOVERSION ${GENERIC_CALLIGRA_LIB_SOVERSION}
 )
-install(TARGETS calligrasheetsengine ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS calligrasheetsengine ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 

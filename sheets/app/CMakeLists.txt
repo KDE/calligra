@@ -24,10 +24,10 @@ target_include_directories( kdeinit_calligrasheets
     ${CMAKE_CURRENT_BINARY_DIR}/../
 )
 
-install(TARGETS kdeinit_calligrasheets  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kdeinit_calligrasheets  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 target_link_libraries( calligrasheets kdeinit_calligrasheets )
-install(TARGETS calligrasheets  ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS calligrasheets  ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 install( PROGRAMS  org.kde.calligrasheets.desktop DESTINATION ${KDE_INSTALL_APPDIR})
 install( FILES org.kde.calligrasheets.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
