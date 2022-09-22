@@ -367,6 +367,8 @@ void KoTextLoader::loadBody(const KoXmlElement &bodyElem, QTextCursor &cursor, L
                         loadTableOfContents(tag, cursor);
                     } else if (localName == "bibliography") {
                         loadBibliography(tag, cursor);
+                    } else if (localName == "user-field-decls") {
+                        loadUserFieldDecls(bodyElem, cursor);
                     } else {
                         KoInlineObject *obj = KoInlineObjectRegistry::instance()->createFromOdf(tag, d->context);
                         if (obj) {
@@ -1614,6 +1616,12 @@ void KoTextLoader::loadBibliography(const KoXmlElement &element, QTextCursor &cu
 
         }// index-body
     }
+}
+
+void KoTextLoader::loadUserFieldDecls(const KoXmlElement &bodyElement, QTextCursor &cursor)
+{
+    const auto textObjectManager = KoTextDocument(cursor.block().document()).inlineTextObjectManager()->variableManager();
+    textObjectManager->loadOdf(bodyElement);
 }
 
 void KoTextLoader::startBody(int total)

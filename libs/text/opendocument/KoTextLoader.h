@@ -187,6 +187,11 @@ private:
     void loadBibliography(const KoXmlElement &element, QTextCursor& cursor);
 
     /**
+    * Load the user-field-decls element from the \p bodyElement into the \p cursor .
+    */
+    void loadUserFieldDecls(const KoXmlElement &bodyElement, QTextCursor& cursor);
+
+    /**
     * This is called in loadBody before reading the body starts.
     */
     void startBody(int total);
