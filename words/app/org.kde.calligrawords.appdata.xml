@@ -19,6 +19,7 @@
   <name xml:lang="ia">Calligra Words</name>
   <name xml:lang="id">Calligra Words</name>
   <name xml:lang="it">Calligra Words</name>
+  <name xml:lang="ka">Calligra Words</name>
   <name xml:lang="ko">Calligra Words</name>
   <name xml:lang="nl">Calligra Words</name>
   <name xml:lang="pl">Słowa Calligra</name>
@@ -51,6 +52,7 @@
   <summary xml:lang="id">Pengolah Kata</summary>
   <summary xml:lang="it">Elaboratore di testi</summary>
   <summary xml:lang="ja">ワードプロセッサ</summary>
+  <summary xml:lang="ka">რედაქტორი</summary>
   <summary xml:lang="ko">워드 프로세서</summary>
   <summary xml:lang="nb">Tekstbehandler</summary>
   <summary xml:lang="nl">Tekstverwerker</summary>
@@ -119,6 +121,7 @@
     <p xml:lang="id">Fitur:</p>
     <p xml:lang="it">Funzionalità:</p>
     <p xml:lang="ja">機能:</p>
+    <p xml:lang="ka">თვისებები:</p>
     <p xml:lang="ko">기능:</p>
     <p xml:lang="nb">Egenskaper:</p>
     <p xml:lang="nl">Mogelijkheden:</p>
@@ -184,6 +187,7 @@
       <li xml:lang="id">Memungkinkan penanaman Dokumen</li>
       <li xml:lang="it">Consente l'integrazione di documenti</li>
       <li xml:lang="ja">文書への埋め込みを許可</li>
+      <li xml:lang="ka">დოკუმენტების ჩადგმის უფლება</li>
       <li xml:lang="ko">문서 포함 허용</li>
       <li xml:lang="nb">Tillater innebygde dokumenter</li>
       <li xml:lang="nl">Staat inbedden van documenten toe</li>
@@ -216,6 +220,7 @@
       <li xml:lang="id">Kustomisasi antarmuka pengguna</li>
       <li xml:lang="it">Personalizzazion e dell'interfaccia utente</li>
       <li xml:lang="ja">ユーザインターフェースのカスタマイズ</li>
+      <li xml:lang="ka">მომხმარებლის ინტერფეისის მორგება</li>
       <li xml:lang="ko">사용자 인터페이스 사용자 정의</li>
       <li xml:lang="nb">Tilpassing av brukerflaten</li>
       <li xml:lang="nl">Aanpassen naar behoefte van het gebruikersinterface</li>
@@ -280,6 +285,7 @@
       <li xml:lang="id">Dukungan ODT (Open Document Text)</li>
       <li xml:lang="it">Supporto ODT (Open Document Text)</li>
       <li xml:lang="ja">ODT (Open Document Text) サポート</li>
+      <li xml:lang="ka">ODT (Open Document Text) -ის მხარდაჭერა</li>
       <li xml:lang="ko">ODT(Open Document Text) 지원</li>
       <li xml:lang="nb">Støtte for ODT (Open Document Text)</li>
       <li xml:lang="nl">Ondersteuning van ODT (Open Document Text)</li>

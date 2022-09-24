@@ -20,6 +20,7 @@
   <name xml:lang="ia">Geminos</name>
   <name xml:lang="id">Gemini</name>
   <name xml:lang="it">Gemini</name>
+  <name xml:lang="ka">Gemini</name>
   <name xml:lang="ko">Gemini</name>
   <name xml:lang="nl">Gemini</name>
   <name xml:lang="pl">Bliźnięta</name>
@@ -49,6 +50,7 @@
   <summary xml:lang="ia">Suite de Office</summary>
   <summary xml:lang="id">Suite Perkantoran</summary>
   <summary xml:lang="it">Office Suite</summary>
+  <summary xml:lang="ka">საოფისე ნაკრები</summary>
   <summary xml:lang="ko">오피스 도구</summary>
   <summary xml:lang="nl">Kantoor-suite</summary>
   <summary xml:lang="pl">Pakiet biurowy</summary>
@@ -203,6 +205,7 @@
       <li xml:lang="gl">Funcionaliaddes comúns</li>
       <li xml:lang="id">Fitur Umum</li>
       <li xml:lang="it">Funzionalità comuni</li>
+      <li xml:lang="ka">საერთო თვისებები</li>
       <li xml:lang="ko">공통 기능</li>
       <li xml:lang="nl">Gemeenschappelijke functies</li>
       <li xml:lang="pl">Wspólne funkcje</li>
@@ -256,6 +259,7 @@
       <li xml:lang="gl">Obxectos incrustábeis</li>
       <li xml:lang="id">Objek Yang Dapat Ditanamkan</li>
       <li xml:lang="it">Oggetti integrabili</li>
+      <li xml:lang="ka">ჩადგმადი ობიექტები</li>
       <li xml:lang="ko">삽입 가능 개체</li>
       <li xml:lang="nl">In te bedden objecten</li>
       <li xml:lang="pl">Osadzane obiekty</li>
@@ -311,6 +315,7 @@
       <li xml:lang="gl">Formato de ficheiro estándar</li>
       <li xml:lang="id">Format file standar</li>
       <li xml:lang="it">Formato standard dei file</li>
+      <li xml:lang="ka">სტანდარტული ფაილის ფორმატი</li>
       <li xml:lang="ko">표준 파일 형식</li>
       <li xml:lang="nl">Standaard bestandsformaat</li>
       <li xml:lang="pl">Standardowy format plików</li>
